@@ -1,0 +1,10 @@
+[package]
+
+	name = "aoc-2019-day-21-part-1"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2018"
+
+[dependencies]
+
+	lazy_static = "1.4"
