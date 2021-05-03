@@ -23,16 +23,27 @@ Once we can do this operation we just need to iterate through and find the best 
 
 ### Part two
 
-The algorithm built for Part one gives us a good base for this part as well. We need to add the
+The algorithm built for part one gives us a good base for this part as well. We need to add the
 ability to sort the directional vectors in the right order. Again, I wanted to do this in a "pure"
 way, so I came up with a simple algorithm to compare these directly. First we classify each one
 into 4 directions, up, down, left and right, and the 4 sets of angles in between. I define these in
-the order the puzzle requires, which means I can rely on rust's derived ordering. I added an extra
-one for zero, but I could also have just panicked if a zero vector was evaluated in this way.
+the order the puzzle requires, which means I can rely on rust's derived ordering for ordering the
+classification itself. I added an extra one for zero, but I could also have just panicked if a zero
+vector was evaluated in this way.
+
+I then needed to order directional vectors in the diagonal categories. By scaling the vector so
+that one coordinate matches, the other can be compared directly, since we are looking at two points
+on the same line. To do this, I multiply each coordinate by the opposite coordinate in the other
+vector. We only do this once, but to illustrate why this works we can look at what the full vectors
+would be. If our vectors to be compared are (x0, y0) and (x1, y1), then we multiply the left vector
+by y1 to get (x0·y1, y0·y1), and we multiply the right vector by y0 to get (x1·y0, y1·y0). We can
+easily see that the y value for both these is the same, so comparing the resulting x coordinate
+alone gives us the same ordering. Better yet, this works for all four quadrants, since negative
+values invert the ordering and combine to cancel out in exactly the right way.
 
 It would be an easy trap to simply sort the asteroids based on their magnitude followed by the
-direction, but this is not correct. For example, some directions may have their first asteroid at
-a distance which evaluates to magnitude 1, and another may have the first with magnitude 2. Both of
+direction, but this is not correct. For example, some directions may have their first asteroid at a
+distance which evaluates to magnitude 1, and another may have the first with magnitude 2. Both of
 these should appear in the first rotation, so they should be treated the same. Instead, we collect
 the asteroids in each direction into a list, then use the index in that list as the first part of
 our search key.
@@ -78,13 +89,15 @@ count the number of blocks at the end.
 
 I decided to have some fun now, and make some use of terminal support for unicode, and found
 characters for the ball "⚽", and blocks "📦". This produces some really nice output! I did create
-an interface to control the paddle correctly, but it turns out this is really difficult because it
-is so small. Obviously it would be quite difficult to break such a large number of blocks this way.
+an interface to control the paddle manually, but it turns out this is really difficult because the
+paddle is tiny. Obviously it would be quite difficult to break such a large number of blocks this
+way.
 
 Instead, it should be fairly easy to control the paddle automatically, by setting the joystick
 based on the relative positions of the paddle and the ball. This does indeed work, and with a nice
-delay of 0.1 seconds between updates we can see the game playing itself. It's obviously going to
-take a long time at this speed, so I made it run a lot faster, and we get the right answer.
+delay of one tenth of a second between updates we can see the game playing itself. It's obviously
+going to take a long time at this speed, so I made it run a lot faster, and we get the right
+answer.
 
 ## Day 14: Space stoichiometry
 
@@ -93,14 +106,14 @@ https://adventofcode.com/2019/day/14
 ### Part one
 
 This is an interesting problem. The reactions form an acyclic graph, so we can find an order to
-evaluate them which guarantees we only need to perform them once each. I can use the same algorithm
+evaluate them which guarantees we only need to perform each one once. I can use the same algorithm
 I used before for a dependency injection framework. I start with a list containing only the
 starting chemical, ORE, then build up the list by adding all output chemicals from reactions which
 have all their inputs already listed.
 
-We then need to reverse this order, because the known quantity is the final output. We can then
-work through the rections backwards, summing the amount of each chemical required, until we have a
-final figure for the amount of ORE needed.
+We then need to reverse this order, because the initially known quantity is the final output. We
+can then work through the rections backwards, summing the amount of each chemical required, until
+we have a final figure for the amount of ORE needed.
 
 ### Part two
 
@@ -119,8 +132,8 @@ is guaranteed to find the shortest path (or one of them) before any longer paths
 
 ### Part two
 
-My optimal solution to Part one is not going to work any more. This time I needed to discover the
-full map. This was a relatively small modification, though. Once we have this information we can
+My optimal solution to part one is not going to work any more. This time I needed to discover the
+full map. This was a relatively small modification, however. Once we have this information we can
 use basically the same algorithm we used to walk the map to fill it with oxygen. This time we need
 to count the steps, of course, since this is the answer the puzzle asks for.
 
@@ -153,12 +166,12 @@ consisted entirely of a number of zeros, followed by a number of ones. These, at
 to calculate, by taking the sum of all digits in a trailing range of the input. This can easily be
 optimised by processing the list in reverse order.
 
-This doesn't work for the first half, since we now have zeros and minus ones in the pattern. I
-thought for a long time that there would be some trick to make it work, and I think this may well
-have been the case if the patterns weren't offset by one. Eventually I gave up on this approach,
-and instead decided to iteratively add and remove trailing sums at different points until I got
-the right answer. This worked, after some considerable execution time, but if I had been using an
-interpreted language, I think this would probably have been impractical.
+This doesn't work for the first half, since we start to see extra ranges after the first series of
+ones in the pattern. thought for a long time that there would be some trick to make it work, and I
+think this may well have been the case if the patterns weren't offset by one. Eventually I gave up
+on this approach, and instead decided to iteratively add and remove trailing sums at different
+points until I got the right answer. This worked, after some considerable execution time, but if I
+had been using an interpreted language, I think this would probably have been impractical.
 
 ## Day 17: Set and forget
 
@@ -172,34 +185,36 @@ we get the correct answer.
 
 ## Part two
 
-This is the third problem which stumped me for a while.
+The second part is somewhat more difficult, and this is the third problem which stumped me for a
+while.
 
-The second part is somewhat more difficult. I started out assuming that the robot would have to
-walk in one direction as far as it could before turning. I approached this as a compression
-problem, looking for repeating patterns in the input and replacing them with function calls. I
-could work out the exact number of characters saved easily enough, but the optimal solution for all
-three functions might not include the longest pattern which could fit in a function. This was fast
-enough to run to completion, but it didn't find a solution. I now know that this should have found
-a solution if the algorithm was correct, so obviously I made a mistake somewhere. Perhaps the time
-taken would have been too long if I had done this correctly.
+I started out assuming that the robot would have to walk in one direction as far as it could before
+turning. I approached this as a compression problem, looking for repeating patterns in the input
+and replacing them with function calls. I could work out the exact number of characters saved
+easily enough, but the optimal solution for all three functions might not include the longest
+pattern which could fit in one function, so we also need to consider less optimal candidates for
+each function, at least for the first two. This was fast enough to run to completion, but it didn't
+find a solution. I now know that this should have found a solution if the algorithm was correct, so
+obviously I made a mistake somewhere. Perhaps the time taken would have been too long if I had done
+this correctly.
 
 When I didn't find a solution, I considered that maybe I should try turning at different points.
 This would give us many different full sequences to try and compress. This was too slow to give me
-an answer in a reasonable amount of time, so I gave up.
+an answer in a reasonable amount of time, so I gave up on this approach.
 
 After stewing on the problem for a while I realised that I had failed to consider an important part
 of the puzzle as described. The main function could not include any direct commands, only function
-calls. This gives us plenty of scope for reducing the search space. We know with certainly that
-one of the functions matches a prefix of the full command sequence, and that the same one or
+calls. With this information, we can drastically reduce the search space. We know with certainly
+that one of the functions matches a prefix of the full command sequence, and that the same one or
 another matches a suffix. We can decide that function A will match the start, and iterate through
 all prefixes which are in the range allowed by the function size limit.
 
 We do the same for functions B and C in a loop, moving through the full command sequence whenever
-we detect a sequence of commands which matches a function we have defined, adding the matched
-function name to our main sequence. When we don't have a match, we try defining the next function
-based on prefixes of the remaining commands, again. I think it's possible to construct a pattern
-which wouldn't match this way, if there were certain types of partially repeating patterns in the
-input, but it turns out this gives us an answer and it runs quickly.
+we detect a sequence of commands which matches a function we have defined, building up a list of
+the matched functions' names as our main sequence. When we don't have a match, we try defining the
+next function based on prefixes of the remaining commands, again. I think it's possible to
+construct a pattern which wouldn't match this way, if there were certain types of partially
+repeating patterns in the input, but it turns out this gives us an answer and it runs quickly.
 
 ## Day 18: Many-worlds interpretation
 
@@ -266,15 +281,15 @@ dimensions of the search by 100 until a match is found. Caching ensures that we 
 special logic to make this fast, although it could probably be slightly quicker.
 
 The puzzle description is vague about the definition of "closest", but I sort the found points by
-the sum of the squares of the coordinates. Since the geometric distance would be the square root
-of this value, which is an operation that preserves the order, this should genuinely find the
-closest point from those it looks at.
+the sum of the squares of the coordinates. Since the geometric distance would be the square root of
+this value, which is an operation that preserves the order, this should genuinely find the closest
+point from those it looks at.
 
 Since the search pattern is a square, whereas equidistant points form a circle, we may find a point
 which is closer to a 45° angle on one iteration of our search size, when a closer point at an angle
 which is further from 45° exists in a subsequent iteration. Since the puzzle description was vague
 about how to calculate the distance I assumed that there should be no ambiguity here, and indeed
-the answer I come up with was accepted.
+the answer my code produced was accepted.
 
 This runs in a little over one second on my machine.
 
@@ -286,8 +301,8 @@ https://adventofcode.com/2019/day/20
 
 This is fairly similar to day 17, except that we have a little more complexity parsing the input.
 Because we have to consider portals as well as regular steps, and I had already come up with logic
-to precalculate the paths through a maze, I did the same here rather than try and calculate it
-with individual steps.
+to precalculate the paths through a maze, I did the same here rather than try and calculate it with
+individual steps.
 
 ### Part two
 
@@ -322,10 +337,10 @@ programme for this limited architecture would involve setting T to some known va
 ORing it with various sensor registers, perhaps inverting it at some point, then combining it into
 J with an AND or an OR, and then repeating this process for an arbitrary number of expressions.
 
-I built an iterator over programmes which looked like this, which would specifically never repeat
-a register in an expression, with the option to limit the number of registers in each expression,
-and with a configurable number of expressions. I can't remember exactly how many there were, but it
-was in the region of 1-2k expressions which would then be combined a set number of times. A single
+I built an iterator over programmes which looked like this, which would specifically never repeat a
+register in an expression, with the option to limit the number of registers in each expression, and
+with a configurable number of expressions. I can't remember exactly how many there were, but it was
+in the region of 1-2k expressions which would then be combined a set number of times. A single
 expression didn't seem to work, but with two I managed to solve the problem in a reasonable time.
 
 ### Part two
@@ -341,23 +356,26 @@ the springbot machine myself based on knowledge of the kind of patterns I would 
 programme output, but I wanted to tackle these puzzles with the idea that the only knowledge used
 was what was present in the puzzle description, rather than write code based on information gleaned
 from the input value. I was already interested in genetic search algorithms, but had never actually
-used this technique, so this seemed like the obvious next step.
+used this technique, so this seemed like a good way to go.
 
-I needed to evaluate each candidate, but I still had some serious constraints on execution time,
-and running the intcode programme every time was unlikely to be efficient. Also, I needed a
-"fitness" function for my programme candidates, but it was difficult to get a fitness function
-which returned anything but true/false using the intcode programme itself. I could try and find a
-memory location which described the distance travelled, but I felt this was not in the spirit of
-the puzzle as described.
+I needed to evaluate each candidate, but I still had some serious constraints on execution time -
+running the intcode programme every time was unlikely to be efficient. Also, I needed a "fitness"
+function for my programme candidates, but it was difficult to get a fitness function which returned
+anything but true/false using the intcode programme itself. I could try and find a memory location
+which described the distance travelled, but I felt this was not in the spirit of the puzzle as
+described.
 
 The virtual machine implemented by the intcode programme is trivially simple, so the obvious way to
 make this more efficient, given that I am using a very efficient language, was to implement the
 same architecture myself. This is done in the emulate function, which executes a springdroid
-programme once, and the simulate function, which tries it against a stretch of ground and checks if
-we make it to the end. Of course, I "compile" the assembly into my own structs, to make this as
-fast as possible. Now I could create a fitness function based on a number of ground samples which
-would check how many of those samples were passed without issue. I added a secondary sort on the
-programme length, to prefer shorter programmes.
+programme once, and the simulate function, which tests a programme against a sample stretch of
+ground and checks if we make it to the end. I can pull these samples from the programme output when
+a run fails, building up a collection of samples I can use to ensure I never fail twice in the same
+place. Of course, I "compile" the assembly into my own structs, to make this as efficient as
+possible. Now I could create a fitness function based on a number of ground samples which would
+check how many of those samples were passed without issue. I added a secondary fitness score based
+on the programme length, to prefer shorter programmes so long as they succeed with the same number
+of samples.
 
 I made my code start with an empty list of candidate programmes and ground samples, but I had a few
 problems, so I experimented with adding some samples I had already gathered, and with a basic
@@ -377,8 +395,8 @@ https://adventofcode.com/2019/day/22
 
 ### Part one
 
-Part one doesn't pose any major challenges. I just needed to parse the input, and apply the
-changes listed.
+Part one doesn't pose any major challenges. I just needed to parse the input, and apply the changes
+listed.
 
 ### Part two
 
@@ -398,21 +416,22 @@ same extent...
 In any case, I pushed forward and made the tests apply the correct logic. I noticed that the new
 operations were basically combinations of add and multiply with modulo of the deck size.
 Technically the "cut" operation is subtraction instead of addition. While subtraction under modulo
-can be converted to addition, this is not possible without knowing what the modulo is. Since my
-representation closely modeled the problem as described, I had to keep the signed argument to my
-"cut" operation, but I still kept it named as addition, and implemented it as addition. This was
-a confusing bug for a while, and I went through a lot of debugging before finding where the problem
+can be converted to positive addition, this is not possible without knowing what the modulo is.
+Since my representation closely modeled the problem as described, with the list of operations not
+including any knowledge of the desk size, I had to keep the signed argument to my "cut" operation,
+but I still kept it named as addition, and implemented it as addition in my new code. This was a
+confusing bug for a while, and I went through a lot of debugging before finding where the problem
 lay.
 
 I also ran into at least one overflow bug, which was frustrating because I knew this was a
 potential trap and had taken steps to avoid it. The reason I ran into the issue anyway is because I
-was modifying code from part one, where I knew that this would not be an issue, and so I had not
-initially considered this as an issue. Unfortunately, while modifying my code I didn't apply the
-right logic everywhere, and this required some more fiddly debugging to weed out. The lesson I will
-take away from this is that if requirements like this change, it may be better to rewrite a unit
-rather than modify it, to ensure that you are using the correct assumptions. Of course, before you
-do this you should refactor the API to the existing code, and write plenty of tests - neither of
-these parts will be rewritten.
+was modifying code from part one, which was written when I knew the deck size would be small and so
+I wouldn't have to deal with this problem. Unfortunately, while modifying my code I didn't apply
+the right logic everywhere, and this required some more fiddly debugging to weed out. The lesson I
+will take away from this is that if requirements like this change, it may be better to rewrite a
+unit rather than modify it, to ensure that you are using the correct assumptions. Of course, before
+you do this you should refactor the API to the existing code, and write plenty of tests - if the
+API is in a good place then the tests themselves should not need to be rewritten.
 
 It took a few optimisation steps to make this run quickly. I knew that all these operations under
 modulo could be collapsed down into a single add and a single multiply. I created a function to
@@ -441,22 +460,23 @@ necessary, but it didn't add much complexity so I am happy with my code.
 
 ### Part two
 
-This should have been fairly simple, but I ran into a very annoying bug which took me much too long
+This should have been fairly simple, but I ran into a very annoying bug which took me far too long
 to track down. When modifying my code from part one, I accidentally deleted the logic which applied
 the rule for adding bugs to squares. I re-did this from memory, and tested for 2 and 3 instead of 1
-and 2, as stated in the problem description.
+and 2, as stated in the problem description. I think this is the rule from Conway's game of life,
+so it looks like my previous experience worked against me this time.
 
 My solution still didn't add up, so I printed the final board state and counted the bugs. Oddly,
 the number of bugs was correct, but the sum was giving me a different figure for some reason. I
 quickly realised that I was applying my logic to the middle square, but neglecting to ignore this
-when counting bugs. My display function did have a special case for the middle square, which is
-why counting them manually gave the right answer. With this fixed, I got the correct solution.
+when counting bugs. My display function did have a special case for the middle square, which is why
+counting them manually gave the right answer. With this fixed, I got the correct solution.
 
 ## Day 25: Cryostasis
 
 https://adventofcode.com/2019/day/25
 
-My solution to the final puzzle was dramatically over-engineered, although I enjoy implementing
+My solution to the final puzzle was dramatically over-engineered. That said, I enjoy implementing
 this kind of complex state machine, so I am happy with what I produced. I did end up compromising
 on my "pure" approach, by hard-coding the names of two items to avoid picking up, namely the "giant
 electromagnet" and the "infinite loop". I could have come up with code to detect both of these, but
