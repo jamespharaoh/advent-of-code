@@ -3,4 +3,6 @@
 members = [
 	"aoc-2018-day-1-part-1",
 	"aoc-2018-day-1-part-2",
+	"aoc-2018-day-2-part-1",
+	"aoc-2018-day-2-part-2",
 ]
