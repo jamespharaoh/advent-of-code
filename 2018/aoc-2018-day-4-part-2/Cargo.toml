@@ -1,0 +1,10 @@
+[package]
+
+	name = "aoc-2018-day-4-part-2"
+	version = "0.1.0"
+	edition = "2018"
+
+[dependencies]
+
+	chrono = "*"
+	regex = "*"
