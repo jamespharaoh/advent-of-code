@@ -17,3 +17,23 @@ version = "0.1.0"
 [[package]]
 name = "aoc-2018-day-2-part-2"
 version = "0.1.0"
+
+[[package]]
+name = "aoc-2018-day-3-part-1"
+version = "0.1.0"
+dependencies = [
+ "text_io",
+]
+
+[[package]]
+name = "aoc-2018-day-3-part-2"
+version = "0.1.0"
+dependencies = [
+ "text_io",
+]
+
+[[package]]
+name = "text_io"
+version = "0.1.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee74b5019b48991b09803402aaf9e65a053b3993fe9d9c475ab67a395358ba76"
