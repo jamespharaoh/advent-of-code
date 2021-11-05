@@ -80,6 +80,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-2018-day-7-part-1"
+version = "0.1.0"
+dependencies = [
+ "regex",
+]
+
+[[package]]
+name = "aoc-2018-day-7-part-2"
+version = "0.1.0"
+dependencies = [
+ "regex",
+]
+
+[[package]]
 name = "aoc-2018-shared"
 version = "0.1.0"
 
