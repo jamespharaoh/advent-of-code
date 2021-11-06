@@ -1,20 +1,14 @@
-[workspace]
+[package]
 
-members = [
-	"aoc-2018-day-1-part-1",
-	"aoc-2018-day-1-part-2",
-	"aoc-2018-day-2-part-1",
-	"aoc-2018-day-2-part-2",
-	"aoc-2018-day-3-part-1",
-	"aoc-2018-day-3-part-2",
-	"aoc-2018-day-4-part-1",
-	"aoc-2018-day-4-part-2",
-	"aoc-2018-day-5-part-1",
-	"aoc-2018-day-5-part-2",
-	"aoc-2018-day-6-part-1",
-	"aoc-2018-day-6-part-2",
-	"aoc-2018-day-7-part-1",
-	"aoc-2018-day-7-part-2",
-	"aoc-2018-day-8-part-1",
-	"aoc-2018-shared",
-]
+	name = "aoc2018"
+	version = "0.1.0"
+	edition = "2021"
+
+[dependencies]
+
+	chrono = "*"
+	itertools = "*"
+	parse-display = "*"
+	parse-display-derive = { path = "../../rust/parse-display/parse-display-derive" }
+	regex = "*"
+	text_io = "*"

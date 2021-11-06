@@ -12,102 +12,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "aoc-2018-day-1-part-1"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-1-part-2"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-2-part-1"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-2-part-2"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-3-part-1"
-version = "0.1.0"
-dependencies = [
- "text_io",
-]
-
-[[package]]
-name = "aoc-2018-day-3-part-2"
-version = "0.1.0"
-dependencies = [
- "text_io",
-]
-
-[[package]]
-name = "aoc-2018-day-4-part-1"
+name = "aoc2018"
 version = "0.1.0"
 dependencies = [
  "chrono",
  "itertools",
  "parse-display",
- "parse-display-derive",
- "syn",
+ "parse-display-derive 0.5.3",
+ "regex",
+ "text_io",
 ]
-
-[[package]]
-name = "aoc-2018-day-4-part-2"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "itertools",
- "parse-display",
- "parse-display-derive",
- "syn",
-]
-
-[[package]]
-name = "aoc-2018-day-5-part-1"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-5-part-2"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-day-6-part-1"
-version = "0.1.0"
-dependencies = [
- "aoc-2018-shared",
-]
-
-[[package]]
-name = "aoc-2018-day-6-part-2"
-version = "0.1.0"
-dependencies = [
- "aoc-2018-shared",
-]
-
-[[package]]
-name = "aoc-2018-day-7-part-1"
-version = "0.1.0"
-dependencies = [
- "parse-display",
- "parse-display-derive",
-]
-
-[[package]]
-name = "aoc-2018-day-7-part-2"
-version = "0.1.0"
-dependencies = [
- "parse-display",
- "parse-display-derive",
-]
-
-[[package]]
-name = "aoc-2018-day-8-part-1"
-version = "0.1.0"
-
-[[package]]
-name = "aoc-2018-shared"
-version = "0.1.0"
 
 [[package]]
 name = "autocfg"
@@ -187,8 +101,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "898bf4c2a569dedbfd4e6c3f0bbd0ae825e5b6b0b69bae3e3c1000158689334a"
 dependencies = [
  "once_cell",
- "parse-display-derive",
+ "parse-display-derive 0.5.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "regex",
+]
+
+[[package]]
+name = "parse-display-derive"
+version = "0.5.3"
+dependencies = [
+ "once_cell",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "regex-syntax",
+ "structmeta",
+ "syn",
 ]
 
 [[package]]

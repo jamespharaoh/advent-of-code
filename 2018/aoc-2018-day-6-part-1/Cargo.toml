@@ -1,9 +1,0 @@
-[package]
-
-	name = "aoc-2018-day-6-part-1"
-	version = "0.1.0"
-	edition = "2021"
-
-[dependencies]
-
-	aoc-2018-shared = { path = "../aoc-2018-shared" }
