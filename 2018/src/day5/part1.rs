@@ -1,6 +1,7 @@
 use std::error::Error;
 
-pub fn aoc2018_day5_part1 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day5_part1 (input: & str) -> Result <String, Box <dyn Error>> {
+
 	let mut result = String::new ();
 	for ch in input.trim ().chars () {
 		if let Some (last_char) = result.chars ().last () {
@@ -12,7 +13,9 @@ pub fn aoc2018_day5_part1 (input: & str) -> Result <(), Box <dyn Error>> {
 		}
 		result.push (ch);
 	}
+
 	println! ("Resulting polymer: {}", result);
-	println! ("Length: {}", result.len ());
-	Ok (())
+
+	Ok (format! ("{}", result.len ()))
+
 }

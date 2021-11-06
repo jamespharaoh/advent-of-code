@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::error::Error;
 
-pub fn aoc2018_day7_part1 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day7_part1 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
 	for line in input.trim ().split ("\n") {
@@ -24,8 +24,7 @@ pub fn aoc2018_day7_part1 (input: & str) -> Result <(), Box <dyn Error>> {
 		order.push (next_step);
 	}
 
-	println! ("Order: {}", order);
-	Ok (())
+	Ok (order)
 
 }
 

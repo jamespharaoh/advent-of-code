@@ -3,7 +3,7 @@ use std::error::Error;
 use crate::shared::GridPosIter;
 use crate::shared::Pos;
 
-pub fn aoc2018_day6_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day6_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	// collect points and work out size
 	let mut width: i64 = 0;
@@ -39,6 +39,6 @@ pub fn aoc2018_day6_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 	}
 	println! ("Number of nearby squares: {}", area);
 
-	Ok (())
+	Ok (format! ("{}", area))
 
 }

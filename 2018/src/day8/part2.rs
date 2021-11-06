@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::iter;
 
-pub fn aoc2018_day8_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day8_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	let data: Vec <u64> = input.trim ().split (" ").map (
 		|datum| Ok (datum.parse () ?),
@@ -62,8 +62,6 @@ pub fn aoc2018_day8_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 		panic! ();
 	}
 
-	println! ("Puzzle answer: {}", value);
-
-	Ok (())
+	Ok (format! ("{}", value))
 
 }

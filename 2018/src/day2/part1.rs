@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use std::error::Error;
 
-pub fn aoc2018_day2_part1 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day2_part1 (input: & str) -> Result <String, Box <dyn Error>> {
 	let mut num_twos: u64 = 0;
 	let mut num_threes: u64 = 0;
 	for line in input.trim ().split ("\n") {
@@ -16,6 +16,5 @@ pub fn aoc2018_day2_part1 (input: & str) -> Result <(), Box <dyn Error>> {
 	}
 	println! ("Number of twos: {}", num_twos);
 	println! ("Number of threes: {}", num_threes);
-	println! ("Rudimentary checksum: {}", num_twos * num_threes);
-	Ok (())
+	Ok (format! ("{}", num_twos * num_threes))
 }

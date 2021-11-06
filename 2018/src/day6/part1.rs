@@ -6,7 +6,7 @@ use std::iter;
 use crate::shared::Grid;
 use crate::shared::Pos;
 
-pub fn aoc2018_day6_part1 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day6_part1 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	// collect points and work out size
 	let mut width: i64 = 0;
@@ -93,11 +93,11 @@ pub fn aoc2018_day6_part1 (input: & str) -> Result <(), Box <dyn Error>> {
 	// find largest remaining area
 	let (index, size) = areas.iter ().max_by_key (|(_, size)| * size).unwrap ();
 	let index = * index;
+
 	println! ("Identified largest finite area");
 	println! ("Index: {}", index);
 	println! ("Position: {}, {}", posns [index as usize].x, posns [index as usize].y);
-	println! ("Area: {}", size);
 
-	Ok (())
+	Ok (format! ("{}", size))
 
 }

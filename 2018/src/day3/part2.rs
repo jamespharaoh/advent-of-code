@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::error::Error;
 use text_io::try_scan;
 
-pub fn aoc2018_day3_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day3_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 	let mut usage: HashMap <(u64, u64), u64> = HashMap::new ();
 	for line in input.trim ().split ("\n") {
 		let id: u64;
@@ -24,7 +24,7 @@ pub fn aoc2018_day3_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 			}
 		}
 		println! ("Non overlapping ID: {}", id);
-		return Ok (());
+		return Ok (format! ("{}", id));
 	}
 	panic! ();
 }

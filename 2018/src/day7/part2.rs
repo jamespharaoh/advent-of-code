@@ -4,7 +4,7 @@ use std::collections::HashSet;
 use std::error::Error;
 use std::iter;
 
-pub fn aoc2018_day7_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day7_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
 	for line in input.trim ().split ("\n") {
@@ -49,8 +49,7 @@ pub fn aoc2018_day7_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 
 	}
 
-	println! ("Elapsed seconds: {}", elapsed);
-	Ok (())
+	Ok (format! ("{}", elapsed))
 
 }
 

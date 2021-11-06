@@ -1,6 +1,6 @@
 use std::error::Error;
 
-pub fn aoc2018_day2_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day2_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 	let lines: Vec <& str> = input.trim ().split ("\n").collect ();
 	for index_0 in 0 .. lines.len () - 2 {
 		let line_0 = lines [index_0];
@@ -15,10 +15,9 @@ pub fn aoc2018_day2_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 			).map (
 				|(ch, _)| ch
 			).collect ();
-			println! ("First box ID:      {}", line_0);
-			println! ("Second box ID:     {}", line_1);
-			println! ("Common characters: {}", common_chars);
-			return Ok (())
+			println! ("First box ID: {}", line_0);
+			println! ("Second box ID: {}", line_1);
+			return Ok (common_chars);
 		}
 	}
 	panic! ();

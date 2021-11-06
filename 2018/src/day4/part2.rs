@@ -6,7 +6,7 @@ use std::error::Error;
 use crate::day4::shared;
 use crate::day4::shared::LineIter;
 
-pub fn aoc2018_day4_part2 (input: & str) -> Result <(), Box <dyn Error>> {
+pub fn aoc2018_day4_part2 (input: & str) -> Result <String, Box <dyn Error>> {
 
 	let lines = shared::parse_lines (input) ?;
 
@@ -22,8 +22,7 @@ pub fn aoc2018_day4_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 
 	println! ("Guard id: {}", guard_id);
 	println! ("Time: 00:{:02}", minute);
-	println! ("Puzzle answer: {}", guard_id * minute);
 
-	Ok (())
+	Ok (format! ("{}", guard_id * minute))
 
 }
