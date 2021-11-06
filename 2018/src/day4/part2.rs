@@ -1,59 +1,29 @@
 use chrono::Duration;
-use chrono::NaiveDateTime;
 use chrono::Timelike as _;
-use itertools::Itertools as _;
-use parse_display_derive::FromStr;
 use std::collections::HashMap;
 use std::error::Error;
 
+use crate::day4::shared;
+use crate::day4::shared::LineIter;
+
 pub fn aoc2018_day4_part2 (input: & str) -> Result <(), Box <dyn Error>> {
 
-	let input_lines: Vec <Line> = input.trim ().split ("\n")
-		.map (|line| Ok::<Line, Box <dyn Error>> (line.parse () ?))
-		.collect::<Result <Vec <_>, _>> () ?
-		.into_iter ().sorted_by_key (|line| line.time).collect ();
+	let lines = shared::parse_lines (input) ?;
 
 	let mut sleep_mins: HashMap <(u32, u32), u32> = HashMap::new ();
-	enum State { None, Awake (u32), Asleep (u32, NaiveDateTime) }
-	let mut state = State::None;
-	for line in input_lines.iter ().cloned () {
-		state = match (state, line.event) {
-			(_, Event::BeginsShift (guard_id)) => State::Awake (guard_id),
-			(State::Awake (guard_id), Event::FallsAsleep) => State::Asleep (guard_id, line.time),
-			(State::Asleep (guard_id, sleep_time), Event::WakesUp) => {
-				for time in itertools::iterate (sleep_time, |time| * time + Duration::minutes (1))
-						.take_while (|time| * time < line.time) {
-					(* sleep_mins.entry ((guard_id, time.time ().minute ())).or_insert (0)) += 1;
-				}
-				State::Awake (guard_id)
-			},
-			_ => panic! (),
-		};
+	for (guard_id, sleep_time, wake_time) in LineIter::new (& lines) {
+		for time in itertools::iterate (sleep_time, |time| * time + Duration::minutes (1))
+				.take_while (|time| * time < wake_time) {
+			(* sleep_mins.entry ((guard_id, time.time ().minute ())).or_insert (0)) += 1;
+		}
 	}
 
 	let ((guard_id, minute), _) = sleep_mins.iter ().max_by_key (|(_, num)| * num).unwrap ();
+
 	println! ("Guard id: {}", guard_id);
 	println! ("Time: 00:{:02}", minute);
 	println! ("Puzzle answer: {}", guard_id * minute);
 
 	Ok (())
 
-}
-
-#[ derive (Clone, Copy, FromStr) ]
-#[ display ("[{time}] {event}") ]
-#[ from_str (new = Ok::<_, Box <dyn Error>> (()).and_then (|_| Ok (Line {
-	time: NaiveDateTime::parse_from_str (String::as_str (& time), "%Y-%m-%d %H:%M") ?,
-	event,
-}))) ]
-struct Line {
-	time: NaiveDateTime,
-	event: Event,
-}
-
-#[ derive (Clone, Copy, FromStr) ]
-enum Event {
-	#[display ("Guard #{0} begins shift")] BeginsShift (u32),
-	#[display ("falls asleep")] FallsAsleep,
-	#[display ("wakes up")] WakesUp,
 }
