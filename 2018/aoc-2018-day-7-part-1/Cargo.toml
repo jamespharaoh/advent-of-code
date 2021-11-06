@@ -6,4 +6,5 @@
 
 [dependencies]
 
-	regex = "*"
+	parse-display = "*"
+	parse-display-derive = "*"

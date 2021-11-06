@@ -1,4 +1,4 @@
-use regex::Regex;
+use parse_display_derive::FromStr;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::error::Error;
@@ -7,21 +7,13 @@ use std::iter;
 
 fn main () -> Result <(), Box <dyn Error>> {
 
-	let line_re = Regex::new (
-		r"^Step ([A-Z]) must be finished before step ([A-Z]) can begin\.$",
-	).unwrap ();
-
 	let input_string = fs::read_to_string ("input") ?;
 
 	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
 	for line in input_string.trim ().split ("\n") {
-		let captures = line_re.captures (line).ok_or_else (
-			|| format! ("Failed to parse line: {}", line),
-		) ?;
-		let dep_step = captures.get (1).unwrap ().as_str ().chars ().next ().unwrap ();
-		let target_step = captures.get (2).unwrap ().as_str ().chars ().next ().unwrap ();
-		deps.entry (dep_step).or_insert (HashSet::new ());
-		(* deps.entry (target_step).or_insert (HashSet::new ())).insert (dep_step);
+		let line: Line = line.parse () ?;
+		deps.entry (line.dependency).or_insert (HashSet::new ());
+		(* deps.entry (line.target).or_insert (HashSet::new ())).insert (line.dependency);
 	}
 
 	let mut remaining: HashSet <char> = deps.keys ().cloned ().collect ();
@@ -63,4 +55,11 @@ fn main () -> Result <(), Box <dyn Error>> {
 	println! ("Elapsed seconds: {}", elapsed);
 	Ok (())
 
+}
+
+#[ derive (FromStr) ]
+#[ display ("Step {dependency} must be finished before step {target} can begin.") ]
+struct Line {
+	target: char,
+	dependency: char,
 }
