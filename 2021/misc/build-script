@@ -1,0 +1,30 @@
+#!/bin/bash
+
+export CARGO_TERM_COLOR="always"
+
+function main {
+	local cargo_args
+	local cargo_run_args
+	local cargo_test_args
+	while [[ "$#" != 0 ]]; do
+		local arg="$1"; shift
+		case "$arg" in
+			(day-*)
+				local day="${arg:4}"
+				cargo_run_args="$cargo_run_args --bin aoc-2021-day-$day"
+				cargo_test_args="$cargo_test_args --package aoc-2021-day-$day"
+				;;
+			(--release)
+				cargo_args="$cargo_args --release"
+				;;
+			(*)
+				echo "Unknown command: $1"
+				exit 1
+				;;
+		esac
+	done
+	cargo run $cargo_args $cargo_run_args
+	cargo test $cargo_args $cargo_test_args
+}
+
+main "$@"

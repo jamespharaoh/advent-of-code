@@ -1,0 +1,9 @@
+[package]
+
+	name = "aoc-2021-day-04"
+	version = "0.1.0"
+	edition = "2021"
+
+[dependencies]
+
+	aoc-common = { path = "../../aoc-common" }

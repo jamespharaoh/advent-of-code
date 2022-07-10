@@ -1,0 +1,46 @@
+#!/bin/bash
+
+coproc watcher {
+	coproc fswatch {
+		exec fswatch . \
+			--recursive \
+			--latency 0.1 \
+			--event Created \
+			--event Updated \
+			--event Removed \
+			--event Renamed \
+			--event OwnerModified \
+			--event AttributeModified \
+			--event MovedFrom \
+			--event MovedTo \
+			--extended \
+			--exclude '^\.git/' \
+			--exclude 'target/' \
+			--exclude '[^/]+\.swp$'
+	}
+	trap "kill $fswatch_PID" EXIT
+	while true; do
+		while true; do
+			read -u ${fswatch[0]} -t 0.3 line
+			read_status="$?"
+			if [[ $read_status -gt 128 ]]; then break; fi
+		done
+		echo "start"
+		read less_pid
+		read -u ${fswatch[0]} line
+		kill $less_pid
+	done
+}
+trap "kill $watcher_PID" EXIT
+
+set -m
+while true; do
+	read -u ${watcher[0]} start
+	( ( "$@" ) 2>&1 ) | less --raw-control-chars &
+	less_pid=$!
+	echo $less_pid >&${watcher[1]}
+	fg >/dev/null
+	less_status="$?"
+	if [[ $less_status = 0 ]]; then break; fi
+done
+
