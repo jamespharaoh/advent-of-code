@@ -17,7 +17,7 @@ mod logic {
 	}
 
 	pub fn calc_result_part_two (input: & str) -> GenResult <u64> {
-		calc_result (input,256)
+		calc_result (input, 256)
 	}
 
 	pub fn calc_result (input: & str, days: u64) -> GenResult <u64> {

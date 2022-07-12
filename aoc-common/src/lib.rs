@@ -3,8 +3,11 @@ use clap::Command;
 
 pub use arrayvec::ArrayVec;
 pub use clap;
+pub use itertools;
+pub use itertools::Either;
 pub use itertools::Itertools;
 pub use std::borrow::Borrow;
+pub use std::borrow::Cow;
 pub use std::cell::RefCell;
 pub use std::cmp;
 pub use std::collections::BinaryHeap;
@@ -21,10 +24,12 @@ pub use std::iter::Peekable;
 pub use std::marker::PhantomData;
 pub use std::mem;
 pub use std::ops;
+pub use std::ops::Range;
 pub use std::ops::RangeInclusive;
 pub use std::path::Path;
 pub use std::rc::Rc;
 pub use std::rc::Weak as RcWeak;
+pub use std::slice;
 pub use std::slice::Iter as SliceIter;
 pub use std::str::Chars;
 pub use std::str::FromStr;
@@ -291,6 +296,31 @@ impl <'a, ErrFn, ErrFnRet> Parser <'a, ErrFn>
 		let val = self.input [0 .. len].parse ().map_err (|_| self.err ()) ?;
 		self.input = & self.input [len .. ];
 		Ok (val)
+	}
+
+	pub fn word (& mut self) -> GenResult <& str> {
+		self.skip_whitespace ();
+		let input_temp = self.input;
+		let start = self.pos;
+		while let Some (letter) = self.peek () {
+			if letter.is_whitespace () { break }
+			self.next ().unwrap ();
+		}
+		let end = self.pos;
+		if start == end { Err (self.err ()) ? }
+		self.skip_whitespace ();
+		Ok (& input_temp [ .. end - start])
+	}
+
+	pub fn skip_whitespace (& mut self) -> & str {
+		let input_temp = self.input;
+		let start = self.pos;
+		while let Some (letter) = self.peek () {
+			if ! letter.is_whitespace () { break }
+			self.next ().unwrap ();
+		}
+		let end = self.pos;
+		& input_temp [ .. end - start]
 	}
 
 	pub fn end (& mut self) -> GenResult <()> {
