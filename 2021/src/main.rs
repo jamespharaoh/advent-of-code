@@ -10,18 +10,22 @@ fn main () -> GenResult <()> {
 	let flush = || io::stdout ().flush ();
 	for puzzle in puzzle_metadata () {
 		print! ("{:02}  {:name_len$}", puzzle.day (), puzzle.name (), name_len = name_len);
+		let start_time = time::Instant::now ();
 		for part in 0 .. puzzle.num_parts () {
 			if part == 0 {
-				print! ("  Part one: "); flush () ?;
+				print! ("  One: "); flush () ?;
 				let result = puzzle.invoke_part_one () ?;
 				print! ("{:14}", result);
 			}
 			if part == 1 {
-				print! ("  Part two: "); flush () ?;
+				print! ("  Two: "); flush () ?;
 				let result = puzzle.invoke_part_two () ?;
-				print! ("{:16}", result);
+				print! ("{:17}", result);
 			}
 		}
+		let end_time = time::Instant::now ();
+		let duration = end_time - start_time;
+		print! ("Time: {:>4}.{:02}ms", duration.as_millis (), (duration.as_micros () % 1000) / 10);
 		print! ("\n");
 	}
 	Ok (())

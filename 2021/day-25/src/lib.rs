@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Sea Cucumber";
 	year = 2021;
 	day = 25;

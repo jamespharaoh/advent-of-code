@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Transparent Origami";
 	year = 2021;
 	day = 13;

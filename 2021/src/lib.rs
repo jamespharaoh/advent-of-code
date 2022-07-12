@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-pub fn puzzle_metadata () -> Vec <Box <dyn Puzzle>> {
+pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {
 	vec! [
 		aoc_2021_day_01::puzzle_metadata (),
 		aoc_2021_day_02::puzzle_metadata (),

@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Amphipod";
 	year = 2021;
 	day = 23;
@@ -38,31 +38,23 @@ mod logic {
 
 	pub fn calc_result (input: State) -> GenResult <i64> {
 
-		let mut seen: HashSet <StateCompact> = HashSet::new ();
+		let mut search = search::PrioritySearch::new (
+			|& state_compact: & StateCompact, & score, mut adder| {
+				let state = state_compact.expand ();
+				for (next_state, next_cost) in calc_next_states (& state) {
+					let next_compact = next_state.compact ();
+					let next_score = score + next_cost;
+					adder.add (next_compact, next_score);
+				}
+			},
+		);
 
-		#[ derive (Eq, Ord) ]
-		struct TodoItem { score: i64, state_compact: StateCompact }
-		impl PartialEq for TodoItem {
-			fn eq (& self, other: & TodoItem) -> bool { self.score.eq (& other.score) }
-		}
-		impl PartialOrd for TodoItem {
-			fn partial_cmp (& self, other: & TodoItem) -> Option <cmp::Ordering> { other.score.partial_cmp (& self.score) }
-		}
-		let mut todo: BinaryHeap <TodoItem> = BinaryHeap::new ();
-		todo.push (TodoItem { score: 0, state_compact: input.compact () });
+		search.push (input.compact (), 0);
 
-		let mut final_score = None;
-		'OUTER: while let Some (TodoItem {score, state_compact }) = todo.pop () {
-			if seen.contains (& state_compact) { continue }
-			seen.insert (state_compact);
-			let state = state_compact.expand ();
-			if state.is_finished () { final_score = Some (score); break 'OUTER }
-			for (next_state, next_cost) in calc_next_states (& state) {
-				let next_compact = next_state.compact ();
-				let next_score = score + next_cost;
-				todo.push (TodoItem { score: next_score, state_compact: next_compact });
-			}
-		}
+		let final_score = search
+			.filter (|(state_compact, _)| state_compact.expand ().is_finished ())
+			.map (|(_, score)| score)
+			.next ();
 
 		let final_score = final_score.ok_or (format! ("Failed to find solution")) ?;
 		Ok (final_score)
@@ -527,32 +519,24 @@ mod examples {
 
 	use super::*;
 
-	const EXAMPLE_0: & 'static [& 'static str] = & [
+	const EXAMPLE: & 'static [& 'static str] = & [
 		"#############",
 		"#...........#",
 		"###B#C#B#D###",
-		"  #A#D#C#A#",
-		"  #########",
-	];
-
-	const EXAMPLE_1: & 'static [& 'static str] = & [
-		"#############",
-		"#...........#",
-		"###B#C#B#D###",
-		"  #D#C#B#A#",
-		"  #D#B#A#C#",
 		"  #A#D#C#A#",
 		"  #########",
 	];
 
 	#[ test ]
-	fn part_one () {
-		assert_eq! (12521, logic::calc_result (EXAMPLE_0).unwrap ());
+	fn part_one () -> GenResult <()> {
+		assert_eq! (12521, logic::part_one (EXAMPLE) ?);
+		Ok (())
 	}
 
 	#[ test ]
-	fn part_two () {
-		assert_eq! (44169, logic::calc_result (EXAMPLE_1).unwrap ());
+	fn part_two () -> GenResult <()> {
+		assert_eq! (44169, logic::part_two (EXAMPLE) ?);
+		Ok (())
 	}
 
 }

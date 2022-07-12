@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Binary Diagnostic";
 	year = 2021;
 	day = 3;

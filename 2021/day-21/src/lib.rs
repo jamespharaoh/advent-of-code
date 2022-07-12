@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Dirac Dice";
 	year = 2021;
 	day = 21;
@@ -105,9 +105,9 @@ mod model {
 		let err = move |line_idx| move |char_idx|
 			format! ("Invalid input: line {}: {}", line_idx + 1, char_idx + 1);
 		if lines.len () != 2 { Err (err (lines.len ()) (0)) ?; }
-		let mut parser = Parser::new (lines [0], err (0));
+		let mut parser = parser::Parser::new (lines [0], err (0));
 		let start_1: u8 = parser.expect ("Player 1 starting position: ") ?.int () ?;
-		let mut parser = Parser::new (lines [1], err (1));
+		let mut parser = parser::Parser::new (lines [1], err (1));
 		let start_2: u8 = parser.expect ("Player 2 starting position: ") ?.int () ?;
 		Ok ((start_1, start_2))
 	}

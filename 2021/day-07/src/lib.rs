@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "The Treachery of Whales";
 	year = 2021;
 	day = 7;

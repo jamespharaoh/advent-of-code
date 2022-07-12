@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Seven Segment Search";
 	year = 2021;
 	day = 8;

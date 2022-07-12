@@ -1,6 +1,6 @@
 use aoc_common::*;
 
-puzzle! {
+puzzle_info! {
 	name = "Trick Shot";
 	year = 2021;
 	day = 17;
@@ -75,7 +75,7 @@ mod model {
 	impl Input {
 		pub fn parse (input: & str) -> GenResult <Input> {
 			let err_fn = |char_idx| format! ("Invalid input: {}; {}", char_idx + 1, input);
-			let mut parser = Parser::new (input, err_fn);
+			let mut parser = parser::Parser::new (input, err_fn);
 			let x_min = parser.expect ("target area: x=") ?.int () ?;
 			let x_max = parser.expect ("..") ?.int () ?;
 			let y_min = parser.expect (", y=") ?.int () ?;

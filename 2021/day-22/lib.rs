@@ -112,7 +112,7 @@ pub mod model {
 	pub fn parse_input (lines: & [& str]) -> GenResult <Vec <Step>> {
 		let err = || format! ("Invalid input");
 		lines.iter ().enumerate ().map (|(line_idx, line)| {
-			let mut parser = Parser::new (line, |char_idx|
+			let mut parser = parser::Parser::new (line, |char_idx|
 				format! ("Invalid input: line {}: char {}: {}", line_idx + 1, char_idx + 1, line));
 			let state = match parser.word () ? {
 				"on" => true,
