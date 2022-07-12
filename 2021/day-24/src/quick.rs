@@ -6,7 +6,8 @@
 //!
 //! ```
 //! # use aoc_2021_day_24::*;
-//! for solution in quick::iterator (true) {
+//! # let steps = [quick::Step { random: false, check: 0, increment: 0 }; 14];
+//! for solution in quick::iterator (& steps, true) {
 //!   println! ("{:?}", solution);
 //! }
 //! ```
@@ -127,9 +128,9 @@ use model::Input;
 
 #[ derive (Clone, Copy, Debug) ]
 pub struct Step {
-	random: bool,
-	check: i64,
-	increment: i64,
+	pub random: bool,
+	pub check: i64,
+	pub increment: i64,
 }
 
 impl Step {

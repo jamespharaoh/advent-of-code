@@ -36,7 +36,7 @@ trap "kill $watcher_PID" EXIT
 set -m
 while true; do
 	read -u ${watcher[0]} start
-	( ( "$@" ) 2>&1 ) | less --raw-control-chars &
+	( ( "$@" ) 2>&1 ) | less --raw-control-chars --chop-long-lines &
 	less_pid=$!
 	echo $less_pid >&${watcher[1]}
 	fg >/dev/null

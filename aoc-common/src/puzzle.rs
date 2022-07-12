@@ -14,7 +14,17 @@ pub trait Puzzle {
 	fn invoke (& self, args: & [OsString]) -> GenResult <()> {
 		let mut command = Command::new (format! ("aoc-{}-day-{}", self.year (), self.day ()));
 		for part_num in 1 ..= self.num_parts () {
-			command = command.subcommand (Command::new (format! ("part-{}", part_num)));
+			command = command.subcommand (
+				Command::new (format! ("part-{}", part_num))
+					.arg (
+						clap::Arg::new ("repeat")
+							.long ("repeat")
+							.value_parser (clap::value_parser! (u64))
+							.takes_value (true)
+							.required (true)
+							.default_value ("1")
+							.help ("Number of times to repeat the calculation"))
+			);
 		}
 		for puzzle_command in self.commands () {
 			command = command.subcommand (
@@ -31,17 +41,20 @@ pub trait Puzzle {
 					let result = self.invoke_part_two () ?;
 					println! ("Part two: {}", result);
 				}
-				Ok (())
 			},
-			Some (("part-1", _)) => {
-				let result = self.invoke_part_one () ?;
-				println! ("Result: {}", result);
-				Ok (())
+			Some (("part-1", matches)) => {
+				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
+				for _ in 0 .. repeat {
+					let result = self.invoke_part_one () ?;
+					println! ("Result: {}", result);
+				}
 			},
-			Some (("part-2", _)) => {
-				let result = self.invoke_part_two () ?;
-				println! ("Result: {}", result);
-				Ok (())
+			Some (("part-2", matches)) => {
+				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
+				for _ in 0 .. repeat {
+					let result = self.invoke_part_two () ?;
+					println! ("Result: {}", result);
+				}
 			},
 			Some ((name, matches)) => {
 				for puzzle_command in self.commands () {
@@ -52,6 +65,7 @@ pub trait Puzzle {
 				unreachable! ();
 			},
 		}
+		Ok (())
 	}
 
 	fn invoke_part_one (& self) -> GenResult <String> {

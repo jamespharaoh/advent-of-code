@@ -1,5 +1,7 @@
 use aoc_common::*;
 
+pub mod rotation;
+
 puzzle_info! {
 	name = "Beacon Scanner";
 	year = 2021;
@@ -10,10 +12,14 @@ puzzle_info! {
 
 mod logic {
 
-	use aoc_common::*;
-	use super::model::Input;
-	use super::model::Pos;
-	use super::rotation::Rotation;
+	use super::*;
+	use model::Coord;
+	use model::Input;
+	use model::Pos;
+	use rotation::Rotation;
+	use bithash::BitHash;
+
+	type ScannerHash = BitHash <48>;
 
 	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
@@ -25,171 +31,164 @@ mod logic {
 		let input = Input::parse (lines) ?;
 		let (scanners, _) = calc_result (& input) ?;
 		let scanners: Vec <Pos> = scanners.into_iter ().collect ();
-		let mut max_distance: u16 = 0;
-		for idx_0 in 0 .. scanners.len () - 1 {
-			for idx_1 in idx_0 + 1 .. scanners.len () {
-				let pos_0 = scanners [idx_0];
-				let pos_1 = scanners [idx_1];
-				let distance = i16::abs_diff (pos_0.x, pos_1.x) + i16::abs_diff (pos_0.y, pos_1.y)
-					+ i16::abs_diff (pos_0.z, pos_1.z);
-				if distance > max_distance { max_distance = distance }
-			}
-		}
-		Ok (max_distance as i64)
+		Ok (
+			scanners.iter ().combinations (2).map (|scanners| {
+				let (pos_0, pos_1) = (scanners [0], scanners [1]);
+				Coord::abs_diff (pos_0.x, pos_1.x)
+					+ Coord::abs_diff (pos_0.y, pos_1.y)
+					+ Coord::abs_diff (pos_0.z, pos_1.z)
+			}).max ().unwrap () as i64
+		)
 	}
 
 	fn calc_result (input: & Input) -> GenResult <(HashSet <Pos>, HashSet <Pos>)> {
-		let mut up_matches_by_scanner: HashMap <Rc <String>, Vec <Rc <UpMatch>>> = HashMap::new ();
-		let mut done: HashMap <Rc <String>, (Rotation, Pos)> = HashMap::new ();
-		let mut final_scanners: HashSet <Pos> = HashSet::new ();
-		let mut final_beacons: HashSet <Pos> = HashSet::new ();
-		let mut all_down_matches;
-		{
-			let base_scanner_name = input.scanner_names [0].clone ();
-			done.insert (base_scanner_name.clone (), (Rotation::None, Pos::ZERO));
-			let base_scanner = & input.scanners [& input.scanner_names [0]];
-			let base_up_matches = calc_up_matches (& input, base_scanner_name.clone ());
-			all_down_matches = calc_down_matches (& base_up_matches);
-			final_beacons.extend (base_scanner.beacons.iter ());
+
+		struct OriginalScanner {
+			beacons: Vec <Pos>,
+			hash: ScannerHash,
+			matched: Cell <bool>,
 		}
-		while done.len () < input.scanner_names.len () {
-			for up_scanner_name in input.scanner_names.iter () {
-				if done.contains_key (up_scanner_name) { continue }
-				let up_matches = up_matches_by_scanner.entry (up_scanner_name.clone ())
-					.or_insert_with (|| calc_up_matches (& input, up_scanner_name.clone ()));
-				for up_match in up_matches.iter () {
-					let down_match = match all_down_matches.get (& up_match.beacons) {
-						Some (down_match) => down_match,
-						None => continue,
-					};
-					let temp_rotate = down_match.rotate.rev ().combine (up_match.rotate);
-					let temp_offset = down_match.rotate.rev ().apply (down_match.origin - up_match.origin);
-					let (down_rotate, down_offset) = done [& down_match.scanner_name];
-					let up_rotate = down_rotate.combine (temp_rotate);
-					let up_offset = down_rotate.apply (temp_offset) + down_offset;
-					let up_scanner = & input.scanners [& up_match.scanner_name];
-					let up_beacons: Vec <Pos> = {
-						let mut up_beacons: Vec <Pos> = up_scanner.beacons.iter ().cloned ().map (
-							|beacon| up_rotate.apply (beacon) + up_offset,
-						).collect ();
-						up_beacons.sort ();
-						up_beacons
-					};
-					done.insert (up_scanner_name.clone (), (up_rotate, up_offset));
-					final_scanners.insert (up_offset);
-					final_beacons.extend (up_beacons.iter ());
-					for (down_match_key, down_match) in calc_down_matches (& up_matches).into_iter () {
-						all_down_matches.entry (down_match_key.clone ()).or_insert (down_match);
+
+		struct RotatedScanner {
+			original: Rc <OriginalScanner>,
+			beacons: Vec <Pos>,
+			hash: ScannerHash,
+		}
+
+		struct PlacedScanner {
+			original: Rc <OriginalScanner>,
+			beacons: Vec <Pos>,
+			hash: ScannerHash,
+		}
+
+		fn calc_scanner_hash (beacons: & [Pos]) -> ScannerHash {
+			beacons.iter ().copied ().enumerate ()
+				.flat_map (|(beacon_0_idx, beacon_0)| beacons.iter ().copied ()
+					.skip (beacon_0_idx + 1)
+					.map (move |beacon_1| beacon_1 - beacon_0))
+				.fold (ScannerHash::new (), |hash, val| hash.update (& val))
+		}
+
+		let mut original_scanners = input.scanners.iter ().map (|(_, scanner)|
+			Rc::new (OriginalScanner {
+				beacons: scanner.beacons.iter ().copied ().sorted ().collect (),
+				hash: calc_scanner_hash (& scanner.beacons),
+				matched: Cell::new (false),
+			})
+		).collect::<Vec <_>> ();
+
+		let base_scanner = original_scanners.remove (0);
+		let base_scanner = Rc::new (PlacedScanner {
+			original: base_scanner.clone (),
+			beacons: base_scanner.beacons.clone (),
+			hash: base_scanner.hash,
+		});
+
+		let mut rotated_scanners = original_scanners.iter ().flat_map (|scanner|
+			Rotation::ALL.iter ().copied ().map (|rotate| {
+				let beacons = scanner.beacons.iter ().copied ()
+					.map (|beacon| rotate.apply (beacon))
+					.sorted ()
+					.collect::<Vec <_>> ();
+				let hash = calc_scanner_hash (& beacons);
+				Rc::new (RotatedScanner {
+					original: scanner.clone (),
+					beacons, hash,
+				})
+			})
+		).collect::<Vec <_>> ();
+
+		#[ derive (Clone) ]
+		struct ScannerMatch {
+			placed: Rc <PlacedScanner>,
+			rotated: Rc <RotatedScanner>,
+			priority: usize,
+		}
+
+		impl PartialEq for ScannerMatch {
+			fn eq (& self, other: & Self) -> bool {
+				self.priority == other.priority
+			}
+		}
+
+		impl Eq for ScannerMatch {}
+
+		impl PartialOrd for ScannerMatch {
+			fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
+				usize::partial_cmp (& self.priority, & other.priority)
+			}
+		}
+
+		impl Ord for ScannerMatch {
+			fn cmp (& self, other: & Self) -> cmp::Ordering {
+				usize::cmp (& self.priority, & other.priority)
+			}
+		}
+
+		let mut scanner_matches = BinaryHeap::new ();
+
+		scanner_matches.extend (rotated_scanners.iter ().map (|rotated_scanner|
+			ScannerMatch {
+				placed: base_scanner.clone (),
+				rotated: rotated_scanner.clone (),
+				priority: (base_scanner.hash & rotated_scanner.hash).bits (),
+			}
+		));
+
+		let mut scanner_positions: HashSet <Pos> = HashSet::new ();
+		scanner_positions.insert (Pos::zero ());
+
+		let mut beacon_positions: HashSet <Pos> = HashSet::new ();
+		beacon_positions.extend (base_scanner.beacons.iter ().copied ());
+
+		let mut scanner_matches_buffer = Vec::new ();
+		'OUTER: loop {
+			if scanner_positions.len () == input.scanners.len () { break }
+			scanner_matches.extend (scanner_matches_buffer.drain ( .. ));
+
+			while let Some (scanner_match) = scanner_matches.pop () {
+				if rotated_scanners.is_empty () { break 'OUTER }
+				if scanner_match.rotated.original.matched.get () { continue }
+				let placed = scanner_match.placed.clone ();
+				let rotated = scanner_match.rotated.clone ();
+				for placed_beacon in placed.beacons.iter ().copied () {
+					for rotated_beacon in rotated.beacons.iter ().copied () {
+						let offset = placed_beacon - rotated_beacon;
+						let count = itertools::merge_join_by(
+								placed.beacons.iter ().copied (),
+								rotated.beacons.iter ().copied ()
+									.map (|beacon| beacon + offset),
+								|left, right| left.cmp (right))
+							.filter (|merged| merged.is_both ())
+							.count ();
+						if count < 12 { continue }
+						let newly_placed = Rc::new (PlacedScanner {
+							original: rotated.original.clone (),
+							beacons: rotated.beacons.iter ().cloned ()
+								.map (|beacon| beacon + offset).collect (),
+							hash: rotated.hash,
+						});
+						newly_placed.original.matched.set (true);
+						scanner_positions.insert (offset);
+						beacon_positions.extend (newly_placed.beacons.iter ().copied ());
+						scanner_matches.extend (rotated_scanners.iter ()
+							.map (|other_scanner| ScannerMatch {
+								placed: newly_placed.clone (),
+								rotated: other_scanner.clone (),
+								priority: (newly_placed.hash & other_scanner.hash).bits (),
+							}));
+						continue 'OUTER;
 					}
-					up_matches_by_scanner.remove (up_scanner_name);
-					break;
 				}
+				scanner_matches_buffer.push (scanner_match);
 			}
+
+			rotated_scanners.retain (|scanner| ! scanner.original.matched.get ());
+
 		}
-		Ok ((final_scanners, final_beacons))
-	}
 
-	fn calc_up_matches (input: & Input, scanner_name: Rc <String>) -> Vec <Rc <UpMatch>> {
-		let scanner = & input.scanners [& scanner_name];
-		let mut up_matches: Vec <Rc <UpMatch>> = Vec::new ();
-		let beacons = & scanner.beacons;
-		for rotate in [
-			Rotation::None, Rotation::Clockwise, Rotation::CounterClockwise, Rotation::UpsideDown,
-			Rotation::Around, Rotation::ClockwiseAround, Rotation::CounterClockwiseAround,
-			Rotation::UpsideDownAround,
-		] {
-			let beacons: Vec <Pos> = beacons.iter ().cloned ().map (|beacon| rotate.apply (beacon)).collect ();
-			let mut todo: VecDeque <Pos> = VecDeque::new ();
-			todo.push_back (Pos::MAX);
-			let mut seen: HashSet <Pos> = HashSet::new ();
-			let mut origins: HashSet <Pos> = HashSet::new ();
-			while let Some (base_bound) = todo.pop_front () {
-				for beacon in beacons.iter () {
-					if beacon.x >= base_bound.x && beacon.y < base_bound.y
-						&& beacon.z >= base_bound.z { continue }
-					let new_bound = Pos {
-						x: cmp::min (beacon.x, base_bound.x),
-						y: cmp::min (beacon.y, base_bound.y),
-						z: cmp::min (beacon.z, base_bound.z),
-					};
-					if seen.contains (& new_bound) { continue }
-					seen.insert (new_bound);
-					todo.push_back (new_bound);
-					let found = beacons.iter ().filter (|& beacon|
-						beacon.x >= new_bound.x && beacon.y >= new_bound.y && beacon.z >= new_bound.z,
-					).count ();
-					if found == 12 {
-						origins.insert (new_bound);
-					}
-				}
-			}
-			for origin in origins.iter ().cloned () {
-				let mut beacons: Vec <Pos> = beacons.iter ().cloned ().filter (
-					|beacon| beacon.x >= origin.x && beacon.y >= origin.y && beacon.z >= origin.z,
-				).map (
-					|beacon| Pos { x: beacon.x - origin.x, y: beacon.y - origin.y, z: beacon.z - origin.z },
-				).collect ();
-				beacons.sort ();
-				let size = beacons.iter ().cloned ().fold (Pos::ZERO,
-					|size, beacon| Pos {
-						x: cmp::max (size.x, beacon.x),
-						y: cmp::max (size.y, beacon.y),
-						z: cmp::max (size.z, beacon.z),
-					},
-				);
-				up_matches.push (Rc::new (UpMatch {
-					scanner_name: scanner_name.clone (),
-					rotate,
-					origin,
-					size,
-					beacons: Rc::new (beacons),
-				}));
-			}
-		}
-		up_matches
-	}
+		Ok ((scanner_positions, beacon_positions))
 
-	fn calc_down_matches (
-		up_matches: & [Rc <UpMatch>],
-	) -> HashMap <Rc <Vec <Pos>>, Rc <DownMatch>> {
-		let mut down_matches: HashMap <Rc <Vec <Pos>>, Rc <DownMatch>> = HashMap::new ();
-		for up_match in up_matches.iter () {
-			for new_rotate in [
-				Rotation::ClockwiseAround,
-				Rotation::UpsideDownDown,
-				Rotation::UpsideDownLeft,
-			] {
-				let mut beacons: Vec <Pos> = up_match.beacons.iter ().cloned ().map (
-					|beacon| new_rotate.apply (beacon - up_match.size),
-				).collect ();
-				beacons.sort ();
-				let beacons = Rc::new (beacons);
-				down_matches.entry (beacons.clone ()).or_insert_with (||
-					Rc::new (DownMatch {
-						scanner_name: up_match.scanner_name.clone (),
-						rotate: new_rotate.combine (up_match.rotate),
-						origin: new_rotate.apply (up_match.origin + up_match.size),
-					})
-				);
-			}
-		}
-		down_matches
-	}
-
-	#[ derive (Clone) ]
-	pub struct UpMatch {
-		pub scanner_name: Rc <String>,
-		pub rotate: Rotation,
-		pub origin: Pos,
-		pub size: Pos,
-		pub beacons: Rc <Vec <Pos>>,
-	}
-
-	#[ derive (Clone) ]
-	pub struct DownMatch {
-		scanner_name: Rc <String>,
-		rotate: Rotation,
-		origin: Pos,
 	}
 
 }
@@ -197,6 +196,9 @@ mod logic {
 mod model {
 
 	use aoc_common::*;
+
+	pub type Coord = i16;
+	pub type Pos = pos::PosXYZ <Coord>;
 
 	pub struct Input {
 		pub scanners: HashMap <Rc <String>, InputScanner>,
@@ -245,347 +247,6 @@ mod model {
 	#[ derive (Debug) ]
 	pub struct InputScanner {
 		pub beacons: Vec <Pos>,
-	}
-
-	#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub struct Pos { pub x: i16, pub y: i16, pub z: i16 }
-
-	impl Pos {
-		pub const ZERO: Pos = Pos { x: 0, y: 0, z: 0 };
-		pub const MAX: Pos = Pos { x: i16::MAX, y: i16::MAX, z: i16::MAX };
-	}
-
-	impl fmt::Debug for Pos {
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			write! (formatter, "Pos ({}, {}, {})", self.x, self.y, self.z) ?;
-			Ok (())
-		}
-	}
-
-	impl ops::Add <Pos> for Pos {
-		type Output = Pos;
-		fn add (self, other: Pos) -> Pos {
-			Pos { x: self.x + other.x, y: self.y + other.y, z: self.z + other.z }
-		}
-	}
-
-	impl ops::Sub <Pos> for Pos {
-		type Output = Pos;
-		fn sub (self, other: Pos) -> Pos {
-			Pos { x: self.x - other.x, y: self.y - other.y, z: self.z - other.z }
-		}
-	}
-
-}
-
-mod rotation {
-
-	use crate::model::Pos;
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	pub enum Rotation {
-		None,
-		Clockwise,
-		CounterClockwise,
-		UpsideDown,
-		Up,
-		ClockwiseUp,
-		CounterClockwiseUp,
-		UpsideDownUp,
-		Down,
-		ClockwiseDown,
-		CounterClockwiseDown,
-		UpsideDownDown,
-		Left,
-		ClockwiseLeft,
-		CounterClockwiseLeft,
-		UpsideDownLeft,
-		Right,
-		ClockwiseRight,
-		CounterClockwiseRight,
-		UpsideDownRight,
-		Around,
-		ClockwiseAround,
-		CounterClockwiseAround,
-		UpsideDownAround,
-	}
-
-	#[ allow (dead_code) ]
-	impl Rotation {
-
-		const ALL: & 'static [Rotation] = & [
-			Rotation::None,
-			Rotation::Clockwise,
-			Rotation::CounterClockwise,
-			Rotation::UpsideDown,
-			Rotation::Up,
-			Rotation::ClockwiseUp,
-			Rotation::CounterClockwiseUp,
-			Rotation::UpsideDownUp,
-			Rotation::Down,
-			Rotation::ClockwiseDown,
-			Rotation::CounterClockwiseDown,
-			Rotation::UpsideDownDown,
-			Rotation::Left,
-			Rotation::ClockwiseLeft,
-			Rotation::CounterClockwiseLeft,
-			Rotation::UpsideDownLeft,
-			Rotation::Right,
-			Rotation::ClockwiseRight,
-			Rotation::CounterClockwiseRight,
-			Rotation::UpsideDownRight,
-			Rotation::Around,
-			Rotation::ClockwiseAround,
-			Rotation::CounterClockwiseAround,
-			Rotation::UpsideDownAround,
-		];
-
-		pub fn apply (self, pos: Pos) -> Pos {
-			match self {
-				Rotation::None => Pos { x: pos.x, y: pos.y, z: pos.z },
-				Rotation::Clockwise => Pos { x: - pos.y, y: pos.x, z: pos.z },
-				Rotation::CounterClockwise => Pos { x: pos.y, y: - pos.x, z: pos.z },
-				Rotation::UpsideDown => Pos { x: - pos.x, y: - pos.y, z: pos.z },
-				Rotation::Up => Pos { x: pos.x, y: - pos.z, z: pos.y },
-				Rotation::ClockwiseUp => Pos { x: pos.z, y: pos.x, z: pos.y },
-				Rotation::CounterClockwiseUp => Pos { x: - pos.z, y: - pos.x, z: pos.y },
-				Rotation::UpsideDownUp => Pos { x: - pos.x, y: pos.z, z: pos.y },
-				Rotation::Down => Pos { x: pos.x, y: pos.z, z: - pos.y },
-				Rotation::ClockwiseDown => Pos { x: - pos.z, y: pos.x, z: - pos.y },
-				Rotation::CounterClockwiseDown => Pos { x: pos.z, y: - pos.x, z: - pos.y },
-				Rotation::UpsideDownDown => Pos { x: - pos.x, y: - pos.z, z: - pos.y },
-				Rotation::Left => Pos { x: pos.z, y: pos.y, z: - pos.x },
-				Rotation::ClockwiseLeft => Pos { x: - pos.y, y: pos.z, z: - pos.x },
-				Rotation::CounterClockwiseLeft => Pos { x: pos.y, y: - pos.z, z: - pos.x },
-				Rotation::UpsideDownLeft => Pos { x: - pos.z, y: - pos.y, z: - pos.x },
-				Rotation::Right => Pos { x: - pos.z, y: pos.y, z: pos.x },
-				Rotation::ClockwiseRight => Pos { x: - pos.y, y: - pos.z, z: pos.x },
-				Rotation::CounterClockwiseRight => Pos { x: pos.y, y: pos.z, z: pos.x },
-				Rotation::UpsideDownRight => Pos { x: pos.z, y: - pos.y, z: pos.x },
-				Rotation::Around => Pos { x: - pos.x, y: pos.y, z: - pos.z },
-				Rotation::ClockwiseAround => Pos { x: - pos.y, y: - pos.x, z: - pos.z },
-				Rotation::CounterClockwiseAround => Pos { x: pos.y, y: pos.x, z: - pos.z },
-				Rotation::UpsideDownAround => Pos { x: pos.x, y: - pos.y, z: - pos.z },
-			}
-		}
-
-		pub fn left (self) -> Rotation {
-			match self {
-				Rotation::None => Rotation::Left,
-				Rotation::Clockwise => Rotation::ClockwiseUp,
-				Rotation::CounterClockwise => Rotation::CounterClockwiseDown,
-				Rotation::UpsideDown => Rotation::UpsideDownRight,
-				Rotation::Up => Rotation::CounterClockwiseLeft,
-				Rotation::ClockwiseUp => Rotation::CounterClockwiseAround,
-				Rotation::CounterClockwiseUp => Rotation::CounterClockwise,
-				Rotation::UpsideDownUp => Rotation::CounterClockwiseRight,
-				Rotation::Down => Rotation::ClockwiseLeft,
-				Rotation::ClockwiseDown => Rotation::Clockwise,
-				Rotation::CounterClockwiseDown => Rotation::ClockwiseAround,
-				Rotation::UpsideDownDown => Rotation::ClockwiseRight,
-				Rotation::Left => Rotation::Around,
-				Rotation::ClockwiseLeft => Rotation::UpsideDownUp,
-				Rotation::CounterClockwiseLeft => Rotation::UpsideDownDown,
-				Rotation::UpsideDownLeft => Rotation::UpsideDown,
-				Rotation::Right => Rotation::None,
-				Rotation::ClockwiseRight => Rotation::Up,
-				Rotation::CounterClockwiseRight => Rotation::Down,
-				Rotation::UpsideDownRight => Rotation::UpsideDownAround,
-				Rotation::Around => Rotation::Right,
-				Rotation::ClockwiseAround => Rotation::CounterClockwiseUp,
-				Rotation::CounterClockwiseAround => Rotation::ClockwiseDown,
-				Rotation::UpsideDownAround => Rotation::UpsideDownLeft,
-			}
-		}
-
-		pub fn around (self) -> Rotation { self.left ().left () }
-		pub fn right (self) -> Rotation { self.left ().left ().left () }
-
-		pub fn clockwise (self) -> Rotation {
-			match self {
-				Rotation::None => Rotation::Clockwise,
-				Rotation::Clockwise => Rotation::UpsideDown,
-				Rotation::CounterClockwise => Rotation::None,
-				Rotation::UpsideDown => Rotation::CounterClockwise,
-				Rotation::Up => Rotation::ClockwiseUp,
-				Rotation::ClockwiseUp => Rotation::UpsideDownUp,
-				Rotation::CounterClockwiseUp => Rotation::Up,
-				Rotation::UpsideDownUp => Rotation::CounterClockwiseUp,
-				Rotation::Down => Rotation::ClockwiseDown,
-				Rotation::ClockwiseDown => Rotation::UpsideDownDown,
-				Rotation::CounterClockwiseDown => Rotation::Down,
-				Rotation::UpsideDownDown => Rotation::CounterClockwiseDown,
-				Rotation::Left => Rotation::ClockwiseLeft,
-				Rotation::ClockwiseLeft => Rotation::UpsideDownLeft,
-				Rotation::CounterClockwiseLeft => Rotation::Left,
-				Rotation::UpsideDownLeft => Rotation::CounterClockwiseLeft,
-				Rotation::Right => Rotation::ClockwiseRight,
-				Rotation::ClockwiseRight => Rotation::UpsideDownRight,
-				Rotation::CounterClockwiseRight => Rotation::Right,
-				Rotation::UpsideDownRight => Rotation::CounterClockwiseRight,
-				Rotation::Around => Rotation::ClockwiseAround,
-				Rotation::ClockwiseAround => Rotation::UpsideDownAround,
-				Rotation::CounterClockwiseAround => Rotation::Around,
-				Rotation::UpsideDownAround => Rotation::CounterClockwiseAround,
-			}
-		}
-
-		pub fn upside_down (self) -> Rotation { self.clockwise ().clockwise () }
-		pub fn counter_clockwise (self) -> Rotation { self.clockwise ().clockwise ().clockwise () }
-
-		pub fn up (self) -> Rotation {
-			match self {
-				Rotation::None => Rotation::Up,
-				Rotation::Clockwise => Rotation::ClockwiseRight,
-				Rotation::CounterClockwise => Rotation::CounterClockwiseLeft,
-				Rotation::UpsideDown => Rotation::UpsideDownDown,
-				Rotation::Up => Rotation::UpsideDownAround,
-				Rotation::ClockwiseUp => Rotation::UpsideDownRight,
-				Rotation::CounterClockwiseUp => Rotation::UpsideDownLeft,
-				Rotation::UpsideDownUp => Rotation::UpsideDown,
-				Rotation::Down => Rotation::None,
-				Rotation::ClockwiseDown => Rotation::Right,
-				Rotation::CounterClockwiseDown => Rotation::Left,
-				Rotation::UpsideDownDown => Rotation::Around,
-				Rotation::Left => Rotation::ClockwiseUp,
-				Rotation::ClockwiseLeft => Rotation::Clockwise,
-				Rotation::CounterClockwiseLeft => Rotation::CounterClockwiseAround,
-				Rotation::UpsideDownLeft => Rotation::ClockwiseDown,
-				Rotation::Right => Rotation::CounterClockwiseUp,
-				Rotation::ClockwiseRight => Rotation::ClockwiseAround,
-				Rotation::CounterClockwiseRight => Rotation::CounterClockwise,
-				Rotation::UpsideDownRight => Rotation::CounterClockwiseDown,
-				Rotation::Around => Rotation::UpsideDownUp,
-				Rotation::ClockwiseAround => Rotation::ClockwiseLeft,
-				Rotation::CounterClockwiseAround => Rotation::CounterClockwiseRight,
-				Rotation::UpsideDownAround => Rotation::Down,
-			}
-		}
-
-		pub fn flip (self) -> Rotation { self.up ().up () }
-		pub fn down (self) -> Rotation { self.up ().up ().up () }
-
-		pub fn rev (self) -> Rotation {
-			match self {
-				Rotation::None => Rotation::None,
-				Rotation::Clockwise => Rotation::CounterClockwise,
-				Rotation::CounterClockwise => Rotation::Clockwise,
-				Rotation::UpsideDown => Rotation::UpsideDown,
-				Rotation::Up => Rotation::Down,
-				Rotation::ClockwiseUp => Rotation::CounterClockwiseRight,
-				Rotation::CounterClockwiseUp => Rotation::ClockwiseLeft,
-				Rotation::UpsideDownUp => Rotation::UpsideDownUp,
-				Rotation::Down => Rotation::Up,
-				Rotation::ClockwiseDown => Rotation::CounterClockwiseLeft,
-				Rotation::CounterClockwiseDown => Rotation::ClockwiseRight,
-				Rotation::UpsideDownDown => Rotation::UpsideDownDown,
-				Rotation::Left => Rotation::Right,
-				Rotation::ClockwiseLeft => Rotation::CounterClockwiseUp,
-				Rotation::CounterClockwiseLeft => Rotation::ClockwiseDown,
-				Rotation::UpsideDownLeft => Rotation::UpsideDownLeft,
-				Rotation::Right => Rotation::Left,
-				Rotation::ClockwiseRight => Rotation::CounterClockwiseDown,
-				Rotation::CounterClockwiseRight => Rotation::ClockwiseUp,
-				Rotation::UpsideDownRight => Rotation::UpsideDownRight,
-				Rotation::Around => Rotation::Around,
-				Rotation::ClockwiseAround => Rotation::ClockwiseAround,
-				Rotation::CounterClockwiseAround => Rotation::CounterClockwiseAround,
-				Rotation::UpsideDownAround => Rotation::UpsideDownAround,
-			}
-		}
-
-		pub fn combine (self, other: Rotation) -> Rotation {
-			match self {
-				Rotation::None => other,
-				Rotation::Clockwise => other.clockwise (),
-				Rotation::CounterClockwise => other.counter_clockwise (),
-				Rotation::UpsideDown => other.upside_down (),
-				Rotation::Up => other.up (),
-				Rotation::ClockwiseUp => other.up ().clockwise (),
-				Rotation::CounterClockwiseUp => other.up ().counter_clockwise (),
-				Rotation::UpsideDownUp => other.up ().upside_down (),
-				Rotation::Down => other.down (),
-				Rotation::ClockwiseDown => other.down ().clockwise (),
-				Rotation::CounterClockwiseDown => other.down ().counter_clockwise (),
-				Rotation::UpsideDownDown => other.down ().upside_down (),
-				Rotation::Left => other.left (),
-				Rotation::ClockwiseLeft => other.left ().clockwise (),
-				Rotation::CounterClockwiseLeft => other.left ().counter_clockwise (),
-				Rotation::UpsideDownLeft => other.left ().upside_down (),
-				Rotation::Right => other.right (),
-				Rotation::ClockwiseRight => other.right ().clockwise (),
-				Rotation::CounterClockwiseRight => other.right ().counter_clockwise (),
-				Rotation::UpsideDownRight => other.right ().upside_down (),
-				Rotation::Around => other.around (),
-				Rotation::ClockwiseAround => other.around ().clockwise (),
-				Rotation::CounterClockwiseAround => other.around ().counter_clockwise (),
-				Rotation::UpsideDownAround => other.around ().upside_down (),
-			}
-		}
-
-	}
-
-	#[ cfg (test) ]
-	mod tests {
-
-		use aoc_common::*;
-		use super::*;
-
-		#[ test ]
-		fn test_rotation () {
-			let base = Pos { x: 1, y: 2, z: 3 };
-			let mut seen: HashSet <Pos> = HashSet::new ();
-			let mut seen_left: HashSet <Rotation> = HashSet::new ();
-			let mut seen_up: HashSet <Rotation> = HashSet::new ();
-			let mut seen_clockwise: HashSet <Rotation> = HashSet::new ();
-			fn right_handed (pos: Pos) -> bool {
-				let sign = match (pos.x.abs (), pos.y.abs (), pos.z.abs ()) {
-					(1, 2, 3) => 1,
-					(2, 3, 1) => 1,
-					(3, 1, 2) => 1,
-					(3, 2, 1) => -1,
-					(2, 1, 3) => -1,
-					(1, 3, 2) => -1,
-					_ => panic! (),
-				} * pos.x.signum () * pos.y.signum () * pos.z.signum ();
-				sign > 0
-			}
-			for rotate in Rotation::ALL.iter ().copied () {
-				let result = rotate.apply (base);
-				assert! (right_handed (result));
-				assert! (! seen.contains (& result), "Duplicated rotation {:?}", result);
-				seen.insert (result);
-				let rotate_left = rotate.left ();
-				assert! (! seen_left.contains (& rotate_left), "Duplicated rotation left {:?}", rotate_left);
-				seen_left.insert (rotate_left);
-				let rotate_up = rotate.up ();
-				assert! (! seen_up.contains (& rotate_up), "Duplicated rotation up {:?}", rotate_up);
-				seen_up.insert (rotate_up);
-				let rotate_clockwise = rotate.clockwise ();
-				assert! (! seen_clockwise.contains (& rotate_clockwise), "Duplicated rotation clockwise {:?}", rotate_clockwise);
-				seen_clockwise.insert (rotate_clockwise);
-				let rotate_four_lefts = rotate.left ().left ().left ().left ();
-				assert_eq! (rotate, rotate_four_lefts, "Four lefts from {:?} arrives at {:?}", rotate, rotate_four_lefts);
-				let rotate_four_ups = rotate.up ().up ().up ().up ();
-				assert_eq! (rotate, rotate_four_ups, "Four ups from {:?} arrives at {:?}", rotate, rotate_four_ups);
-				let rotate_four_clockwises = rotate.clockwise ().clockwise ().clockwise ().clockwise ();
-				assert_eq! (rotate, rotate_four_clockwises, "Four clockwises from {:?} arrives at {:?}", rotate, rotate_four_clockwises);
-				assert_eq! (rotate, rotate.up ().right ().down ().counter_clockwise ());
-				assert_eq! (rotate, rotate.flip ().around ().upside_down ());
-				let rotate_two_revs = rotate.rev ().rev ();
-				assert_eq! (rotate, rotate_two_revs, "Two reverses of {:?} arrives at {:?}", rotate, rotate_two_revs);
-				let pos_forward_rev = rotate.rev ().apply (rotate.apply (base));
-				assert_eq! (base, pos_forward_rev, "Applying forward and reverse to {:?} arrives at {:?}", base, pos_forward_rev);
-				for other in Rotation::ALL.iter ().copied () {
-					let pos_apply_twice = other.apply (rotate.apply (base));
-					let pos_combine = other.combine (rotate).apply (base);
-					assert_eq! (pos_apply_twice, pos_combine,
-						"Appling {:?} then {:?} gives {:?} but combining then applying gives {:?}",
-						rotate, other, pos_apply_twice, pos_combine);
-				}
-			}
-		}
-
 	}
 
 }
