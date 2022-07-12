@@ -1,6 +1,6 @@
 use super::*;
 
-#[ derive (Clone, Copy, Eq, Hash, PartialEq) ]
+#[ derive (Clone, Copy, fmt::Debug, Eq, Hash, PartialEq) ]
 pub struct PosXY <Val: num::PrimInt> { pub x: Val, pub y: Val }
 
 impl <Val: num::PrimInt> PosXY <Val> {
@@ -23,7 +23,7 @@ impl <Val: num::PrimInt> PosXY <Val> {
 	}
 }
 
-#[ derive (Clone, Copy, Eq, Hash, PartialEq) ]
+#[ derive (Clone, Copy, fmt::Debug, Eq, Hash, PartialEq) ]
 pub struct PosYX <Val: num::PrimInt> { pub y: Val, pub x: Val }
 
 impl <Val: num::PrimInt> PosYX <Val> {
@@ -44,4 +44,13 @@ impl <Val: num::PrimInt> PosYX <Val> {
 		}
 		result
 	}
+}
+
+impl <Val: num::PrimInt> PosYX <Val> {
+	pub fn zero () -> Self { Self { y: Val::zero (), x: Val::zero () } }
+}
+
+impl <Val: num::PrimInt> ops::Add for PosYX <Val> {
+	type Output = Self;
+	fn add (self, other: Self) -> Self { PosYX { y: self.y + other.y, x: self.x + other.x } }
 }

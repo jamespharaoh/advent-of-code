@@ -1,4 +1,10 @@
 //! Advent of Code 2021: Day 15: Chiton
+//!
+//! [https://adventofcode.com/2021/day/15](https://adventofcode.com/2021/day/15)
+//!
+//! This is a relatively simple path finder. We use [`PrioritySearch`](search::PrioritySearch) to
+//! prioritise the routes with the lowest risk, and keep a cache of the best ones so far to each
+//! point so we can short-circuit appropriately.
 
 use aoc_common::*;
 
@@ -31,7 +37,7 @@ mod logic {
 					let orig_risk = cave_risks.get (Pos { y, x }).copied ().unwrap ();
 					(orig_risk + rep_y + rep_x - 1) % 9 + 1
 				})),
-			))
+			)).collect ()
 		};
 		let new_size = [cave.risks.size () [0] * 5, cave.risks.size () [1] * 5];
 		cave.risks = Grid::new_from ([0, 0], new_size, risks);
@@ -69,7 +75,7 @@ mod model {
 
 	use super::*;
 
-	pub type Grid <Val> = grid::Grid <Val, 2>;
+	pub type Grid <Val> = grid::Grid <Val, Pos, 2>;
 	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Cave {

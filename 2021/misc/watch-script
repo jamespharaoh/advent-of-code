@@ -2,7 +2,7 @@
 
 coproc watcher {
 	coproc fswatch {
-		exec fswatch . \
+		exec fswatch . ../aoc-common \
 			--recursive \
 			--latency 0.1 \
 			--event Created \

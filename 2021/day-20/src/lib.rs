@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 20: Trench Map
+//!
+//! [https://adventofcode.com/2021/day/20](https://adventofcode.com/2021/day/20)
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -6,6 +10,9 @@ puzzle_info! {
 	day = 20;
 	part_one = |lines| logic::calc_result_part_one (lines);
 	part_two = |lines| logic::calc_result_part_two (lines);
+	commands = [
+		( name = "run"; method = tool::run; ),
+	];
 }
 
 pub mod tool {
@@ -42,13 +49,13 @@ pub mod tool {
 				print! (
 					"After {} steps: {} pixels {}\n{}",
 					steps,
-					image.len (),
+					image.num_pixels (),
 					if image.inverted () { "inactive" } else { "active" },
 					image.dump (),
 				);
 			},
 		).map (|(_, image)| image).skip (args.loops).next ().unwrap ();
-		println! ("Result: {}", end_image.len ());
+		println! ("Result: {}", end_image.num_pixels ());
 		Ok (())
 	}
 
@@ -60,6 +67,7 @@ mod logic {
 	use model::Algorithm;
 	use model::Image;
 	use model::Input;
+	use model::Pixels;
 	use model::Pos;
 
 	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
@@ -72,9 +80,10 @@ mod logic {
 
 	pub fn calc_result (lines: & [& str], loops: usize) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
+		let image = Image::new_from (input.pixels, false);
 		Ok (
-			image_iter (input.algorithm, Image::new_from (input.pixels, false))
-				.skip (loops).next ().unwrap ().len () as i64
+			image_iter (input.algorithm, image)
+				.skip (loops).next ().unwrap ().num_pixels () as i64
 		)
 	}
 
@@ -106,32 +115,28 @@ mod logic {
 
 	pub fn calc_next (algorithm: & Algorithm, image: & Image) -> Image {
 		let (origin, peak) = image.range ();
-		let mut new_image = Image::new (algorithm [if image.inverted () { 0x1ff } else { 0 }]);
-		for row in origin.row - 1 .. peak.row + 1 {
-			for col in origin.col - 1 .. peak.col + 1 {
-				let pos = Pos { row, col };
-				let algorithm_idx = {
-					let mut algorithm_idx: usize = 0;
-					for bit_pos in [
-						Pos { row: row - 1, col: col - 1 },
-						Pos { row: row - 1, col: col },
-						Pos { row: row - 1, col: col + 1 },
-						Pos { row: row, col: col - 1 },
-						Pos { row: row, col: col },
-						Pos { row: row, col: col + 1 },
-						Pos { row: row + 1, col: col - 1 },
-						Pos { row: row + 1, col: col },
-						Pos { row: row + 1, col: col + 1 },
-					] {
-						let bit = if image.get (bit_pos) { 1 } else { 0 };
-						algorithm_idx = algorithm_idx << 1 | bit;
-					}
-					algorithm_idx
-				};
-				new_image.set (pos, algorithm [algorithm_idx]);
-			}
-		}
-		new_image
+		let new_pixels = (origin.y - 1 .. peak.y + 1).flat_map (|y|
+			(origin.x - 3 .. peak.x + 1).map (move |x| [
+				image.get (Pos { y: y - 1, x: x + 1 }),
+				image.get (Pos { y: y, x: x + 1 }),
+				image.get (Pos { y: y + 1, x: x + 1 }),
+			]).scan ([false; 9], |state, next| {
+				* state = [
+					state [1], state [2], next [0],
+					state [4], state [5], next [1],
+					state [7], state [8], next [2],
+				];
+				Some (* state)
+			}).skip (2).map (|bits| {
+				let algorithm_idx = bits.into_iter ()
+					.fold (0, |val, bit| (val << 1) | if bit { 1 } else { 0 });
+				algorithm [algorithm_idx]
+			})
+		).collect ();
+		let new_size = [image.height () + 2, image.width () + 2];
+		let new_pixels = Pixels::new_from ([0, 0], new_size, new_pixels);
+		let new_inverted = algorithm [if image.inverted () { 0x1ff } else { 0 }];
+		Image::new_from (new_pixels, new_inverted)
 	}
 
 }
@@ -141,10 +146,12 @@ mod model {
 	use super::*;
 
 	pub type Algorithm = [bool; 512];
+	pub type Pixels = grid::Grid <bool, Pos>;
+	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Input {
 		pub algorithm: Algorithm,
-		pub pixels: HashSet <Pos>,
+		pub pixels: Pixels,
 	}
 
 	impl Input {
@@ -167,70 +174,45 @@ mod model {
 			};
 			if ! lines [1].is_empty () { Err (err (1, format! ("Expected blank line"))) ?; }
 			let pixels = lines.iter ().enumerate ().skip (2).map (|(line_idx, line)| {
-				let row = line_idx as i16 - 2;
-				line.chars ().enumerate ().map (move |(col, letter)| {
-					let col = col as i16;
-					let pos = Pos { row, col };
-					match letter {
-						'#' => Ok (Some (pos)),
-						'.' => Ok (None),
-						_ => Err (err (line_idx, format! ("Invalid character"))),
-					}
-				})
-			}).flatten ().filter_map_ok (|pos| pos).collect::<Result <_, _>> () ?;
+				line.chars ().map (move |letter| { match letter {
+					'#' => Ok (true),
+					'.' => Ok (false),
+					_ => Err (err (line_idx, format! ("Invalid character"))),
+				}})
+			}).flatten ().collect::<Result <_, _>> () ?;
+			let size = [lines.len () - 2, lines [2].chars ().count ()];
+			let pixels = Pixels::new_from ([0, 0], size, pixels);
 			Ok (Input { algorithm, pixels })
 		}
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	pub struct Pos { pub row: i16, pub col: i16 }
-
-	impl Pos {
-		const ZERO: Pos = Pos { row: 0, col: 0 };
-	}
-
 	#[ derive (Debug) ]
 	pub struct Image {
-		pixels: HashSet <Pos>,
+		pixels: Pixels,
 		inverted: bool,
 	}
 
 	impl Image {
-		pub fn new (inverted: bool) -> Image {
-			let pixels = HashSet::new ();
+		pub fn new_from (pixels: Pixels, inverted: bool) -> Image {
 			Image { pixels, inverted }
 		}
-		pub fn new_from (pixels: HashSet <Pos>, inverted: bool) -> Image {
-			Image { pixels, inverted }
+		pub fn num_pixels (& self) -> usize {
+			self.pixels.iter ().filter (|(_, & val)| val != self.inverted).count ()
 		}
-		pub fn len (& self) -> usize { self.pixels.len () }
+		pub fn height (& self) -> usize { self.pixels.size () [0] }
+		pub fn width (& self) -> usize { self.pixels.size () [1] }
 		pub fn inverted (& self) -> bool { self.inverted }
 		pub fn get (& self, pos: Pos) -> bool {
-			self.pixels.contains (& pos) ^ self.inverted
-		}
-		pub fn set (& mut self, pos: Pos, val: bool) {
-			if val ^ self.inverted {
-				self.pixels.insert (pos);
-			} else {
-				self.pixels.remove (& pos);
-			}
+			self.pixels.get (pos).copied ().unwrap_or (self.inverted)
 		}
 		pub fn range (& self) -> (Pos, Pos) {
-			self.pixels.iter ().fold ((Pos::ZERO, Pos::ZERO),
-				|(origin, peak), pixel| (
-					Pos {
-						row: cmp::min (origin.row, pixel.row),
-						col: cmp::min (origin.col, pixel.col),
-					},
-					Pos {
-						row: cmp::max (peak.row, pixel.row + 1),
-						col: cmp::max (peak.col, pixel.col + 1),
-					},
-				),
-			)
+			(self.pixels.origin (), self.pixels.peak () + Pos { y: 1, x: 1 })
 		}
 		pub fn dump (& self) -> ImageDump {
 			ImageDump (self)
+		}
+		pub fn pixels <'a> (& 'a self) -> impl Iterator <Item = bool> + 'a {
+			self.pixels.iter ().map (|(_, & val)| val)
 		}
 	}
 
@@ -240,9 +222,9 @@ mod model {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			let ImageDump (image) = self;
 			let (origin, peak) = image.range ();
-			for row in origin.row .. peak.row {
-				for col in origin.col .. peak.col {
-					let pos = Pos { row, col };
+			for y in origin.y .. peak.y {
+				for x in origin.x .. peak.x {
+					let pos = Pos { y, x };
 					write! (formatter, "{}", if image.get (pos) { '#' } else { '.' }) ?;
 				}
 				write! (formatter, "\n") ?;
