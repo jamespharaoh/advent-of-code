@@ -1,3 +1,5 @@
+//! Advent of Code 2021: Day 15: Chiton
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -12,6 +14,7 @@ mod logic {
 
 	use super::*;
 	use model::Cave;
+	use model::Grid;
 	use model::Pos;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
@@ -21,50 +24,43 @@ mod logic {
 
 	pub fn part_two (lines: & [& str]) -> GenResult <u64> {
 		let mut cave = Cave::parse (lines) ?;
-		let width = cave.end.x + 1;
-		let height = cave.end.y + 1;
-		cave.risks = cave.risks.into_iter ().flat_map (|(pos, risk)| {
-			let mut result = ArrayVec::<(Pos, u8), 25>::new ();
-			for (y_incr, y) in (pos.y .. height * 5).step_by (height as usize).enumerate () {
-				for (x_incr, x) in (pos.x .. width * 5).step_by (width as usize).enumerate () {
-					result.push ((Pos { x, y }, (risk + x_incr as u8 + y_incr as u8 - 1) % 9 + 1));
-				}
-			}
-			result
-		}).collect ();
-		cave.end = Pos { x: width * 5 - 1, y: height * 5 - 1 };
+		let risks = {
+			let cave_risks = & cave.risks;
+			(0 .. 5).flat_map (move |rep_y| (0 ..= cave.end.y).flat_map (move |y|
+				(0 .. 5).flat_map (move |rep_x| (0 ..= cave.end.x).map (move |x| {
+					let orig_risk = cave_risks.get (Pos { y, x }).copied ().unwrap ();
+					(orig_risk + rep_y + rep_x - 1) % 9 + 1
+				})),
+			))
+		};
+		let new_size = [cave.risks.size () [0] * 5, cave.risks.size () [1] * 5];
+		cave.risks = Grid::new_from ([0, 0], new_size, risks);
+		cave.end = Pos { y: (cave.end.y + 1) * 5 - 1, x: (cave.end.x + 1) * 5 - 1 };
 		calc_result (& cave)
 	}
 
 	pub fn calc_result (cave: & Cave) -> GenResult <u64> {
-		let max_x = cave.risks.keys ().map (|pos| pos.x).max ().unwrap_or (0);
-		let max_y = cave.risks.keys ().map (|pos| pos.y).max ().unwrap_or (0);
-		let max = max_x + max_y;
-		let mut todo = VecDeque::from ([ (cave.start, 0) ]);
-		let mut best = HashMap::from ([ (cave.start, 0) ]);
-		for loop_max in 0 ..= max {
-			let mut todo_later = Vec::new ();
-			while let Some ((pos, path_risk)) = todo.pop_front () {
-				if let Some (& best_path_risk) = best.get (& pos) {
-					if best_path_risk < path_risk { continue }
-				}
-				if pos.x + pos.y > loop_max {
-					todo_later.push ((pos, path_risk));
-					continue;
-				}
-				for adj_pos in pos.adjacent () {
-					if let Some (& adj_risk) = cave.risks.get (& adj_pos) {
-						let adj_path_risk = path_risk + adj_risk as u64;
-						if adj_path_risk < best.get (& adj_pos).cloned ().unwrap_or (u64::MAX) {
-							best.insert (adj_pos, adj_path_risk);
-							todo.push_back ((adj_pos, adj_path_risk));
-						}
-					}
+		let mut best: Grid <u64> = Grid::new_with ([0, 0], cave.risks.size (), u64::MAX);
+		let mut search = search::PrioritySearch::new (|& pos: & Pos, & path_risk, mut adder| {
+			if let Some (prev_best) = best.get_mut (pos) {
+				if * prev_best <= path_risk { return }
+				* prev_best = path_risk;
+			}
+			for adj_pos in pos.adjacent_4 () {
+				if let Some (& adj_risk) = cave.risks.get (adj_pos) {
+					let adj_path_risk = path_risk + adj_risk as u64;
+					let prev_best = best.get (adj_pos).copied ().unwrap_or (u64::MAX);
+					if prev_best <= adj_path_risk { continue }
+					adder.add (adj_pos, adj_path_risk);
 				}
 			}
-			todo = todo_later.into ();
-		}
-		Ok (best [& cave.end])
+		});
+		search.push (cave.start, 0);
+		let best = search
+			.filter (|& (pos, _)| pos == cave.end)
+			.map (|(_, score)| score)
+			.next ().unwrap ();
+		Ok (best)
 	}
 
 }
@@ -73,45 +69,28 @@ mod model {
 
 	use super::*;
 
+	pub type Grid <Val> = grid::Grid <Val, 2>;
+	pub type Pos = pos::PosYX <i16>;
+
 	pub struct Cave {
-		pub risks: HashMap <Pos, u8>,
+		pub risks: Grid <u8>,
 		pub start: Pos,
 		pub end: Pos,
 	}
 
 	impl Cave {
 		pub fn parse (lines: & [& str]) -> GenResult <Cave> {
-			let mut risks = HashMap::new ();
-			let mut start = None;
-			let mut end = None;
+			let mut risks = Vec::new ();
 			for (line_idx, line) in lines.iter ().enumerate () {
 				let line_err = || format! ("Invalid input on line {}: {}", line_idx + 1, line);
-				let y = line_idx as i64;
-				for (char_idx, letter) in line.chars ().enumerate () {
-					let x = char_idx as i64;
-					let pos = Pos { x, y };
-					risks.insert (pos, letter.to_digit (10).ok_or_else (line_err) ? as u8);
-					if start.is_none () { start = Some (pos); }
-					end = Some (pos);
+				for letter in line.chars () {
+					risks.push (letter.to_digit (10).ok_or_else (line_err) ? as u8);
 				}
 			}
-			let start = start.ok_or (format! ("Invalid input")) ?;
-			let end = end.ok_or (format! ("Invalid input")) ?;
+			let risks = Grid::new_from ([0, 0], [lines.len (), lines [0].len ()], risks);
+			let start = Pos { x: 0, y: 0 };
+			let end = Pos { x: risks.size () [1] as i16 - 1, y: risks.size () [0] as i16 - 1 };
 			Ok (Cave { risks, start, end })
-		}
-	}
-
-	#[ derive (Clone, Copy, Eq, Hash, PartialEq) ]
-	pub struct Pos { pub x: i64, pub y: i64 }
-
-	impl Pos {
-		pub fn adjacent (& self) -> Vec <Pos> {
-			vec! [
-				Pos { x: self.x - 1, y: self.y },
-				Pos { x: self.x + 1, y: self.y },
-				Pos { x: self.x, y: self.y - 1 },
-				Pos { x: self.x, y: self.y + 1 },
-			]
 		}
 	}
 

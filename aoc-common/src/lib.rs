@@ -6,6 +6,7 @@ pub use clap;
 pub use itertools;
 pub use itertools::Either;
 pub use itertools::Itertools;
+pub use num;
 pub use std::borrow::Borrow;
 pub use std::borrow::Cow;
 pub use std::cell::RefCell;
@@ -35,7 +36,9 @@ pub use std::str::Chars;
 pub use std::str::FromStr;
 pub use std::time;
 
+pub mod grid;
 pub mod parser;
+pub mod pos;
 pub mod puzzle;
 pub mod search;
 

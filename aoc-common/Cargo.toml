@@ -9,3 +9,4 @@
 	arrayvec = "0.7"
 	clap = { version = "3.2", features = [ "derive" ] }
 	itertools = "0.10"
+	num = "0.4"

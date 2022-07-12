@@ -21,7 +21,7 @@ impl <Node, Pri, NextFn> PrioritySearch <Node, Pri, NextFn>
 	where
 		Node: Clone + Eq + hash::Hash,
 		Pri: Clone + Ord,
-		NextFn: Fn (& Node, & Pri, PrioritySearchAdder <Node, Pri>) {
+		NextFn: FnMut (& Node, & Pri, PrioritySearchAdder <Node, Pri>) {
 
 	pub fn new (next_fn: NextFn) -> PrioritySearch <Node, Pri, NextFn> {
 		PrioritySearch {
@@ -41,7 +41,7 @@ impl <Node, Pri, NextFn> Iterator for PrioritySearch <Node, Pri, NextFn>
 	where
 		Node: Clone + Eq + hash::Hash,
 		Pri: Clone + Ord,
-		NextFn: Fn (& Node, & Pri, PrioritySearchAdder <Node, Pri>) {
+		NextFn: FnMut (& Node, & Pri, PrioritySearchAdder <Node, Pri>) {
 
 	type Item = (Node, Pri);
 
