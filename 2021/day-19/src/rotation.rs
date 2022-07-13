@@ -14,7 +14,7 @@ pub enum Rotation {
 #[ allow (dead_code) ]
 impl Rotation {
 
-	pub const ALL: & 'static [Rotation] = & [
+	pub const ALL: & 'static [Rotation; 24] = & [
 		Rotation::None, Rotation::Clockwise,
 		Rotation::CounterClockwise, Rotation::UpsideDown,
 		Rotation::Up, Rotation::ClockwiseUp,
@@ -298,11 +298,14 @@ mod tests {
 				let pos_apply_twice = other.apply (rotate.apply (base));
 				let pos_combine = other.combine (rotate).apply (base);
 				assert_eq! (pos_apply_twice, pos_combine,
-					"Appling {:?} then {:?} gives {:?} but combining then applying gives {:?}",
+					"Applying {:?} then {:?} gives {:?} but combining then applying gives {:?}",
 					rotate, other, pos_apply_twice, pos_combine);
+				for other_base in Rotation::ALL.iter ().copied ().map (|rot| rot.apply (base)) {
+					if other.apply (other_base) != result { continue }
+					assert_eq! (other.rev ().combine (rotate).apply (base), other_base);
+				}
 			}
 		}
 	}
 
 }
-

@@ -19,9 +19,8 @@ pub trait Puzzle {
 					.arg (
 						clap::Arg::new ("repeat")
 							.long ("repeat")
-							.value_parser (clap::value_parser! (u64))
+							.value_parser (clap::value_parser! (u64).range (1 .. ))
 							.takes_value (true)
-							.required (true)
 							.default_value ("1")
 							.help ("Number of times to repeat the calculation"))
 			);
@@ -33,6 +32,60 @@ pub trait Puzzle {
 			);
 		}
 		let matches = command.get_matches_from (args);
+		use time::Instant;
+		fn percentile (times: & [u64], num: u64, denom: u64) -> u64 {
+			let size = times.len () as u64 - 1;
+			let idx = num * size / denom;
+			let rem = num * size % denom;
+			if rem == 0 { return times [idx as usize] }
+			times [idx as usize] * (denom - rem) / denom + times [idx as usize + 1] * rem / denom
+		}
+		fn runner <InnerFn: Fn (u64) -> GenResult <()>> (repeat: u64, inner_fn: InnerFn) -> GenResult <()> {
+			let times = {
+				let mut times: Vec <_> = (0 .. repeat)
+					.map (|idx| { inner_fn (idx) ?; Ok (Instant::now ()) })
+					.scan (Instant::now (), |state, cur|
+						Some (cur.map (|cur| cur - mem::replace (state, cur))))
+					.map_ok (|duration| duration.as_micros () as u64)
+					.collect::<GenResult <_>> () ?;
+				times.sort ();
+				times
+			};
+			if repeat == 1 { return Ok (()) }
+			let total = times.iter ().map (|& val| val as u128).sum::<u128> ();
+			let mean = (total / repeat as u128) as u64;
+			let disp_float = |val, ref_val|
+				if ref_val >= 2_000_000.0 { format! ("{:.3}s", val / 1_000_000.0) }
+				else if ref_val >= 2_000.0 { format! ("{:.3}ms", val / 1_000.0) }
+				else { format! ("{:.0}µs", val) };
+			let disp = |val| disp_float (val as f32, val as f32);
+			let disp_mean = |val| disp_float (val as f32, mean as f32);
+			let disp_pc = |pc| disp_float (percentile (& times, pc, 1000) as f32, mean as f32);
+			print! ("Statistics: total={} count={} mean={},", disp (total), repeat, disp_mean (mean));
+			const PERCENTILE_OPTIONS: & [(u64, & [u64])] = & [
+				(1000, & [0, 500, 900, 990, 999, 1000]),
+				(100, & [0, 500, 900, 990, 1000]),
+				(25, & [0, 500, 750, 900, 1000]),
+				(10, & [0, 500, 900, 1000]),
+				(0, & []),
+			];
+			for (min_repeat, percentiles) in PERCENTILE_OPTIONS.iter ().copied () {
+				if repeat < min_repeat * 2 { continue }
+				for percentile in percentiles.iter ().copied () {
+					if percentile % 10 == 0 {
+						print! (" p{}={}", percentile / 10, disp_pc (percentile));
+					} else {
+						print! (" p{}={}", percentile as f32 / 10.0, disp_pc (percentile));
+					}
+				}
+				if percentiles.is_empty () {
+					print! (" min={} median={} max={}", disp_pc (0), disp_pc (500), disp_pc (1000));
+				}
+				break;
+			}
+			print! ("\n");
+			Ok (())
+		}
 		match matches.subcommand () {
 			None => {
 				let result = self.invoke_part_one () ?;
@@ -44,17 +97,19 @@ pub trait Puzzle {
 			},
 			Some (("part-1", matches)) => {
 				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
-				for _ in 0 .. repeat {
+				runner (repeat, |idx| {
 					let result = self.invoke_part_one () ?;
-					println! ("Result: {}", result);
-				}
+					if idx == 0 { println! ("Result: {}", result); }
+					Ok (())
+				}) ?;
 			},
 			Some (("part-2", matches)) => {
 				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
-				for _ in 0 .. repeat {
+				runner (repeat, |idx| {
 					let result = self.invoke_part_two () ?;
-					println! ("Result: {}", result);
-				}
+					if idx == 0 { println! ("Result: {}", result); }
+					Ok (())
+				}) ?;
 			},
 			Some ((name, matches)) => {
 				for puzzle_command in self.commands () {

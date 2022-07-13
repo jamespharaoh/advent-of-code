@@ -1,4 +1,25 @@
+//! Advent of Code 2021: Day 19: Beacon Scanner
+//!
+//! [https://adventofcode.com/2021/day/19](https://adventofcode.com/2021/day/19)
+//!
+//! This algorithm uses bloom filters to allow it to scale better. For each scanner we generate a
+//! set of bits which have bits set according to the arrangement of the beacons they contain. If
+//! there are two beacons with a specific offset between them, then a number of bits are guaranteed
+//! to be set. Once we have this information for every scanner, we can prioritise the slower
+//! matching process to pairs of scanners which share a large number of bits.
+//!
+//! Generating these hashes for each scanner is slow, so there is some further optimisation going
+//! on as well. Firstly, we have to rotate scanners so that they will match. Instead of rotating
+//! each scanner in every direction, we rotate scanners which we have placed in one set of
+//! directions and the ones we haven't placed in another. We choose a set of directions in each
+//! case to guarntee a match. Specifically we rotate placed scanners around the Z axis only, giving
+//! four hashes for each scanner. We rotate unplaced scanners to move its Z axis into one of the
+//! six other positions. since almost all scanners will first be unplaced and later placed, this
+//! means we do a total of ten hashes for each scanner, instead of the twenty four we would have to
+//! with a more naïve algorithm.
+
 use aoc_common::*;
+use bithash::*;
 
 pub mod rotation;
 
@@ -17,9 +38,12 @@ mod logic {
 	use model::Input;
 	use model::Pos;
 	use rotation::Rotation;
-	use bithash::BitHash;
 
-	type ScannerHash = BitHash <48>;
+	const SCANNER_HASH_U64S: usize = 64; // 4096 bits per hash
+	const SCANNER_HASH_BITS: usize = 3;  // 2 bits per entry (pair of scanners)
+
+	type ScannerHash = BitHash <SCANNER_HASH_U64S>;
+	type ScannerHasher = BitHasher <RandomHasher, SCANNER_HASH_U64S, SCANNER_HASH_BITS>;
 
 	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
@@ -42,211 +66,251 @@ mod logic {
 	}
 
 	fn calc_result (input: & Input) -> GenResult <(HashSet <Pos>, HashSet <Pos>)> {
+		let mut arranger = ScannerArranger::new ();
+		if ! arranger.init (input) { Err (format! ("Failed to arrange scanners")) ? }
+		if ! arranger.run () { Err (format! ("Failed to arrange scanners")) ? }
+		Ok ((arranger.scanner_positions, arranger.beacon_positions))
+	}
 
-		struct OriginalScanner {
-			beacons: Vec <Pos>,
-			hash: ScannerHash,
-			matched: Cell <bool>,
+	#[ derive (Default) ]
+	struct ScannerArranger {
+		hash_builder: RandomHasher,
+		original_scanners: Vec <Rc <OriginalScanner>>,
+		unplaced_scanners: Vec <Rc <UnplacedScanner>>,
+		scanner_matches: BinaryHeap <ScannerMatch>,
+		scanner_positions: HashSet <Pos>,
+		beacon_positions: HashSet <Pos>,
+	}
+
+	impl ScannerArranger {
+
+		fn new () -> ScannerArranger { default () }
+
+		fn init (& mut self, input: & Input) -> bool {
+			self.original_scanners.extend (
+				input.scanners.iter ().map (|scanner|
+					Rc::new (OriginalScanner {
+						beacons: scanner.beacons.iter ().copied ().sorted ().collect (),
+						matched: Cell::new (false),
+					})));
+			if self.original_scanners.is_empty () { return false }
+			self.unplaced_scanners = self.original_scanners.iter ()
+				.map (|scanner|
+					Rc::new (UnplacedScanner {
+						original: scanner.clone (),
+						hashes: self.calc_scanner_hashes (& scanner.beacons, UNPLACED_ROTATIONS),
+					}))
+				.collect::<Vec <_>> ();
+			true
 		}
 
-		struct RotatedScanner {
-			original: Rc <OriginalScanner>,
-			beacons: Vec <Pos>,
-			hash: ScannerHash,
+		fn run (& mut self) -> bool {
+			self.place_scanner (& self.unplaced_scanners [0].clone (), Rotation::None, Pos::zero ());
+			let mut scanner_matches_buffer = Vec::new ();
+			'OUTER: loop {
+				if self.unplaced_scanners.is_empty () { break }
+				self.scanner_matches.extend (scanner_matches_buffer.drain ( .. ));
+				while let Some (scanner_match) = self.scanner_matches.pop () {
+					if self.unplaced_scanners.is_empty () { break 'OUTER }
+					if scanner_match.unplaced.original.matched.get () { continue }
+					if self.process_match (& scanner_match) { continue 'OUTER }
+					scanner_matches_buffer.push (scanner_match);
+				}
+				self.unplaced_scanners.retain (|scanner| ! scanner.original.matched.get ());
+			}
+			true
 		}
 
-		struct PlacedScanner {
-			original: Rc <OriginalScanner>,
-			beacons: Vec <Pos>,
-			hash: ScannerHash,
+		fn process_match (& mut self, scanner_match: & ScannerMatch) -> bool {
+			let placed = scanner_match.placed.clone ();
+			let unplaced = scanner_match.unplaced.clone ();
+			let rotate = Rotation::combine (
+				scanner_match.placed_rotate.rev (),
+				scanner_match.unplaced_rotate);
+			let offset = match Self::find_offset (& placed, & unplaced, rotate) {
+				Some (value) => value,
+				None => { return false },
+			};
+			self.place_scanner (& unplaced, rotate, offset);
+			true
 		}
 
-		fn calc_scanner_hash (beacons: & [Pos]) -> ScannerHash {
-			beacons.iter ().copied ().enumerate ()
-				.flat_map (|(beacon_0_idx, beacon_0)| beacons.iter ().copied ()
-					.skip (beacon_0_idx + 1)
-					.map (move |beacon_1| beacon_1 - beacon_0))
-				.fold (ScannerHash::new (), |hash, val| hash.update (& val))
-		}
-
-		let mut original_scanners = input.scanners.iter ().map (|(_, scanner)|
-			Rc::new (OriginalScanner {
-				beacons: scanner.beacons.iter ().copied ().sorted ().collect (),
-				hash: calc_scanner_hash (& scanner.beacons),
-				matched: Cell::new (false),
-			})
-		).collect::<Vec <_>> ();
-
-		let base_scanner = original_scanners.remove (0);
-		let base_scanner = Rc::new (PlacedScanner {
-			original: base_scanner.clone (),
-			beacons: base_scanner.beacons.clone (),
-			hash: base_scanner.hash,
-		});
-
-		let mut rotated_scanners = original_scanners.iter ().flat_map (|scanner|
-			Rotation::ALL.iter ().copied ().map (|rotate| {
-				let beacons = scanner.beacons.iter ().copied ()
+		fn find_offset (
+			placed: & PlacedScanner,
+			unplaced: & UnplacedScanner,
+			rotate: Rotation,
+		) -> Option <Pos> {
+			let offsets_grouped =
+				unplaced.original.beacons.iter ().copied ()
 					.map (|beacon| rotate.apply (beacon))
+					.cartesian_product (placed.beacons.iter ().copied ())
+					.map (|(unplaced_beacon, placed_beacon)| placed_beacon - unplaced_beacon)
 					.sorted ()
-					.collect::<Vec <_>> ();
-				let hash = calc_scanner_hash (& beacons);
-				Rc::new (RotatedScanner {
-					original: scanner.clone (),
-					beacons, hash,
-				})
-			})
-		).collect::<Vec <_>> ();
-
-		#[ derive (Clone) ]
-		struct ScannerMatch {
-			placed: Rc <PlacedScanner>,
-			rotated: Rc <RotatedScanner>,
-			priority: usize,
+					.group_by (|offset| offset.to_owned ());
+			offsets_grouped.into_iter ()
+				.map (|(offset, iter)| (offset, iter.count ()))
+				.filter (|& (_, count)| count >= 12)
+				.map (|(offset, _)| offset)
+				.next ()
 		}
 
-		impl PartialEq for ScannerMatch {
-			fn eq (& self, other: & Self) -> bool {
-				self.priority == other.priority
-			}
+		fn place_scanner (& mut self, scanner: & Rc <UnplacedScanner>, rotate: Rotation, offset: Pos) {
+			let beacons = scanner.original.beacons.iter ().copied ()
+				.map (|beacon| rotate.apply (beacon) + offset)
+				.sorted ()
+				.collect::<Vec <_>> ();
+			let hashes = self.calc_scanner_hashes (& beacons, PLACED_ROTATIONS);
+			let scanner = Rc::new (PlacedScanner {
+				original: scanner.original.clone (),
+				beacons,
+				hashes,
+			});
+			scanner.original.matched.set (true);
+			self.scanner_positions.insert (offset);
+			self.beacon_positions.extend (scanner.beacons.iter ().copied ());
+			self.add_scanner_matches (& scanner);
 		}
 
-		impl Eq for ScannerMatch {}
-
-		impl PartialOrd for ScannerMatch {
-			fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
-				usize::partial_cmp (& self.priority, & other.priority)
-			}
-		}
-
-		impl Ord for ScannerMatch {
-			fn cmp (& self, other: & Self) -> cmp::Ordering {
-				usize::cmp (& self.priority, & other.priority)
-			}
-		}
-
-		let mut scanner_matches = BinaryHeap::new ();
-
-		scanner_matches.extend (rotated_scanners.iter ().map (|rotated_scanner|
-			ScannerMatch {
-				placed: base_scanner.clone (),
-				rotated: rotated_scanner.clone (),
-				priority: (base_scanner.hash & rotated_scanner.hash).bits (),
-			}
-		));
-
-		let mut scanner_positions: HashSet <Pos> = HashSet::new ();
-		scanner_positions.insert (Pos::zero ());
-
-		let mut beacon_positions: HashSet <Pos> = HashSet::new ();
-		beacon_positions.extend (base_scanner.beacons.iter ().copied ());
-
-		let mut scanner_matches_buffer = Vec::new ();
-		'OUTER: loop {
-			if scanner_positions.len () == input.scanners.len () { break }
-			scanner_matches.extend (scanner_matches_buffer.drain ( .. ));
-
-			while let Some (scanner_match) = scanner_matches.pop () {
-				if rotated_scanners.is_empty () { break 'OUTER }
-				if scanner_match.rotated.original.matched.get () { continue }
-				let placed = scanner_match.placed.clone ();
-				let rotated = scanner_match.rotated.clone ();
-				for placed_beacon in placed.beacons.iter ().copied () {
-					for rotated_beacon in rotated.beacons.iter ().copied () {
-						let offset = placed_beacon - rotated_beacon;
-						let count = itertools::merge_join_by(
-								placed.beacons.iter ().copied (),
-								rotated.beacons.iter ().copied ()
-									.map (|beacon| beacon + offset),
-								|left, right| left.cmp (right))
-							.filter (|merged| merged.is_both ())
-							.count ();
-						if count < 12 { continue }
-						let newly_placed = Rc::new (PlacedScanner {
-							original: rotated.original.clone (),
-							beacons: rotated.beacons.iter ().cloned ()
-								.map (|beacon| beacon + offset).collect (),
-							hash: rotated.hash,
+		fn add_scanner_matches (& mut self, placed: & Rc <PlacedScanner>) {
+			for unplaced in self.unplaced_scanners.iter () {
+				if unplaced.original.matched.get () { continue }
+				for (unplaced_rotate_idx, unplaced_rotate)
+						in UNPLACED_ROTATIONS.iter ().copied ().enumerate () {
+					let unplaced_hash = unplaced.hashes [unplaced_rotate_idx];
+					for (placed_rotate_idx, placed_rotate)
+							in PLACED_ROTATIONS.iter ().copied ().enumerate () {
+						let placed_hash = placed.hashes [placed_rotate_idx];
+						self.scanner_matches.push (ScannerMatch {
+							placed: placed.clone (),
+							unplaced: unplaced.clone (),
+							priority: (placed_hash & unplaced_hash).bits () as u32,
+							placed_rotate,
+							unplaced_rotate,
 						});
-						newly_placed.original.matched.set (true);
-						scanner_positions.insert (offset);
-						beacon_positions.extend (newly_placed.beacons.iter ().copied ());
-						scanner_matches.extend (rotated_scanners.iter ()
-							.map (|other_scanner| ScannerMatch {
-								placed: newly_placed.clone (),
-								rotated: other_scanner.clone (),
-								priority: (newly_placed.hash & other_scanner.hash).bits (),
-							}));
-						continue 'OUTER;
 					}
 				}
-				scanner_matches_buffer.push (scanner_match);
 			}
-
-			rotated_scanners.retain (|scanner| ! scanner.original.matched.get ());
-
 		}
 
-		Ok ((scanner_positions, beacon_positions))
+		fn calc_scanner_hashes <const LEN: usize> (
+			& self,
+			beacons: & [Pos],
+			rotates: & [Rotation; LEN],
+		) -> [ScannerHash; LEN] {
+			let mut hashers =
+				[0; LEN].map (|_| ScannerHasher::new_with_hasher (self.hash_builder.clone ()));
+			for offset in beacons.iter ().copied ().enumerate ()
+				.flat_map (|(beacon_0_idx, beacon_0)| beacons.iter ().copied ()
+					.skip (beacon_0_idx + 1)
+					.map (move |beacon_1| beacon_1 - beacon_0)) {
+				for idx in 0 .. rotates.len () {
+					let offset = rotates [idx].apply (offset);
+					hashers [idx].update (cmp::max (offset, - offset));
+				}
+			}
+			hashers.map (|hasher| hasher.finish ())
+		}
 
 	}
+
+	struct OriginalScanner {
+		beacons: Vec <Pos>,
+		matched: Cell <bool>,
+	}
+
+	struct UnplacedScanner {
+		original: Rc <OriginalScanner>,
+		hashes: [ScannerHash; 6],
+	}
+
+	struct PlacedScanner {
+		original: Rc <OriginalScanner>,
+		hashes: [ScannerHash; 4],
+		beacons: Vec <Pos>,
+	}
+
+	#[ derive (Clone) ]
+	struct ScannerMatch {
+		placed: Rc <PlacedScanner>,
+		unplaced: Rc <UnplacedScanner>,
+		priority: u32,
+		placed_rotate: Rotation,
+		unplaced_rotate: Rotation,
+	}
+
+	impl PartialEq for ScannerMatch {
+		fn eq (& self, other: & Self) -> bool {
+			self.priority == other.priority
+		}
+	}
+
+	impl Eq for ScannerMatch {}
+
+	impl PartialOrd for ScannerMatch {
+		fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
+			u32::partial_cmp (& self.priority, & other.priority)
+		}
+	}
+
+	impl Ord for ScannerMatch {
+		fn cmp (& self, other: & Self) -> cmp::Ordering {
+			u32::cmp (& self.priority, & other.priority)
+		}
+	}
+
+	const PLACED_ROTATIONS: & [Rotation; 4] = & [
+		Rotation::None, Rotation::Clockwise,
+		Rotation::UpsideDown, Rotation::CounterClockwise,
+	];
+
+	const UNPLACED_ROTATIONS: & [Rotation; 6] = & [
+		Rotation::None, Rotation::Up, Rotation::Right,
+		Rotation::Around, Rotation::Down, Rotation::Left,
+	];
 
 }
 
 mod model {
 
 	use aoc_common::*;
+	use parser::Parser;
 
 	pub type Coord = i16;
 	pub type Pos = pos::PosXYZ <Coord>;
 
 	pub struct Input {
-		pub scanners: HashMap <Rc <String>, InputScanner>,
-		pub scanner_names: Vec <Rc <String>>,
-	}
-
-	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Input> {
-			let mut scanners = HashMap::new ();
-			let mut scanner_names = Vec::new ();
-			let mut lines_iter = lines.iter ();
-			let mut line_idx: usize = 0;
-			let err = |line_idx, line| format! ("Invalid input: {}: {}", line_idx + 1, line);
-			loop {
-				let line = match lines_iter.next () {
-					Some (line) => line,
-					None => break,
-				};
-				if ! line.starts_with ("--- ") { Err (err (line_idx, line)) ? }
-				if ! line.ends_with (" ---") { Err (err (line_idx, line)) ? }
-				let name = Rc::new (line [4 .. line.len () - 4].to_string ());
-				line_idx += 1;
-				let mut beacons = Vec::new ();
-				loop {
-					let line = match lines_iter.next () {
-						Some (line) => line,
-						None => break,
-					};
-					if line.is_empty () { line_idx += 1; break }
-					let line_parts: Vec <& str> = line.split (",").collect ();
-					if line_parts.len () != 3 { Err (err (line_idx, line)) ? }
-					beacons.push (Pos {
-						x: line_parts [0].parse ().map_err (|_| err (line_idx, line)) ?,
-						y: line_parts [1].parse ().map_err (|_| err (line_idx, line)) ?,
-						z: line_parts [2].parse ().map_err (|_| err (line_idx, line)) ?,
-					});
-					line_idx += 1;
-				}
-				scanners.insert (name.clone (), InputScanner { beacons });
-				scanner_names.push (name);
-			}
-			Ok (Input { scanners, scanner_names })
-		}
+		pub scanners: Vec <InputScanner>,
 	}
 
 	#[ derive (Debug) ]
 	pub struct InputScanner {
+		pub name: Rc <String>,
 		pub beacons: Vec <Pos>,
+	}
+
+	impl Input {
+		pub fn parse (lines: & [& str]) -> GenResult <Input> {
+			let mut scanners = Vec::new ();
+			let mut lines_iter = lines.iter ().enumerate ();
+			let err = |line_idx, line| format! ("Invalid input: line {}: {}", line_idx + 1, line);
+			while let Some ((line_idx, line)) = lines_iter.next () {
+				if ! line.starts_with ("--- ") { Err (err (line_idx, line)) ? }
+				if ! line.ends_with (" ---") { Err (err (line_idx, line)) ? }
+				let name = Rc::new (line [4 .. line.len () - 4].to_string ());
+				let mut beacons = Vec::new ();
+				while let Some ((line_idx, line)) = lines_iter.next () {
+					if line.is_empty () { break }
+					let mut parser = Parser::new (line, |_| err (line_idx, line));
+					beacons.push (Pos {
+						x: parser.int () ?,
+						y: parser.expect (",") ?.int () ?,
+						z: parser.expect (",") ?.int () ?,
+					});
+				}
+				scanners.push (InputScanner { name, beacons });
+			}
+			Ok (Input { scanners })
+		}
 	}
 
 }

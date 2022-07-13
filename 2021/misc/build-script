@@ -11,8 +11,7 @@ function main {
 		case "$arg" in
 			(day-*)
 				local day="${arg:4}"
-				cargo_run_args="$cargo_run_args --bin aoc-2021-day-$day"
-				cargo_test_args="$cargo_test_args --package aoc-2021-day-$day"
+				cargo_args="$cargo_run_args --package aoc-2021-day-$day"
 				;;
 			(--release)
 				cargo_args="$cargo_args --release"

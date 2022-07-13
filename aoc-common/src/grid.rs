@@ -1,5 +1,6 @@
 use super::*;
 
+use nums::Int;
 use pos::PosYX;
 
 #[ derive (Clone, Debug, Eq, PartialEq) ]
@@ -76,7 +77,7 @@ impl GridPos <2> for (usize, usize) {
 	}
 }
 
-impl <Val: num::PrimInt> GridPos <2> for PosYX <Val> {
+impl <Val: Int> GridPos <2> for PosYX <Val> {
 	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
 		if origin != [0, 0] { unimplemented! () }
 		let y = match self.y.to_usize () { Some (val) => val, _ => return None };
@@ -86,8 +87,8 @@ impl <Val: num::PrimInt> GridPos <2> for PosYX <Val> {
 	}
 	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
 		if origin != [0, 0] { unimplemented! () }
-		let y = match Val::from (scalar / size [1]) { Some (val) => val, _ => return None };
-		let x = match Val::from (scalar % size [1]) { Some (val) => val, _ => return None };
+		let y = match Val::from_usize (scalar / size [1]) { Some (val) => val, _ => return None };
+		let x = match Val::from_usize (scalar % size [1]) { Some (val) => val, _ => return None };
 		Some (PosYX { y, x })
 	}
 }
