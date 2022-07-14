@@ -2,7 +2,12 @@
 
 	name = "aoc-2021-day-11"
 	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
+	description = "Advent of Code 2021: Day 11: Dumbo Octopus"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2021/day-11"
+	license = "MIT"
+	publish = false
 
 [dependencies]
 

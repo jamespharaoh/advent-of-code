@@ -11,11 +11,15 @@ fn main () -> GenResult <()> {
 	for puzzle in puzzle_metadata () {
 		print! ("{:02}  {:name_len$}", puzzle.day (), puzzle.name (), name_len = name_len);
 		let start_time = time::Instant::now ();
-		for part in 0 .. puzzle.num_parts () {
+		for part in 0 .. 2 {
+			if puzzle.num_parts () < part + 1 {
+				print! ("{:24}", "");
+				continue;
+			}
 			if part == 0 {
 				print! ("  One: "); flush () ?;
 				let result = puzzle.invoke_part_one () ?;
-				print! ("{:14}", result);
+				print! ("{:17}", result);
 			}
 			if part == 1 {
 				print! ("  Two: "); flush () ?;

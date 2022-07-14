@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 23: Amphipod
+//!
+//! [https://adventofcode.com/2021/day/23](https://adventofcode.com/2021/day/23)
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -6,6 +10,9 @@ puzzle_info! {
 	day = 23;
 	part_one = |lines| logic::part_one (lines);
 	part_two = |lines| logic::part_two (lines);
+	commands = [
+		( name = "run"; method = tools::run; ),
+	];
 }
 
 mod logic {
@@ -13,9 +20,10 @@ mod logic {
 	use super::*;
 	use model::Amph;
 	use model::Place;
-	use model::PlaceAdjacent;
 	use model::State;
 	use model::StateCompact;
+	use search::PrioritySearch;
+	use search::PrioritySearchAdder;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = State::parse (lines) ?;
@@ -23,7 +31,13 @@ mod logic {
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
-		let lines_modified: Vec <& str> = vec! [
+		let lines_modified = modify_input_for_part_two (lines);
+		let input = State::parse (& lines_modified) ?;
+		calc_result (input)
+	}
+
+	pub fn modify_input_for_part_two <'a> (lines: & [& 'a str]) -> Vec <& 'a str> {
+		vec! [
 			lines [0],
 			lines [1],
 			lines [2],
@@ -31,201 +45,164 @@ mod logic {
 			"  #D#B#A#C#",
 			lines [3],
 			lines [4],
-		];
-		let input = State::parse (& lines_modified) ?;
-		calc_result (input)
+		]
 	}
 
 	pub fn calc_result (input: State) -> GenResult <i64> {
+		Ok (
+			iterator (input)
+				.filter (|(state_compact, _)| state_compact.expand ().is_finished ())
+				.map (|(_, score)| score)
+				.next ()
+				.ok_or (format! ("Failed to find solution")) ?
+		)
+	}
 
-		let mut search = search::PrioritySearch::new (
-			|& state_compact: & StateCompact, & score, mut adder| {
-				let state = state_compact.expand ();
-				for (next_state, next_cost) in calc_next_states (& state) {
-					let next_compact = next_state.compact ();
+	pub fn iterator (input: State) -> impl Iterator <Item = (StateCompact, i64)> {
+		let mut search = PrioritySearch::new (
+			|state: StateCompact, score: i64, mut adder: PrioritySearchAdder <'_, _, _>| {
+				for (next_state, next_cost) in calc_next_states (state) {
 					let next_score = score + next_cost;
-					adder.add (next_compact, next_score);
+					adder.add (next_state, next_score);
 				}
+				(state, score)
 			},
 		);
-
 		search.push (input.compact (), 0);
-
-		let final_score = search
-			.filter (|(state_compact, _)| state_compact.expand ().is_finished ())
-			.map (|(_, score)| score)
-			.next ();
-
-		let final_score = final_score.ok_or (format! ("Failed to find solution")) ?;
-		Ok (final_score)
-
+		search
 	}
 
-	#[ allow (dead_code) ]
-	fn print_next_states (cur_state: & State, next_states: & [(State, i64)]) {
-		for (chunk_idx, chunk) in next_states.chunks (10).enumerate () {
-			print! ("{:^13}  ", if chunk_idx == 0 { "START" } else { "" });
-			for (_, cost) in chunk.iter () {
-				print! (" {:^13}", cost);
-			}
-			print! ("\n");
-			for line in 0 .. (cur_state.room_size () as usize + 3) {
-				print! ("{:13}  ", if chunk_idx == 0 { cur_state.pretty_line (line) } else { String::new () });
-				for (next_state, _) in chunk.iter () {
-					print! (" {:13}", next_state.pretty_line (line));
-				}
-				print! ("\n");
-			}
-		}
-	}
+	pub fn calc_next_states (state_compact: StateCompact) -> ArrayVec <(StateCompact, i64), 28> {
+		let state = state_compact.expand ();
 
-	fn calc_next_states (state: & State) -> ArrayVec <(State, i64), 28> {
+		let out_cost = |room| state.room_size () - state.room (room).len () + 1;
+		let in_cost = |room| state.room_size () - state.room (room).len ();
+		let hall_cost = |room: Amph, hall: Place|
+			usize::abs_diff (2 + room.idx () * 2, hall.idx ());
+
+		let next_moves = calc_next_moves (& state);
+		if next_moves.is_empty () { return ArrayVec::new () }
+
+		let blocking = (state.hall () [3], state.hall () [5], state.hall () [7]);
+		let sections = [
+			match blocking {
+				(Some (Amph::Copper), _, _) => false,
+				(Some (Amph::Desert), _, _) => false,
+				(_, Some (Amph::Bronze), _) => false,
+				(_, Some (Amph::Copper), _) => false,
+				(_, Some (Amph::Desert), _) => false,
+				(_, _, Some (Amph::Desert)) => false,
+				_ => true,
+			},
+			match blocking {
+				(Some (Amph::Amber), _, _) => false,
+				(_, Some (Amph::Copper), _) => false,
+				(_, Some (Amph::Desert), _) => false,
+				(_, _, Some (Amph::Desert)) => false,
+				_ => true,
+			},
+			match blocking {
+				(Some (Amph::Amber), _, _) => false,
+				(_, Some (Amph::Amber), _) => false,
+				(_, Some (Amph::Bronze), _) => false,
+				(_, _, Some (Amph::Desert)) => false,
+				_ => true,
+			},
+			match blocking {
+				(Some (Amph::Amber), _, _) => false,
+				(_, Some (Amph::Amber), _) => false,
+				(_, Some (Amph::Bronze), _) => false,
+				(_, _, Some (Amph::Amber)) => false,
+				(_, _, Some (Amph::Bronze)) => false,
+				(_, _, Some (Amph::Copper)) => false,
+				_ => true,
+			},
+		];
+
 		let mut next_states = ArrayVec::new ();
-		for (cur_place, amph) in state.iter () {
-			for (next_place, dist) in calc_routes (& state, cur_place) {
-				if ! allowed_move (state, cur_place, next_place) { continue }
-				let next_state = state.with_move (cur_place, next_place);
-				if ! allowed_state (next_state) { continue }
-				next_states.push ((
-					state.with_move (cur_place, next_place),
-					amph.cost () * dist,
-				));
+		for next_move in next_moves.iter () {
+			match next_move {
+				& Move::Between (amph, from_room, to_room) => {
+					if ! sections [from_room.idx ()] || ! sections [to_room.idx ()] { continue }
+					let cost = amph.cost () * (out_cost (from_room) + in_cost (to_room)
+						+ usize::abs_diff (from_room.idx (), to_room.idx ()) * 2) as i64;
+					let next_state = state.move_between (from_room, to_room);
+					return iter::once ((next_state.compact (), cost)).collect ();
+				},
+				& Move::In (amph, from_hall, to_room) => {
+					if ! sections [to_room.idx ()] { continue }
+					let cost = amph.cost () * (in_cost (to_room) + hall_cost (to_room, from_hall)) as i64;
+					let next_state = state.move_in (from_hall, to_room);
+					return iter::once ((next_state.compact (), cost)).collect ();
+				},
+				_ => (),
 			}
 		}
+		for next_move in next_moves.iter () {
+			match next_move {
+				& Move::Out (amph, from_room, to_hall) => {
+					if ! sections [from_room.idx ()] { continue }
+					let cost = amph.cost () * (out_cost (from_room)
+						+ hall_cost (from_room, to_hall)) as i64;
+					let next_state = state.move_out (from_room, to_hall);
+					next_states.push ((next_state.compact (), cost));
+				},
+				_ => (),
+			}
+		}
+
 		next_states
+
 	}
 
-	#[ allow (dead_code) ]
-	struct CalcStatesIter <'a> {
-		cur_state: & 'a State,
-		state_iter: Option <SliceIter <'a, (Place, Amph)>>,
-		cur_place: Option <Place>,
-		routes_iter: Option <CalcRoutesIter <'a>>,
+	enum Move {
+		Out (Amph, Amph, Place),
+		In (Amph, Place, Amph),
+		Between (Amph, Amph, Amph),
 	}
 
-	fn allowed_move (state: & State, from: Place, to: Place) -> bool {
-
-		let amph = state.get (from).unwrap ();
-
-		let misplaced_in_my_room = || state.room_for (amph).rev ().map (
-			|some_place| state.get (some_place),
-		).take_while (Option::is_some).map (Option::unwrap).any (
-			|some_amph| some_amph != amph,
-		);
-
-		// don't move in the hallway
-		if from.hall () && to.hall () { return false }
-
-		// don't stop at room entrance
-		if to.entrance () { return false }
-
-		// don't move inside a room
-		if from.room () && to.room () && from.amph () == to.amph () { return false }
-
-		// when entering a room...
-		if to.room () && from.amph () != to.amph () {
-
-			// don't enter the wrong one
-			if ! amph.belongs (to) { return false }
-
-			// only enter if there are no mismatched amphs
-			if misplaced_in_my_room () { return false }
-
-			// don't leave space at the back of a room
-			let my_room: ArrayVec <Place, 4> = state.room_for (amph).collect ();
-			let my_depth = my_room.iter ().copied ().position (|room| room == to).unwrap ();
-			if let Some (& next_room) = my_room.get (my_depth + 1) {
-				if state.get (next_room).is_none () { return false }
+	fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
+		let mut result = ArrayVec::new ();
+		let path_clear = |from: Place, to: Place|
+			state.hall ().iter ().enumerate ()
+				.skip (cmp::min (to.idx (), from.idx ()))
+				.take (usize::abs_diff (from.idx (), to.idx ()) + 1)
+				.map (|(idx, amph)| (Place::for_idx (idx), amph))
+				.filter (|& (hall, _)| hall != from)
+				.all (|(_, amph)| amph.is_none ());
+		let room_entrance = |room: Amph| Place::for_idx (2 + room.idx () * 2);
+		for (idx, amph) in state.hall ().iter ().enumerate ()
+				.filter_map (|(idx, amph)| amph.map (|amph| (idx, amph))) {
+			let to_room = amph;
+			let hall = Place::for_idx (idx);
+			if ! state.room_is_happy (to_room) { continue }
+			if ! path_clear (hall, room_entrance (to_room)) { continue }
+			result.push (Move::In (amph, hall, to_room));
+		}
+		for (from_room, amphs) in [
+			(Amph::Amber, state.room (Amph::Amber)),
+			(Amph::Bronze, state.room (Amph::Bronze)),
+			(Amph::Copper, state.room (Amph::Copper)),
+			(Amph::Desert, state.room (Amph::Desert)),
+		] {
+			if let Some (& amph) = amphs.last () {
+				let to_room = amph;
+				if state.room_is_happy (from_room) { continue }
+				if state.room_is_happy (to_room) {
+					if ! path_clear (room_entrance (from_room), room_entrance (to_room)) { continue }
+					result.push (Move::Between (amph, from_room, to_room));
+				} else {
+					for hall in state.hall ().iter ().enumerate ()
+							.filter_map (|(idx, amph)| amph.is_none ().then_some (idx))
+							.map (Place::for_idx)
+							.filter (|hall| ! hall.entrance ()) {
+						if ! path_clear (room_entrance (from_room), hall) { continue }
+						result.push (Move::Out (amph, from_room, hall));
+					}
+				}
 			}
-
 		}
-
-		// don't leave own room unless you need to get out of the way
-		if from.room () && from.amph () != to.amph ()
-			&& from.amph () == Some (amph) && ! misplaced_in_my_room () { return false }
-
-		true
-
-	}
-
-	fn allowed_state (state: State) -> bool {
-		match (
-			state.get (Place::hall_blocking_left ()),
-			state.get (Place::hall_blocking_middle ()),
-			state.get (Place::hall_blocking_right ()),
-		) {
-			(Some (Amph::Desert), Some (Amph::Amber), _) => false,
-			(Some (Amph::Desert), _, Some (Amph::Amber)) => false,
-			(_, Some (Amph::Desert), Some (Amph::Amber)) => false,
-			(_, Some (Amph::Desert), Some (Amph::Bronze)) => false,
-			(Some (Amph::Copper), Some (Amph::Amber), _) => false,
-			_ => true,
-		}
-	}
-
-	fn calc_routes <'a> (state: & 'a State, start_place: Place) -> CalcRoutesIter {
-		let mut todo = ArrayVec::new ();
-		todo.push ((0, start_place));
-		CalcRoutesIter {
-			cur_state: state,
-			cur_route: ArrayVec::new (),
-			todo,
-			state: CalcRoutesIterState::Outer,
-		}
-	}
-
-	struct CalcRoutesIter <'a> {
-		cur_state: & 'a State,
-		cur_route: ArrayVec <Place, 12>,
-		todo: ArrayVec <(usize, Place), 4>,
-		state: CalcRoutesIterState,
-	}
-
-	enum CalcRoutesIterState {
-		Outer,
-		Inner { cur_place: Place, adj_iter: PlaceAdjacent },
-		Complete,
-		Poison,
-	}
-
-	impl <'a> Iterator for CalcRoutesIter <'a> {
-		type Item = (Place, i64);
-		fn next (& mut self) -> Option <(Place, i64)> {
-			loop { match mem::replace (& mut self.state, CalcRoutesIterState::Poison) {
-				CalcRoutesIterState::Outer => {
-					if let Some ((todo_len, todo_place)) = self.todo.pop () {
-						self.cur_route.truncate (todo_len);
-						self.cur_route.push (todo_place);
-						self.state = CalcRoutesIterState::Inner {
-							cur_place: todo_place,
-							adj_iter: todo_place.adjacent (),
-						};
-						continue;
-					} else {
-						self.state = CalcRoutesIterState::Complete;
-						return None;
-					}
-				},
-				CalcRoutesIterState::Inner { cur_place, mut adj_iter } => {
-					if let Some (adj_place) = adj_iter.next () {
-						if ! self.cur_state.valid_place (adj_place)
-								|| self.cur_route.contains (& adj_place)
-								|| self.cur_state.get (adj_place).is_some () {
-							self.state = CalcRoutesIterState::Inner { cur_place, adj_iter };
-							continue;
-						}
-						self.todo.push ((self.cur_route.len (), adj_place));
-						self.state = CalcRoutesIterState::Inner { cur_place, adj_iter };
-						return Some ((adj_place, self.cur_route.len () as i64));
-					} else {
-						self.state = CalcRoutesIterState::Outer;
-						continue;
-					}
-				},
-				CalcRoutesIterState::Complete => return None,
-				CalcRoutesIterState::Poison => panic! (),
-			} }
-		}
+		result
 	}
 
 }
@@ -236,51 +213,125 @@ mod model {
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
 	pub struct State {
-		room_size: u8,
-		places: [Option <Amph>; 27],
+		room_size: usize,
+		hall: ArrayVec <Option <Amph>, 11>,
+		amber: ArrayVec <Amph, 4>,
+		bronze: ArrayVec <Amph, 4>,
+		copper: ArrayVec <Amph, 4>,
+		desert: ArrayVec <Amph, 4>,
 	}
 
 	impl State {
 
-		pub fn new (room_size: u8, places: [Option <Amph>; 27]) -> State {
-			State { room_size, places }
+		pub fn from_array (room_size: usize, places: [Option <Amph>; 27]) -> State {
+			let mut state = State {
+				room_size,
+				hall: ArrayVec::new (),
+				amber: ArrayVec::new (),
+				bronze: ArrayVec::new (),
+				copper: ArrayVec::new (),
+				desert: ArrayVec::new (),
+			};
+			state.hall = places [0 .. 11].iter ().copied ().collect ();
+			for room in Amph::ALL.iter ().copied () {
+				state.room_mut (room).extend (
+					places [11 + room.idx () * 4 .. ].iter ().copied ().take (room_size).rev ()
+						.while_some ());
+			}
+			state
 		}
 
-		pub fn room_size (& self) -> u8 { self.room_size }
+		pub fn as_array (& self) -> [Option <Amph>; 27] {
+			let mut result = [None; 27];
+			for idx in 0 .. 11 { result [idx] = self.hall [idx]; }
+			for (idx, amph) in self.amber.iter ().copied ().enumerate () {
+				result [11 + self.room_size - idx - 1] = Some (amph);
+			}
+			for (idx, amph) in self.bronze.iter ().copied ().enumerate () {
+				result [15 + self.room_size - idx - 1] = Some (amph);
+			}
+			for (idx, amph) in self.copper.iter ().copied ().enumerate () {
+				result [19 + self.room_size - idx - 1] = Some (amph);
+			}
+			for (idx, amph) in self.desert.iter ().copied ().enumerate () {
+				result [23 + self.room_size - idx - 1] = Some (amph);
+			}
+			result
+		}
+
+		pub fn room_size (& self) -> usize { self.room_size }
 
 		pub fn get (& self, place: Place) -> Option <Amph> {
-			self.places [place.idx () as usize]
+			match place {
+				Place::Hall (id) => self.hall [id as usize],
+				Place::Room (Amph::Amber, depth) =>
+					self.amber.get (self.room_size - depth as usize - 1).copied (),
+				Place::Room (Amph::Bronze, depth) =>
+					self.bronze.get (self.room_size - depth as usize - 1).copied (),
+				Place::Room (Amph::Copper, depth) =>
+					self.copper.get (self.room_size - depth as usize - 1).copied (),
+				Place::Room (Amph::Desert, depth) =>
+					self.desert.get (self.room_size - depth as usize - 1).copied (),
+			}
 		}
 
-		pub fn iter (& self) -> impl Iterator <Item = (Place, Amph)> {
-			self.places.into_iter ().enumerate ().filter_map (
-				|(idx, amph)| amph.map (|amph| (Place { id: idx as u8 }, amph)),
-			)
+		pub fn hall (& self) -> & [Option <Amph>] { & self.hall }
+
+		pub fn room (& self, amph: Amph) -> & [Amph] {
+			match amph {
+				Amph::Amber => & self.amber,
+				Amph::Bronze => & self.bronze,
+				Amph::Copper => & self.copper,
+				Amph::Desert => & self.desert,
+			}
+		}
+
+		fn room_mut (& mut self, amph: Amph) -> & mut ArrayVec <Amph, 4> {
+			match amph {
+				Amph::Amber => & mut self.amber,
+				Amph::Bronze => & mut self.bronze,
+				Amph::Copper => & mut self.copper,
+				Amph::Desert => & mut self.desert,
+			}
 		}
 
 		pub fn is_finished (& self) -> bool {
-			self.iter ().all (|(place, amph)| amph.belongs (place))
+			self.hall.iter ().all (Option::is_none)
+				&& self.amber.iter ().all (|& amph| amph == Amph::Amber)
+				&& self.bronze.iter ().all (|& amph| amph == Amph::Bronze)
+				&& self.copper.iter ().all (|& amph| amph == Amph::Copper)
+				&& self.desert.iter ().all (|& amph| amph == Amph::Desert)
 		}
 
-		pub fn room_for (& self, amph: Amph) -> impl DoubleEndedIterator <Item = Place> {
-			let offset = match amph {
-				Amph::Amber => 11, Amph::Bronze => 12,
-				Amph::Copper => 13, Amph::Desert => 14,
+		pub fn room_is_happy (& self, room: Amph) -> bool {
+			self.room (room).iter ().copied ().all (|amph| amph == room)
+		}
+
+		pub fn move_out (& self, room: Amph, hall: Place) -> State {
+			let mut state = self.clone ();
+			let amph = state.room_mut (room).pop ().unwrap ();
+			assert! (state.get (hall).is_none ());
+			state.hall [hall.idx ()] = Some (amph);
+			state
+		}
+
+		pub fn move_in (& self, hall: Place, room: Amph) -> State {
+			let mut state = self.clone ();
+			let amph = state.hall [hall.idx ()].take ().unwrap ();
+			state.room_mut (room).push (amph);
+			state
+		}
+
+		pub fn move_between (& self, from: Amph, to: Amph) -> State {
+			let mut state = self.clone ();
+			let amph = state.room_mut (from).pop ().unwrap ();
+			let to = match to {
+				Amph::Amber => & mut state.amber, Amph::Bronze => & mut state.bronze,
+				Amph::Copper => & mut state.copper, Amph::Desert => & mut state.desert,
 			};
-			(0 .. self.room_size).map (move |idx| Place { id: offset + idx * 4 })
-		}
-
-		pub fn valid_place (& self, place: Place) -> bool {
-			place.hall () || place.room_depth () < self.room_size
-		}
-
-		pub fn with_move (& self, from: Place, to: Place) -> State {
-			let mut places = self.places;
-			let amph = places [from.idx ()].unwrap ();
-			if places [to.idx ()].is_some () { panic! () }
-			places [to.idx ()] = Some (amph);
-			places [from.idx ()] = None;
-			State::new (self.room_size, places)
+			assert! (to.len () < self.room_size);
+			to.push (amph);
+			state
 		}
 
 		pub fn pretty_line (& self, line: usize) -> String {
@@ -289,16 +340,20 @@ mod model {
 				format! ("┌───────────┐")
 			} else if line == 1 {
 				format! ("│{}│",
-					self.places [0 .. 11].iter ().copied ().map (print_amph).collect::<String> ())
+					self.hall.iter ().copied ().map (print_amph).collect::<String> ())
 			} else if line == 2 {
 				format! ("└─┐{}╷{}╷{}╷{}┌─┘",
-					print_amph (self.places [11]), print_amph (self.places [12]),
-					print_amph (self.places [13]), print_amph (self.places [14]))
+					print_amph (self.get (Place::Room (Amph::Amber, 0))),
+					print_amph (self.get (Place::Room (Amph::Bronze, 0))),
+					print_amph (self.get (Place::Room (Amph::Copper, 0))),
+					print_amph (self.get (Place::Room (Amph::Desert, 0))))
 			} else if line < self.room_size as usize + 2 {
-				let offset = 11 + (line - 2) * 4;
+				let depth = (line - 2) as u8;
 				format! ("  │{}│{}│{}│{}│",
-					print_amph (self.places [offset + 0]), print_amph (self.places [offset + 1]),
-					print_amph (self.places [offset + 2]), print_amph (self.places [offset + 3]))
+					print_amph (self.get (Place::Room (Amph::Amber, depth))),
+					print_amph (self.get (Place::Room (Amph::Bronze, depth))),
+					print_amph (self.get (Place::Room (Amph::Copper, depth))),
+					print_amph (self.get (Place::Room (Amph::Desert, depth))))
 			} else if line == self.room_size as usize + 2 {
 				format! ("  └─┴─┴─┴─┘")
 			} else {
@@ -316,16 +371,23 @@ mod model {
 		#[ allow (dead_code) ]
 		pub fn from_str (input: & str) -> Option <State> {
 			let num_chars = input.chars ().count ();
-			if ! [19, 23, 27].contains (& num_chars) { return None }
-			let room_size = ((num_chars - 11) / 4) as u8;
+			if ! [23, 27, 31].contains (& num_chars) { return None }
+			let room_size = (num_chars - 11) / 5;
 			let mut places = [None; 27];
-			for (idx, letter) in input.chars ().enumerate () {
-				places [idx] = match Amph::from_letter (letter) {
+			let mut place_idx = 0;
+			for (char_idx, letter) in input.chars ().enumerate () {
+				if 11 <= char_idx && (char_idx - 11) % (room_size + 1) == 0 {
+					if letter != '/' { return None }
+					if 11 < char_idx { place_idx += 4 - room_size; }
+					continue;
+				}
+				places [place_idx] = match Amph::from_letter (letter) {
 					Some (amph) => amph,
 					None => return None,
-				}
+				};
+				place_idx += 1;
 			}
-			Some (State::new (room_size, places))
+			Some (State::from_array (room_size, places))
 		}
 
 		pub fn parse (lines: & [& str]) -> GenResult <State> {
@@ -346,39 +408,37 @@ mod model {
 			}
 			let line_idx = lines.len () - 1;
 			if lines [line_idx] != "  #########" { Err (err (line_idx)) ?; }
-			let room_size = (lines.len () - 3) as u8;
+			let room_size = lines.len () - 3;
 			let parse_amph = |line: usize, col| Amph::from_letter (
 				lines [line].chars ().skip (col).next ().unwrap (),
-			).ok_or (err (2));
+			).ok_or (err (line));
 			let mut places = [None; 27];
-			for idx in 0 .. room_size as usize {
-				let line_idx = 2 + idx;
-				places [11 + idx * 4] = parse_amph (line_idx, 3) ?;
-				places [12 + idx * 4] = parse_amph (line_idx, 5) ?;
-				places [13 + idx * 4] = parse_amph (line_idx, 7) ?;
-				places [14 + idx * 4] = parse_amph (line_idx, 9) ?;
+			for idx in 0 .. 11 { places [idx] = parse_amph (1, 1 + idx) ?; }
+			for room in 0 .. 4 {
+				for depth in 0 .. room_size {
+					places [11 + room * 4 + depth] = parse_amph (2 + depth, 3 + room * 2) ?;
+				}
 			}
-			Ok (State::new (room_size, places))
+			Ok (State::from_array (room_size, places))
 		}
 
 		pub fn compact (& self) -> StateCompact {
-			let mut mask: u64 = 0;
-			let mut places: u64 = 0;
-			for (idx, amph) in self.places.into_iter ().enumerate () {
-				if idx == 2 || idx == 4 || idx == 6 { continue }
-				mask <<= 1;
+			let mut place_bits: u64 = 0;
+			let mut amph_bits: u64 = 0;
+			for amph in self.as_array () {
+				place_bits <<= 1;
 				if let Some (amph) = amph {
-					places <<= 2;
-					mask |= 1;
-					match amph {
-						Amph::Amber => places |= 0,
-						Amph::Bronze => places |= 1,
-						Amph::Copper => places |= 2,
-						Amph::Desert => places |= 3,
+					place_bits |= 1;
+					amph_bits <<= 2;
+					amph_bits |= match amph {
+						Amph::Amber => 0, Amph::Bronze => 1,
+						Amph::Copper => 2, Amph::Desert => 3,
 					}
 				}
 			}
-			let data = ((self.room_size as u64) << 56) | (mask << 32) | places;
+			assert! (64 - place_bits.leading_zeros () <= 27);
+			assert! (64 - amph_bits.leading_zeros () <= 32);
+			let data = ((self.room_size as u64) << 59) | (place_bits << 32) | amph_bits;
 			StateCompact { data }
 		}
 
@@ -386,8 +446,15 @@ mod model {
 
 	impl fmt::Display for State {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			for amph in self.places {
+			for amph in self.hall.iter ().copied () {
 				write! (formatter, "{}", amph.map (Amph::letter).unwrap_or ('.')) ?;
+			}
+			for room in [& self.amber, & self.bronze, & self.copper, & self.desert] {
+				write! (formatter, "/") ?;
+				for amph in iter::repeat (None).take (self.room_size - room.len ())
+						.chain (room.iter ().copied ().rev ().map (Some)) {
+					write! (formatter, "{}", amph.map (Amph::letter).unwrap_or ('.')) ?;
+				}
 			}
 			Ok (())
 		}
@@ -406,97 +473,84 @@ mod model {
 
 	impl StateCompact {
 		pub fn expand (self) -> State {
-			let mut mask = (self.data & 0x00ffffff00000000) >> 32;
-			let mut place_bits = self.data & 0x00000000ffffffff;
+			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32;
+			let mut amph_bits = self.data & 0x00000000ffffffff;
 			let mut places = [None; 27];
-			for idx in (0 .. 27).rev () {
-				if idx == 2 || idx == 4 || idx == 6 { continue }
-				if mask & 1 != 0 {
-					match place_bits & 0x3 {
-						0 => places [idx] = Some (Amph::Amber),
-						1 => places [idx] = Some (Amph::Bronze),
-						2 => places [idx] = Some (Amph::Copper),
-						3 => places [idx] = Some (Amph::Desert),
+			for place_idx in (0 .. 27).rev () {
+				if present_bits & 1 != 0 {
+					match amph_bits & 0x3 {
+						0 => places [place_idx] = Some (Amph::Amber),
+						1 => places [place_idx] = Some (Amph::Bronze),
+						2 => places [place_idx] = Some (Amph::Copper),
+						3 => places [place_idx] = Some (Amph::Desert),
 						_ => unreachable! (),
 					}
-					place_bits >>= 2;
+					amph_bits >>= 2;
 				}
-				mask >>= 1;
+				present_bits >>= 1;
 			}
-			let room_size = (self.data >> 56) as u8;
-			State { room_size, places }
+			let room_size = (self.data >> 59) as usize;
+			State::from_array (room_size, places)
 		}
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	pub struct Place {
-		id: u8,
+	pub enum Place {
+		Hall (u8),
+		Room (Amph, u8),
 	}
 
 	impl Place {
-		pub fn hall_blocking_left () -> Place { Place { id: 3 } }
-		pub fn hall_blocking_middle () -> Place { Place { id: 5 } }
-		pub fn hall_blocking_right () -> Place { Place { id: 7 } }
-		fn idx (self) -> usize { self.id as usize }
-		pub fn hall (self) -> bool { (0 .. 11).contains (& self.idx ()) }
-		pub fn room (self) -> bool { (11 .. 27).contains (& self.idx ()) }
-		pub fn entrance (self) -> bool { [2, 4, 6, 8].contains (& self.idx ()) }
-		pub fn amph (self) -> Option <Amph> { match self.id {
-			11 | 15 | 19 | 23 => Some (Amph::Amber),
-			12 | 16 | 20 | 24 => Some (Amph::Bronze),
-			13 | 17 | 21 | 25 => Some (Amph::Copper),
-			14 | 18 | 22 | 26 => Some (Amph::Desert),
-			_ => None,
-		} }
-		pub fn adjacent (self) -> PlaceAdjacent {
-			PlaceAdjacent { iter: Place::ADJACENT [self.id as usize].iter () }
-		}
-		pub fn room_depth (self) -> u8 { match self.id {
-			11 ..= 14 => 0,
-			15 ..= 18 => 1,
-			19 ..= 22 => 2,
-			23 ..= 26 => 3,
-			_ => panic! (),
-		} }
-		const ADJACENT: & 'static [& 'static [u8]] = & [
-			& [1], & [0, 2], & [1, 3, 11], & [2, 4], & [3, 5, 12], & [4, 6], & [5, 7, 13],
-			& [6, 8], & [7, 9, 14], & [8, 10], & [9], & [2, 15], & [4, 16], & [6, 17], & [8, 18],
-			& [11, 19], & [12, 20], & [13, 21], & [14, 22], & [15, 23], & [16, 24], & [17, 25],
-			& [18, 26], & [19], & [20], & [21], & [22],
-		];
-	}
-
-	pub struct PlaceAdjacent { iter: SliceIter <'static, u8> }
-	impl Iterator for PlaceAdjacent {
-		type Item = Place;
-		fn next (& mut self) -> Option <Place> {
-			match self.iter.next () {
-				Some (id) => Some (Place { id: * id }),
-				None => None,
+		pub fn idx (self) -> usize {
+			match self {
+				Place::Hall (id) => id as usize,
+				Place::Room (Amph::Amber, depth) => 11 + depth as usize,
+				Place::Room (Amph::Bronze, depth) => 15 + depth as usize,
+				Place::Room (Amph::Copper, depth) => 19 + depth as usize,
+				Place::Room (Amph::Desert, depth) => 23 + depth as usize,
 			}
 		}
+		pub const fn for_idx (idx: usize) -> Place {
+			match idx {
+				0 ..= 10 => Place::Hall (idx as u8),
+				11 ..= 14 => Place::Room (Amph::Amber, idx as u8 - 11),
+				15 ..= 18 => Place::Room (Amph::Bronze, idx as u8 - 15),
+				19 ..= 22 => Place::Room (Amph::Copper, idx as u8 - 19),
+				23 ..= 26 => Place::Room (Amph::Desert, idx as u8 - 23),
+				_ => panic! (),
+			}
+		}
+		pub fn entrance (self) -> bool { [2, 4, 6, 8].contains (& self.idx ()) }
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Amph { Amber, Bronze, Copper, Desert }
 
 	impl Amph {
-		pub fn cost (self) -> i64 { match self {
-			Amph::Amber => 1, Amph::Bronze => 10,
-			Amph::Copper => 100, Amph::Desert => 1000,
-		} }
-		pub fn belongs (self, place: Place) -> bool {
-			place.amph () == Some (self)
+		pub fn idx (self) -> usize {
+			match self {
+				Amph::Amber => 0,
+				Amph::Bronze => 1,
+				Amph::Copper => 2,
+				Amph::Desert => 3,
+			}
 		}
-		pub fn letter (self) -> char { match self {
-			Amph::Amber => 'A', Amph::Bronze => 'B',
-			Amph::Copper => 'C', Amph::Desert => 'D',
-		} }
-		pub fn from_letter (letter: char) -> Option <Option <Amph>> { match letter {
-			'A' => Some (Some (Amph::Amber)), 'B' => Some (Some (Amph::Bronze)),
-			'C' => Some (Some (Amph::Copper)), 'D' => Some (Some (Amph::Desert)),
-			'.' => Some (None), _ => None,
-		} }
+		pub fn from_letter (letter: char) -> Option <Option <Amph>> {
+			match letter {
+				'A' => Some (Some (Amph::Amber)),
+				'B' => Some (Some (Amph::Bronze)),
+				'C' => Some (Some (Amph::Copper)),
+				'D' => Some (Some (Amph::Desert)),
+				'.' => Some (None), _ => None,
+			}
+		}
+		pub fn cost (self) -> i64 { Amph::COSTS [self.idx ()] }
+		pub fn letter (self) -> char { Amph::LETTERS [self.idx ()] }
+		const COSTS: & 'static [i64; 4] = & [1, 10, 100, 1000];
+		const LETTERS: & 'static [char; 4] = & ['A', 'B', 'C', 'D'];
+		pub const ALL: & 'static [Amph] = & [
+			Amph::Amber, Amph::Bronze, Amph::Copper, Amph::Desert
+		];
 	}
 
 	#[ cfg (test) ]
@@ -506,10 +560,145 @@ mod model {
 
 		#[ test ]
 		fn test_state_finished () {
-			assert! (State::from_str ("...........ABCDABCD").unwrap ().is_finished ());
-			assert! (! State::from_str ("A...........BCDABCD").unwrap ().is_finished ());
+			assert! (State::from_str (".........../AA/BB/CC/DD").unwrap ().is_finished ());
+			assert! (! State::from_str ("A........../.A/BB/CC/DD").unwrap ().is_finished ());
 		}
 
+	}
+
+}
+
+pub mod tools {
+
+	use super::*;
+	use model::State;
+	use search::PrioritySearch;
+	use search::PrioritySearchAdder;
+
+	#[ derive (Debug, clap::Parser) ]
+	pub struct RunArgs {
+
+		#[ clap (long, default_value ("inputs/day-23")) ]
+		input: String,
+
+		#[ clap (long) ]
+		verbose: bool,
+
+		#[ clap (long) ]
+		part_1: bool,
+
+		#[ clap (long) ]
+		part_2: bool,
+
+	}
+
+	pub fn run (args: RunArgs) -> GenResult <()> {
+		let mut args = args;
+		if ! (args.part_1 || args.part_2) { args.part_1 = true; args.part_2 = true; }
+		let input_string = fs::read_to_string (& args.input) ?;
+		let input_lines: Vec <_> = input_string.trim ().split ("\n").collect ();
+		if args.part_1 {
+			run_part (& args, & input_lines) ?;
+		}
+		if args.part_2 {
+			let input_lines_modified = logic::modify_input_for_part_two (& input_lines);
+			run_part (& args, & input_lines_modified) ?;
+		}
+		Ok (())
+	}
+
+	pub fn run_part (args: & RunArgs, lines: & [& str]) -> GenResult <()> {
+		let input = State::parse (& lines) ?;
+		let mut num_loops = 0;
+		let mut last_cost = -1;
+		let mut prev_states = HashMap::new ();
+		let mut search = PrioritySearch::new (
+			|state_compact, score, mut adder: PrioritySearchAdder <_, _>| {
+				let next_states_compact = logic::calc_next_states (state_compact);
+				for (next_state_compact, next_cost) in next_states_compact.iter ().copied () {
+					let next_score = score + next_cost;
+					adder.add (next_state_compact, next_score);
+					prev_states.insert (next_state_compact, state_compact);
+				}
+				(state_compact, score, next_states_compact)
+			},
+		);
+		search.push (input.compact (), 0);
+		let final_cost = loop {
+			let (state_compact, cost, next_states_compact) = match search.next () {
+				Some (val) => val,
+				None => break None,
+			};
+			num_loops += 1;
+			let state = state_compact.expand ();
+			if state.is_finished () {
+				break Some ((state_compact, cost));
+			}
+			if args.verbose {
+				let next_states: Vec <_> =
+					next_states_compact.iter ().copied ()
+						.map (|(state_compact, cost)| (state_compact.expand (), cost))
+						.sorted_by_key (|& (_, cost)| cost)
+						.collect ();
+				if ! next_states.is_empty () {
+					if cost != last_cost {
+						println! ();
+						println! ("Evaluating states with cost: {}", cost);
+						println! ("Number of iterations: {}", num_loops);
+						println! ("Size of backlog: {}", search.len ());
+					}
+					println! ();
+					print_next_states (& state, & next_states);
+				}
+			}
+			last_cost = cost;
+		};
+		let (final_state_compact, final_cost) =
+			final_cost.ok_or_else (|| format! ("Failed to find a solution")) ?;
+		let final_state = final_state_compact.expand ();
+		if args.verbose {
+			println! ();
+			println! ("═══════════════════════════ Found solution ═══════════════════════════");
+			println! ();
+		}
+		println! ("Solved with cost: {}", final_cost);
+		println! ("Number of iterations: {}", num_loops);
+		if args.verbose { println! (); }
+		let mut all_states =
+			iter::successors (
+					Some (final_state_compact),
+					|state| prev_states.get (state).copied ())
+				.map (|state_compact| state_compact.expand ())
+				.collect::<Vec <_>> ();
+		all_states.reverse ();
+		for chunk in all_states.chunks (11) {
+			for line in 0 .. final_state.room_size () + 3 {
+				for (idx, state) in chunk.into_iter ().enumerate () {
+					if idx > 0 { print! (" "); }
+					print! ("{:13}", state.pretty_line (line));
+				}
+				print! ("\n");
+			}
+		}
+		if args.verbose { println! (); }
+		Ok (())
+	}
+
+	pub fn print_next_states (cur_state: & State, next_states: & [(State, i64)]) {
+		for (chunk_idx, chunk) in next_states.chunks (10).enumerate () {
+			print! ("{:^13}  ", if chunk_idx == 0 { "START" } else { "" });
+			for (_, cost) in chunk.iter () {
+				print! (" {:^13}", cost);
+			}
+			print! ("\n");
+			for line in 0 .. (cur_state.room_size () as usize + 3) {
+				print! ("{:13}  ", if chunk_idx == 0 { cur_state.pretty_line (line) } else { String::new () });
+				for (next_state, _) in chunk.iter () {
+					print! (" {:13}", next_state.pretty_line (line));
+				}
+				print! ("\n");
+			}
+		}
 	}
 
 }

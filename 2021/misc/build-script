@@ -3,27 +3,55 @@
 export CARGO_TERM_COLOR="always"
 
 function main {
-	local cargo_args
-	local cargo_run_args
-	local cargo_test_args
+	local mode
+	local package
+	local profile
+	local -a run_args
 	while [[ "$#" != 0 ]]; do
 		local arg="$1"; shift
 		case "$arg" in
-			(day-*)
-				local day="${arg:4}"
-				cargo_args="$cargo_run_args --package aoc-2021-day-$day"
-				;;
-			(--release)
-				cargo_args="$cargo_args --release"
+			(day-*) package="aoc-2021-day-${arg:4}" ;;
+			(release) profile="release" ;;
+			(release-lto) profile="release-lto" ;;
+			(flamegraph) mode="flamegraph" ;;
+			(test) mode="test" ;;
+			(part-1|part-2) run_args+=( "$arg" ) ;;
+			(--)
+				case "$mode" in
+					(""|run|run-test|flamegraph) run_args+=( "$@" ) ;;
+					(test) test_args+=( "$@" ) ;;
+				esac
+				shift $#
 				;;
 			(*)
-				echo "Unknown command: $1"
+				echo "Unknown command: $arg"
 				exit 1
 				;;
 		esac
 	done
-	cargo run $cargo_args $cargo_run_args
-	cargo test $cargo_args $cargo_test_args
+	local -a cargo_args
+	if [[ -z "$mode" ]]; then mode="run-test"; fi
+	if [[ -z "$profile" && "$mode" = "flamegraph" ]]; then profile="flamegraph"; fi
+	if [[ -n "$package" ]]; then cargo_args+=( --package "$package" ); fi
+	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
+	case "$mode" in
+		(run-test)
+			cargo run "${cargo_args[@]}" -- "${run_args[@]}"
+			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
+			;;
+		(run)
+			cargo run "${cargo_args[@]}" -- "${run_args[@]}"
+			;;
+		(test)
+			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
+			;;
+		(flamegraph)
+			cargo_args+=( --image-width "4000" )
+			cargo_args+=( --palette "rust" )
+			cargo flamegraph "${cargo_args[@]}" -- "${run_args[@]}" \
+				&& (eog flamegraph.svg &)
+			;;
+	esac
 }
 
 main "$@"

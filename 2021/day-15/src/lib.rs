@@ -22,6 +22,8 @@ mod logic {
 	use model::Cave;
 	use model::Grid;
 	use model::Pos;
+	use search::PrioritySearch;
+	use search::PrioritySearchAdder;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let cave = Cave::parse (lines) ?;
@@ -47,20 +49,23 @@ mod logic {
 
 	pub fn calc_result (cave: & Cave) -> GenResult <u64> {
 		let mut best: Grid <u64> = Grid::new_with ([0, 0], cave.risks.size (), u64::MAX);
-		let mut search = search::PrioritySearch::new (|& pos: & Pos, & path_risk, mut adder| {
-			if let Some (prev_best) = best.get_mut (pos) {
-				if * prev_best <= path_risk { return }
-				* prev_best = path_risk;
-			}
-			for adj_pos in pos.adjacent_4 () {
-				if let Some (& adj_risk) = cave.risks.get (adj_pos) {
-					let adj_path_risk = path_risk + adj_risk as u64;
-					let prev_best = best.get (adj_pos).copied ().unwrap_or (u64::MAX);
-					if prev_best <= adj_path_risk { continue }
-					adder.add (adj_pos, adj_path_risk);
+		let mut search = PrioritySearch::new (
+			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64>| {
+				if let Some (prev_best) = best.get_mut (pos) {
+					if * prev_best <= path_risk { return (pos, path_risk) }
+					* prev_best = path_risk;
 				}
-			}
-		});
+				for adj_pos in pos.adjacent_4 () {
+					if let Some (& adj_risk) = cave.risks.get (adj_pos) {
+						let adj_path_risk = path_risk + adj_risk as u64;
+						let prev_best = best.get (adj_pos).copied ().unwrap_or (u64::MAX);
+						if prev_best <= adj_path_risk { continue }
+						adder.add (adj_pos, adj_path_risk);
+					}
+				}
+				(pos, path_risk)
+			},
+		);
 		search.push (cave.start, 0);
 		let best = search
 			.filter (|& (pos, _)| pos == cave.end)
@@ -108,16 +113,8 @@ mod examples {
 	use super::*;
 
 	const EXAMPLE: & [& str] = & [
-		"1163751742",
-		"1381373672",
-		"2136511328",
-		"3694931569",
-		"7463417111",
-		"1319128137",
-		"1359912421",
-		"3125421639",
-		"1293138521",
-		"2311944581",
+		"1163751742", "1381373672", "2136511328", "3694931569", "7463417111",
+		"1319128137", "1359912421", "3125421639", "1293138521", "2311944581",
 	];
 
 	#[ test ]
