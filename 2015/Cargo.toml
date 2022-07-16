@@ -1,0 +1,32 @@
+[package]
+
+	name = "aoc-2015"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2015"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../aoc-common" }
+
+	aoc-2015-day-01 = { path = "day-01" }
+
+[profile.flamegraph]
+
+	inherits = "release"
+	debug = true
+
+[profile.release-lto]
+
+	inherits = "release"
+	lto = true
+
+[workspace]
+
+	members = [
+		"day-01"
+	]
