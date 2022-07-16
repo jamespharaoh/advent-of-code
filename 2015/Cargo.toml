@@ -14,6 +14,7 @@
 	aoc-common = { path = "../aoc-common" }
 
 	aoc-2015-day-01 = { path = "day-01" }
+	aoc-2015-day-02 = { path = "day-02" }
 
 [profile.flamegraph]
 
@@ -28,5 +29,5 @@
 [workspace]
 
 	members = [
-		"day-01"
+		"day-01", "day-02",
 	]

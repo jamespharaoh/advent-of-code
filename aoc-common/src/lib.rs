@@ -31,6 +31,25 @@ macro_rules! assert_err {
 	};
 }
 
+mod iter_ext {
+
+	use super::*;
+	use iter::Copied;
+
+	pub trait IntoIteratorExt: IntoIterator + Sized {
+		fn iter_copied <'a, Item> (self) -> Copied <Self::IntoIter>
+			where
+				Item: 'a + Copy,
+				Self: IntoIterator <Item = & 'a Item> {
+			self.into_iter ().copied ()
+		}
+	}
+
+	impl <'a, IntoIter> IntoIteratorExt for & 'a IntoIter where & 'a IntoIter: IntoIterator {
+	}
+
+}
+
 mod prelude {
 	pub use arrayvec::ArrayVec;
 	pub use clap;
@@ -84,4 +103,5 @@ mod prelude {
 	pub use std::str::Chars;
 	pub use std::str::FromStr;
 	pub use std::time;
+	pub use crate::iter_ext::IntoIteratorExt as _;
 }
