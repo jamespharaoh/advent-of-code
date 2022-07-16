@@ -279,13 +279,13 @@ mod examples {
 	#[ test ]
 	fn part_one () -> GenResult <()> {
 		assert_eq! (39, logic::part_one (EXAMPLE_0) ?);
-		assert_eq! (590784, logic::calc_result_part_one (EXAMPLE_1) ?);
+		assert_eq! (590784, logic::part_one (EXAMPLE_1) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (2758514936282235, logic::calc_result_part_two (EXAMPLE_2) ?);
+		assert_eq! (2758514936282235, logic::part_two (EXAMPLE_2) ?);
 		Ok (())
 	}
 
