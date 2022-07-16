@@ -12,6 +12,7 @@ puzzle_info! {
 	part_two = |lines| logic::part_two (lines);
 	commands = [
 		( name = "run"; method = tools::run; ),
+		( name = "internals"; method = tools::internals; ),
 	];
 }
 
@@ -51,7 +52,7 @@ mod logic {
 	pub fn calc_result (input: State) -> GenResult <i64> {
 		Ok (
 			iterator (input)
-				.filter (|(state_compact, _)| state_compact.expand ().is_finished ())
+				.filter (|(state_compact, _)| state_compact.is_finished ())
 				.map (|(_, score)| score)
 				.next ()
 				.ok_or (format! ("Failed to find solution")) ?
@@ -59,8 +60,8 @@ mod logic {
 	}
 
 	pub fn iterator (input: State) -> impl Iterator <Item = (StateCompact, i64)> {
-		let mut search = PrioritySearch::new (
-			|state: StateCompact, score: i64, mut adder: PrioritySearchAdder <'_, _, _>| {
+		let mut search = PrioritySearch::with_hash_map (
+			|state: StateCompact, score: i64, mut adder: PrioritySearchAdder <'_, _, _, _>| {
 				for (next_state, next_cost) in calc_next_states (state) {
 					let next_score = score + next_cost;
 					adder.add (next_state, next_score);
@@ -155,13 +156,13 @@ mod logic {
 
 	}
 
-	enum Move {
+	pub enum Move {
 		Out (Amph, Amph, Place),
 		In (Amph, Place, Amph),
 		Between (Amph, Amph, Amph),
 	}
 
-	fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
+	pub fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
 		let mut result = ArrayVec::new ();
 		let path_clear = |from: Place, to: Place|
 			state.hall ().iter ().enumerate ()
@@ -177,7 +178,9 @@ mod logic {
 			let hall = Place::for_idx (idx);
 			if ! state.room_is_happy (to_room) { continue }
 			if ! path_clear (hall, room_entrance (to_room)) { continue }
+			result.clear ();
 			result.push (Move::In (amph, hall, to_room));
+			return result;
 		}
 		for (from_room, amphs) in [
 			(Amph::Amber, state.room (Amph::Amber)),
@@ -190,11 +193,24 @@ mod logic {
 				if state.room_is_happy (from_room) { continue }
 				if state.room_is_happy (to_room) {
 					if ! path_clear (room_entrance (from_room), room_entrance (to_room)) { continue }
+					result.clear ();
 					result.push (Move::Between (amph, from_room, to_room));
+					return result;
 				} else {
-					for hall in state.hall ().iter ().enumerate ()
-							.filter_map (|(idx, amph)| amph.is_none ().then_some (idx))
-							.map (Place::for_idx)
+					for hall in
+						iter::successors (
+								Some (room_entrance (from_room)),
+								|prev_hall| if prev_hall.idx () > 0 {
+									Some (Place::for_idx (prev_hall.idx () - 1))
+								} else { None })
+							.take_while (|& hall| state.get (hall).is_none ())
+							.chain (
+								iter::successors (
+										Some (room_entrance (from_room)),
+										|prev_hall| if prev_hall.idx () + 1 < 11 {
+											Some (Place::for_idx (prev_hall.idx () + 1))
+										} else { None })
+									.take_while (|& hall| state.get (hall).is_none ()))
 							.filter (|hall| ! hall.entrance ()) {
 						if ! path_clear (room_entrance (from_room), hall) { continue }
 						result.push (Move::Out (amph, from_room, hall));
@@ -492,6 +508,21 @@ mod model {
 			let room_size = (self.data >> 59) as usize;
 			State::from_array (room_size, places)
 		}
+		pub fn is_finished (self) -> bool {
+			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32;
+			if present_bits & 0x07ff0000 != 0 { return false }
+			let mut amph_bits = self.data & 0x00000000ffffffff;
+			for idx in (0 .. 4).rev () {
+				for _ in 0 .. 4 {
+					if present_bits & 1 != 0 {
+						if amph_bits & 0x3 != idx { return false }
+						amph_bits >>= 2;
+					}
+					present_bits >>= 1;
+				}
+			}
+			true
+		}
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
@@ -585,6 +616,9 @@ pub mod tools {
 		verbose: bool,
 
 		#[ clap (long) ]
+		dead_ends: bool,
+
+		#[ clap (long) ]
 		part_1: bool,
 
 		#[ clap (long) ]
@@ -612,13 +646,12 @@ pub mod tools {
 		let mut num_loops = 0;
 		let mut last_cost = -1;
 		let mut prev_states = HashMap::new ();
-		let mut search = PrioritySearch::new (
-			|state_compact, score, mut adder: PrioritySearchAdder <_, _>| {
+		let mut search = PrioritySearch::with_hash_map (
+			|state_compact, score, mut adder: PrioritySearchAdder <_, _, _>| {
 				let next_states_compact = logic::calc_next_states (state_compact);
 				for (next_state_compact, next_cost) in next_states_compact.iter ().copied () {
 					let next_score = score + next_cost;
 					adder.add (next_state_compact, next_score);
-					prev_states.insert (next_state_compact, state_compact);
 				}
 				(state_compact, score, next_states_compact)
 			},
@@ -640,30 +673,43 @@ pub mod tools {
 						.map (|(state_compact, cost)| (state_compact.expand (), cost))
 						.sorted_by_key (|& (_, cost)| cost)
 						.collect ();
-				if ! next_states.is_empty () {
-					if cost != last_cost {
-						println! ();
-						println! ("Evaluating states with cost: {}", cost);
-						println! ("Number of iterations: {}", num_loops);
-						println! ("Size of backlog: {}", search.len ());
-					}
+				if cost != last_cost {
 					println! ();
+					println! ("Evaluating states with cost: {}", cost);
+					println! ("Number of iterations: {}", num_loops);
+					println! ("Size of backlog: {}", search.len ());
+				}
+				println! ();
+				if next_states.is_empty () && args.dead_ends {
+					let all_states =
+						iter::successors (
+								Some (state_compact),
+								|state| prev_states.get (state).copied ())
+							.map (|state_compact| state_compact.expand ())
+							.collect::<Vec <_>> ();
+					println! ("  ▒▒▒▒  Dead end:");
+					for chunk in all_states.chunks (11) {
+						for line in 0 .. state.room_size () + 3 {
+							print! ("  ▒▒▒▒  ");
+							for (idx, state) in chunk.into_iter ().enumerate () {
+								if idx > 0 { print! (" "); }
+								print! ("{:13}", state.pretty_line (line));
+							}
+							print! ("\n");
+						}
+					}
+				} else {
 					print_next_states (& state, & next_states);
 				}
+			}
+			for (next_state_compact, _) in next_states_compact {
+				prev_states.insert (next_state_compact, state_compact);
 			}
 			last_cost = cost;
 		};
 		let (final_state_compact, final_cost) =
 			final_cost.ok_or_else (|| format! ("Failed to find a solution")) ?;
 		let final_state = final_state_compact.expand ();
-		if args.verbose {
-			println! ();
-			println! ("═══════════════════════════ Found solution ═══════════════════════════");
-			println! ();
-		}
-		println! ("Solved with cost: {}", final_cost);
-		println! ("Number of iterations: {}", num_loops);
-		if args.verbose { println! (); }
 		let mut all_states =
 			iter::successors (
 					Some (final_state_compact),
@@ -671,6 +717,17 @@ pub mod tools {
 				.map (|state_compact| state_compact.expand ())
 				.collect::<Vec <_>> ();
 		all_states.reverse ();
+		if args.verbose {
+			println! ();
+			println! ("═══════════════════════════ Found solution ═══════════════════════════");
+			println! ();
+		}
+		println! ("Solved with cost: {}", final_cost);
+		println! ("Number of steps in solution: {}", all_states.len () - 1);
+		println! ();
+		println! ("Number of iterations: {}", num_loops);
+		println! ("Total states genereated: {}", prev_states.len ());
+		if args.verbose { println! (); }
 		for chunk in all_states.chunks (11) {
 			for line in 0 .. final_state.room_size () + 3 {
 				for (idx, state) in chunk.into_iter ().enumerate () {
@@ -685,6 +742,17 @@ pub mod tools {
 	}
 
 	pub fn print_next_states (cur_state: & State, next_states: & [(State, i64)]) {
+		if next_states.is_empty () {
+			println! ("{:^13}", "START");
+			for line in 0 .. cur_state.room_size () + 3 {
+				print! ("{:13}", cur_state.pretty_line (line));
+				if line == (cur_state.room_size () + 3) / 2 {
+					print! ("   (dead end)");
+				}
+				print! ("\n");
+			}
+			return;
+		}
 		for (chunk_idx, chunk) in next_states.chunks (10).enumerate () {
 			print! ("{:^13}  ", if chunk_idx == 0 { "START" } else { "" });
 			for (_, cost) in chunk.iter () {
@@ -699,6 +767,25 @@ pub mod tools {
 				print! ("\n");
 			}
 		}
+	}
+
+	#[ derive (Debug, clap::Parser) ]
+	pub struct InternalsArgs {}
+
+	pub fn internals (_args: InternalsArgs) -> GenResult <()> {
+		println! ("Data structures:");
+		fn show_struct <Type> () {
+			let name = std::any::type_name::<Type> ();
+			let size = mem::size_of::<Type> ();
+			let align = mem::align_of::<Type> ();
+			println! (" - {} {} bytes (align = {})", name, size, align);
+		}
+		show_struct::<logic::Move> ();
+		show_struct::<model::Amph> ();
+		show_struct::<model::Place> ();
+		show_struct::<model::State> ();
+		show_struct::<model::StateCompact> ();
+		Ok (())
 	}
 
 }

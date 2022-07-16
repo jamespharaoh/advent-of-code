@@ -10,6 +10,7 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
+	use model::Pos;
 	use model::Region;
 	use model::Seafloor;
 
@@ -27,66 +28,112 @@ mod logic {
 	}
 
 	pub fn move_both (seafloor: & Seafloor) -> Seafloor {
-		move_south (& move_east (seafloor))
+		let size = seafloor.size ();
+		let iter_row = |y|
+			iter::once (seafloor.get (Pos { y, x: size.x - 1 }))
+				.chain (seafloor.values ()
+					.skip (size.x as usize * y as usize)
+					.take (size.x as usize))
+				.chain (iter::once (seafloor.get (Pos { y, x: 0 })))
+				.collect::<Vec <Region>> ();
+		let data =
+			iter::once (iter_row (size.y - 1))
+				.chain ((0 .. size.y).map (|y| iter_row (y)))
+				.chain (iter::once (iter_row (0)))
+				.scan ((Rc::new (Vec::new ()), Rc::new (Vec::new ())),
+					move |rows, row| {
+						let row_0 = rows.0.clone ();
+						let row_1 = rows.1.clone ();
+						let row_2 = Rc::new (row);
+						* rows = (row_1.clone (), row_2.clone ());
+						if row_0.len () == 0 || row_1.len () == 0 {
+							return Some (Either::Left (iter::empty ()));
+						}
+						Some (Either::Right (
+							(0 .. size.x as usize).map (move |idx|
+								calc_one_region (
+									row_0 [idx .. idx + 3].try_into ().unwrap (),
+									row_1 [idx .. idx + 3].try_into ().unwrap (),
+									row_2 [idx .. idx + 3].try_into ().unwrap (),
+								)
+							)
+						))
+					})
+				.flatten ()
+				.collect::<Vec <_>> ();
+		Seafloor::new (size, data)
 	}
 
-	pub fn move_east (seafloor: & Seafloor) -> Seafloor {
-		let (rows, cols) = seafloor.size ();
-		Seafloor::new ((rows, cols), seafloor.iter ().map (|((row, col), here)| {
-			let west = seafloor.get ((row, (col + cols - 1) % cols));
-			let east = seafloor.get ((row, (col + 1) % cols));
-			match (west, here, east) {
-				(Region::East, Region::Empty, _) => Region::East,
-				(_, Region::East, Region::Empty) => Region::Empty,
-				(_, _, _) => here,
-			}
-		}))
-	}
-
-	pub fn move_south (seafloor: & Seafloor) -> Seafloor {
-		let (rows, cols) = seafloor.size ();
-		Seafloor::new ((rows, cols), seafloor.iter ().map (|((row, col), here)| {
-			let north = seafloor.get (((row + rows - 1) % rows, col));
-			let south = seafloor.get (((row + 1) % rows, col));
-			match (north, here, south) {
-				(Region::South, Region::Empty, _) => Region::South,
-				(_, Region::South, Region::Empty) => Region::Empty,
-				(_, _, _) => here,
-			}
-		}))
+	pub fn calc_one_region (
+		above: [Region; 3],
+		level: [Region; 3],
+		below: [Region; 3],
+	) -> Region {
+		use Region::{ Empty as X, East as E, South as S };
+		match (above, level, below) {
+			([_, _, _], [E, X, _], [_, _, _]) => E,
+			([_, S, _], [_, E, X], [_, _, _]) => S,
+			([_, _, _], [_, E, X], [_, _, _]) => X,
+			([_, S, _], [_, X, _], [_, _, _]) => S,
+			([_, _, _], [_, S, _], [_, E, X]) => X,
+			([_, _, _], [_, S, _], [E, X, _]) => S,
+			([_, _, _], [_, S, _], [_, X, _]) => X,
+			([_, _, _], [_, h, _], [_, _, _]) => h,
+		}
 	}
 
 	#[ cfg (test) ]
-	fn test_sequence <StepFn: Fn (& Seafloor) -> Seafloor> (
-		step_fn: StepFn,
-		seafloor_strs: & [& [& str]],
-	) -> GenResult <()> {
-		let mut seafloor = Seafloor::parse (seafloor_strs [0]) ?;
-		for expect_str in seafloor_strs.iter ().skip (1) {
-			let expect = Seafloor::parse (expect_str) ?;
-			seafloor = step_fn (& seafloor);
-			assert_eq! (expect, seafloor);
+	mod tests {
+
+		use super::*;
+
+		fn test_sequence <StepFn: Fn (& Seafloor) -> Seafloor> (
+			step_fn: StepFn,
+			seafloor_strs: & [& [& str]],
+		) -> GenResult <()> {
+			let mut seafloor = Seafloor::parse (seafloor_strs [0]) ?;
+			let count = |seafloor: & Seafloor, region|
+				seafloor.iter ()
+					.filter (|& (_, other_region)| region == other_region)
+					.count ();
+			let num_east = count (& seafloor, Region::East);
+			let num_south = count (& seafloor, Region::South);
+			for expect_str in seafloor_strs.iter ().skip (1) {
+				let expect = Seafloor::parse (expect_str) ?;
+				seafloor = step_fn (& seafloor);
+				assert_eq! (expect, seafloor);
+				assert_eq! (num_east, count (& seafloor, Region::East));
+				assert_eq! (num_south, count (& seafloor, Region::South));
+			}
+			Ok (())
 		}
-		Ok (())
-	}
 
-	#[ test ]
-	fn test_move_east () -> GenResult <()> {
-		test_sequence (move_east, & [
-			& ["...>>>>>..."],
-			& ["...>>>>.>.."],
-			& ["...>>>.>.>."],
-			& ["...>>.>.>.>"],
-		])
-	}
+		#[ test ]
+		fn test_complex () -> GenResult <()> {
+			test_sequence (move_both, & [
+				& [ "v...>>.vv>", ".vv>>.vv..", ">>.>v>...v", ">>v>>.>.v.", "v>v.vv.v..",
+					">.>>..v...", ".vv..>.>v.", "v.v..>>v.v", "....v..v.>" ],
+				& [ "....>.>v.>", "v.v>.>v.v.", ">v>>..>v..", ">>v>v>.>.v", ".>v.v...v.",
+					"v>>.>vvv..", "..v...>>..", "vv...>>vv.", ">.v.v..v.v" ],
+			])
+		}
 
-	#[ test ]
-	fn test_move_both () -> GenResult <()> {
-		test_sequence (move_both, & [
-			& ["..........", ".>v....v..", ".......>..", ".........."],
-			& ["..........", ".>........", "..v....v>.", ".........."],
-			& ["..........", "..>.......", ".........>", "..v....v.."],
-		])
+		#[ test ]
+		fn test_east () -> GenResult <()> {
+			test_sequence (move_both, & [
+				& ["...>>>>>..."], & ["...>>>>.>.."], & ["...>>>.>.>."], & ["...>>.>.>.>"],
+			])
+		}
+
+		#[ test ]
+		fn test_both () -> GenResult <()> {
+			test_sequence (move_both, & [
+				& ["..........", ".>v....v..", ".......>..", ".........."],
+				& ["..........", ".>........", "..v....v>.", ".........."],
+				& ["..........", "..>.......", ".........>", "..v....v.."],
+			])
+		}
+
 	}
 
 }
@@ -94,52 +141,54 @@ mod logic {
 mod model {
 
 	use super::*;
+	use bitvec::BitVecNative;
+	use grid::Grid;
+	use pos::PosYX;
+
+	pub type Pos = PosYX <Coord>;
+	pub type Coord = u16;
+	pub type GridInner = Vec <Region>;
 
 	#[ derive (Clone, Eq, PartialEq) ]
 	pub struct Seafloor {
-		size: (usize, usize),
-		data: Vec <Region>,
+		grid: Grid <GridInner, Pos>,
+		size: Pos,
 	}
 
 	impl Seafloor {
-		pub fn new <IntoIter> (size: (usize, usize), iter: IntoIter) -> Seafloor
-				where IntoIter: IntoIterator <Item = Region> {
-			let mut iter = iter.into_iter ();
-			let data: Vec <_> = (& mut iter).take (size.0 * size.1).collect ();
-			if data.len () < size.0 * size.1 || iter.next ().is_some () { panic! () }
-			Seafloor { size, data }
+		pub fn new (size: Pos, regions: GridInner) -> Seafloor {
+			let grid_size = [size.y as usize, size.x as usize];
+			let grid = Grid::wrap (regions, [0, 0], grid_size);
+			Seafloor { grid, size }
 		}
-		pub fn size (& self) -> (usize, usize) { self.size }
+		pub fn size (& self) -> Pos { self.size }
 		pub fn parse (lines: & [& str]) -> GenResult <Seafloor> {
 			if lines.is_empty () { Err (format! ("Invalid input")) ? }
-			let size = (lines.len (), lines [0].chars ().count ());
-			let data = lines.iter ().enumerate ().map (|(line_idx, line)| {
-				let line_err = move || format! ("Invalid input: {}: {}", line_idx, line);
-				if line.chars ().count () != size.1 { Err (line_err ()) ? }
-				Ok (line.chars ().map (move |letter| Ok (match letter {
-					'.' => Region::Empty,
-					'>' => Region::East,
-					'v' => Region::South,
-					_ => Err (line_err ()) ?,
-				})))
-			}).flatten_ok ().collect::<GenResult <GenResult <_>>> () ? ?;
-			Ok (Seafloor { size, data })
+			let size = Pos { y: lines.len () as u16, x: lines [0].chars ().count () as u16 };
+			let data = lines.iter ().enumerate ()
+				.flat_map (|(line_idx, line)| {
+					let line_err = move || format! ("Invalid input: {}: {}", line_idx, line);
+					line.chars ().map::<Result <_, String>, _> (move |letter|
+						Ok (match letter {
+							'.' => Region::Empty,
+							'>' => Region::East,
+							'v' => Region::South,
+							_ => Err (line_err ()) ?,
+						}),
+					)
+				}).collect::<Result <_, _>> () ?;
+			let grid_size = [size.y as usize, size.x as usize];
+			let grid = Grid::wrap (data, [0, 0], grid_size);
+			Ok (Seafloor { grid, size })
 		}
-		pub fn get (& self, pos: (usize, usize)) -> Region {
-			if ! (0 .. self.size.0).contains (& pos.0) { panic! () }
-			if ! (0 .. self.size.1).contains (& pos.1) { panic! () }
-			self.data [pos.0 * self.size.1 + pos.1]
+		pub fn get (& self, pos: Pos) -> Region {
+			self.grid.get (pos).unwrap ()
 		}
-		pub fn iter <'a> (& 'a self) -> impl Iterator <Item = ((usize, usize), Region)> + 'a {
-			self.data.iter ().scan ((0, 0), |pos, val| {
-				let ret = (* pos, * val);
-				pos.1 += 1;
-				if pos.1 == self.size.1 {
-					pos.1 = 0;
-					pos.0 += 1;
-				}
-				Some (ret)
-			})
+		pub fn iter <'a> (& 'a self) -> impl Iterator <Item = (Pos, Region)> + 'a {
+			self.grid.iter ()
+		}
+		pub fn values <'a> (& 'a self) -> impl Iterator <Item = Region> + 'a {
+			self.grid.values ()
 		}
 	}
 
@@ -147,10 +196,10 @@ mod model {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			write! (formatter, "Seafloor {{ {:?}, ", self.size) ?;
 			for (pos, region) in self.iter () {
-				if pos.1 == 0 && pos.0 > 0 { write! (formatter, ", ") ?; }
-				if pos.1 == 0 { write! (formatter, "\"") ?; }
+				if pos.x == 0 && pos.y > 0 { write! (formatter, ", ") ?; }
+				if pos.x == 0 { write! (formatter, "\"") ?; }
 				write! (formatter, "{}", region) ?;
-				if pos.1 + 1 == self.size.1 { write! (formatter, "\"") ?; }
+				if pos.x + 1 == self.size.x { write! (formatter, "\"") ?; }
 			}
 			write! (formatter, " }}") ?;
 			Ok (())
@@ -164,7 +213,26 @@ mod model {
 		South,
 	}
 
-	impl fmt::Display for Region {
+	impl BitVecNative for Region {
+		const BITS: u32 = 2;
+		fn encode (self) -> usize {
+			match self {
+				Region::Empty => 0x0,
+				Region::East => 0x1,
+				Region::South => 0x2,
+			}
+		}
+		fn decode (encoded: usize) -> Region {
+			match encoded {
+				0 => Region::Empty,
+				1 => Region::East,
+				2 => Region::South,
+				_ => panic! ("Invalid encoded value for Region: {:#x}", encoded),
+			}
+		}
+	}
+
+	impl Display for Region {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			write! (formatter, "{}", match * self {
 				Region::Empty => '.',
@@ -181,16 +249,9 @@ mod examples {
 
 	use super::*;
 
-	const EXAMPLE_0: & 'static [& 'static str] = & [
-		"v...>>.vv>",
-		".vv>>.vv..",
-		">>.>v>...v",
-		">>v>>.>.v.",
-		"v>v.vv.v..",
-		">.>>..v...",
-		".vv..>.>v.",
-		"v.v..>>v.v",
-		"....v..v.>",
+	const EXAMPLE_0: & [& str] = & [
+		"v...>>.vv>", ".vv>>.vv..", ">>.>v>...v", ">>v>>.>.v.", "v>v.vv.v..", ">.>>..v...",
+		".vv..>.>v.", "v.v..>>v.v", "....v..v.>",
 	];
 
 	#[ test ]

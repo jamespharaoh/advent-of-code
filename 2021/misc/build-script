@@ -11,10 +11,8 @@ function main {
 		local arg="$1"; shift
 		case "$arg" in
 			(day-*) package="aoc-2021-day-${arg:4}" ;;
-			(release) profile="release" ;;
-			(release-lto) profile="release-lto" ;;
-			(flamegraph) mode="flamegraph" ;;
-			(test) mode="test" ;;
+			(dev|release|release-lto) profile="$arg" ;;
+			(flamegraph|run|run-test|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(--)
 				case "$mode" in

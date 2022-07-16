@@ -134,7 +134,7 @@ mod logic {
 			})
 		).collect ();
 		let new_size = [image.height () + 2, image.width () + 2];
-		let new_pixels = Pixels::new_from ([0, 0], new_size, new_pixels);
+		let new_pixels = Pixels::wrap (new_pixels, [0, 0], new_size);
 		let new_inverted = algorithm [if image.inverted () { 0x1ff } else { 0 }];
 		Image::new_from (new_pixels, new_inverted)
 	}
@@ -146,7 +146,7 @@ mod model {
 	use super::*;
 
 	pub type Algorithm = [bool; 512];
-	pub type Pixels = grid::Grid <bool, Pos>;
+	pub type Pixels = grid::Grid <Vec <bool>, Pos>;
 	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Input {
@@ -181,7 +181,7 @@ mod model {
 				}})
 			}).flatten ().collect::<Result <_, _>> () ?;
 			let size = [lines.len () - 2, lines [2].chars ().count ()];
-			let pixels = Pixels::new_from ([0, 0], size, pixels);
+			let pixels = Pixels::wrap (pixels, [0, 0], size);
 			Ok (Input { algorithm, pixels })
 		}
 	}
@@ -197,22 +197,19 @@ mod model {
 			Image { pixels, inverted }
 		}
 		pub fn num_pixels (& self) -> usize {
-			self.pixels.iter ().filter (|(_, & val)| val != self.inverted).count ()
+			self.pixels.values ().filter (|& val| val != self.inverted).count ()
 		}
 		pub fn height (& self) -> usize { self.pixels.size () [0] }
 		pub fn width (& self) -> usize { self.pixels.size () [1] }
 		pub fn inverted (& self) -> bool { self.inverted }
 		pub fn get (& self, pos: Pos) -> bool {
-			self.pixels.get (pos).copied ().unwrap_or (self.inverted)
+			self.pixels.get (pos).unwrap_or (self.inverted)
 		}
 		pub fn range (& self) -> (Pos, Pos) {
 			(self.pixels.origin (), self.pixels.peak () + Pos { y: 1, x: 1 })
 		}
 		pub fn dump (& self) -> ImageDump {
 			ImageDump (self)
-		}
-		pub fn pixels <'a> (& 'a self) -> impl Iterator <Item = bool> + 'a {
-			self.pixels.iter ().map (|(_, & val)| val)
 		}
 	}
 

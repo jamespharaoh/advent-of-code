@@ -5,6 +5,7 @@ use clap::Command;
 pub use prelude::*;
 
 pub mod bithash;
+pub mod bitvec;
 pub mod grid;
 pub mod nums;
 pub mod parser;
@@ -29,6 +30,7 @@ mod prelude {
 	pub use itertools;
 	pub use itertools::Either;
 	pub use itertools::Itertools;
+	pub use itertools::izip;
 	pub use std::borrow::Borrow;
 	pub use std::borrow::Cow;
 	pub use std::cell::Cell;
@@ -44,6 +46,8 @@ mod prelude {
 	pub use std::error::Error;
 	pub use std::ffi::OsString;
 	pub use std::fmt;
+	pub use std::fmt::Debug;
+	pub use std::fmt::Display;
 	pub use std::fs;
 	pub use std::hash;
 	pub use std::hash::BuildHasher;
@@ -57,10 +61,13 @@ mod prelude {
 	pub use std::ops;
 	pub use std::ops::Add;
 	pub use std::ops::Div;
+	pub use std::ops::Index;
+	pub use std::ops::IndexMut;
 	pub use std::ops::Mul;
 	pub use std::ops::Neg;
 	pub use std::ops::Range;
 	pub use std::ops::RangeInclusive;
+	pub use std::ops::Rem;
 	pub use std::ops::Sub;
 	pub use std::path::Path;
 	pub use std::rc::Rc;

@@ -12,6 +12,7 @@ mod logic {
 
 	use super::*;
 	use model::Pos;
+	use grid::Grid;
 
 	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, false)
@@ -26,7 +27,17 @@ mod logic {
 		if ! include_diagonal {
 			vents.retain (|vent| ! vent.is_diagonal ());
 		}
-		let mut points: HashMap <Pos, u16> = HashMap::new ();
+		let size = vents.iter ()
+			.flat_map (|vent| [ vent.start, vent.end ])
+			.fold (Pos::ZERO, |max, pos| Pos {
+				x: cmp::max (max.x, pos.x + 1),
+				y: cmp::max (max.y, pos.y + 1),
+			});
+		let mut points: Grid <Vec <u16>, Pos> =
+			Grid::wrap (
+				iter::repeat (0).take (size.x as usize * size.y as usize).collect (),
+				[0, 0],
+				[size.y as usize, size.x as usize]);
 		for vent in vents {
 			let step = Pos {
 				x: (vent.end.x - vent.start.x).signum (),
@@ -34,13 +45,13 @@ mod logic {
 			};
 			let mut pos = vent.start;
 			loop {
-				* points.entry (pos).or_insert (0) += 1;
+				* points.get_mut (pos).unwrap () += 1;
 				if pos == vent.end { break }
 				pos.x += step.x;
 				pos.y += step.y;
 			}
 		}
-		Ok (points.values ().cloned ().filter (|& num| num > 1).count () as i64)
+		Ok (points.values ().filter (|& num| num > 1).count () as i64)
 	}
 
 }
@@ -48,6 +59,8 @@ mod logic {
 mod model {
 
 	use super::*;
+
+	pub type Pos = pos::PosYX <i16>;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <Vec <Vent>> {
 		let mut vents: Vec <Vent> = Vec::new ();
@@ -76,9 +89,6 @@ mod model {
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	pub struct Pos { pub x: i16, pub y: i16 }
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
 	pub struct Vent { pub start: Pos, pub end: Pos }
 
 	impl Vent {
@@ -89,8 +99,10 @@ mod model {
 
 }
 
-#[ cfg (tes) ]
+#[ cfg (test) ]
 mod examples {
+
+	use super::*;
 
 	const EXAMPLE: & [& str] = & [
 		"0,9 -> 5,9",
@@ -107,7 +119,7 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (12, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (5, logic::calc_result_part_one (EXAMPLE) ?);
 		Ok (())
 	}
 	#[ test ]

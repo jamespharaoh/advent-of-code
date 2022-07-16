@@ -36,30 +36,25 @@ mod logic {
 			let cave_risks = & cave.risks;
 			(0 .. 5).flat_map (move |rep_y| (0 ..= cave.end.y).flat_map (move |y|
 				(0 .. 5).flat_map (move |rep_x| (0 ..= cave.end.x).map (move |x| {
-					let orig_risk = cave_risks.get (Pos { y, x }).copied ().unwrap ();
+					let orig_risk = cave_risks.get (Pos { y, x }).unwrap ();
 					(orig_risk + rep_y + rep_x - 1) % 9 + 1
 				})),
 			)).collect ()
 		};
 		let new_size = [cave.risks.size () [0] * 5, cave.risks.size () [1] * 5];
-		cave.risks = Grid::new_from ([0, 0], new_size, risks);
+		cave.risks = Grid::wrap (risks, [0, 0], new_size);
 		cave.end = Pos { y: (cave.end.y + 1) * 5 - 1, x: (cave.end.x + 1) * 5 - 1 };
 		calc_result (& cave)
 	}
 
 	pub fn calc_result (cave: & Cave) -> GenResult <u64> {
-		let mut best: Grid <u64> = Grid::new_with ([0, 0], cave.risks.size (), u64::MAX);
-		let mut search = PrioritySearch::new (
-			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64>| {
-				if let Some (prev_best) = best.get_mut (pos) {
-					if * prev_best <= path_risk { return (pos, path_risk) }
-					* prev_best = path_risk;
-				}
+		let mut search = PrioritySearch::with_grid (
+			[0, 0],
+			cave.risks.size (),
+			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64, _>| {
 				for adj_pos in pos.adjacent_4 () {
-					if let Some (& adj_risk) = cave.risks.get (adj_pos) {
+					if let Some (adj_risk) = cave.risks.get (adj_pos) {
 						let adj_path_risk = path_risk + adj_risk as u64;
-						let prev_best = best.get (adj_pos).copied ().unwrap_or (u64::MAX);
-						if prev_best <= adj_path_risk { continue }
 						adder.add (adj_pos, adj_path_risk);
 					}
 				}
@@ -80,7 +75,7 @@ mod model {
 
 	use super::*;
 
-	pub type Grid <Val> = grid::Grid <Val, Pos, 2>;
+	pub type Grid <Val> = grid::Grid <Vec <Val>, Pos, 2>;
 	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Cave {
@@ -98,7 +93,7 @@ mod model {
 					risks.push (letter.to_digit (10).ok_or_else (line_err) ? as u8);
 				}
 			}
-			let risks = Grid::new_from ([0, 0], [lines.len (), lines [0].len ()], risks);
+			let risks = Grid::wrap (risks, [0, 0], [lines.len (), lines [0].len ()]);
 			let start = Pos { x: 0, y: 0 };
 			let end = Pos { x: risks.size () [1] as i16 - 1, y: risks.size () [0] as i16 - 1 };
 			Ok (Cave { risks, start, end })
