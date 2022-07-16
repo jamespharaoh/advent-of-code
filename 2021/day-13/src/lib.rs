@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 13: Transparent Origami
+//!
+//! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -7,7 +11,7 @@ puzzle_info! {
 	part_one = |lines| logic::part_one (lines);
 	part_two = |lines| logic::part_two (lines);
 	commands = [
-		( name = "part-2-display"; method = tool::part_two_display; ),
+		( name = "run"; method = tool::run; ),
 	];
 }
 
@@ -17,12 +21,14 @@ mod tool {
 	use model::Input;
 
 	#[ derive (clap::Parser) ]
-	pub struct PartTwoDisplayArgs {
+	pub struct RunArgs {
+
 		#[ clap (long, value_parser, default_value = "inputs/day-13") ]
 		input: String,
+
 	}
 
-	pub fn part_two_display (args: PartTwoDisplayArgs) -> GenResult <()> {
+	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (args.input) ?;
 		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
 		let input = Input::parse (& input_lines) ?;
@@ -87,6 +93,8 @@ mod logic {
 				0x19297a52 => 'A',
 				0x392e4a5c => 'B',
 				0x1928424c => 'C',
+				0x3d0e421e => 'E',
+				0x19285a4e => 'G',
 				0x3d0e4210 => 'F',
 				0x0c210a4c => 'J',
 				0x252f4a52 => 'H',

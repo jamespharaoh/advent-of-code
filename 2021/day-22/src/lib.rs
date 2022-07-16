@@ -17,8 +17,8 @@ puzzle_info! {
 	name = "Reactor Reboot";
 	year = 2021;
 	day = 22;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 }
 
 pub mod logic {
@@ -29,13 +29,13 @@ pub mod logic {
 
 	pub const BOUND_50: Cube = Cube { x0: -50, y0: -50, z0: -50, x1: 51, y1: 51, z1: 51 };
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = model::parse_input (lines) ?;
 		let steps = bound_steps (& input, BOUND_50);
 		Ok (calc_result (& steps))
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		let input = model::parse_input (lines) ?;
 		Ok (calc_result_with_splits (& input, 10))
 	}
@@ -277,18 +277,16 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one_0 () {
-		assert_eq! (39, logic::calc_result_part_one (EXAMPLE_0).unwrap ());
+	fn part_one () -> GenResult <()> {
+		assert_eq! (39, logic::part_one (EXAMPLE_0) ?);
+		assert_eq! (590784, logic::calc_result_part_one (EXAMPLE_1) ?);
+		Ok (())
 	}
 
 	#[ test ]
-	fn part_one_1 () {
-		assert_eq! (590784, logic::calc_result_part_one (EXAMPLE_1).unwrap ());
-	}
-
-	#[ test ]
-	fn part_two () {
-		assert_eq! (2758514936282235, logic::calc_result_part_two (EXAMPLE_2).unwrap ());
+	fn part_two () -> GenResult <()> {
+		assert_eq! (2758514936282235, logic::calc_result_part_two (EXAMPLE_2) ?);
+		Ok (())
 	}
 
 }

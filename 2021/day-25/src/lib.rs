@@ -1,10 +1,14 @@
+//! Advent of Code 2021: Day 25: Sea Cucumber
+//!
+//! [https://adventofcode.com/2021/day/25](https://adventofcode.com/2021/day/25)
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Sea Cucumber";
 	year = 2021;
 	day = 25;
-	part_one = |lines| logic::calc_result (lines);
+	part_one = |lines| logic::part_one (lines);
 }
 
 mod logic {
@@ -14,7 +18,7 @@ mod logic {
 	use model::Region;
 	use model::Seafloor;
 
-	pub fn calc_result (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let seafloor = Seafloor::parse (lines) ?;
 		let mut count = 0;
 		let mut prev_seafloor = seafloor;
@@ -255,8 +259,8 @@ mod examples {
 	];
 
 	#[ test ]
-	fn test_example_0 () -> GenResult <()> {
-		assert_eq! (58, logic::calc_result (EXAMPLE_0) ?);
+	fn part_one () -> GenResult <()> {
+		assert_eq! (58, logic::part_one (EXAMPLE_0) ?);
 		Ok (())
 	}
 

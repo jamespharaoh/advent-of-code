@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 15: Packet Decoder
+//!
+//! [https://adventofcode.com/2021/day/16](https://adventofcode.com/2021/day/16)
+
 use aoc_common::*;
 
 puzzle_info! {

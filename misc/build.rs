@@ -9,12 +9,16 @@ use std::mem;
 fn main () -> Result <(), Box <dyn Error>> {
 	println! ("cargo:rerun-if-changed=build.rs");
 	let pkg_name = env::var ("CARGO_PKG_NAME") ?;
-	if ! pkg_name.starts_with ("aoc-2021-day-") { panic! () }
-	let day = & pkg_name [13 .. ];
+	let pkg_name_parts = pkg_name.split ("-").collect::<Vec <_>> ();
+	if pkg_name_parts.len () != 4 { panic! () }
+	if pkg_name_parts [0] != "aoc" { panic! () }
+	if pkg_name_parts [2] != "day" { panic! () }
+	let year = pkg_name_parts [1];
+	let day = pkg_name_parts [3];
 	write_file (
 		& format! ("src/main.rs"),
 		replace_placeholders (templates::BIN_RS, & HashMap::from_iter (vec! [
-			("${YEAR}", "2021"),
+			("${YEAR}", year),
 			("${DAY}", day),
 		])),
 	) ?;

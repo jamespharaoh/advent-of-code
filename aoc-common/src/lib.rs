@@ -24,6 +24,13 @@ pub fn default <T: Default> () -> T {
 	Default::default ()
 }
 
+#[ macro_export ]
+macro_rules! assert_err {
+	( $expect:expr , $actual:expr ) => {
+		assert_eq! ($expect, $actual.unwrap_err ().to_string ());
+	};
+}
+
 mod prelude {
 	pub use arrayvec::ArrayVec;
 	pub use clap;

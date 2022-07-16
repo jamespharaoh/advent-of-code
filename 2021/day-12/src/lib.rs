@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 12: Passage Pathing
+//!
+//! [https://adventofcode.com/2021/day/12](https://adventofcode.com/2021/day/12)
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -185,37 +189,17 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one_0 () -> GenResult <()> {
+	fn part_one () -> GenResult <()> {
 		assert_eq! (10, logic::part_one (EXAMPLE_0) ?);
-		Ok (())
-	}
-
-	#[ test ]
-	fn part_one_1 () -> GenResult <()> {
 		assert_eq! (19, logic::part_one (EXAMPLE_1) ?);
-		Ok (())
-	}
-
-	#[ test ]
-	fn part_one_2 () -> GenResult <()> {
 		assert_eq! (226, logic::part_one (EXAMPLE_2) ?);
 		Ok (())
 	}
 
 	#[ test ]
-	fn part_two_0 () -> GenResult <()> {
+	fn part_two () -> GenResult <()> {
 		assert_eq! (36, logic::part_two (EXAMPLE_0) ?);
-		Ok (())
-	}
-
-	#[ test ]
-	fn part_two_1 () -> GenResult <()> {
 		assert_eq! (103, logic::part_two (EXAMPLE_1) ?);
-		Ok (())
-	}
-
-	#[ test ]
-	fn part_two_2 () -> GenResult <()> {
 		assert_eq! (3509, logic::part_two (EXAMPLE_2) ?);
 		Ok (())
 	}

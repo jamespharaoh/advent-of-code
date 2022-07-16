@@ -1,1 +1,1 @@
-../misc/build.rs
+../../misc/build.rs

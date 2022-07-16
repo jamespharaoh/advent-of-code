@@ -1,11 +1,15 @@
+//! Advent of Code 2021: Day 4: Giant Squid
+//!
+//! [https://adventofcode.com/2021/day/4](https://adventofcode.com/2021/day/4)
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Giant Squid";
 	year = 2021;
 	day = 4;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 }
 
 mod logic {
@@ -14,12 +18,12 @@ mod logic {
 	use model::Board;
 	use model::Input;
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
 		Ok (scores_iter (& input).next ().unwrap ())
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
 		Ok (scores_iter (& input).last ().unwrap ())
 	}
@@ -151,13 +155,13 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (4512, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (4512, logic::part_one (EXAMPLE) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (1924, logic::calc_result_part_two (EXAMPLE) ?);
+		assert_eq! (1924, logic::part_two (EXAMPLE) ?);
 		Ok (())
 	}
 

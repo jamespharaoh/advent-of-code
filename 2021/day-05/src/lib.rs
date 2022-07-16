@@ -1,11 +1,15 @@
+//! Advent of Code 2021: Day 5: Hydrothermal Venture
+//!
+//! [https://adventofcode.com/2021/day/5](https://adventofcode.com/2021/day/5)
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Hydrothermal Venture";
 	year = 2021;
 	day = 5;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 }
 
 mod logic {
@@ -14,11 +18,11 @@ mod logic {
 	use model::Pos;
 	use grid::Grid;
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, false)
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, true)
 	}
 
@@ -119,12 +123,12 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (5, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (5, logic::part_one (EXAMPLE) ?);
 		Ok (())
 	}
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (12, logic::calc_result_part_two (EXAMPLE) ?);
+		assert_eq! (12, logic::part_two (EXAMPLE) ?);
 		Ok (())
 	}
 

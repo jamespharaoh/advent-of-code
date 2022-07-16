@@ -8,57 +8,11 @@ puzzle_info! {
 	name = "Trench Map";
 	year = 2021;
 	day = 20;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 	commands = [
 		( name = "run"; method = tool::run; ),
 	];
-}
-
-pub mod tool {
-
-	use super::*;
-	use model::Image;
-	use model::Input;
-
-	#[ derive (Debug, clap::Parser) ]
-	pub struct RunArgs {
-
-		/// File to read algorithm and initial image from
-		#[ clap (long, value_parser, default_value = "inputs/day-20") ]
-		input: String,
-
-		/// Print the image after each step
-		#[ clap (long) ]
-		verbose: bool,
-
-		/// Number of times to apply the algorithm
-		#[ clap (long, value_parser, default_value_t = 2) ]
-		loops: usize,
-
-	}
-
-	pub fn run (args: RunArgs) -> GenResult <()> {
-		let input_string = fs::read_to_string (& args.input) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
-		let input = Input::parse (& input_lines) ?;
-		let start_image = Image::new_from (input.pixels, false);
-		let end_image = logic::image_iter (input.algorithm, start_image)
-			.enumerate ()
-			.inspect (|(steps, image)| if args.verbose {
-				print! (
-					"After {} steps: {} pixels {}\n{}",
-					steps,
-					image.num_pixels (),
-					if image.inverted () { "inactive" } else { "active" },
-					image.dump (),
-				);
-			},
-		).map (|(_, image)| image).skip (args.loops).next ().unwrap ();
-		println! ("Result: {}", end_image.num_pixels ());
-		Ok (())
-	}
-
 }
 
 mod logic {
@@ -70,11 +24,11 @@ mod logic {
 	use model::Pixels;
 	use model::Pos;
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, 2)
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, 50)
 	}
 
@@ -232,6 +186,52 @@ mod model {
 
 }
 
+pub mod tool {
+
+	use super::*;
+	use model::Image;
+	use model::Input;
+
+	#[ derive (Debug, clap::Parser) ]
+	pub struct RunArgs {
+
+		/// File to read algorithm and initial image from
+		#[ clap (long, value_parser, default_value = "inputs/day-20") ]
+		input: String,
+
+		/// Print the image after each step
+		#[ clap (long) ]
+		verbose: bool,
+
+		/// Number of times to apply the algorithm
+		#[ clap (long, value_parser, default_value_t = 2) ]
+		loops: usize,
+
+	}
+
+	pub fn run (args: RunArgs) -> GenResult <()> {
+		let input_string = fs::read_to_string (& args.input) ?;
+		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input = Input::parse (& input_lines) ?;
+		let start_image = Image::new_from (input.pixels, false);
+		let end_image = logic::image_iter (input.algorithm, start_image)
+			.enumerate ()
+			.inspect (|(steps, image)| if args.verbose {
+				print! (
+					"After {} steps: {} pixels {}\n{}",
+					steps,
+					image.num_pixels (),
+					if image.inverted () { "inactive" } else { "active" },
+					image.dump (),
+				);
+			},
+		).map (|(_, image)| image).skip (args.loops).next ().unwrap ();
+		println! ("Result: {}", end_image.num_pixels ());
+		Ok (())
+	}
+
+}
+
 #[ cfg (test) ]
 mod examples {
 
@@ -255,13 +255,13 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (35, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (35, logic::part_one (EXAMPLE) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (3351, logic::calc_result_part_two (EXAMPLE) ?);
+		assert_eq! (3351, logic::part_two (EXAMPLE) ?);
 		Ok (())
 	}
 

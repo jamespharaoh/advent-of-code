@@ -1,18 +1,22 @@
+//! Advent of Code 2021: Day 21: Dirac Dice
+//!
+//! [https://adventofcode.com/2021/day/21](https://adventofcode.com/2021/day/21)
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Dirac Dice";
 	year = 2021;
 	day = 21;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 }
 
 mod logic {
 
 	use super::*;
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <u64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let (start_1, start_2) = model::parse_input (lines) ?;
 		let mut die_state: u16 = 0;
 		let mut die_count: u64 = 0;
@@ -39,7 +43,7 @@ mod logic {
 		Ok (die_count * players [loser].score as u64)
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <u128> {
+	pub fn part_two (lines: & [& str]) -> GenResult <u128> {
 		let (start_1, start_2) = model::parse_input (lines) ?;
 		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, PartialEq) ]
 		struct Player { score: u8, pos: u8 }
@@ -125,13 +129,15 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one () {
-		assert_eq! (739785, logic::calc_result_part_one (EXAMPLE).unwrap ());
+	fn part_one () -> GenResult <()> {
+		assert_eq! (739785, logic::part_one (EXAMPLE) ?);
+		Ok (())
 	}
 
 	#[ test ]
-	fn part_two () {
-		assert_eq! (444356092776315, logic::calc_result_part_two (EXAMPLE).unwrap ());
+	fn part_two () -> GenResult <()> {
+		assert_eq! (444356092776315, logic::part_two (EXAMPLE) ?);
+		Ok (())
 	}
 
 }

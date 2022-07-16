@@ -1,22 +1,26 @@
+//! Advent of Code 2021: Day 6: Lanternfish
+//!
+//! [https://adventofcode.com/2021/day/6](https://adventofcode.com/2021/day/6)
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Lanternfish";
 	year = 2021;
 	day = 6;
-	part_one = |lines| logic::calc_result_part_one (lines [0]);
-	part_two = |lines| logic::calc_result_part_two (lines [0]);
+	part_one = |lines| logic::part_one (lines [0]);
+	part_two = |lines| logic::part_two (lines [0]);
 }
 
 mod logic {
 
 	use super::*;
 
-	pub fn calc_result_part_one (input: & str) -> GenResult <u64> {
+	pub fn part_one (input: & str) -> GenResult <u64> {
 		calc_result (input, 80)
 	}
 
-	pub fn calc_result_part_two (input: & str) -> GenResult <u64> {
+	pub fn part_two (input: & str) -> GenResult <u64> {
 		calc_result (input, 256)
 	}
 
@@ -53,13 +57,13 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (5934, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (5934, logic::part_one (EXAMPLE) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (26984457539, logic::calc_result_part_two (EXAMPLE) ?);
+		assert_eq! (26984457539, logic::part_two (EXAMPLE) ?);
 		Ok (())
 	}
 

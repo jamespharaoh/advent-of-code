@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 17: Trick Shot
+//!
+//! [https://adventofcode.com/2021/day/17](https://adventofcode.com/2021/day/17)
+
 use aoc_common::*;
 
 puzzle_info! {

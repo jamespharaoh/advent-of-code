@@ -27,8 +27,8 @@ puzzle_info! {
 	name = "Beacon Scanner";
 	year = 2021;
 	day = 19;
-	part_one = |lines| logic::calc_result_part_one (lines);
-	part_two = |lines| logic::calc_result_part_two (lines);
+	part_one = |lines| logic::part_one (lines);
+	part_two = |lines| logic::part_two (lines);
 }
 
 mod logic {
@@ -45,13 +45,13 @@ mod logic {
 	type ScannerHash = BitHash <SCANNER_HASH_U64S>;
 	type ScannerHasher = BitHasher <RandomHasher, SCANNER_HASH_U64S, SCANNER_HASH_BITS>;
 
-	pub fn calc_result_part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
 		let (_, beacons) = calc_result (& input) ?;
 		Ok (beacons.len () as i64)
 	}
 
-	pub fn calc_result_part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
 		let (scanners, _) = calc_result (& input) ?;
 		let scanners: Vec <Pos> = scanners.into_iter ().collect ();
@@ -362,13 +362,13 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (79, logic::calc_result_part_one (EXAMPLE) ?);
+		assert_eq! (79, logic::part_one (EXAMPLE) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (3621, logic::calc_result_part_two (EXAMPLE) ?);
+		assert_eq! (3621, logic::part_two (EXAMPLE) ?);
 		Ok (())
 	}
 

@@ -1,3 +1,7 @@
+//! Advent of Code 2021: Day 14: Extended Polymerization
+//!
+//! [https://adventofcode.com/2021/day/14](https://adventofcode.com/2021/day/14)
+
 use aoc_common::*;
 
 puzzle_info! {
