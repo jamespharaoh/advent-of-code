@@ -15,6 +15,7 @@ pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps {
 	fn signed_diff (self, other: Self) -> Option <Self::Signed>;
 	fn unsigned_diff (self, other: Self) -> Option <Self::Unsigned>;
 	fn add_signed (self, other: Self::Signed) -> Option <Self>;
+	fn sub_signed (self, other: Self::Signed) -> Option <Self>;
 	fn as_usize (self) -> usize;
 	fn to_usize (self) -> Option <usize>;
 	fn from_usize (val: usize) -> Option <Self>;
@@ -36,6 +37,7 @@ impl Int for i16 {
 		(other <= self).then (|| i16::abs_diff (self, other))
 	}
 	fn add_signed (self, other: i16) -> Option <i16> { i16::checked_add (self, other) }
+	fn sub_signed (self, other: i16) -> Option <i16> { i16::checked_sub (self, other) }
 	fn as_usize (self) -> usize { self as usize }
 	fn to_usize (self) -> Option <usize> { (self >= 0).then (|| self as usize) }
 	fn from_usize (val: usize) -> Option <Self> { val.try_into ().ok () }
@@ -60,6 +62,10 @@ impl Int for u16 {
 	fn add_signed (self, other: i16) -> Option <u16> {
 		if other >= 0 { u16::checked_add (self, other as u16) }
 		else { u16::checked_sub (self, i16::unsigned_abs (other)) }
+	}
+	fn sub_signed (self, other: i16) -> Option <u16> {
+		if other >= 0 { u16::checked_sub (self, other as u16) }
+		else { u16::checked_add (self, i16::unsigned_abs (other)) }
 	}
 	fn as_usize (self) -> usize { self as usize }
 	fn to_usize (self) -> Option <usize> { Some (self as usize) }

@@ -1,0 +1,14 @@
+[package]
+
+	name = "aoc-2015-day-03"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2015: Day 3: Perfectly Spherical Houses in a Vacuum"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-03"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../aoc-common" }

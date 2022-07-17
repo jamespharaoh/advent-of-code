@@ -102,6 +102,10 @@ mod prelude {
 	pub use std::slice::Iter as SliceIter;
 	pub use std::str::Chars;
 	pub use std::str::FromStr;
+	pub use std::sync::Arc;
+	pub use std::sync::Condvar;
+	pub use std::sync::Mutex;
+	pub use std::thread;
 	pub use std::time;
 	pub use crate::iter_ext::IntoIteratorExt as _;
 }
