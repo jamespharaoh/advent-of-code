@@ -1,0 +1,14 @@
+[package]
+
+	name = "aoc-2015-day-06"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2015: Day 6: Probably a Fire Hazard"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-06"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../aoc-common" }

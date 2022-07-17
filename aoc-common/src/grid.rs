@@ -13,29 +13,29 @@ use pos::PosYX;
 /// [`GridPos`].
 
 #[ derive (Clone, Debug, Eq, PartialEq) ]
-pub struct Grid <Inner, Pos, const DIMS: usize = 2> {
-	inner: Inner,
+pub struct Grid <Storage, Pos, const DIMS: usize = 2> {
+	storage: Storage,
 	origin: [isize; DIMS],
 	size: [usize; DIMS],
 	phantom: PhantomData <Pos>,
 }
 
-impl <Inner, Pos, const DIMS: usize> Grid <Inner, Pos, DIMS>
+impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	where
-		Inner: GridStorage + Clone,
+		Storage: GridStorage + Clone,
 		Pos: GridPos <DIMS> {
 
 	pub fn wrap (
-		inner: Inner,
+		storage: Storage,
 		origin: [isize; DIMS],
 		size: [usize; DIMS],
-	) -> Grid <Inner, Pos, DIMS> {
+	) -> Grid <Storage, Pos, DIMS> {
 		let expected_len = size.into_iter ().product::<usize> ();
-		let actual_len = (& inner).storage_len ();
+		let actual_len = (& storage).storage_len ();
 		if expected_len != actual_len {
 			panic! ("Expected {} items but was passed {}", expected_len, actual_len);
 		}
-		Grid { inner, origin, size, phantom: PhantomData }
+		Grid { storage, origin, size, phantom: PhantomData }
 	}
 
 	pub fn len (& self) -> usize { self.size.into_iter ().product () }
@@ -44,15 +44,21 @@ impl <Inner, Pos, const DIMS: usize> Grid <Inner, Pos, DIMS>
 	pub fn origin (& self) -> Pos { Pos::from_scalar (0, self.origin, self.size).unwrap () }
 	pub fn peak (& self) -> Pos { Pos::from_scalar (self.len () - 1, self.origin, self.size).unwrap () }
 
-	pub fn get (& self, pos: Pos) -> Option <Inner::Item> {
+	pub fn get (& self, pos: Pos) -> Option <Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& self.inner).storage_get (index))
+			.and_then (|index| (& self.storage).storage_get (index))
 	}
 
-	pub fn iter <'a> (& 'a self) -> GridIter <<& 'a Inner as GridStorageIntoIter>::Iter, Pos, DIMS>
-			where & 'a Inner: GridStorageIntoIter {
+	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
+		self.storage.storage_set (
+			Pos::to_scalar (& pos, self.origin, self.size).unwrap (),
+			item);
+	}
+
+	pub fn iter <'a> (& 'a self) -> GridIter <<& 'a Storage as GridStorageIntoIter>::Iter, Pos, DIMS>
+			where & 'a Storage: GridStorageIntoIter {
 		GridIter {
-			inner: (& self.inner).storage_iter (),
+			storage: (& self.storage).storage_iter (),
 			idx: 0,
 			origin: self.origin,
 			size: self.size,
@@ -60,26 +66,26 @@ impl <Inner, Pos, const DIMS: usize> Grid <Inner, Pos, DIMS>
 		}
 	}
 
-	pub fn values <'a> (& 'a self) -> <& 'a Inner as GridStorageIntoIter>::Iter
-			where & 'a Inner: GridStorageIntoIter {
-		(& self.inner).storage_iter ()
+	pub fn values <'a> (& 'a self) -> <& 'a Storage as GridStorageIntoIter>::Iter
+			where & 'a Storage: GridStorageIntoIter {
+		(& self.storage).storage_iter ()
 	}
 
 }
 
-impl <Inner, Pos, const DIMS: usize> Grid <Inner, Pos, DIMS>
+impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	where
-		Inner: GridStorageMut + Clone,
+		Storage: GridStorageMut + Clone,
 		Pos: GridPos <DIMS> {
 
-	pub fn get_ref (& self, pos: Pos) -> Option <& Inner::Item> {
+	pub fn get_ref (& self, pos: Pos) -> Option <& Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& self.inner).storage_ref (index))
+			.and_then (|index| (& self.storage).storage_ref (index))
 	}
 
-	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Inner::Item> {
+	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& mut self.inner).storage_mut (index))
+			.and_then (|index| (& mut self.storage).storage_mut (index))
 	}
 
 }
@@ -89,28 +95,28 @@ impl <Inner, Pos, const DIMS: usize> Grid <Inner, Pos, DIMS>
 /// This iterator wraps the iterator from an implementation of [`GridStorage`] and maps from `Item`
 /// to `([GridPos], Item)`.
 
-pub struct GridIter <Inner, Pos, const DIMS: usize> {
-	inner: Inner,
+pub struct GridIter <Storage, Pos, const DIMS: usize> {
+	storage: Storage,
 	idx: usize,
 	origin: [isize; DIMS],
 	size: [usize; DIMS],
 	phantom: PhantomData <Pos>,
 }
 
-impl <Inner, Pos, const DIMS: usize> Iterator for GridIter <Inner, Pos, DIMS>
+impl <Storage, Pos, const DIMS: usize> Iterator for GridIter <Storage, Pos, DIMS>
 	where
-		Inner: Iterator,
+		Storage: Iterator,
 		Pos: GridPos <DIMS> {
-	type Item = (Pos, Inner::Item);
-	fn next (& mut self) -> Option <(Pos, Inner::Item)> {
-		if let Some (item) = self.inner.next () {
+	type Item = (Pos, Storage::Item);
+	fn next (& mut self) -> Option <(Pos, Storage::Item)> {
+		if let Some (item) = self.storage.next () {
 			let idx = self.idx;
 			self.idx += 1;
 			Some ((Pos::from_scalar (idx, self.origin, self.size).unwrap (), item))
 		} else { None }
 	}
-	fn nth (& mut self, num: usize) -> Option <(Pos, Inner::Item)> {
-		if let Some (item) = self.inner.nth (num) {
+	fn nth (& mut self, num: usize) -> Option <(Pos, Storage::Item)> {
+		if let Some (item) = self.storage.nth (num) {
 			let idx = self.idx;
 			self.idx += num + 1;
 			Some ((Pos::from_scalar (idx, self.origin, self.size).unwrap (), item))
@@ -234,25 +240,25 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 /// no guarantee each element will be processed, it seems like it does so. Instead, we want to
 /// completely bypass any elements which aren't required.
 
-pub struct GridStorageClone <Inner> {
-	inner: Inner,
+pub struct GridStorageClone <Storage> {
+	storage: Storage,
 }
 
-impl <Inner> GridStorageClone <Inner> {
-	fn new (inner: Inner) -> GridStorageClone <Inner> {
-		GridStorageClone { inner }
+impl <Storage> GridStorageClone <Storage> {
+	fn new (storage: Storage) -> GridStorageClone <Storage> {
+		GridStorageClone { storage }
 	}
 }
 
-impl <'a, Inner, Item> Iterator for GridStorageClone <Inner>
+impl <'a, Storage, Item> Iterator for GridStorageClone <Storage>
 	where
-		Inner: Iterator <Item = & 'a Item>,
+		Storage: Iterator <Item = & 'a Item>,
 		Item: Clone + 'a {
 	type Item = Item;
 	fn next (& mut self) -> Option <Item> {
-		self.inner.next ().map (|item| item.clone ())
+		self.storage.next ().map (|item| item.clone ())
 	}
 	fn nth (& mut self, num: usize) -> Option <Item> {
-		self.inner.nth (num).map (|item| item.clone ())
+		self.storage.nth (num).map (|item| item.clone ())
 	}
 }

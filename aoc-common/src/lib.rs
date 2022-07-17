@@ -55,6 +55,7 @@ mod prelude {
 	pub use clap;
 	pub use itertools;
 	pub use itertools::Either;
+	pub use itertools::EitherOrBoth;
 	pub use itertools::Itertools;
 	pub use itertools::izip;
 	pub use std::borrow::Borrow;
