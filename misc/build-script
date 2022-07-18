@@ -16,6 +16,7 @@ function main {
 			(dev|release|release-lto) profile="$arg" ;;
 			(flamegraph|run|run-test|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
+			(--width) flamegraph_width="$1"; shift ;;
 			(--)
 				case "$mode" in
 					(""|run|run-test|flamegraph) run_args+=( "$@" ) ;;
@@ -46,7 +47,7 @@ function main {
 			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
 			;;
 		(flamegraph)
-			cargo_args+=( --image-width "8000" )
+			cargo_args+=( --image-width "${flamegraph_width:-4000}" )
 			cargo_args+=( --palette "rust" )
 			cargo flamegraph "${cargo_args[@]}" -- "${run_args[@]}" \
 				&& (eog flamegraph.svg &)
