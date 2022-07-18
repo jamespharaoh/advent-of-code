@@ -40,7 +40,7 @@
 //!
 //! So, the registers seem to be used as follows:
 //!
-//! 
+//!
 //! * `w` --- The current input value. This is loaded in the first instruction and not modified
 //! again.
 //! * `x` --- Temporary value, the value from the previous step is discarded. This is set to `0` if

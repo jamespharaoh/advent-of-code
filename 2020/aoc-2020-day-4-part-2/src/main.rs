@@ -69,7 +69,7 @@ fn ensure_valid (passport: & HashMap <String, String>) -> Result <(), & 'static 
 	let passport_pid = passport.get ("pid").ok_or ("pid") ?;
 	if passport_pid.len () != 9 { return Err ("pid") }
 	if ! passport_pid.chars ().all (|ch| ch.is_ascii_digit ()) { return Err ("pid") }
-	
+
 	return Ok (())
 
 }

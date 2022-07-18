@@ -16,7 +16,7 @@ fn main () {
 		let y = machine.next ().unwrap ();
 		let sym = machine.next ().unwrap ();
 
-		while board.len () < y as usize + 1 { board.push (Vec::new ()) } 
+		while board.len () < y as usize + 1 { board.push (Vec::new ()) }
 		let board_line = & mut board [y as usize];
 		while board_line.len () < x as usize + 1 { board_line.push (Symbol::Empty) }
 		board_line [x as usize] = match sym {

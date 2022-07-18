@@ -103,7 +103,7 @@ fn test_deal_with_increment () {
 	assert_eq! (
 		vec! [0, 7, 4, 1, 8, 5, 2, 9, 6, 3],
 		perform_operations(10, & vec! ["deal with increment 3"]),
-	); 
+	);
 }
 
 #[ test ]
