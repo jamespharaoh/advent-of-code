@@ -235,7 +235,7 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 
 /// Wrapping iterator which clones items.
 ///
-/// We don't use [`Clone`](iter::Clone) from the standard library because it doesn't handle
+/// We don't use [`Cloned`](iter::Cloned) from the standard library because it doesn't handle
 /// [`Iterator::skip`] the way we would like. Although it says in the documentation that there is
 /// no guarantee each element will be processed, it seems like it does so. Instead, we want to
 /// completely bypass any elements which aren't required.

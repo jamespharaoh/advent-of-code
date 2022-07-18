@@ -206,7 +206,7 @@ pub fn iterator <'a> (steps: & 'a [Step; 14], reverse: bool) -> impl Iterator <I
 
 type TempAnswer = (ArrayVec <u8, 14>, i64);
 
-enum NextNumIter <'a, Nested> {
+pub enum NextNumIter <'a, Nested> {
 	Outer { steps: & 'a [Step; 14], nested: Nested, reverse: bool },
 	Inner { steps: & 'a [Step; 14], nested: Nested, reverse: bool, nums: ArrayVec <u8, 14>, progress: i64, next_iter: ops::RangeInclusive <u8> },
 	Poison,

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -euf -o pipefail
+
+if [[ -d .git ]]; then
+	true
+elif [[ -d ../.git ]]; then
+	cd ..
+elif [[ -d ../../.git ]]; then
+	cd ../..
+else
+	echo "Must be run from git repository" >&2
+	exit 1
+fi
+declare root_dir="$PWD"
+declare work_dir="$root_dir/pre-commit"
+
+export RUSTDOCFLAGS="-D warnings"
+
+for project in common 2015 2021; do
+	project_dir=$root_dir/$project
+	project_work_dir=$work_dir/$project
+	mkdir -p $project_work_dir ; cd $project_work_dir
+	{
+		printf "cargo-features = [\"profile-rustflags\"]\n\n"
+		cat $project_dir/Cargo.toml
+		printf "\n[profile.pre-commit]\n\n"
+		printf "\tinherits = \"release\"\n"
+		printf "\trustflags = [ \"--deny\", \"warnings\" ]\n"
+	} >Cargo.toml
+	ln -fns $project_dir/Cargo.lock $project_work_dir/Cargo.lock
+	ln -fns $project_dir/src/ $project_work_dir/src
+	ln -fns $project_dir/inputs/ $project_work_dir/inputs
+	declare -a sub_projects
+	for sub_project in $(cd "$project_dir"; find -maxdepth 1 -type d -printf '%P\n'); do
+		if [[ ! -f "$project_dir/$sub_project/Cargo.toml" ]]; then continue; fi
+		sub_projects+=("$sub_project")
+		ln -fns "$project_dir/$sub_project/" "$sub_project"
+	done
+	cargo +nightly check --frozen --workspace --all-targets --profile pre-commit
+	cargo +nightly test --workspace --profile pre-commit
+	cargo +nightly doc --profile pre-commit
+	if [[ $project != common ]]; then cargo +nightly run --profile pre-commit; fi
+done
+
+cd "$root_dir"
+rm -rf "$work_dir"
+
+true

@@ -11,7 +11,7 @@
 
 [dependencies]
 
-	aoc-common = { path = "../aoc-common" }
+	aoc-common = { path = "../common" }
 
 	aoc-2021-day-01 = { path = "day-01" }
 	aoc-2021-day-02 = { path = "day-02" }

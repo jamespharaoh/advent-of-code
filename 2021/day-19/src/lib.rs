@@ -273,7 +273,6 @@ mod logic {
 mod model {
 
 	use aoc_common::*;
-	use parser::Parser;
 
 	pub type Coord = i16;
 	pub type Pos = pos::PosXYZ <Coord>;
@@ -290,6 +289,7 @@ mod model {
 
 	impl Input {
 		pub fn parse (lines: & [& str]) -> GenResult <Input> {
+			use parser::*;
 			let mut scanners = Vec::new ();
 			let mut lines_iter = lines.iter ().enumerate ();
 			let err = |line_idx, line| format! ("Invalid input: line {}: {}", line_idx + 1, line);
@@ -300,12 +300,15 @@ mod model {
 				let mut beacons = Vec::new ();
 				while let Some ((line_idx, line)) = lines_iter.next () {
 					if line.is_empty () { break }
-					let mut parser = Parser::new (line, |_| err (line_idx, line));
-					beacons.push (Pos {
-						x: parser.int () ?,
-						y: parser.expect (",") ?.int () ?,
-						z: parser.expect (",") ?.int () ?,
-					});
+					Parser::wrap (line, |parser| {
+						beacons.push (Pos {
+							x: parser.int () ?,
+							y: parser.expect (",") ?.int () ?,
+							z: parser.expect (",") ?.int () ?,
+						});
+						parser.end () ?;
+						Ok (())
+					}).map_parse_err (|_| err (line_idx, line)) ?
 				}
 				scanners.push (InputScanner { name, beacons });
 			}

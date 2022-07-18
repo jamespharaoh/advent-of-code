@@ -33,7 +33,7 @@ use grid::GridPos;
 ///          // list of connected nodes and the distance between them
 ///          ("one", "two", 7), ("one", "three", 9), ("one", "six", 14),
 ///          ("two", "three", 10), ("two", "four", 15), ("three", "four", 11),
-///          ("three", "six", 2), ("four", "five", 6), ("five", "six", 9),
+///          ("three", "six", 2), ("four", "five", 6), ("five", "six", 8),
 ///       ].into_iter ()
 ///          // double up the connections to include the reverse
 ///          .flat_map (|(node_1, node_2, dist)| [(node_1, node_2, dist), (node_2, node_1, dist)])
@@ -52,7 +52,7 @@ use grid::GridPos;
 /// };
 ///
 /// // create a PrioritySearch to traverse our nodes
-/// let mut search = PrioritySearch::new (nodes);
+/// let mut search = PrioritySearch::with_hash_map (nodes);
 ///
 /// // add the starting point with a total distance of 0
 /// search.push ("one", 0);
@@ -62,7 +62,7 @@ use grid::GridPos;
 /// assert_eq! (search.next (), Some (("two", 7)));
 /// assert_eq! (search.next (), Some (("three", 9)));
 /// assert_eq! (search.next (), Some (("six", 11)));
-/// assert_eq! (search.next (), Some (("five", 20)));
+/// assert_eq! (search.next (), Some (("five", 19)));
 /// assert_eq! (search.next (), Some (("four", 20)));
 /// assert_eq! (search.next (), None);
 /// ```

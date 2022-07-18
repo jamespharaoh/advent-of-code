@@ -11,4 +11,4 @@
 
 [dependencies]
 
-	aoc-common = { path = "../../aoc-common" }
+	aoc-common = { path = "../../common" }

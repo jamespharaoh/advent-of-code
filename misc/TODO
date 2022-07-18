@@ -1,0 +1,18 @@
+TODO LIST:
+
+- remove arrayvec dependency
+- remove itertools dependency
+- remove clap dependency
+- complete 2015
+- complete 2016
+- complete 2017
+- complete 2018
+- refactor 2019
+- complete 2020
+- look at 2022/day-24 again
+- missing letters for ocr puzzles
+- remove external deps in other puzzles
+
+OTHER IDEAS:
+
+- input generator

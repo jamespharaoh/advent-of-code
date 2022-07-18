@@ -30,7 +30,7 @@ mod logic {
 		let strings = model::parse_input (input) ?;
 		Ok (
 			strings.iter ()
-				.map (|(code, value)| (encode (code), code))
+				.map (|(code, _)| (encode (code), code))
 				.map (|(code, value)|
 					code.chars ().count () - value.chars ().count ())
 				.sum ()
