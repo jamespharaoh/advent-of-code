@@ -149,6 +149,10 @@ impl <'inp> Parser <'inp> {
 		letter_opt
 	}
 
+	pub fn expect_next (& mut self) -> ParseResult <char> {
+		self.next ().ok_or_else (|| self.err ())
+	}
+
 	pub fn err (& self) -> ParseError {
 	    ParseError::Simple (self.pos)
 	}

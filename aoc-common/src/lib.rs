@@ -31,6 +31,27 @@ macro_rules! assert_err {
 	};
 }
 
+#[ macro_export ]
+macro_rules! array_vec {
+	( ) => { ArrayVec::new () };
+	( $($vals:expr),+ ) => {
+		{
+			let mut result = ArrayVec::new ();
+			array_vec! (@push result, $($vals,)*);
+			result
+		}
+	};
+	( @push $result:ident $(,)? ) => {};
+	( @push $result:ident , $val:expr $(, $rest:expr)* ) => {
+		$result.push ($val);
+		array_vec! (@push $result, $($rest),*);
+	};
+	( @push $result:ident , $val:expr $(, $rest:expr)* , ) => {
+		$result.push ($val);
+		array_vec! (@push $result, $($rest),*);
+	};
+}
+
 mod iter_ext {
 
 	use super::*;

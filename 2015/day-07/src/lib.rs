@@ -199,26 +199,6 @@ mod model {
 		RightShift (WireId, WireVal),
 	}
 
-	macro_rules! array_vec {
-		( ) => { ArrayVec::new () };
-		( $($vals:expr),+ ) => {
-			{
-				let mut result = ArrayVec::new ();
-				array_vec! (@push result, $($vals,)*);
-				result
-			}
-		};
-		( @push $result:ident $(,)? ) => {};
-		( @push $result:ident , $val:expr $(, $rest:expr)* ) => {
-			$result.push ($val);
-			array_vec! (@push $result, $($rest),*);
-		};
-		( @push $result:ident , $val:expr $(, $rest:expr)* , ) => {
-			$result.push ($val);
-			array_vec! (@push $result, $($rest),*);
-		};
-	}
-
 	impl WireInput {
 		pub fn inputs (& self) -> ArrayVec <& WireId, 2> {
 			match self {
