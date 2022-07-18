@@ -62,62 +62,123 @@ mod logic {
 			}
 			cur_steps.sort_by_key (|& (idx, _)| idx);
 			row_data.clear ();
-			for (_, step) in cur_steps.iter ().copied () {
-				row_data = update_line (
-					row_data,
-					step.action,
-					step.origin.col,
-					step.peak.col,
-					& mut row_data_temp);
+			{
+				let mut steps = & cur_steps [ .. ];
+				trait RowIter: Iterator <Item = (Coord, u8)> {}
+				impl <SomeIter: Iterator <Item = (Coord, u8)>> RowIter for SomeIter {}
+				fn update_once (iter: impl RowIter, step: Step) -> impl RowIter {
+					UpdateLineIter::new (iter, step.action, step.origin.col, step.peak.col)
+				}
+				fn update_twice (iter: impl RowIter, steps: & [(usize, Step)]) -> impl RowIter {
+					update_once (update_once (iter, steps [0].1), steps [1].1)
+				}
+				fn update_four_x (iter: impl RowIter, steps: & [(usize, Step)]) -> impl RowIter {
+					update_twice (update_twice (iter, & steps [0 .. 2]), & steps [2 .. 4])
+				}
+				fn update_eight_x (iter: impl RowIter, steps: & [(usize, Step)]) -> impl RowIter {
+					update_four_x (update_four_x (iter, & steps [0 .. 4]), & steps [4 .. 8])
+				}
+				while steps.len () >= 8 {
+					mem::swap (& mut row_data, & mut row_data_temp);
+					assert! (row_data.is_empty ());
+					row_data.extend (
+						update_eight_x (
+							row_data_temp.drain ( .. ),
+							& steps [0 .. 8 ]));
+					steps = & steps [ 8 .. ];
+				}
+				while steps.len () >= 1 {
+					mem::swap (& mut row_data, & mut row_data_temp);
+					assert! (row_data.is_empty ());
+					row_data.extend (
+						update_once (
+							row_data_temp.drain ( .. ),
+							steps [0].1));
+					steps = & steps [ 1 .. ];
+				}
 			}
+			/* old implementation:
+			mem::swap (& mut row_data, & mut row_data_temp);
+			assert! (row_data.is_empty ());
+			let mut iter: Box <dyn RowIter> = Box::new (row_data.drain ( .. ));
+			for step in steps.iter ().copied () {
+				iter = Box::new (UpdateLineIter::new (iter, step.action, step.origin.col, step.peak.col));
+			}
+			row_data = iter.collect ();
+			*/
 			prev_row = row;
 			prev_active =
 				row_data.iter ().copied ()
 					.tuple_windows::<(_, _)> ()
-					.map (|((start, val), (end, _))| u32::checked_mul (u16::checked_sub (end, start).unwrap () as u32, val as u32).unwrap ())
+					.map (|((start, val), (end, _))|
+						u32::checked_mul (
+							u16::checked_sub (end, start).unwrap () as u32,
+							val as u32,
+						).unwrap ())
 					.sum ();
 			assert! (row_data.last ().copied ().map (|(_, val)| val).unwrap_or (0) == 0);
 		}
 		Ok (sum)
 	}
 
-	pub fn update_line (
-		mut line: Vec <(Coord, u8)>,
+	struct UpdateLineIter <Inner: Iterator> {
+		inner: Inner,
+		next: Option <Inner::Item>,
 		action: Action,
-		start: Coord,
-		end: Coord,
-		new_line: & mut Vec <(Coord, u8)>,
-	) -> Vec <(Coord, u8)> {
-		new_line.clear ();
-		new_line.extend (
-			itertools::merge_join_by (
-					line.drain ( .. ),
-					[ (start, 0), (end, 0) ],
-					|(left, _), (right, _)| Ord::cmp (left, right))
-				.scan ((0, 0, false), |state, items| {
-					let old_active = & mut state.0; // value on old line
-					let cur_active = & mut state.1; // value on new line
-					let in_step = & mut state.2;
-					if let Some ((_, val)) = items.as_ref ().left () { * old_active = * val; }
-					if items.has_right () { * in_step = ! * in_step; }
-					let (pos, _) = * items.as_ref ().reduce (|first, _| first);
-					let want_active = match action {
-						Action::Toggle => if (* old_active != 0) != * in_step { 1 } else { 0 },
-						Action::On => if (* old_active != 0) || * in_step { 1 } else { 0 },
-						Action::Off => if (* old_active != 0) && ! * in_step { 1 } else { 0 },
-						Action::Up => if * in_step { u8::checked_add (* old_active, 1).unwrap () } else { * old_active },
-						Action::Down => if * in_step { u8::saturating_sub (* old_active, 1) } else { * old_active },
-						Action::UpTwo => if * in_step { u8::checked_add (* old_active, 2).unwrap () } else { * old_active },
-					};
-					if * cur_active != want_active {
-						* cur_active = want_active;
-						Some (Some ((pos, want_active)))
-					} else { Some (None) }
-				})
-				.flatten ()
-		);
-		mem::swap (new_line, & mut line);
-		line
+		step: ArrayVec <Coord, 2>,
+		old_active: u8,
+		cur_active: u8,
+		in_step: bool,
+	}
+
+	impl <Inner> UpdateLineIter <Inner>
+			where Inner: Iterator <Item = (Coord, u8)> {
+		fn new (inner: Inner, action: Action, start: Coord, end: Coord) -> Self {
+			UpdateLineIter {
+				inner,
+				next: None,
+				action,
+				step: [ end, start ].into_iter ().collect (),
+				old_active: 0,
+				cur_active: 0,
+				in_step: false,
+			}
+		}
+	}
+
+	impl <Inner> Iterator for UpdateLineIter <Inner>
+			where Inner: Iterator <Item = (Coord, u8)> {
+		type Item = (Coord, u8);
+		fn next (& mut self) -> Option <(Coord, u8)> {
+			loop {
+				if self.next.is_none () { self.next = self.inner.next (); }
+				let (pos, old_val, step) = match (self.next, self.step.last ().copied ()) {
+					(Some ((pos, val)), None) => (pos, Some (val), false),
+					(Some ((pos_0, val)), Some (pos_1)) if pos_0 < pos_1 => (pos_0, Some (val), false),
+					(Some ((pos_0, _)), Some (pos_1)) if pos_1 < pos_0 => (pos_1, None, true),
+					(Some ((pos_0, val)), Some (pos_1)) if pos_0 == pos_1 => (pos_0, Some (val), true),
+					(None, Some (pos)) => (pos, None, true),
+					(None, None) => return None,
+					_ => unreachable! (),
+				};
+				if let Some (val) = old_val { self.old_active = val; self.next = None; }
+				if step { self.in_step = ! self.in_step; self.step.pop ().unwrap (); }
+				let want_active = if self.in_step {
+					match self.action {
+						Action::Toggle => if self.old_active == 0 { 1 } else { 0 },
+						Action::On => 1,
+						Action::Off => 0,
+						Action::Up => self.old_active + 1,
+						Action::Down => u8::saturating_sub (self.old_active, 1),
+						Action::UpTwo => u8::checked_add (self.old_active, 2).unwrap (),
+					}
+				} else { self.old_active };
+				if self.cur_active != want_active {
+					self.cur_active = want_active;
+					return Some ((pos, want_active));
+				}
+			}
+		}
 	}
 
 }
