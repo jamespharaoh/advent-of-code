@@ -78,17 +78,20 @@ mod model {
 
 	impl Input {
 		pub fn parse (input: & str) -> GenResult <Input> {
-			let err_fn = |char_idx| format! ("Invalid input: {}; {}", char_idx + 1, input);
-			let mut parser = parser::Parser::new (input, err_fn);
-			let x_min = parser.expect ("target area: x=") ?.int () ?;
-			let x_max = parser.expect ("..") ?.int () ?;
-			let y_min = parser.expect (", y=") ?.int () ?;
-			let y_max = parser.expect ("..") ?.int () ?;
-			parser.end () ?;
-			Ok (Input {
-				target_x: x_min ..= x_max,
-				target_y: y_min ..= y_max,
-			})
+			use parser::*;
+			Parser::wrap (input, |parser| {
+				let x_min = parser.expect ("target area: x=") ?.int () ?;
+				let x_max = parser.expect ("..") ?.int () ?;
+				let y_min = parser.expect (", y=") ?.int () ?;
+				let y_max = parser.expect ("..") ?.int () ?;
+				parser.end () ?;
+				Ok (Input {
+					target_x: x_min ..= x_max,
+					target_y: y_min ..= y_max,
+				})
+			}).map_parse_err (|char_idx|
+				format! ("Invalid input: col {}: {}", char_idx + 1, input)
+			)
 		}
 	}
 

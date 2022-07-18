@@ -87,6 +87,7 @@ mod prelude {
 	pub use std::mem;
 	pub use std::ops;
 	pub use std::ops::Add;
+	pub use std::ops::Deref;
 	pub use std::ops::Div;
 	pub use std::ops::Index;
 	pub use std::ops::IndexMut;

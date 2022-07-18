@@ -168,7 +168,7 @@ mod logic {
 						Action::Toggle => if self.old_active == 0 { 1 } else { 0 },
 						Action::On => 1,
 						Action::Off => 0,
-						Action::Up => self.old_active + 1,
+						Action::Up => u8::checked_add (self.old_active, 1).unwrap (),
 						Action::Down => u8::saturating_sub (self.old_active, 1),
 						Action::UpTwo => u8::checked_add (self.old_active, 2).unwrap (),
 					}
@@ -186,7 +186,6 @@ mod logic {
 mod model {
 
 	use super::*;
-	use parser::Parser;
 	use pos::PosRowCol;
 
 	pub type Coord = u16;
@@ -204,27 +203,29 @@ mod model {
 	pub enum Action { On, Off, Toggle, Up, Down, UpTwo }
 
 	pub fn parse_input (input: & [& str], part_two: bool) -> GenResult <Input> {
-		input.iter ().enumerate ().map (|(line_idx, line)| {
-			let mut parser = Parser::new (line, |char_idx|
-				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line));
-			let action = match parser.word () ? {
-				"turn" => match parser.word () ? {
-					"on" => if part_two { Action::Up } else { Action::On },
-					"off" => if part_two { Action::Down } else { Action::Off },
+		use parser::*;
+		input.iter ().enumerate ().map (|(line_idx, line)|
+			Parser::wrap (line, |parser| {
+				let action = match parser.word () ? {
+					"turn" => match parser.word () ? {
+						"on" => if part_two { Action::Up } else { Action::On },
+						"off" => if part_two { Action::Down } else { Action::Off },
+						_ => return Err (parser.err ()),
+					},
+					"toggle" => if part_two { Action::UpTwo } else { Action::Toggle },
 					_ => return Err (parser.err ()),
-				},
-				"toggle" => if part_two { Action::UpTwo } else { Action::Toggle },
-				_ => return Err (parser.err ()),
-			};
-			let origin = Pos {
-				row: parser.int () ?,
-				col: parser.expect (",") ?.int () ?,
-			};
-			let peak = Pos {
-				row: parser.expect (" through ") ?.int::<Coord> () ? + 1,
-				col: parser.expect (",") ?.int::<Coord> () ? + 1,
-			};
-			Ok (Step { action, origin, peak })
-		}).collect::<GenResult <_>> ()
+				};
+				let origin = Pos {
+					row: parser.int () ?,
+					col: parser.expect (",") ?.int () ?,
+				};
+				let peak = Pos {
+					row: parser.expect (" through ") ?.int::<Coord> () ? + 1,
+					col: parser.expect (",") ?.int::<Coord> () ? + 1,
+				};
+				Ok (Step { action, origin, peak })
+			}).map_parse_err (|char_idx|
+				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line))
+		).collect::<GenResult <_>> ()
 	}
 }

@@ -46,7 +46,7 @@ function main {
 			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
 			;;
 		(flamegraph)
-			cargo_args+=( --image-width "4000" )
+			cargo_args+=( --image-width "8000" )
 			cargo_args+=( --palette "rust" )
 			cargo flamegraph "${cargo_args[@]}" -- "${run_args[@]}" \
 				&& (eog flamegraph.svg &)

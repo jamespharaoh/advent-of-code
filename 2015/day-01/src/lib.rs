@@ -8,8 +8,8 @@ puzzle_info! {
 	name = "Not Quite Lisp";
 	year = 2015;
 	day = 1;
-	part_one = |lines| logic::part_one (lines [0]);
-	part_two = |lines| logic::part_two (lines [0]);
+	part_one = |input| logic::part_one (input [0]);
+	part_two = |input| logic::part_two (input [0]);
 }
 
 mod logic {

@@ -110,26 +110,27 @@ pub mod model {
 	use super::*;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <Vec <Step>> {
-		let err = || format! ("Invalid input");
-		lines.iter ().enumerate ().map (|(line_idx, line)| {
-			let mut parser = parser::Parser::new (line, |char_idx|
-				format! ("Invalid input: line {}: char {}: {}", line_idx + 1, char_idx + 1, line));
-			let state = match parser.word () ? {
-				"on" => true,
-				"off" => false,
-				_ => Err (err ()) ?,
-			};
-			let cube = Cube {
-				x0: parser.expect ("x=") ?.int () ?,
-				x1: parser.expect ("..") ?.int::<i32> () ? + 1,
-				y0: parser.expect (",y=") ?.int () ?,
-				y1: parser.expect ("..") ?.int::<i32> () ? + 1,
-				z0: parser.expect (",z=") ?.int () ?,
-				z1: parser.expect ("..") ?.int::<i32> () ? + 1,
-			};
-			parser.end () ?;
-			Ok (Step { state, cube })
-		}).collect ()
+		use parser::*;
+		lines.iter ().enumerate ().map (|(line_idx, line)|
+			Parser::wrap (line, |parser| {
+				let state = match parser.word () ? {
+					"on" => true,
+					"off" => false,
+					_ => Err (parser.err ()) ?,
+				};
+				let cube = Cube {
+					x0: parser.expect ("x=") ?.int () ?,
+					x1: parser.expect ("..") ?.int::<i32> () ? + 1,
+					y0: parser.expect (",y=") ?.int () ?,
+					y1: parser.expect ("..") ?.int::<i32> () ? + 1,
+					z0: parser.expect (",z=") ?.int () ?,
+					z1: parser.expect ("..") ?.int::<i32> () ? + 1,
+				};
+				parser.end () ?;
+				Ok (Step { state, cube })
+			}).map_parse_err (|char_idx|
+				format! ("Invalid input: line {}: char {}: {}", line_idx + 1, char_idx + 1, line))
+		).collect ()
 	}
 
 	#[ derive (Clone, Copy, Debug) ]

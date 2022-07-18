@@ -39,23 +39,23 @@ mod logic {
 mod model {
 
 	use super::*;
-	use parser::Parser;
 
 	pub type Input = Vec <(u32, u32, u32)>;
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
-		Ok (
-			input.iter ().enumerate ().map (|(line_idx, line)| -> GenResult <_> {
-				let mut parser = Parser::new (line, |char_idx|
-					format! ("Invalid input: line {}: char {}: {}",
-						line_idx + 1, char_idx + 1, line));
+		use parser::*;
+		input.iter ().enumerate ().map (|(line_idx, line)|
+			Parser::wrap (line, |parser|
 				Ok ((
 					parser.int () ?,
 					parser.expect ("x") ?.int () ?,
 					parser.expect ("x") ?.int () ?,
 				))
-			}).collect::<Result::<_, _>> () ?
-		)
+			).map_parse_err (|char_idx|
+				format! ("Invalid input: line {}: char {}: {}",
+					line_idx + 1, char_idx + 1, line)
+			)
+		).collect::<Result::<_, _>> ()
 	}
 }
 
