@@ -49,8 +49,18 @@ function main {
 		(flamegraph)
 			cargo_args+=( --image-width "${flamegraph_width:-4000}" )
 			cargo_args+=( --palette "rust" )
-			cargo flamegraph "${cargo_args[@]}" -- "${run_args[@]}" \
-				&& (eog flamegraph.svg &)
+			local timestamp=$(date +"%Y-%m-%d-%H:%M:%S")
+			if cargo flamegraph \
+				"${cargo_args[@]}" \
+				--output target/flamegraph-$timestamp.svg \
+				-- \
+				"${run_args[@]}"
+			then
+				(eog flamegraph.svg target/flamegraph-$timestamp.svg &)
+				mv perf.data target/flamegraph-$timestamp.perf-data
+				ln -fns flamegraph-$timestamp.svg target/flamegraph-latest.svg
+				ln -fns flamegraph-$timestamp.perf-data target/flamegraph-latest.perf-data
+			fi
 			;;
 	esac
 }
