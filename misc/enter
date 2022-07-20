@@ -1,14 +1,22 @@
 aoc_root="$(readlink --canonicalize-existing "$(dirname "${BASH_SOURCE[0]}")"/..)"
-function build {
-	"$aoc_root/misc/build-script" "$@"
-}
 function watch {
-	if [[ "$1" == "build" ]]; then
-		shift
-		"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$@"
-	else
-		"$aoc_root/misc/watch-script" "$@"
-	fi
+	case "$1" in
+		(build|clean|clippy|flamegraph|run|run-test|test)
+			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$@"
+			;;
+		(*)
+			"$aoc_root/misc/watch-script" "$@"
+			;;
+	esac
 }
-alias reload="source $aoc_root/misc/enter"
+function build { "$aoc_root/misc/build-script" build "$@"; }
+function clean { "$aoc_root/misc/build-script" clean "$@"; }
+function clippy { "$aoc_root/misc/build-script" clippy "$@"; }
+function flamegraph { "$aoc_root/misc/build-script" flamegraph "$@"; }
+function run { "$aoc_root/misc/build-script" run "$@"; }
+function run-test { "$aoc_root/misc/build-script" run-test "$@"; }
+function test { "$aoc_root/misc/build-script" test "$@"; }
+
+function reload { source "$aoc_root/misc/enter"; }
+
 export RUST_BACKTRACE=1
