@@ -1,19 +1,22 @@
 TODO LIST:
 
-- remove arrayvec dependency
-- remove itertools dependency
-- remove clap dependency
+- check answers for examples
 - complete 2015
+- remove clap dependency
 - complete 2016
 - complete 2017
-- complete 2018
+- remove arrayvec dependency
+- remove itertools dependency
+- refactor/complete 2018
 - refactor 2019
-- complete 2020
-- look at 2022/day-24 again
+- refactor/complete 2020
 - missing letters for ocr puzzles
 - remove external deps in other puzzles
-- update old projects
-- look at 2015/day-10 again
+
+LOOK AGAIN:
+
+- 2015/day-10
+- 2022/day-24
 
 REFACTORING:
 
