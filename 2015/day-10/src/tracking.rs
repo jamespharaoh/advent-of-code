@@ -1,3 +1,6 @@
+#![ allow (clippy::print_with_newline) ]
+#![ allow (clippy::vec_init_then_push) ]
+
 use super::*;
 
 #[ derive (Debug, clap::Parser) ]
@@ -109,7 +112,8 @@ pub struct State {
 
 impl State {
 	pub fn parse (input: & str) -> GenResult <Self> {
-		Ok (model::State::parse (input) ?.try_into () ?)
+		let state = model::State::parse (input) ?.try_into () ?;
+		Ok (state)
 	}
 }
 
@@ -126,7 +130,7 @@ impl TryFrom <model::State> for State {
 	type Error = GenError;
 	fn try_from (state: model::State) -> GenResult <State> {
 		if state.len () % 2 != 0 {
-			Err (format! ("TrackingState requires an even numbers of items")) ?;
+			Err ("TrackingState requires an even numbers of items") ?;
 		}
 		Ok (State {
 			items: state.iter ().copied ()

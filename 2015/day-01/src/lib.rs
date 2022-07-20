@@ -32,7 +32,7 @@ mod logic {
 			input.iter ().copied ()
 				.filter_map (|(ch_idx, floor)| (floor < 0).then_some (ch_idx + 1))
 				.next ()
-				.ok_or_else (|| format! ("Never visited the basement")) ?
+				.ok_or ("Never visited the basement") ?
 		)
 	}
 

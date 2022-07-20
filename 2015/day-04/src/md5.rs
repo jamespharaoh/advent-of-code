@@ -20,15 +20,16 @@ type State = [WrappingU32; 4];
 
 impl Output {
 	pub fn len (& self) -> usize { self.0.len () }
+	pub fn is_empty (& self) -> bool { self.0.is_empty () }
 	pub fn from_hex (input: & str) -> GenResult <Self> {
 		let input_len = input.chars ().count ();
 		if input_len != 32 { Err (format! ("Expected 32 chars, not {}", input_len)) ? }
 		let mut result = [0; 16];
 		let mut input_iter = input.chars ();
-		for idx in 0 .. 16 {
+		for result_ch in result.iter_mut () {
 			let (high_ch, low_ch) = input_iter.next_tuple ().unwrap ();
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
-			result [idx] = (decode (high_ch) ? as u8) << 4 | decode (low_ch) ? as u8;
+			* result_ch = (decode (high_ch) ? as u8) << 4 | decode (low_ch) ? as u8;
 		}
 		Ok (Output (result))
 	}
@@ -145,6 +146,10 @@ impl MD5 {
 		self.message.clear ();
 	}
 
+}
+
+impl Default for MD5 {
+	fn default () -> Self { Self::new () }
 }
 
 #[ derive (Clone, Copy) ]

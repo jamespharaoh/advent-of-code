@@ -87,7 +87,7 @@ mod logic {
 							& steps [0 .. 8 ]));
 					steps = & steps [ 8 .. ];
 				}
-				while steps.len () >= 1 {
+				while ! steps.is_empty () {
 					mem::swap (& mut row_data, & mut row_data_temp);
 					assert! (row_data.is_empty ());
 					row_data.extend (

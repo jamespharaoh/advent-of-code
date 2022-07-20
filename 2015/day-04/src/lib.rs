@@ -2,6 +2,9 @@
 //!
 //! [https://adventofcode.com/2015/day/4](https://adventofcode.com/2015/day/4)
 
+#![ allow (clippy::needless_collect) ]
+#![ allow (clippy::needless_range_loop) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -45,7 +48,7 @@ pub mod logic {
 				return Ok (if base == 0 { loop_idx + 1 } else { base + loop_idx });
 			}
 		}
-		Err (format! ("No solution found")) ?;
+		Err ("No solution found") ?;
 		unreachable! ();
 	}
 
@@ -128,7 +131,7 @@ pub mod logic {
 		let state = state_mutex.into_inner ().unwrap ();
 		let mut solutions = state.solutions;
 		solutions.sort ();
-		Ok (solutions.into_iter ().next ().ok_or_else (|| format! ("No solution found")) ?)
+		Ok (solutions.into_iter ().next ().ok_or ("No solution found") ?)
 	}
 
 	pub fn search_range (
@@ -156,7 +159,7 @@ pub mod logic {
 				break;
 			}
 			if input_buf.len () == min_len { input_buf.push (b'1'); }
-			for _ in 0 .. num_zeros { input_buf.push (b'0'); }
+			input_buf.extend (iter::repeat (b'0').take (num_zeros));
 		}
 		None
 	}
@@ -208,7 +211,7 @@ mod cli {
 
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (& args.input) ?;
-		let input_lines: Vec <_> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 		println! ("Using input file: {}", & args.input);
 		println! ("Looking for {} zeros", args.zeros);
 		let result = logic::calc_result_parallel (input_lines [0], args.zeros) ?;

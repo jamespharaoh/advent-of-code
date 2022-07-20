@@ -9,14 +9,14 @@ use std::mem;
 fn main () -> Result <(), Box <dyn Error>> {
 	println! ("cargo:rerun-if-changed=build.rs");
 	let pkg_name = env::var ("CARGO_PKG_NAME") ?;
-	let pkg_name_parts = pkg_name.split ("-").collect::<Vec <_>> ();
+	let pkg_name_parts = pkg_name.split ('-').collect::<Vec <_>> ();
 	if pkg_name_parts.len () != 4 { panic! () }
 	if pkg_name_parts [0] != "aoc" { panic! () }
 	if pkg_name_parts [2] != "day" { panic! () }
 	let year = pkg_name_parts [1];
 	let day = pkg_name_parts [3];
 	write_file (
-		& format! ("src/main.rs"),
+		"src/main.rs",
 		replace_placeholders (templates::BIN_RS, & HashMap::from_iter (vec! [
 			("${YEAR}", year),
 			("${DAY}", day),
@@ -26,17 +26,17 @@ fn main () -> Result <(), Box <dyn Error>> {
 }
 
 
-fn write_file <'a, Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
+fn write_file <Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
 	name: & str,
 	lines: LinesIter,
 ) -> Result <(), Box <dyn Error>> {
 	let mut new_contents = String::new ();
 	for line in lines.into_iter () {
 		let line = line.as_ref ();
-		new_contents.push_str (& line);
+		new_contents.push_str (line);
 		new_contents.push ('\n');
 	}
-	let old_contents = fs::read_to_string (name).unwrap_or (String::new ());
+	let old_contents = fs::read_to_string (name).unwrap_or_default ();
 	if old_contents != new_contents {
 		let mut main_rs_file = File::create (name) ?;
 		write! (& mut main_rs_file, "{}", new_contents) ?;
@@ -48,7 +48,7 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 	lines.iter ().map (|line| {
 		let (output, buffer) = line.chars ().fold ((String::new (), String::new ()),
 			|(mut output, mut buffer), letter| {
-				if (buffer.len () == 0 && letter == '$')
+				if (buffer.is_empty () && letter == '$')
 						|| (buffer.len () == 1 && letter == '{')
 						|| buffer.len () > 1 {
 					buffer.push (letter);
@@ -60,7 +60,7 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 						buffer = String::new ();
 					}
 				} else {
-					output.push_str (mem::replace (& mut buffer, String::new ()).as_str ());
+					output.push_str (mem::take (& mut buffer).as_str ());
 					output.push (letter);
 				}
 				(output, buffer)
@@ -73,7 +73,7 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 
 mod templates {
 
-	pub const BIN_RS: & 'static [& 'static str] = & [
+	pub const BIN_RS: & [& str] = & [
 		"use std::env;",
 		"use std::ffi::OsString;",
 		"",

@@ -92,7 +92,6 @@ mod logic {
 			resolved.insert (wire.id.clone (), val);
 			let wire_id = wire.id.clone ();
 			let wire_outputs = mem::take (& mut wire.outputs);
-			drop (wire);
 			for outp in wire_outputs {
 				let other = wires.get_mut (& outp).unwrap ();
 				other.inputs.retain (|other_id| * other_id != wire_id);
@@ -157,7 +156,7 @@ mod model {
 		type Error = GenError;
 		fn try_from (src: & str) -> GenResult <WireId> {
 			if ! src.chars ().all (char::is_lowercase) {
-				Err (format! ("Wire ID must be lowercase")) ?;
+				Err ("Wire ID must be lowercase") ?;
 			}
 			Ok (WireId (src.to_string ().into ()))
 		}

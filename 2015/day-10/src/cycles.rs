@@ -1,3 +1,5 @@
+#![ allow (clippy::vec_init_then_push) ]
+
 use super::*;
 use model::State;
 
@@ -197,15 +199,14 @@ pub fn run (args: Args) -> GenResult <()> {
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			if {
+			let has_long_run = {
 				let group_by_temp =
 					state.iter ().copied ()
 						.group_by (|& item| item);
 				group_by_temp.into_iter ()
 					.any (|(_, group)| group.count () > 3)
-			} {
-				continue;
-			}
+			};
+			if has_long_run { continue }
 
 			for prefix_len in (2 ..= length as usize - 2).step_by (2) {
 				match (
@@ -305,7 +306,7 @@ pub fn run (args: Args) -> GenResult <()> {
 	}
 
 	println! ("DESTINIES: count={}", destinies.len ());
-	for (_key, _destiny) in destinies.iter ().sorted_by_key (|(key, _)| key.clone ()) {
+	for (_key, _destiny) in destinies.iter ().sorted_by_key (|& (key, _)| key.clone ()) {
 		//println! (" - {:?}", atomic);
 	}
 
@@ -329,15 +330,14 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			if {
+			let has_long_run = {
 				let group_by_temp =
 					state.iter ().copied ()
 						.group_by (|& item| item);
 				group_by_temp.into_iter ()
 					.any (|(_, group)| group.count () > 3)
-			} {
-				continue;
-			}
+			};
+			if has_long_run { continue }
 
 			for prefix_len in (2 ..= length as usize - 2).step_by (2) {
 				match (
@@ -385,8 +385,7 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 					first_seq.push (next_first);
 					if [1, 2, 3].into_iter ()
 						.all (|num_0| first_seq.iter ().copied ()
-							.find (|& num_1| num_0 == num_1)
-							.is_some ()) {
+							.any (|num_1| num_0 == num_1)) {
 						stables.insert (key.clone (), None);
 						continue 'STATE;
 					}
@@ -435,7 +434,7 @@ impl <Item> Intern <Item> for & mut HashSet <Rc <Item>> where Item: Eq + Hash {
 	type Shared = Rc <Item>;
 	fn intern (self, item: Item) -> Rc <Item> {
 		if let Some (shared) = self.get (& item) {
-			return Rc::clone (& shared);
+			return Rc::clone (shared);
 		}
 		let shared = Rc::new (item);
 		(& mut * self).insert (shared.clone ());

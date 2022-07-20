@@ -1,3 +1,5 @@
+#![ allow (clippy::print_with_newline) ]
+
 use std::io;
 use std::io::Write as _;
 

@@ -24,11 +24,14 @@ mod logic {
 	const DISALLOWED_CHARS: & [char] = & [ 'i', 'l', 'o' ];
 
 	pub fn part_one (input: & str) -> GenResult <String> {
-		Ok (next_password (input) ?)
+		let password = next_password (input) ?;
+		Ok (password)
 	}
 
 	pub fn part_two (input: & str) -> GenResult <String> {
-		Ok (next_password (& next_password (input) ?) ?)
+		let password_0 = next_password (input) ?;
+		let password_1 = next_password (& password_0) ?;
+		Ok (password_1)
 	}
 
 	pub fn next_password (input: & str) -> GenResult <String> {
@@ -76,20 +79,18 @@ mod logic {
 			where Inpt: Iterator <Item = char> + Clone {
 		if ! input.clone ()
 			.tuple_windows::<(_, _, _)> ()
-			.filter (|& (a, b, c)| a as u32 + 1 == b as u32 && b as u32 + 1 == c as u32)
-			.next ().is_some ()
+			.any (|(a, b, c)| a as u32 + 1 == b as u32 && b as u32 + 1 == c as u32)
 			{ return false }
 		if input.clone ()
 			.any (|ch| DISALLOWED_CHARS.contains (& ch))
 			{ return false }
-		if input.clone ()
-			.fold ((0, None, None), |(sum, last, prev), next|
-				if last == Some (next) && prev != Some (next) {
-					(sum + 1, None, Some (next))
-				} else {
-					(sum, Some (next), prev)
-				}
-			).0 < 2 { return false }
+		if input.fold ((0, None, None), |(sum, last, prev), next|
+			if last == Some (next) && prev != Some (next) {
+				(sum + 1, None, Some (next))
+			} else {
+				(sum, Some (next), prev)
+			}
+		).0 < 2 { return false }
 		true
 	}
 

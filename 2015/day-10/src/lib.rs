@@ -33,10 +33,9 @@ mod logic {
 
 	pub fn part_one (input: & str) -> GenResult <u32> {
 		let input = State::parse (input) ?;
-		let state = input.clone ();
 		Ok (
 			iter::successors (
-					Some (state),
+					Some (input),
 					|state| Some (one_round (state)))
 				.nth (40)
 				.unwrap ()
@@ -46,10 +45,9 @@ mod logic {
 
 	pub fn part_two (input: & str) -> GenResult <u32> {
 		let input = State::parse (input) ?;
-		let state = input.clone ();
 		Ok (
 			iter::successors (
-					Some (state),
+					Some (input),
 					|state| Some (one_round (state)))
 				.nth (50)
 				.unwrap ()
@@ -78,10 +76,10 @@ mod model {
 	impl State {
 		pub fn parse (input: & str) -> GenResult <State> {
 			input.chars ().map (|ch|
-				Ok (ch.to_digit (10).ok_or_else (|| format! ("Invalid input")) ? as u8)
+				Ok (ch.to_digit (10).ok_or ("Invalid input") ? as u8)
 			).collect::<GenResult <_>> ()
 		}
-		pub fn iter <'a> (& 'a self) -> SliceIter <'a, u8> {
+		pub fn iter (& self) -> SliceIter <'_, u8> {
 			self.0.iter ()
 		}
 	}
@@ -109,8 +107,8 @@ mod model {
 	impl TryFrom <Vec <u8>> for State {
 		type Error = GenError;
 		fn try_from (nums: Vec <u8>) -> GenResult <State> {
-			if nums.iter ().copied ().any (|num| num < 1 || num > 9) {
-				Err (format! ("Digits must be 1-9")) ?;
+			if nums.iter ().copied ().any (|num| (1 ..= 9).contains (& num)) {
+				Err ("Digits must be 1-9") ?;
 			}
 			Ok (State (nums))
 		}
@@ -180,11 +178,10 @@ mod cli {
 			State::parse (state) ?
 		} else {
 			State::parse (
-				& fs::read_to_string (& args.input) ?
+				fs::read_to_string (& args.input) ?
 					.trim ()
-					.split ("\n")
+					.split ('\n')
 					.next ().unwrap ()
-					.to_string ()
 			) ?
 		};
 		for idx in 0 .. {
