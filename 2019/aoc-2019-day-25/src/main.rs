@@ -483,7 +483,7 @@ impl GameEngine {
 fn main_interactive () {
 	let input_string = fs::read_to_string ("input").unwrap ();
 	let input_programme = intcode::from_str (& input_string);
-	let mut editor = Editor::<()>::new ();
+	let mut editor = Editor::<()>::new ().unwrap ();
 	let mut machine = Machine::new (input_programme.clone ());
 	let mut output_buffer = String::new ();
 	loop {

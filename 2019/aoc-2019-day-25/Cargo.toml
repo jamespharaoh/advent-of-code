@@ -7,4 +7,4 @@
 
 [dependencies]
 
-	rustyline = "8.0"
+	rustyline = "10.0"

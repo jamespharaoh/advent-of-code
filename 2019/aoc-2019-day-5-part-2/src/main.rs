@@ -29,7 +29,7 @@ struct Opcode {
 }
 
 fn main () {
-	let mut readline = Editor::new ();
+	let mut readline = Editor::new ().unwrap ();
 	let mut mem = load ();
 	run (& mut mem, & mut readline);
 }
