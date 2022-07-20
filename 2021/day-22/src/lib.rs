@@ -113,6 +113,7 @@ pub mod model {
 		use parser::*;
 		lines.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
+				parser.set_ignore_whitespace (true);
 				let state = match parser.word () ? {
 					"on" => true,
 					"off" => false,

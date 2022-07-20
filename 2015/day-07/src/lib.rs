@@ -231,6 +231,7 @@ mod model {
 		};
 		input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
+				parser.set_ignore_whitespace (true);
 				let valid_id = |word: & str| word.chars ().all (char::is_lowercase);
 				parser.any ()
 					.of (|parser| {

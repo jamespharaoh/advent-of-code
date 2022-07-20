@@ -81,16 +81,18 @@ mod model {
 		use parser::*;
 		input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
-				parser.set_word_pred (char::is_alphabetic);
+				parser
+					.set_word_pred (char::is_alphabetic)
+					.set_ignore_whitespace (true);
 				let name_0 = parser.word () ?;
 				let verb = parser.expect_word ("would") ?.word () ?;
-				let amount: i32 = parser.skip_whitespace ().int () ?;
+				let amount: i32 = parser.int () ?;
 				let amount = match verb {
 					"gain" => amount,
 					"lose" => - amount,
 					_ => Err (parser.err ()) ?,
 				};
-				let name_1 = parser.expect (" happiness units by sitting next to ") ?.word () ?;
+				let name_1 = parser.expect ("happiness units by sitting next to ") ?.word () ?;
 				parser.expect (".") ?.end () ?;
 				Ok ((name_0.into (), name_1.into (), amount))
 			}).map_parse_err (|char_idx|

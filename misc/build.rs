@@ -10,6 +10,7 @@ use std::path::PathBuf;
 
 fn main () -> Result <(), Box <dyn Error>> {
 	println! ("cargo:rerun-if-changed=build.rs");
+	println! ("cargo:rerun-if-changed=.");
 	let pkg_name = env::var ("CARGO_PKG_NAME") ?;
 	let pkg_name_parts = pkg_name.split ('-').collect::<Vec <_>> ();
 	if pkg_name_parts [0] != "aoc" { panic! () }

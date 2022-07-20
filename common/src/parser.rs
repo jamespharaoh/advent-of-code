@@ -7,6 +7,7 @@ pub struct Parser <'inp> {
 	input: & 'inp str,
 	pos: usize,
 	word_pred: fn (char) -> bool,
+	ignore_whitespace: bool,
 }
 
 #[ derive (Debug) ]
@@ -69,10 +70,16 @@ impl <'inp> Parser <'inp> {
 			input,
 			pos: 0,
 			word_pred: |ch| ! ch.is_whitespace (),
+			ignore_whitespace: false,
 		}
 	}
 
-	pub fn set_word_pred (& mut self, word_pred: fn (char) -> bool) -> & Self {
+	pub fn set_ignore_whitespace (& mut self, ignore_whitespace: bool) -> & mut Self {
+		self.ignore_whitespace = ignore_whitespace;
+		self
+	}
+
+	pub fn set_word_pred (& mut self, word_pred: fn (char) -> bool) -> & mut Self {
 		self.word_pred = word_pred;
 		self
 	}
@@ -91,6 +98,7 @@ impl <'inp> Parser <'inp> {
 	}
 
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		let len = self.input.chars ().enumerate ()
 			.take_while (|& (idx, letter)|
 				letter.is_ascii_digit () || (idx == 0 && letter == '-'))
@@ -98,11 +106,12 @@ impl <'inp> Parser <'inp> {
 			.sum ();
 		let val = self.input [0 .. len].parse ().map_err (|_| self.err ()) ?;
 		self.input = & self.input [len .. ];
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (val)
 	}
 
 	pub fn word <'b> (& 'b mut self) -> ParseResult <& 'inp str> {
-		self.skip_whitespace ();
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		let input_temp = self.input;
 		let start = self.pos;
 		while let Some (letter) = self.peek () {
@@ -111,7 +120,7 @@ impl <'inp> Parser <'inp> {
 		}
 		let end = self.pos;
 		if start == end { Err (self.err ()) ? }
-		self.skip_whitespace ();
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (& input_temp [ .. end - start])
 	}
 

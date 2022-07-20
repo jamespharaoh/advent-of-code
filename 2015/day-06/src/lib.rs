@@ -206,6 +206,7 @@ mod model {
 		use parser::*;
 		input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
+				parser.set_ignore_whitespace (true);
 				let action = match parser.word () ? {
 					"turn" => match parser.word () ? {
 						"on" => if part_two { Action::Up } else { Action::On },
@@ -220,7 +221,7 @@ mod model {
 					col: parser.expect (",") ?.int () ?,
 				};
 				let peak = Pos {
-					row: parser.expect (" through ") ?.int::<Coord> () ? + 1,
+					row: parser.expect ("through") ?.int::<Coord> () ? + 1,
 					col: parser.expect (",") ?.int::<Coord> () ? + 1,
 				};
 				Ok (Step { action, origin, peak })

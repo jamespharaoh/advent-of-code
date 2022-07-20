@@ -106,6 +106,7 @@ mod model {
 		use parser::*;
 		input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
+				parser.set_ignore_whitespace (true);
 				let place_0 = parser.word () ?;
 				let place_1 = parser.expect_word ("to") ?.word () ?;
 				let distance = parser.expect_word ("=") ?.int () ?;
