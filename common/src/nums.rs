@@ -39,7 +39,7 @@ impl Int for i16 {
 	fn add_signed (self, other: i16) -> Option <i16> { i16::checked_add (self, other) }
 	fn sub_signed (self, other: i16) -> Option <i16> { i16::checked_sub (self, other) }
 	fn as_usize (self) -> usize { self as usize }
-	fn to_usize (self) -> Option <usize> { (self >= 0).then (|| self as usize) }
+	fn to_usize (self) -> Option <usize> { (self >= 0).then_some (self as usize) }
 	fn from_usize (val: usize) -> Option <Self> { val.try_into ().ok () }
 }
 
@@ -56,7 +56,7 @@ impl Int for u16 {
 	fn signum (self) -> i16 { if self > 0 { 1 } else { 0 } }
 	fn signed_diff (self, other: Self) -> Option <i16> {
 		if other < self { (self - other).try_into ().ok () }
-		else { (other - self).try_into ().map (|val| i16::neg (val)).ok () }
+		else { (other - self).try_into ().map (i16::neg).ok () }
 	}
 	fn unsigned_diff (self, other: Self) -> Option <u16> { u16::checked_sub (self, other) }
 	fn add_signed (self, other: i16) -> Option <u16> {

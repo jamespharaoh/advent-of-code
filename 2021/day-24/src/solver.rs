@@ -475,7 +475,7 @@ impl SymVal {
 			results.sort ();
 			results
 		}
-		Ok (match & * self {
+		Ok (match self {
 			SymVal::Symbol (arg) => lookup (arg).to_vec (),
 			SymVal::Input (arg) => input.get (* arg).copied ().ok_or (MachineError::NoMoreInput) ?.to_vec (),
 			SymVal::Add (left, right) => combine (lookup (left), lookup (right), |a, b| a + b),
@@ -507,7 +507,7 @@ impl SymVal {
 		fn make <const CAP: usize> (arg: [& Symbol; CAP]) -> ArrayVec <Symbol, 2> {
 			arg.into_iter ().cloned ().collect ()
 		}
-		match & * self {
+		match self {
 			SymVal::Symbol (arg) => make ([ arg ]),
 			SymVal::Input (_) => make ([ ]),
 			SymVal::Add (left, right) => make ([ left, right ]),

@@ -123,6 +123,7 @@ impl <Node, Pri, Visitor, Seen> PrioritySearch <Node, Pri, Visitor, Seen>
 		Visitor: PrioritySearchVisitor <Node, Pri, Seen> {
 
 	pub fn len (& self) -> usize { self.inner.todo.len () }
+	pub fn is_empty (& self) -> bool { self.len () == 0 }
 
 	pub fn push (& mut self, node: Node, priority: Pri) -> & mut Self {
 		self.inner.push (node, priority);
@@ -141,7 +142,7 @@ impl <Node, Pri, Visitor, Seen> Iterator for PrioritySearch <Node, Pri, Visitor,
 	type Item = Visitor::Item;
 
 	fn next (& mut self) -> Option <Self::Item> {
-		while let Some (WithPriority { priority, value: node }) = self.inner.pop () {
+		if let Some (WithPriority { priority, value: node }) = self.inner.pop () {
 			let adder = PrioritySearchAdder { inner: & mut self.inner };
 			return Some (self.visitor.visit (node, priority, adder));
 		}
@@ -267,7 +268,7 @@ impl <Node, Pri, Seen, NextNodesIntoIter> PrioritySearchVisitor <Node, Pri, Seen
 pub trait PrioritySearchSeen <Node, Pri> where Node: Clone, Pri: Clone + Ord {
 	fn get_mut (& mut self, node: Node) -> & mut PrioritySearchSeenState <Pri>;
 	fn push (& mut self, node: Node, priority: Pri) -> bool {
-		let seen_state = self.get_mut (node.clone ());
+		let seen_state = self.get_mut (node);
 		match seen_state.clone () {
 			PrioritySearchSeenState::New => {
 				* seen_state = PrioritySearchSeenState::Unvisited (priority);
@@ -295,7 +296,7 @@ pub trait PrioritySearchSeen <Node, Pri> where Node: Clone, Pri: Clone + Ord {
 impl <Node, Pri> PrioritySearchSeen <Node, Pri> for HashMap <Node, PrioritySearchSeenState <Pri>>
 		where Node: Clone + Eq + Hash, Pri: Clone + Ord {
 	fn get_mut (& mut self, node: Node) -> & mut PrioritySearchSeenState <Pri> {
-		self.entry (node.clone ()).or_insert (PrioritySearchSeenState::New)
+		self.entry (node).or_insert (PrioritySearchSeenState::New)
 	}
 }
 

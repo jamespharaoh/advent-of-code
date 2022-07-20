@@ -165,7 +165,7 @@ mod model {
 		Ok (digit)
 	}
 
-	#[ derive (Clone, Copy, Debug, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, PartialEq, Eq) ]
 	pub struct Digit {
 		pub segments: [bool; 7],
 	}

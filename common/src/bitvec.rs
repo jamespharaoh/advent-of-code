@@ -21,6 +21,7 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		}
 	}
 	pub fn len (& self) -> usize { self.len }
+	pub fn is_empty (& self) -> bool { self.len == 0 }
 	pub fn push (& mut self, item: Item) {
 		let mut item_enc = Encoding::encode (item);
 		debug_assert! (item_enc & ! Encoding::MASK == 0);
@@ -81,7 +82,7 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 			bit_idx = 0;
 		}
 	}
-	pub fn iter <'a> (& 'a self) -> BitVecIter <'a, Item, Encoding> {
+	pub fn iter (& self) -> BitVecIter <Item, Encoding> {
 		BitVecIter {
 			words: self.words.as_slice (),
 			len: self.len,

@@ -20,9 +20,16 @@ cd $root_dir
 # set up work directory
 
 declare work_dir="$root_dir/pre-commit"
-rm -rf $work_dir
-mkdir $work_dir
-git checkout-index --all --force --prefix pre-commit/
+if [[ "$0" != "$work_dir/misc/pre-commit" ]]; then
+	rm -rf $work_dir
+	mkdir $work_dir
+	git checkout-index --all --force --prefix pre-commit/
+	exec $work_dir/misc/pre-commit "$@"
+fi
+
+# update rust
+
+rustup update
 
 # iterate projects
 
@@ -47,6 +54,7 @@ for project in common 2015 2021; do
 	cargo +nightly check --frozen --workspace --all-targets --profile pre-commit
 	cargo +nightly test --frozen --workspace --profile pre-commit
 	cargo +nightly doc --frozen --profile pre-commit
+	cargo +nightly clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
 	if [[ $project != common ]]; then cargo +nightly run --frozen --profile pre-commit; fi
 
 done

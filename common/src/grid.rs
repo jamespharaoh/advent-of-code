@@ -31,7 +31,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 		size: [usize; DIMS],
 	) -> Grid <Storage, Pos, DIMS> {
 		let expected_len = size.into_iter ().product::<usize> ();
-		let actual_len = (& storage).storage_len ();
+		let actual_len = storage.storage_len ();
 		if expected_len != actual_len {
 			panic! ("Expected {} items but was passed {}", expected_len, actual_len);
 		}
@@ -39,6 +39,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	pub fn len (& self) -> usize { self.size.into_iter ().product () }
+	pub fn is_empty (& self) -> bool { self.size.into_iter ().any (|dim| dim == 0) }
 	pub fn size (& self) -> [usize; DIMS] { self.size }
 
 	pub fn origin (& self) -> Pos { Pos::from_scalar (0, self.origin, self.size).unwrap () }
@@ -46,7 +47,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	pub fn get (& self, pos: Pos) -> Option <Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& self.storage).storage_get (index))
+			.and_then (|index| self.storage.storage_get (index))
 	}
 
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
@@ -80,12 +81,12 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	pub fn get_ref (& self, pos: Pos) -> Option <& Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& self.storage).storage_ref (index))
+			.and_then (|index| self.storage.storage_ref (index))
 	}
 
 	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
-			.and_then (|index| (& mut self.storage).storage_mut (index))
+			.and_then (|index| self.storage.storage_mut (index))
 	}
 
 }
@@ -256,9 +257,9 @@ impl <'a, Storage, Item> Iterator for GridStorageClone <Storage>
 		Item: Clone + 'a {
 	type Item = Item;
 	fn next (& mut self) -> Option <Item> {
-		self.storage.next ().map (|item| item.clone ())
+		self.storage.next ().cloned ()
 	}
 	fn nth (& mut self, num: usize) -> Option <Item> {
-		self.storage.nth (num).map (|item| item.clone ())
+		self.storage.nth (num).cloned ()
 	}
 }

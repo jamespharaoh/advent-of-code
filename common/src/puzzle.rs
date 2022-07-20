@@ -7,7 +7,7 @@ pub trait Puzzle {
 	fn day (& self) -> u8;
 	fn part_one (& self, _lines: & [& str]) -> GenResult <String> { unimplemented! () }
 	fn part_two (& self, _lines: & [& str]) -> GenResult <String> { unimplemented! () }
-	fn num_parts (& self) -> usize { return 2 }
+	fn num_parts (& self) -> usize { 2 }
 
 	fn commands (& self) -> Vec <PuzzleCommand> { Vec::new () }
 
@@ -114,7 +114,7 @@ pub trait Puzzle {
 			Some ((name, matches)) => {
 				for puzzle_command in self.commands () {
 					if puzzle_command.name () == name {
-						return puzzle_command.invoke (& matches);
+						return puzzle_command.invoke (matches);
 					}
 				}
 				unreachable! ();
@@ -125,13 +125,13 @@ pub trait Puzzle {
 
 	fn invoke_part_one (& self) -> GenResult <String> {
 		let input_string = fs::read_to_string (& format! ("inputs/day-{:02}", self.day ())) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		self.part_one (& input_lines)
 	}
 
 	fn invoke_part_two (& self) -> GenResult <String> {
 		let input_string = fs::read_to_string (& format! ("inputs/day-{:02}", self.day ())) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		self.part_two (& input_lines)
 	}
 

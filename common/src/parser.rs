@@ -82,7 +82,8 @@ impl <'inp> Parser <'inp> {
 
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
 		let len = self.input.chars ().enumerate ()
-			.take_while (|& (idx, letter)| letter.is_digit (10) || (idx == 0 && letter == '-'))
+			.take_while (|& (idx, letter)|
+				letter.is_ascii_digit () || (idx == 0 && letter == '-'))
 			.map (|(_, letter)| letter.len_utf8 ())
 			.sum ();
 		let val = self.input [0 .. len].parse ().map_err (|_| self.err ()) ?;
@@ -136,17 +137,17 @@ impl <'inp> Parser <'inp> {
 		Ok (())
 	}
 
-	pub fn peek (& mut self) -> Option <char> {
-		self.input.chars ().next ()
-	}
-
-	pub fn next (& mut self) -> Option <char> {
+	fn next (& mut self) -> Option <char> {
 		let letter_opt = self.input.chars ().next ();
 		if let Some (letter) = letter_opt {
 			self.input = & self.input [letter.len_utf8 () .. ];
 			self.pos += 1;
 		}
 		letter_opt
+	}
+
+	pub fn peek (& mut self) -> Option <char> {
+		self.input.chars ().next ()
 	}
 
 	pub fn expect_next (& mut self) -> ParseResult <char> {

@@ -70,9 +70,7 @@ mod logic {
 				sum += if line.chars ().nth (offset).unwrap () == '1' { 1 } else { -1 };
 			}
 			let sel = if (sum < 0) == (mode == Mode::Oxygen) { '0' } else { '1' };
-			lines = lines.into_iter ().filter (
-				|line| line.chars ().nth (offset).unwrap () == sel
-			).collect ();
+			lines.retain (|line| line.chars ().nth (offset).unwrap () == sel);
 			offset += 1;
 		}
 		Ok (i64::from_str_radix (lines [0], 2) ?)
@@ -82,7 +80,7 @@ mod logic {
 
 mod model {
 
-	#[ derive (PartialEq) ]
+	#[ derive (PartialEq, Eq) ]
 	pub enum Mode { Oxygen, CO2 }
 
 }
