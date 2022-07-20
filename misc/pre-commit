@@ -33,6 +33,16 @@ rustup update
 
 # iterate projects
 
+function try {
+	local project="$1"
+	local command="$2"
+	shift 2
+	if ! "$@"; then
+		echo "Error running \"$command\" in \"$project\"" >&2
+		false
+	fi
+}
+
 for project in common 2015 2021; do
 	project_dir=$root_dir/$project
 	project_work_dir=$work_dir/$project
@@ -51,11 +61,18 @@ for project in common 2015 2021; do
 	# run various cargo commands
 
 	export RUSTDOCFLAGS="-D warnings"
-	cargo +nightly check --frozen --workspace --all-targets --profile pre-commit
-	cargo +nightly test --frozen --workspace --profile pre-commit
-	cargo +nightly doc --frozen --profile pre-commit
-	cargo +nightly clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
-	if [[ $project != common ]]; then cargo +nightly run --frozen --profile pre-commit; fi
+	try "$project" "cargo check" \
+		cargo +nightly check --frozen --workspace --all-targets --profile pre-commit
+	try "$project" "cargo test" \
+		cargo +nightly test --frozen --workspace --profile pre-commit
+	try "$project" "cargo doc" \
+		cargo +nightly doc --frozen --profile pre-commit
+	try "$project" "cargo clippy" \
+		cargo +nightly clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
+	if [[ $project != common ]]; then
+		try "$project" "cargo run" \
+			cargo +nightly run --frozen --profile pre-commit
+	fi
 
 done
 

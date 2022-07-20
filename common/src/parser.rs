@@ -121,15 +121,12 @@ impl <'inp> Parser <'inp> {
 		self.clone ().word ().ok ()
 	}
 
-	pub fn skip_whitespace (& mut self) -> & str {
-		let input_temp = self.input;
-		let start = self.pos;
+	pub fn skip_whitespace (& mut self) -> & mut Self {
 		while let Some (letter) = self.peek () {
 			if ! letter.is_whitespace () { break }
 			self.next ().unwrap ();
 		}
-		let end = self.pos;
-		& input_temp [ .. end - start]
+		self
 	}
 
 	pub fn end (& mut self) -> ParseResult <()> {
@@ -137,7 +134,8 @@ impl <'inp> Parser <'inp> {
 		Ok (())
 	}
 
-	fn next (& mut self) -> Option <char> {
+	#[ allow (clippy::should_implement_trait) ]
+	pub fn next (& mut self) -> Option <char> {
 		let letter_opt = self.input.chars ().next ();
 		if let Some (letter) = letter_opt {
 			self.input = & self.input [letter.len_utf8 () .. ];
@@ -158,8 +156,8 @@ impl <'inp> Parser <'inp> {
 	    ParseError::Simple (self.pos)
 	}
 
-	pub fn any <Item> (& self) -> ParserAny <'inp, Item> {
-		ParserAny::Parser (self.clone ())
+	pub fn any <Item> (& mut self) -> ParserAny <'_, 'inp, Item> {
+		ParserAny::Parser (self)
 	}
 
 	pub fn wrap <Output, WrapFn> (input: & str, mut wrap_fn: WrapFn) -> ParseResult <Output>
@@ -170,19 +168,26 @@ impl <'inp> Parser <'inp> {
 
 }
 
-pub enum ParserAny <'inp, Item> {
-	Parser (Parser <'inp>),
+pub enum ParserAny <'par, 'inp, Item> {
+	Parser (& 'par mut Parser <'inp>),
 	Item (Item),
 }
 
-impl <'inp, Item> ParserAny <'inp, Item> {
+impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 
 	pub fn of <OfFn> (self, mut of_fn: OfFn) -> Self
-			where OfFn: FnMut (Parser <'inp>) -> ParseResult <Item> {
+			where OfFn: FnMut (& mut Parser <'inp>) -> ParseResult <Item> {
 		match self {
-			ParserAny::Parser (parser) => match of_fn (parser.clone ()) {
-				Ok (item) => ParserAny::Item (item),
-				Err (_) => ParserAny::Parser (parser),
+			ParserAny::Parser (parser) => {
+				let mut sub_parser = parser.clone ();
+				match of_fn (& mut sub_parser) {
+					Ok (item) => {
+						parser.input = sub_parser.input;
+						parser.pos = sub_parser.pos;
+						ParserAny::Item (item)
+					},
+					Err (_) => ParserAny::Parser (parser),
+				}
 			},
 			ParserAny::Item (item) => ParserAny::Item (item),
 		}

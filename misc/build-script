@@ -33,11 +33,14 @@ function main {
 		esac
 	done
 	local -a cargo_args
-	if [[ -z "$mode" ]]; then mode="run-test"; fi
+	if [[ -z "$mode" ]]; then mode="build"; fi
 	if [[ -z "$profile" && "$mode" = "flamegraph" ]]; then profile="flamegraph"; fi
 	if [[ -n "$package" ]]; then cargo_args+=( --package "$package" ); fi
 	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
 	case "$mode" in
+		(build)
+			time env time -v cargo $toolchain build "${cargo_args[@]}"
+			;;
 		(clippy)
 			local -a clippy_args=( $(cat "$(dirname "$0")"/clippy-args) )
 			cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"

@@ -1,0 +1,14 @@
+aoc_root="$(readlink --canonicalize-existing "$(dirname "${BASH_SOURCE[0]}")"/..)"
+function build {
+	"$aoc_root/misc/build-script" "$@"
+}
+function watch {
+	if [[ "$1" == "build" ]]; then
+		shift
+		"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$@"
+	else
+		"$aoc_root/misc/watch-script" "$@"
+	fi
+}
+alias reload="source $aoc_root/misc/enter"
+export RUST_BACKTRACE=1

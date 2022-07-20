@@ -5,7 +5,7 @@
 use aoc_common::*;
 
 puzzle_info! {
-	name = "All in a Single Night";
+	name = "Corporate Policy";
 	year = 2015;
 	day = 11;
 	part_one = |input| logic::part_one (input [0]);

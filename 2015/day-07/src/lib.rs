@@ -233,52 +233,52 @@ mod model {
 			Parser::wrap (line, |parser| {
 				let valid_id = |word: & str| word.chars ().all (char::is_lowercase);
 				parser.any ()
-					.of (|mut parser| {
+					.of (|parser| {
 						let val = parser.int () ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::Static (val)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let arg = parser.word_if (valid_id) ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::Wire (intern (arg) ?)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let id_0 = parser.expect_word ("NOT") ?.word_if (valid_id) ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::Not (intern (id_0) ?)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let id_0 = parser.word_if (valid_id) ?;
 						let id_1 = parser.expect_word ("AND") ?.word_if (valid_id) ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::And (intern (id_0) ?, intern (id_1) ?)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let arg_0 = parser.expect_word ("1") ?.expect_word ("AND") ?.word_if (valid_id) ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::AndOne (intern (arg_0) ?)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let id_0 = parser.word_if (valid_id) ?;
 						let id_1 = parser.expect_word ("OR") ?.word_if (valid_id) ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::Or (intern (id_0) ?, intern (id_1) ?)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let arg_0 = parser.word_if (valid_id) ?;
 						let arg_1 = parser.expect_word ("LSHIFT") ?.int () ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 						parser.end () ?;
 						Ok ((intern (id) ?, WireInput::LeftShift (intern (arg_0) ?, arg_1)))
 					})
-					.of (|mut parser| {
+					.of (|parser| {
 						let arg_0 = parser.word_if (valid_id) ?;
 						let arg_1 = parser.expect_word ("RSHIFT") ?.int () ?;
 						let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
