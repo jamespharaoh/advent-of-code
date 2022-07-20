@@ -80,7 +80,7 @@ pub mod tool {
 
 	pub fn all (args: AllArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (args.input) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		let prog = machine::parse_prog (& input_lines) ?;
 		let steps = quick::steps_for (& prog) ?;
 		quick::iterator (& steps, false).for_each (
@@ -133,8 +133,8 @@ pub mod tool {
 			|_| print! ("--------------------------------+"));
 		return Ok (());
 		fn printer <
-			BeforeFn: Fn () -> (),
-			EachFn: Fn (& Machine) -> (),
+			BeforeFn: Fn (),
+			EachFn: Fn (& Machine),
 		> (machines: & [(Machine, [i64; 14])], before_fn: BeforeFn, each_fn: EachFn) {
 			before_fn ();
 			for (machine, _) in machines.iter () {
@@ -170,7 +170,7 @@ pub mod tool {
 
 	fn load_prog () -> GenResult <Vec <Instr>> {
 		let input_string = fs::read_to_string ("inputs/day-24") ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		machine::parse_prog (& input_lines)
 	}
 

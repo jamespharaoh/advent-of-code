@@ -92,9 +92,11 @@ mod logic {
 				continue;
 			}
 			let frame = stack.pop ().unwrap ();
-			let prev_counts = if let Some (prev_frame) = stack.iter_mut ().rev ().skip_while (
-				|some_frame| some_frame.loops == frame.loops,
-			).next () { & mut prev_frame.counts } else { & mut global_counts };
+			let prev_counts =
+				if let Some (prev_frame) =
+					stack.iter_mut ().rev ()
+						.find (|some_frame| some_frame.loops != frame.loops)
+				{ & mut prev_frame.counts } else { & mut global_counts };
 			for (& letter, count) in frame.counts.iter () {
 				* prev_counts.entry (letter).or_insert (0) += count;
 			}
@@ -125,12 +127,12 @@ mod model {
 			for line in lines.iter ().skip (2) {
 				let line_err = || format! ("Invalid input: {}", line);
 				let mut line_iter = line.chars ();
-				let letter_before = line_iter.next ().ok_or_else (|| line_err ()) ?;
-				let letter_after = line_iter.next ().ok_or_else (|| line_err ()) ?;
+				let letter_before = line_iter.next ().ok_or_else (line_err) ?;
+				let letter_after = line_iter.next ().ok_or_else (line_err) ?;
 				if iter::from_fn (|| line_iter.next ()).take (4).collect::<String> () != " -> " {
 					Err (line_err ()) ?;
 				}
-				let letter_insert = line_iter.next ().ok_or_else (|| line_err ()) ?;
+				let letter_insert = line_iter.next ().ok_or_else (line_err) ?;
 				rules.insert ((letter_before, letter_after), letter_insert);
 			}
 			Ok (Input { template, rules })

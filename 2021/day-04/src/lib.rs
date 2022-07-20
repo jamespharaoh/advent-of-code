@@ -88,7 +88,7 @@ mod logic {
 		}
 		if winner {
 			Some (board.iter ().cloned ().filter (
-				|num| ! called.contains (& num),
+				|num| ! called.contains (num),
 			).map (
 				|num| num as u16,
 			).sum ())
@@ -110,15 +110,15 @@ mod model {
 
 	impl Input {
 		pub fn parse (lines: & [& str]) -> GenResult <Rc <Input>> {
-			let call_order: Vec <u8> = lines [0].split (",").map (
+			let call_order: Vec <u8> = lines [0].split (',').map (
 				|num_str| num_str.parse::<u8> ().unwrap (),
 			).collect ();
 			let boards: Vec <Board> = lines [2 ..].chunks (6).map (
-				|board_lines| board_lines.iter ().take (5).map (
+				|board_lines| board_lines.iter ().take (5).flat_map (
 					|board_line| board_line.split_whitespace ().map (
 						|num_str| num_str.parse::<u8> ().unwrap (),
 					).collect::<Vec <u8>> (),
-				).flatten ().collect::<Vec <u8>> ().try_into ().unwrap (),
+				).collect::<Vec <u8>> ().try_into ().unwrap (),
 			).collect ();
 			Ok (Input { call_order, boards }.into ())
 		}

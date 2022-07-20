@@ -156,13 +156,10 @@ mod snailfish {
 				}
 			}
 			for (pos, token) in self.tokens.iter ().enumerate () {
-				match token {
-					& Token::Value (value) => {
-						if value >= 10 {
-							return (true, self.reduce_split (pos));
-						}
-					},
-					_ => (),
+				if let & Token::Value (value) = token {
+					if value >= 10 {
+						return (true, self.reduce_split (pos));
+					}
 				}
 			}
 			(false, self)
@@ -421,10 +418,10 @@ mod model {
 	}
 
 	impl Token {
-		pub fn is_open (& self) -> bool { match * self { Token::Open => true, _ => false } }
-		pub fn is_close (& self) -> bool { match * self { Token::Close => true, _ => false } }
-		pub fn is_comma (& self) -> bool { match * self { Token::Comma => true, _ => false } }
-		pub fn is_value (& self) -> bool { match * self { Token::Value (_) => true, _ => false } }
+		pub fn is_open (& self) -> bool { matches! (* self, Token::Open) }
+		pub fn is_close (& self) -> bool { matches! (* self, Token::Close) }
+		pub fn is_comma (& self) -> bool { matches! (* self, Token::Comma) }
+		pub fn is_value (& self) -> bool { matches! (* self, Token::Value (_)) }
 		pub fn value (& self) -> i64 {
 			match * self {
 				Token::Value (value) => value,

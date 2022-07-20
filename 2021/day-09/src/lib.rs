@@ -68,7 +68,7 @@ mod logic {
 			basin_sizes.push (basin_size);
 		}
 		basin_sizes.sort ();
-		Ok (basin_sizes.into_iter ().rev ().take (3).fold (1, |product, value| product * value))
+		Ok (basin_sizes.into_iter ().rev ().take (3).product ())
 	}
 
 }

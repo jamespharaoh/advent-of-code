@@ -37,7 +37,9 @@ mod logic {
 		let image = Image::new_from (input.pixels, false);
 		Ok (
 			image_iter (input.algorithm, image)
-				.skip (loops).next ().unwrap ().num_pixels () as i64
+				.nth (loops)
+				.unwrap ()
+				.num_pixels () as i64
 		)
 	}
 
@@ -72,7 +74,7 @@ mod logic {
 		let new_pixels = (origin.y - 1 .. peak.y + 1).flat_map (|y|
 			(origin.x - 3 .. peak.x + 1).map (move |x| [
 				image.get (Pos { y: y - 1, x: x + 1 }),
-				image.get (Pos { y: y, x: x + 1 }),
+				image.get (Pos { y, x: x + 1 }),
 				image.get (Pos { y: y + 1, x: x + 1 }),
 			]).scan ([false; 9], |state, next| {
 				* state = [
@@ -127,13 +129,13 @@ mod model {
 				algorithm
 			};
 			if ! lines [1].is_empty () { Err (err (1, format! ("Expected blank line"))) ?; }
-			let pixels = lines.iter ().enumerate ().skip (2).map (|(line_idx, line)| {
+			let pixels = lines.iter ().enumerate ().skip (2).flat_map (|(line_idx, line)| {
 				line.chars ().map (move |letter| { match letter {
 					'#' => Ok (true),
 					'.' => Ok (false),
 					_ => Err (err (line_idx, format! ("Invalid character"))),
 				}})
-			}).flatten ().collect::<Result <_, _>> () ?;
+			}).collect::<Result <_, _>> () ?;
 			let size = [lines.len () - 2, lines [2].chars ().count ()];
 			let pixels = Pixels::wrap (pixels, [0, 0], size);
 			Ok (Input { algorithm, pixels })
@@ -211,7 +213,7 @@ pub mod tool {
 
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (& args.input) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		let input = Input::parse (& input_lines) ?;
 		let start_image = Image::new_from (input.pixels, false);
 		let end_image = logic::image_iter (input.algorithm, start_image)
@@ -225,7 +227,7 @@ pub mod tool {
 					image.dump (),
 				);
 			},
-		).map (|(_, image)| image).skip (args.loops).next ().unwrap ();
+		).map (|(_, image)| image).nth (args.loops).unwrap ();
 		println! ("Result: {}", end_image.num_pixels ());
 		Ok (())
 	}

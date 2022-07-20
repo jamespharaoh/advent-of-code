@@ -102,8 +102,7 @@ impl Solver {
 			fn lit (& mut self, value: i64) -> Symbol {
 				let symbol_name = self.namer.define (& self.literal_name);
 				let symbol_value = SymVal::Value (value);
-				let symbol = self.solver.define (symbol_name, symbol_value);
-				symbol
+				self.solver.define (symbol_name, symbol_value)
 			}
 		}
 		let mut ctx = {
@@ -213,7 +212,7 @@ impl Solver {
 		let mut new_solver = Solver::new ();
 		for symbol in state.symbols_ordered.iter () {
 			if ! seen.contains (symbol) { continue }
-			let new_value = symbol.value ().migrate (& mut new_solver, & input);
+			let new_value = symbol.value ().migrate (& mut new_solver, input);
 			new_solver.define (symbol.name ().clone (), new_value);
 		}
 		for old_symbol in symbols.iter_mut () {
@@ -389,6 +388,7 @@ impl Symbol {
 		let state = inner.state.borrow ();
 		state.len
 	}
+	pub fn is_empty (& self) -> bool { self.len () == 0 }
 	pub fn original_depth (& self) -> usize {
 		let inner = self.inner.as_ref ();
 		inner.original_depth
@@ -415,7 +415,7 @@ impl Symbol {
 				}
 			},
 			FormatExpandOptions::BreakSymbols (break_symbols) => {
-				if break_symbols.contains (& self) {
+				if break_symbols.contains (self) {
 					write! (formatter, "A{}", inner.name) ?;
 				} else {
 					let value = inner.original_value.clone ().unwrap_or_else (|| state.value.clone ()).simplified ();
@@ -494,6 +494,9 @@ impl SymVal {
 	pub fn len (& self) -> usize {
 		self.children ().iter ().fold (1, |len, child| len + child.len ())
 	}
+	pub fn is_empty (& self) -> bool {
+		self.children ().iter ().next ().is_some ()
+	}
 	pub fn original_depth (& self) -> usize {
 		self.children ().iter ().map (|child| child.original_depth ()).max ().unwrap_or (0) + 1
 	}
@@ -501,7 +504,7 @@ impl SymVal {
 		self.children ().iter ().fold (1, |len, child| len + child.original_len ())
 	}
 	pub fn children (& self) -> ArrayVec <Symbol, 2> {
-		fn make <'solver, const CAP: usize> (arg: [& Symbol; CAP]) -> ArrayVec <Symbol, 2> {
+		fn make <const CAP: usize> (arg: [& Symbol; CAP]) -> ArrayVec <Symbol, 2> {
 			arg.into_iter ().cloned ().collect ()
 		}
 		match & * self {
@@ -562,11 +565,9 @@ impl SymVal {
 	fn simplify (& self) -> Option <SymVal> {
 		let mut value = self;
 		let mut result = None;
-		loop {
-			if let Some (temp) = value.simplify_real () {
-				result = Some (temp);
-				value = result.as_ref ().unwrap ();
-			} else { break }
+		while let Some (temp) = value.simplify_real () {
+			result = Some (temp);
+			value = result.as_ref ().unwrap ();
 		}
 		result
 	}
@@ -673,7 +674,7 @@ impl SymVal {
 		}
 	}
 	fn migrate (& self, solver: & mut Solver, input: & [i64]) -> SymVal {
-		let dup = |arg: Symbol| solver.get (arg.name ()).unwrap ().clone ();
+		let dup = |arg: Symbol| solver.get (arg.name ()).unwrap ();
 		match self.clone () {
 			SymVal::Symbol (arg) => SymVal::Symbol (dup (arg)),
 			SymVal::Input (arg) =>

@@ -66,7 +66,7 @@ mod model {
 	use super::*;
 
 	pub fn parse_input (input: & str) -> GenResult <Vec <u64>> {
-		Ok (input.split (",").map (|pos_str| pos_str.parse ()).collect::<Result <_, _>> ()
+		Ok (input.split (',').map (|pos_str| pos_str.parse ()).collect::<Result <_, _>> ()
 			.map_err (|_| format! ("Invalid input")) ?)
 	}
 

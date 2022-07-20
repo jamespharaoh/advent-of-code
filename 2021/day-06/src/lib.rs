@@ -26,7 +26,7 @@ mod logic {
 
 	pub fn calc_result (input: & str, days: u64) -> GenResult <u64> {
 		let mut fishes: [u64; 9] = [0; 9];
-		for fish_str in input.split (",") {
+		for fish_str in input.split (',') {
 			let fish: usize = fish_str.parse () ?;
 			fishes [fish] += 1;
 		}

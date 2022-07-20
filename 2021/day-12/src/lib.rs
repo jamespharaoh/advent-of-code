@@ -79,7 +79,7 @@ mod logic {
 		if let Some (& cached_val) = cache.get (& cache_key) { return cached_val }
 		let mut num_routes: u64 = 0;
 		for next_cave in caves.connexions [& this_cave].iter ().cloned () {
-			if ! check_fn (state, & route, next_cave) { continue }
+			if ! check_fn (state, route, next_cave) { continue }
 			route.push (next_cave);
 			num_routes += calc_recurse (caves, state, check_fn, cache, route);
 			route.pop ();
@@ -97,7 +97,7 @@ mod model {
 	pub fn parse_input (lines: & [& str]) -> GenResult <Caves> {
 		let mut caves = Caves::new ();
 		for line in lines {
-			let line_parts: Vec <& str> = line.split ("-").collect ();
+			let line_parts: Vec <& str> = line.split ('-').collect ();
 			if line_parts.len () != 2 { Err (format! ("Invalid input: {}", line)) ? }
 			let cave_a = caves.name_idx (line_parts [0]);
 			let cave_b = caves.name_idx (line_parts [1]);

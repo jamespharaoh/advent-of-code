@@ -31,12 +31,12 @@ mod logic {
 	}
 
 	fn packet_eval (packet: & Packet) -> u64 {
-		let child_vals = || packet.children.iter ().map (|packet| packet_eval (packet));
-		let child_at = |pos| child_vals ().skip (pos).next ().unwrap ();
+		let child_vals = || packet.children.iter ().map (packet_eval);
+		let child_at = |pos| child_vals ().nth (pos).unwrap ();
 		let from_bool = |val| if val { 1 } else { 0 };
 		match packet.packet_type {
 			0 => child_vals ().sum (),
-			1 => child_vals ().fold (1, |product, val| product * val),
+			1 => child_vals ().product (),
 			2 => child_vals ().min ().unwrap (),
 			3 => child_vals ().max ().unwrap (),
 			4 => packet.value,

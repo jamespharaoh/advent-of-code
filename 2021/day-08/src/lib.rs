@@ -30,6 +30,7 @@ mod logic {
 		Ok (count)
 	}
 
+	#[ allow (clippy::identity_op) ]
 	pub fn part_two (lines: & [& str]) -> GenResult <u64> {
 		let displays = model::parse_input (lines) ?;
 		let mut sum: u64 = 0;
@@ -38,12 +39,12 @@ mod logic {
 			let digit_val = |digit| {
 				digits.iter ().position (|& some_digit| some_digit == digit).unwrap () as u64
 			};
-			let value = 0
-				+ digit_val (display.value [0]) * 1000
-				+ digit_val (display.value [1]) * 100
-				+ digit_val (display.value [2]) * 10
-				+ digit_val (display.value [3]) * 1;
-			sum += value;
+			sum += [
+				digit_val (display.value [0]) * 1000,
+				digit_val (display.value [1]) * 100,
+				digit_val (display.value [2]) * 10,
+				digit_val (display.value [3]) * 1,
+			].into_iter ().sum::<u64> ();
 		}
 		Ok (sum)
 	}
@@ -146,7 +147,7 @@ mod model {
 	}
 
 	fn parse_digits (input: & str) -> GenResult <Vec <Digit>> {
-		let input_parts: Vec <& str> = input.split (" ").collect ();
+		let input_parts: Vec <& str> = input.split (' ').collect ();
 		let mut digits: Vec <Digit> = Vec::new ();
 		for part in input_parts {
 			digits.push (parse_digit (part) ?);

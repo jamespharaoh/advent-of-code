@@ -20,7 +20,7 @@ mod logic {
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let input = model::parse_input (lines) ?;
-		let score = input.iter ().map (|line| {
+		let score = input.iter ().flat_map (|line| {
 			let mut stack: Vec <Delim> = Vec::new ();
 			line.iter ().copied ().map (move |(delim, mode)| match mode {
 				Mode::Open => { stack.push (delim); 0 },
@@ -30,7 +30,7 @@ mod logic {
 					} else { 0 }
 				},
 			})
-		}).flatten ().sum ();
+		}).sum ();
 		Ok (score)
 	}
 

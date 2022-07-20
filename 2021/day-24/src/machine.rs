@@ -19,7 +19,7 @@ pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
 				_ => RegOrInt::Int (input.parse::<i64> ().map_err (|_| err ()) ?),
 			})
 		};
-		let line_parts: Vec <& str> = line.split (" ").collect ();
+		let line_parts: Vec <& str> = line.split (' ').collect ();
 		let instr_str = line_parts [0];
 		let instr_args = & line_parts [1 .. ];
 		Ok (match (instr_str, instr_args.len ()) {
@@ -40,7 +40,7 @@ pub fn machine_input (input: [u8; 14]) -> [i64; 14] {
 	result
 }
 
-#[ derive (Clone, Debug, Eq, Hash, PartialEq) ]
+#[ derive (Clone, Debug, Default, Eq, Hash, PartialEq) ]
 pub struct Machine {
 	pub regs: MachineRegs,
 }

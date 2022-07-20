@@ -193,7 +193,7 @@ pub fn steps_for (prog: & [Instr]) -> GenResult <[Step; 14]> {
 	}).collect::<GenResult <Vec <Step>>> () ?.try_into ().unwrap ())
 }
 
-pub fn iterator <'a> (steps: & 'a [Step; 14], reverse: bool) -> impl Iterator <Item = Input> + 'a {
+pub fn iterator (steps: & [Step; 14], reverse: bool) -> impl Iterator <Item = Input> + '_ {
 	NextNumIter::new (steps, reverse).nest ().nest ().nest ().nest ().nest ().nest ().nest ().nest ()
 		.nest ().nest ().nest ().nest ().nest ().filter_map (|(nums, progress)| {
 			if progress == 0 {
@@ -231,6 +231,7 @@ impl <'a, Nested: Iterator <Item = TempAnswer>> NextNumIter <'a, Nested> {
 
 impl <'a, Nested: Iterator <Item = TempAnswer>> Iterator for NextNumIter <'a, Nested> {
 	type Item = TempAnswer;
+	#[ allow (clippy::reversed_empty_ranges) ]
 	fn next (& mut self) -> Option <TempAnswer> {
 		loop { match mem::replace (self, NextNumIter::Poison) {
 			NextNumIter::Outer { steps, mut nested, reverse } => match nested.next () {

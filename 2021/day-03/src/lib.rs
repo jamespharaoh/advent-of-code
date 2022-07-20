@@ -67,11 +67,11 @@ mod logic {
 		while lines.len () > 1 {
 			let mut sum: i64 = 0;
 			for line in lines.iter () {
-				sum += if line.chars ().skip (offset).next ().unwrap () == '1' { 1 } else { -1 };
+				sum += if line.chars ().nth (offset).unwrap () == '1' { 1 } else { -1 };
 			}
 			let sel = if (sum < 0) == (mode == Mode::Oxygen) { '0' } else { '1' };
 			lines = lines.into_iter ().filter (
-				|line| line.chars ().skip (offset).next ().unwrap () == sel
+				|line| line.chars ().nth (offset).unwrap () == sel
 			).collect ();
 			offset += 1;
 		}

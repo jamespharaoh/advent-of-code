@@ -14,7 +14,7 @@ function main {
 		case "$arg" in
 			(day-*) package="aoc-$year-day-${arg:4}" ;;
 			(dev|release|release-lto) profile="$arg" ;;
-			(flamegraph|run|run-test|test) mode="$arg" ;;
+			(clippy|flamegraph|run|run-test|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(--width) flamegraph_width="$1"; shift ;;
 			(--)
@@ -36,6 +36,17 @@ function main {
 	if [[ -n "$package" ]]; then cargo_args+=( --package "$package" ); fi
 	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
 	case "$mode" in
+		(clippy)
+			local -a clippy_args
+			clippy_args+=( --allow "clippy::needless_collect" )
+			clippy_args+=( --allow "clippy::needless_range_loop" )
+			clippy_args+=( --allow "clippy::new_without_default" )
+			clippy_args+=( --allow "clippy::print_with_newline" )
+			clippy_args+=( --allow "clippy::useless_format" )
+			clippy_args+=( --allow "clippy::vec_init_then_push" )
+			clippy_args+=( --allow "clippy::write_with_newline" )
+			cargo clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
+			;;
 		(run-test)
 			time env time -v cargo run "${cargo_args[@]}" -- "${run_args[@]}"
 			time env time -v cargo test "${cargo_args[@]}" -- "${test_args[@]}"

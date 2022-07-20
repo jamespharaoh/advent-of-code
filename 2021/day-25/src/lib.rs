@@ -42,7 +42,7 @@ mod logic {
 				.collect::<Vec <Region>> ();
 		let data =
 			iter::once (iter_row (size.y - 1))
-				.chain ((0 .. size.y).map (|y| iter_row (y)))
+				.chain ((0 .. size.y).map (iter_row))
 				.chain (iter::once (iter_row (0)))
 				.scan ((Rc::new (Vec::new ()), Rc::new (Vec::new ())),
 					move |rows, row| {
@@ -188,10 +188,10 @@ mod model {
 		pub fn get (& self, pos: Pos) -> Region {
 			self.grid.get (pos).unwrap ()
 		}
-		pub fn iter <'a> (& 'a self) -> impl Iterator <Item = (Pos, Region)> + 'a {
+		pub fn iter (& self) -> impl Iterator <Item = (Pos, Region)> + '_ {
 			self.grid.iter ()
 		}
-		pub fn values <'a> (& 'a self) -> impl Iterator <Item = Region> + 'a {
+		pub fn values (& self) -> impl Iterator <Item = Region> + '_ {
 			self.grid.values ()
 		}
 	}

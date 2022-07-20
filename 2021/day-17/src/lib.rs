@@ -36,7 +36,7 @@ mod logic {
 		for x_velocity in 1 ..= * input.target_x.end () {
 			for y_velocity in * input.target_y.start () ..= -2 * input.target_y.end () {
 				let velocity = Velocity { x: x_velocity, y: y_velocity };
-				if let Some (max_height) = simulate (& input, velocity) {
+				if let Some (max_height) = simulate (input, velocity) {
 					results.push ((velocity, max_height));
 				}
 			}

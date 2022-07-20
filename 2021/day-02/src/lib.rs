@@ -21,7 +21,7 @@ mod logic {
 		let mut depth: i64 = 0;
 		for line in lines.iter () {
 			if line.trim ().is_empty () { continue }
-			let line_parts: Vec <_> = line.split (" ").collect ();
+			let line_parts: Vec <_> = line.split (' ').collect ();
 			if line_parts.len () != 2 { panic! () }
 			let line_verb = line_parts [0];
 			let line_arg: i64 = line_parts [1].parse () ?;
@@ -41,7 +41,7 @@ mod logic {
 		let mut aim: i64 = 0;
 		for line in lines.iter () {
 			if line.trim ().is_empty () { continue }
-			let line_parts: Vec <_> = line.split (" ").collect ();
+			let line_parts: Vec <_> = line.split (' ').collect ();
 			if line_parts.len () != 2 { panic! () }
 			let line_verb = line_parts [0];
 			let line_arg: i64 = line_parts [1].parse () ?;

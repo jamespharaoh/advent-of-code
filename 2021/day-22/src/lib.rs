@@ -66,7 +66,7 @@ pub mod logic {
 		}).collect ();
 		let mut total = 0;
 		for x_bound in x_bounds.iter ().copied () {
-			let steps = bound_steps (& steps, x_bound);
+			let steps = bound_steps (steps, x_bound);
 			for y_bound in y_bounds.iter ().copied () {
 				let steps = bound_steps (& steps, y_bound);
 				for z_bound in z_bounds.iter ().copied () {
@@ -90,7 +90,7 @@ pub mod logic {
 					buffer.push ((intersect, ! core_state));
 				}
 			}
-			core.extend (buffer.drain ( .. ));
+			core.append (& mut buffer);
 		}
 		core.iter ().cloned ()
 			.map (|(cube, state)| cube.volume () * if state { 1 } else { -1 })

@@ -30,7 +30,7 @@ mod tool {
 
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (args.input) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		let input = Input::parse (& input_lines) ?;
 		let mut dots = input.dots;
 		for fold in input.folds.iter () {
@@ -62,7 +62,8 @@ mod logic {
 		for fold in input.folds.iter () {
 			dots = fold_dots (fold, & dots);
 		}
-		Ok (read_dots (& dots) ?)
+		let result = read_dots (& dots) ?;
+		Ok (result)
 	}
 
 	pub fn fold_dots (fold: & Fold, dots: & HashSet <Pos>) -> HashSet <Pos> {
@@ -121,10 +122,9 @@ mod logic {
 				dots_temp.sort_by_key (|pos| (pos.y, pos.x));
 				dots_temp
 			};
-			let mut dots_iter = dots.into_iter ();
 			let mut row: i64 = -1;
 			let mut col: i64 = -1;
-			while let Some (dot) = dots_iter.next () {
+			for dot in dots {
 				while row < dot.y {
 					write! (formatter, "\n") ?;
 					col = -1;
@@ -158,10 +158,10 @@ mod model {
 		pub fn parse (lines: & [& str]) -> GenResult <Input> {
 			let mut lines_iter = lines.iter ();
 			let mut dots = HashSet::new ();
-			while let Some (line) = lines_iter.next () {
+			for line in lines_iter.by_ref () {
 				if line.is_empty () { break }
 				let line_err = || format! ("Invalid input: {}", line);
-				let line_parts: Vec <& str> = line.split (",").collect ();
+				let line_parts: Vec <& str> = line.split (',').collect ();
 				if line_parts.len () != 2 { Err (line_err ()) ? }
 				dots.insert (Pos {
 					x: line_parts [0].parse ().map_err (|_| line_err ()) ?,
@@ -169,12 +169,12 @@ mod model {
 				});
 			}
 			let mut folds = Vec::new ();
-			while let Some (line) = lines_iter.next () {
+			for line in lines_iter.by_ref () {
 				let line_err = || format! ("Invalid input: {}", line);
-				if line.starts_with ("fold along x=") {
-					folds.push (Fold { axis: Axis::X, val: line [13 ..].parse () ? });
-				} else if line.starts_with ("fold along y=") {
-					folds.push (Fold { axis: Axis::Y, val: line [13 ..].parse () ? });
+				if let Some (line) = line.strip_prefix ("fold along x=") {
+					folds.push (Fold { axis: Axis::X, val: line.parse () ? });
+				} else if let Some (line) = line.strip_prefix ("fold along y=") {
+					folds.push (Fold { axis: Axis::Y, val: line.parse () ? });
 				} else {
 					Err (line_err ()) ?
 				}

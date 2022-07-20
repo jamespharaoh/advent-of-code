@@ -82,7 +82,7 @@ mod model {
 	}
 
 	pub fn parse_pos (input: & str) -> GenResult <Pos> {
-		let input_parts: Vec <& str> = input.split (",").collect ();
+		let input_parts: Vec <& str> = input.split (',').collect ();
 		if input_parts.len () != 2 {
 			Err (format! ("Input position: {}", input)) ?;
 		}

@@ -55,7 +55,7 @@ mod logic {
 				.filter (|(state_compact, _)| state_compact.is_finished ())
 				.map (|(_, score)| score)
 				.next ()
-				.ok_or (format! ("Failed to find solution")) ?
+				.ok_or ("Failed to find solution") ?
 		)
 	}
 
@@ -86,51 +86,41 @@ mod logic {
 
 		let blocking = (state.hall () [3], state.hall () [5], state.hall () [7]);
 		let sections = [
-			match blocking {
-				(Some (Amph::Copper), _, _) => false,
-				(Some (Amph::Desert), _, _) => false,
-				(_, Some (Amph::Bronze), _) => false,
-				(_, Some (Amph::Copper), _) => false,
-				(_, Some (Amph::Desert), _) => false,
-				(_, _, Some (Amph::Desert)) => false,
-				_ => true,
-			},
-			match blocking {
-				(Some (Amph::Amber), _, _) => false,
-				(_, Some (Amph::Copper), _) => false,
-				(_, Some (Amph::Desert), _) => false,
-				(_, _, Some (Amph::Desert)) => false,
-				_ => true,
-			},
-			match blocking {
-				(Some (Amph::Amber), _, _) => false,
-				(_, Some (Amph::Amber), _) => false,
-				(_, Some (Amph::Bronze), _) => false,
-				(_, _, Some (Amph::Desert)) => false,
-				_ => true,
-			},
-			match blocking {
-				(Some (Amph::Amber), _, _) => false,
-				(_, Some (Amph::Amber), _) => false,
-				(_, Some (Amph::Bronze), _) => false,
-				(_, _, Some (Amph::Amber)) => false,
-				(_, _, Some (Amph::Bronze)) => false,
-				(_, _, Some (Amph::Copper)) => false,
-				_ => true,
-			},
+			! matches! (blocking,
+				(Some (Amph::Copper), _, _) | (Some (Amph::Desert), _, _) |
+				(_, Some (Amph::Bronze), _) | (_, Some (Amph::Copper), _) |
+				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
+			),
+			! matches! (blocking,
+				(Some (Amph::Amber), _, _) | (_, Some (Amph::Copper), _) |
+				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
+			),
+			! matches! (blocking,
+				(Some (Amph::Amber), _, _) | (_, Some (Amph::Copper), _) |
+				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
+			),
+			! matches! (blocking,
+				(Some (Amph::Amber), _, _) | (_, Some (Amph::Amber), _) |
+				(_, Some (Amph::Bronze), _) | (_, _, Some (Amph::Desert))
+			),
+			! matches! (blocking,
+				(Some (Amph::Amber), _, _) | (_, Some (Amph::Amber), _) |
+				(_, Some (Amph::Bronze), _) | (_, _, Some (Amph::Amber)) |
+				(_, _, Some (Amph::Bronze)) | (_, _, Some (Amph::Copper))
+			),
 		];
 
 		let mut next_states = ArrayVec::new ();
-		for next_move in next_moves.iter () {
+		for next_move in next_moves.iter ().copied () {
 			match next_move {
-				& Move::Between (amph, from_room, to_room) => {
+				Move::Between (amph, from_room, to_room) => {
 					if ! sections [from_room.idx ()] || ! sections [to_room.idx ()] { continue }
 					let cost = amph.cost () * (out_cost (from_room) + in_cost (to_room)
 						+ usize::abs_diff (from_room.idx (), to_room.idx ()) * 2) as i64;
 					let next_state = state.move_between (from_room, to_room);
 					return iter::once ((next_state.compact (), cost)).collect ();
 				},
-				& Move::In (amph, from_hall, to_room) => {
+				Move::In (amph, from_hall, to_room) => {
 					if ! sections [to_room.idx ()] { continue }
 					let cost = amph.cost () * (in_cost (to_room) + hall_cost (to_room, from_hall)) as i64;
 					let next_state = state.move_in (from_hall, to_room);
@@ -139,16 +129,13 @@ mod logic {
 				_ => (),
 			}
 		}
-		for next_move in next_moves.iter () {
-			match next_move {
-				& Move::Out (amph, from_room, to_hall) => {
-					if ! sections [from_room.idx ()] { continue }
-					let cost = amph.cost () * (out_cost (from_room)
-						+ hall_cost (from_room, to_hall)) as i64;
-					let next_state = state.move_out (from_room, to_hall);
-					next_states.push ((next_state.compact (), cost));
-				},
-				_ => (),
+		for next_move in next_moves.iter ().copied () {
+			if let Move::Out (amph, from_room, to_hall) = next_move {
+				if ! sections [from_room.idx ()] { continue }
+				let cost = amph.cost () * (out_cost (from_room)
+					+ hall_cost (from_room, to_hall)) as i64;
+				let next_state = state.move_out (from_room, to_hall);
+				next_states.push ((next_state.compact (), cost));
 			}
 		}
 
@@ -156,6 +143,7 @@ mod logic {
 
 	}
 
+	#[ derive (Clone, Copy) ]
 	pub enum Move {
 		Out (Amph, Amph, Place),
 		In (Amph, Place, Amph),
@@ -426,8 +414,8 @@ mod model {
 			if lines [line_idx] != "  #########" { Err (err (line_idx)) ?; }
 			let room_size = lines.len () - 3;
 			let parse_amph = |line: usize, col| Amph::from_letter (
-				lines [line].chars ().skip (col).next ().unwrap (),
-			).ok_or (err (line));
+				lines [line].chars ().nth (col).unwrap (),
+			).ok_or_else (|| err (line));
 			let mut places = [None; 27];
 			for idx in 0 .. 11 { places [idx] = parse_amph (1, 1 + idx) ?; }
 			for room in 0 .. 4 {
@@ -473,12 +461,6 @@ mod model {
 				}
 			}
 			Ok (())
-		}
-	}
-
-	impl hash::Hash for State {
-		fn hash <Hasher: hash::Hasher> (& self, state: & mut Hasher) {
-			state.write_u64 (self.compact ().data);
 		}
 	}
 
@@ -630,7 +612,7 @@ pub mod tools {
 		let mut args = args;
 		if ! (args.part_1 || args.part_2) { args.part_1 = true; args.part_2 = true; }
 		let input_string = fs::read_to_string (& args.input) ?;
-		let input_lines: Vec <_> = input_string.trim ().split ("\n").collect ();
+		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 		if args.part_1 {
 			run_part (& args, & input_lines) ?;
 		}
@@ -642,7 +624,7 @@ pub mod tools {
 	}
 
 	pub fn run_part (args: & RunArgs, lines: & [& str]) -> GenResult <()> {
-		let input = State::parse (& lines) ?;
+		let input = State::parse (lines) ?;
 		let mut num_loops = 0;
 		let mut last_cost = -1;
 		let mut prev_states = HashMap::new ();
@@ -691,7 +673,7 @@ pub mod tools {
 					for chunk in all_states.chunks (11) {
 						for line in 0 .. state.room_size () + 3 {
 							print! ("  ▒▒▒▒  ");
-							for (idx, state) in chunk.into_iter ().enumerate () {
+							for (idx, state) in chunk.iter ().enumerate () {
 								if idx > 0 { print! (" "); }
 								print! ("{:13}", state.pretty_line (line));
 							}
@@ -730,7 +712,7 @@ pub mod tools {
 		if args.verbose { println! (); }
 		for chunk in all_states.chunks (11) {
 			for line in 0 .. final_state.room_size () + 3 {
-				for (idx, state) in chunk.into_iter ().enumerate () {
+				for (idx, state) in chunk.iter ().enumerate () {
 					if idx > 0 { print! (" "); }
 					print! ("{:13}", state.pretty_line (line));
 				}

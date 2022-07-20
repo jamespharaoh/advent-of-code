@@ -298,7 +298,7 @@ mod model {
 				if ! line.ends_with (" ---") { Err (err (line_idx, line)) ? }
 				let name = Rc::new (line [4 .. line.len () - 4].to_string ());
 				let mut beacons = Vec::new ();
-				while let Some ((line_idx, line)) = lines_iter.next () {
+				for (line_idx, line) in lines_iter.by_ref () {
 					if line.is_empty () { break }
 					Parser::wrap (line, |parser| {
 						beacons.push (Pos {
