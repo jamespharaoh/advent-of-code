@@ -22,6 +22,7 @@
 	aoc-2015-day-07 = { path = "day-07" }
 	aoc-2015-day-08 = { path = "day-08" }
 	aoc-2015-day-09 = { path = "day-09" }
+	aoc-2015-day-10 = { path = "day-10" }
 
 [profile.flamegraph]
 
@@ -41,6 +42,6 @@
 [workspace]
 
 	members = [
-		"day-01", "day-02", "day-03", "day-04", "day-05",
-		"day-06", "day-07", "day-08", "day-09",
+		"day-01", "day-02", "day-03", "day-04", "day-05", "day-06", "day-07", "day-08", "day-09",
+		"day-10",
 	]

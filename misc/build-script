@@ -37,14 +37,14 @@ function main {
 	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
 	case "$mode" in
 		(run-test)
-			cargo run "${cargo_args[@]}" -- "${run_args[@]}"
-			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
+			time env time -v cargo run "${cargo_args[@]}" -- "${run_args[@]}"
+			time env time -v cargo test "${cargo_args[@]}" -- "${test_args[@]}"
 			;;
 		(run)
-			cargo run "${cargo_args[@]}" -- "${run_args[@]}"
+			time env time -v cargo run "${cargo_args[@]}" -- "${run_args[@]}"
 			;;
 		(test)
-			cargo test "${cargo_args[@]}" -- "${test_args[@]}"
+			time env time -v cargo test "${cargo_args[@]}" -- "${test_args[@]}"
 			;;
 		(flamegraph)
 			cargo_args+=( --image-width "${flamegraph_width:-4000}" )

@@ -12,6 +12,12 @@ TODO LIST:
 - look at 2022/day-24 again
 - missing letters for ocr puzzles
 - remove external deps in other puzzles
+- update old projects
+- look at 2015/day-10 again
+
+REFACTORING:
+
+- use Ord::clamp
 
 OTHER IDEAS:
 
