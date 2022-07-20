@@ -6,6 +6,7 @@ pub type ParseResult <Item> = Result <Item, ParseError>;
 pub struct Parser <'inp> {
 	input: & 'inp str,
 	pos: usize,
+	word_pred: fn (char) -> bool,
 }
 
 #[ derive (Debug) ]
@@ -64,7 +65,16 @@ impl From <& str> for ParseError {
 impl <'inp> Parser <'inp> {
 
 	pub fn new (input: & 'inp str) -> Parser <'inp> {
-		Parser { input, pos: 0 }
+		Parser {
+			input,
+			pos: 0,
+			word_pred: |ch| ! ch.is_whitespace (),
+		}
+	}
+
+	pub fn set_word_pred (& mut self, word_pred: fn (char) -> bool) -> & Self {
+		self.word_pred = word_pred;
+		self
 	}
 
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
@@ -96,7 +106,7 @@ impl <'inp> Parser <'inp> {
 		let input_temp = self.input;
 		let start = self.pos;
 		while let Some (letter) = self.peek () {
-			if letter.is_whitespace () { break }
+			if ! (self.word_pred) (letter) { break }
 			self.next ().unwrap ();
 		}
 		let end = self.pos;

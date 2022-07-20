@@ -15,5 +15,7 @@ pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {
 		aoc_2015_day_09::puzzle_metadata (),
 		aoc_2015_day_10::puzzle_metadata (),
 		aoc_2015_day_11::puzzle_metadata (),
+		aoc_2015_day_12::puzzle_metadata (),
+		aoc_2015_day_13::puzzle_metadata (),
 	]
 }
