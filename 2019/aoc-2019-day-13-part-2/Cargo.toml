@@ -7,4 +7,4 @@
 
 [dependencies]
 
-	console = "0.14.1"
+	console = "0.15"
