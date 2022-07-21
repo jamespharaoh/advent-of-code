@@ -22,6 +22,7 @@ dependencies = [
  "aoc-2015-day-14",
  "aoc-2015-day-15",
  "aoc-2015-day-16",
+ "aoc-2015-day-17",
  "aoc-common",
 ]
 
@@ -140,6 +141,13 @@ dependencies = [
 
 [[package]]
 name = "aoc-2015-day-16"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-17"
 version = "0.1.0"
 dependencies = [
  "aoc-common",

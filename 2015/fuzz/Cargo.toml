@@ -75,3 +75,12 @@
 	path = "src/day-08.rs"
 	test = false
 	doc = false
+
+# TODO 09 to 16
+
+[[bin]]
+
+	name = "day-17"
+	path = "src/day-17.rs"
+	test = false
+	doc = false

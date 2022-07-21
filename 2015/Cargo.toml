@@ -29,6 +29,7 @@
 	aoc-2015-day-14 = { path = "day-14" }
 	aoc-2015-day-15 = { path = "day-15" }
 	aoc-2015-day-16 = { path = "day-16" }
+	aoc-2015-day-17 = { path = "day-17" }
 
 [profile.coverage]
 
@@ -53,5 +54,5 @@
 
 	members = [
 		"day-01", "day-02", "day-03", "day-04", "day-05", "day-06", "day-07", "day-08", "day-09",
-		"day-10", "day-11", "day-12", "day-13", "day-14", "day-15", "day-16",
+		"day-10", "day-11", "day-12", "day-13", "day-14", "day-15", "day-16", "day-17",
 	]
