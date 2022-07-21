@@ -8,17 +8,18 @@ puzzle_info! {
 	name = "Perfectly Spherical Houses in a Vacuum";
 	year = 2015;
 	day = 3;
-	part_one = |input| logic::part_one (input [0]);
-	part_two = |input| logic::part_two (input [0]);
+	parse = |input| model::parse_input (input [0]);
+	part_one = |input| logic::part_one (input);
+	part_two = |input| logic::part_two (input);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
+	use model::Input;
 	use model::Pos;
 
-	pub fn part_one (input: & str) -> GenResult <u32> {
-		let input = model::parse_input (input) ?;
+	pub fn part_one (input: Input) -> GenResult <u32> {
 		let (seen, _) = input.iter_copied ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO),
 			|(mut seen, pos), dir| {
@@ -30,8 +31,7 @@ mod logic {
 		Ok (seen.len ().try_into () ?)
 	}
 
-	pub fn part_two (input: & str) -> GenResult <u32> {
-		let input = model::parse_input (input) ?;
+	pub fn part_two (input: Input) -> GenResult <u32> {
 		let (seen, _, _) = input.iter_copied ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO, Pos::ZERO),
 			|(mut seen, pos_0, pos_1), dir| {
@@ -45,7 +45,7 @@ mod logic {
 
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 
@@ -53,6 +53,7 @@ mod model {
 	pub type Pos = pos::PosGeo <i16>;
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub enum Dir {
 		North, South, East, West,
 	}
@@ -74,8 +75,22 @@ mod model {
 			'v' => Dir::South,
 			'>' => Dir::East,
 			'<' => Dir::West,
-			_ => Err (format! ("Invalid input: char {}: {}", ch_idx + 1, ch)) ?,
+			_ => Err (format! ("Invalid input: col {}: {}", ch_idx + 1, ch)) ?,
 		})).collect::<GenResult <_>> ()
+	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn parse_input () {
+			use Dir::*;
+			assert_eq_ok! (vec! [North, East, South, West], model::parse_input ("^>v<"));
+			assert_err! ("Invalid input: col 3: X", model::parse_input ("^vX"));
+		}
+
 	}
 
 }
@@ -87,17 +102,19 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (2, logic::part_one (">") ?);
-		assert_eq! (4, logic::part_one ("^>v<") ?);
-		assert_eq! (2, logic::part_one ("^v^v^v^v^v") ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("2", puzzle.part_one (& [">"]));
+		assert_eq_ok! ("4", puzzle.part_one (& ["^>v<"]));
+		assert_eq_ok! ("2", puzzle.part_one (& ["^v^v^v^v^v"]));
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (3, logic::part_two ("^v") ?);
-		assert_eq! (3, logic::part_two ("^>v<") ?);
-		assert_eq! (11, logic::part_two ("^v^v^v^v^v") ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("3", puzzle.part_two (& ["^v"]));
+		assert_eq_ok! ("3", puzzle.part_two (& ["^>v<"]));
+		assert_eq_ok! ("11", puzzle.part_two (& ["^v^v^v^v^v"]));
 		Ok (())
 	}
 

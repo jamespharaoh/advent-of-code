@@ -16,31 +16,35 @@ fn main () -> Result <(), Box <dyn Error>> {
 	if pkg_name_parts [0] != "aoc" { panic! () }
 	let year = pkg_name_parts [1];
 	if pkg_name_parts.len () == 2 {
+		let static_part = |template| {
+			replace_placeholders (
+				template,
+				& HashMap::from_iter (vec! [
+					("${YEAR}", year),
+				]))
+		};
+		let dynamic_part = |template| {
+			(1 ..= 25)
+				.filter_map (move |day|
+					if PathBuf::from (format! ("day-{:02}", day)).exists () {
+						Some (replace_placeholders (
+							template,
+							& HashMap::from_iter (vec! [
+								("${YEAR}", year),
+								("${DAY}", & format! ("{:02}", day)),
+							] ),
+						))
+					} else { None })
+				.flatten ()
+		};
 		write_file (
 			"src/lib.rs",
 			iter::empty ()
-				.chain (replace_placeholders (
-					templates::ALL_LIB_ABOVE_RS,
-					& HashMap::from_iter (vec! [
-						("${YEAR}", year),
-					])))
-				.chain ((1 ..= 25)
-					.filter_map (|day|
-						if PathBuf::from (format! ("day-{:02}", day)).exists () {
-							Some (replace_placeholders (
-								templates::ALL_LIB_DAY_RS,
-								& HashMap::from_iter (vec! [
-									("${YEAR}", year),
-									("${DAY}", & format! ("{:02}", day)),
-								] ),
-							))
-						} else { None })
-					.flatten ())
-				.chain (replace_placeholders (
-					templates::ALL_LIB_BELOW_RS,
-					& HashMap::from_iter (vec! [
-						("${YEAR}", year),
-					]))),
+				.chain (static_part (templates::ALL_LIB_RS [0]))
+				.chain (dynamic_part (templates::ALL_LIB_RS [1]))
+				.chain (static_part (templates::ALL_LIB_RS [2]))
+				.chain (dynamic_part (templates::ALL_LIB_RS [3]))
+				.chain (static_part (templates::ALL_LIB_RS [4])),
 		) ?;
 	} else if pkg_name_parts.len () == 4 {
 		if pkg_name_parts [2] != "day" { panic! () }
@@ -104,22 +108,28 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 
 mod templates {
 
-	pub const ALL_LIB_ABOVE_RS: & [& str] = & [
-		"#![ doc (html_playground_url = \"https://playground.example.com/\") ]",
-		"",
-		"use aoc_common::*;",
-		"",
-		"pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {",
-		"\tvec! [",
-	];
-
-	pub const ALL_LIB_DAY_RS: & [& str] = & [
-		"\t\taoc_${YEAR}_day_${DAY}::puzzle_metadata (),",
-	];
-
-	pub const ALL_LIB_BELOW_RS: & [& str] = & [
-		"\t]",
-		"}",
+	pub const ALL_LIB_RS: & [& [& str]] = & [
+		& [
+			"#![ doc (html_playground_url = \"https://playground.example.com/\") ]",
+			"",
+			"use aoc_common::*;",
+			"",
+		],
+		& [
+			"pub use aoc_${YEAR}_day_${DAY} as day_${DAY};",
+		],
+		& [
+			"",
+			"pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {",
+			"\tvec! [",
+		],
+		& [
+			"\t\tday_${DAY}::puzzle_metadata (),",
+		],
+		& [
+			"\t]",
+			"}",
+		],
 	];
 
 	pub const DAY_BIN_RS: & [& str] = & [

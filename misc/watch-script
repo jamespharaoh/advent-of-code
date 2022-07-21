@@ -16,7 +16,8 @@ coproc watcher {
 			--extended \
 			--exclude '^\.git/' \
 			--exclude 'target/' \
-			--exclude '[^/]+\.swp$'
+			--exclude '[^/]+\.swp$' \
+			--exclude '/fuzz/'
 	}
 	trap "kill $fswatch_PID" EXIT
 	while true; do

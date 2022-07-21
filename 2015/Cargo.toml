@@ -30,6 +30,10 @@
 	aoc-2015-day-15 = { path = "day-15" }
 	aoc-2015-day-16 = { path = "day-16" }
 
+[profile.coverage]
+
+	inherits = "dev"
+
 [profile.flamegraph]
 
 	inherits = "release"

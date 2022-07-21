@@ -3,210 +3,154 @@
 version = 3
 
 [[package]]
-name = "aoc-2021"
+name = "aoc-2015"
 version = "0.1.0"
 dependencies = [
- "aoc-2021-day-01",
- "aoc-2021-day-02",
- "aoc-2021-day-03",
- "aoc-2021-day-04",
- "aoc-2021-day-05",
- "aoc-2021-day-06",
- "aoc-2021-day-07",
- "aoc-2021-day-08",
- "aoc-2021-day-09",
- "aoc-2021-day-10",
- "aoc-2021-day-11",
- "aoc-2021-day-12",
- "aoc-2021-day-13",
- "aoc-2021-day-14",
- "aoc-2021-day-15",
- "aoc-2021-day-16",
- "aoc-2021-day-17",
- "aoc-2021-day-18",
- "aoc-2021-day-19",
- "aoc-2021-day-20",
- "aoc-2021-day-21",
- "aoc-2021-day-22",
- "aoc-2021-day-23",
- "aoc-2021-day-24",
- "aoc-2021-day-25",
+ "aoc-2015-day-01",
+ "aoc-2015-day-02",
+ "aoc-2015-day-03",
+ "aoc-2015-day-04",
+ "aoc-2015-day-05",
+ "aoc-2015-day-06",
+ "aoc-2015-day-07",
+ "aoc-2015-day-08",
+ "aoc-2015-day-09",
+ "aoc-2015-day-10",
+ "aoc-2015-day-11",
+ "aoc-2015-day-12",
+ "aoc-2015-day-13",
+ "aoc-2015-day-14",
+ "aoc-2015-day-15",
+ "aoc-2015-day-16",
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-01"
+name = "aoc-2015-day-01"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-02"
+name = "aoc-2015-day-02"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-03"
+name = "aoc-2015-day-03"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-04"
+name = "aoc-2015-day-04"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-05"
+name = "aoc-2015-day-05"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-06"
+name = "aoc-2015-day-06"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-07"
+name = "aoc-2015-day-07"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-08"
+name = "aoc-2015-day-08"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
+ "arbitrary",
 ]
 
 [[package]]
-name = "aoc-2021-day-09"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-10"
+name = "aoc-2015-day-09"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-11"
+name = "aoc-2015-day-10"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-12"
+name = "aoc-2015-day-11"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-13"
+name = "aoc-2015-day-12"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-14"
+name = "aoc-2015-day-13"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-15"
+name = "aoc-2015-day-14"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-16"
+name = "aoc-2015-day-15"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-17"
+name = "aoc-2015-day-16"
 version = "0.1.0"
 dependencies = [
  "aoc-common",
 ]
 
 [[package]]
-name = "aoc-2021-day-18"
+name = "aoc-2015-fuzz"
 version = "0.1.0"
 dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-19"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-20"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-21"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-22"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-23"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-24"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
-]
-
-[[package]]
-name = "aoc-2021-day-25"
-version = "0.1.0"
-dependencies = [
- "aoc-common",
+ "aoc-2015",
+ "libfuzzer-sys",
 ]
 
 [[package]]
@@ -254,6 +198,12 @@ name = "bitflags"
 version = "1.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
+
+[[package]]
+name = "cc"
+version = "1.0.73"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2fff2a6927b3bb87f9595d67196a70493f627687a71d87a0d692242c33f58c11"
 
 [[package]]
 name = "clap"
@@ -354,6 +304,17 @@ name = "libc"
 version = "0.2.126"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
+
+[[package]]
+name = "libfuzzer-sys"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "336244aaeab6a12df46480dc585802aa743a72d66b11937844c61bbca84c991d"
+dependencies = [
+ "arbitrary",
+ "cc",
+ "once_cell",
+]
 
 [[package]]
 name = "once_cell"

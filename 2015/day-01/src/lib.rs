@@ -8,55 +8,101 @@ puzzle_info! {
 	name = "Not Quite Lisp";
 	year = 2015;
 	day = 1;
-	part_one = |input| logic::part_one (input [0]);
-	part_two = |input| logic::part_two (input [0]);
+	parse = |input| model::parse_input (input [0]);
+	part_one = |input| logic::part_one (input);
+	part_two = |input| logic::part_two (input);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
+	use model::Input;
 
-	pub fn part_one (input: & str) -> GenResult <i64> {
-		let input = model::parse_input (input) ?;
+	pub fn part_one (input: Input) -> GenResult <i32> {
 		Ok (
-			input.iter ().copied ()
+			input.iter ().copied ().enumerate ()
+				.scan (0, |floor, (idx, dir)| { * floor += dir.val (); Some ((idx, * floor)) })
 				.last ()
 				.map (|(_, floor)| floor)
 				.unwrap_or (0)
 		)
 	}
 
-	pub fn part_two (input: & str) -> GenResult <usize> {
-		let input = model::parse_input (input) ?;
+	pub fn part_two (input: Input) -> GenResult <usize> {
 		Ok (
-			input.iter ().copied ()
-				.filter_map (|(ch_idx, floor)| (floor < 0).then_some (ch_idx + 1))
+			input.iter ().copied ().enumerate ()
+				.scan (0, |floor, (idx, dir)| { * floor += dir.val (); Some ((idx, * floor)) })
+				.filter_map (|(idx, floor)| (floor < 0).then_some (idx + 1))
 				.next ()
 				.ok_or ("Never visited the basement") ?
 		)
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn part_one () -> GenResult <()> {
+			use model::Dir::*;
+			assert_eq! (3, logic::part_one (vec! [Up, Up, Up]) ?);
+			assert_eq! (-1, logic::part_one (vec! [Up, Down, Down]) ?);
+			Ok (())
+		}
+
+		#[ test ]
+		fn part_two () -> GenResult <()> {
+			use model::Dir::*;
+			assert_eq! (3, logic::part_two (vec! [Up, Down, Down]) ?);
+			assert_err! ("Never visited the basement", logic::part_two (vec! [Up, Down]));
+			Ok (())
+		}
+
+	}
+
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 
-	pub type Input = Vec <(usize, i64)>;
+	pub type Input = Vec <Dir>;
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
+	pub enum Dir { Up, Down }
+
+	impl Dir {
+		pub fn val (& self) -> i32 {
+			match self { Dir::Up => 1, Dir::Down => -1 }
+		}
+	}
 
 	pub fn parse_input (input: & str) -> GenResult <Input> {
 		Ok (
 			input.chars ().enumerate ()
 				.map (|(ch_idx, ch)| match ch {
-					'(' => Ok ((ch_idx, 1)),
-					')' => Ok ((ch_idx, -1)),
+					'(' => Ok (Dir::Up),
+					')' => Ok (Dir::Down),
 					_ => Err (format! ("Invalid character: char {}: {}", ch_idx + 1, ch)),
 				})
-				.scan (0, |floor, result|
-					Some (result.map (|(pos, diff)| { * floor += diff; (pos, * floor) })))
 				.collect::<Result <_, _>> () ?
 		)
 	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn parse_input () {
+			assert_err! ("Invalid character: char 3: X", model::parse_input ("()X"));
+		}
+
+	}
+
 }
 
 #[ cfg (test) ]
@@ -64,26 +110,39 @@ mod examples {
 
 	use super::*;
 
+	const EXAMPLES_ONE: & [& str] = & [
+		"(())",
+		"()()",
+		"))(((((",
+		"())",
+		"))(",
+		")))",
+		")())())",
+	];
+
+	const EXAMPLES_TWO: & [& str] = & [
+		")",
+		"()())",
+	];
+
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (0, logic::part_one ("(())") ?);
-		assert_eq! (0, logic::part_one ("()()") ?);
-		assert_eq! (3, logic::part_one ("))(((((") ?);
-		assert_eq! (-1, logic::part_one ("())") ?);
-		assert_eq! (-1, logic::part_one ("))(") ?);
-		assert_eq! (-3, logic::part_one (")))") ?);
-		assert_eq! (-3, logic::part_one (")())())") ?);
-		assert_eq! ("Invalid character: char 3: X",
-			logic::part_one ("()X").unwrap_err ().to_string ());
+		let puzzle = puzzle_metadata ();
+		assert_eq! ("0", puzzle.part_one (& [EXAMPLES_ONE [0]]) ?);
+		assert_eq! ("0", puzzle.part_one (& [EXAMPLES_ONE [1]]) ?);
+		assert_eq! ("3", puzzle.part_one (& [EXAMPLES_ONE [2]]) ?);
+		assert_eq! ("-1", puzzle.part_one (& [EXAMPLES_ONE [3]]) ?);
+		assert_eq! ("-1", puzzle.part_one (& [EXAMPLES_ONE [4]]) ?);
+		assert_eq! ("-3", puzzle.part_one (& [EXAMPLES_ONE [5]]) ?);
+		assert_eq! ("-3", puzzle.part_one (& [EXAMPLES_ONE [6]]) ?);
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (1, logic::part_two (")") ?);
-		assert_eq! (5, logic::part_two ("()())") ?);
-		assert_err! ("Invalid character: char 3: X", logic::part_two ("()X"));
-		assert_err! ("Never visited the basement", logic::part_two ("(()())"));
+		let puzzle = puzzle_metadata ();
+		assert_eq! ("1", puzzle.part_two (& [EXAMPLES_TWO [0]]) ?);
+		assert_eq! ("5", puzzle.part_two (& [EXAMPLES_TWO [1]]) ?);
 		Ok (())
 	}
 

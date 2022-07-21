@@ -11,8 +11,9 @@ puzzle_info! {
 	name = "The Ideal Stocking Stuffer";
 	year = 2015;
 	day = 4;
-	part_one = |input| logic::part_one (input [0]);
-	part_two = |input| logic::part_two (input [0]);
+	parse = |input| Ok::<_, Infallible> (input [0]);
+	part_one = |input| logic::part_one (input);
+	part_two = |input| logic::part_two (input);
 	commands = [
 		( name = "run"; method = cli::run; ),
 	];
@@ -26,14 +27,23 @@ pub mod logic {
 	use md5::Output;
 
 	pub fn part_one (input: & str) -> GenResult <usize> {
-		calc_result_serial (input, 5)
+		calc_result (input, 5)
 	}
 
 	pub fn part_two (input: & str) -> GenResult <usize> {
-		calc_result_parallel (input, 6)
+		calc_result (input, 6)
 	}
 
-	pub fn calc_result_serial (input: & str, num_zeros: usize) -> GenResult <usize> {
+	pub fn calc_result (input: & str, num_zeros: usize) -> GenResult <usize> {
+		let num_threads = get_num_threads ().unwrap_or (1);
+		if num_threads < 2 {
+			calc_result_serial (input, num_zeros)
+		} else {
+			calc_result_parallel (input, num_zeros, num_threads)
+		}
+	}
+
+	fn calc_result_serial (input: & str, num_zeros: usize) -> GenResult <usize> {
 		let check_fn = check_zeros_fn (num_zeros);
 		for base in (0 .. ).step_by (100) {
 			let input_buf =
@@ -67,9 +77,7 @@ pub mod logic {
 		Ok (num_threads)
 	}
 
-	pub fn calc_result_parallel (input: & str, num_zeros: usize) -> GenResult <usize> {
-		let num_threads = get_num_threads ().unwrap_or (1);
-		if num_threads < 2 { return calc_result_serial (input, num_zeros) }
+	fn calc_result_parallel (input: & str, num_zeros: usize, num_threads: usize) -> GenResult <usize> {
 		const BATCH_SIZE: usize = 1000;
 		#[ derive (Debug, Default) ]
 		struct State {
@@ -134,7 +142,7 @@ pub mod logic {
 		Ok (solutions.into_iter ().next ().ok_or ("No solution found") ?)
 	}
 
-	pub fn search_range (
+	fn search_range (
 		mut input_buf: Vec <u8>,
 		min_len: usize,
 		loops: usize,
@@ -164,7 +172,7 @@ pub mod logic {
 		None
 	}
 
-	pub fn check_zeros <const ZRS: usize> (hash: & Output) -> bool {
+	fn check_zeros <const ZRS: usize> (hash: & Output) -> bool {
 		for idx in 0 .. hash.len () {
 			if ZRS == idx * 2 + 1 && hash [idx] & 0xf0 != 0 { return false }
 			if ZRS >= idx * 2 + 2 && hash [idx] != 0 { return false }
@@ -172,7 +180,7 @@ pub mod logic {
 		true
 	}
 
-	pub fn check_zeros_fn (num_zeros: usize) -> Box <dyn Fn (& Output) -> bool + Send + Sync> {
+	fn check_zeros_fn (num_zeros: usize) -> Box <dyn Fn (& Output) -> bool + Send + Sync> {
 		Box::new (match num_zeros {
 			0 => check_zeros::<0>, 1 => check_zeros::<1>, 2 => check_zeros::<2>,
 			3 => check_zeros::<3>, 4 => check_zeros::<4>, 5 => check_zeros::<5>,
@@ -185,12 +193,13 @@ pub mod logic {
 			24 => check_zeros::<24>, 25 => check_zeros::<25>, 26 => check_zeros::<26>,
 			27 => check_zeros::<27>, 28 => check_zeros::<28>, 29 => check_zeros::<29>,
 			30 => check_zeros::<30>, 31 => check_zeros::<31>, 32 => check_zeros::<32>,
-			_ => panic! (),
+			_ => unreachable! (),
 		})
 	}
 
 }
 
+#[ cfg (not (tarpaulin_include)) ]
 mod cli {
 
 	use super::*;
@@ -214,7 +223,7 @@ mod cli {
 		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 		println! ("Using input file: {}", & args.input);
 		println! ("Looking for {} zeros", args.zeros);
-		let result = logic::calc_result_parallel (input_lines [0], args.zeros) ?;
+		let result = logic::calc_result (input_lines [0], args.zeros) ?;
 		println! ("Result: {}", result);
 		Ok (())
 	}
@@ -226,10 +235,18 @@ mod examples {
 
 	use super::*;
 
+	const EXAMPLE: & str = "abcdef";
+
 	#[ test ]
-	fn part_one () -> GenResult <()> {
-		assert_eq! (609043, logic::part_one ("abcdef") ?);
-		Ok (())
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("609043", puzzle.part_one (& [EXAMPLE]));
+	}
+
+	#[ test ]
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("6742839", puzzle.part_two (& [EXAMPLE]));
 	}
 
 }

@@ -15,6 +15,7 @@ function clippy { "$aoc_root/misc/build-script" clippy "$@"; }
 function flamegraph { "$aoc_root/misc/build-script" flamegraph "$@"; }
 function run { "$aoc_root/misc/build-script" run "$@"; }
 function run-test { "$aoc_root/misc/build-script" run-test "$@"; }
+function tarpaulin { "$aoc_root/misc/build-script" tarpaulin "$@"; }
 function test { "$aoc_root/misc/build-script" test "$@"; }
 
 function reload { source "$aoc_root/misc/enter"; }

@@ -73,27 +73,53 @@ impl MD5 {
 	}
 
 	pub fn update (& mut self, mut message: & [u8]) {
+
+		// iterate over message
+
 		while ! message.is_empty () {
+
+			// copy max sized chunk to buffer
+
 			let bytes = cmp::min (self.message.remaining_capacity (), message.len ());
 			self.message.extend (message.iter ().copied ().take (bytes));
 			message = & message [bytes .. ];
 			self.len = self.len.wrapping_add (bytes << 3);
+
+			// stop now if buffer is part filled
+
 			if ! self.message.is_full () { return }
+
+			// consume buffer
+
 			self.apply ();
+
 		}
+
 	}
 
 	pub fn finish (mut self) -> Output {
-		self.message.push (0x80);
-		while self.message.remaining_capacity () != 8 {
-			self.message.push (0x00);
-			if self.message.is_full () { self.apply (); }
-		}
+
+		// remember the length before padding
+
 		let mut len = self.len;
+
+		// add one then zeros
+
+		self.update (& [ 0x80 ]);
+		while self.message.remaining_capacity () != 8 {
+			self.update (& [ 0x00 ]);
+		}
+
+		// then the length
+
 		for _ in 0 .. 8 {
 			self.update (& [ (len & 0xff) as u8 ]);
 			len >>= 8;
 		}
+
+		// convert result words to byte array
+
+		assert! (self.message.is_empty ());
 		let mut result = [0; 16];
 		for src_idx in 0 .. 4 {
 			let dst_idx = src_idx << 2;
@@ -102,10 +128,15 @@ impl MD5 {
 			result [dst_idx + 2] = (self.state [src_idx].0 >> 16) as u8;
 			result [dst_idx + 3] = (self.state [src_idx].0 >> 24) as u8;
 		}
+
 		Output (result)
+
 	}
 
 	fn apply (& mut self) {
+
+		// convert message buffer into words
+
 		assert! (self.message.is_full ());
 		let message = {
 			let mut message = [WrappingU32 (0); 16];
@@ -120,6 +151,9 @@ impl MD5 {
 			}
 			message
 		};
+
+		// apply rounds as specified
+
 		let [mut a, mut b, mut c, mut d] = self.state;
 		for op in 0 .. 16 {
 			let func = ((b & c) | (! b & d)) + a + WrappingU32 (ADDS [op]) + message [op];
@@ -143,7 +177,11 @@ impl MD5 {
 			self.state [2] + c,
 			self.state [3] + d,
 		];
+
+		// clear buffer
+
 		self.message.clear ();
+
 	}
 
 }

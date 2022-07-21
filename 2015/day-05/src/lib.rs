@@ -8,15 +8,17 @@ puzzle_info! {
 	name = "Doesn't He Have Intern-Elves For This?";
 	year = 2015;
 	day = 5;
+	parse = |input| model::parse_input (input);
 	part_one = |input| logic::part_one (input);
 	part_two = |input| logic::part_two (input);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
+	use model::Input;
 
-	pub fn part_one (input: & [& str]) -> GenResult <usize> {
+	pub fn part_one (input: Input) -> GenResult <usize> {
 		Ok (
 			input.iter ()
 				.filter (|line| is_nice_one (line))
@@ -24,7 +26,7 @@ mod logic {
 		)
 	}
 
-	pub fn part_two (input: & [& str]) -> GenResult <usize> {
+	pub fn part_two (input: Input) -> GenResult <usize> {
 		Ok (
 			input.iter ()
 				.filter (|line| is_nice_two (line))
@@ -32,7 +34,7 @@ mod logic {
 		)
 	}
 
-	pub fn is_nice_one (input: & str) -> bool {
+	fn is_nice_one (input: & str) -> bool {
 		if input.chars ()
 				.filter (|ch| ['a', 'e', 'i', 'o', 'u'].contains (ch))
 				.count () < 3
@@ -50,7 +52,7 @@ mod logic {
 		true
 	}
 
-	pub fn is_nice_two (input: & str) -> bool {
+	fn is_nice_two (input: & str) -> bool {
 		if ! input.chars ()
 				.tuple_windows::<(_, _)> ()
 				.enumerate ()
@@ -94,6 +96,30 @@ mod logic {
 
 }
 
+pub mod model {
+
+	use super::*;
+
+	#[ derive (Clone) ]
+	pub struct Input (Vec <String>);
+
+	impl Deref for Input {
+		type Target = [String];
+		fn deref (& self) -> & Self::Target { & self.0 }
+	}
+
+	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
+		Ok (
+			input.iter ().all (|line| line.chars ()
+					.all (|ch| char::is_ascii_lowercase (& ch)))
+				.then_some (Input (input.iter ()
+					.map (|line| line.to_string ()).collect ()))
+				.ok_or ("Invalid input") ?
+		)
+	}
+
+}
+
 #[ cfg (test) ]
 mod examples {
 
@@ -115,15 +141,15 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one () -> GenResult <()> {
-		assert_eq! (2, logic::part_one (EXAMPLE_ONE) ?);
-		Ok (())
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("2", puzzle.part_one (EXAMPLE_ONE));
 	}
 
 	#[ test ]
-	fn part_two () -> GenResult <()> {
-		assert_eq! (2, logic::part_two (EXAMPLE_TWO) ?);
-		Ok (())
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("2", puzzle.part_two (EXAMPLE_TWO));
 	}
 
 }

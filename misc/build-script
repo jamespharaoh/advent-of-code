@@ -14,10 +14,11 @@ function main {
 		local arg="$1"; shift
 		case "$arg" in
 			(day-*) package="aoc-$year-day-${arg:4}" ;;
-			(dev|release|release-lto) profile="$arg" ;;
-			(clippy|flamegraph|run|run-test|test) mode="$arg" ;;
+			(coverage|dev|release|release-lto) profile="$arg" ;;
+			(clippy|flamegraph|run|run-test|tarpaulin|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(nightly) toolchain="+$arg" ;;
+			(--profile) profile="$1"; shift ;;
 			(--width) flamegraph_width="$1"; shift ;;
 			(--)
 				case "$mode" in
@@ -70,6 +71,17 @@ function main {
 				ln -fns flamegraph-$timestamp.svg target/flamegraph-latest.svg
 				ln -fns flamegraph-$timestamp.perf-data target/flamegraph-latest.perf-data
 			fi
+			;;
+		(tarpaulin)
+			if [[ -z "$profile" ]]; then profile="coverage"; fi
+			cargo $toolchain tarpaulin \
+				--workspace \
+				--out Html \
+				--exclude-files "main.rs" \
+				--exclude-files "build.rs" \
+				--profile "$profile" \
+				--output-dir target/tarpaulin
+			firefox --new-window "target/tarpaulin/tarpaulin-report.html"
 			;;
 	esac
 }

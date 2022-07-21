@@ -235,6 +235,7 @@ mod dim_2 {
 		use super::*;
 
 		#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 		pub struct PosRowCol <Val> { pub row: Val, pub col: Val }
 
 		impl <Val: Int> PosRowCol <Val> {

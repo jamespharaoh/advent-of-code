@@ -25,6 +25,29 @@ pub fn default <T: Default> () -> T {
 }
 
 #[ macro_export ]
+macro_rules! ok_or {
+	( $val:expr, $if_err:expr ) => {
+		match ($val) { Ok (val) => val, Err (_) => $if_err }
+	};
+}
+
+#[ macro_export ]
+macro_rules! assert_is_ok {
+	( $actual:expr ) => {
+		assert! ($actual.is_ok ());
+	};
+}
+
+#[ macro_export ]
+macro_rules! assert_eq_ok {
+	( $expect:expr , $actual:expr ) => {
+		let actual = $actual;
+		assert! (actual.is_ok ());
+		assert_eq! ($expect, actual.unwrap ());
+	};
+}
+
+#[ macro_export ]
 macro_rules! assert_err {
 	( $expect:expr , $actual:expr ) => {
 		assert_eq! ($expect, $actual.unwrap_err ().to_string ());
@@ -91,6 +114,7 @@ mod prelude {
 	pub use std::collections::VecDeque;
 	pub use std::collections::hash_map::DefaultHasher;
 	pub use std::collections::hash_map::RandomState as RandomHasher;
+	pub use std::convert::Infallible;
 	pub use std::error::Error;
 	pub use std::ffi::OsString;
 	pub use std::fmt;

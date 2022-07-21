@@ -8,6 +8,7 @@ pub struct Parser <'inp> {
 	pos: usize,
 	word_pred: fn (char) -> bool,
 	ignore_whitespace: bool,
+	confirmed: bool,
 }
 
 #[ derive (Debug) ]
@@ -71,7 +72,13 @@ impl <'inp> Parser <'inp> {
 			pos: 0,
 			word_pred: |ch| ! ch.is_whitespace (),
 			ignore_whitespace: false,
+			confirmed: false,
 		}
+	}
+
+	pub fn confirm (& mut self) -> & mut Self {
+		self.confirmed = true;
+		self
 	}
 
 	pub fn set_ignore_whitespace (& mut self, ignore_whitespace: bool) -> & mut Self {
@@ -158,7 +165,7 @@ impl <'inp> Parser <'inp> {
 		let letter_opt = self.input.chars ().next ();
 		if let Some (letter) = letter_opt {
 			self.input = & self.input [letter.len_utf8 () .. ];
-			self.pos += 1;
+			self.pos += letter.len_utf8 ();
 		}
 		letter_opt
 	}
@@ -190,6 +197,7 @@ impl <'inp> Parser <'inp> {
 pub enum ParserAny <'par, 'inp, Item> {
 	Parser (& 'par mut Parser <'inp>),
 	Item (Item),
+	ConfirmedError (ParseError),
 }
 
 impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
@@ -205,10 +213,13 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 						parser.pos = sub_parser.pos;
 						ParserAny::Item (item)
 					},
-					Err (_) => ParserAny::Parser (parser),
+					Err (err) =>
+						if sub_parser.confirmed { ParserAny::ConfirmedError (err) }
+						else { ParserAny::Parser (parser) },
 				}
 			},
 			ParserAny::Item (item) => ParserAny::Item (item),
+			ParserAny::ConfirmedError (err) => ParserAny::ConfirmedError (err),
 		}
 	}
 
@@ -216,6 +227,7 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 		match self {
 			ParserAny::Parser (parser) => Err (parser.err ()),
 			ParserAny::Item (item) => Ok (item),
+			ParserAny::ConfirmedError (err) => Err (err),
 		}
 	}
 
