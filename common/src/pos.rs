@@ -164,6 +164,25 @@ mod dim_2 {
 				if self.x < Val::MAX { result.push (PosYX { x: x + Val::ONE, y }); }
 				result
 			}
+			pub fn adjacent_8 (& self) -> ArrayVec <PosYX <Val>, 8> where Val: Int {
+				let mut result = ArrayVec::new ();
+				let PosYX { y, x } = * self;
+				if self.y > Val::MIN {
+					let y = y - Val::ONE;
+					if self.x > Val::MIN { result.push (PosYX { x: x - Val::ONE, y }); }
+					result.push (PosYX { x, y });
+					if self.x < Val::MAX { result.push (PosYX { x: x + Val::ONE, y }); }
+				}
+				if self.x > Val::MIN { result.push (PosYX { x: x - Val::ONE, y }); }
+				if self.x < Val::MAX { result.push (PosYX { x: x + Val::ONE, y }); }
+				if self.y < Val::MAX {
+					let y = y + Val::ONE;
+					if self.x > Val::MIN { result.push (PosYX { x: x - Val::ONE, y }); }
+					result.push (PosYX { x, y });
+					if self.x < Val::MAX { result.push (PosYX { x: x + Val::ONE, y }); }
+				}
+				result
+			}
 		}
 
 		impl <Val: Int> Coord <2> for PosYX <Val> {

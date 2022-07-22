@@ -1,0 +1,14 @@
+[package]
+
+	name = "aoc-2015-day-18"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2015: Day 18: Like a GIF For Your Yard"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-18"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }

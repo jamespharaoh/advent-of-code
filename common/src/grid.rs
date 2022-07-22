@@ -30,6 +30,9 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 		origin: [isize; DIMS],
 		size: [usize; DIMS],
 	) -> Grid <Storage, Pos, DIMS> {
+		if size.into_iter ().any (|dim| dim == 0 ) {
+			panic! ("Size must be positive in all dimensions: {:?}", size);
+		}
 		let expected_len = size.into_iter ().product::<usize> ();
 		let actual_len = storage.storage_len ();
 		if expected_len != actual_len {
@@ -42,6 +45,8 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	pub fn is_empty (& self) -> bool { self.size.into_iter ().any (|dim| dim == 0) }
 	pub fn size (& self) -> [usize; DIMS] { self.size }
 
+	pub fn raw_origin (& self) -> [isize; DIMS] { self.origin }
+	pub fn raw_size (& self) -> [usize; DIMS] { self.size }
 	pub fn origin (& self) -> Pos { Pos::from_scalar (0, self.origin, self.size).unwrap () }
 	pub fn peak (& self) -> Pos { Pos::from_scalar (self.len () - 1, self.origin, self.size).unwrap () }
 
@@ -140,7 +145,7 @@ pub trait GridStorage {
 impl <Item> GridStorage for Vec <Item> where Item: Clone {
 	type Item = Item;
 	fn storage_get (& self, idx: usize) -> Option <Item> { self.get (idx).cloned () }
-	fn storage_set (& mut self, idx: usize, item: Self::Item) { self.insert (idx, item); }
+	fn storage_set (& mut self, idx: usize, item: Self::Item) { self [idx] = item; }
 	fn storage_len (& self) -> usize { self.len () }
 }
 

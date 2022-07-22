@@ -16,7 +16,7 @@ impl Display for Overflow {
 impl Error for Overflow {
 }
 
-pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps {
+pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps + IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;
 	const ZERO: Self;
@@ -31,9 +31,6 @@ pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps {
 	fn unsigned_diff (self, other: Self) -> NumResult <Self::Unsigned>;
 	fn add_signed (self, other: Self::Signed) -> NumResult <Self>;
 	fn sub_signed (self, other: Self::Signed) -> NumResult <Self>;
-	fn as_usize (self) -> usize;
-	fn to_usize (self) -> NumResult <usize>;
-	fn from_usize (val: usize) -> NumResult <Self>;
 	fn add_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
 	#[ inline ]
 	fn add_3 (arg_0: Self, arg_1: Self, arg_2: Self) -> NumResult <Self> {
@@ -89,16 +86,6 @@ macro_rules! prim_int {
 				$signed::checked_sub (self, other).ok_or (Overflow)
 			}
 			#[ inline ]
-			fn as_usize (self) -> usize { self as usize }
-			#[ inline ]
-			fn to_usize (self) -> NumResult <usize> {
-				(self >= 0).then_some (self as usize).ok_or (Overflow)
-			}
-			#[ inline ]
-			fn from_usize (val: usize) -> NumResult <Self> {
-				val.try_into ().ok ().ok_or (Overflow)
-			}
-			#[ inline ]
 			fn add_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
 				$signed::checked_add (arg_0, arg_1).ok_or (Overflow)
 			}
@@ -125,11 +112,16 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn unsigned_abs (self) -> $unsigned { self }
 			#[ inline ]
-			fn signum (self) -> $signed { if self > 0 { 1 } else { 0 } }
+			fn signum (self) -> $signed {
+				if self > 0 { 1 } else { 0 }
+			}
 			#[ inline ]
 			fn signed_diff (self, other: Self) -> NumResult <$signed> {
-				if other < self { (self - other).try_into ().ok ().ok_or (Overflow) }
-				else { (other - self).try_into ().map ($signed::neg).ok ().ok_or (Overflow) }
+				if other < self {
+					(self - other).try_into ().ok ().ok_or (Overflow)
+				} else {
+					(other - self).try_into ().map ($signed::neg).ok ().ok_or (Overflow)
+				}
 			}
 			#[ inline ]
 			fn unsigned_diff (self, other: Self) -> NumResult <$unsigned> {
@@ -137,21 +129,19 @@ macro_rules! prim_int {
 			}
 			#[ inline ]
 			fn add_signed (self, other: $signed) -> NumResult <$unsigned> {
-				if other >= 0 { $unsigned::checked_add (self, other as $unsigned).ok_or (Overflow) }
-				else { $unsigned::checked_sub (self, $signed::unsigned_abs (other)).ok_or (Overflow) }
+				if other >= 0 {
+					$unsigned::checked_add (self, other as $unsigned).ok_or (Overflow)
+				} else {
+					$unsigned::checked_sub (self, $signed::unsigned_abs (other)).ok_or (Overflow)
+				}
 			}
 			#[ inline ]
 			fn sub_signed (self, other: $signed) -> NumResult <$unsigned> {
-				if other >= 0 { $unsigned::checked_sub (self, other as $unsigned).ok_or (Overflow) }
-				else { $unsigned::checked_add (self, $signed::unsigned_abs (other)).ok_or (Overflow) }
-			}
-			#[ inline ]
-			fn as_usize (self) -> usize { self as usize }
-			#[ inline ]
-			fn to_usize (self) -> NumResult <usize> { Ok (self as usize) }
-			#[ inline ]
-			fn from_usize (val: usize) -> NumResult <Self> {
-				val.try_into ().ok ().ok_or (Overflow)
+				if other >= 0 {
+					$unsigned::checked_sub (self, other as $unsigned).ok_or (Overflow)
+				} else {
+					$unsigned::checked_add (self, $signed::unsigned_abs (other)).ok_or (Overflow)
+				}
 			}
 			#[ inline ]
 			fn add_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
@@ -167,12 +157,20 @@ macro_rules! prim_int {
 			}
 		}
 		impl IntOpsSafe for $signed {
-			fn safe_add (self, arg: $signed) -> $signed { $signed::checked_add (self, arg).unwrap () }
-			fn safe_sub (self, arg: $signed) -> $signed { $signed::checked_sub (self, arg).unwrap () }
+			fn safe_add (self, arg: $signed) -> $signed {
+				$signed::checked_add (self, arg).unwrap ()
+			}
+			fn safe_sub (self, arg: $signed) -> $signed {
+				$signed::checked_sub (self, arg).unwrap ()
+			}
 		}
 		impl IntOpsSafe for $unsigned {
-			fn safe_add (self, arg: $unsigned) -> $unsigned { $unsigned::checked_add (self, arg).unwrap () }
-			fn safe_sub (self, arg: $unsigned) -> $unsigned { $unsigned::checked_sub (self, arg).unwrap () }
+			fn safe_add (self, arg: $unsigned) -> $unsigned {
+				$unsigned::checked_add (self, arg).unwrap ()
+			}
+			fn safe_sub (self, arg: $unsigned) -> $unsigned {
+				$unsigned::checked_sub (self, arg).unwrap ()
+			}
 		}
 		impl IntSigned for $signed {
 			const NEG_ONE: $signed = -1;
@@ -180,11 +178,25 @@ macro_rules! prim_int {
 		impl IntUnsigned for $unsigned {}
 		impl IntSized <$bits> for $signed {}
 		impl IntSized <$bits> for $unsigned {}
+		impl IntConv for $signed {
+			fn to_usize (self) -> NumResult <usize> { self.try_into ().ok ().ok_or (Overflow) }
+			fn to_u32 (self) -> NumResult <u32> { self.try_into ().ok ().ok_or (Overflow) }
+			fn from_usize (val: usize) -> NumResult <Self> { val.try_into ().ok ().ok_or (Overflow) }
+		}
+		impl IntConv for $unsigned {
+			fn to_usize (self) -> NumResult <usize> { self.try_into ().ok ().ok_or (Overflow) }
+			fn to_u32 (self) -> NumResult <u32> { self.try_into ().ok ().ok_or (Overflow) }
+			fn from_usize (val: usize) -> NumResult <Self> { val.try_into ().ok ().ok_or (Overflow) }
+		}
 	};
 }
 
+prim_int! (i8, u8, 8);
 prim_int! (i16, u16, 16);
 prim_int! (i32, u32, 32);
+prim_int! (i64, u64, 64);
+prim_int! (i128, u128, 128);
+prim_int! (isize, usize, 128);
 
 pub trait IntSigned: Int {
 	const NEG_ONE: Self::Signed;
@@ -208,3 +220,9 @@ pub trait IntOpsSafe: Sized {
 
 pub trait IntOps: IntOpsRust + IntOpsSafe {}
 impl <Val> IntOps for Val where Val: IntOpsRust + IntOpsSafe {}
+
+pub trait IntConv: Sized {
+	fn to_usize (self) -> NumResult <usize>;
+	fn to_u32 (self) -> NumResult <u32>;
+	fn from_usize (val: usize) -> NumResult <Self>;
+}

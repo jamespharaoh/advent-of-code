@@ -7,9 +7,15 @@ pub trait Puzzle {
 	fn day (& self) -> u8;
 	fn part_one (& self, _lines: & [& str]) -> GenResult <String> { unimplemented! () }
 	fn part_two (& self, _lines: & [& str]) -> GenResult <String> { unimplemented! () }
-	fn num_parts (& self) -> usize { 2 }
+	fn num_parts (& self) -> usize;
 
 	fn commands (& self) -> Vec <PuzzleCommand> { Vec::new () }
+
+	fn set_default_params (& mut self) { }
+	fn set_param_real (& mut self, name: String, value: String);
+	fn set_param (& mut self, name: & str, value: String) {
+		self.set_param_real (name.to_string (), value);
+	}
 
 	fn invoke (& self, args: & [OsString]) -> GenResult <()> {
 		let mut command = Command::new (format! ("aoc-{}-day-{}", self.year (), self.day ()));
@@ -183,5 +189,115 @@ impl PuzzleCommand {
 	pub fn invoke (& self, args: & ArgMatches) -> GenResult <()> {
 		(self.invoke_fn) (args)
 	}
+
+}
+
+#[ macro_export ]
+macro_rules! puzzle_info {
+
+	(
+		name = $name:literal ;
+		year = $year:literal ;
+		day = $day:literal ;
+		$($rest4:tt)*
+	) => {
+		pub fn puzzle_metadata () -> Box <dyn ::aoc_common::puzzle::Puzzle> {
+			use ::aoc_common::puzzle::Puzzle;
+			struct ThisPuzzle { params: HashMap <String, String> }
+			impl Puzzle for ThisPuzzle {
+				fn name (& self) -> & 'static str { $name }
+				fn year (& self) -> u16 { $year }
+				fn day (& self) -> u8 { $day }
+				fn set_param_real (& mut self, name: String, value: String) {
+					self.params.insert (name, value);
+				}
+				puzzle_info! { @rest (input, Ok::<_, Infallible> (input), 0) $($rest4)* }
+			}
+			let mut puzzle = ThisPuzzle { params: HashMap::new () };
+			puzzle.set_default_params ();
+			Box::new (puzzle)
+		}
+	};
+
+	( @rest ($parse_input:ident, $parse_expr:expr, $num_parts:expr) ) => {
+		fn num_parts (& self) -> usize { $num_parts }
+	};
+	( @rest ($parse_input_old:ident, $parse_expr_old:expr, $num_parts:expr)
+		parse = |$parse_input:ident| $parse_expr:expr;
+		$($rest1:tt)*
+	) => {
+		puzzle_info! { @rest ($parse_input, $parse_expr, $num_parts) $($rest1)* }
+	};
+	( @rest ($parse_input:ident, $parse_expr:expr, $num_parts:expr)
+		part_one = |$part_input:ident $(, $param_name:ident : $param_type:ty)*| $part_expr:expr;
+		$($rest0:tt)*
+	) => {
+		fn part_one (& self, $parse_input: & [& str]) -> GenResult <String> {
+			$(
+				let $param_name: $param_type =
+					self.params [stringify! ($param_name)].parse ().unwrap ();
+			)*
+			let $part_input = $parse_expr ?;
+			let result = $part_expr ?;
+			Ok (format! ("{}", result))
+		}
+		puzzle_info! { @rest ($parse_input, $parse_expr, $num_parts + 1) $($rest0)* }
+	};
+	( @rest ($parse_input:ident, $parse_expr:expr, $num_parts:expr)
+		part_two = |$part_input:ident $(, $param_name:ident : $param_type:ty)*| $part_expr:expr;
+		$($rest0:tt)*
+	) => {
+		fn part_two (& self, $parse_input: & [& str]) -> GenResult <String> {
+			$(
+				let $param_name: $param_type =
+					self.params [stringify! ($param_name)].parse ().unwrap ();
+			)*
+			let $part_input = $parse_expr ?;
+			let result = $part_expr ?;
+			Ok (format! ("{}", result))
+		}
+		puzzle_info! { @rest ($parse_input, $parse_expr, $num_parts + 1) $($rest0)* }
+	};
+	( @rest ($parse_input:ident, $parse_expr:expr, $num_parts:expr)
+		commands = [ $($commands:tt)* ];
+		$($rest3:tt)*
+	) => {
+		fn commands (& self) -> Vec <::aoc_common::puzzle::PuzzleCommand> {
+			let mut commands = Vec::new ();
+			puzzle_info! { @commands commands $($commands)* }
+			commands
+		}
+		puzzle_info! { @rest ($parse_input, $parse_expr, $num_parts) $($rest3)* }
+	};
+	( @rest ($parse_input:ident, $parse_expr:expr, $num_parts:expr)
+		params = [ $($params:tt)* ];
+		$($rest:tt)*
+	) => {
+		fn set_default_params (& mut self) {
+			puzzle_info! { @params self $($params)* }
+		}
+		puzzle_info! { @rest ($parse_input, $parse_expr, $num_parts) $($rest)* }
+	};
+
+	( @params ) => {};
+	( @params $self:ident $name:ident : $type:ty = $val:expr ; $($rest:tt)* ) => {
+		$self.set_param_real (stringify! ($name).to_string (), format! ("{}", $val as $type));
+		puzzle_info! { @params $($rest)* }
+	};
+
+	( @commands $commands:ident ) => {};
+	( @commands $commands:ident (
+		name = $name:literal ;
+		method = $method:expr ;
+	) ) => {
+		$commands.push (::aoc_common::puzzle::PuzzleCommand::new ($name, $method));
+	};
+	( @commands $commands:ident (
+		name = $name:literal ;
+		method = $method:expr ;
+	) , $($rest:tt)* ) => {
+		$commands.push (::aoc_common::puzzle::PuzzleCommand::new ($name, $method));
+		puzzle_info! { @commands $commands $($rest)* }
+	};
 
 }

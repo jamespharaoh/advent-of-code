@@ -13,8 +13,6 @@ pub mod pos;
 pub mod puzzle;
 pub mod search;
 
-mod puzzle_macro;
-
 pub type GenError = Box <dyn Error>;
 pub type GenResult <Ok> = Result <Ok, GenError>;
 
@@ -24,34 +22,38 @@ pub fn default <T: Default> () -> T {
 	Default::default ()
 }
 
-#[ macro_export ]
-macro_rules! ok_or {
-	( $val:expr, $if_err:expr ) => {
-		match ($val) { Ok (val) => val, Err (_) => $if_err }
-	};
-}
+mod assertions {
 
-#[ macro_export ]
-macro_rules! assert_is_ok {
-	( $actual:expr ) => {
-		assert! ($actual.is_ok ());
-	};
-}
+	#[ macro_export ]
+	macro_rules! ok_or {
+		( $val:expr, $if_err:expr ) => {
+			match ($val) { Ok (val) => val, Err (_) => $if_err }
+		};
+	}
 
-#[ macro_export ]
-macro_rules! assert_eq_ok {
-	( $expect:expr , $actual:expr ) => {
-		let actual = $actual;
-		assert! (actual.is_ok ());
-		assert_eq! ($expect, actual.unwrap ());
-	};
-}
+	#[ macro_export ]
+	macro_rules! assert_is_ok {
+		( $actual:expr ) => {
+			assert! ($actual.is_ok ());
+		};
+	}
 
-#[ macro_export ]
-macro_rules! assert_err {
-	( $expect:expr , $actual:expr ) => {
-		assert_eq! ($expect, $actual.unwrap_err ().to_string ());
-	};
+	#[ macro_export ]
+	macro_rules! assert_eq_ok {
+		( $expect:expr , $actual:expr ) => {
+			let actual = $actual;
+			assert! (actual.is_ok ());
+			assert_eq! ($expect, actual.unwrap ());
+		};
+	}
+
+	#[ macro_export ]
+	macro_rules! assert_err {
+		( $expect:expr , $actual:expr ) => {
+			assert_eq! ($expect, $actual.unwrap_err ().to_string ());
+		};
+	}
+
 }
 
 #[ macro_export ]
