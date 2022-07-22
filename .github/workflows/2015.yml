@@ -1,0 +1,60 @@
+name: y2015
+
+on:
+  push:
+    branches: [ master ]
+    paths: [ "2015", common, misc ]
+  pull_request:
+    branches: [ master ]
+    paths: [ "2015", common, misc ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  stable-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "2015"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: clippy
+    - run: cargo build --release --workspace
+  beta-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "2015"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install rust beta
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        components: clippy
+    - run: cargo build --release --workspace
+  nightly-build-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "2015"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install rust nightly
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+        components: clippy
+    - run: cargo build --release --workspace
+    - uses: actions-rs/clippy-check@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        args: --all-features
