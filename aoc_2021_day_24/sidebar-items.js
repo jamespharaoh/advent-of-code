@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["puzzle_metadata",""]],"mod":[["logic",""],["machine",""],["model",""],["quick","Quick algorithm found by reverse engineering the input programme."],["solver",""],["tool",""]]};
