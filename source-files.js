@@ -1,4 +1,5 @@
 var sourcesIndex = {};
+sourcesIndex["aoc"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2015"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2015_day_01"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2015_day_02"] = {"name":"","files":["lib.rs"]};
