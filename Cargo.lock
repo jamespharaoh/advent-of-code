@@ -8,6 +8,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-2015",
  "aoc-2021",
+ "aoc-common",
 ]
 
 [[package]]
