@@ -51,6 +51,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         args: >
           --all-features
+          --
           --deny warnings
           --allow clippy::needless_collect
           --allow clippy::needless_range_loop
