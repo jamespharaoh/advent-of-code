@@ -151,10 +151,10 @@ jobs:
         run: touch target/doc/.nojekyll
 
       - name: Write _config.yaml
-        run: echo "theme: jekyll-theme-midnight" >target/doc/_config.yaml
+        run: "echo \"theme: jekyll-theme-midnight\" >target/doc/_config.yaml"
 
       - name: Write index.html
-        run: echo "<meta http-equiv=\"refresh\" content=\"0; URL=aoc/index.html\">" >target/doc/index.html
+        run: "echo \"<meta http-equiv=\\\"refresh\\\" content=\\\"0; URL=aoc/index.html\\\">\" >target/doc/index.html"
 
       - name: Deploy docs
         uses: JamesIves/github-pages-deploy-action@v4
