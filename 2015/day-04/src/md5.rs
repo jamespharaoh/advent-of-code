@@ -278,4 +278,18 @@ mod tests {
 		assert_md5! ("777f5a5ebdeab74ab0299512f9688be0", LOREM_IPSUM);
 	}
 
+	#[ test ]
+	fn test_output () {
+		let output = Output::from_hex ("0123456789abcdef0123456789abcdef").unwrap ();
+		assert_eq! (16, output.len ());
+		assert_eq! (false, output.is_empty ());
+		assert_eq! (0x01, output [0]);
+		assert_eq! (0xef, output [15]);
+		assert_eq! ("md5::Output (\"0123456789abcdef0123456789abcdef\")", format! ("{:?}", output));
+		assert_eq! ("0123456789abcdef0123456789abcdef", format! ("{}", output));
+		assert_err! ("Expected 32 chars, not 31", Output::from_hex ("0123456789abcdef0123456789abcde"));
+		assert_err! ("Expected 32 chars, not 33", Output::from_hex ("0123456789abcdef0123456789abcdef0"));
+		assert_err! ("Invalid hex: X", Output::from_hex ("0123456789abcdeX0123456789abcdef"));
+	}
+
 }
