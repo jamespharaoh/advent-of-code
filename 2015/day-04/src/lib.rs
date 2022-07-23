@@ -12,10 +12,13 @@ puzzle_info! {
 	year = 2015;
 	day = 4;
 	parse = |input| Ok::<_, Infallible> (input [0]);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input, max_threads: usize| logic::part_one (input, max_threads);
+	part_two = |input, max_threads: usize| logic::part_two (input, max_threads);
 	commands = [
 		( name = "run"; method = cli::run; ),
+	];
+	params = [
+		max_threads: usize = usize::MAX;
 	];
 }
 
@@ -26,16 +29,16 @@ pub mod logic {
 	use super::*;
 	use md5::Output;
 
-	pub fn part_one (input: & str) -> GenResult <usize> {
-		calc_result (input, 5)
+	pub fn part_one (input: & str, max_threads: usize) -> GenResult <usize> {
+		calc_result (input, 5, max_threads)
 	}
 
-	pub fn part_two (input: & str) -> GenResult <usize> {
-		calc_result (input, 6)
+	pub fn part_two (input: & str, max_threads: usize) -> GenResult <usize> {
+		calc_result (input, 6, max_threads)
 	}
 
-	pub fn calc_result (input: & str, num_zeros: usize) -> GenResult <usize> {
-		let num_threads = get_num_threads ().unwrap_or (1);
+	pub fn calc_result (input: & str, num_zeros: usize, max_threads: usize) -> GenResult <usize> {
+		let num_threads = cmp::min (get_num_threads ().unwrap_or (1), max_threads);
 		if num_threads < 2 {
 			calc_result_serial (input, num_zeros)
 		} else {
@@ -197,6 +200,38 @@ pub mod logic {
 		})
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn check_zeros_fn () {
+			fn with_zeros (zeros: usize) -> Output {
+				let mut hex = String::new ();
+				for _ in 0 .. zeros { hex.push ('0'); }
+				while hex.len () < 32 { hex.push ('f'); }
+				Output::from_hex (& hex).unwrap ()
+			}
+			for zeros in 0 .. 32 {
+				let check_fn = logic::check_zeros_fn (zeros);
+				let should_pass = with_zeros (zeros);
+				assert! (check_fn (& should_pass));
+				if zeros > 0 {
+					let should_fail = with_zeros (zeros - 1);
+					assert! (! check_fn (& should_fail), "Should fail for {} zeros: {}", zeros, should_fail);
+				}
+			}
+		}
+
+		#[ test ]
+		#[ should_panic ]
+		fn check_zeros_fn_panic () {
+			let _ = logic::check_zeros_fn (33);
+		}
+
+	}
+
 }
 
 #[ cfg (not (tarpaulin_include)) ]
@@ -207,11 +242,11 @@ mod cli {
 	#[ derive (clap::Parser) ]
 	pub struct RunArgs {
 
-		#[ clap (long, default_value = "inputs/day-04") ]
+		#[ clap (long, default_value = "2015/inputs/day-04") ]
 		input: String,
 
 		#[ clap (long) ]
-		threads: Option <usize>,
+		max_threads: Option <usize>,
 
 		#[ clap (long) ]
 		zeros: usize,
@@ -223,7 +258,11 @@ mod cli {
 		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 		println! ("Using input file: {}", & args.input);
 		println! ("Looking for {} zeros", args.zeros);
-		let result = logic::calc_result (input_lines [0], args.zeros) ?;
+		let result = logic::calc_result (
+			input_lines [0],
+			args.zeros,
+			args.max_threads.unwrap_or (usize::MAX),
+		) ?;
 		println! ("Result: {}", result);
 		Ok (())
 	}
@@ -239,7 +278,8 @@ mod examples {
 
 	#[ test ]
 	fn part_one () {
-		let puzzle = puzzle_metadata ();
+		let mut puzzle = puzzle_metadata ();
+		puzzle.set_param ("max_threads", 1.to_string ());
 		assert_eq_ok! ("609043", puzzle.part_one (& [EXAMPLE]));
 	}
 

@@ -13,7 +13,8 @@ function main {
 	while [[ "$#" != 0 ]]; do
 		local arg="$1"; shift
 		case "$arg" in
-			(day-*) package="aoc-$year-day-${arg:4}" ;;
+			(year-*) year="${arg:5}" ;;
+			(day-*) day="${arg:4}" ;;
 			(coverage|dev|release|release-lto) profile="$arg" ;;
 			(build|clippy|flamegraph|run|run-test|tarpaulin|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
@@ -33,6 +34,11 @@ function main {
 				;;
 		esac
 	done
+	if [[ -n "$year" && -n "$day" ]]; then
+		package="aoc-$year-day-$day"
+	elif [[ -n "$year" ]]; then
+		package="aoc-$year"
+	fi
 	local -a cargo_args
 	if [[ -z "$mode" ]]; then mode="build"; fi
 	if [[ -z "$profile" && "$mode" = "flamegraph" ]]; then profile="flamegraph"; fi
