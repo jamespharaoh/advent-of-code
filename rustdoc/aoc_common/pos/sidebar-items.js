@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["PosGeo",""],["PosRowCol",""],["PosXY",""],["PosXYZ",""],["PosYX",""]],"trait":[["Coord",""]]};
