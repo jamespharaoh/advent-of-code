@@ -93,7 +93,7 @@ cargo test --frozen --workspace --profile pre-commit
 #cargo doc --frozen --profile pre-commit
 
 for year in 2015 2021; do
-	cargo run --frozen --profile pre-commit --bin "aoc-$year"
+	cargo run --frozen --profile pre-commit --package "aoc-$year"
 done
 
 # clean up
