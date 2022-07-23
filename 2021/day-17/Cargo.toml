@@ -20,3 +20,9 @@
 [lib]
 
 	crate-type = [ "rlib", "dylib" ]
+
+[[bin]]
+
+	name="aoc-2021-day-17"
+	test = false
+	bench = false

@@ -2,6 +2,14 @@
 
 set -euf -o pipefail
 
+force=""
+for arg in "$@"; do
+	case "$arg" in
+		(--force) force="yes" ;;
+		(*) echo "Unrecognied argument: $arg" >&2; false ;;
+	esac
+done
+
 # find the repo
 
 if [[ -d .git ]]; then
@@ -30,11 +38,10 @@ fi
 # make sure there are pending changes
 
 cd "$root_dir"
-if git diff --cached --quiet; then
-	git status >&2
+if [[ ! "$force" ]] && git diff --cached --quiet; then
 	exit 0
 fi
-if ! git diff --quiet; then
+if [[ ! "$force" ]] && ! git diff --quiet; then
 	printf "################################### WARNING ###################################\n"
 	printf "\n"
 	git status
@@ -80,10 +87,10 @@ cd "$work_dir"
 
 export RUSTDOCFLAGS="-D warnings"
 
-cargo check --frozen --workspace --all-targets --profile pre-commit
-cargo test --frozen --workspace --profile pre-commit
-cargo doc --frozen --profile pre-commit
 cargo clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
+#cargo check --frozen --workspace --all-targets --profile pre-commit
+cargo test --frozen --workspace --profile pre-commit
+#cargo doc --frozen --profile pre-commit
 
 for year in 2015 2021; do
 	cargo run --frozen --profile pre-commit --bin "aoc-$year"

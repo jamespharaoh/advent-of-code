@@ -20,3 +20,9 @@
 [build-dependencies]
 
 	aoc-codegen = { path = "../../misc/codegen" }
+
+[[bin]]
+
+	name="aoc-2015-day-17"
+	test = false
+	bench = false
