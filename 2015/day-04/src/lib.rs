@@ -213,7 +213,7 @@ pub mod logic {
 				while hex.len () < 32 { hex.push ('f'); }
 				Output::from_hex (& hex).unwrap ()
 			}
-			for zeros in 0 .. 32 {
+			for zeros in 0 ..= 32 {
 				let check_fn = logic::check_zeros_fn (zeros);
 				let should_pass = with_zeros (zeros);
 				assert! (check_fn (& should_pass));
