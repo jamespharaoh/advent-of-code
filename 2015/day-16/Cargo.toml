@@ -12,3 +12,11 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
