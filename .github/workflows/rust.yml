@@ -17,58 +17,22 @@ env:
 
 jobs:
 
-  stable-build:
+  clippy:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout project
-        uses: actions/checkout@v3
-
-      - name: Install rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: clippy
-
-      - name: Build workspace
-        run: cargo build --workspace
-
-  beta-build:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Checkout project
-        uses: actions/checkout@v3
-
-      - name: Install rust beta
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: clippy
-
-      - name: Build workspace
-        run: cargo build --workspace
-
-  nightly-build-check:
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: Checkout project
-        uses: actions/checkout@v3
 
       - name: Install rust nightly
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
-          override: true
           components: clippy
+          override: true
+          profile: minimal
+          toolchain: nightly
 
-      - name: Build workspace
-        run: cargo build --workspace
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Check workspace with clippy
+      - name: Run clippy
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -84,3 +48,81 @@ jobs:
             --allow clippy::useless_format
             --allow clippy::vec_init_then_push
             --allow clippy::write_with_newline
+
+  stable:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: stable
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --release
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --release
+
+  beta:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install rust beta
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: beta
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --release
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --release
+
+  nightly:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install rust nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: nightly
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --release
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace --release
