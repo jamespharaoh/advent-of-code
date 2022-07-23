@@ -126,3 +126,28 @@ jobs:
         with:
           command: test
           args: --workspace --release
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install rust nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: nightly
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Generate docs
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --workspace
+
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/doc
