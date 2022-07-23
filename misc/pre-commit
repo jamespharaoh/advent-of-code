@@ -26,7 +26,26 @@ if [[ "$0" != "$work_dir/misc/pre-commit" ]]; then
 	git checkout-index --all --force --prefix pre-commit/
 	exec "$work_dir/misc/pre-commit" "$@"
 fi
-cd "$work_dir"
+
+# make sure there are pending changes
+
+cd "$root_dir"
+if git diff --cached --quiet; then
+	git status >&2
+	exit 0
+fi
+if ! git diff --quiet; then
+	printf "################################### WARNING ###################################\n"
+	printf "\n"
+	git status
+	printf "###############################################################################\n"
+	printf "\n"
+	for secs in {5..1}; do
+		printf "Waiting for $secs seconds..." >&2
+		sleep 1
+		printf "\r\e[K" >&2
+	done
+fi
 
 # update rust
 
@@ -34,6 +53,7 @@ rustup update
 
 # modify manifest
 
+cd "$work_dir"
 {
 	printf "cargo-features = [\"profile-rustflags\"]\n\n"
 	cat Cargo.toml
@@ -55,6 +75,8 @@ function cargo {
 }
 
 # execute build, test etc
+
+cd "$work_dir"
 
 export RUSTDOCFLAGS="-D warnings"
 
