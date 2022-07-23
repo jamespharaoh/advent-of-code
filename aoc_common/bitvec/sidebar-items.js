@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":[["BitVec",""],["BitVecEncodingDefault",""],["BitVecIter",""]],"trait":[["BitVecEncoding",""],["BitVecNative",""]]};

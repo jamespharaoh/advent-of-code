@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":[["Overflow",""]],"trait":[["Int",""],["IntConv",""],["IntOps",""],["IntOpsRust",""],["IntOpsSafe",""],["IntSigned",""],["IntSized",""],["IntUnsigned",""]],"type":[["NumResult",""]]};

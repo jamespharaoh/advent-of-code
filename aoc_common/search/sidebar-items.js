@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":[["PrioritySearchSeenState",""]],"struct":[["PrioritySearch","Implements Digkstra’s algorithm"],["PrioritySearchAdder",""]],"trait":[["PrioritySearchSeen",""],["PrioritySearchVisitor",""]]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":[["Attr",""]],"fn":[["parse_input",""]],"struct":[["AuntSue",""]],"type":[["Input",""]]};

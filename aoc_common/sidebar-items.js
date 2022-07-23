@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":[["default",""]],"macro":[["array_vec",""],["assert_eq_ok",""],["assert_err",""],["assert_is_ok",""],["ok_or",""],["puzzle_info",""]],"mod":[["bithash",""],["bitvec",""],["grid",""],["nums",""],["parser",""],["pos",""],["puzzle",""],["search","Iterative search algorithms for solutions in a problem space"]],"type":[["GenError",""],["GenResult",""]]};

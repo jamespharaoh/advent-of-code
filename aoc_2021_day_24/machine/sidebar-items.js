@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":[["Instr",""],["MachineError",""],["Reg",""],["RegOrInt",""]],"fn":[["machine_input",""],["parse_prog",""]],"struct":[["Machine",""],["MachineRegs",""]]};
