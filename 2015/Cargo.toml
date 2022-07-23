@@ -31,29 +31,3 @@
 	aoc-2015-day-16 = { path = "day-16" }
 	aoc-2015-day-17 = { path = "day-17" }
 	aoc-2015-day-18 = { path = "day-18" }
-
-[profile.coverage]
-
-	inherits = "dev"
-
-[profile.flamegraph]
-
-	inherits = "release"
-	debug = true
-
-[profile.release-lto]
-
-	inherits = "release"
-	lto = true
-
-[profile.dev.package.aoc-2015-day-04]
-
-	# includes an MD5 implementation which runs very slowly without optimisation
-	opt-level = 2
-
-[workspace]
-
-	members = [
-		"day-01", "day-02", "day-03", "day-04", "day-05", "day-06", "day-07", "day-08", "day-09",
-		"day-10", "day-11", "day-12", "day-13", "day-14", "day-15", "day-16", "day-17", "day-18",
-	]

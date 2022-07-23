@@ -15,70 +15,61 @@ else
 	exit 1
 fi
 declare root_dir="$PWD"
-cd $root_dir
+cd "$root_dir"
 
 # set up work directory
 
 declare work_dir="$root_dir/pre-commit"
 if [[ "$0" != "$work_dir/misc/pre-commit" ]]; then
-	rm -rf $work_dir
-	mkdir $work_dir
+	rm -rf "$work_dir"
+	mkdir "$work_dir"
 	git checkout-index --all --force --prefix pre-commit/
-	exec $work_dir/misc/pre-commit "$@"
+	exec "$work_dir/misc/pre-commit" "$@"
 fi
+cd "$work_dir"
 
 # update rust
 
 rustup update
 
-# iterate projects
+# modify manifest
 
-function try {
-	local project="$1"
-	local command="$2"
-	shift 2
-	if ! "$@"; then
-		echo "Error running \"$command\" in \"$project\"" >&2
+{
+	printf "cargo-features = [\"profile-rustflags\"]\n\n"
+	cat Cargo.toml
+	printf "\n[profile.pre-commit]\n\n"
+	printf "\tinherits = \"release\"\n"
+	printf "\trustflags = [ \"--deny\", \"warnings\" ]\n"
+} >Cargo.toml.temp
+mv Cargo.toml.temp Cargo.toml
+
+# cargo helper
+
+which_cargo="$(which cargo)"
+
+function cargo {
+	if ! "$which_cargo" +nightly "$@"; then
+		echo "Error running command: cargo +nightly $*" >&2
 		false
 	fi
 }
 
-for project in common 2015 2021; do
-	project_dir=$root_dir/$project
-	project_work_dir=$work_dir/$project
-	cd $project_work_dir
+# execute build, test etc
 
-	# modify manifest
+export RUSTDOCFLAGS="-D warnings"
 
-	{
-		printf "cargo-features = [\"profile-rustflags\"]\n\n"
-		cat $project_dir/Cargo.toml
-		printf "\n[profile.pre-commit]\n\n"
-		printf "\tinherits = \"release\"\n"
-		printf "\trustflags = [ \"--deny\", \"warnings\" ]\n"
-	} >Cargo.toml
+cargo check --frozen --workspace --all-targets --profile pre-commit
+cargo test --frozen --workspace --profile pre-commit
+cargo doc --frozen --profile pre-commit
+cargo clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
 
-	# run various cargo commands
-
-	export RUSTDOCFLAGS="-D warnings"
-	try "$project" "cargo check" \
-		cargo +nightly check --frozen --workspace --all-targets --profile pre-commit
-	try "$project" "cargo test" \
-		cargo +nightly test --frozen --workspace --profile pre-commit
-	try "$project" "cargo doc" \
-		cargo +nightly doc --frozen --profile pre-commit
-	try "$project" "cargo clippy" \
-		cargo +nightly clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
-	if [[ $project != common ]]; then
-		try "$project" "cargo run" \
-			cargo +nightly run --frozen --profile pre-commit
-	fi
-
+for year in 2015 2021; do
+	cargo run --frozen --profile pre-commit --bin "aoc-$year"
 done
 
 # clean up
 
 cd "$root_dir"
-rm -rf "$work_dir"
+rm --recursive --force "$work_dir"
 
 true

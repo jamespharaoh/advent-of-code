@@ -38,6 +38,8 @@ pub trait Puzzle {
 			);
 		}
 		let matches = command.get_matches_from (args);
+		let input_string = self.load_input () ?;
+		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 		use time::Instant;
 		fn percentile (times: & [u64], num: u64, denom: u64) -> u64 {
 			let size = times.len () as u64 - 1;
@@ -94,17 +96,17 @@ pub trait Puzzle {
 		}
 		match matches.subcommand () {
 			None => {
-				let result = self.invoke_part_one () ?;
+				let result = self.part_one (& input_lines) ?;
 				println! ("Part one: {}", result);
 				if self.num_parts () >= 2 {
-					let result = self.invoke_part_two () ?;
+					let result = self.part_two (& input_lines) ?;
 					println! ("Part two: {}", result);
 				}
 			},
 			Some (("part-1", matches)) => {
 				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
 				runner (repeat, |idx| {
-					let result = self.invoke_part_one () ?;
+					let result = self.part_one (& input_lines) ?;
 					if idx == 0 { println! ("Result: {}", result); }
 					Ok (())
 				}) ?;
@@ -112,7 +114,7 @@ pub trait Puzzle {
 			Some (("part-2", matches)) => {
 				let repeat: u64 = * matches.get_one ("repeat").unwrap ();
 				runner (repeat, |idx| {
-					let result = self.invoke_part_two () ?;
+					let result = self.part_two (& input_lines) ?;
 					if idx == 0 { println! ("Result: {}", result); }
 					Ok (())
 				}) ?;
@@ -129,16 +131,19 @@ pub trait Puzzle {
 		Ok (())
 	}
 
-	fn invoke_part_one (& self) -> GenResult <String> {
-		let input_string = fs::read_to_string (& format! ("inputs/day-{:02}", self.day ())) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
-		self.part_one (& input_lines)
-	}
-
-	fn invoke_part_two (& self) -> GenResult <String> {
-		let input_string = fs::read_to_string (& format! ("inputs/day-{:02}", self.day ())) ?;
-		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
-		self.part_two (& input_lines)
+	fn load_input (& self) -> GenResult <String> {
+		let input_path = [
+			format! ("{:04}/inputs/day-{:02}", self.year (), self.day ()),
+			format! ("inputs/day-{:02}", self.day ()),
+			format! ("../inputs/day-{:02}", self.day ()),
+		].into_iter ()
+			.find (|path| Path::new (path).exists ())
+			.ok_or_else (|| format! (
+				"Unable to find inputs/day-{:02} in \"{:04}\", \".\" or \"..\"",
+				self.day (),
+				self.year ())) ?;
+		let input_string = fs::read_to_string (input_path) ?;
+		Ok (input_string)
 	}
 
 }

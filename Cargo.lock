@@ -3,6 +3,165 @@
 version = 3
 
 [[package]]
+name = "aoc-2015"
+version = "0.1.0"
+dependencies = [
+ "aoc-2015-day-01",
+ "aoc-2015-day-02",
+ "aoc-2015-day-03",
+ "aoc-2015-day-04",
+ "aoc-2015-day-05",
+ "aoc-2015-day-06",
+ "aoc-2015-day-07",
+ "aoc-2015-day-08",
+ "aoc-2015-day-09",
+ "aoc-2015-day-10",
+ "aoc-2015-day-11",
+ "aoc-2015-day-12",
+ "aoc-2015-day-13",
+ "aoc-2015-day-14",
+ "aoc-2015-day-15",
+ "aoc-2015-day-16",
+ "aoc-2015-day-17",
+ "aoc-2015-day-18",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-02"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-03"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-04"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-05"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-06"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-07"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-08"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+ "arbitrary",
+]
+
+[[package]]
+name = "aoc-2015-day-09"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-10"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-11"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-12"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-13"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-14"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-15"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-16"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-17"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-18"
+version = "0.1.0"
+dependencies = [
+ "aoc-common",
+]
+
+[[package]]
 name = "aoc-2021"
 version = "0.1.0"
 dependencies = [

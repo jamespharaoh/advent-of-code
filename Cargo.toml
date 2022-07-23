@@ -1,0 +1,26 @@
+[profile.coverage]
+
+	inherits = "dev"
+
+[profile.flamegraph]
+
+	inherits = "release"
+	debug = true
+
+[profile.release-lto]
+
+	inherits = "release"
+	lto = true
+
+[profile.dev.package.aoc-2015-day-04]
+
+	# includes an MD5 implementation which runs very slowly without optimisation
+	opt-level = 2
+
+[workspace]
+
+	members = [
+		"2015",
+		"2021",
+		"common",
+	]

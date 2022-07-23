@@ -1,5 +1,7 @@
-*/target
-*/*/target
+/target
+/2018/target
+/2019/*/target
+/2020/*/target
 flamegraph.svg
 perf.data
 perf.data.old
