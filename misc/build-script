@@ -15,7 +15,7 @@ function main {
 		case "$arg" in
 			(day-*) package="aoc-$year-day-${arg:4}" ;;
 			(coverage|dev|release|release-lto) profile="$arg" ;;
-			(clippy|flamegraph|run|run-test|tarpaulin|test) mode="$arg" ;;
+			(build|clippy|flamegraph|run|run-test|tarpaulin|test) mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;

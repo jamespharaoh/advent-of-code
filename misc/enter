@@ -1,23 +1,36 @@
 aoc_root="$(readlink --canonicalize-existing "$(dirname "${BASH_SOURCE[0]}")"/..)"
-function watch {
-	case "$1" in
-		(build|clean|clippy|flamegraph|run|run-test|test)
-			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$@"
+
+function aoc {
+	local command="$1"
+	shift
+	case "$command" in
+		(watch)
+			aoc-watch "$@"
+			;;
+		(build|clean|clippy|flamegraph|run|run-test|tarpaulin|test)
+			"$aoc_root/misc/build-script" build "$@"
+			;;
+		(reload)
+			source "$aoc_root/misc/enter"
 			;;
 		(*)
-			"$aoc_root/misc/watch-script" "$@"
+			echo "Don't recognise command: $command" >&2
+			exit 1
 			;;
 	esac
 }
-function build { "$aoc_root/misc/build-script" build "$@"; }
-function clean { "$aoc_root/misc/build-script" clean "$@"; }
-function clippy { "$aoc_root/misc/build-script" clippy "$@"; }
-function flamegraph { "$aoc_root/misc/build-script" flamegraph "$@"; }
-function run { "$aoc_root/misc/build-script" run "$@"; }
-function run-test { "$aoc_root/misc/build-script" run-test "$@"; }
-function tarpaulin { "$aoc_root/misc/build-script" tarpaulin "$@"; }
-function test { "$aoc_root/misc/build-script" test "$@"; }
 
-function reload { source "$aoc_root/misc/enter"; }
+function aoc-watch {
+	local command="$1"
+	shift
+	case "$command" in
+		(build|clean|clippy|flamegraph|run|run-test|test)
+			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "$@"
+			;;
+		(*)
+			"$aoc_root/misc/watch-script" "$command" "$@"
+			;;
+	esac
+}
 
 export RUST_BACKTRACE=1
