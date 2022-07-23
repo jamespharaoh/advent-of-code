@@ -3,10 +3,10 @@ name: y2015
 on:
   push:
     branches: [ master ]
-    paths: [ "2015", common, misc ]
+    paths: [ .github/workflows/2015.yml, "2015", common, misc ]
   pull_request:
     branches: [ master ]
-    paths: [ "2015", common, misc ]
+    paths: [ .github/workflows/2015.yml, "2015", common, misc ]
 
 env:
   CARGO_TERM_COLOR: always
