@@ -1,12 +1,18 @@
 name: rust
 
 on:
+
   push:
     branches: [ master ]
+
   pull_request:
     branches: [ master ]
 
+  schedule:
+    - cron: "33 3 * * *"
+
 env:
+
   CARGO_TERM_COLOR: always
 
 jobs:
@@ -14,50 +20,67 @@ jobs:
   stable-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Install rust stable
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        components: clippy
-    - run: cargo build --workspace
+
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: clippy
+
+      - name: Build workspace
+        run: cargo build --workspace
 
   beta-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Install rust beta
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        components: clippy
-    - run: cargo build --workspace
+
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Install rust beta
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: clippy
+
+      - name: Build workspace
+        run: cargo build --workspace
 
   nightly-build-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Install rust nightly
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: nightly
-        override: true
-        components: clippy
-    - run: cargo build --workspace
-    - uses: actions-rs/clippy-check@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        args: >
-          --all-features
-          --
-          --deny warnings
-          --allow clippy::needless_collect
-          --allow clippy::needless_range_loop
-          --allow clippy::new_without_default
-          --allow clippy::print_with_newline
-          --allow clippy::type_complexity
-          --allow clippy::useless_format
-          --allow clippy::vec_init_then_push
-          --allow clippy::write_with_newline
+
+      - name: Checkout project
+        uses: actions/checkout@v3
+
+      - name: Install rust nightly
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          components: clippy
+
+      - name: Build workspace
+        run: cargo build --workspace
+
+      - name: Check workspace with clippy
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: >
+            --all-features
+            --
+            --deny warnings
+            --allow clippy::needless_collect
+            --allow clippy::needless_range_loop
+            --allow clippy::new_without_default
+            --allow clippy::print_with_newline
+            --allow clippy::type_complexity
+            --allow clippy::useless_format
+            --allow clippy::vec_init_then_push
+            --allow clippy::write_with_newline
