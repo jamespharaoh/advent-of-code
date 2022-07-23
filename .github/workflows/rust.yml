@@ -21,7 +21,7 @@ jobs:
         toolchain: stable
         override: true
         components: clippy
-    - run: cargo build --release --workspace
+    - run: cargo build --workspace
 
   beta-build:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
         toolchain: stable
         override: true
         components: clippy
-    - run: cargo build --release --workspace
+    - run: cargo build --workspace
 
   nightly-build-check:
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ jobs:
         toolchain: nightly
         override: true
         components: clippy
-    - run: cargo build --release --workspace
+    - run: cargo build --workspace
     - uses: actions-rs/clippy-check@v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
