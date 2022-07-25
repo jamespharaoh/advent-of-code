@@ -40,6 +40,7 @@ pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps + IntCo
 	fn add_4 (arg_0: Self, arg_1: Self, arg_2: Self, arg_3: Self) -> NumResult <Self> {
 		Self::add_2 (Self::add_3 (arg_0, arg_1, arg_2) ?, arg_3)
 	}
+	fn div_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
 	fn mul_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
 	#[ inline ]
 	fn mul_3 (arg_0: Self, arg_1: Self, arg_2: Self) -> NumResult <Self> {
@@ -88,6 +89,10 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn add_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
 				$signed::checked_add (arg_0, arg_1).ok_or (Overflow)
+			}
+			#[ inline ]
+			fn div_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
+				$signed::checked_div (arg_0, arg_1).ok_or (Overflow)
 			}
 			#[ inline ]
 			fn mul_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
@@ -146,6 +151,10 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn add_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
 				$unsigned::checked_add (arg_0, arg_1).ok_or (Overflow)
+			}
+			#[ inline ]
+			fn div_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
+				$unsigned::checked_div (arg_0, arg_1).ok_or (Overflow)
 			}
 			#[ inline ]
 			fn mul_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
