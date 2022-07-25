@@ -1,11 +1,11 @@
 [package]
 
-	name = "aoc-2015-day-11"
+	name = "aoc-2015-day-19"
 	version = "0.1.0"
 	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
-	description = "Advent of Code 2015: Day 11: Corporate Policy"
-	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-11"
+	description = "Advent of Code 2015: Day 19: Medicine for Rudolph"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-19"
 	license = "MIT"
 	publish = false
 
@@ -23,6 +23,6 @@
 
 [[bin]]
 
-	name = "aoc-2015-day-11"
+	name = "aoc-2015-day-19"
 	test = false
 	bench = false

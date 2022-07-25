@@ -89,8 +89,11 @@ pub mod model {
 			(& input [ 1 .. ], target_str.parse () ?)
 		} else { (input, 150) };
 		let buckets = input.iter ().enumerate ().map (|(line_idx, line)|
-			Parser::wrap (line, |parser| Ok (parser.int::<u8> () ? as u32))
-				.map_parse_err (|char_idx| format! ("Invalid input: line {}: col {}: {}",
+			Parser::wrap (line, |parser| {
+				let val = parser.int::<u8> () ? as u32;
+				parser.end () ?;
+				Ok (val)
+			}).map_parse_err (|char_idx| format! ("Invalid input: line {}: col {}: {}",
 					line_idx + 1, char_idx + 1, line))
 		).collect::<GenResult <_>> () ?;
 		Ok (( buckets, target ))

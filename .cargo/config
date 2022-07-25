@@ -1,7 +1,3 @@
 [build]
 
 	rustflags = [ "-C", "prefer-dynamic" ]
-
-[patch.crates-io]
-
-	arbitrary = { git = "https://github.com/rust-fuzz/arbitrary" }

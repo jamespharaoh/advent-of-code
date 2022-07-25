@@ -23,6 +23,6 @@
 
 [[bin]]
 
-	name="aoc-2021-day-10"
+	name = "aoc-2021-day-10"
 	test = false
 	bench = false

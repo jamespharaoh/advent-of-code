@@ -218,7 +218,6 @@ pub mod model {
 	}
 
 	#[ derive (Clone, Eq, Hash, PartialEq) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub struct WireId (Rc <str>);
 
 	impl Wire {
@@ -330,14 +329,12 @@ pub mod model {
 	}
 
 	#[ derive (Clone, Debug) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub struct Wire {
 		pub id: WireId,
 		pub input: WireInput,
 	}
 
 	#[ derive (Clone) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub enum WireInput {
 		Static (WireVal),
 		Wire (WireId),

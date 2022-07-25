@@ -13,10 +13,6 @@
 
 	aoc-common = { path = "../../common" }
 
-[target.'cfg(fuzzing)'.dependencies]
-
-	arbitrary = { version = "1.1", features = [ "derive" ] }
-
 [lib]
 
 	crate-type = [ "rlib", "dylib" ]
@@ -27,6 +23,6 @@
 
 [[bin]]
 
-	name="aoc-2015-day-04"
+	name = "aoc-2015-day-04"
 	test = false
 	bench = false

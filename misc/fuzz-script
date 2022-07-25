@@ -1,0 +1,184 @@
+#!/bin/bash
+
+declare -a cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 )
+declare time_limit=300
+
+function dispatch {
+	local command="${1:-fuzz}"; shift
+	case "$command" in
+		(fuzz|minimise) launch "$command" "$@" ;;
+		(worker) worker "$@" ;;
+		(*) echo "Syntax error" >&2; exit 1 ;;
+	esac
+}
+
+function launch {
+
+	local mode="$1"
+
+	# basic setup
+
+	declare main_pid="$$"
+	declare work_dir="/run/user/$UID/aoc-fuzz-script-$main_pid"
+	mkdir -p "$work_dir"
+	trap "rm -rf $work_dir" EXIT
+
+	# create fifos to communicate with workers
+
+	for cpu in "${cpus[@]}"; do
+		mkfifo "$work_dir/$cpu-produce"
+		mkfifo "$work_dir/$cpu-consume"
+	done
+
+	# start controller
+
+	coproc control { controller "$mode"; }
+
+	# run workers in screen
+
+	screenrc="$work_dir/screen-rc"
+	{
+		echo "startup_message off"
+		echo "caption always \"%{= kw} %t %-=\""
+		for cpu in "${cpus[@]}"; do
+			if [[ $cpu != "${cpus[0]}" ]]; then
+				echo "split"
+				echo "focus"
+			fi
+			echo "screen taskset $cpu nice misc/fuzz-script worker $main_pid $cpu"
+		done
+	} > $screenrc
+
+	exec screen -c $screenrc -e ^@@
+
+}
+
+function iterator {
+	local repeat="$1"
+	local days=$(
+		for day in {01..25}; do
+			if [[ ! -f "2015/fuzz/src/day-$day.rs" ]]; then continue; fi
+			echo $day
+		done | shuf
+	)
+	if "$repeat"; then
+		while true; do
+			for day in $days; do
+				echo "$mode 2015 $day"
+			done
+		done
+	else
+		for day in $days; do
+			echo "$mode 2015 $day"
+		done
+		while true; do
+			echo "done"
+		done
+	fi
+}
+
+function controller {
+
+	local mode="$1"
+	local -A produce_fds
+	local -A consume_fds
+
+	# open fifos to talk to workers
+
+	for cpu in "${cpus[@]}"; do
+		exec {produce_fd}>"$work_dir/$cpu-produce"
+		produce_fds[$cpu]=$produce_fd
+		exec {consume_fd}<"$work_dir/$cpu-consume"
+		consume_fds[$cpu]=$consume_fd
+	done
+
+	# iterate targets
+
+	coproc iterate {
+		case "$mode" in
+			(fuzz) iterator true ;;
+			(minimise) iterator false ;;
+		esac
+	}
+
+	# feed tasks to workers when requested
+
+	while true; do
+		while true; do
+			for cpu in "${cpus[@]}"; do
+				produce_fd="${produce_fds[$cpu]}"
+				consume_fd="${consume_fds[$cpu]}"
+				if ! read -t 0 -u "$consume_fd"; then continue; fi
+				read -u "$consume_fd"
+				read -u "${iterate[0]}"
+				echo "$REPLY" >&$produce_fd
+			done
+			sleep 0.4
+		done
+	done
+
+}
+
+function worker {
+
+	# basic setup
+
+	declare main_pid="$1"
+	declare cpu="$2"
+	declare work_dir="/run/user/$UID/aoc-fuzz-script-$main_pid"
+
+	# exit entire screen session on interrupt
+
+	trap "screen -X quit" INT
+
+	# open fifos to communicate with controller
+
+	exec 3<"$work_dir/$cpu-produce"
+	exec 4>"$work_dir/$cpu-consume"
+
+	( while true; do
+
+		# get task from controller
+
+		screen -X title "looking for work"
+		echo "ready" >&4
+		local -a input
+		read -u 3 -a input
+		local mode="${input[0]}"
+		if [[ "$mode" == "done" ]]; then exit 0; fi
+		local year="${input[1]}"
+		local day="${input[2]}"
+
+		# execute task
+
+		case "$mode" in
+
+			(fuzz)
+				screen -X title "$year/day-$day fuzzing"
+				misc/build-script fuzz year-$year day-$day \
+					-- \
+					-- \
+					-max_total_time=$time_limit
+				;;
+
+			(minimise)
+				screen -X title "$year/day-$day minimising"
+				misc/build-script fuzz year-$year day-$day cmin
+				;;
+
+		esac
+
+	done ) |& {
+
+		# supress blank line at end of output
+
+		while true; do
+			if ! read; then break; fi
+			printf "\n%s" "$REPLY"
+		done
+
+	}
+
+}
+
+dispatch "$@"

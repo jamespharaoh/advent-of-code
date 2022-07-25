@@ -70,7 +70,6 @@ pub mod model {
 	pub type Input = Vec <Dir>;
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub enum Dir { Up, Down }
 
 	impl Dir {

@@ -1,0 +1,75 @@
+#!/bin/bash
+
+source "$HOME/.bashrc"
+
+export RUST_BACKTRACE=1
+
+aoc_root="$(readlink --canonicalize-existing "$(dirname "${BASH_SOURCE[0]}")"/..)"
+
+function aoc {
+	local command="$1"; shift
+	case "$command" in
+		(watch)
+			aoc-watch "$@"
+			;;
+		(build|clean|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test)
+			"$aoc_root/misc/build-script" "$command" "$@"
+			;;
+		(reload)
+			source "$aoc_root/misc/environment"
+			aoc-update-context
+			;;
+		(year)
+			aoc_year="$1"
+			aoc-update-context
+			;;
+		(day)
+			aoc_day="$1"
+			aoc-update-context
+			;;
+		(edit|nano)
+			local year="$aoc_year"
+			local day="$aoc_day"
+			for arg in "$@"; do
+				case "$arg" in
+					(year-*) local year="${arg:5}" ;;
+					(day-*) local day="${arg:4}" ;;
+					(*) echo "Syntax error" >&2; return ;;
+				esac
+			done
+			if [[ -z "$year" ]]; then echo "Must set year" >&2; fi
+			if [[ -z "$day" ]]; then echo "Must set day" >&2; fi
+			if [[ -n "$year" && -n "$day" ]]; then
+				nano "$year/day-$day/"{src/*.rs,Cargo.toml}
+			fi
+			;;
+		(*)
+			echo "Don't recognise command: $command" >&2
+			exit 1
+			;;
+	esac
+}
+
+function aoc-watch {
+	local command="$1"; shift
+	case "$command" in
+		(build|clean|clippy|flamegraph|fuzz|run|run-test|test)
+			local -a args=()
+			if [[ -n "$year" ]]; then args+=( "year-$year" ); fi
+			if [[ -n "$day" ]]; then args+=( "day-$day" ); fi
+			args+=( "${args[@]}" )
+			echo "$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "${args[@]}"
+			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "${args[@]}"
+			;;
+		(*)
+			"$aoc_root/misc/watch-script" "$command" "$@"
+			;;
+	esac
+}
+
+function aoc-update-context {
+	local prefix="aoc"
+	if [[ -n "$aoc_year" ]]; then prefix="$prefix/$aoc_year"; fi
+	if [[ -n "$aoc_day" ]]; then prefix="$prefix/day-$aoc_day"; fi
+	BASH_PROMPT_DEFAULTS[prefix]="$(highlight "$prefix")"
+}

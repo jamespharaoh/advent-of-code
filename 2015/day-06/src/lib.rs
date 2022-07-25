@@ -248,7 +248,6 @@ pub mod model {
 	pub type Input = Vec <Step>;
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub struct Step {
 		pub action: Action,
 		pub origin: Pos,
@@ -289,7 +288,6 @@ pub mod model {
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub enum Action { On, Off, Toggle }
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {

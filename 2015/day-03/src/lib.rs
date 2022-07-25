@@ -53,7 +53,6 @@ pub mod model {
 	pub type Pos = pos::PosGeo <i16>;
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	#[ cfg_attr (fuzzing, derive (arbitrary::Arbitrary)) ]
 	pub enum Dir {
 		North, South, East, West,
 	}
