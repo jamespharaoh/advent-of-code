@@ -32,7 +32,9 @@ if [[ "$0" != "$work_dir/misc/pre-commit" ]]; then
 	rm -rf "$work_dir"
 	mkdir "$work_dir"
 	git checkout-index --all --force --prefix pre-commit/
-	exec "$work_dir/misc/pre-commit" "$@"
+	if [[ -f "$work_dir/misc/pre-commit" ]]; then
+		exec "$work_dir/misc/pre-commit" "$@"
+	fi
 fi
 
 # make sure there are pending changes

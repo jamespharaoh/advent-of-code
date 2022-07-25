@@ -13,7 +13,7 @@ function aoc {
 			aoc-watch "$@"
 			;;
 		(build|clean|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test)
-			"$aoc_root/misc/build-script" "$command" "$@"
+			aoc-build "$command" "$@"
 			;;
 		(reload)
 			source "$aoc_root/misc/environment"
@@ -54,16 +54,21 @@ function aoc-watch {
 	local command="$1"; shift
 	case "$command" in
 		(build|clean|clippy|flamegraph|fuzz|run|run-test|test)
-			local -a args=()
-			if [[ -n "$aoc_year" ]]; then args+=( "year-$aoc_year" ); fi
-			if [[ -n "$aoc_day" ]]; then args+=( "day-$aoc_day" ); fi
-			args+=( "${args[@]}" )
-			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "${args[@]}"
+			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" $(aoc-args) "$@"
 			;;
 		(*)
 			"$aoc_root/misc/watch-script" "$command" "$@"
 			;;
 	esac
+}
+
+function aoc-args {
+	if [[ -n "$aoc_year" ]]; then echo "year-$aoc_year"; fi
+	if [[ -n "$aoc_day" ]]; then echo "day-$aoc_day"; fi
+}
+
+function aoc-build {
+	"$aoc_root/misc/build-script" "$command" $(aoc-args) "$@"
 }
 
 function aoc-update-context {
