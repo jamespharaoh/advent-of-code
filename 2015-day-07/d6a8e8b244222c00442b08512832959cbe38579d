@@ -1,0 +1,34 @@
+4->zaaaaaaaaaaa
+z										LSHIFT0 ->a
+z LSHIFT1 ->aaaaaaaaaaaaa
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->aaaa
+z							LSHIFT0 ->a
+z LSHIFT0 ->aaaaa
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->aaaaaa
+z												LSHIFT0 ->a
+z LSHIFT0 ->aaaaa
+zLSHIFT0 ->aa
+zLSHIFT0 ->aaaaaaaaaa
+z		LSHIFT0 ->a
+z LSHIFT1 ->aaaaa
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->aaaaa
+z													LSHIFT0 ->a
+z LSHIFT0 ->aaaaa
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->aaa
+z												LSHIFT0 ->a
+z LSHIFT0 ->aaaaa
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->zaaa
+z													LSHIFT0 ->a
+z LSHIFT0 ->aaaaa
+zLSHIFT0 ->aa
+zLSHIFT0 ->aaaaaaaaaaa
+z												LSHIFT0 ->a
+z LSHIFT1 ->a
+zLSHIFT0 ->aaaaaaa
+zLSHIFT0 ->aaaai
+1u
