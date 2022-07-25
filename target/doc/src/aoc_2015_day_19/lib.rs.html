@@ -431,6 +431,7 @@
 <span id="425">425</span>
 <span id="426">426</span>
 <span id="427">427</span>
+<span id="428">428</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 19: Medicine for Rudolph</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/19](https://adventofcode.com/2015/day/19)</span>
@@ -481,6 +482,7 @@
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span>(<span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">CharList</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">min_match</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 		<span class="lifetime">&#39;OUTER</span>: <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">todo_steps</span>, <span class="ident">todo_prefix</span>, <span class="ident">todo_suffix</span>)) <span class="op">=</span> <span class="ident">todo</span>.<span class="ident">pop_back</span> () {
+			<span class="kw">if</span> <span class="ident">todo</span>.<span class="ident">len</span> () <span class="op">&gt;</span><span class="op">=</span> <span class="number">1000</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;1k items in backlog, giving up&quot;</span>) <span class="question-mark">?</span>; }
 			<span class="kw">if</span> <span class="op">!</span> <span class="ident">seen</span>.<span class="ident">insert</span> ((<span class="ident">todo_prefix</span>.<span class="ident">clone</span> (), <span class="ident">todo_suffix</span>.<span class="ident">clone</span> ())) { <span class="kw">continue</span> }
 			<span class="kw">const</span> <span class="ident">VERBOSE</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">false</span>;
 			<span class="kw">if</span> <span class="ident">VERBOSE</span> {
