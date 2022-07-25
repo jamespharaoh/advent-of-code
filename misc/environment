@@ -75,5 +75,5 @@ function aoc-update-context {
 	local prefix="aoc"
 	if [[ -n "$aoc_year" ]]; then prefix="$prefix/$aoc_year"; fi
 	if [[ -n "$aoc_day" ]]; then prefix="$prefix/day-$aoc_day"; fi
-	BASH_PROMPT_DEFAULTS[prefix]="$(highlight "$prefix")"
+	BASH_PROMPT_DEFAULTS[prefix]="$(highlight " $prefix ")"
 }

@@ -2,6 +2,7 @@
 
 declare -a cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 )
 declare time_limit=300
+declare -a years=( 2015 )
 
 function dispatch {
 	local command="${1:-fuzz}"; shift

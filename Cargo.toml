@@ -37,8 +37,5 @@
 [workspace]
 
 	members = [
-		"2015",
-		"2021",
-		"common",
 		"misc/codegen",
 	]
