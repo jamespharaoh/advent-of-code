@@ -323,7 +323,6 @@
 <span id="317">317</span>
 <span id="318">318</span>
 <span id="319">319</span>
-<span id="320">320</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">nums::Int</span>;
 
@@ -580,7 +579,6 @@
 		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
 		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="attribute">#[ <span class="ident">cfg_attr</span> (<span class="ident">fuzzing</span>, <span class="ident">derive</span> (<span class="ident">arbitrary::Arbitrary</span>)) ]</span>
 		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">row</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">col</span>: <span class="ident">Val</span> }
 
 		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {

@@ -385,9 +385,6 @@
 <span id="379">379</span>
 <span id="380">380</span>
 <span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 7: Some Assembly Required</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/7](https://adventofcode.com/2015/day/7)</span>
@@ -608,7 +605,6 @@
 	}
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="attribute">#[ <span class="ident">cfg_attr</span> (<span class="ident">fuzzing</span>, <span class="ident">derive</span> (<span class="ident">arbitrary::Arbitrary</span>)) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">WireId</span> (<span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>);
 
 	<span class="kw">impl</span> <span class="ident">Wire</span> {
@@ -720,14 +716,12 @@
 	}
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>) ]</span>
-	<span class="attribute">#[ <span class="ident">cfg_attr</span> (<span class="ident">fuzzing</span>, <span class="ident">derive</span> (<span class="ident">arbitrary::Arbitrary</span>)) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Wire</span> {
 		<span class="kw">pub</span> <span class="ident">id</span>: <span class="ident">WireId</span>,
 		<span class="kw">pub</span> <span class="ident">input</span>: <span class="ident">WireInput</span>,
 	}
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>) ]</span>
-	<span class="attribute">#[ <span class="ident">cfg_attr</span> (<span class="ident">fuzzing</span>, <span class="ident">derive</span> (<span class="ident">arbitrary::Arbitrary</span>)) ]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">WireInput</span> {
 		<span class="ident">Static</span> (<span class="ident">WireVal</span>),
 		<span class="ident">Wire</span> (<span class="ident">WireId</span>),

@@ -152,7 +152,6 @@
 <span id="146">146</span>
 <span id="147">147</span>
 <span id="148">148</span>
-<span id="149">149</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 1: Not Quite Lisp</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/1](https://adventofcode.com/2015/day/1)</span>
@@ -225,7 +224,6 @@
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Input</span> <span class="op">=</span> <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Dir</span><span class="op">&gt;</span>;
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="attribute">#[ <span class="ident">cfg_attr</span> (<span class="ident">fuzzing</span>, <span class="ident">derive</span> (<span class="ident">arbitrary::Arbitrary</span>)) ]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Dir</span> { <span class="ident">Up</span>, <span class="ident">Down</span> }
 
 	<span class="kw">impl</span> <span class="ident">Dir</span> {
