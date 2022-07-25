@@ -1,8 +1,13 @@
-My solutions to advent of code puzzles found here:
-
-https://adventofcode.com/
+My solutions to the Advent of Code puzzles.
 
 These are all written in Rust, without checking online for any pre-existing solutions.
+
+Links:
+
+- [Advent of Code](https://adventofcode.com/)
+- [Rust docs](https://jamespharaoh.github.io/advent-of-code/rustdoc/aoc/index.html)
+- [Test coverage](https://jamespharaoh.github.io/advent-of-code/coverage/tarpaulin-report.html)
+
 
 | Year         | Status                                                 |
 |--------------|--------------------------------------------------------|
