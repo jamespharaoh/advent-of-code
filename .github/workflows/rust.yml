@@ -29,6 +29,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
@@ -72,6 +73,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
@@ -109,6 +111,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
@@ -146,6 +149,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
@@ -183,6 +187,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
@@ -225,6 +230,7 @@ jobs:
 
       - name: Install tooling
         run: |
+          rustup self uninstall -y
           export RUSTUP_HOME="$HOME/tooling/rustup"
           export CARGO_HOME="$HOME/tooling/cargo"
           export PATH="$CARGO_HOME/bin:$PATH"
