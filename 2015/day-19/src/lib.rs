@@ -159,6 +159,19 @@ pub mod logic {
 
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn part_two () {
+			assert_err! ("Must have at least one replacement from \"e\"",
+				logic::part_two (Input::parse (& ["a => b", "c => d", "", "whatever"]).unwrap ()));
+		}
+
+	}
+
 }
 
 /// Representation of the puzzle input, etc.
@@ -168,7 +181,7 @@ pub mod model {
 	use super::*;
 	use parser::*;
 
-	#[ derive (Clone) ]
+	#[ derive (Clone, Debug) ]
 	pub struct Input {
 		pub replacements: Replacements,
 		pub medicine: String,
@@ -198,6 +211,19 @@ pub mod model {
 			if medicine.is_empty () { Err ("Medicine must be at least one character") ?; }
 			Ok (Input { replacements, medicine })
 		}
+	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn input_parse () {
+			assert_err! ("Invalid input: line 1: col 5: a =>",
+				model::Input::parse (& [ "a =>", "", "whatever" ]));
+		}
+
 	}
 
 }
