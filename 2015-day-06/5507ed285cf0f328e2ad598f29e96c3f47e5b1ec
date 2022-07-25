@@ -1,0 +1,9 @@
+toggle 4,7through87,7
+turn	off 79,8through5,7#
+turn	off 79,7through5,8
+turn	off 79,7through0,5,
+turn	off 79,7through5,7
+turn	off 8,7through5,5
+turn	off 79,7through5,7
+turn	off 79,7through3,7
+turn	off 79,7through5,7 g
