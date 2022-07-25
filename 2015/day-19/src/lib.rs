@@ -8,7 +8,7 @@ puzzle_info! {
 	name = "Medicine for Rudolph";
 	year = 2015;
 	day = 19;
-	parse = |input| model::parse_input (input);
+	parse = |input| model::Input::parse (input);
 	part_one = |input| logic::part_one (input);
 	part_two = |input| logic::part_two (input);
 }
@@ -19,6 +19,7 @@ pub mod logic {
 
 	use super::*;
 	use list::CharList;
+	use list::List;
 	use model::Input;
 
 	pub fn part_one (input: Input) -> GenResult <u32> {
@@ -40,58 +41,103 @@ pub mod logic {
 	}
 
 	pub fn part_two (input: Input) -> GenResult <u32> {
+
+		// sanity check
+
 		if ! input.replacements.iter ().any (|(from, _)| from == "e") {
 			Err ("Must have at least one replacement from \"e\"") ?;
 		}
-		let mut todo: VecDeque <(u32, Vec <Rc <String>>, CharList)> = VecDeque::new ();
-		todo.push_back ((0, Vec::new (), CharList::from (& input.medicine)));
-		let mut seen: HashSet <(Vec <Rc <String>>, CharList)> = HashSet::new ();
+
+		// list of continuations to handle branching without recursion
+
+		let mut todo: VecDeque <(u32, List <String>, CharList)> = VecDeque::new ();
+		todo.push_back ((0, List::new (), CharList::from (& input.medicine)));
+
+		// set of previous iterations to short circuit repeated evaluation of the same state
+
+		let mut seen: HashSet <(List <String>, CharList)> = HashSet::new ();
+
+		// iterate over items from todo
+
 		let mut min_match = None;
 		'OUTER: while let Some ((todo_steps, todo_prefix, todo_suffix)) = todo.pop_back () {
+
+			// abort if it looks too complex, this is mostly to make fuzzing more practical
+
 			if todo.len () >= 1000 { Err ("1k items in backlog, giving up") ?; }
+
+			// skip duplicated items
+
 			if ! seen.insert ((todo_prefix.clone (), todo_suffix.clone ())) { continue }
+
+			// output a message, disabled for now but could be added as a flag
+
 			const VERBOSE: bool = false;
 			if VERBOSE {
 				if todo_prefix.is_empty () {
 					println! ("queue={} steps={} {}", todo.len (), todo_steps, todo_suffix);
 				} else {
-					println! ("queue={} steps={} {} | {}", todo.len (), todo_steps, todo_prefix.iter ().join (" | "), todo_suffix);
+					println! ("queue={} steps={} {} | {}", todo.len (), todo_steps,
+						todo_prefix.iter ().join (" | "), todo_suffix);
 				}
 			}
+
+			// add todo items for any replacements at the start of the suffix, also detect success
+
 			for (from, to) in input.replacements.iter () {
 				if from == "e" {
+
+					// detect success
+
 					if todo_prefix.is_empty () && to == todo_suffix {
-						// TODO i am not convinced it is so simple, but i got the right answer...
-						// i am guessing that this has something to do with this being an
-						// implementation of a greedy matcher, always trying to match on the left
-						// first then recusring. but i would like to think about this a bit more.
+						// TODO I am not entirely convinced that this is so simple, but I got the
+						// right answer, so... I am /guessing/ that this has something to do with
+						// this being an implementation of a greedy matcher, always trying to match
+						// on the left first then recursing. But i would like to think about this a
+						// bit more.
 						min_match = Some (todo_steps + 1);
 						break 'OUTER;
 					}
+
+					// never reduce a partial match to "e", it's only valid if it replaces the
+					// entire molecule
+
 				} else if let Some (suffix) = todo_suffix.strip_prefix (to) {
 					if todo_prefix.is_empty () {
+
+						// no prefix: add the split with no prefix also
+
 						todo.push_back ((
 							todo_steps + 1,
-							Vec::new (),
+							List::new (),
 							suffix.prepend (from),
 						));
+
 					} else {
+
+						// some prefix: continue with the last item removed
+
 						todo.push_back ((
 							todo_steps + 1,
-							todo_prefix.iter ()
-								.take (todo_prefix.len () - 1)
-								.cloned ()
-								.collect (),
+							todo_prefix.tail ().cloned ().unwrap (),
 							suffix.prepend (from)
-								.prepend (todo_prefix.last ().unwrap ()),
+								.prepend (todo_prefix.head ().unwrap ()),
 						));
+
 					}
 				}
 			}
 
+			// add todo items for possible splits: at some point we have to match a replacement at
+			// the start of the molecule, so we must be able to reduce some suffix of the current
+			// molecule into something so that we can reduce the new combined prefix and suffix.
+			// so, we iterate over prefixes but stop when our prefix is not itself a prefix of any
+			// replacements, since we know that it can't possibly be reduced further whatever the
+			// suffix changes into.
+
 			let mut prefix = String::new ();
-			let mut suffix = todo_suffix.clone ();
-			while let Some ((head, tail)) = suffix.cons () {
+			let mut suffix = & todo_suffix;
+			while let Some ((& head, tail)) = suffix.cons () {
 				prefix.push (head);
 				suffix = tail;
 				if ! input.replacements.iter ()
@@ -100,251 +146,16 @@ pub mod logic {
 				}
 				todo.push_back ((
 					todo_steps,
-					todo_prefix.iter ().cloned ()
-						.chain (iter::once (Rc::new (prefix.clone ())))
-						.collect (),
+					todo_prefix.push_front (prefix.clone ()),
 					suffix.clone (),
 				));
 			}
+
 		}
+
+		// return result or error
+
 		Ok (min_match.ok_or ("No solution found") ?)
-	}
-
-}
-
-pub mod list {
-
-	use aoc_common::*;
-
-	pub use char_list::CharList;
-
-	#[ derive (Clone) ]
-	pub enum List <Item: Clone> {
-		Present (Rc <(Item, List <Item>)>),
-		Empty,
-	}
-
-	impl <Item: Clone + Debug> Debug for List <Item> {
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			write! (formatter, "[") ?;
-			let mut cur = self.clone ();
-			let mut idx = 0;
-			while let Some ((head, tail)) = cur.cons () {
-				if idx > 0 { write! (formatter, ", ") ?; }
-				Debug::fmt (& head, formatter) ?;
-				cur = tail;
-				idx += 1;
-			}
-			write! (formatter, "]") ?;
-			Ok (())
-		}
-	}
-
-	impl <Item: Clone + PartialEq> PartialEq for List <Item> {
-		fn eq (& self, other: & Self) -> bool {
-			let mut left = self.clone ();
-			let mut right = other.clone ();
-			loop {
-				match (left.cons (), right.cons ()) {
-					(None, None) => return true,
-					(Some (_), None) | (None, Some (_)) => return false,
-					(Some ((left_head, left_tail)), Some ((right_head, right_tail))) => {
-						if ! Item::eq (& left_head, & right_head) { return false }
-						(left, right) = (left_tail, right_tail)
-					},
-				}
-			}
-		}
-	}
-
-	impl <Item: Clone + Eq> Eq for List <Item> { }
-
-	impl <Item: Clone + Hash> Hash for List <Item> {
-		fn hash <Hshr: Hasher> (& self, hasher: & mut Hshr) {
-			let mut cur = self.clone ();
-			while let Some ((head, tail)) = cur.cons () {
-				head.hash (hasher);
-				cur = tail;
-			}
-		}
-	}
-
-	impl Display for List <char> {
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			let mut cur = self.clone ();
-			while let List::Present (inner) = cur {
-				let & (head, ref tail) = inner.deref ();
-				write! (formatter, "{}", head) ?;
-				cur = tail.clone ();
-			}
-			Ok (())
-		}
-	}
-
-	impl <Item: Clone> List <Item> {
-		#[ inline ]
-		pub fn cons (& self) -> Option <(Item, List <Item>)> {
-			match self {
-				List::Present (inner) => {
-					let (head, tail) = inner.deref ();
-					Some ((head.clone (), tail.clone ()))
-				},
-				List::Empty => None,
-			}
-		}
-		#[ inline ]
-		pub fn head (& self) -> Option <Item> { self.cons ().map (|(head, _)| head) }
-		#[ inline ]
-		pub fn tail (& self) -> Option <List <Item>> { self.cons ().map (|(_, tail)| tail) }
-		#[ inline ]
-		pub fn is_empty (& self) -> bool { self.cons ().is_none () }
-		#[ inline ]
-		pub fn len (& self) -> usize {
-			let mut cur = self.clone ();
-			let mut len = 0;
-			while let List::Present (inner) = cur {
-				let (_, new) = inner.deref ();
-				cur = new.clone ();
-				len += 1
-			}
-			len
-		}
-		#[ inline ]
-		pub fn push_front (& self, head: Item) -> List <Item> {
-			List::Present (Rc::new ((head, self.clone ())))
-		}
-	}
-
-	mod char_list {
-
-		use super::*;
-
-		pub type CharList = List <char>;
-
-		impl CharList {
-			#[ inline ]
-			pub fn starts_with (& self, pat: & str) -> bool {
-				self.strip_prefix (pat).is_some ()
-			}
-			#[ inline ]
-			pub fn strip_prefix (& self, pat: & str) -> Option <CharList> {
-				let mut cur = self.clone ();
-				let mut pat_chars = pat.chars ();
-				loop {
-					match (cur.cons (), pat_chars.next ()) {
-						(_, None) => return Some (cur),
-						(None, _) => return None,
-						(Some ((head, tail)), Some (pat_ch)) => {
-							if head != pat_ch { return None }
-							cur = tail.clone ();
-						},
-					}
-				}
-			}
-			#[ inline ]
-			pub fn prepend (& self, prefix: & str) -> CharList {
-				let mut cur = self.clone ();
-				for prefix_ch in prefix.chars ().rev () {
-					cur = cur.push_front (prefix_ch);
-				}
-				cur
-			}
-		}
-
-		impl From <& str> for CharList {
-			#[ inline ]
-			fn from (src: & str) -> CharList {
-				CharList::Empty.prepend (src)
-			}
-		}
-
-		impl From <& String> for CharList {
-			#[ inline ]
-			fn from (src: & String) -> CharList {
-				CharList::Empty.prepend (src)
-			}
-		}
-
-		impl PartialEq <str> for CharList {
-			#[ inline ]
-			fn eq (& self, other: & str) -> bool {
-				let mut cur = self.clone ();
-				let mut other_iter = other.chars ();
-				loop {
-					match (cur.cons (), other_iter.next ()) {
-						(Some (_), None) | (None, Some (_)) => return false,
-						(None, None) => return true,
-						(Some ((cur_head, cur_tail)), Some (other_ch)) => {
-							if cur_head != other_ch { return false }
-							cur = cur_tail;
-						},
-					}
-				}
-			}
-		}
-
-		impl PartialEq <String> for CharList {
-			#[ inline ]
-			fn eq (& self, other: & String) -> bool {
-				PartialEq::eq (self, other.as_str ())
-			}
-		}
-
-		impl PartialEq <CharList> for & String {
-			#[ inline ]
-			fn eq (& self, other: & CharList) -> bool {
-				PartialEq::eq (self.as_str (), other)
-			}
-		}
-
-		impl PartialEq <CharList> for str {
-			#[ inline ]
-			fn eq (& self, other: & CharList) -> bool {
-				PartialEq::eq (other, self)
-			}
-		}
-
-		#[ cfg (test) ]
-		mod tests {
-
-			use super::*;
-			use CharList as CL;
-
-			fn cl (src: & str) -> CL { CL::from (src) }
-
-			const SAMPLES: & [& str] = & [ "", "a", "ab", "abc", "b", "bc", "c" ];
-
-			#[ test ]
-			fn eq () {
-				for left in SAMPLES.iter ().cloned () {
-					for right in SAMPLES.iter ().cloned () {
-						if left == right {
-							assert! (cl (left) == cl (right),
-								"{:?} == {:?} but CharList::from ({:?}) != CharList::from ({:?})",
-								left, right, left, right);
-						} else {
-							assert! (cl (left) != cl (right),
-								"{:?} != {:?} but CharList::from ({:?}) == CharList::from ({:?})",
-								left, right, left, right);
-						}
-					}
-				}
-			}
-
-			#[ test ]
-			fn strip_prefix () {
-				for left in SAMPLES.iter ().cloned () {
-					for right in SAMPLES.iter ().cloned () {
-						let expected = left.strip_prefix (right);
-						let actual = cl (left).strip_prefix (right);
-						assert_eq! (expected.map (cl), actual,
-							"{:?}.strip_prefix ({:?}) == {:?} but {:?}.strip_prefix ({:?}) == {:?}",
-							left, right, expected, cl (left), right, actual);
-					}
-				}
-			}
-
-		}
 
 	}
 
@@ -366,26 +177,27 @@ pub mod model {
 	pub type Replacements = Vec <Replacement>;
 	pub type Replacement = (String, String);
 
-	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
-		if input.len () < 2 { Err ("Invalid input") ?; }
-		if ! input [input.len () - 2].is_empty () { Err ("Invalid input") ?; }
-		let is_chem = |input: & str| input.chars ().all (|ch| ch.is_ascii_alphanumeric ());
-		let replacements = input [0 .. input.len () - 2].iter ().enumerate ()
-			.map (|(line_idx, line)|
-				Parser::wrap (line, |parser| {
-					parser.set_ignore_whitespace (true);
-					let from = parser.word_if (is_chem) ?;
-					let to = parser.expect_word ("=>") ?.word_if (is_chem) ?;
-					parser.end () ?;
-					if to.len () < from.len () { Err (parser.err ()) ?; }
-					Ok ((from.to_string (), to.to_string ()))
-				}).map_parse_err (|col_idx| format! (
-					"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
-			).collect::<GenResult <Replacements>> () ?;
-		Ok (Input {
-			replacements,
-			medicine: input [input.len () - 1].to_string (),
-		})
+	impl Input {
+		pub fn parse (input: & [& str]) -> GenResult <Input> {
+			if input.len () < 2 { Err ("Invalid input") ?; }
+			if ! input [input.len () - 2].is_empty () { Err ("Invalid input") ?; }
+			let is_chem = |input: & str| input.chars ().all (|ch| ch.is_ascii_alphanumeric ());
+			let replacements = input [0 .. input.len () - 2].iter ().enumerate ()
+				.map (|(line_idx, line)|
+					Parser::wrap (line, |parser| {
+						parser.set_ignore_whitespace (true);
+						let from = parser.word_if (is_chem) ?;
+						let to = parser.expect_word ("=>") ?.word_if (is_chem) ?;
+						parser.end () ?;
+						if to.len () < from.len () { Err (parser.err ()) ?; }
+						Ok ((from.to_string (), to.to_string ()))
+					}).map_parse_err (|col_idx| format! (
+						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
+				).collect::<GenResult <Replacements>> () ?;
+			let medicine = input.last ().unwrap ().to_string ();
+			if medicine.is_empty () { Err ("Medicine must be at least one character") ?; }
+			Ok (Input { replacements, medicine })
+		}
 	}
 
 }

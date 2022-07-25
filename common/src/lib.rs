@@ -7,6 +7,7 @@ pub use prelude::*;
 pub mod bithash;
 pub mod bitvec;
 pub mod grid;
+pub mod list;
 pub mod nums;
 pub mod parser;
 pub mod pos;
