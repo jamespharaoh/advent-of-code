@@ -55,10 +55,9 @@ function aoc-watch {
 	case "$command" in
 		(build|clean|clippy|flamegraph|fuzz|run|run-test|test)
 			local -a args=()
-			if [[ -n "$year" ]]; then args+=( "year-$year" ); fi
-			if [[ -n "$day" ]]; then args+=( "day-$day" ); fi
+			if [[ -n "$aoc_year" ]]; then args+=( "year-$aoc_year" ); fi
+			if [[ -n "$aoc_day" ]]; then args+=( "day-$aoc_day" ); fi
 			args+=( "${args[@]}" )
-			echo "$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "${args[@]}"
 			"$aoc_root/misc/watch-script" "$aoc_root/misc/build-script" "$command" "${args[@]}"
 			;;
 		(*)

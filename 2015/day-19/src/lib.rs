@@ -48,6 +48,7 @@ pub mod logic {
 		let mut seen: HashSet <(Vec <Rc <String>>, CharList)> = HashSet::new ();
 		let mut min_match = None;
 		'OUTER: while let Some ((todo_steps, todo_prefix, todo_suffix)) = todo.pop_back () {
+			if todo.len () >= 1000 { Err ("1k items in backlog, giving up") ?; }
 			if ! seen.insert ((todo_prefix.clone (), todo_suffix.clone ())) { continue }
 			const VERBOSE: bool = false;
 			if VERBOSE {
