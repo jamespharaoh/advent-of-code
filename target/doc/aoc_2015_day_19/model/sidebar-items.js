@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input",""]],"struct":[["Input",""]],"type":[["Replacement",""],["Replacements",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Input",""]],"type":[["Replacement",""],["Replacements",""]]};
