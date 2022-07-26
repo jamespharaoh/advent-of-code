@@ -54,8 +54,8 @@ pub mod logic {
 			weights.iter ().copied ()
 				.fold (Ok (0), |sum, item| sum
 					.and_then (|sum| u32::add_2 (sum, item))) ?;
-		let third_weight = total_weight / PILES as u32;
-		if third_weight * PILES as u32 != total_weight {
+		let want_pile_weight = total_weight / PILES as u32;
+		if want_pile_weight * PILES as u32 != total_weight {
 			Err (format! ("Total weight is not a multiple of {}", PILES)) ?;
 		}
 
@@ -106,7 +106,7 @@ pub mod logic {
 
 			let pile_weight: u32 =
 				pile_stack.iter ().copied ().map (|idx| weights [idx]).sum ();
-			if pile_weight > third_weight { continue }
+			if pile_weight > want_pile_weight { continue }
 
 			// for the first pile only, check the quantum and abort if it's already too high
 
@@ -123,7 +123,7 @@ pub mod logic {
 			// if this pile is now the right weight we start the next pile, or record a solution if
 			// this is the last pile
 
-			if pile_weight == third_weight {
+			if pile_weight == want_pile_weight {
 				if stack.len () < PILES {
 					stack.push (vec! []);
 					for idx in (0 .. weights.len ()).rev () {
@@ -161,7 +161,28 @@ pub mod logic {
 
 		}
 
+		if max_quantum_0 == u64::MAX { Err ("No solution found") ?; }
 		Ok (max_quantum_0)
+
+	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn calc_result () {
+			assert_eq_ok! (5, logic::calc_result::<3> (Input { weights: (1 ..= 5).collect () }));
+			assert_err! ("No solution found",
+				logic::calc_result::<3> (Input { weights: (1 ..= 3).collect () }));
+			assert_err! ("Refusing to deal with more than 50 items",
+				logic::calc_result::<3> (Input { weights: (0 ..= 50).collect () }));
+			assert_err! ("Refusing to deal with duplicated weights",
+				logic::calc_result::<3> (Input { weights: vec! [ 1, 1, 1 ] }));
+			assert_err! ("Total weight is not a multiple of 3",
+				logic::calc_result::<3> (Input { weights: vec! [ 1, 2, 3, 4 ] }));
+		}
 
 	}
 
@@ -187,6 +208,18 @@ pub mod model {
 				.collect::<GenResult <Vec <_>>> () ?;
 			Ok (Input { weights })
 		}
+	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn input_parse () {
+			assert_err! ("Invalid input: line 2: 456X", Input::parse (& [ "123", "456X" ]));
+		}
+
 	}
 
 }
