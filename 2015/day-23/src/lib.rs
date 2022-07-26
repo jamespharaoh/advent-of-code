@@ -125,6 +125,52 @@ pub mod logic {
 		}
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn emulate () {
+			use Instr::*;
+			use Reg::*;
+			// inc, hlf, tpl
+			assert_eq_ok! ((2, 0), logic::emulate (
+				Input { instrs: vec! [ Inc (A), Tpl (A), Inc (A), Hlf (A) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((0, 2), logic::emulate (
+				Input { instrs: vec! [ Inc (B), Tpl (B), Inc (B), Hlf (B) ] }, 0, 0, 0, 10));
+			// jmp
+			assert_eq_ok! ((1, 1), logic::emulate (
+				Input { instrs: vec! [ Inc (A), Jmp (2), Tpl (A), Inc (B) ] }, 0, 0, 0, 10));
+			// jio
+			assert_eq_ok! ((1, 1), logic::emulate (
+				Input { instrs: vec! [ Inc (A), Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((0, 2), logic::emulate (
+				Input { instrs: vec! [ Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((1, 1), logic::emulate (
+				Input { instrs: vec! [ Inc (B), Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((2, 0), logic::emulate (
+				Input { instrs: vec! [ Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+			// jie
+			assert_eq_ok! ((1, 2), logic::emulate (
+				Input { instrs: vec! [ Inc (A), Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((0, 1), logic::emulate (
+				Input { instrs: vec! [ Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((2, 1), logic::emulate (
+				Input { instrs: vec! [ Inc (B), Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+			assert_eq_ok! ((1, 0), logic::emulate (
+				Input { instrs: vec! [ Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+			// errors
+			assert_err! ("Infinite loop", logic::emulate (
+				Input { instrs: vec! [ Jmp (0) ] }, 0, 0, 0, 10));
+			assert_err! ("Max loops reached", logic::emulate (
+				Input { instrs: vec! [ Inc (A), Jmp (-1) ] }, 0, 0, 0, 10));
+			assert_err! ("Arithmetic overflow", logic::emulate (
+				Input { instrs: vec! [ Inc (A), Tpl (A), Jmp (-1) ] }, 0, 0, 0, 100));
+		}
+
+	}
+
 }
 
 /// Representation of the puzzle input, etc.
