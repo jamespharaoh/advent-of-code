@@ -266,6 +266,52 @@
 <span id="260">260</span>
 <span id="261">261</span>
 <span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)</span>
@@ -391,6 +437,52 @@
 			}
 			<span class="prelude-val">Ok</span> (())
 		}
+	}
+
+	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
+	<span class="kw">mod</span> <span class="ident">tests</span> {
+
+		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">emulate</span> () {
+			<span class="kw">use</span> <span class="ident">Instr</span>::<span class="kw-2">*</span>;
+			<span class="kw">use</span> <span class="ident">Reg</span>::<span class="kw-2">*</span>;
+			<span class="comment">// inc, hlf, tpl</span>
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Hlf</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Hlf</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jmp</span>
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="number">2</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jio</span>
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jie</span>
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// errors</span>
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Infinite loop&quot;</span>, <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jmp</span> (<span class="number">0</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Max loops reached&quot;</span>, <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Arithmetic overflow&quot;</span>, <span class="ident">logic::emulate</span> (
+				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));
+		}
+
 	}
 
 }
