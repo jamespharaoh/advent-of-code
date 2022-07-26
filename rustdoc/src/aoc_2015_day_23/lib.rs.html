@@ -312,6 +312,35 @@
 <span id="306">306</span>
 <span id="307">307</span>
 <span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)</span>
@@ -516,6 +545,11 @@
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Reg</span> { <span class="ident">A</span>, <span class="ident">B</span> }
 
 	<span class="kw">impl</span> <span class="ident">Instr</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span> {
+			<span class="ident">Parser::wrap</span> (<span class="ident">input</span>, <span class="ident"><span class="self">Self</span>::parse_real</span>)
+				.<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
+					<span class="macro">format!</span> (<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">input</span>))
+		}
 		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span> {
 			<span class="ident">parser</span>
 				.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>)
@@ -584,6 +618,30 @@
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;b&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Reg::B</span>) })
 				.<span class="ident">done</span> ()
 		}
+	}
+
+	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
+	<span class="kw">mod</span> <span class="ident">tests</span> {
+
+		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 2: col 8: jio a, +-5&quot;</span>,
+				<span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;inc a&quot;</span>, <span class="string">&quot;jio a, +-5&quot;</span> ]));
+		}
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">instr_parse</span> () {
+			<span class="kw">use</span> { <span class="ident">Instr</span>::<span class="kw-2">*</span>, <span class="ident">Reg</span>::<span class="op">*</span> };
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Hlf</span> (<span class="ident">A</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;hlf a&quot;</span>));
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;tpl b&quot;</span>));
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;inc a&quot;</span>));
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jmp -1&quot;</span>));
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">0</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jio b, 0&quot;</span>));
+			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">1</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jie a, +1&quot;</span>));
+		}
+
 	}
 
 }
