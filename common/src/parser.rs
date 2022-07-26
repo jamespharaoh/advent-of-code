@@ -108,7 +108,7 @@ impl <'inp> Parser <'inp> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let len = self.input.chars ().enumerate ()
 			.take_while (|& (idx, letter)|
-				letter.is_ascii_digit () || (idx == 0 && letter == '-'))
+				letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
 			.map (|(_, letter)| letter.len_utf8 ())
 			.sum ();
 		let val = self.input [0 .. len].parse ().map_err (|_| self.err ()) ?;
@@ -206,7 +206,7 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 			where OfFn: FnMut (& mut Parser <'inp>) -> ParseResult <Item> {
 		match self {
 			ParserAny::Parser (parser) => {
-				let mut sub_parser = parser.clone ();
+				let mut sub_parser = Parser { confirmed: false, .. * parser };
 				match of_fn (& mut sub_parser) {
 					Ok (item) => {
 						parser.input = sub_parser.input;

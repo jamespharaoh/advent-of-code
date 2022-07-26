@@ -1,0 +1,28 @@
+[package]
+
+	name = "aoc-2015-day-23"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2015: Day 12: Opening the Turing Lock"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-23"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[[bin]]
+
+	name = "aoc-2015-day-23"
+	test = false
+	bench = false
