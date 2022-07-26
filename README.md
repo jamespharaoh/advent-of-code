@@ -15,4 +15,4 @@ Links:
 | [2020](2020) | ![](https://img.shields.io/badge/stars%20⭐-40-green) |
 | [2019](2019) | ![](https://img.shields.io/badge/stars%20⭐-50-brightgreen)  |
 | [2018](2018) | ![](https://img.shields.io/badge/stars%20⭐-20-yellow) |
-| [2015](2018) | ![](https://img.shields.io/badge/stars%20⭐-46-green) |
+| [2015](2018) | ![](https://img.shields.io/badge/stars%20⭐-50-brightgreen) |
