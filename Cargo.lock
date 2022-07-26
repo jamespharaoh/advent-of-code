@@ -38,6 +38,7 @@ dependencies = [
  "aoc-2015-day-21",
  "aoc-2015-day-22",
  "aoc-2015-day-23",
+ "aoc-2015-day-24",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -220,6 +221,14 @@ dependencies = [
 
 [[package]]
 name = "aoc-2015-day-23"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2015-day-24"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",

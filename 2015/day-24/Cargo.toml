@@ -1,11 +1,11 @@
 [package]
 
-	name = "aoc-2015-day-23"
+	name = "aoc-2015-day-24"
 	version = "0.1.0"
 	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
-	description = "Advent of Code 2015: Day 23: Opening the Turing Lock"
-	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-23"
+	description = "Advent of Code 2015: Day 24: It Hangs in the Balance"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-24"
 	license = "MIT"
 	publish = false
 
@@ -23,6 +23,6 @@
 
 [[bin]]
 
-	name = "aoc-2015-day-23"
+	name = "aoc-2015-day-24"
 	test = false
 	bench = false

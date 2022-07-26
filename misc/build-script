@@ -15,7 +15,7 @@ function main {
 			(day-*) day="${arg:4}" ;;
 			(coverage|dev|release|release-lto) profile="$arg" ;;
 			(build|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test) mode="$arg" ;;
-			(cmin) fuzz_mode="$arg" ;;
+			(cmin|repr) fuzz_mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;
@@ -46,7 +46,18 @@ function main {
 		(fuzz)
 			cd $year/fuzz
 			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
-			cargo +nightly fuzz "$fuzz_mode" "day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
+			case "$fuzz_mode" in
+				(run|cmin)
+					cargo +nightly fuzz "$fuzz_mode" "day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
+					;;
+				(repr)
+					cargo +nightly fuzz run "day-$day" "${extra_args[@]}"
+					;;
+				(*)
+					echo "Syntax error" >&2
+					exit 1
+					;;
+			esac
 			;;
 		(run-test)
 			time env time -v cargo $toolchain run "${cargo_args[@]}" -- "${extra_args[@]}"
