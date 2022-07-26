@@ -202,6 +202,11 @@ pub mod model {
 	pub enum Reg { A, B }
 
 	impl Instr {
+		pub fn parse (input: & str) -> GenResult <Instr> {
+			Parser::wrap (input, Self::parse_real)
+				.map_parse_err (|col_idx|
+					format! ("Invalid input: col {}: {}", col_idx + 1, input))
+		}
 		fn parse_real (parser: & mut Parser) -> ParseResult <Instr> {
 			parser
 				.set_ignore_whitespace (true)
@@ -270,6 +275,30 @@ pub mod model {
 				.of (|parser| { parser.expect_word ("b") ?; Ok (Reg::B) })
 				.done ()
 		}
+	}
+
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn input_parse () {
+			assert_err! ("Invalid input: line 2: col 8: jio a, +-5",
+				Input::parse (& [ "inc a", "jio a, +-5" ]));
+		}
+
+		#[ test ]
+		fn instr_parse () {
+			use { Instr::*, Reg::* };
+			assert_eq_ok! (Hlf (A), Instr::parse ("hlf a"));
+			assert_eq_ok! (Tpl (B), Instr::parse ("tpl b"));
+			assert_eq_ok! (Inc (A), Instr::parse ("inc a"));
+			assert_eq_ok! (Jmp (-1), Instr::parse ("jmp -1"));
+			assert_eq_ok! (Jio (B, 0), Instr::parse ("jio b, 0"));
+			assert_eq_ok! (Jie (A, 1), Instr::parse ("jie a, +1"));
+		}
+
 	}
 
 }
