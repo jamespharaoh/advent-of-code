@@ -1,11 +1,11 @@
 [package]
 
-	name = "aoc-2015-day-21"
+	name = "aoc-2015-day-22"
 	version = "0.1.0"
 	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
-	description = "Advent of Code 2015: Day 21: RPG Simulator 20XX"
-	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-21"
+	description = "Advent of Code 2015: Day 22: Wizard Simulator 20XX"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2015/day-22"
 	license = "MIT"
 	publish = false
 
@@ -23,6 +23,6 @@
 
 [[bin]]
 
-	name = "aoc-2015-day-21"
+	name = "aoc-2015-day-22"
 	test = false
 	bench = false

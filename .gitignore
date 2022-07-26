@@ -1,7 +1,8 @@
-/target
 /2018/target
 /2019/*/target
 /2020/*/target
+/github-pages
+/target
 flamegraph.svg
 perf.data
 perf.data.old

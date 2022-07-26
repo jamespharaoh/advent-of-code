@@ -45,7 +45,7 @@ function aoc {
 			;;
 		(*)
 			echo "Don't recognise command: $command" >&2
-			exit 1
+			return 1
 			;;
 	esac
 }
@@ -77,3 +77,5 @@ function aoc-update-context {
 	if [[ -n "$aoc_day" ]]; then prefix="$prefix/day-$aoc_day"; fi
 	BASH_PROMPT_DEFAULTS[prefix]="$(highlight " $prefix ")"
 }
+
+aoc-update-context
