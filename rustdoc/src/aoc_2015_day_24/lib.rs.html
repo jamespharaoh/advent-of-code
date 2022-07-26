@@ -217,6 +217,39 @@
 <span id="211">211</span>
 <span id="212">212</span>
 <span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
@@ -273,8 +306,8 @@
 			<span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
 				.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">sum</span>
 					.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">sum</span><span class="op">|</span> <span class="ident">u32::add_2</span> (<span class="ident">sum</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">third_weight</span> <span class="op">=</span> <span class="ident">total_weight</span> <span class="op">/</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span>;
-		<span class="kw">if</span> <span class="ident">third_weight</span> <span class="op">*</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">!</span><span class="op">=</span> <span class="ident">total_weight</span> {
+		<span class="kw">let</span> <span class="ident">want_pile_weight</span> <span class="op">=</span> <span class="ident">total_weight</span> <span class="op">/</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span>;
+		<span class="kw">if</span> <span class="ident">want_pile_weight</span> <span class="op">*</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">!</span><span class="op">=</span> <span class="ident">total_weight</span> {
 			<span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Total weight is not a multiple of {}&quot;</span>, <span class="ident">PILES</span>)) <span class="question-mark">?</span>;
 		}
 
@@ -325,7 +358,7 @@
 
 			<span class="kw">let</span> <span class="ident">pile_weight</span>: <span class="ident">u32</span> <span class="op">=</span>
 				<span class="ident">pile_stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>]).<span class="ident">sum</span> ();
-			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">&gt;</span> <span class="ident">third_weight</span> { <span class="kw">continue</span> }
+			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">&gt;</span> <span class="ident">want_pile_weight</span> { <span class="kw">continue</span> }
 
 			<span class="comment">// for the first pile only, check the quantum and abort if it&#39;s already too high</span>
 
@@ -342,7 +375,7 @@
 			<span class="comment">// if this pile is now the right weight we start the next pile, or record a solution if</span>
 			<span class="comment">// this is the last pile</span>
 
-			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">==</span> <span class="ident">third_weight</span> {
+			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">==</span> <span class="ident">want_pile_weight</span> {
 				<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="ident">PILES</span> {
 					<span class="ident">stack</span>.<span class="ident">push</span> (<span class="macro">vec!</span> []);
 					<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">weights</span>.<span class="ident">len</span> ()).<span class="ident">rev</span> () {
@@ -380,7 +413,28 @@
 
 		}
 
+		<span class="kw">if</span> <span class="ident">max_quantum_0</span> <span class="op">==</span> <span class="ident">u64::MAX</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>; }
 		<span class="prelude-val">Ok</span> (<span class="ident">max_quantum_0</span>)
+
+	}
+
+	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
+	<span class="kw">mod</span> <span class="ident">tests</span> {
+
+		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">calc_result</span> () {
+			<span class="macro">assert_eq_ok!</span> (<span class="number">5</span>, <span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">1</span> ..<span class="op">=</span> <span class="number">5</span>).<span class="ident">collect</span> () }));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;No solution found&quot;</span>,
+				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">1</span> ..<span class="op">=</span> <span class="number">3</span>).<span class="ident">collect</span> () }));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Refusing to deal with more than 50 items&quot;</span>,
+				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">0</span> ..<span class="op">=</span> <span class="number">50</span>).<span class="ident">collect</span> () }));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>,
+				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: <span class="macro">vec!</span> [ <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ] }));
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Total weight is not a multiple of 3&quot;</span>,
+				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: <span class="macro">vec!</span> [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> ] }));
+		}
 
 	}
 
@@ -406,6 +460,18 @@
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
 			<span class="prelude-val">Ok</span> (<span class="ident">Input</span> { <span class="ident">weights</span> })
 		}
+	}
+
+	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
+	<span class="kw">mod</span> <span class="ident">tests</span> {
+
+		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 2: 456X&quot;</span>, <span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;123&quot;</span>, <span class="string">&quot;456X&quot;</span> ]));
+		}
+
 	}
 
 }
