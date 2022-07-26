@@ -5,8 +5,8 @@ These are all written in Rust, without checking online for any pre-existing solu
 Links:
 
 - [Advent of Code](https://adventofcode.com/)
-- [Rust docs](https://jamespharaoh.github.io/advent-of-code/rustdoc/aoc/index.html)
-- [Test coverage](https://jamespharaoh.github.io/advent-of-code/coverage/tarpaulin-report.html)
+- [Rust docs](https://advent-of-code.jamespharaoh.com/rustdoc/aoc/index.html)
+- [Test coverage](https://advent-of-code.jamespharaoh.com/coverage/tarpaulin-report.html)
 
 
 | Year         | Status                                                 |
