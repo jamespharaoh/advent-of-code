@@ -297,6 +297,7 @@ pub mod model {
 			assert_eq_ok! (Jmp (-1), Instr::parse ("jmp -1"));
 			assert_eq_ok! (Jio (B, 0), Instr::parse ("jio b, 0"));
 			assert_eq_ok! (Jie (A, 1), Instr::parse ("jie a, +1"));
+			assert_err! ("Invalid input: col 5: inc abc", Instr::parse ("inc abc"));
 		}
 
 	}
