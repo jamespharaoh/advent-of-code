@@ -11,8 +11,8 @@ Links:
 
 | Year         | Status                                                 |
 |--------------|--------------------------------------------------------|
-| [2021](2021) | ![](https://img.shields.io/badge/stars%20⭐-50-green)  |
-| [2020](2020) | ![](https://img.shields.io/badge/stars%20⭐-40-yellow) |
-| [2019](2019) | ![](https://img.shields.io/badge/stars%20⭐-50-green)  |
-| [2018](2018) | ![](https://img.shields.io/badge/stars%20⭐-20-orange) |
-| [2015](2018) | ![](https://img.shields.io/badge/stars%20⭐-36-yellow) |
+| [2021](2021) | ![](https://img.shields.io/badge/stars%20⭐-50-brightgreen)  |
+| [2020](2020) | ![](https://img.shields.io/badge/stars%20⭐-40-green) |
+| [2019](2019) | ![](https://img.shields.io/badge/stars%20⭐-50-brightgreen)  |
+| [2018](2018) | ![](https://img.shields.io/badge/stars%20⭐-20-yellow) |
+| [2015](2018) | ![](https://img.shields.io/badge/stars%20⭐-46-green) |
