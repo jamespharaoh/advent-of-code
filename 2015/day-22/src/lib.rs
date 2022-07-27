@@ -21,6 +21,8 @@ pub mod logic {
 	use model::Boss;
 	use model::Input;
 	use model::Player;
+	use search::PrioritySearch;
+	use search::PrioritySearchAdder;
 
 	pub fn part_one (input: Input) -> GenResult <u16> {
 		Ok (calc_result (input, Difficulty::Easy).ok_or ("No solution found") ?)
@@ -32,43 +34,38 @@ pub mod logic {
 
 	fn calc_result (input: Input, difficulty: Difficulty) -> Option <u16> {
 		outcomes (input, difficulty)
-			.filter (| & Outcome { winner, .. } | winner == Contender::Player)
-			.map (| Outcome { mana, .. } | mana)
-			.min ()
+			.filter (|outcome| outcome.winner == Contender::Player)
+			.map (|outcome| outcome.mana)
+			.next ()
 	}
 
 	fn outcomes (input: Input, difficulty: Difficulty) -> impl Iterator <Item = Outcome> {
 
-		let mut stack = vec! [ State {
+		let mut search = PrioritySearch::with_hash_map (
+			|state: State, _, mut adder: PrioritySearchAdder <'_, _, _, _>| {
+				if state.boss.hit_points == 0 {
+					Some (Outcome { winner: Contender::Player, mana: state.mana })
+				} else if state.player.hit_points == 0 {
+					Some (Outcome { winner: Contender::Boss, mana: state.mana })
+				} else {
+					for next_state in next_states (state) {
+						adder.add (next_state, next_state.mana);
+					}
+					None
+				}
+			},
+		);
+
+		search.push (State {
 			player: input.player,
 			boss: input.boss,
 			effects: Effects { shield: 0, poison: 0, recharge: 0 },
 			turn: Contender::Player,
 			difficulty,
 			mana: 0,
-		} ];
+		}, 0);
 
-		let mut seen: HashSet <State> =
-			HashSet::from_iter (stack.iter ().cloned ());
-
-		iter::from_fn (move || {
-			while let Some (state) = stack.pop () {
-
-				if state.boss.hit_points == 0 {
-					return Some (Outcome { winner: Contender::Player, mana: state.mana });
-				}
-
-				if state.player.hit_points == 0 {
-					return Some (Outcome { winner: Contender::Boss, mana: state.mana });
-				}
-
-				for state in next_states (state) {
-					if seen.insert (state) { stack.push (state); }
-				}
-
-			}
-			None
-		})
+		search.flatten ()
 
 	}
 
@@ -232,8 +229,8 @@ pub mod model {
 			}
 			let hit_points = parse_line (0, input [0], "Hit Points: ") ?;
 			let damage = parse_line (1, input [1], "Damage: ") ?;
-			if hit_points > 200 { Err ("Boss hit points are limited to 200") ?; }
-			if damage > 20 { Err ("Boss damage is limited to 20") ?; }
+			if hit_points > 100 { Err ("Boss hit points are limited to 100") ?; }
+			if damage > 15 { Err ("Boss damage is limited to 15") ?; }
 			Ok (Input { player, boss: Boss { hit_points, damage }})
 		}
 	}
