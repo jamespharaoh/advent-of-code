@@ -250,9 +250,57 @@
 <span id="244">244</span>
 <span id="245">245</span>
 <span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Input</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Each line contains a decimal integer, representing the weight of a single package.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Part one</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Split the packages into three piles of equal weight. Optimise so that one pile has the fewest</span>
+<span class="doccomment">//! possible number of packages. Further optimize so that the product of the weights of the</span>
+<span class="doccomment">//! packages in the first pile is as small as possible. Produce that product as a result.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Part two</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The same as part one, but with four piles instead of three.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Algorithm</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - Iteratively build up a list of items to assign to each pile, always in order from heavier to</span>
+<span class="doccomment">//!   lighter. This ensures that we find a solution with the smallest possible number of packages</span>
+<span class="doccomment">//!   in the first pile before any other.</span>
+<span class="doccomment">//! - Once we find a solution for all three piles, record the size and product of the first pile,</span>
+<span class="doccomment">//!   and only consider solutions with a first pile which would signify an improvement.</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -298,6 +346,10 @@
 
 		<span class="kw">if</span> <span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">dedup</span> ().<span class="ident">count</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">weights</span>.<span class="ident">len</span> () {
 			<span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>) <span class="question-mark">?</span>;
+		}
+
+		<span class="kw">if</span> <span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">any</span> (<span class="op">|</span><span class="ident">weight</span><span class="op">|</span> <span class="ident">weight</span> <span class="op">&gt;</span> <span class="number">200</span>) {
+			<span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to deal with weights over 200&quot;</span>) <span class="question-mark">?</span>;
 		}
 
 		<span class="comment">// work out the balanced weight of each pile</span>
