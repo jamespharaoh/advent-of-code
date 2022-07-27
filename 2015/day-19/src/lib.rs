@@ -42,10 +42,36 @@ pub mod logic {
 
 	pub fn part_two (input: Input) -> GenResult <u32> {
 
-		// sanity check
+		// sanity checks
 
 		if ! input.replacements.iter ().any (|(from, _)| from == "e") {
 			Err ("Must have at least one replacement from \"e\"") ?;
+		}
+
+		if input.medicine.len () > 512 {
+			Err ("Medicine must be 512 chars or less") ?;
+		}
+
+		if ! input.medicine.chars ().all (|ch| ch.is_ascii_alphanumeric ()) {
+			Err ("Medicine must be ASCII alphanumeric") ?;
+		}
+
+		for (from, to) in input.replacements.iter () {
+
+			if ! from.chars ().all (|ch| ch.is_ascii_alphanumeric ())
+					|| ! to.chars ().all (|ch| ch.is_ascii_alphanumeric ()) {
+				Err ("All replacements must be ASCII alphanumeric") ?;
+			}
+
+			if from.chars ()
+					.filter (|ch| ch.is_ascii_uppercase () || ch.is_ascii_digit ())
+					.count ()
+				>= to.chars ()
+					.filter (|ch| ch.is_ascii_uppercase () || ch.is_ascii_digit ())
+					.count () {
+				Err ("Replacements must always increase number of more ASCII uppercase/digits") ?;
+			}
+
 		}
 
 		// list of continuations to handle branching without recursion
@@ -64,7 +90,8 @@ pub mod logic {
 
 			// abort if it looks too complex, this is mostly to make fuzzing more practical
 
-			if todo.len () >= 1000 { Err ("1k items in backlog, giving up") ?; }
+			if todo.len () >= 1500 { Err ("1500 states pending, giving up") ?; }
+			if seen.len () >= 3000 { Err ("3000 unique states seen, giving up") ?; }
 
 			// skip duplicated items
 
@@ -192,7 +219,7 @@ pub mod model {
 
 	impl Input {
 		pub fn parse (input: & [& str]) -> GenResult <Input> {
-			if input.len () < 2 { Err ("Invalid input") ?; }
+			if input.len () < 3 { Err ("Invalid input") ?; }
 			if ! input [input.len () - 2].is_empty () { Err ("Invalid input") ?; }
 			let is_chem = |input: & str| input.chars ().all (|ch| ch.is_ascii_alphanumeric ());
 			let replacements = input [0 .. input.len () - 2].iter ().enumerate ()
