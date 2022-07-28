@@ -174,12 +174,12 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span> {
 		<span class="prelude-val">Ok</span> (
-			<span class="ident">input</span>.<span class="ident">iter_copied</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">l</span>, <span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span>
+			<span class="ident">input</span>.<span class="ident">iter_vals</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">l</span>, <span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span>
 				<span class="ident">Int::add_4</span> (
 					<span class="ident">Int::mul_3</span> (<span class="number">2</span>, <span class="ident">l</span>, <span class="ident">w</span>) <span class="question-mark">?</span>,
 					<span class="ident">Int::mul_3</span> (<span class="number">2</span>, <span class="ident">w</span>, <span class="ident">h</span>) <span class="question-mark">?</span>,
 					<span class="ident">Int::mul_3</span> (<span class="number">2</span>, <span class="ident">h</span>, <span class="ident">l</span>) <span class="question-mark">?</span>,
-					[ <span class="ident">Int::mul_2</span> (<span class="ident">l</span>, <span class="ident">w</span>) <span class="question-mark">?</span>, <span class="ident">Int::mul_2</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="question-mark">?</span>, <span class="ident">Int::mul_2</span> (<span class="ident">h</span>, <span class="ident">l</span>) <span class="question-mark">?</span>].<span class="ident">iter_copied</span> ()
+					[ <span class="ident">Int::mul_2</span> (<span class="ident">l</span>, <span class="ident">w</span>) <span class="question-mark">?</span>, <span class="ident">Int::mul_2</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="question-mark">?</span>, <span class="ident">Int::mul_2</span> (<span class="ident">h</span>, <span class="ident">l</span>) <span class="question-mark">?</span>].<span class="ident">iter_vals</span> ()
 						.<span class="ident">min</span> ().<span class="ident">unwrap</span> (),
 				)
 			).<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">val</span><span class="op">|</span> <span class="ident">Int::add_2</span> (<span class="ident">sum</span> <span class="question-mark">?</span>, <span class="ident">val</span> <span class="question-mark">?</span>)) <span class="question-mark">?</span>
@@ -188,13 +188,13 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Dim</span><span class="op">&gt;</span> {
 		<span class="prelude-val">Ok</span> (
-			<span class="ident">input</span>.<span class="ident">iter_copied</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">l</span>, <span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span>
+			<span class="ident">input</span>.<span class="ident">iter_vals</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">l</span>, <span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span>
 				<span class="ident">Int::add_2</span> (
 					[
 						<span class="ident">Int::mul_2</span> (<span class="number">2</span>, <span class="ident">Int::add_2</span> (<span class="ident">l</span>, <span class="ident">w</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>,
 						<span class="ident">Int::mul_2</span> (<span class="number">2</span>, <span class="ident">Int::add_2</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>,
 						<span class="ident">Int::mul_2</span> (<span class="number">2</span>, <span class="ident">Int::add_2</span> (<span class="ident">h</span>, <span class="ident">l</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>,
-					].<span class="ident">iter_copied</span> ().<span class="ident">min</span> ().<span class="ident">unwrap</span> (),
+					].<span class="ident">iter_vals</span> ().<span class="ident">min</span> ().<span class="ident">unwrap</span> (),
 					<span class="ident">Int::mul_3</span> (<span class="ident">l</span>, <span class="ident">w</span>, <span class="ident">h</span>) <span class="question-mark">?</span>,
 				)
 			).<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">val</span><span class="op">|</span> <span class="ident">Int::add_2</span> (<span class="ident">sum</span> <span class="question-mark">?</span>, <span class="ident">val</span> <span class="question-mark">?</span>)) <span class="question-mark">?</span>
