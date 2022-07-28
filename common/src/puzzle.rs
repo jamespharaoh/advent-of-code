@@ -1,12 +1,41 @@
+use std::fs::File;
 use std::io;
+use std::io::BufRead as _;
+use std::io::BufReader;
 use std::io::Write as _;
+use std::path::PathBuf;
 
 use super::*;
 use nums::IntConv;
 
-pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
+pub struct RunStats {
+	num_correct: usize,
+	num_incorrect: usize,
+	num_unknown: usize,
+}
+
+pub fn run_year_and_exit (
+	puzzles: & [Box <dyn Puzzle>],
+	require_answers: bool,
+) -> GenResult <()> {
+	let stats = run_year (puzzles) ?;
+	let num_errors =
+		if require_answers { stats.num_incorrect + stats.num_unknown }
+		else { stats.num_incorrect };
+	std::process::exit (
+		if num_errors == 0 { 0 }
+		else { 1 });
+}
+
+pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 
 	let flush = || io::stdout ().flush ().unwrap ();
+
+	let mut stats = RunStats {
+		num_correct: 0,
+		num_incorrect: 0,
+		num_unknown: 0,
+	};
 
 	// work out max name length
 
@@ -15,6 +44,34 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
 			.map (|puzzle| puzzle.name ().len ())
 			.max ()
 			.unwrap ();
+
+	// load answers
+
+	let answers_path = PathBuf::from (
+		format! ("{}/inputs/answers", puzzles [0].year ()));
+
+	let answers: HashMap <(u8, u8), String> =
+		if answers_path.exists () {
+			BufReader::new (File::open (answers_path) ?)
+				.lines ()
+				.map (move |line| {
+					let line = line ?;
+					let line_parts: Vec <String> =
+						line.split (' ')
+							.map (str::to_string)
+							.collect ();
+					let day: u8 = line_parts [0].parse::<u8> () ?;
+					Ok (
+						line_parts.into_iter ()
+							.skip (1)
+							.enumerate ()
+							.map (move |(idx, val)|
+								((day, idx.as_u8 ()), val))
+					)
+				})
+				.flatten_ok ()
+				.collect::<GenResult <_>> () ?
+		} else { HashMap::new () };
 
 	// iterate puzzles
 
@@ -40,6 +97,7 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
 
 		// iterate over parts
 
+		let mut errors = Vec::new ();
 		for part in 0 .. 2 {
 
 			// handle missing part
@@ -63,6 +121,21 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
 				else if part == 1 { puzzle.part_two (& input_lines) ? }
 				else { panic! () };
 
+			// check against answers
+
+			if let Some (answer) = answers.get (& (puzzle.day (), part.as_u8 ())) {
+				if & result == answer {
+					stats.num_correct += 1;
+				} else if & result != answer {
+					stats.num_incorrect += 1;
+					errors.push (format! (
+						"Part {part}: Expected {answer:?}, but calculated {result:?}",
+						part = part + 1,
+						answer = answer,
+						result = result));
+				}
+			} else { stats.num_unknown += 1; }
+
 			// print result
 
 			print! ("{:17}", result);
@@ -79,9 +152,15 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
 			millis = duration.as_millis (),
 			micros = (duration.as_micros () % 1000) / 10);
 
+		// print errors
+
+		for error in errors {
+			print! ("  {}\n", error);
+		}
+
 	}
 
-	Ok (())
+	Ok (stats)
 
 }
 

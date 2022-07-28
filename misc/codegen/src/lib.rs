@@ -157,7 +157,7 @@ mod templates {
 		"use aoc_common::*;",
 		"",
 		"fn main () -> GenResult <()> {",
-		"\tpuzzle::run_year (& aoc_${YEAR}::puzzle_metadata ())",
+		"\tpuzzle::run_year_and_exit (& aoc_${YEAR}::puzzle_metadata (), true)",
 		"}",
 	];
 
