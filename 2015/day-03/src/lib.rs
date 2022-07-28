@@ -20,7 +20,7 @@ pub mod logic {
 	use model::Pos;
 
 	pub fn part_one (input: Input) -> GenResult <u32> {
-		let (seen, _) = input.iter_copied ().fold (
+		let (seen, _) = input.iter_vals ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO),
 			|(mut seen, pos), dir| {
 				let pos = pos + dir.to_pos ();
@@ -32,7 +32,7 @@ pub mod logic {
 	}
 
 	pub fn part_two (input: Input) -> GenResult <u32> {
-		let (seen, _, _) = input.iter_copied ().fold (
+		let (seen, _, _) = input.iter_vals ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO, Pos::ZERO),
 			|(mut seen, pos_0, pos_1), dir| {
 				let pos_0 = pos_0 + dir.to_pos ();

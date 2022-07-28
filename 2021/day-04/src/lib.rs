@@ -111,17 +111,30 @@ mod model {
 
 	impl Input {
 		pub fn parse (lines: & [& str]) -> GenResult <Rc <Input>> {
-			let call_order: Vec <u8> = lines [0].split (',').map (
-				|num_str| num_str.parse::<u8> ().unwrap (),
-			).collect ();
-			let boards: Vec <Board> = lines [2 ..].chunks (6).map (
-				|board_lines| board_lines.iter ().take (5).flat_map (
-					|board_line| board_line.split_whitespace ().map (
-						|num_str| num_str.parse::<u8> ().unwrap (),
-					).collect::<Vec <u8>> (),
-				).collect::<Vec <u8>> ().try_into ().unwrap (),
-			).collect ();
+
+			let call_order: Vec <u8> =
+				lines [0]
+					.split (',')
+					.map (|num_str| num_str
+						.parse ()
+						.unwrap ())
+					.collect ();
+
+			let boards: Vec <Board> =
+				lines [2 ..].chunks (6)
+					.map (|board_lines| board_lines.iter ()
+						.take (5)
+						.flat_map (|board_line| board_line
+							.split_whitespace ()
+							.map (|num_str| num_str
+								.parse ()
+								.unwrap ()))
+						.collect_array ()
+						.unwrap ())
+					.collect ();
+
 			Ok (Input { call_order, boards }.into ())
+
 		}
 	}
 

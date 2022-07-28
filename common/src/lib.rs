@@ -35,6 +35,13 @@ mod assertions {
 	}
 
 	#[ macro_export ]
+	macro_rules! some_or {
+		( $val:expr, $if_err:expr ) => {
+			match ($val) { Some (val) => val, None => $if_err }
+		};
+	}
+
+	#[ macro_export ]
 	macro_rules! assert_is_ok {
 		( $actual:expr ) => {
 			assert! ($actual.is_ok ());
@@ -86,7 +93,7 @@ mod iter_ext {
 	use iter::Copied;
 
 	pub trait IntoIteratorExt: IntoIterator + Sized {
-		fn iter_copied <'a, Item> (self) -> Copied <Self::IntoIter>
+		fn iter_vals <'a, Item> (self) -> Copied <Self::IntoIter>
 			where
 				Item: 'a + Copy,
 				Self: IntoIterator <Item = & 'a Item> {
@@ -94,8 +101,22 @@ mod iter_ext {
 		}
 	}
 
-	impl <'a, IntoIter> IntoIteratorExt for & 'a IntoIter where & 'a IntoIter: IntoIterator {
+	impl <'a, IntoIter> IntoIteratorExt for & 'a IntoIter where & 'a IntoIter: IntoIterator {}
+
+	pub trait IteratorExt: Iterator {
+		fn collect_array <const DIM: usize> (mut self) -> Option <[Self::Item; DIM]>
+				where Self: Sized, Self::Item: Copy + Default {
+			let mut result = [default (); DIM];
+			for idx in 0 .. DIM {
+				assert! (idx < result.len ());
+				result [idx] = some_or! (self.next (), return None);
+			}
+			if self.next ().is_some () { return None }
+			Some (result)
+		}
 	}
+
+	impl <SomeIter: Iterator> IteratorExt for SomeIter {}
 
 }
 
@@ -160,4 +181,5 @@ mod prelude {
 	pub use std::thread;
 	pub use std::time;
 	pub use crate::iter_ext::IntoIteratorExt as _;
+	pub use crate::iter_ext::IteratorExt as _;
 }

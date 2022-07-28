@@ -22,12 +22,12 @@ pub mod logic {
 
 	pub fn part_one (input: Input) -> GenResult <Dim> {
 		Ok (
-			input.iter_copied ().map (|(l, w, h)|
+			input.iter_vals ().map (|(l, w, h)|
 				Int::add_4 (
 					Int::mul_3 (2, l, w) ?,
 					Int::mul_3 (2, w, h) ?,
 					Int::mul_3 (2, h, l) ?,
-					[ Int::mul_2 (l, w) ?, Int::mul_2 (w, h) ?, Int::mul_2 (h, l) ?].iter_copied ()
+					[ Int::mul_2 (l, w) ?, Int::mul_2 (w, h) ?, Int::mul_2 (h, l) ?].iter_vals ()
 						.min ().unwrap (),
 				)
 			).fold (Ok (0), |sum, val| Int::add_2 (sum ?, val ?)) ?
@@ -36,13 +36,13 @@ pub mod logic {
 
 	pub fn part_two (input: Input) -> GenResult <Dim> {
 		Ok (
-			input.iter_copied ().map (|(l, w, h)|
+			input.iter_vals ().map (|(l, w, h)|
 				Int::add_2 (
 					[
 						Int::mul_2 (2, Int::add_2 (l, w) ?) ?,
 						Int::mul_2 (2, Int::add_2 (w, h) ?) ?,
 						Int::mul_2 (2, Int::add_2 (h, l) ?) ?,
-					].iter_copied ().min ().unwrap (),
+					].iter_vals ().min ().unwrap (),
 					Int::mul_3 (l, w, h) ?,
 				)
 			).fold (Ok (0), |sum, val| Int::add_2 (sum ?, val ?)) ?
