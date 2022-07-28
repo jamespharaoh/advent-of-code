@@ -58,6 +58,7 @@ jobs:
             --allow clippy::useless_format
             --allow clippy::vec_init_then_push
             --allow clippy::write_with_newline
+            --deny clippy::as_conversions
           name: clippy-results
           token: ${{ secrets.GITHUB_TOKEN }}
 

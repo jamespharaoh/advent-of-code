@@ -22,6 +22,7 @@ mod logic {
 	use model::Cave;
 	use model::Grid;
 	use model::Pos;
+	use nums::IntConv;
 	use search::PrioritySearch;
 	use search::PrioritySearchAdder;
 
@@ -54,7 +55,7 @@ mod logic {
 			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64, _>| {
 				for adj_pos in pos.adjacent_4 () {
 					if let Some (adj_risk) = cave.risks.get (adj_pos) {
-						let adj_path_risk = path_risk + adj_risk as u64;
+						let adj_path_risk = path_risk + adj_risk.as_u64 ();
 						adder.add (adj_pos, adj_path_risk);
 					}
 				}
@@ -74,6 +75,7 @@ mod logic {
 mod model {
 
 	use super::*;
+	use nums::IntConv;
 
 	pub type Grid <Val> = grid::Grid <Vec <Val>, Pos, 2>;
 	pub type Pos = pos::PosYX <i16>;
@@ -90,12 +92,12 @@ mod model {
 			for (line_idx, line) in lines.iter ().enumerate () {
 				let line_err = || format! ("Invalid input on line {}: {}", line_idx + 1, line);
 				for letter in line.chars () {
-					risks.push (letter.to_digit (10).ok_or_else (line_err) ? as u8);
+					risks.push (letter.to_digit (10).ok_or_else (line_err) ?.as_u8 ());
 				}
 			}
 			let risks = Grid::wrap (risks, [0, 0], [lines.len (), lines [0].len ()]);
 			let start = Pos { x: 0, y: 0 };
-			let end = Pos { x: risks.size () [1] as i16 - 1, y: risks.size () [0] as i16 - 1 };
+			let end = Pos { x: risks.size () [1].as_i16 () - 1, y: risks.size () [0].as_i16 () - 1 };
 			Ok (Cave { risks, start, end })
 		}
 	}

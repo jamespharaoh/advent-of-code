@@ -16,6 +16,7 @@ mod logic {
 
 	use super::*;
 	use model::*;
+	use nums::IntConv;
 
 	pub fn part_one (input: & str) -> GenResult <i32> {
 		let input = Json::parse (input) ?;
@@ -33,7 +34,7 @@ mod logic {
 		match value {
 			Json::Array (items) => items.iter ().map (calc_sum).sum (),
 			Json::Object (items) => items.iter ().map (|(_, item)| calc_sum (item)).sum (),
-			& Json::Number (value) => value as i32,
+			& Json::Number (value) => value.as_i32 (),
 			Json::String (_) => 0,
 		}
 	}
@@ -50,7 +51,7 @@ mod logic {
 					items.iter ().map (|(_, item)| calc_sum_no_red (item)).sum ()
 				} else { 0 }
 			},
-			& Json::Number (value) => value as i32,
+			& Json::Number (value) => value.as_i32 (),
 			Json::String (_) => 0,
 		}
 	}

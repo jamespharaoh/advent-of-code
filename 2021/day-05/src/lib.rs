@@ -15,8 +15,9 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
-	use model::Pos;
 	use grid::Grid;
+	use model::Pos;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, false)
@@ -39,9 +40,9 @@ mod logic {
 			});
 		let mut points: Grid <Vec <u16>, Pos> =
 			Grid::wrap (
-				iter::repeat (0).take (size.x as usize * size.y as usize).collect (),
+				iter::repeat (0).take (size.x.as_usize () * size.y.as_usize ()).collect (),
 				[0, 0],
-				[size.y as usize, size.x as usize]);
+				[size.y.as_usize (), size.x.as_usize ()]);
 		for vent in vents {
 			let step = Pos {
 				x: (vent.end.x - vent.start.x).signum (),
@@ -55,7 +56,7 @@ mod logic {
 				pos.y += step.y;
 			}
 		}
-		Ok (points.values ().filter (|& num| num > 1).count () as i64)
+		Ok (points.values ().filter (|& num| num > 1).count ().as_i64 ())
 	}
 
 }

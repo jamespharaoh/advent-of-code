@@ -1,4 +1,5 @@
 use super::*;
+use nums::IntConv;
 
 #[ derive (Debug, Clone, Eq, PartialEq) ]
 pub struct BitVec <Item, Encoding = BitVecEncodingDefault> {
@@ -26,8 +27,8 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		let mut item_enc = Encoding::encode (item);
 		debug_assert! (item_enc & ! Encoding::MASK == 0);
 		let mut item_bits = Encoding::BITS;
-		let mut word_idx = self.len * Encoding::BITS as usize / usize::BITS as usize;
-		let mut bit_idx = (self.len * Encoding::BITS as usize % usize::BITS as usize) as u32;
+		let mut word_idx = self.len * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
+		let mut bit_idx = (self.len * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
 		while item_bits > 0 {
 			let word_bits = cmp::min (item_bits, usize::BITS - bit_idx);
 			let word_mask = (1 << word_bits) - 1;
@@ -51,8 +52,8 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		if self.len < idx + 1 { return None }
 		let mut item_enc = 0;
 		let mut item_bits = 0;
-		let mut word_idx = idx * Encoding::BITS as usize / usize::BITS as usize;
-		let mut bit_idx = (idx * Encoding::BITS as usize % usize::BITS as usize) as u32;
+		let mut word_idx = idx * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
+		let mut bit_idx = (idx * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
 		while item_bits < Encoding::BITS {
 			let word_bits = cmp::min (Encoding::BITS - item_bits, usize::BITS - bit_idx);
 			let word_mask = (1 << word_bits) - 1;
@@ -68,8 +69,8 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		if self.len < idx + 1 { panic! ("Tried to set {} but len is {}", idx, self.len) }
 		let mut item_enc = Encoding::encode (item);
 		let mut item_bits = Encoding::BITS;
-		let mut word_idx = idx * Encoding::BITS as usize / usize::BITS as usize;
-		let mut bit_idx = (idx * Encoding::BITS as usize % usize::BITS as usize) as u32;
+		let mut word_idx = idx * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
+		let mut bit_idx = (idx * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
 		while item_bits > 0 {
 			let word_bits = cmp::min (item_bits, usize::BITS - bit_idx);
 			let word_mask = (1 << word_bits) - 1;
@@ -140,18 +141,18 @@ impl <'a, Item, Encoding> Iterator for BitVecIter <'a, Item, Encoding>
 		Some (Encoding::decode (item_enc))
 	}
 	fn nth (& mut self, num: usize) -> Option <Item> {
-		let mut adv_bits = Encoding::BITS as usize * num;
+		let mut adv_bits = Encoding::BITS.as_usize () * num;
 		let adv_words =
-			(usize::BITS as usize - self.word_bits as usize + adv_bits)
-				/ usize::BITS as usize;
+			(usize::BITS.as_usize () - self.word_bits.as_usize () + adv_bits)
+				/ usize::BITS.as_usize ();
 		if adv_words > 0 {
 			self.word_val = self.words [adv_words - 1];
 			self.words = & self.words [adv_words .. ];
-			adv_bits -= (adv_words - 1) * usize::BITS as usize;
+			adv_bits -= (adv_words - 1) * usize::BITS.as_usize ();
 			self.word_bits = usize::BITS;
 		}
-		debug_assert! (adv_bits <= self.word_bits as usize);
-		self.word_bits -= adv_bits as u32;
+		debug_assert! (adv_bits <= self.word_bits.as_usize ());
+		self.word_bits -= adv_bits.as_u32 ();
 		self.word_val >>= adv_bits;
 		self.len -= num;
 		self.next ()

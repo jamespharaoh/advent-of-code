@@ -21,6 +21,7 @@ pub mod logic {
 	use list::CharList;
 	use list::List;
 	use model::Input;
+	use nums::IntConv;
 
 	pub fn part_one (input: Input) -> GenResult <u32> {
 		let mut results = HashSet::new ();
@@ -37,7 +38,7 @@ pub mod logic {
 				last_pos = pos + from.len ();
 			}
 		}
-		Ok (results.len () as u32)
+		Ok (results.len ().as_u32 ())
 	}
 
 	pub fn part_two (input: Input) -> GenResult <u32> {

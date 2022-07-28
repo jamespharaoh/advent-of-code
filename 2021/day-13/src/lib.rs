@@ -49,11 +49,12 @@ mod logic {
 	use model::Fold;
 	use model::Input;
 	use model::Pos;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let input = Input::parse (lines) ?;
 		let dots = fold_dots (& input.folds [0], & input.dots);
-		Ok (dots.len () as u64)
+		Ok (dots.len ().as_u64 ())
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <String> {

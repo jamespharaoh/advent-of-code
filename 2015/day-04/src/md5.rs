@@ -1,4 +1,5 @@
 use super::*;
+use nums::IntConv;
 use ops::{ BitAnd, BitOr, BitXor, Not };
 
 #[ derive (Eq, PartialEq) ]
@@ -29,7 +30,7 @@ impl Output {
 		for result_ch in result.iter_mut () {
 			let (high_ch, low_ch) = input_iter.next_tuple ().unwrap ();
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
-			* result_ch = (decode (high_ch) ? as u8) << 4 | decode (low_ch) ? as u8;
+			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4 | decode (low_ch) ?.as_u8 ();
 		}
 		Ok (Output (result))
 	}
@@ -113,7 +114,7 @@ impl MD5 {
 		// then the length
 
 		for _ in 0 .. 8 {
-			self.update (& [ (len & 0xff) as u8 ]);
+			self.update (& [ (len & 0xff).as_u8 () ]);
 			len >>= 8;
 		}
 
@@ -123,10 +124,10 @@ impl MD5 {
 		let mut result = [0; 16];
 		for src_idx in 0 .. 4 {
 			let dst_idx = src_idx << 2;
-			result [dst_idx] = self.state [src_idx].0 as u8;
-			result [dst_idx + 1] = (self.state [src_idx].0 >> 8) as u8;
-			result [dst_idx + 2] = (self.state [src_idx].0 >> 16) as u8;
-			result [dst_idx + 3] = (self.state [src_idx].0 >> 24) as u8;
+			result [dst_idx] = (self.state [src_idx].0 & 0xff).as_u8 ();
+			result [dst_idx + 1] = (self.state [src_idx].0 >> 8 & 0xff).as_u8 ();
+			result [dst_idx + 2] = (self.state [src_idx].0 >> 16 & 0xff).as_u8 ();
+			result [dst_idx + 3] = (self.state [src_idx].0 >> 24 & 0xff).as_u8 ();
 		}
 
 		Output (result)
@@ -143,10 +144,10 @@ impl MD5 {
 			for dst_idx in 0 .. 16 {
 				let src_idx = dst_idx << 2;
 				message [dst_idx] = WrappingU32 (
-					(self.message [src_idx]) as u32
-						| (self.message [src_idx + 1] as u32) << 8
-						| (self.message [src_idx + 2] as u32) << 16
-						| (self.message [src_idx + 3] as u32) << 24
+					(self.message [src_idx]).as_u32 ()
+						| (self.message [src_idx + 1].as_u32 ()) << 8
+						| (self.message [src_idx + 2].as_u32 ()) << 16
+						| (self.message [src_idx + 3].as_u32 ()) << 24
 				);
 			}
 			message
@@ -157,19 +158,19 @@ impl MD5 {
 		let [mut a, mut b, mut c, mut d] = self.state;
 		for op in 0 .. 16 {
 			let func = ((b & c) | (! b & d)) + a + WrappingU32 (ADDS [op]) + message [op];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op] as u32), b, c);
+			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
 		}
 		for op in 16 .. 32 {
 			let func = ((d & b) | (! d & c)) + a + WrappingU32 (ADDS [op]) + message [(5 * op + 1) % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op] as u32), b, c);
+			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
 		}
 		for op in 32 .. 48 {
 			let func = (b ^ c ^ d) + a + WrappingU32 (ADDS [op]) + message [(3 * op + 5) % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op] as u32), b, c);
+			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
 		}
 		for op in 48 .. 64 {
 			let func = (c ^ (b | ! d)) + a + WrappingU32 (ADDS [op]) + message [7 * op % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op] as u32), b, c);
+			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
 		}
 		self.state = [
 			self.state [0] + a,

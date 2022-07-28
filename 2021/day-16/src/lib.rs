@@ -52,6 +52,7 @@ mod logic {
 mod model {
 
 	use super::*;
+	use nums::IntConv;
 
 	#[ allow (dead_code) ]
 	#[ derive (Debug) ]
@@ -130,7 +131,7 @@ mod model {
 		fn has_next (& mut self) -> bool {
 			if self.buffer.is_empty () {
 				if let Some (next_char) = self.inner.next () {
-					let mut next_nibble = next_char.to_digit (16).unwrap () as u64;
+					let mut next_nibble = next_char.to_digit (16).unwrap ().as_u64 ();
 					for _ in 0 .. 4 {
 						self.buffer.push (next_nibble & 1);
 						next_nibble >>= 1;

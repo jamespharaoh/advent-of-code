@@ -18,6 +18,7 @@ pub mod logic {
 
 	use super::*;
 	use model::Ingredient;
+	use nums::IntConv;
 
 	/// Part one: Find the combination of ingredients which gives the maximum possible score.
 	///
@@ -124,7 +125,7 @@ pub mod logic {
 						stack.iter ().copied ().enumerate ()
 							.flat_map (|(idx, num)|
 								iter::repeat (& all_ingrs [idx])
-									.take (num as usize))
+									.take (num.as_usize ()))
 							.collect::<Vec <_>> ()
 					)
 				}
@@ -178,7 +179,7 @@ pub mod logic {
 				sums.3 + ingr.texture,
 			));
 		if cap < 0 || dur < 0 || fla < 0 || tex < 0 { return 0 }
-		cap as u64 * dur as u64 * fla as u64 * tex as u64
+		cap.as_u64 () * dur.as_u64 () * fla.as_u64 () * tex.as_u64 ()
 	}
 
 }

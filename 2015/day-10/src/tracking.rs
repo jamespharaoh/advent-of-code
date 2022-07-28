@@ -1,7 +1,5 @@
-#![ allow (clippy::print_with_newline) ]
-#![ allow (clippy::vec_init_then_push) ]
-
 use super::*;
+use nums::IntConv;
 
 #[ derive (Debug, clap::Parser) ]
 pub struct Args {
@@ -82,7 +80,7 @@ pub fn run (args: Args) -> GenResult <()> {
 	}
 	// print states
 	for (state_gen, state) in states.iter ().enumerate () {
-		let state_gen = state_gen as u16;
+		let state_gen = state_gen.as_u16 ();
 		let mut align_iter =
 			states.last ().unwrap ().items.iter ().copied ()
 				.map (|Item { gen, idx, .. }| (gen, idx))

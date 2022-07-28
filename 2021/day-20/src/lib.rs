@@ -23,6 +23,7 @@ mod logic {
 	use model::Input;
 	use model::Pixels;
 	use model::Pos;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, 2)
@@ -39,7 +40,7 @@ mod logic {
 			image_iter (input.algorithm, image)
 				.nth (loops)
 				.unwrap ()
-				.num_pixels () as i64
+				.num_pixels ().as_i64 ()
 		)
 	}
 

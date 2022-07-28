@@ -16,6 +16,7 @@ mod logic {
 
 	use super::*;
 	use model::Reindeer;
+	use nums::IntConv;
 
 	pub fn part_one (input: & [& str], time: u32) -> GenResult <u32> {
 		let deers = model::parse_input (input) ?;
@@ -65,7 +66,7 @@ mod logic {
 	}
 
 	pub fn calc_distance (deer: & Reindeer, time: u32) -> u32 {
-		iter_distance (deer).nth (time as usize).unwrap ()
+		iter_distance (deer).nth (time.as_usize ()).unwrap ()
 	}
 
 }

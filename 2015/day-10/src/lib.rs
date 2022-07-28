@@ -30,6 +30,7 @@ mod logic {
 
 	use super::*;
 	use model::State;
+	use nums::IntConv;
 
 	pub fn part_one (input: & str) -> GenResult <u32> {
 		let input = State::parse (input) ?;
@@ -39,7 +40,7 @@ mod logic {
 					|state| Some (one_round (state)))
 				.nth (40)
 				.unwrap ()
-				.len () as u32
+				.len ().as_u32 ()
 		)
 	}
 
@@ -51,7 +52,7 @@ mod logic {
 					|state| Some (one_round (state)))
 				.nth (50)
 				.unwrap ()
-				.len () as u32
+				.len ().as_u32 ()
 		)
 	}
 
@@ -60,7 +61,7 @@ mod logic {
 			state.iter ().copied ()
 				.group_by (|& val| val);
 		group_by.into_iter ()
-			.flat_map (|(val, group)| [ group.count () as u8, val ])
+			.flat_map (|(val, group)| [ group.count ().as_u8 (), val ])
 			.collect ()
 	}
 
@@ -69,6 +70,7 @@ mod logic {
 mod model {
 
 	use super::*;
+	use nums::IntConv;
 
 	#[ derive (Clone, Eq, Hash, PartialEq) ]
 	pub struct State (Vec <u8>);
@@ -76,7 +78,7 @@ mod model {
 	impl State {
 		pub fn parse (input: & str) -> GenResult <State> {
 			input.chars ().map (|ch|
-				Ok (ch.to_digit (10).ok_or ("Invalid input") ? as u8)
+				Ok (ch.to_digit (10).ok_or ("Invalid input") ?.as_u8 ())
 			).collect::<GenResult <_>> ()
 		}
 		pub fn iter (& self) -> SliceIter <'_, u8> {
@@ -124,7 +126,7 @@ mod model {
 	impl Display for State {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			for & val in self.0.iter () {
-				write! (formatter, "{}", char::from_digit (val as u32, 10).unwrap ()) ?;
+				write! (formatter, "{}", char::from_digit (val.as_u32 (), 10).unwrap ()) ?;
 			}
 			Ok (())
 		}

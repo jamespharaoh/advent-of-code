@@ -17,6 +17,7 @@ mod logic {
 	use super::*;
 	use model::Octopodes;
 	use model::Pos;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let octopodes = model::parse_input (lines) ?;
@@ -29,11 +30,11 @@ mod logic {
 
 	pub fn part_two (lines: & [& str]) -> GenResult <u64> {
 		let octopodes = model::parse_input (lines) ?;
-		let num_octopodes = octopodes.len () as u64;
+		let num_octopodes = octopodes.len ().as_u64 ();
 		Ok (
 			step_iter (octopodes)
 				.take_while (|& num_flashes| num_flashes < num_octopodes)
-				.count () as u64 + 1
+				.count ().as_u64 () + 1
 		)
 	}
 
@@ -78,16 +79,17 @@ mod logic {
 mod model {
 
 	use super::*;
+	use nums::IntConv;
 
 	pub type Octopodes = HashMap <Pos, u8>;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <Octopodes> {
 		let mut octopodes: HashMap <Pos, u8> = HashMap::new ();
 		for (row, line) in lines.iter ().enumerate () {
-			let row = row as i16;
+			let row = row.as_i16 ();
 			for (col, letter) in line.chars ().enumerate () {
-				let col = col as i16;
-				octopodes.insert (Pos { row, col }, letter.to_digit (10).unwrap () as u8);
+				let col = col.as_i16 ();
+				octopodes.insert (Pos { row, col }, letter.to_digit (10).unwrap ().as_u8 ());
 			}
 		}
 		Ok (octopodes)

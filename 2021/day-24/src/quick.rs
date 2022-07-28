@@ -125,6 +125,7 @@ use machine::Instr;
 use machine::Reg;
 use machine::RegOrInt;
 use model::Input;
+use nums::IntConv;
 
 #[ derive (Clone, Copy, Debug) ]
 pub struct Step {
@@ -140,12 +141,12 @@ impl Step {
 	pub fn solve (self, progress: i64) -> Option <u8> {
 		let next = progress % 26 + self.check;
 		if (1 ..= 9).contains (& next) {
-			Some (next as u8)
+			Some (next.as_u8 ())
 		} else { None }
 	}
 	pub fn incr (self, progress: i64, next: u8) -> i64 {
 		if self.random {
-			progress * 26 + next as i64 + self.increment
+			progress * 26 + next.as_i64 () + self.increment
 		} else {
 			progress / 26
 		}

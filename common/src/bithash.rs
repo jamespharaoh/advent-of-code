@@ -1,4 +1,5 @@
 use super::*;
+use nums::IntConv;
 
 pub struct BitHasher <BldHsh: BuildHasher, const LEN: usize, const BITS: usize> {
 	data: [u64; LEN],
@@ -16,8 +17,8 @@ impl <BldHsh: BuildHasher, const LEN: usize, const BITS: usize> BitHasher <BldHs
 		for _ in 0 .. BITS {
 			let bit = 1 << (hash & 0x3f);
 			hash >>= 6;
-			let idx = (hash % LEN as u64) as usize;
-			hash /= LEN as u64;
+			let idx = (hash % LEN.to_u64 ().unwrap ()).to_usize ().unwrap ();
+			hash /= LEN.to_u64 ().unwrap ();
 			self.data [idx] |= bit;
 		}
 		self
@@ -38,7 +39,7 @@ impl <const LEN: usize> BitHash <LEN> {
 	}
 	pub fn bits (& self) -> usize {
 		let mut sum = 0;
-		for idx in 0 .. LEN { sum += self.data [idx].count_ones () as usize; }
+		for idx in 0 .. LEN { sum += self.data [idx].count_ones ().to_usize ().unwrap (); }
 		sum
 	}
 	pub fn reduce <const OTHER_LEN: usize> (& self) -> BitHash <OTHER_LEN> {

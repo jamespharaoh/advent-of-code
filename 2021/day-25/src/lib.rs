@@ -17,6 +17,7 @@ mod logic {
 	use model::Pos;
 	use model::Region;
 	use model::Seafloor;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let seafloor = Seafloor::parse (lines) ?;
@@ -36,8 +37,8 @@ mod logic {
 		let iter_row = |y|
 			iter::once (seafloor.get (Pos { y, x: size.x - 1 }))
 				.chain (seafloor.values ()
-					.skip (size.x as usize * y as usize)
-					.take (size.x as usize))
+					.skip (size.x.as_usize () * y.as_usize ())
+					.take (size.x.as_usize ()))
 				.chain (iter::once (seafloor.get (Pos { y, x: 0 })))
 				.collect::<Vec <Region>> ();
 		let data =
@@ -54,7 +55,7 @@ mod logic {
 							return Some (Either::Left (iter::empty ()));
 						}
 						Some (Either::Right (
-							(0 .. size.x as usize).map (move |idx|
+							(0 .. size.x.as_usize ()).map (move |idx|
 								calc_one_region (
 									row_0 [idx .. idx + 3].try_into ().unwrap (),
 									row_1 [idx .. idx + 3].try_into ().unwrap (),
@@ -147,6 +148,7 @@ mod model {
 	use super::*;
 	use bitvec::BitVecNative;
 	use grid::Grid;
+	use nums::IntConv;
 	use pos::PosYX;
 
 	pub type Pos = PosYX <Coord>;
@@ -161,14 +163,14 @@ mod model {
 
 	impl Seafloor {
 		pub fn new (size: Pos, regions: GridInner) -> Seafloor {
-			let grid_size = [size.y as usize, size.x as usize];
+			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
 			let grid = Grid::wrap (regions, [0, 0], grid_size);
 			Seafloor { grid, size }
 		}
 		pub fn size (& self) -> Pos { self.size }
 		pub fn parse (lines: & [& str]) -> GenResult <Seafloor> {
 			if lines.is_empty () { Err (format! ("Invalid input")) ? }
-			let size = Pos { y: lines.len () as u16, x: lines [0].chars ().count () as u16 };
+			let size = Pos { y: lines.len ().as_u16 (), x: lines [0].chars ().count ().as_u16 () };
 			let data = lines.iter ().enumerate ()
 				.flat_map (|(line_idx, line)| {
 					let line_err = move || format! ("Invalid input: {}: {}", line_idx, line);
@@ -181,7 +183,7 @@ mod model {
 						}),
 					)
 				}).collect::<Result <_, _>> () ?;
-			let grid_size = [size.y as usize, size.x as usize];
+			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
 			let grid = Grid::wrap (data, [0, 0], grid_size);
 			Ok (Seafloor { grid, size })
 		}

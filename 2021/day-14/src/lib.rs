@@ -16,6 +16,7 @@ mod logic {
 
 	use super::*;
 	use model::Input;
+	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		calc_result (10, lines)
@@ -106,7 +107,7 @@ mod logic {
 		}
 		let most = global_counts.values ().max ().unwrap ();
 		let least = global_counts.values ().min ().unwrap ();
-		Ok ((most - least) as u64)
+		Ok ((most - least).as_u64 ())
 	}
 
 }

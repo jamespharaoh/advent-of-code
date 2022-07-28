@@ -42,6 +42,7 @@ pub mod logic {
 	use super::*;
 	use model::Input;
 	use nums::Int;
+	use nums::IntConv;
 
 	pub fn part_one (input: Input) -> GenResult <u64> {
 		calc_result::<3> (input)
@@ -80,8 +81,8 @@ pub mod logic {
 			weights.iter ().copied ()
 				.fold (Ok (0), |sum, item| sum
 					.and_then (|sum| u32::add_2 (sum, item))) ?;
-		let want_pile_weight = total_weight / PILES as u32;
-		if want_pile_weight * PILES as u32 != total_weight {
+		let want_pile_weight = total_weight / PILES.as_u32 ();
+		if want_pile_weight * PILES.as_u32 () != total_weight {
 			Err (format! ("Total weight is not a multiple of {}", PILES)) ?;
 		}
 
@@ -140,7 +141,7 @@ pub mod logic {
 				if max_len_0 < stack [0].len () { continue }
 				let quantum_0 =
 					stack [0].iter ().copied ()
-						.map (|idx| weights [idx] as u64)
+						.map (|idx| weights [idx].as_u64 ())
 						.fold (Ok (1), |prod, item| prod
 							.and_then (|prod| u64::mul_2 (prod, item))) ?;
 				if max_quantum_0 <= quantum_0 { continue }
@@ -164,7 +165,7 @@ pub mod logic {
 					max_len_0 = stack [0].len ();
 					max_quantum_0 =
 						stack [0].iter ().copied ()
-							.map (|idx| weights [idx] as u64)
+							.map (|idx| weights [idx].as_u64 ())
 							.fold (Ok (1), |prod, item| prod
 								.and_then (|prod| u64::mul_2 (prod, item))) ?;
 					shortcircuit = true;

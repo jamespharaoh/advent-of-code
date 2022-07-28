@@ -21,6 +21,7 @@ pub mod logic {
 	use model::Input;
 	use model::Step;
 	use nums::Int;
+	use nums::IntConv;
 
 	pub type ModeFn = fn (Action, u8) -> u8;
 
@@ -70,8 +71,8 @@ pub mod logic {
 		for row in rows {
 			sum = u32::checked_add (sum,
 				u32::checked_mul (
-					u16::checked_sub (row, prev_row).unwrap () as u32,
-					prev_active as u32,
+					u16::checked_sub (row, prev_row).unwrap ().as_u32 (),
+					prev_active.as_u32 (),
 				).unwrap (),
 			).unwrap ();
 			cur_steps.retain (|(_, step)| row < step.peak.row);
@@ -137,8 +138,8 @@ pub mod logic {
 					.tuple_windows::<(_, _)> ()
 					.map (|((start, val), (end, _))|
 						Int::mul_2 (
-							Int::sub_2 (end, start) ? as u32,
-							val as u32,
+							Int::sub_2 (end, start) ?.as_u32 (),
+							val.as_u32 (),
 						))
 					.fold (Ok (0), |sum, val| Int::add_2 (sum ?, val ?)) ?;
 			assert! (row_data.last ().copied ().map (|(_, val)| val).unwrap_or (0) == 0);

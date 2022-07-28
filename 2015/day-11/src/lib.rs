@@ -15,6 +15,7 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
+	use nums::IntConv;
 
 	const ALL_CHARS: & [char] = & [
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
@@ -79,7 +80,7 @@ mod logic {
 			where Inpt: Iterator <Item = char> + Clone {
 		if ! input.clone ()
 			.tuple_windows::<(_, _, _)> ()
-			.any (|(a, b, c)| a as u32 + 1 == b as u32 && b as u32 + 1 == c as u32)
+			.any (|(a, b, c)| a.as_u32 () + 1 == b.as_u32 () && b.as_u32 () + 1 == c.as_u32 ())
 			{ return false }
 		if input.clone ()
 			.any (|ch| DISALLOWED_CHARS.contains (& ch))

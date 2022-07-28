@@ -48,12 +48,12 @@ pub mod model {
 
 	pub fn encode (input: & str) -> String {
 		iter::once ('"')
-			.chain (input.chars ().flat_map (|ch|
+			.chain (input.chars ().flat_map::<ArrayVec <char, 2>, _> (|ch|
 				match ch {
 					'\\' => array_vec! [ '\\', '\\' ],
 					'"' => array_vec! [ '\\', '"' ],
 					ch => array_vec! [ ch ],
-				} as ArrayVec <char, 2>))
+				}))
 			.chain (iter::once ('"'))
 			.collect ()
 	}

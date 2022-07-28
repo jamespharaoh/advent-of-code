@@ -1,4 +1,5 @@
 use aoc_common::*;
+use nums::IntConv;
 
 pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
 	lines.iter ().enumerate ().map (|(line_idx, line)| -> GenResult <Instr> {
@@ -36,7 +37,7 @@ pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
 
 pub fn machine_input (input: [u8; 14]) -> [i64; 14] {
 	let mut result = [0; 14];
-	for idx in 0 .. 14 { result [idx] = input [idx] as i64; }
+	for idx in 0 .. 14 { result [idx] = input [idx].as_i64 (); }
 	result
 }
 

@@ -23,6 +23,7 @@ pub mod logic {
 	use model::Reg;
 	use model::Val;
 	use nums::Int;
+	use nums::IntConv;
 
 	pub fn part_one (input: Input) -> GenResult <Val> {
 		let (_, reg_b) = emulate (input, 0, 0, 0, 0x10000) ?;
@@ -45,7 +46,7 @@ pub mod logic {
 		// main loop
 
 		let mut seen = HashSet::new ();
-		while next < input.instrs.len () as Val {
+		while next < Val::from_usize (input.instrs.len ()).map_err (|_| EmulateError::Overflow) ? {
 
 			// abort when we reach max_loops
 
@@ -58,7 +59,7 @@ pub mod logic {
 
 			// execute next instruction
 
-			let instr = input.instrs [next as usize];
+			let instr = input.instrs [next.as_usize ()];
 			match instr {
 				Instr::Hlf (Reg::A) => reg_a /= 2,
 				Instr::Hlf (Reg::B) => reg_b /= 2,
