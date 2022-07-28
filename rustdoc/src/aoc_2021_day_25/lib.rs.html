@@ -271,6 +271,8 @@
 <span id="265">265</span>
 <span id="266">266</span>
 <span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 25: Sea Cucumber</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/25](https://adventofcode.com/2021/day/25)</span>
@@ -290,6 +292,7 @@
 	<span class="kw">use</span> <span class="ident">model::Pos</span>;
 	<span class="kw">use</span> <span class="ident">model::Region</span>;
 	<span class="kw">use</span> <span class="ident">model::Seafloor</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">seafloor</span> <span class="op">=</span> <span class="ident">Seafloor::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
@@ -309,8 +312,8 @@
 		<span class="kw">let</span> <span class="ident">iter_row</span> <span class="op">=</span> <span class="op">|</span><span class="ident">y</span><span class="op">|</span>
 			<span class="ident">iter::once</span> (<span class="ident">seafloor</span>.<span class="ident">get</span> (<span class="ident">Pos</span> { <span class="ident">y</span>, <span class="ident">x</span>: <span class="ident">size</span>.<span class="ident">x</span> <span class="op">-</span> <span class="number">1</span> }))
 				.<span class="ident">chain</span> (<span class="ident">seafloor</span>.<span class="ident">values</span> ()
-					.<span class="ident">skip</span> (<span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">*</span> <span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>)
-					.<span class="ident">take</span> (<span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>))
+					.<span class="ident">skip</span> (<span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> () <span class="op">*</span> <span class="ident">y</span>.<span class="ident">as_usize</span> ())
+					.<span class="ident">take</span> (<span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> ()))
 				.<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">seafloor</span>.<span class="ident">get</span> (<span class="ident">Pos</span> { <span class="ident">y</span>, <span class="ident">x</span>: <span class="number">0</span> })))
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Region</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
 		<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span>
@@ -327,7 +330,7 @@
 							<span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Either::Left</span> (<span class="ident">iter::empty</span> ()));
 						}
 						<span class="prelude-val">Some</span> (<span class="ident">Either::Right</span> (
-							(<span class="number">0</span> .. <span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span><span class="ident">idx</span><span class="op">|</span>
+							(<span class="number">0</span> .. <span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> ()).<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span><span class="ident">idx</span><span class="op">|</span>
 								<span class="ident">calc_one_region</span> (
 									<span class="ident">row_0</span> [<span class="ident">idx</span> .. <span class="ident">idx</span> <span class="op">+</span> <span class="number">3</span>].<span class="ident">try_into</span> ().<span class="ident">unwrap</span> (),
 									<span class="ident">row_1</span> [<span class="ident">idx</span> .. <span class="ident">idx</span> <span class="op">+</span> <span class="number">3</span>].<span class="ident">try_into</span> ().<span class="ident">unwrap</span> (),
@@ -420,6 +423,7 @@
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">bitvec::BitVecNative</span>;
 	<span class="kw">use</span> <span class="ident">grid::Grid</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 	<span class="kw">use</span> <span class="ident">pos::PosYX</span>;
 
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pos</span> <span class="op">=</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Coord</span><span class="op">&gt;</span>;
@@ -434,14 +438,14 @@
 
 	<span class="kw">impl</span> <span class="ident">Seafloor</span> {
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span> (<span class="ident">size</span>: <span class="ident">Pos</span>, <span class="ident">regions</span>: <span class="ident">GridInner</span>) -&gt; <span class="ident">Seafloor</span> {
-			<span class="kw">let</span> <span class="ident">grid_size</span> <span class="op">=</span> [<span class="ident">size</span>.<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>];
+			<span class="kw">let</span> <span class="ident">grid_size</span> <span class="op">=</span> [<span class="ident">size</span>.<span class="ident">y</span>.<span class="ident">as_usize</span> (), <span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> ()];
 			<span class="kw">let</span> <span class="ident">grid</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (<span class="ident">regions</span>, [<span class="number">0</span>, <span class="number">0</span>], <span class="ident">grid_size</span>);
 			<span class="ident">Seafloor</span> { <span class="ident">grid</span>, <span class="ident">size</span> }
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">size</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Pos</span> { <span class="self">self</span>.<span class="ident">size</span> }
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Seafloor</span><span class="op">&gt;</span> {
 			<span class="kw">if</span> <span class="ident">lines</span>.<span class="ident">is_empty</span> () { <span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Invalid input&quot;</span>)) <span class="question-mark">?</span> }
-			<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">y</span>: <span class="ident">lines</span>.<span class="ident">len</span> () <span class="kw">as</span> <span class="ident">u16</span>, <span class="ident">x</span>: <span class="ident">lines</span> [<span class="number">0</span>].<span class="ident">chars</span> ().<span class="ident">count</span> () <span class="kw">as</span> <span class="ident">u16</span> };
+			<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">y</span>: <span class="ident">lines</span>.<span class="ident">len</span> ().<span class="ident">as_u16</span> (), <span class="ident">x</span>: <span class="ident">lines</span> [<span class="number">0</span>].<span class="ident">chars</span> ().<span class="ident">count</span> ().<span class="ident">as_u16</span> () };
 			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ()
 				.<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span> {
 					<span class="kw">let</span> <span class="ident">line_err</span> <span class="op">=</span> <span class="kw">move</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}: {}&quot;</span>, <span class="ident">line_idx</span>, <span class="ident">line</span>);
@@ -454,7 +458,7 @@
 						}),
 					)
 				}).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">grid_size</span> <span class="op">=</span> [<span class="ident">size</span>.<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>];
+			<span class="kw">let</span> <span class="ident">grid_size</span> <span class="op">=</span> [<span class="ident">size</span>.<span class="ident">y</span>.<span class="ident">as_usize</span> (), <span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> ()];
 			<span class="kw">let</span> <span class="ident">grid</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (<span class="ident">data</span>, [<span class="number">0</span>, <span class="number">0</span>], <span class="ident">grid_size</span>);
 			<span class="prelude-val">Ok</span> (<span class="ident">Seafloor</span> { <span class="ident">grid</span>, <span class="ident">size</span> })
 		}

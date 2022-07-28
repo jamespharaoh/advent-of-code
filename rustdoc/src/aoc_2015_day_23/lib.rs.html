@@ -342,6 +342,7 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
+<span id="339">339</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)</span>
@@ -367,6 +368,7 @@
 	<span class="kw">use</span> <span class="ident">model::Reg</span>;
 	<span class="kw">use</span> <span class="ident">model::Val</span>;
 	<span class="kw">use</span> <span class="ident">nums::Int</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">reg_b</span>) <span class="op">=</span> <span class="ident">emulate</span> (<span class="ident">input</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
@@ -389,7 +391,7 @@
 		<span class="comment">// main loop</span>
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">while</span> <span class="ident">next</span> <span class="op">&lt;</span> <span class="ident">input</span>.<span class="ident">instrs</span>.<span class="ident">len</span> () <span class="kw">as</span> <span class="ident">Val</span> {
+		<span class="kw">while</span> <span class="ident">next</span> <span class="op">&lt;</span> <span class="ident">Val::from_usize</span> (<span class="ident">input</span>.<span class="ident">instrs</span>.<span class="ident">len</span> ()).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span> {
 
 			<span class="comment">// abort when we reach max_loops</span>
 
@@ -402,7 +404,7 @@
 
 			<span class="comment">// execute next instruction</span>
 
-			<span class="kw">let</span> <span class="ident">instr</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">instrs</span> [<span class="ident">next</span> <span class="kw">as</span> <span class="ident">usize</span>];
+			<span class="kw">let</span> <span class="ident">instr</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">instrs</span> [<span class="ident">next</span>.<span class="ident">as_usize</span> ()];
 			<span class="kw">match</span> <span class="ident">instr</span> {
 				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::A</span>) =&gt; <span class="ident">reg_a</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,
 				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::B</span>) =&gt; <span class="ident">reg_b</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,

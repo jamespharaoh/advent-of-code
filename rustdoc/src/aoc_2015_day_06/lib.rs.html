@@ -389,6 +389,7 @@
 <span id="383">383</span>
 <span id="384">384</span>
 <span id="385">385</span>
+<span id="386">386</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 6: Probably a Fire Hazard</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/6](https://adventofcode.com/2015/day/6)</span>
@@ -412,6 +413,7 @@
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
 	<span class="kw">use</span> <span class="ident">model::Step</span>;
 	<span class="kw">use</span> <span class="ident">nums::Int</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ModeFn</span> <span class="op">=</span> <span class="kw">fn</span> (<span class="ident">Action</span>, <span class="ident">u8</span>) -&gt; <span class="ident">u8</span>;
 
@@ -461,8 +463,8 @@
 		<span class="kw">for</span> <span class="ident">row</span> <span class="kw">in</span> <span class="ident">rows</span> {
 			<span class="ident">sum</span> <span class="op">=</span> <span class="ident">u32::checked_add</span> (<span class="ident">sum</span>,
 				<span class="ident">u32::checked_mul</span> (
-					<span class="ident">u16::checked_sub</span> (<span class="ident">row</span>, <span class="ident">prev_row</span>).<span class="ident">unwrap</span> () <span class="kw">as</span> <span class="ident">u32</span>,
-					<span class="ident">prev_active</span> <span class="kw">as</span> <span class="ident">u32</span>,
+					<span class="ident">u16::checked_sub</span> (<span class="ident">row</span>, <span class="ident">prev_row</span>).<span class="ident">unwrap</span> ().<span class="ident">as_u32</span> (),
+					<span class="ident">prev_active</span>.<span class="ident">as_u32</span> (),
 				).<span class="ident">unwrap</span> (),
 			).<span class="ident">unwrap</span> ();
 			<span class="ident">cur_steps</span>.<span class="ident">retain</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">step</span>)<span class="op">|</span> <span class="ident">row</span> <span class="op">&lt;</span> <span class="ident">step</span>.<span class="ident">peak</span>.<span class="ident">row</span>);
@@ -528,8 +530,8 @@
 					.<span class="ident">tuple_windows</span>::<span class="op">&lt;</span>(<span class="kw">_</span>, <span class="kw">_</span>)<span class="op">&gt;</span> ()
 					.<span class="ident">map</span> (<span class="op">|</span>((<span class="ident">start</span>, <span class="ident">val</span>), (<span class="ident">end</span>, <span class="kw">_</span>))<span class="op">|</span>
 						<span class="ident">Int::mul_2</span> (
-							<span class="ident">Int::sub_2</span> (<span class="ident">end</span>, <span class="ident">start</span>) <span class="question-mark">?</span> <span class="kw">as</span> <span class="ident">u32</span>,
-							<span class="ident">val</span> <span class="kw">as</span> <span class="ident">u32</span>,
+							<span class="ident">Int::sub_2</span> (<span class="ident">end</span>, <span class="ident">start</span>) <span class="question-mark">?</span>.<span class="ident">as_u32</span> (),
+							<span class="ident">val</span>.<span class="ident">as_u32</span> (),
 						))
 					.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">val</span><span class="op">|</span> <span class="ident">Int::add_2</span> (<span class="ident">sum</span> <span class="question-mark">?</span>, <span class="ident">val</span> <span class="question-mark">?</span>)) <span class="question-mark">?</span>;
 			<span class="macro">assert!</span> (<span class="ident">row_data</span>.<span class="ident">last</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">val</span>)<span class="op">|</span> <span class="ident">val</span>).<span class="ident">unwrap_or</span> (<span class="number">0</span>) <span class="op">==</span> <span class="number">0</span>);

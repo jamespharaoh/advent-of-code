@@ -139,6 +139,7 @@
 <span id="133">133</span>
 <span id="134">134</span>
 <span id="135">135</span>
+<span id="136">136</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 5: Hydrothermal Venture</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/5](https://adventofcode.com/2021/day/5)</span>
@@ -156,8 +157,9 @@
 <span class="kw">mod</span> <span class="ident">logic</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Pos</span>;
 	<span class="kw">use</span> <span class="ident">grid::Grid</span>;
+	<span class="kw">use</span> <span class="ident">model::Pos</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="ident">calc_result</span> (<span class="ident">lines</span>, <span class="bool-val">false</span>)
@@ -180,9 +182,9 @@
 			});
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">points</span>: <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>, <span class="ident">Pos</span><span class="op">&gt;</span> <span class="op">=</span>
 			<span class="ident">Grid::wrap</span> (
-				<span class="ident">iter::repeat</span> (<span class="number">0</span>).<span class="ident">take</span> (<span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">*</span> <span class="ident">size</span>.<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">collect</span> (),
+				<span class="ident">iter::repeat</span> (<span class="number">0</span>).<span class="ident">take</span> (<span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> () <span class="op">*</span> <span class="ident">size</span>.<span class="ident">y</span>.<span class="ident">as_usize</span> ()).<span class="ident">collect</span> (),
 				[<span class="number">0</span>, <span class="number">0</span>],
-				[<span class="ident">size</span>.<span class="ident">y</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">size</span>.<span class="ident">x</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+				[<span class="ident">size</span>.<span class="ident">y</span>.<span class="ident">as_usize</span> (), <span class="ident">size</span>.<span class="ident">x</span>.<span class="ident">as_usize</span> ()]);
 		<span class="kw">for</span> <span class="ident">vent</span> <span class="kw">in</span> <span class="ident">vents</span> {
 			<span class="kw">let</span> <span class="ident">step</span> <span class="op">=</span> <span class="ident">Pos</span> {
 				<span class="ident">x</span>: (<span class="ident">vent</span>.<span class="ident">end</span>.<span class="ident">x</span> <span class="op">-</span> <span class="ident">vent</span>.<span class="ident">start</span>.<span class="ident">x</span>).<span class="ident">signum</span> (),
@@ -196,7 +198,7 @@
 				<span class="ident">pos</span>.<span class="ident">y</span> <span class="op">+</span><span class="op">=</span> <span class="ident">step</span>.<span class="ident">y</span>;
 			}
 		}
-		<span class="prelude-val">Ok</span> (<span class="ident">points</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">num</span><span class="op">|</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="number">1</span>).<span class="ident">count</span> () <span class="kw">as</span> <span class="ident">i64</span>)
+		<span class="prelude-val">Ok</span> (<span class="ident">points</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">num</span><span class="op">|</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="number">1</span>).<span class="ident">count</span> ().<span class="ident">as_i64</span> ())
 	}
 
 }

@@ -130,6 +130,7 @@
 <span id="124">124</span>
 <span id="125">125</span>
 <span id="126">126</span>
+<span id="127">127</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 14: Reindeer Olympics</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/14](https://adventofcode.com/2015/day/14)</span>
@@ -148,6 +149,7 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Reindeer</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>], <span class="ident">time</span>: <span class="ident">u32</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">deers</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
@@ -197,7 +199,7 @@
 	}
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_distance</span> (<span class="ident">deer</span>: <span class="op">&amp;</span> <span class="ident">Reindeer</span>, <span class="ident">time</span>: <span class="ident">u32</span>) -&gt; <span class="ident">u32</span> {
-		<span class="ident">iter_distance</span> (<span class="ident">deer</span>).<span class="ident">nth</span> (<span class="ident">time</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">unwrap</span> ()
+		<span class="ident">iter_distance</span> (<span class="ident">deer</span>).<span class="ident">nth</span> (<span class="ident">time</span>.<span class="ident">as_usize</span> ()).<span class="ident">unwrap</span> ()
 	}
 
 }

@@ -186,6 +186,7 @@
 <span id="180">180</span>
 <span id="181">181</span>
 <span id="182">182</span>
+<span id="183">183</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 14: Extended Polymerization</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/14](https://adventofcode.com/2021/day/14)</span>
@@ -204,6 +205,7 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 		<span class="ident">calc_result</span> (<span class="number">10</span>, <span class="ident">lines</span>)
@@ -294,7 +296,7 @@
 		}
 		<span class="kw">let</span> <span class="ident">most</span> <span class="op">=</span> <span class="ident">global_counts</span>.<span class="ident">values</span> ().<span class="ident">max</span> ().<span class="ident">unwrap</span> ();
 		<span class="kw">let</span> <span class="ident">least</span> <span class="op">=</span> <span class="ident">global_counts</span>.<span class="ident">values</span> ().<span class="ident">min</span> ().<span class="ident">unwrap</span> ();
-		<span class="prelude-val">Ok</span> ((<span class="ident">most</span> <span class="op">-</span> <span class="ident">least</span>) <span class="kw">as</span> <span class="ident">u64</span>)
+		<span class="prelude-val">Ok</span> ((<span class="ident">most</span> <span class="op">-</span> <span class="ident">least</span>).<span class="ident">as_u64</span> ())
 	}
 
 }

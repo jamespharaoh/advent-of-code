@@ -804,6 +804,10 @@
 <span id="798">798</span>
 <span id="799">799</span>
 <span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 23: Amphipod</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/23](https://adventofcode.com/2021/day/23)</span>
@@ -829,6 +833,7 @@
 	<span class="kw">use</span> <span class="ident">model::Place</span>;
 	<span class="kw">use</span> <span class="ident">model::State</span>;
 	<span class="kw">use</span> <span class="ident">model::StateCompact</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
 
@@ -922,13 +927,13 @@
 				<span class="ident">Move::Between</span> (<span class="ident">amph</span>, <span class="ident">from_room</span>, <span class="ident">to_room</span>) =&gt; {
 					<span class="kw">if</span> <span class="op">!</span> <span class="ident">sections</span> [<span class="ident">from_room</span>.<span class="ident">idx</span> ()] <span class="op">|</span><span class="op">|</span> <span class="op">!</span> <span class="ident">sections</span> [<span class="ident">to_room</span>.<span class="ident">idx</span> ()] { <span class="kw">continue</span> }
 					<span class="kw">let</span> <span class="ident">cost</span> <span class="op">=</span> <span class="ident">amph</span>.<span class="ident">cost</span> () <span class="op">*</span> (<span class="ident">out_cost</span> (<span class="ident">from_room</span>) <span class="op">+</span> <span class="ident">in_cost</span> (<span class="ident">to_room</span>)
-						<span class="op">+</span> <span class="ident">usize::abs_diff</span> (<span class="ident">from_room</span>.<span class="ident">idx</span> (), <span class="ident">to_room</span>.<span class="ident">idx</span> ()) <span class="op">*</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">i64</span>;
+						<span class="op">+</span> <span class="ident">usize::abs_diff</span> (<span class="ident">from_room</span>.<span class="ident">idx</span> (), <span class="ident">to_room</span>.<span class="ident">idx</span> ()) <span class="op">*</span> <span class="number">2</span>).<span class="ident">as_i64</span> ();
 					<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">move_between</span> (<span class="ident">from_room</span>, <span class="ident">to_room</span>);
 					<span class="kw">return</span> <span class="ident">iter::once</span> ((<span class="ident">next_state</span>.<span class="ident">compact</span> (), <span class="ident">cost</span>)).<span class="ident">collect</span> ();
 				},
 				<span class="ident">Move::In</span> (<span class="ident">amph</span>, <span class="ident">from_hall</span>, <span class="ident">to_room</span>) =&gt; {
 					<span class="kw">if</span> <span class="op">!</span> <span class="ident">sections</span> [<span class="ident">to_room</span>.<span class="ident">idx</span> ()] { <span class="kw">continue</span> }
-					<span class="kw">let</span> <span class="ident">cost</span> <span class="op">=</span> <span class="ident">amph</span>.<span class="ident">cost</span> () <span class="op">*</span> (<span class="ident">in_cost</span> (<span class="ident">to_room</span>) <span class="op">+</span> <span class="ident">hall_cost</span> (<span class="ident">to_room</span>, <span class="ident">from_hall</span>)) <span class="kw">as</span> <span class="ident">i64</span>;
+					<span class="kw">let</span> <span class="ident">cost</span> <span class="op">=</span> <span class="ident">amph</span>.<span class="ident">cost</span> () <span class="op">*</span> (<span class="ident">in_cost</span> (<span class="ident">to_room</span>) <span class="op">+</span> <span class="ident">hall_cost</span> (<span class="ident">to_room</span>, <span class="ident">from_hall</span>)).<span class="ident">as_i64</span> ();
 					<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">move_in</span> (<span class="ident">from_hall</span>, <span class="ident">to_room</span>);
 					<span class="kw">return</span> <span class="ident">iter::once</span> ((<span class="ident">next_state</span>.<span class="ident">compact</span> (), <span class="ident">cost</span>)).<span class="ident">collect</span> ();
 				},
@@ -939,7 +944,7 @@
 			<span class="kw">if</span> <span class="kw">let</span> <span class="ident">Move::Out</span> (<span class="ident">amph</span>, <span class="ident">from_room</span>, <span class="ident">to_hall</span>) <span class="op">=</span> <span class="ident">next_move</span> {
 				<span class="kw">if</span> <span class="op">!</span> <span class="ident">sections</span> [<span class="ident">from_room</span>.<span class="ident">idx</span> ()] { <span class="kw">continue</span> }
 				<span class="kw">let</span> <span class="ident">cost</span> <span class="op">=</span> <span class="ident">amph</span>.<span class="ident">cost</span> () <span class="op">*</span> (<span class="ident">out_cost</span> (<span class="ident">from_room</span>)
-					<span class="op">+</span> <span class="ident">hall_cost</span> (<span class="ident">from_room</span>, <span class="ident">to_hall</span>)) <span class="kw">as</span> <span class="ident">i64</span>;
+					<span class="op">+</span> <span class="ident">hall_cost</span> (<span class="ident">from_room</span>, <span class="ident">to_hall</span>)).<span class="ident">as_i64</span> ();
 				<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">move_out</span> (<span class="ident">from_room</span>, <span class="ident">to_hall</span>);
 				<span class="ident">next_states</span>.<span class="ident">push</span> ((<span class="ident">next_state</span>.<span class="ident">compact</span> (), <span class="ident">cost</span>));
 			}
@@ -1020,6 +1025,7 @@
 <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">State</span> {
@@ -1073,15 +1079,15 @@
 
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">place</span>: <span class="ident">Place</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span> {
 			<span class="kw">match</span> <span class="ident">place</span> {
-				<span class="ident">Place::Hall</span> (<span class="ident">id</span>) =&gt; <span class="self">self</span>.<span class="ident">hall</span> [<span class="ident">id</span> <span class="kw">as</span> <span class="ident">usize</span>],
+				<span class="ident">Place::Hall</span> (<span class="ident">id</span>) =&gt; <span class="self">self</span>.<span class="ident">hall</span> [<span class="ident">id</span>.<span class="ident">as_usize</span> ()],
 				<span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>) =&gt;
-					<span class="self">self</span>.<span class="ident">amber</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
+					<span class="self">self</span>.<span class="ident">amber</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
 				<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>) =&gt;
-					<span class="self">self</span>.<span class="ident">bronze</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
+					<span class="self">self</span>.<span class="ident">bronze</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
 				<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>) =&gt;
-					<span class="self">self</span>.<span class="ident">copper</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
+					<span class="self">self</span>.<span class="ident">copper</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
 				<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt;
-					<span class="self">self</span>.<span class="ident">desert</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
+					<span class="self">self</span>.<span class="ident">desert</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">1</span>).<span class="ident">copied</span> (),
 			}
 		}
 
@@ -1157,14 +1163,14 @@
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="number">0</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="number">0</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="number">0</span>))))
-			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">room_size</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="number">2</span> {
-				<span class="kw">let</span> <span class="ident">depth</span> <span class="op">=</span> (<span class="ident">line</span> <span class="op">-</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">u8</span>;
+			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">2</span> {
+				<span class="kw">let</span> <span class="ident">depth</span> <span class="op">=</span> (<span class="ident">line</span> <span class="op">-</span> <span class="number">2</span>).<span class="ident">as_u8</span> ();
 				<span class="macro">format!</span> (<span class="string">&quot;  │{}│{}│{}│{}│&quot;</span>,
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>))))
-			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">room_size</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="number">2</span> {
+			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">2</span> {
 				<span class="macro">format!</span> (<span class="string">&quot;  └─┴─┴─┴─┘&quot;</span>)
 			} <span class="kw">else</span> {
 				<span class="macro">panic!</span> ();
@@ -1173,7 +1179,7 @@
 
 		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">dead_code</span>) ]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print</span> (<span class="op">&amp;</span> <span class="self">self</span>) {
-			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="self">self</span>.<span class="ident">room_size</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="number">3</span> {
+			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">3</span> {
 				<span class="macro">println!</span> (<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>));
 			}
 		}
@@ -1248,7 +1254,7 @@
 			}
 			<span class="macro">assert!</span> (<span class="number">64</span> <span class="op">-</span> <span class="ident">place_bits</span>.<span class="ident">leading_zeros</span> () <span class="op">&lt;</span><span class="op">=</span> <span class="number">27</span>);
 			<span class="macro">assert!</span> (<span class="number">64</span> <span class="op">-</span> <span class="ident">amph_bits</span>.<span class="ident">leading_zeros</span> () <span class="op">&lt;</span><span class="op">=</span> <span class="number">32</span>);
-			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> ((<span class="self">self</span>.<span class="ident">room_size</span> <span class="kw">as</span> <span class="ident">u64</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">59</span>) <span class="op">|</span> (<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">32</span>) <span class="op">|</span> <span class="ident">amph_bits</span>;
+			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> ((<span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_u64</span> ()) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">59</span>) <span class="op">|</span> (<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">32</span>) <span class="op">|</span> <span class="ident">amph_bits</span>;
 			<span class="ident">StateCompact</span> { <span class="ident">data</span> }
 		}
 
@@ -1293,7 +1299,7 @@
 				}
 				<span class="ident">present_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>;
 			}
-			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">59</span>) <span class="kw">as</span> <span class="ident">usize</span>;
+			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">59</span>).<span class="ident">as_usize</span> ();
 			<span class="ident">State::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>)
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_finished</span> (<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
@@ -1322,13 +1328,14 @@
 	<span class="kw">impl</span> <span class="ident">Place</span> {
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">idx</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
 			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">Place::Hall</span> (<span class="ident">id</span>) =&gt; <span class="ident">id</span> <span class="kw">as</span> <span class="ident">usize</span>,
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>) =&gt; <span class="number">11</span> <span class="op">+</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span>,
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>) =&gt; <span class="number">15</span> <span class="op">+</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span>,
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>) =&gt; <span class="number">19</span> <span class="op">+</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span>,
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt; <span class="number">23</span> <span class="op">+</span> <span class="ident">depth</span> <span class="kw">as</span> <span class="ident">usize</span>,
+				<span class="ident">Place::Hall</span> (<span class="ident">id</span>) =&gt; <span class="ident">id</span>.<span class="ident">as_usize</span> (),
+				<span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>) =&gt; <span class="number">11</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>) =&gt; <span class="number">15</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>) =&gt; <span class="number">19</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt; <span class="number">23</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
 			}
 		}
+		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::as_conversions</span>) ]</span>
 		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">for_idx</span> (<span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Place</span> {
 			<span class="kw">match</span> <span class="ident">idx</span> {
 				<span class="number">0</span> ..<span class="op">=</span> <span class="number">10</span> =&gt; <span class="ident">Place::Hall</span> (<span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span>),
@@ -1391,6 +1398,7 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::State</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
 
@@ -1547,7 +1555,7 @@
 				<span class="macro">print!</span> (<span class="string">&quot; {:^13}&quot;</span>, <span class="ident">cost</span>);
 			}
 			<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
-			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. (<span class="ident">cur_state</span>.<span class="ident">room_size</span> () <span class="kw">as</span> <span class="ident">usize</span> <span class="op">+</span> <span class="number">3</span>) {
+			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. (<span class="ident">cur_state</span>.<span class="ident">room_size</span> ().<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">3</span>) {
 				<span class="macro">print!</span> (<span class="string">&quot;{:13}  &quot;</span>, <span class="kw">if</span> <span class="ident">chunk_idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">cur_state</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>) } <span class="kw">else</span> { <span class="ident">String::new</span> () });
 				<span class="kw">for</span> (<span class="ident">next_state</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span> () {
 					<span class="macro">print!</span> (<span class="string">&quot; {:13}&quot;</span>, <span class="ident">next_state</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>));

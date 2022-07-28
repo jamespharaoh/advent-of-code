@@ -131,6 +131,8 @@
 <span id="125">125</span>
 <span id="126">126</span>
 <span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 15: Chiton</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/15](https://adventofcode.com/2021/day/15)</span>
@@ -155,6 +157,7 @@
 	<span class="kw">use</span> <span class="ident">model::Cave</span>;
 	<span class="kw">use</span> <span class="ident">model::Grid</span>;
 	<span class="kw">use</span> <span class="ident">model::Pos</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
 
@@ -187,7 +190,7 @@
 			<span class="op">|</span><span class="ident">pos</span>: <span class="ident">Pos</span>, <span class="ident">path_risk</span>, <span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Pos</span>, <span class="ident">u64</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
 				<span class="kw">for</span> <span class="ident">adj_pos</span> <span class="kw">in</span> <span class="ident">pos</span>.<span class="ident">adjacent_4</span> () {
 					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">adj_risk</span>) <span class="op">=</span> <span class="ident">cave</span>.<span class="ident">risks</span>.<span class="ident">get</span> (<span class="ident">adj_pos</span>) {
-						<span class="kw">let</span> <span class="ident">adj_path_risk</span> <span class="op">=</span> <span class="ident">path_risk</span> <span class="op">+</span> <span class="ident">adj_risk</span> <span class="kw">as</span> <span class="ident">u64</span>;
+						<span class="kw">let</span> <span class="ident">adj_path_risk</span> <span class="op">=</span> <span class="ident">path_risk</span> <span class="op">+</span> <span class="ident">adj_risk</span>.<span class="ident">as_u64</span> ();
 						<span class="ident">adder</span>.<span class="ident">add</span> (<span class="ident">adj_pos</span>, <span class="ident">adj_path_risk</span>);
 					}
 				}
@@ -207,6 +210,7 @@
 <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">grid::Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span>, <span class="ident">Pos</span>, <span class="number">2</span><span class="op">&gt;</span>;
 	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pos</span> <span class="op">=</span> <span class="ident">pos::PosYX</span> <span class="op">&lt;</span><span class="ident">i16</span><span class="op">&gt;</span>;
@@ -223,12 +227,12 @@
 			<span class="kw">for</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>) <span class="kw">in</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
 				<span class="kw">let</span> <span class="ident">line_err</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input on line {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>);
 				<span class="kw">for</span> <span class="ident">letter</span> <span class="kw">in</span> <span class="ident">line</span>.<span class="ident">chars</span> () {
-					<span class="ident">risks</span>.<span class="ident">push</span> (<span class="ident">letter</span>.<span class="ident">to_digit</span> (<span class="number">10</span>).<span class="ident">ok_or_else</span> (<span class="ident">line_err</span>) <span class="question-mark">?</span> <span class="kw">as</span> <span class="ident">u8</span>);
+					<span class="ident">risks</span>.<span class="ident">push</span> (<span class="ident">letter</span>.<span class="ident">to_digit</span> (<span class="number">10</span>).<span class="ident">ok_or_else</span> (<span class="ident">line_err</span>) <span class="question-mark">?</span>.<span class="ident">as_u8</span> ());
 				}
 			}
 			<span class="kw">let</span> <span class="ident">risks</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (<span class="ident">risks</span>, [<span class="number">0</span>, <span class="number">0</span>], [<span class="ident">lines</span>.<span class="ident">len</span> (), <span class="ident">lines</span> [<span class="number">0</span>].<span class="ident">len</span> ()]);
 			<span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">0</span> };
-			<span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">1</span>] <span class="kw">as</span> <span class="ident">i16</span> <span class="op">-</span> <span class="number">1</span>, <span class="ident">y</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">0</span>] <span class="kw">as</span> <span class="ident">i16</span> <span class="op">-</span> <span class="number">1</span> };
+			<span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">1</span>].<span class="ident">as_i16</span> () <span class="op">-</span> <span class="number">1</span>, <span class="ident">y</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">0</span>].<span class="ident">as_i16</span> () <span class="op">-</span> <span class="number">1</span> };
 			<span class="prelude-val">Ok</span> (<span class="ident">Cave</span> { <span class="ident">risks</span>, <span class="ident">start</span>, <span class="ident">end</span> })
 		}
 	}

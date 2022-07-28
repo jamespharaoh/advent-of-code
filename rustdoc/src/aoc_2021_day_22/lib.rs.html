@@ -298,6 +298,7 @@
 <span id="292">292</span>
 <span id="293">293</span>
 <span id="294">294</span>
+<span id="295">295</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 22: Reactor Reboot</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/22](https://adventofcode.com/2021/day/22)</span>
@@ -408,6 +409,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_input</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Step</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
@@ -466,9 +468,9 @@
 			} <span class="kw">else</span> { <span class="prelude-val">None</span> }
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">volume</span> (<span class="self">self</span>) -&gt; <span class="ident">i64</span> {
-			(<span class="self">self</span>.<span class="ident">x1</span> <span class="kw">as</span> <span class="ident">i64</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">x0</span> <span class="kw">as</span> <span class="ident">i64</span>)
-				<span class="op">*</span> (<span class="self">self</span>.<span class="ident">y1</span> <span class="kw">as</span> <span class="ident">i64</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">y0</span> <span class="kw">as</span> <span class="ident">i64</span>)
-				<span class="op">*</span> (<span class="self">self</span>.<span class="ident">z1</span> <span class="kw">as</span> <span class="ident">i64</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">z0</span> <span class="kw">as</span> <span class="ident">i64</span>)
+			(<span class="self">self</span>.<span class="ident">x1</span>.<span class="ident">as_i64</span> () <span class="op">-</span> <span class="self">self</span>.<span class="ident">x0</span>.<span class="ident">as_i64</span> ())
+				<span class="op">*</span> (<span class="self">self</span>.<span class="ident">y1</span>.<span class="ident">as_i64</span> () <span class="op">-</span> <span class="self">self</span>.<span class="ident">y0</span>.<span class="ident">as_i64</span> ())
+				<span class="op">*</span> (<span class="self">self</span>.<span class="ident">z1</span>.<span class="ident">as_i64</span> () <span class="op">-</span> <span class="self">self</span>.<span class="ident">z0</span>.<span class="ident">as_i64</span> ())
 		}
 		<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="ident">Cube</span> <span class="op">=</span> <span class="ident">Cube</span> { <span class="ident">x0</span>: <span class="number">0</span>, <span class="ident">x1</span>: <span class="number">0</span>, <span class="ident">y0</span>: <span class="number">0</span>, <span class="ident">y1</span>: <span class="number">0</span>, <span class="ident">z0</span>: <span class="number">0</span>, <span class="ident">z1</span>: <span class="number">0</span> };
 	}

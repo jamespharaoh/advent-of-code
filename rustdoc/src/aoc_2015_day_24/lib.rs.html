@@ -276,6 +276,7 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
+<span id="273">273</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
@@ -320,6 +321,7 @@
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
 	<span class="kw">use</span> <span class="ident">nums::Int</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 		<span class="ident">calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">input</span>)
@@ -358,8 +360,8 @@
 			<span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
 				.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">sum</span>
 					.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">sum</span><span class="op">|</span> <span class="ident">u32::add_2</span> (<span class="ident">sum</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">want_pile_weight</span> <span class="op">=</span> <span class="ident">total_weight</span> <span class="op">/</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span>;
-		<span class="kw">if</span> <span class="ident">want_pile_weight</span> <span class="op">*</span> <span class="ident">PILES</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">!</span><span class="op">=</span> <span class="ident">total_weight</span> {
+		<span class="kw">let</span> <span class="ident">want_pile_weight</span> <span class="op">=</span> <span class="ident">total_weight</span> <span class="op">/</span> <span class="ident">PILES</span>.<span class="ident">as_u32</span> ();
+		<span class="kw">if</span> <span class="ident">want_pile_weight</span> <span class="op">*</span> <span class="ident">PILES</span>.<span class="ident">as_u32</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">total_weight</span> {
 			<span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Total weight is not a multiple of {}&quot;</span>, <span class="ident">PILES</span>)) <span class="question-mark">?</span>;
 		}
 
@@ -418,7 +420,7 @@
 				<span class="kw">if</span> <span class="ident">max_len_0</span> <span class="op">&lt;</span> <span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">len</span> () { <span class="kw">continue</span> }
 				<span class="kw">let</span> <span class="ident">quantum_0</span> <span class="op">=</span>
 					<span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-						.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>] <span class="kw">as</span> <span class="ident">u64</span>)
+						.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>].<span class="ident">as_u64</span> ())
 						.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">1</span>), <span class="op">|</span><span class="ident">prod</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">prod</span>
 							.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">prod</span><span class="op">|</span> <span class="ident">u64::mul_2</span> (<span class="ident">prod</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
 				<span class="kw">if</span> <span class="ident">max_quantum_0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">quantum_0</span> { <span class="kw">continue</span> }
@@ -442,7 +444,7 @@
 					<span class="ident">max_len_0</span> <span class="op">=</span> <span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">len</span> ();
 					<span class="ident">max_quantum_0</span> <span class="op">=</span>
 						<span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>] <span class="kw">as</span> <span class="ident">u64</span>)
+							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>].<span class="ident">as_u64</span> ())
 							.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">1</span>), <span class="op">|</span><span class="ident">prod</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">prod</span>
 								.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">prod</span><span class="op">|</span> <span class="ident">u64::mul_2</span> (<span class="ident">prod</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
 					<span class="ident">shortcircuit</span> <span class="op">=</span> <span class="bool-val">true</span>;

@@ -172,6 +172,7 @@
 <span id="166">166</span>
 <span id="167">167</span>
 <span id="168">168</span>
+<span id="169">169</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 4: Giant Squid</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/4](https://adventofcode.com/2021/day/4)</span>
@@ -191,6 +192,7 @@
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Board</span>;
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Input::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
@@ -240,8 +242,8 @@
 				) {
 					<span class="self">self</span>.<span class="ident">boards</span> [<span class="self">self</span>.<span class="ident">board_idx</span>] <span class="op">=</span> <span class="bool-val">true</span>;
 					<span class="self">self</span>.<span class="ident">board_idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-					<span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">score</span> <span class="kw">as</span> <span class="ident">i64</span>
-						<span class="op">*</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">call_order</span> [<span class="self">self</span>.<span class="ident">call_idx</span>] <span class="kw">as</span> <span class="ident">i64</span>,
+					<span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">score</span>.<span class="ident">as_i64</span> ()
+						<span class="op">*</span> <span class="self">self</span>.<span class="ident">input</span>.<span class="ident">call_order</span> [<span class="self">self</span>.<span class="ident">call_idx</span>].<span class="ident">as_i64</span> (),
 					)
 				}
 				<span class="self">self</span>.<span class="ident">board_idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -264,7 +266,7 @@
 			<span class="prelude-val">Some</span> (<span class="ident">board</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ().<span class="ident">filter</span> (
 				<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="op">!</span> <span class="ident">called</span>.<span class="ident">contains</span> (<span class="ident">num</span>),
 			).<span class="ident">map</span> (
-				<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="ident">num</span> <span class="kw">as</span> <span class="ident">u16</span>,
+				<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="ident">num</span>.<span class="ident">as_u16</span> (),
 			).<span class="ident">sum</span> ())
 		} <span class="kw">else</span> { <span class="prelude-val">None</span> }
 	}

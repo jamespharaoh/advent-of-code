@@ -297,6 +297,7 @@
 <span id="291">291</span>
 <span id="292">292</span>
 <span id="293">293</span>
+<span id="294">294</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 19: Medicine for Rudolph</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/19](https://adventofcode.com/2015/day/19)</span>
@@ -320,6 +321,7 @@
 	<span class="kw">use</span> <span class="ident">list::CharList</span>;
 	<span class="kw">use</span> <span class="ident">list::List</span>;
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
+	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
@@ -336,7 +338,7 @@
 				<span class="ident">last_pos</span> <span class="op">=</span> <span class="ident">pos</span> <span class="op">+</span> <span class="ident">from</span>.<span class="ident">len</span> ();
 			}
 		}
-		<span class="prelude-val">Ok</span> (<span class="ident">results</span>.<span class="ident">len</span> () <span class="kw">as</span> <span class="ident">u32</span>)
+		<span class="prelude-val">Ok</span> (<span class="ident">results</span>.<span class="ident">len</span> ().<span class="ident">as_u32</span> ())
 	}
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
