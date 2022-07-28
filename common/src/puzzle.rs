@@ -1,5 +1,89 @@
+use std::io;
+use std::io::Write as _;
+
 use super::*;
 use nums::IntConv;
+
+pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <()> {
+
+	let flush = || io::stdout ().flush ().unwrap ();
+
+	// work out max name length
+
+	let name_len =
+		puzzles.iter ()
+			.map (|puzzle| puzzle.name ().len ())
+			.max ()
+			.unwrap ();
+
+	// iterate puzzles
+
+	for puzzle in puzzles.iter () {
+
+		// load input
+
+		let input_string = puzzle.load_input () ?;
+		let input_lines: Vec <& str> =
+			input_string.trim ().split ('\n').collect ();
+
+		// print day and puzzle name
+
+		print! (
+			"{day:02}  {name:name_len$}",
+			day = puzzle.day (),
+			name = puzzle.name (),
+			name_len = name_len);
+
+		// start timer
+
+		let start_time = time::Instant::now ();
+
+		// iterate over parts
+
+		for part in 0 .. 2 {
+
+			// handle missing part
+
+			if puzzle.num_parts () < part + 1 {
+				print! ("{:24}", "");
+				continue;
+			}
+
+			// print part name
+
+			const PART_NAMES: & [& str] = & [ "One", "Two" ];
+			print! ("  {}: ", PART_NAMES [part]);
+
+			// calculate result
+
+			flush ();
+
+			let result =
+				if part == 0 { puzzle.part_one (& input_lines) ? }
+				else if part == 1 { puzzle.part_two (& input_lines) ? }
+				else { panic! () };
+
+			// print result
+
+			print! ("{:17}", result);
+
+		}
+
+		// print duration
+
+		let end_time = time::Instant::now ();
+		let duration = end_time - start_time;
+
+		print! (
+			"Time: {millis:>4}.{micros:02}ms\n",
+			millis = duration.as_millis (),
+			micros = (duration.as_micros () % 1000) / 10);
+
+	}
+
+	Ok (())
+
+}
 
 fn puzzle_invoke_real (
 	puzzle: & dyn Puzzle,

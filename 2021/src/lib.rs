@@ -1,5 +1,3 @@
-#![ doc (html_playground_url = "https://playground.example.com/") ]
-
 use aoc_common::*;
 
 pub use aoc_2021_day_01 as day_01;

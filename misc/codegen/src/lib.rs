@@ -60,11 +60,15 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 	write_file (
 		"src/lib.rs",
 		iter::empty ()
-			.chain (static_part (templates::ALL_LIB_RS [0]))
-			.chain (dynamic_part (templates::ALL_LIB_RS [1]))
-			.chain (static_part (templates::ALL_LIB_RS [2]))
-			.chain (dynamic_part (templates::ALL_LIB_RS [3]))
-			.chain (static_part (templates::ALL_LIB_RS [4])),
+			.chain (static_part (templates::YEAR_LIB [0]))
+			.chain (dynamic_part (templates::YEAR_LIB [1]))
+			.chain (static_part (templates::YEAR_LIB [2]))
+			.chain (dynamic_part (templates::YEAR_LIB [3]))
+			.chain (static_part (templates::YEAR_LIB [4])),
+	) ?;
+	write_file (
+		"src/main.rs",
+		static_part (templates::YEAR_MAIN),
 	) ?;
 	Ok (())
 }
@@ -72,7 +76,7 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 fn prepare_day (year: & str, day: & str) -> Result <(), Box <dyn Error>> {
 	write_file (
 		"src/main.rs",
-		replace_placeholders (templates::DAY_BIN_RS, & HashMap::from_iter (vec! [
+		replace_placeholders (templates::DAY_MAIN, & HashMap::from_iter (vec! [
 			("${YEAR}", year),
 			("${DAY}", day),
 		])),
@@ -127,10 +131,8 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 
 mod templates {
 
-	pub const ALL_LIB_RS: & [& [& str]] = & [
+	pub const YEAR_LIB: & [& [& str]] = & [
 		& [
-			"#![ doc (html_playground_url = \"https://playground.example.com/\") ]",
-			"",
 			"use aoc_common::*;",
 			"",
 		],
@@ -151,7 +153,15 @@ mod templates {
 		],
 	];
 
-	pub const DAY_BIN_RS: & [& str] = & [
+	pub const YEAR_MAIN: & [& str] = & [
+		"use aoc_common::*;",
+		"",
+		"fn main () -> GenResult <()> {",
+		"\tpuzzle::run_year (& aoc_${YEAR}::puzzle_metadata ())",
+		"}",
+	];
+
+	pub const DAY_MAIN: & [& str] = & [
 		"use std::env;",
 		"use std::ffi::OsString;",
 		"",
