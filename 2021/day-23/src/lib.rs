@@ -97,10 +97,6 @@ mod logic {
 				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
 			),
 			! matches! (blocking,
-				(Some (Amph::Amber), _, _) | (_, Some (Amph::Copper), _) |
-				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
-			),
-			! matches! (blocking,
 				(Some (Amph::Amber), _, _) | (_, Some (Amph::Amber), _) |
 				(_, Some (Amph::Bronze), _) | (_, _, Some (Amph::Desert))
 			),
