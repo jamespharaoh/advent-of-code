@@ -160,7 +160,6 @@ pub mod logic {
 							{ continue }
 						todo.push ((stack.len (), 0, idx));
 					}
-					continue;
 				} else {
 					max_len_0 = stack [0].len ();
 					max_quantum_0 =
@@ -169,8 +168,8 @@ pub mod logic {
 							.fold (Ok (1), |prod, item| prod
 								.and_then (|prod| u64::mul_2 (prod, item))) ?;
 					shortcircuit = true;
-					continue;
 				}
+				continue;
 			}
 
 			// branch out for every possible next weight to add to the top pile

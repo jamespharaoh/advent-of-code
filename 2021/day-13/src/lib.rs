@@ -69,7 +69,7 @@ mod logic {
 
 	pub fn fold_dots (fold: & Fold, dots: & HashSet <Pos>) -> HashSet <Pos> {
 		let mut new_dots = HashSet::new ();
-		for mut dot in dots.iter ().cloned () {
+		for mut dot in dots.iter_vals () {
 			match fold.axis {
 				Axis::X => if dot.x > fold.val { dot.x = fold.val - (dot.x - fold.val) },
 				Axis::Y => if dot.y > fold.val { dot.y = fold.val - (dot.y - fold.val) },
@@ -119,7 +119,8 @@ mod logic {
 	impl <'a> fmt::Display for DrawDots <'a> {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			let dots = {
-				let mut dots_temp: Vec <Pos> = self.0.iter ().cloned ().collect ();
+				let mut dots_temp: Vec <Pos> =
+					self.0.iter_vals ().collect ();
 				dots_temp.sort_by_key (|pos| (pos.y, pos.x));
 				dots_temp
 			};

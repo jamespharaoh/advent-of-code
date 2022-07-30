@@ -109,7 +109,7 @@ pub mod logic {
 	fn gen_dist_table (input: & Input) -> (usize, Vec <u32>) {
 		let place_indexes: HashMap <Place, usize> =
 			input.iter ()
-				.flat_map (|(place_0, place_1, _)| [ place_0.clone (), place_1.clone () ])
+				.flat_map (|(place_0, place_1, _)| [ Rc::clone (place_0), Rc::clone (place_1) ])
 				.sorted ()
 				.dedup ()
 				.enumerate ()

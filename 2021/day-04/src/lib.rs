@@ -31,7 +31,7 @@ mod logic {
 
 	fn scores_iter (input: & Rc <Input>) -> ScoresIter {
 		ScoresIter {
-			input: input.clone (),
+			input: Rc::clone (input),
 			boards: iter::repeat (false).take (input.boards.len ()).collect (),
 			call_idx: 0,
 			board_idx: 0,
@@ -82,13 +82,13 @@ mod logic {
 		}
 		let mut winner = false;
 		for row in 0 .. 5 {
-			if check (called, board.iter ().skip (row * 5).take (5).cloned ()) { winner = true }
+			if check (called, board.iter_vals ().skip (row * 5).take (5)) { winner = true }
 		}
 		for col in 0 .. 5 {
-			if check (called, board.iter ().skip (col).step_by (5).cloned ()) { winner = true }
+			if check (called, board.iter_vals ().skip (col).step_by (5)) { winner = true }
 		}
 		if winner {
-			Some (board.iter ().cloned ().filter (
+			Some (board.iter_vals ().filter (
 				|num| ! called.contains (num),
 			).map (
 				|num| num.as_u16 (),

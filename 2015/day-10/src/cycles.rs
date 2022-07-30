@@ -436,7 +436,7 @@ impl <Item> Intern <Item> for & mut HashSet <Rc <Item>> where Item: Eq + Hash {
 			return Rc::clone (shared);
 		}
 		let shared = Rc::new (item);
-		(* self).insert (shared.clone ());
+		(* self).insert (Rc::clone (& shared));
 		shared
 	}
 	fn intern_get (self, item: & Item) -> Option <Rc <Item>> {

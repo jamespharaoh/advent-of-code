@@ -85,20 +85,20 @@ pub mod logic {
 			if step.state {
 				buffer.push ((step.cube, true));
 			}
-			for (core_cube, core_state) in core.iter ().cloned () {
+			for (core_cube, core_state) in core.iter_vals () {
 				if let Some (intersect) = core_cube.intersect (step.cube) {
 					buffer.push ((intersect, ! core_state));
 				}
 			}
 			core.append (& mut buffer);
 		}
-		core.iter ().cloned ()
+		core.iter_vals ()
 			.map (|(cube, state)| cube.volume () * if state { 1 } else { -1 })
 			.sum::<i64> ()
 	}
 
 	fn bound_steps (steps: & [Step], bound: Cube) -> Vec <Step> {
-		steps.iter ().cloned ().filter_map (
+		steps.iter ().copied ().filter_map (
 			|mut step| step.cube.intersect (bound).map (|cube| { step.cube = cube; step }),
 		).collect ()
 	}

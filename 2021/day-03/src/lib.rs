@@ -22,7 +22,7 @@ mod logic {
 		for line in lines {
 			if line.trim ().is_empty () { continue }
 			let sums_temp = sums;
-			let prev_sums = Iterator::chain (sums_temp.iter ().cloned (), iter::repeat (0));
+			let prev_sums = Iterator::chain (sums_temp.iter_vals (), iter::repeat (0));
 			sums = Vec::new ();
 			for (ch, sum) in iter::zip (line.chars (), prev_sums) {
 				sums.push (sum + match ch {
@@ -32,7 +32,7 @@ mod logic {
 				});
 			}
 		}
-		for sum in sums.iter ().cloned () {
+		for sum in sums.iter_vals () {
 			if sum == 0 {
 				Err (format! ("Equal number of bits")) ?;
 			}

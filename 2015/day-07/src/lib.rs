@@ -58,7 +58,7 @@ pub mod logic {
 				.map (|wire| (wire.id.clone (), Wire {
 					id: wire.id.clone (),
 					input: wire.input.clone (),
-					inputs: ArrayVec::from_iter (wire.input.inputs ().iter ().cloned ().cloned ()),
+					inputs: ArrayVec::from_iter (wire.input.inputs ().iter ().copied ().cloned ()),
 					outputs: default (),
 				}))
 				.collect ();

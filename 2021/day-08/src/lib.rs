@@ -24,7 +24,7 @@ mod logic {
 		let mut count: u64 = 0;
 		for display in displays.iter () {
 			for digit in display.value.iter () {
-				let num = digit.segments.iter ().cloned ().filter (|& segment| segment).count ();
+				let num = digit.segments.iter_vals ().filter (|& segment| segment).count ();
 				if [2, 3, 4, 7].contains (& num) { count += 1 }
 			}
 		}
@@ -59,8 +59,8 @@ mod logic {
 		let without_segment = |segment: usize| move |digit: & Digit|
 			! digit.segments [segment];
 		let has_num_segments = |num_segments: usize| move |digit: & Digit|
-			digit.segments.iter ().cloned ().filter (|& segment| segment).count () == num_segments;
-		let samples = || display.samples.iter ().cloned ();
+			digit.segments.iter_vals ().filter (|& segment| segment).count () == num_segments;
+		let samples = || display.samples.iter_vals ();
 		let samples_with_segments = |num_segments| samples ().filter (has_num_segments (num_segments));
 		let digit_1 = find_one (samples_with_segments (2));
 		let digit_4 = find_one (samples_with_segments (4));
@@ -71,7 +71,7 @@ mod logic {
 				|sample| sample.segments [segment],
 			).count (),
 		).collect ();
-		let find_segment_freq = |segment_freq| segment_counts.iter ().cloned ().position (
+		let find_segment_freq = |segment_freq| segment_counts.iter ().copied ().position (
 			|some_freq| some_freq == segment_freq,
 		).unwrap ();
 		let segment_b = find_segment_freq (6);
@@ -79,7 +79,7 @@ mod logic {
 		let segment_f = find_segment_freq (9);
 		let digit_2 = find_one (samples_with_segments (5).filter (without_segment (segment_f)));
 		let segment_c = find_one (
-			digit_1.segments.iter ().cloned ().enumerate ()
+			digit_1.segments.iter_vals ().enumerate ()
 				.filter (|& (index, value)| value && index != segment_f)
 				.map (|(index, _value)| index));
 		let digit_5 = find_one (samples_with_segments (5).filter (without_segment (segment_c)));

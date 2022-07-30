@@ -181,9 +181,9 @@ impl Solver {
 		let mut values: HashMap <Symbol, Rc <Vec <i64>>> = HashMap::new ();
 		for symbol in state.symbols_ordered.iter () {
 			if ! seen.contains (symbol) { continue }
-			let value = symbol.eval (& |sym| values.get (sym).unwrap ().clone (), input) ?;
+			let value = symbol.eval (& |sym| Rc::clone (values.get (sym).unwrap ()), input) ?;
 			let value = Rc::new (value);
-			values.insert (symbol.clone (), value.clone ());
+			values.insert (symbol.clone (), Rc::clone (& value));
 		}
 		todo! ();
 	}
@@ -213,7 +213,7 @@ impl Solver {
 		for symbol in state.symbols_ordered.iter () {
 			if ! seen.contains (symbol) { continue }
 			let new_value = symbol.value ().migrate (& mut new_solver, input);
-			new_solver.define (symbol.name ().clone (), new_value);
+			new_solver.define (Rc::clone (symbol.name ()), new_value);
 		}
 		for old_symbol in symbols.iter_mut () {
 			let new_symbol = new_solver.get (old_symbol.name ()).unwrap ();
@@ -245,7 +245,7 @@ impl Solver {
 		let symbol = Symbol {
 			inner: Rc::new (SymbolInner {
 				solver_inner: Rc::downgrade (& self.inner),
-				name: name.clone (),
+				name: Rc::clone (& name),
 				original_value,
 				original_depth,
 				original_len,
@@ -745,15 +745,16 @@ impl VerNamer {
 	}
 
 	fn define (& mut self, base_name: & Rc <str>) -> Rc <str> {
-		let entry = self.entries.entry (base_name.clone ()).and_modify (|entry| {
-			entry.latest_rev += 1;
-		}).or_insert (VerNamerEntry {
-			base_name: base_name.clone (),
-			latest_name: base_name.clone (),
-			latest_rev: 0,
-		});
+		let entry =
+			self.entries.entry (Rc::clone (base_name))
+				.and_modify (|entry| entry.latest_rev += 1)
+				.or_insert (VerNamerEntry {
+					base_name: Rc::clone (base_name),
+					latest_name: Rc::clone (base_name),
+					latest_rev: 0,
+				});
 		entry.latest_name = format! ("{}{}", entry.base_name, entry.latest_rev).into ();
-		entry.latest_name.clone ()
+		Rc::clone (& entry.latest_name)
 	}
 
 }

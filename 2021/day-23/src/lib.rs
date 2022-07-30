@@ -521,14 +521,13 @@ mod model {
 				Place::Room (Amph::Desert, depth) => 23 + depth.as_usize (),
 			}
 		}
-		#[ allow (clippy::as_conversions) ]
-		pub const fn for_idx (idx: usize) -> Place {
+		pub fn for_idx (idx: usize) -> Place {
 			match idx {
-				0 ..= 10 => Place::Hall (idx as u8),
-				11 ..= 14 => Place::Room (Amph::Amber, idx as u8 - 11),
-				15 ..= 18 => Place::Room (Amph::Bronze, idx as u8 - 15),
-				19 ..= 22 => Place::Room (Amph::Copper, idx as u8 - 19),
-				23 ..= 26 => Place::Room (Amph::Desert, idx as u8 - 23),
+				0 ..= 10 => Place::Hall (idx.as_u8 ()),
+				11 ..= 14 => Place::Room (Amph::Amber, idx.as_u8 () - 11),
+				15 ..= 18 => Place::Room (Amph::Bronze, idx.as_u8 () - 15),
+				19 ..= 22 => Place::Room (Amph::Copper, idx.as_u8 () - 19),
+				23 ..= 26 => Place::Room (Amph::Desert, idx.as_u8 () - 23),
 				_ => panic! (),
 			}
 		}

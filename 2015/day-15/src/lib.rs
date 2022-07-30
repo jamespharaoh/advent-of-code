@@ -35,10 +35,10 @@ pub mod logic {
 
 		let mixed_ingrs =
 			iter::successors (Some (start_ingrs), |ingrs| Some (iter::empty ()
-					.chain (ingrs.iter ().cloned ())
+					.chain (ingrs.iter_vals ())
 					.chain (iter::once ((all_ingrs).iter ()
 						.map (|ingr| (ingr, calc_score (
-							ingrs.iter ().cloned ().chain (iter::once (ingr)))))
+							ingrs.iter_vals ().chain (iter::once (ingr)))))
 						.max_by_key (|& (_, score)| score)
 						.map (|(ingr, _)| ingr)
 						.unwrap ()))
@@ -48,7 +48,7 @@ pub mod logic {
 
 		// work out the final score
 
-		let max_score = calc_score (mixed_ingrs.iter ().cloned ());
+		let max_score = calc_score (mixed_ingrs.iter_vals ());
 		Ok (max_score)
 
 	}
@@ -137,7 +137,7 @@ pub mod logic {
 		// go through the list and pick the highest score
 
 		let max_score = ingr_combos
-			.map (|ingrs| calc_score (ingrs.iter ().cloned ()))
+			.map (|ingrs| calc_score (ingrs.iter_vals ()))
 			.max ()
 			.unwrap ();
 
@@ -156,7 +156,7 @@ pub mod logic {
 			.flat_map (|num| all_ingrs.iter ()
 				.combinations_with_replacement (num)
 				.map (|ingrs: Vec <& Ingredient>| (ingrs.clone (),
-					calc_score (ingrs.iter ().cloned ())))
+					calc_score (ingrs.iter_vals ())))
 				.max_by_key (|& (_, score)| score)
 				.filter (|& (_, score)| score > 0)
 				.map (|(ingrs, _)| ingrs))

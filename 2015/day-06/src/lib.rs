@@ -51,7 +51,7 @@ pub mod logic {
 
 	fn calc_result (steps: & [Step], mode_fn: ModeFn) -> GenResult <u32> {
 		let steps =
-			steps.iter ().cloned ()
+			steps.iter ().copied ()
 				.enumerate ()
 				.sorted_by_key (|(_, step)| step.origin)
 				.collect::<Vec <_>> ();

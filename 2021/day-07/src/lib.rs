@@ -21,7 +21,7 @@ mod logic {
 		let start_posns = model::parse_input (input) ?;
 		calc_result (& start_posns, (0, 0), |(fuel, crabs): & mut (u64, u64), pos| {
 			* fuel += * crabs;
-			* crabs += start_posns.iter ().cloned ().filter (
+			* crabs += start_posns.iter_vals ().filter (
 				|start_pos| * start_pos == pos,
 			).count ().as_u64 ();
 			Some (* fuel)
@@ -33,7 +33,7 @@ mod logic {
 		calc_result (& start_posns, (0, 0, 0), |(fuel, incr, crabs): & mut (u64, u64, u64), pos| {
 			* incr += * crabs;
 			* fuel += * incr;
-			* crabs += start_posns.iter ().cloned ().filter (
+			* crabs += start_posns.iter_vals ().filter (
 				|start_pos| * start_pos == pos,
 			).count ().as_u64 ();
 			Some (* fuel)
@@ -48,7 +48,7 @@ mod logic {
 		initial_state: State,
 		scan_fn: ScanFn,
 	) -> GenResult <u64> {
-		let max = start_posns.iter ().cloned ().max ().unwrap ();
+		let max = start_posns.iter ().copied ().max ().unwrap ();
 		let lower: Vec <u64> = (0 ..= max).scan (initial_state, scan_fn.clone ()).collect ();
 		let higher: Vec <u64> = (0 ..= max).rev ().scan (initial_state, scan_fn).collect ();
 		let moves: Vec <u64> = Iterator::zip (

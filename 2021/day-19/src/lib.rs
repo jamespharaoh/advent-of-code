@@ -98,7 +98,7 @@ mod logic {
 			self.unplaced_scanners = self.original_scanners.iter ()
 				.map (|scanner|
 					Rc::new (UnplacedScanner {
-						original: scanner.clone (),
+						original: Rc::clone (scanner),
 						hashes: self.calc_scanner_hashes (& scanner.beacons, UNPLACED_ROTATIONS),
 					}))
 				.collect::<Vec <_>> ();
@@ -106,7 +106,7 @@ mod logic {
 		}
 
 		fn run (& mut self) -> bool {
-			self.place_scanner (& self.unplaced_scanners [0].clone (), Rotation::None, Pos::zero ());
+			self.place_scanner (& Rc::clone (& self.unplaced_scanners [0]), Rotation::None, Pos::zero ());
 			let mut scanner_matches_buffer = Vec::new ();
 			'OUTER: loop {
 				if self.unplaced_scanners.is_empty () { break }
@@ -123,8 +123,8 @@ mod logic {
 		}
 
 		fn process_match (& mut self, scanner_match: & ScannerMatch) -> bool {
-			let placed = scanner_match.placed.clone ();
-			let unplaced = scanner_match.unplaced.clone ();
+			let placed = Rc::clone (& scanner_match.placed);
+			let unplaced = Rc::clone (& scanner_match.unplaced);
 			let rotate = Rotation::combine (
 				scanner_match.placed_rotate.rev (),
 				scanner_match.unplaced_rotate);
@@ -162,7 +162,7 @@ mod logic {
 				.collect::<Vec <_>> ();
 			let hashes = self.calc_scanner_hashes (& beacons, PLACED_ROTATIONS);
 			let scanner = Rc::new (PlacedScanner {
-				original: scanner.original.clone (),
+				original: Rc::clone (& scanner.original),
 				beacons,
 				hashes,
 			});
@@ -182,8 +182,8 @@ mod logic {
 							in PLACED_ROTATIONS.iter ().copied ().enumerate () {
 						let placed_hash = placed.hashes [placed_rotate_idx];
 						self.scanner_matches.push (ScannerMatch {
-							placed: placed.clone (),
-							unplaced: unplaced.clone (),
+							placed: Rc::clone (placed),
+							unplaced: Rc::clone (unplaced),
 							priority: (placed_hash & unplaced_hash).bits ().as_u32 (),
 							placed_rotate,
 							unplaced_rotate,

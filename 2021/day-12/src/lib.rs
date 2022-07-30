@@ -78,7 +78,7 @@ mod logic {
 		let cache_key = (this_cave, route_sorted);
 		if let Some (& cached_val) = cache.get (& cache_key) { return cached_val }
 		let mut num_routes: u64 = 0;
-		for next_cave in caves.connexions [& this_cave].iter ().cloned () {
+		for next_cave in caves.connexions [& this_cave].iter_vals () {
 			if ! check_fn (state, route, next_cave) { continue }
 			route.push (next_cave);
 			num_routes += calc_recurse (caves, state, check_fn, cache, route);

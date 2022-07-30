@@ -94,7 +94,7 @@ mod base_list {
 	impl <Item: Clone> Clone for List <Item> {
 		fn clone (& self) -> Self {
 			match self {
-				List::Present (inner) => List::Present (inner.clone ()),
+				List::Present (inner) => List::Present (Rc::clone (inner)),
 				List::Empty => List::Empty,
 			}
 		}

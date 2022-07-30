@@ -18,13 +18,13 @@ mod logic {
 	use snailfish::Snailfish;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
-		let sum = Snailfish::sum (lines.iter ().cloned ().map (Snailfish::parse));
+		let sum = Snailfish::sum (lines.iter ().copied ().map (Snailfish::parse));
 		let magnitude = sum.magnitude ();
 		Ok (magnitude)
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
-		let numbers: Vec <Snailfish> = lines.iter ().cloned ().map (Snailfish::parse).collect ();
+		let numbers: Vec <Snailfish> = lines.iter ().copied ().map (Snailfish::parse).collect ();
 		let mut best: i64 = i64::MIN;
 		for i in 0 .. numbers.len () {
 			for j in 0 .. numbers.len () {
@@ -250,7 +250,7 @@ mod snailfish {
 
 	impl From <& Snailfish> for Snailfish {
 		fn from (val: & Snailfish) -> Snailfish {
-			Snailfish { tokens: val.tokens.clone () }
+			Snailfish { tokens: Rc::clone (& val.tokens) }
 		}
 	}
 

@@ -92,9 +92,9 @@ pub mod logic {
 		let queue_pulled = Arc::new (Condvar::new ());
 		let join_handles = (0 .. num_threads).map (|_| {
 			let input = input.to_string ();
-			let state_mutex = state_mutex.clone ();
-			let queue_pushed = queue_pushed.clone ();
-			let queue_pulled = queue_pulled.clone ();
+			let state_mutex = Arc::clone (& state_mutex);
+			let queue_pushed = Arc::clone (& queue_pushed);
+			let queue_pulled = Arc::clone (& queue_pulled);
 			let check_fn = check_zeros_fn (num_zeros);
 			thread::spawn (move || {
 				loop {

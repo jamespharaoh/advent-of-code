@@ -47,10 +47,10 @@ mod logic {
 				.chain (iter::once (iter_row (0)))
 				.scan ((Rc::new (Vec::new ()), Rc::new (Vec::new ())),
 					move |rows, row| {
-						let row_0 = rows.0.clone ();
-						let row_1 = rows.1.clone ();
+						let row_0 = Rc::clone (& rows.0);
+						let row_1 = Rc::clone (& rows.1);
 						let row_2 = Rc::new (row);
-						* rows = (row_1.clone (), row_2.clone ());
+						* rows = (Rc::clone (& row_1), Rc::clone (& row_2));
 						if row_0.len () == 0 || row_1.len () == 0 {
 							return Some (Either::Left (iter::empty ()));
 						}
