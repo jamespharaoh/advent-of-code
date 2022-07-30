@@ -276,7 +276,6 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
-<span id="273">273</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
@@ -439,7 +438,6 @@
 							{ <span class="kw">continue</span> }
 						<span class="ident">todo</span>.<span class="ident">push</span> ((<span class="ident">stack</span>.<span class="ident">len</span> (), <span class="number">0</span>, <span class="ident">idx</span>));
 					}
-					<span class="kw">continue</span>;
 				} <span class="kw">else</span> {
 					<span class="ident">max_len_0</span> <span class="op">=</span> <span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">len</span> ();
 					<span class="ident">max_quantum_0</span> <span class="op">=</span>
@@ -448,8 +446,8 @@
 							.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">1</span>), <span class="op">|</span><span class="ident">prod</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">prod</span>
 								.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">prod</span><span class="op">|</span> <span class="ident">u64::mul_2</span> (<span class="ident">prod</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
 					<span class="ident">shortcircuit</span> <span class="op">=</span> <span class="bool-val">true</span>;
-					<span class="kw">continue</span>;
 				}
+				<span class="kw">continue</span>;
 			}
 
 			<span class="comment">// branch out for every possible next weight to add to the top pile</span>

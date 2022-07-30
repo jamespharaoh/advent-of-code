@@ -322,10 +322,10 @@
 				.<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">iter_row</span> (<span class="number">0</span>)))
 				.<span class="ident">scan</span> ((<span class="ident">Rc::new</span> (<span class="ident">Vec::new</span> ()), <span class="ident">Rc::new</span> (<span class="ident">Vec::new</span> ())),
 					<span class="kw">move</span> <span class="op">|</span><span class="ident">rows</span>, <span class="ident">row</span><span class="op">|</span> {
-						<span class="kw">let</span> <span class="ident">row_0</span> <span class="op">=</span> <span class="ident">rows</span>.<span class="number">0</span>.<span class="ident">clone</span> ();
-						<span class="kw">let</span> <span class="ident">row_1</span> <span class="op">=</span> <span class="ident">rows</span>.<span class="number">1</span>.<span class="ident">clone</span> ();
+						<span class="kw">let</span> <span class="ident">row_0</span> <span class="op">=</span> <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">rows</span>.<span class="number">0</span>);
+						<span class="kw">let</span> <span class="ident">row_1</span> <span class="op">=</span> <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">rows</span>.<span class="number">1</span>);
 						<span class="kw">let</span> <span class="ident">row_2</span> <span class="op">=</span> <span class="ident">Rc::new</span> (<span class="ident">row</span>);
-						<span class="op">*</span> <span class="ident">rows</span> <span class="op">=</span> (<span class="ident">row_1</span>.<span class="ident">clone</span> (), <span class="ident">row_2</span>.<span class="ident">clone</span> ());
+						<span class="op">*</span> <span class="ident">rows</span> <span class="op">=</span> (<span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">row_1</span>), <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">row_2</span>));
 						<span class="kw">if</span> <span class="ident">row_0</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">row_1</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">0</span> {
 							<span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Either::Left</span> (<span class="ident">iter::empty</span> ()));
 						}

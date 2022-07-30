@@ -390,9 +390,9 @@
 		<span class="kw">let</span> <span class="ident">queue_pulled</span> <span class="op">=</span> <span class="ident">Arc::new</span> (<span class="ident">Condvar::new</span> ());
 		<span class="kw">let</span> <span class="ident">join_handles</span> <span class="op">=</span> (<span class="number">0</span> .. <span class="ident">num_threads</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
 			<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">to_string</span> ();
-			<span class="kw">let</span> <span class="ident">state_mutex</span> <span class="op">=</span> <span class="ident">state_mutex</span>.<span class="ident">clone</span> ();
-			<span class="kw">let</span> <span class="ident">queue_pushed</span> <span class="op">=</span> <span class="ident">queue_pushed</span>.<span class="ident">clone</span> ();
-			<span class="kw">let</span> <span class="ident">queue_pulled</span> <span class="op">=</span> <span class="ident">queue_pulled</span>.<span class="ident">clone</span> ();
+			<span class="kw">let</span> <span class="ident">state_mutex</span> <span class="op">=</span> <span class="ident">Arc::clone</span> (<span class="op">&amp;</span> <span class="ident">state_mutex</span>);
+			<span class="kw">let</span> <span class="ident">queue_pushed</span> <span class="op">=</span> <span class="ident">Arc::clone</span> (<span class="op">&amp;</span> <span class="ident">queue_pushed</span>);
+			<span class="kw">let</span> <span class="ident">queue_pulled</span> <span class="op">=</span> <span class="ident">Arc::clone</span> (<span class="op">&amp;</span> <span class="ident">queue_pulled</span>);
 			<span class="kw">let</span> <span class="ident">check_fn</span> <span class="op">=</span> <span class="ident">check_zeros_fn</span> (<span class="ident">num_zeros</span>);
 			<span class="ident">thread::spawn</span> (<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
 				<span class="kw">loop</span> {

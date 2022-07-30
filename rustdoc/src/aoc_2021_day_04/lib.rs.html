@@ -219,7 +219,7 @@
 
 	<span class="kw">fn</span> <span class="ident">scores_iter</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Input</span><span class="op">&gt;</span>) -&gt; <span class="ident">ScoresIter</span> {
 		<span class="ident">ScoresIter</span> {
-			<span class="ident">input</span>: <span class="ident">input</span>.<span class="ident">clone</span> (),
+			<span class="ident">input</span>: <span class="ident">Rc::clone</span> (<span class="ident">input</span>),
 			<span class="ident">boards</span>: <span class="ident">iter::repeat</span> (<span class="bool-val">false</span>).<span class="ident">take</span> (<span class="ident">input</span>.<span class="ident">boards</span>.<span class="ident">len</span> ()).<span class="ident">collect</span> (),
 			<span class="ident">call_idx</span>: <span class="number">0</span>,
 			<span class="ident">board_idx</span>: <span class="number">0</span>,
@@ -270,13 +270,13 @@
 		}
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">winner</span> <span class="op">=</span> <span class="bool-val">false</span>;
 		<span class="kw">for</span> <span class="ident">row</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">5</span> {
-			<span class="kw">if</span> <span class="ident">check</span> (<span class="ident">called</span>, <span class="ident">board</span>.<span class="ident">iter</span> ().<span class="ident">skip</span> (<span class="ident">row</span> <span class="op">*</span> <span class="number">5</span>).<span class="ident">take</span> (<span class="number">5</span>).<span class="ident">cloned</span> ()) { <span class="ident">winner</span> <span class="op">=</span> <span class="bool-val">true</span> }
+			<span class="kw">if</span> <span class="ident">check</span> (<span class="ident">called</span>, <span class="ident">board</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">row</span> <span class="op">*</span> <span class="number">5</span>).<span class="ident">take</span> (<span class="number">5</span>)) { <span class="ident">winner</span> <span class="op">=</span> <span class="bool-val">true</span> }
 		}
 		<span class="kw">for</span> <span class="ident">col</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">5</span> {
-			<span class="kw">if</span> <span class="ident">check</span> (<span class="ident">called</span>, <span class="ident">board</span>.<span class="ident">iter</span> ().<span class="ident">skip</span> (<span class="ident">col</span>).<span class="ident">step_by</span> (<span class="number">5</span>).<span class="ident">cloned</span> ()) { <span class="ident">winner</span> <span class="op">=</span> <span class="bool-val">true</span> }
+			<span class="kw">if</span> <span class="ident">check</span> (<span class="ident">called</span>, <span class="ident">board</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">col</span>).<span class="ident">step_by</span> (<span class="number">5</span>)) { <span class="ident">winner</span> <span class="op">=</span> <span class="bool-val">true</span> }
 		}
 		<span class="kw">if</span> <span class="ident">winner</span> {
-			<span class="prelude-val">Some</span> (<span class="ident">board</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ().<span class="ident">filter</span> (
+			<span class="prelude-val">Some</span> (<span class="ident">board</span>.<span class="ident">iter_vals</span> ().<span class="ident">filter</span> (
 				<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="op">!</span> <span class="ident">called</span>.<span class="ident">contains</span> (<span class="ident">num</span>),
 			).<span class="ident">map</span> (
 				<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="ident">num</span>.<span class="ident">as_u16</span> (),

@@ -803,7 +803,6 @@
 <span id="797">797</span>
 <span id="798">798</span>
 <span id="799">799</span>
-<span id="800">800</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 23: Amphipod</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/23](https://adventofcode.com/2021/day/23)</span>
@@ -1327,14 +1326,13 @@
 				<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt; <span class="number">23</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
 			}
 		}
-		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::as_conversions</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">for_idx</span> (<span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Place</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_idx</span> (<span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Place</span> {
 			<span class="kw">match</span> <span class="ident">idx</span> {
-				<span class="number">0</span> ..<span class="op">=</span> <span class="number">10</span> =&gt; <span class="ident">Place::Hall</span> (<span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span>),
-				<span class="number">11</span> ..<span class="op">=</span> <span class="number">14</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">11</span>),
-				<span class="number">15</span> ..<span class="op">=</span> <span class="number">18</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">15</span>),
-				<span class="number">19</span> ..<span class="op">=</span> <span class="number">22</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">19</span>),
-				<span class="number">23</span> ..<span class="op">=</span> <span class="number">26</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">idx</span> <span class="kw">as</span> <span class="ident">u8</span> <span class="op">-</span> <span class="number">23</span>),
+				<span class="number">0</span> ..<span class="op">=</span> <span class="number">10</span> =&gt; <span class="ident">Place::Hall</span> (<span class="ident">idx</span>.<span class="ident">as_u8</span> ()),
+				<span class="number">11</span> ..<span class="op">=</span> <span class="number">14</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">11</span>),
+				<span class="number">15</span> ..<span class="op">=</span> <span class="number">18</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">15</span>),
+				<span class="number">19</span> ..<span class="op">=</span> <span class="number">22</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">19</span>),
+				<span class="number">23</span> ..<span class="op">=</span> <span class="number">26</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">23</span>),
 				<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (),
 			}
 		}

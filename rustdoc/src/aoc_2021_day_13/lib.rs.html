@@ -240,6 +240,7 @@
 <span id="234">234</span>
 <span id="235">235</span>
 <span id="236">236</span>
+<span id="237">237</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 13: Transparent Origami</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)</span>
@@ -311,7 +312,7 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fold_dots</span> (<span class="ident">fold</span>: <span class="op">&amp;</span> <span class="ident">Fold</span>, <span class="ident">dots</span>: <span class="op">&amp;</span> <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>) -&gt; <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_dots</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">dot</span> <span class="kw">in</span> <span class="ident">dots</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> () {
+		<span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">dot</span> <span class="kw">in</span> <span class="ident">dots</span>.<span class="ident">iter_vals</span> () {
 			<span class="kw">match</span> <span class="ident">fold</span>.<span class="ident">axis</span> {
 				<span class="ident">Axis::X</span> =&gt; <span class="kw">if</span> <span class="ident">dot</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">fold</span>.<span class="ident">val</span> { <span class="ident">dot</span>.<span class="ident">x</span> <span class="op">=</span> <span class="ident">fold</span>.<span class="ident">val</span> <span class="op">-</span> (<span class="ident">dot</span>.<span class="ident">x</span> <span class="op">-</span> <span class="ident">fold</span>.<span class="ident">val</span>) },
 				<span class="ident">Axis::Y</span> =&gt; <span class="kw">if</span> <span class="ident">dot</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">fold</span>.<span class="ident">val</span> { <span class="ident">dot</span>.<span class="ident">y</span> <span class="op">=</span> <span class="ident">fold</span>.<span class="ident">val</span> <span class="op">-</span> (<span class="ident">dot</span>.<span class="ident">y</span> <span class="op">-</span> <span class="ident">fold</span>.<span class="ident">val</span>) },
@@ -361,7 +362,8 @@
 	<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">DrawDots</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
 		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
 			<span class="kw">let</span> <span class="ident">dots</span> <span class="op">=</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dots_temp</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ().<span class="ident">collect</span> ();
+				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dots_temp</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span> <span class="op">=</span>
+					<span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter_vals</span> ().<span class="ident">collect</span> ();
 				<span class="ident">dots_temp</span>.<span class="ident">sort_by_key</span> (<span class="op">|</span><span class="ident">pos</span><span class="op">|</span> (<span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">pos</span>.<span class="ident">x</span>));
 				<span class="ident">dots_temp</span>
 			};
