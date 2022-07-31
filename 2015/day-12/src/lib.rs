@@ -35,7 +35,7 @@ mod logic {
 			Json::Array (items) => items.iter ().map (calc_sum).sum (),
 			Json::Object (items) => items.iter ().map (|(_, item)| calc_sum (item)).sum (),
 			& Json::Number (value) => value.as_i32 (),
-			Json::String (_) => 0,
+			Json::String (_) => 0_i32,
 		}
 	}
 
@@ -49,10 +49,10 @@ mod logic {
 					} else { false }
 				) {
 					items.iter ().map (|(_, item)| calc_sum_no_red (item)).sum ()
-				} else { 0 }
+				} else { 0_i32 }
 			},
 			& Json::Number (value) => value.as_i32 (),
-			Json::String (_) => 0,
+			Json::String (_) => 0_i32,
 		}
 	}
 

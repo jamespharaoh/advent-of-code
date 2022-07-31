@@ -31,8 +31,8 @@ mod logic {
 				.sorted ()
 				.dedup ()
 				.flat_map (|name| [
-					("Myself".to_string (), name.to_string (), 0),
-					(name.to_string (), "Myself".to_string (), 0),
+					("Myself".to_string (), name.to_string (), 0_i32),
+					(name.to_string (), "Myself".to_string (), 0_i32),
 				])
 				.collect::<Vec <_>> ();
 		input.extend (my_scores);
@@ -50,7 +50,8 @@ mod logic {
 				.collect ();
 		let scores =
 			input.iter ().cloned ()
-				.chain (names.iter ().map (|name| (name.to_string (), name.to_string (), 0)))
+				.chain (names.iter ()
+					.map (|name| (name.to_string (), name.to_string (), 0_i32)))
 				.sorted ()
 				.map (|(_, _, score)| score)
 				.collect::<Vec <_>> ();

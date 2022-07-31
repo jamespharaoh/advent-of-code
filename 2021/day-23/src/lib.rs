@@ -428,10 +428,10 @@ mod model {
 			let mut place_bits: u64 = 0;
 			let mut amph_bits: u64 = 0;
 			for amph in self.as_array () {
-				place_bits <<= 1;
+				place_bits <<= 1_u64;
 				if let Some (amph) = amph {
 					place_bits |= 1;
-					amph_bits <<= 2;
+					amph_bits <<= 2_i32;
 					amph_bits |= match amph {
 						Amph::Amber => 0, Amph::Bronze => 1,
 						Amph::Copper => 2, Amph::Desert => 3,
@@ -440,7 +440,7 @@ mod model {
 			}
 			assert! (64 - place_bits.leading_zeros () <= 27);
 			assert! (64 - amph_bits.leading_zeros () <= 32);
-			let data = ((self.room_size.as_u64 ()) << 59) | (place_bits << 32) | amph_bits;
+			let data = ((self.room_size.as_u64 ()) << 59_i32) | (place_bits << 32_i32) | amph_bits;
 			StateCompact { data }
 		}
 
@@ -469,7 +469,7 @@ mod model {
 
 	impl StateCompact {
 		pub fn expand (self) -> State {
-			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32;
+			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32_i32;
 			let mut amph_bits = self.data & 0x00000000ffffffff;
 			let mut places = [None; 27];
 			for place_idx in (0 .. 27).rev () {
@@ -481,24 +481,24 @@ mod model {
 						3 => places [place_idx] = Some (Amph::Desert),
 						_ => unreachable! (),
 					}
-					amph_bits >>= 2;
+					amph_bits >>= 2_i32;
 				}
-				present_bits >>= 1;
+				present_bits >>= 1_i32;
 			}
-			let room_size = (self.data >> 59).as_usize ();
+			let room_size = (self.data >> 59_i32).as_usize ();
 			State::from_array (room_size, places)
 		}
 		pub fn is_finished (self) -> bool {
-			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32;
+			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32_i32;
 			if present_bits & 0x07ff0000 != 0 { return false }
 			let mut amph_bits = self.data & 0x00000000ffffffff;
 			for idx in (0 .. 4).rev () {
-				for _ in 0 .. 4 {
+				for _ in 0_i32 .. 4_i32 {
 					if present_bits & 1 != 0 {
 						if amph_bits & 0x3 != idx { return false }
-						amph_bits >>= 2;
+						amph_bits >>= 2_i32;
 					}
-					present_bits >>= 1;
+					present_bits >>= 1_i32;
 				}
 			}
 			true
@@ -624,8 +624,8 @@ pub mod tools {
 
 	pub fn run_part (args: & RunArgs, lines: & [& str]) -> GenResult <()> {
 		let input = State::parse (lines) ?;
-		let mut num_loops = 0;
-		let mut last_cost = -1;
+		let mut num_loops = 0_i32;
+		let mut last_cost = -1_i64;
 		let mut prev_states = HashMap::new ();
 		let mut search = PrioritySearch::with_hash_map (
 			|state_compact, score, mut adder: PrioritySearchAdder <_, _, _>| {
@@ -643,7 +643,7 @@ pub mod tools {
 				Some (val) => val,
 				None => break None,
 			};
-			num_loops += 1;
+			num_loops += 1_i32;
 			let state = state_compact.expand ();
 			if state.is_finished () {
 				break Some ((state_compact, cost));

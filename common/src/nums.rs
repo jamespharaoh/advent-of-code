@@ -56,7 +56,9 @@ macro_rules! prim_int {
 		impl Int for $signed {
 			type Signed = $signed;
 			type Unsigned = $unsigned;
+			#[ allow (clippy::default_numeric_fallback) ]
 			const ZERO: $signed = 0;
+			#[ allow (clippy::default_numeric_fallback) ]
 			const ONE: $signed = 1;
 			const MIN: $signed = $signed::MIN;
 			const MAX: $signed = $signed::MAX;
@@ -108,7 +110,7 @@ macro_rules! prim_int {
 			fn unsigned_abs (self) -> $unsigned { self }
 			#[ inline ]
 			fn signum (self) -> $signed {
-				if self > 0 { 1 } else { 0 }
+				if self > 0 { Self::Signed::ONE } else { Self::Signed::ZERO }
 			}
 			#[ inline ]
 			fn signed_diff (self, other: Self) -> NumResult <$signed> {
@@ -124,7 +126,7 @@ macro_rules! prim_int {
 			}
 			#[ inline ]
 			fn add_signed (self, other: $signed) -> NumResult <$unsigned> {
-				if other >= 0 {
+				if other >= Self::Signed::ZERO {
 					$unsigned::checked_add (self, $signed::unsigned_abs (other)).ok_or (Overflow)
 				} else {
 					$unsigned::checked_sub (self, $signed::unsigned_abs (other)).ok_or (Overflow)
@@ -132,7 +134,7 @@ macro_rules! prim_int {
 			}
 			#[ inline ]
 			fn sub_signed (self, other: $signed) -> NumResult <$unsigned> {
-				if other >= 0 {
+				if other >= Self::Signed::ZERO {
 					$unsigned::checked_sub (self, $signed::unsigned_abs (other)).ok_or (Overflow)
 				} else {
 					$unsigned::checked_add (self, $signed::unsigned_abs (other)).ok_or (Overflow)
@@ -172,7 +174,7 @@ macro_rules! prim_int {
 			}
 		}
 		impl IntSigned for $signed {
-			const NEG_ONE: $signed = -1;
+			const NEG_ONE: $signed = Self::ZERO - Self::ONE;
 		}
 		impl IntUnsigned for $unsigned {}
 		impl IntSized <$bits> for $signed {}

@@ -199,7 +199,7 @@ mod logic {
 			rotates: & [Rotation; LEN],
 		) -> [ScannerHash; LEN] {
 			let mut hashers =
-				[0; LEN].map (|_| ScannerHasher::new_with_hasher (self.hash_builder.clone ()));
+				[0_i32; LEN].map (|_| ScannerHasher::new_with_hasher (self.hash_builder.clone ()));
 			for offset in beacons.iter ().copied ().enumerate ()
 				.flat_map (|(beacon_0_idx, beacon_0)| beacons.iter ().copied ()
 					.skip (beacon_0_idx + 1)

@@ -83,14 +83,14 @@ pub mod logic {
 			if stack.len () == all_ingrs.len () {
 				stack.pop ().unwrap ();
 			} else if stack.is_empty () {
-				stack.push (0);
+				stack.push (0_i32);
 			} else { unreachable! () }
 
 			loop {
 
 				// increment the ingredient counts
 
-				* stack.last_mut ().unwrap () += 1;
+				* stack.last_mut ().unwrap () += 1_i32;
 
 				// short circuit if calories is over 500
 
@@ -99,7 +99,7 @@ pub mod logic {
 						.map (|(idx, num)| all_ingrs [idx].calories * num)
 						.sum ();
 
-				if calories > 500 {
+				if calories > 500_i32 {
 					stack.pop ();
 					if stack.is_empty () { return None }
 					continue;
@@ -108,18 +108,18 @@ pub mod logic {
 				// fill in rest of stack with zeros...
 
 				while stack.len () + 1 < all_ingrs.len () {
-					stack.push (0);
+					stack.push (0_i32);
 				}
 
 				// ...execpt for last place which we pick to get 100 ingredients total
 
-				let num_final = 100 - stack.iter ().copied ().sum::<i32> ();
-				if num_final < 0 { continue }
+				let num_final = 100_i32 - stack.iter ().copied ().sum::<i32> ();
+				if num_final < 0_i32 { continue }
 				let calories = calories + num_final * all_ingrs.last ().unwrap ().calories;
 
 				// if the total calories is exactly 500, return the list of ingredients
 
-				if calories == 500 {
+				if calories == 500_i32 {
 					stack.push (num_final);
 					return Some (
 						stack.iter ().copied ().enumerate ()
@@ -172,13 +172,13 @@ pub mod logic {
 	///
 	pub fn calc_score <'a> (ingrs: impl IntoIterator <Item = & 'a Ingredient>) -> u64 {
 		let (cap, dur, fla, tex) = ingrs.into_iter ()
-			.fold ((0, 0, 0, 0), |sums, ingr| (
+			.fold ((0_i32, 0_i32, 0_i32, 0_i32), |sums, ingr| (
 				sums.0 + ingr.capacity,
 				sums.1 + ingr.durability,
 				sums.2 + ingr.flavour,
 				sums.3 + ingr.texture,
 			));
-		if cap < 0 || dur < 0 || fla < 0 || tex < 0 { return 0 }
+		if cap < 0_i32 || dur < 0_i32 || fla < 0_i32 || tex < 0_i32 { return 0 }
 		cap.as_u64 () * dur.as_u64 () * fla.as_u64 () * tex.as_u64 ()
 	}
 

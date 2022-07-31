@@ -44,7 +44,7 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 			]))
 	};
 	let dynamic_part = |template| {
-		(1 ..= 25)
+		(1_u32 ..= 25)
 			.filter_map (move |day|
 				if PathBuf::from (format! ("day-{:02}", day)).exists () {
 					Some (replace_placeholders (

@@ -71,12 +71,12 @@ mod model {
 			let mut value = 0;
 			let mut children = Vec::new ();
 			if packet_type == 4 {
-				let mut bits = 0;
+				let mut bits = 0_i32;
 				loop {
 					let is_last = iter.next_bit ().unwrap () == 0;
-					if bits + 4 > 64 { panic! (); }
-					value = value << 4 | iter.next_uint (4).unwrap ();
-					bits += 4;
+					if bits + 4_i32 > 64_i32 { panic! (); }
+					value = value << 4_i32 | iter.next_uint (4).unwrap ();
+					bits += 4_i32;
 					if is_last { break }
 				}
 			} else if iter.next_bit ().unwrap () == 0 {
@@ -119,7 +119,7 @@ mod model {
 			let mut val = 0;
 			for _ in 0 .. bits {
 				let next_bit = self.next_bit ().unwrap ();
-				val = val << 1 | next_bit;
+				val = val << 1_i32 | next_bit;
 			}
 			Some (val)
 		}
@@ -132,9 +132,9 @@ mod model {
 			if self.buffer.is_empty () {
 				if let Some (next_char) = self.inner.next () {
 					let mut next_nibble = next_char.to_digit (16).unwrap ().as_u64 ();
-					for _ in 0 .. 4 {
+					for _ in 0_i32 .. 4_i32 {
 						self.buffer.push (next_nibble & 1);
-						next_nibble >>= 1;
+						next_nibble >>= 1_i32;
 					}
 				}
 			}

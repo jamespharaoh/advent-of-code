@@ -79,7 +79,7 @@ mod base_list {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			write! (formatter, "[") ?;
 			let mut cur = self;
-			let mut idx = 0;
+			let mut idx = 0_usize;
 			while let Some ((head, tail)) = cur.cons () {
 				if idx > 0 { write! (formatter, ", ") ?; }
 				Debug::fmt (& head, formatter) ?;

@@ -50,7 +50,7 @@ pub mod logic {
 					* next = Val::sub_2 (div, 1) ?;
 					let comp =
 						if div == Val::ONE { house }
-						else if div == 2 { house >> 1 }
+						else if div == 2 { house >> 1_i32 }
 						else { Val::div_2 (house, div) ? };
 					if comp <= lim {
 						total = Val::add_2 (total, Val::mul_2 (div, mul) ?) ?;

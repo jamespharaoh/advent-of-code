@@ -30,7 +30,7 @@ impl Output {
 		for result_ch in result.iter_mut () {
 			let (high_ch, low_ch) = input_iter.next_tuple ().unwrap ();
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
-			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4 | decode (low_ch) ?.as_u8 ();
+			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4_i32 | decode (low_ch) ?.as_u8 ();
 		}
 		Ok (Output (result))
 	}
@@ -113,9 +113,9 @@ impl MD5 {
 
 		// then the length
 
-		for _ in 0 .. 8 {
+		for _ in 0_i32 .. 8_i32 {
 			self.update (& [ (len & 0xff).as_u8 () ]);
-			len >>= 8;
+			len >>= 8_i32;
 		}
 
 		// convert result words to byte array
@@ -123,11 +123,11 @@ impl MD5 {
 		assert! (self.message.is_empty ());
 		let mut result = [0; 16];
 		for src_idx in 0 .. 4 {
-			let dst_idx = src_idx << 2;
+			let dst_idx = src_idx << 2_i32;
 			result [dst_idx] = (self.state [src_idx].0 & 0xff).as_u8 ();
-			result [dst_idx + 1] = (self.state [src_idx].0 >> 8 & 0xff).as_u8 ();
-			result [dst_idx + 2] = (self.state [src_idx].0 >> 16 & 0xff).as_u8 ();
-			result [dst_idx + 3] = (self.state [src_idx].0 >> 24 & 0xff).as_u8 ();
+			result [dst_idx + 1] = (self.state [src_idx].0 >> 8_i32 & 0xff).as_u8 ();
+			result [dst_idx + 2] = (self.state [src_idx].0 >> 16_i32 & 0xff).as_u8 ();
+			result [dst_idx + 3] = (self.state [src_idx].0 >> 24_i32 & 0xff).as_u8 ();
 		}
 
 		Output (result)
@@ -142,7 +142,7 @@ impl MD5 {
 		let message = {
 			let mut message = [WrappingU32 (0); 16];
 			for dst_idx in 0 .. 16 {
-				let src_idx = dst_idx << 2;
+				let src_idx = dst_idx << 2_i32;
 				message [dst_idx] = WrappingU32 (
 					(self.message [src_idx]).as_u32 ()
 						| (self.message [src_idx + 1].as_u32 ()) << 8

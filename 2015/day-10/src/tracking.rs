@@ -63,13 +63,13 @@ pub fn run (args: Args) -> GenResult <()> {
 				};
 				// update state
 				let (iter_adv, buffer_new) = match next_run {
-					0 => (0, None),
-					1 => (1, Some (next_1.unwrap ())),
-					2 => (1, None),
-					3 => (2, Some (next_3.unwrap ())),
+					0 => (0_i32, None),
+					1 => (1_i32, Some (next_1.unwrap ())),
+					2 => (1_i32, None),
+					3 => (2_i32, Some (next_3.unwrap ())),
 					_ => panic! ("Found run of {} + {} = {}", buffer_run, next_run, run),
 				};
-				for _ in 0 .. iter_adv { items_iter.next ().unwrap (); }
+				for _ in 0_i32 .. iter_adv { items_iter.next ().unwrap (); }
 				buffer = buffer_new;
 				item_idx += 1;
 				// produce value

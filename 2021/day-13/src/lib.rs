@@ -85,7 +85,7 @@ mod logic {
 			let mut encoded: u32 = 0;
 			for row in 0 .. 6 {
 				for col in 0 .. 5 {
-					encoded <<= 1;
+					encoded <<= 1_i32;
 					if dots.contains (& Pos { x: offset + col, y: row }) {
 						encoded |= 1;
 					}

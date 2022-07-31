@@ -138,7 +138,7 @@ mod snailfish {
 		}
 
 		pub fn reduce_once (self) -> (bool, Snailfish) {
-			let mut depth = 0;
+			let mut depth = 0_u32;
 			for (pos, token) in self.tokens.iter ().enumerate () {
 				match token {
 					Token::Open => {

@@ -49,17 +49,17 @@ pub mod logic {
 			z0: cmp::min (bound.z0, step.cube.z0),
 			z1: cmp::max (bound.z1, step.cube.z1),
 		});
-		let x_bounds: Vec <_> = (0 .. num_splits).map (|idx| Cube {
+		let x_bounds: Vec <_> = (0_i32 .. num_splits).map (|idx| Cube {
 			x0: bound.x0 + (bound.x1 - bound.x0) * idx / num_splits,
 			x1: bound.x0 + (bound.x1 - bound.x0) * (idx + 1) / num_splits,
 			.. bound
 		}).collect ();
-		let y_bounds: Vec <_> = (0 .. num_splits).map (|idx| Cube {
+		let y_bounds: Vec <_> = (0_i32 .. num_splits).map (|idx| Cube {
 			y0: bound.y0 + (bound.y1 - bound.y0) * idx / num_splits,
 			y1: bound.y0 + (bound.y1 - bound.y0) * (idx + 1) / num_splits,
 			.. bound
 		}).collect ();
-		let z_bounds: Vec <_> = (0 .. num_splits).map (|idx| Cube {
+		let z_bounds: Vec <_> = (0_i32 .. num_splits).map (|idx| Cube {
 			z0: bound.z0 + (bound.z1 - bound.z0) * idx / num_splits,
 			z1: bound.z0 + (bound.z1 - bound.z0) * (idx + 1) / num_splits,
 			.. bound

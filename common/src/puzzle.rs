@@ -214,8 +214,8 @@ fn puzzle_invoke_real (
 		let total = times.iter ().map (|& val| val.as_u128 ()).sum::<u128> ();
 		let mean = (total / repeat.as_u128 ()).as_u64 ();
 		let disp_float = |val, ref_val|
-			if ref_val >= 2_000_000.0 { format! ("{:.3}s", val / 1_000_000.0) }
-			else if ref_val >= 2_000.0 { format! ("{:.3}ms", val / 1_000.0) }
+			if ref_val >= 2_000_000_f64 { format! ("{:.3}s", val / 1_000_000_f64) }
+			else if ref_val >= 2_000_f64 { format! ("{:.3}ms", val / 1_000_f64) }
 			else { format! ("{:.0}µs", val) };
 		let disp = |val: u128| disp_float (val.as_f64 (), val.as_f64 ());
 		let disp_mean = |val: u64| disp_float (val.as_f64 (), mean.as_f64 ());
@@ -234,7 +234,7 @@ fn puzzle_invoke_real (
 				if percentile % 10 == 0 {
 					print! (" p{}={}", percentile / 10, disp_pc (percentile));
 				} else {
-					print! (" p{}={}", percentile.as_f64 () / 10.0, disp_pc (percentile));
+					print! (" p{}={}", percentile.as_f64 () / 10.0_f64, disp_pc (percentile));
 				}
 			}
 			if percentiles.is_empty () {

@@ -28,7 +28,7 @@ pub mod logic {
 		let mut mul = 252533;
 		while cell_seq != 0 {
 			if cell_seq & 1 == 1 { code = code * mul % 33554393; }
-			cell_seq >>= 1;
+			cell_seq >>= 1_i32;
 			mul = mul * mul % 33554393;
 		}
 		Ok (code)

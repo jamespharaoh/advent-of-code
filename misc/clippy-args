@@ -20,3 +20,9 @@
 --deny clippy::checked_conversions
 --deny clippy::clone_on_ref_ptr
 --deny clippy::cloned_instead_of_copied
+--deny clippy::copy_iterator
+--deny clippy::create_dir
+--deny clippy::dbg_macro
+--deny clippy::debug_assert_with_mut_call
+--deny clippy::decimal_literal_representation
+--deny clippy::default_numeric_fallback

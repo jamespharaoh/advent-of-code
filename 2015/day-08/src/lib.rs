@@ -75,7 +75,7 @@ pub mod model {
 							.ok_or_else (|| parser.err ()) ?;
 						let digit_low = parser.expect_next () ?.to_digit (16)
 							.ok_or_else (|| parser.err ()) ?;
-						let ch_code = digit_high << 4 | digit_low;
+						let ch_code = digit_high << 4_u32 | digit_low;
 						let ch = char::from_u32 (ch_code).ok_or_else (|| parser.err ()) ?;
 						result.push (ch);
 					},

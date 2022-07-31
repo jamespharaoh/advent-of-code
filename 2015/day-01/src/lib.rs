@@ -21,18 +21,24 @@ pub mod logic {
 	pub fn part_one (input: Input) -> GenResult <i32> {
 		Ok (
 			input.iter ().copied ().enumerate ()
-				.scan (0, |floor, (idx, dir)| { * floor += dir.val (); Some ((idx, * floor)) })
+				.scan (0_i32, |floor, (idx, dir)| {
+					* floor += dir.val ();
+					Some ((idx, * floor))
+				})
 				.last ()
 				.map (|(_, floor)| floor)
-				.unwrap_or (0)
+				.unwrap_or (0_i32)
 		)
 	}
 
 	pub fn part_two (input: Input) -> GenResult <usize> {
 		Ok (
 			input.iter ().copied ().enumerate ()
-				.scan (0, |floor, (idx, dir)| { * floor += dir.val (); Some ((idx, * floor)) })
-				.filter_map (|(idx, floor)| (floor < 0).then_some (idx + 1))
+				.scan (0_i32, |floor, (idx, dir)| {
+					* floor += dir.val ();
+					Some ((idx, * floor))
+				})
+				.filter_map (|(idx, floor)| (floor < 0_i32).then_some (idx + 1))
 				.next ()
 				.ok_or ("Never visited the basement") ?
 		)
@@ -74,7 +80,7 @@ pub mod model {
 
 	impl Dir {
 		pub fn val (& self) -> i32 {
-			match self { Dir::Up => 1, Dir::Down => -1 }
+			match self { Dir::Up => 1_i32, Dir::Down => -1_i32 }
 		}
 	}
 

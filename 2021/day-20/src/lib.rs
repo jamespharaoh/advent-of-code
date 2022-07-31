@@ -86,7 +86,7 @@ mod logic {
 				Some (* state)
 			}).skip (2).map (|bits| {
 				let algorithm_idx = bits.into_iter ()
-					.fold (0, |val, bit| (val << 1) | if bit { 1 } else { 0 });
+					.fold (0, |val, bit| (val << 1_i32) | if bit { 1 } else { 0 });
 				algorithm [algorithm_idx]
 			})
 		).collect ();

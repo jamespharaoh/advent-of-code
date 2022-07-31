@@ -16,7 +16,7 @@ impl <BldHsh: BuildHasher, const LEN: usize, const BITS: usize> BitHasher <BldHs
 		let mut hash = hasher.finish ();
 		for _ in 0 .. BITS {
 			let bit = 1 << (hash & 0x3f);
-			hash >>= 6;
+			hash >>= 6_u32;
 			let idx = (hash % LEN.to_u64 ().unwrap ()).to_usize ().unwrap ();
 			hash /= LEN.to_u64 ().unwrap ();
 			self.data [idx] |= bit;

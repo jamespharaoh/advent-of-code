@@ -85,7 +85,7 @@ mod logic {
 		if input.clone ()
 			.any (|ch| DISALLOWED_CHARS.contains (& ch))
 			{ return false }
-		if input.fold ((0, None, None), |(sum, last, prev), next|
+		if input.fold ((0_u32, None, None), |(sum, last, prev), next|
 			if last == Some (next) && prev != Some (next) {
 				(sum + 1, None, Some (next))
 			} else {
