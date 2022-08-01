@@ -28,7 +28,7 @@ mod logic {
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let cave = Cave::parse (lines) ?;
-		calc_result (& cave)
+		Ok (calc_result (& cave))
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <u64> {
@@ -45,10 +45,10 @@ mod logic {
 		let new_size = [cave.risks.size () [0] * 5, cave.risks.size () [1] * 5];
 		cave.risks = Grid::wrap (risks, [0, 0], new_size);
 		cave.end = Pos { y: (cave.end.y + 1) * 5 - 1, x: (cave.end.x + 1) * 5 - 1 };
-		calc_result (& cave)
+		Ok (calc_result (& cave))
 	}
 
-	pub fn calc_result (cave: & Cave) -> GenResult <u64> {
+	pub fn calc_result (cave: & Cave) -> u64 {
 		let mut search = PrioritySearch::with_grid (
 			[0, 0],
 			cave.risks.size (),
@@ -63,11 +63,11 @@ mod logic {
 			},
 		);
 		search.push (cave.start, 0);
-		let best = search
+		search
 			.filter (|& (pos, _)| pos == cave.end)
 			.map (|(_, score)| score)
-			.next ().unwrap ();
-		Ok (best)
+			.next ()
+			.unwrap ()
 	}
 
 }
@@ -87,7 +87,7 @@ mod model {
 	}
 
 	impl Cave {
-		pub fn parse (lines: & [& str]) -> GenResult <Cave> {
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			let mut risks = Vec::new ();
 			for (line_idx, line) in lines.iter ().enumerate () {
 				let line_err = || format! ("Invalid input on line {}: {}", line_idx + 1, line);
@@ -98,7 +98,7 @@ mod model {
 			let risks = Grid::wrap (risks, [0, 0], [lines.len (), lines [0].len ()]);
 			let start = Pos { x: 0, y: 0 };
 			let end = Pos { x: risks.size () [1].as_i16 () - 1, y: risks.size () [0].as_i16 () - 1 };
-			Ok (Cave { risks, start, end })
+			Ok (Self { risks, start, end })
 		}
 	}
 

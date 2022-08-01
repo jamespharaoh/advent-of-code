@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2021/day/20](https://adventofcode.com/2021/day/20)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -50,6 +52,7 @@ mod logic {
 		first: bool,
 	}
 
+	#[ allow (clippy::large_types_passed_by_value) ]
 	pub fn image_iter <IntoImage: Into <Rc <Image>>> (
 		algorithm: Algorithm,
 		image: IntoImage,
@@ -112,7 +115,7 @@ mod model {
 	}
 
 	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Input> {
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			let err = |idx, msg| format! ("Invalid input: {}: {}", idx + 1, msg);
 			let algorithm = {
 				let line_0_len = lines [0].chars ().count ();
@@ -124,22 +127,22 @@ mod model {
 					match letter {
 						'#' => algorithm [letter_idx] = true,
 						'.' => (),
-						_ => Err (err (0, format! ("Invalid character in algorithm"))) ?,
+						_ => Err (err (0, "Invalid character in algorithm".to_owned ())) ?,
 					}
 				}
 				algorithm
 			};
-			if ! lines [1].is_empty () { Err (err (1, format! ("Expected blank line"))) ?; }
+			if ! lines [1].is_empty () { Err (err (1, "Expected blank line".to_owned ())) ?; }
 			let pixels = lines.iter ().enumerate ().skip (2).flat_map (|(line_idx, line)| {
 				line.chars ().map (move |letter| { match letter {
 					'#' => Ok (true),
 					'.' => Ok (false),
-					_ => Err (err (line_idx, format! ("Invalid character"))),
+					_ => Err (err (line_idx, "Invalid character".to_owned ())),
 				}})
 			}).collect::<Result <_, _>> () ?;
 			let size = [lines.len () - 2, lines [2].chars ().count ()];
 			let pixels = Pixels::wrap (pixels, [0, 0], size);
-			Ok (Input { algorithm, pixels })
+			Ok (Self { algorithm, pixels })
 		}
 	}
 
@@ -150,31 +153,31 @@ mod model {
 	}
 
 	impl Image {
-		pub fn new_from (pixels: Pixels, inverted: bool) -> Image {
-			Image { pixels, inverted }
+		pub const fn new_from (pixels: Pixels, inverted: bool) -> Self {
+			Self { pixels, inverted }
 		}
 		pub fn num_pixels (& self) -> usize {
 			self.pixels.values ().filter (|& val| val != self.inverted).count ()
 		}
-		pub fn height (& self) -> usize { self.pixels.size () [0] }
-		pub fn width (& self) -> usize { self.pixels.size () [1] }
-		pub fn inverted (& self) -> bool { self.inverted }
+		pub const fn height (& self) -> usize { self.pixels.size () [0] }
+		pub const fn width (& self) -> usize { self.pixels.size () [1] }
+		pub const fn inverted (& self) -> bool { self.inverted }
 		pub fn get (& self, pos: Pos) -> bool {
 			self.pixels.get (pos).unwrap_or (self.inverted)
 		}
 		pub fn range (& self) -> (Pos, Pos) {
 			(self.pixels.origin (), self.pixels.peak () + Pos { y: 1, x: 1 })
 		}
-		pub fn dump (& self) -> ImageDump {
+		pub const fn dump (& self) -> ImageDump {
 			ImageDump (self)
 		}
 	}
 
-	pub struct ImageDump <'a> (& 'a Image);
+	pub struct ImageDump <'img> (& 'img Image);
 
-	impl <'a> fmt::Display for ImageDump <'a> {
+	impl <'img> fmt::Display for ImageDump <'img> {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			let ImageDump (image) = self;
+			let ImageDump (image) = * self;
 			let (origin, peak) = image.range ();
 			for y in origin.y .. peak.y {
 				for x in origin.x .. peak.x {
@@ -212,6 +215,8 @@ pub mod tool {
 
 	}
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (& args.input) ?;
 		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
@@ -219,7 +224,7 @@ pub mod tool {
 		let start_image = Image::new_from (input.pixels, false);
 		let end_image = logic::image_iter (input.algorithm, start_image)
 			.enumerate ()
-			.inspect (|(steps, image)| if args.verbose {
+			.inspect (|& (ref steps, ref image)| if args.verbose {
 				print! (
 					"After {} steps: {} pixels {}\n{}",
 					steps,

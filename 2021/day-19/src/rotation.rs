@@ -14,230 +14,271 @@ pub enum Rotation {
 #[ allow (dead_code) ]
 impl Rotation {
 
-	pub const ALL: & 'static [Rotation; 24] = & [
-		Rotation::None, Rotation::Clockwise,
-		Rotation::CounterClockwise, Rotation::UpsideDown,
-		Rotation::Up, Rotation::ClockwiseUp,
-		Rotation::CounterClockwiseUp, Rotation::UpsideDownUp,
-		Rotation::Down, Rotation::ClockwiseDown,
-		Rotation::CounterClockwiseDown, Rotation::UpsideDownDown,
-		Rotation::Left, Rotation::ClockwiseLeft,
-		Rotation::CounterClockwiseLeft, Rotation::UpsideDownLeft,
-		Rotation::Right, Rotation::ClockwiseRight,
-		Rotation::CounterClockwiseRight, Rotation::UpsideDownRight,
-		Rotation::Around, Rotation::ClockwiseAround,
-		Rotation::CounterClockwiseAround, Rotation::UpsideDownAround,
+	pub const ALL: & 'static [Self; 24] = & [
+		Self::None, Self::Clockwise,
+		Self::CounterClockwise, Self::UpsideDown,
+		Self::Up, Self::ClockwiseUp,
+		Self::CounterClockwiseUp, Self::UpsideDownUp,
+		Self::Down, Self::ClockwiseDown,
+		Self::CounterClockwiseDown, Self::UpsideDownDown,
+		Self::Left, Self::ClockwiseLeft,
+		Self::CounterClockwiseLeft, Self::UpsideDownLeft,
+		Self::Right, Self::ClockwiseRight,
+		Self::CounterClockwiseRight, Self::UpsideDownRight,
+		Self::Around, Self::ClockwiseAround,
+		Self::CounterClockwiseAround, Self::UpsideDownAround,
 	];
 
-	pub fn idx (self) -> usize {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn idx (self) -> usize {
 		match self {
-			Rotation::None => 0,
-			Rotation::Clockwise => 1,
-			Rotation::CounterClockwise => 2,
-			Rotation::UpsideDown => 3,
-			Rotation::Up => 4,
-			Rotation::ClockwiseUp => 5,
-			Rotation::CounterClockwiseUp => 6,
-			Rotation::UpsideDownUp => 7,
-			Rotation::Down => 8,
-			Rotation::ClockwiseDown => 9,
-			Rotation::CounterClockwiseDown => 10,
-			Rotation::UpsideDownDown => 11,
-			Rotation::Left => 12,
-			Rotation::ClockwiseLeft => 13,
-			Rotation::CounterClockwiseLeft => 14,
-			Rotation::UpsideDownLeft => 15,
-			Rotation::Right => 16,
-			Rotation::ClockwiseRight => 17,
-			Rotation::CounterClockwiseRight => 18,
-			Rotation::UpsideDownRight => 19,
-			Rotation::Around => 20,
-			Rotation::ClockwiseAround => 21,
-			Rotation::CounterClockwiseAround => 22,
-			Rotation::UpsideDownAround => 23,
+			Self::None => 0,
+			Self::Clockwise => 1,
+			Self::CounterClockwise => 2,
+			Self::UpsideDown => 3,
+			Self::Up => 4,
+			Self::ClockwiseUp => 5,
+			Self::CounterClockwiseUp => 6,
+			Self::UpsideDownUp => 7,
+			Self::Down => 8,
+			Self::ClockwiseDown => 9,
+			Self::CounterClockwiseDown => 10,
+			Self::UpsideDownDown => 11,
+			Self::Left => 12,
+			Self::ClockwiseLeft => 13,
+			Self::CounterClockwiseLeft => 14,
+			Self::UpsideDownLeft => 15,
+			Self::Right => 16,
+			Self::ClockwiseRight => 17,
+			Self::CounterClockwiseRight => 18,
+			Self::UpsideDownRight => 19,
+			Self::Around => 20,
+			Self::ClockwiseAround => 21,
+			Self::CounterClockwiseAround => 22,
+			Self::UpsideDownAround => 23,
 		}
 	}
 
-	pub fn apply (self, pos: Pos) -> Pos {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn apply (self, pos: Pos) -> Pos {
 		match self {
-			Rotation::None => Pos { x: pos.x, y: pos.y, z: pos.z },
-			Rotation::Clockwise => Pos { x: - pos.y, y: pos.x, z: pos.z },
-			Rotation::CounterClockwise => Pos { x: pos.y, y: - pos.x, z: pos.z },
-			Rotation::UpsideDown => Pos { x: - pos.x, y: - pos.y, z: pos.z },
-			Rotation::Up => Pos { x: pos.x, y: - pos.z, z: pos.y },
-			Rotation::ClockwiseUp => Pos { x: pos.z, y: pos.x, z: pos.y },
-			Rotation::CounterClockwiseUp => Pos { x: - pos.z, y: - pos.x, z: pos.y },
-			Rotation::UpsideDownUp => Pos { x: - pos.x, y: pos.z, z: pos.y },
-			Rotation::Down => Pos { x: pos.x, y: pos.z, z: - pos.y },
-			Rotation::ClockwiseDown => Pos { x: - pos.z, y: pos.x, z: - pos.y },
-			Rotation::CounterClockwiseDown => Pos { x: pos.z, y: - pos.x, z: - pos.y },
-			Rotation::UpsideDownDown => Pos { x: - pos.x, y: - pos.z, z: - pos.y },
-			Rotation::Left => Pos { x: pos.z, y: pos.y, z: - pos.x },
-			Rotation::ClockwiseLeft => Pos { x: - pos.y, y: pos.z, z: - pos.x },
-			Rotation::CounterClockwiseLeft => Pos { x: pos.y, y: - pos.z, z: - pos.x },
-			Rotation::UpsideDownLeft => Pos { x: - pos.z, y: - pos.y, z: - pos.x },
-			Rotation::Right => Pos { x: - pos.z, y: pos.y, z: pos.x },
-			Rotation::ClockwiseRight => Pos { x: - pos.y, y: - pos.z, z: pos.x },
-			Rotation::CounterClockwiseRight => Pos { x: pos.y, y: pos.z, z: pos.x },
-			Rotation::UpsideDownRight => Pos { x: pos.z, y: - pos.y, z: pos.x },
-			Rotation::Around => Pos { x: - pos.x, y: pos.y, z: - pos.z },
-			Rotation::ClockwiseAround => Pos { x: - pos.y, y: - pos.x, z: - pos.z },
-			Rotation::CounterClockwiseAround => Pos { x: pos.y, y: pos.x, z: - pos.z },
-			Rotation::UpsideDownAround => Pos { x: pos.x, y: - pos.y, z: - pos.z },
+			Self::None => Pos { x: pos.x, y: pos.y, z: pos.z },
+			Self::Clockwise => Pos { x: - pos.y, y: pos.x, z: pos.z },
+			Self::CounterClockwise => Pos { x: pos.y, y: - pos.x, z: pos.z },
+			Self::UpsideDown => Pos { x: - pos.x, y: - pos.y, z: pos.z },
+			Self::Up => Pos { x: pos.x, y: - pos.z, z: pos.y },
+			Self::ClockwiseUp => Pos { x: pos.z, y: pos.x, z: pos.y },
+			Self::CounterClockwiseUp => Pos { x: - pos.z, y: - pos.x, z: pos.y },
+			Self::UpsideDownUp => Pos { x: - pos.x, y: pos.z, z: pos.y },
+			Self::Down => Pos { x: pos.x, y: pos.z, z: - pos.y },
+			Self::ClockwiseDown => Pos { x: - pos.z, y: pos.x, z: - pos.y },
+			Self::CounterClockwiseDown => Pos { x: pos.z, y: - pos.x, z: - pos.y },
+			Self::UpsideDownDown => Pos { x: - pos.x, y: - pos.z, z: - pos.y },
+			Self::Left => Pos { x: pos.z, y: pos.y, z: - pos.x },
+			Self::ClockwiseLeft => Pos { x: - pos.y, y: pos.z, z: - pos.x },
+			Self::CounterClockwiseLeft => Pos { x: pos.y, y: - pos.z, z: - pos.x },
+			Self::UpsideDownLeft => Pos { x: - pos.z, y: - pos.y, z: - pos.x },
+			Self::Right => Pos { x: - pos.z, y: pos.y, z: pos.x },
+			Self::ClockwiseRight => Pos { x: - pos.y, y: - pos.z, z: pos.x },
+			Self::CounterClockwiseRight => Pos { x: pos.y, y: pos.z, z: pos.x },
+			Self::UpsideDownRight => Pos { x: pos.z, y: - pos.y, z: pos.x },
+			Self::Around => Pos { x: - pos.x, y: pos.y, z: - pos.z },
+			Self::ClockwiseAround => Pos { x: - pos.y, y: - pos.x, z: - pos.z },
+			Self::CounterClockwiseAround => Pos { x: pos.y, y: pos.x, z: - pos.z },
+			Self::UpsideDownAround => Pos { x: pos.x, y: - pos.y, z: - pos.z },
 		}
 	}
 
-	pub fn left (self) -> Rotation {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn left (self) -> Self {
 		match self {
-			Rotation::None => Rotation::Left,
-			Rotation::Clockwise => Rotation::ClockwiseUp,
-			Rotation::CounterClockwise => Rotation::CounterClockwiseDown,
-			Rotation::UpsideDown => Rotation::UpsideDownRight,
-			Rotation::Up => Rotation::CounterClockwiseLeft,
-			Rotation::ClockwiseUp => Rotation::CounterClockwiseAround,
-			Rotation::CounterClockwiseUp => Rotation::CounterClockwise,
-			Rotation::UpsideDownUp => Rotation::CounterClockwiseRight,
-			Rotation::Down => Rotation::ClockwiseLeft,
-			Rotation::ClockwiseDown => Rotation::Clockwise,
-			Rotation::CounterClockwiseDown => Rotation::ClockwiseAround,
-			Rotation::UpsideDownDown => Rotation::ClockwiseRight,
-			Rotation::Left => Rotation::Around,
-			Rotation::ClockwiseLeft => Rotation::UpsideDownUp,
-			Rotation::CounterClockwiseLeft => Rotation::UpsideDownDown,
-			Rotation::UpsideDownLeft => Rotation::UpsideDown,
-			Rotation::Right => Rotation::None,
-			Rotation::ClockwiseRight => Rotation::Up,
-			Rotation::CounterClockwiseRight => Rotation::Down,
-			Rotation::UpsideDownRight => Rotation::UpsideDownAround,
-			Rotation::Around => Rotation::Right,
-			Rotation::ClockwiseAround => Rotation::CounterClockwiseUp,
-			Rotation::CounterClockwiseAround => Rotation::ClockwiseDown,
-			Rotation::UpsideDownAround => Rotation::UpsideDownLeft,
+			Self::None => Self::Left,
+			Self::Clockwise => Self::ClockwiseUp,
+			Self::CounterClockwise => Self::CounterClockwiseDown,
+			Self::UpsideDown => Self::UpsideDownRight,
+			Self::Up => Self::CounterClockwiseLeft,
+			Self::ClockwiseUp => Self::CounterClockwiseAround,
+			Self::CounterClockwiseUp => Self::CounterClockwise,
+			Self::UpsideDownUp => Self::CounterClockwiseRight,
+			Self::Down => Self::ClockwiseLeft,
+			Self::ClockwiseDown => Self::Clockwise,
+			Self::CounterClockwiseDown => Self::ClockwiseAround,
+			Self::UpsideDownDown => Self::ClockwiseRight,
+			Self::Left => Self::Around,
+			Self::ClockwiseLeft => Self::UpsideDownUp,
+			Self::CounterClockwiseLeft => Self::UpsideDownDown,
+			Self::UpsideDownLeft => Self::UpsideDown,
+			Self::Right => Self::None,
+			Self::ClockwiseRight => Self::Up,
+			Self::CounterClockwiseRight => Self::Down,
+			Self::UpsideDownRight => Self::UpsideDownAround,
+			Self::Around => Self::Right,
+			Self::ClockwiseAround => Self::CounterClockwiseUp,
+			Self::CounterClockwiseAround => Self::ClockwiseDown,
+			Self::UpsideDownAround => Self::UpsideDownLeft,
 		}
 	}
 
-	pub fn around (self) -> Rotation { self.left ().left () }
-	pub fn right (self) -> Rotation { self.left ().left ().left () }
+	#[ inline ]
+	#[ must_use ]
+	pub const fn around (self) -> Self {
+		self.left ().left ()
+	}
 
-	pub fn clockwise (self) -> Rotation {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn right (self) -> Self {
+		self.left ().left ().left ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn clockwise (self) -> Self {
 		match self {
-			Rotation::None => Rotation::Clockwise,
-			Rotation::Clockwise => Rotation::UpsideDown,
-			Rotation::CounterClockwise => Rotation::None,
-			Rotation::UpsideDown => Rotation::CounterClockwise,
-			Rotation::Up => Rotation::ClockwiseUp,
-			Rotation::ClockwiseUp => Rotation::UpsideDownUp,
-			Rotation::CounterClockwiseUp => Rotation::Up,
-			Rotation::UpsideDownUp => Rotation::CounterClockwiseUp,
-			Rotation::Down => Rotation::ClockwiseDown,
-			Rotation::ClockwiseDown => Rotation::UpsideDownDown,
-			Rotation::CounterClockwiseDown => Rotation::Down,
-			Rotation::UpsideDownDown => Rotation::CounterClockwiseDown,
-			Rotation::Left => Rotation::ClockwiseLeft,
-			Rotation::ClockwiseLeft => Rotation::UpsideDownLeft,
-			Rotation::CounterClockwiseLeft => Rotation::Left,
-			Rotation::UpsideDownLeft => Rotation::CounterClockwiseLeft,
-			Rotation::Right => Rotation::ClockwiseRight,
-			Rotation::ClockwiseRight => Rotation::UpsideDownRight,
-			Rotation::CounterClockwiseRight => Rotation::Right,
-			Rotation::UpsideDownRight => Rotation::CounterClockwiseRight,
-			Rotation::Around => Rotation::ClockwiseAround,
-			Rotation::ClockwiseAround => Rotation::UpsideDownAround,
-			Rotation::CounterClockwiseAround => Rotation::Around,
-			Rotation::UpsideDownAround => Rotation::CounterClockwiseAround,
+			Self::None => Self::Clockwise,
+			Self::Clockwise => Self::UpsideDown,
+			Self::CounterClockwise => Self::None,
+			Self::UpsideDown => Self::CounterClockwise,
+			Self::Up => Self::ClockwiseUp,
+			Self::ClockwiseUp => Self::UpsideDownUp,
+			Self::CounterClockwiseUp => Self::Up,
+			Self::UpsideDownUp => Self::CounterClockwiseUp,
+			Self::Down => Self::ClockwiseDown,
+			Self::ClockwiseDown => Self::UpsideDownDown,
+			Self::CounterClockwiseDown => Self::Down,
+			Self::UpsideDownDown => Self::CounterClockwiseDown,
+			Self::Left => Self::ClockwiseLeft,
+			Self::ClockwiseLeft => Self::UpsideDownLeft,
+			Self::CounterClockwiseLeft => Self::Left,
+			Self::UpsideDownLeft => Self::CounterClockwiseLeft,
+			Self::Right => Self::ClockwiseRight,
+			Self::ClockwiseRight => Self::UpsideDownRight,
+			Self::CounterClockwiseRight => Self::Right,
+			Self::UpsideDownRight => Self::CounterClockwiseRight,
+			Self::Around => Self::ClockwiseAround,
+			Self::ClockwiseAround => Self::UpsideDownAround,
+			Self::CounterClockwiseAround => Self::Around,
+			Self::UpsideDownAround => Self::CounterClockwiseAround,
 		}
 	}
 
-	pub fn upside_down (self) -> Rotation { self.clockwise ().clockwise () }
-	pub fn counter_clockwise (self) -> Rotation { self.clockwise ().clockwise ().clockwise () }
+	#[ inline ]
+	#[ must_use ]
+	pub const fn upside_down (self) -> Self {
+		self.clockwise ().clockwise ()
+	}
 
-	pub fn up (self) -> Rotation {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn counter_clockwise (self) -> Self {
+		self.clockwise ().clockwise ().clockwise ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn up (self) -> Self {
 		match self {
-			Rotation::None => Rotation::Up,
-			Rotation::Clockwise => Rotation::ClockwiseRight,
-			Rotation::CounterClockwise => Rotation::CounterClockwiseLeft,
-			Rotation::UpsideDown => Rotation::UpsideDownDown,
-			Rotation::Up => Rotation::UpsideDownAround,
-			Rotation::ClockwiseUp => Rotation::UpsideDownRight,
-			Rotation::CounterClockwiseUp => Rotation::UpsideDownLeft,
-			Rotation::UpsideDownUp => Rotation::UpsideDown,
-			Rotation::Down => Rotation::None,
-			Rotation::ClockwiseDown => Rotation::Right,
-			Rotation::CounterClockwiseDown => Rotation::Left,
-			Rotation::UpsideDownDown => Rotation::Around,
-			Rotation::Left => Rotation::ClockwiseUp,
-			Rotation::ClockwiseLeft => Rotation::Clockwise,
-			Rotation::CounterClockwiseLeft => Rotation::CounterClockwiseAround,
-			Rotation::UpsideDownLeft => Rotation::ClockwiseDown,
-			Rotation::Right => Rotation::CounterClockwiseUp,
-			Rotation::ClockwiseRight => Rotation::ClockwiseAround,
-			Rotation::CounterClockwiseRight => Rotation::CounterClockwise,
-			Rotation::UpsideDownRight => Rotation::CounterClockwiseDown,
-			Rotation::Around => Rotation::UpsideDownUp,
-			Rotation::ClockwiseAround => Rotation::ClockwiseLeft,
-			Rotation::CounterClockwiseAround => Rotation::CounterClockwiseRight,
-			Rotation::UpsideDownAround => Rotation::Down,
+			Self::None => Self::Up,
+			Self::Clockwise => Self::ClockwiseRight,
+			Self::CounterClockwise => Self::CounterClockwiseLeft,
+			Self::UpsideDown => Self::UpsideDownDown,
+			Self::Up => Self::UpsideDownAround,
+			Self::ClockwiseUp => Self::UpsideDownRight,
+			Self::CounterClockwiseUp => Self::UpsideDownLeft,
+			Self::UpsideDownUp => Self::UpsideDown,
+			Self::Down => Self::None,
+			Self::ClockwiseDown => Self::Right,
+			Self::CounterClockwiseDown => Self::Left,
+			Self::UpsideDownDown => Self::Around,
+			Self::Left => Self::ClockwiseUp,
+			Self::ClockwiseLeft => Self::Clockwise,
+			Self::CounterClockwiseLeft => Self::CounterClockwiseAround,
+			Self::UpsideDownLeft => Self::ClockwiseDown,
+			Self::Right => Self::CounterClockwiseUp,
+			Self::ClockwiseRight => Self::ClockwiseAround,
+			Self::CounterClockwiseRight => Self::CounterClockwise,
+			Self::UpsideDownRight => Self::CounterClockwiseDown,
+			Self::Around => Self::UpsideDownUp,
+			Self::ClockwiseAround => Self::ClockwiseLeft,
+			Self::CounterClockwiseAround => Self::CounterClockwiseRight,
+			Self::UpsideDownAround => Self::Down,
 		}
 	}
 
-	pub fn flip (self) -> Rotation { self.up ().up () }
-	pub fn down (self) -> Rotation { self.up ().up ().up () }
+	#[ inline ]
+	#[ must_use ]
+	pub const fn flip (self) -> Self {
+		self.up ().up ()
+	}
 
-	pub fn rev (self) -> Rotation {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn down (self) -> Self {
+		self.up ().up ().up ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn rev (self) -> Self {
 		match self {
-			Rotation::None => Rotation::None,
-			Rotation::Clockwise => Rotation::CounterClockwise,
-			Rotation::CounterClockwise => Rotation::Clockwise,
-			Rotation::UpsideDown => Rotation::UpsideDown,
-			Rotation::Up => Rotation::Down,
-			Rotation::ClockwiseUp => Rotation::CounterClockwiseRight,
-			Rotation::CounterClockwiseUp => Rotation::ClockwiseLeft,
-			Rotation::UpsideDownUp => Rotation::UpsideDownUp,
-			Rotation::Down => Rotation::Up,
-			Rotation::ClockwiseDown => Rotation::CounterClockwiseLeft,
-			Rotation::CounterClockwiseDown => Rotation::ClockwiseRight,
-			Rotation::UpsideDownDown => Rotation::UpsideDownDown,
-			Rotation::Left => Rotation::Right,
-			Rotation::ClockwiseLeft => Rotation::CounterClockwiseUp,
-			Rotation::CounterClockwiseLeft => Rotation::ClockwiseDown,
-			Rotation::UpsideDownLeft => Rotation::UpsideDownLeft,
-			Rotation::Right => Rotation::Left,
-			Rotation::ClockwiseRight => Rotation::CounterClockwiseDown,
-			Rotation::CounterClockwiseRight => Rotation::ClockwiseUp,
-			Rotation::UpsideDownRight => Rotation::UpsideDownRight,
-			Rotation::Around => Rotation::Around,
-			Rotation::ClockwiseAround => Rotation::ClockwiseAround,
-			Rotation::CounterClockwiseAround => Rotation::CounterClockwiseAround,
-			Rotation::UpsideDownAround => Rotation::UpsideDownAround,
+			Self::None => Self::None,
+			Self::Clockwise => Self::CounterClockwise,
+			Self::CounterClockwise => Self::Clockwise,
+			Self::UpsideDown => Self::UpsideDown,
+			Self::Up => Self::Down,
+			Self::ClockwiseUp => Self::CounterClockwiseRight,
+			Self::CounterClockwiseUp => Self::ClockwiseLeft,
+			Self::UpsideDownUp => Self::UpsideDownUp,
+			Self::Down => Self::Up,
+			Self::ClockwiseDown => Self::CounterClockwiseLeft,
+			Self::CounterClockwiseDown => Self::ClockwiseRight,
+			Self::UpsideDownDown => Self::UpsideDownDown,
+			Self::Left => Self::Right,
+			Self::ClockwiseLeft => Self::CounterClockwiseUp,
+			Self::CounterClockwiseLeft => Self::ClockwiseDown,
+			Self::UpsideDownLeft => Self::UpsideDownLeft,
+			Self::Right => Self::Left,
+			Self::ClockwiseRight => Self::CounterClockwiseDown,
+			Self::CounterClockwiseRight => Self::ClockwiseUp,
+			Self::UpsideDownRight => Self::UpsideDownRight,
+			Self::Around => Self::Around,
+			Self::ClockwiseAround => Self::ClockwiseAround,
+			Self::CounterClockwiseAround => Self::CounterClockwiseAround,
+			Self::UpsideDownAround => Self::UpsideDownAround,
 		}
 	}
 
-	pub fn combine (self, other: Rotation) -> Rotation {
+	#[ inline ]
+	#[ must_use ]
+	pub const fn combine (self, other: Self) -> Self {
 		match self {
-			Rotation::None => other,
-			Rotation::Clockwise => other.clockwise (),
-			Rotation::CounterClockwise => other.counter_clockwise (),
-			Rotation::UpsideDown => other.upside_down (),
-			Rotation::Up => other.up (),
-			Rotation::ClockwiseUp => other.up ().clockwise (),
-			Rotation::CounterClockwiseUp => other.up ().counter_clockwise (),
-			Rotation::UpsideDownUp => other.up ().upside_down (),
-			Rotation::Down => other.down (),
-			Rotation::ClockwiseDown => other.down ().clockwise (),
-			Rotation::CounterClockwiseDown => other.down ().counter_clockwise (),
-			Rotation::UpsideDownDown => other.down ().upside_down (),
-			Rotation::Left => other.left (),
-			Rotation::ClockwiseLeft => other.left ().clockwise (),
-			Rotation::CounterClockwiseLeft => other.left ().counter_clockwise (),
-			Rotation::UpsideDownLeft => other.left ().upside_down (),
-			Rotation::Right => other.right (),
-			Rotation::ClockwiseRight => other.right ().clockwise (),
-			Rotation::CounterClockwiseRight => other.right ().counter_clockwise (),
-			Rotation::UpsideDownRight => other.right ().upside_down (),
-			Rotation::Around => other.around (),
-			Rotation::ClockwiseAround => other.around ().clockwise (),
-			Rotation::CounterClockwiseAround => other.around ().counter_clockwise (),
-			Rotation::UpsideDownAround => other.around ().upside_down (),
+			Self::None => other,
+			Self::Clockwise => other.clockwise (),
+			Self::CounterClockwise => other.counter_clockwise (),
+			Self::UpsideDown => other.upside_down (),
+			Self::Up => other.up (),
+			Self::ClockwiseUp => other.up ().clockwise (),
+			Self::CounterClockwiseUp => other.up ().counter_clockwise (),
+			Self::UpsideDownUp => other.up ().upside_down (),
+			Self::Down => other.down (),
+			Self::ClockwiseDown => other.down ().clockwise (),
+			Self::CounterClockwiseDown => other.down ().counter_clockwise (),
+			Self::UpsideDownDown => other.down ().upside_down (),
+			Self::Left => other.left (),
+			Self::ClockwiseLeft => other.left ().clockwise (),
+			Self::CounterClockwiseLeft => other.left ().counter_clockwise (),
+			Self::UpsideDownLeft => other.left ().upside_down (),
+			Self::Right => other.right (),
+			Self::ClockwiseRight => other.right ().clockwise (),
+			Self::CounterClockwiseRight => other.right ().counter_clockwise (),
+			Self::UpsideDownRight => other.right ().upside_down (),
+			Self::Around => other.around (),
+			Self::ClockwiseAround => other.around ().clockwise (),
+			Self::CounterClockwiseAround => other.around ().counter_clockwise (),
+			Self::UpsideDownAround => other.around ().upside_down (),
 		}
 	}
 

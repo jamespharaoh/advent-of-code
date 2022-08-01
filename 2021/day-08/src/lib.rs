@@ -142,8 +142,8 @@ mod model {
 		let values = parse_digits (line_parts [1]) ?;
 		if values.len () != 4 { Err (err ()) ? }
 		Ok (Display {
-			samples: samples.try_into ().map_err (|_| err ()) ?,
-			value: values.try_into ().map_err (|_| err ()) ?,
+			samples: samples.try_into ().map_err (|_err| err ()) ?,
+			value: values.try_into ().map_err (|_err| err ()) ?,
 		})
 	}
 
@@ -158,6 +158,9 @@ mod model {
 
 	fn parse_digit (input: & str) -> GenResult <Digit> {
 		let mut digit = Digit { segments: [false; 7] };
+		if input.chars ()
+			.any (|ch| ! ('a' ..= 'g').contains (& ch))
+			{ Err ("Invalid input") ?; }
 		for (index, letter) in ('a' ..= 'g').enumerate () {
 			if input.contains (letter) {
 				digit.segments [index] = true;

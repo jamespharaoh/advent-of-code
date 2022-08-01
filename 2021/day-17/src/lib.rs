@@ -22,17 +22,17 @@ mod logic {
 
 	pub fn part_one (input: & str) -> GenResult <i64> {
 		let input = Input::parse (input) ?;
-		let results = find_solutions (& input) ?;
+		let results = find_solutions (& input);
 		Ok (results.into_iter ().map (|(_, height)| height).max ().unwrap ())
 	}
 
 	pub fn part_two (input: & str) -> GenResult <i64> {
 		let input = Input::parse (input) ?;
-		let results = find_solutions (& input) ?;
+		let results = find_solutions (& input);
 		Ok (results.len ().as_i64 ())
 	}
 
-	fn find_solutions (input: & Input) -> GenResult <Vec <(Velocity, i64)>> {
+	fn find_solutions (input: & Input) -> Vec <(Velocity, i64)> {
 		let mut results: Vec <(Velocity, i64)> = Vec::new ();
 		for x_velocity in 1 ..= * input.target_x.end () {
 			for y_velocity in * input.target_y.start () ..= -2 * input.target_y.end () {
@@ -42,7 +42,7 @@ mod logic {
 				}
 			}
 		}
-		Ok (results)
+		results
 	}
 
 	fn simulate (input: & Input, velocity: Velocity) -> Option <i64> {
@@ -78,7 +78,7 @@ mod model {
 	}
 
 	impl Input {
-		pub fn parse (input: & str) -> GenResult <Input> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			use parser::*;
 			Parser::wrap (input, |parser| {
 				let x_min = parser.expect ("target area: x=") ?.int () ?;
@@ -86,7 +86,7 @@ mod model {
 				let y_min = parser.expect (", y=") ?.int () ?;
 				let y_max = parser.expect ("..") ?.int () ?;
 				parser.end () ?;
-				Ok (Input {
+				Ok (Self {
 					target_x: x_min ..= x_max,
 					target_y: y_min ..= y_max,
 				})

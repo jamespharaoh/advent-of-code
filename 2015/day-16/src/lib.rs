@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/16](https://adventofcode.com/2015/day/16)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -21,7 +23,7 @@ pub mod logic {
 
 	pub fn part_one (input: & [& str]) -> GenResult <u16> {
 		let all_sues = model::parse_input (input) ?;
-		fn ticker (attr: Attr) -> u8 {
+		const fn ticker (attr: Attr) -> u8 {
 			match attr {
 				Attr::Children => 3,
 				Attr::Cats => 7,
@@ -45,7 +47,7 @@ pub mod logic {
 
 	pub fn part_two (input: & [& str]) -> GenResult <u16> {
 		let all_sues = model::parse_input (input) ?;
-		fn ticker (attr: Attr, num: u8) -> bool {
+		const fn ticker (attr: Attr, num: u8) -> bool {
 			match attr {
 				Attr::Children => num == 3,
 				Attr::Cats => num > 7,

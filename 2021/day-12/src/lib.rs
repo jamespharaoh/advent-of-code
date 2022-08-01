@@ -29,7 +29,7 @@ mod logic {
 		let caves = model::parse_input (lines) ?;
 		let dupe_index: Option <(usize, usize)> = None;
 		Ok (calc_result (& caves, dupe_index, |dupe_index, route, next_cave| {
-			if let Some (dupe_index_val) = dupe_index {
+			if let Some (dupe_index_val) = * dupe_index {
 				if dupe_index_val.1 + 1 > route.len ()
 						|| route [dupe_index_val.0] != route [dupe_index_val.1] {
 					* dupe_index = None;
@@ -74,7 +74,7 @@ mod logic {
 		let this_cave = route.last ().unwrap ().to_owned ();
 		if this_cave == caves.end { return 1 }
 		let mut route_sorted = route.clone ();
-		route_sorted.sort ();
+		route_sorted.sort_unstable ();
 		let cache_key = (this_cave, route_sorted);
 		if let Some (& cached_val) = cache.get (& cache_key) { return cached_val }
 		let mut num_routes: u64 = 0;
@@ -116,10 +116,10 @@ mod model {
 	}
 
 	impl Caves {
-		fn new () -> Caves {
-			Caves {
+		fn new () -> Self {
+			Self {
 				connexions: HashMap::new (),
-				names: vec! [ "start".to_string (), "end".to_string () ],
+				names: vec! [ "start".to_owned (), "end".to_owned () ],
 				start: 0,
 				end: 1,
 			}
@@ -129,7 +129,7 @@ mod model {
 				return pos;
 			}
 			let pos = self.names.len ();
-			self.names.push (name.to_string ());
+			self.names.push (name.to_owned ());
 			pos
 		}
 		pub fn is_small (& self, index: usize) -> bool {

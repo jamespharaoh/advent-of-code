@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 23;
 	parse = |input| model::Input::parse (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 /// Logic for solving the puzzles.
@@ -25,18 +27,18 @@ pub mod logic {
 	use nums::Int;
 	use nums::IntConv;
 
-	pub fn part_one (input: Input) -> GenResult <Val> {
+	pub fn part_one (input: & Input) -> GenResult <Val> {
 		let (_, reg_b) = emulate (input, 0, 0, 0, 0x10000) ?;
 		Ok (reg_b)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <Val> {
+	pub fn part_two (input: & Input) -> GenResult <Val> {
 		let (_, reg_b) = emulate (input, 1, 0, 0, 0x10000) ?;
 		Ok (reg_b)
 	}
 
 	fn emulate (
-		input: Input,
+		input: & Input,
 		mut reg_a: Val,
 		mut reg_b: Val,
 		mut next: Val,
@@ -46,7 +48,8 @@ pub mod logic {
 		// main loop
 
 		let mut seen = HashSet::new ();
-		while next < Val::from_usize (input.instrs.len ()).map_err (|_| EmulateError::Overflow) ? {
+		while next < Val::from_usize (input.instrs.len ())
+			.map_err (|_err| EmulateError::Overflow) ? {
 
 			// abort when we reach max_loops
 
@@ -64,31 +67,40 @@ pub mod logic {
 				Instr::Hlf (Reg::A) => reg_a /= 2,
 				Instr::Hlf (Reg::B) => reg_b /= 2,
 				Instr::Tpl (Reg::A) =>
-					reg_a = Val::mul_2 (reg_a, 3).map_err (|_| EmulateError::Overflow) ?,
+					reg_a = Val::mul_2 (reg_a, 3)
+						.map_err (|_err| EmulateError::Overflow) ?,
 				Instr::Tpl (Reg::B) =>
-					reg_b = Val::mul_2 (reg_b, 3).map_err (|_| EmulateError::Overflow) ?,
+					reg_b = Val::mul_2 (reg_b, 3)
+						.map_err (|_err| EmulateError::Overflow) ?,
 				Instr::Inc (Reg::A) =>
-					reg_a = Val::add_2 (reg_a, 1).map_err (|_| EmulateError::Overflow) ?,
+					reg_a = Val::add_2 (reg_a, 1)
+						.map_err (|_err| EmulateError::Overflow) ?,
 				Instr::Inc (Reg::B) =>
-					reg_b = Val::add_2 (reg_b, 1).map_err (|_| EmulateError::Overflow) ?,
+					reg_b = Val::add_2 (reg_b, 1)
+						.map_err (|_err| EmulateError::Overflow) ?,
 				Instr::Jmp (offset) => {
-					next = Val::add_signed (next, offset).map_err (|_| EmulateError::Overflow) ?;
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) ?;
 					continue;
 				},
 				Instr::Jie (Reg::A, offset) => if reg_a & 1 == 0 {
-					next = Val::add_signed (next, offset).map_err (|_| EmulateError::Overflow) ?;
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) ?;
 					continue;
 				},
 				Instr::Jie (Reg::B, offset) => if reg_b & 1 == 0 {
-					next = Val::add_signed (next, offset).map_err (|_| EmulateError::Overflow) ?;
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) ?;
 					continue;
 				},
 				Instr::Jio (Reg::A, offset) => if reg_a == 1 {
-					next = Val::add_signed (next, offset).map_err (|_| EmulateError::Overflow) ?;
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) ?;
 					continue;
 				},
 				Instr::Jio (Reg::B, offset) => if reg_b == 1 {
-					next = Val::add_signed (next, offset).map_err (|_| EmulateError::Overflow) ?;
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) ?;
 					continue;
 				},
 			}
@@ -117,10 +129,10 @@ pub mod logic {
 
 	impl Display for EmulateError {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			match self {
-				EmulateError::InfiniteLoop => write! (formatter, "Infinite loop") ?,
-				EmulateError::Overflow => write! (formatter, "Arithmetic overflow") ?,
-				EmulateError::MaxLoops => write! (formatter, "Max loops reached") ?,
+			match * self {
+				Self::InfiniteLoop => write! (formatter, "Infinite loop") ?,
+				Self::Overflow => write! (formatter, "Arithmetic overflow") ?,
+				Self::MaxLoops => write! (formatter, "Max loops reached") ?,
 			}
 			Ok (())
 		}
@@ -137,37 +149,37 @@ pub mod logic {
 			use Reg::*;
 			// inc, hlf, tpl
 			assert_eq_ok! ((2, 0), logic::emulate (
-				Input { instrs: vec! [ Inc (A), Tpl (A), Inc (A), Hlf (A) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (A), Tpl (A), Inc (A), Hlf (A) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((0, 2), logic::emulate (
-				Input { instrs: vec! [ Inc (B), Tpl (B), Inc (B), Hlf (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (B), Tpl (B), Inc (B), Hlf (B) ] }, 0, 0, 0, 10));
 			// jmp
 			assert_eq_ok! ((1, 1), logic::emulate (
-				Input { instrs: vec! [ Inc (A), Jmp (2), Tpl (A), Inc (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (A), Jmp (2), Tpl (A), Inc (B) ] }, 0, 0, 0, 10));
 			// jio
 			assert_eq_ok! ((1, 1), logic::emulate (
-				Input { instrs: vec! [ Inc (A), Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (A), Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((0, 2), logic::emulate (
-				Input { instrs: vec! [ Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Jio (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((1, 1), logic::emulate (
-				Input { instrs: vec! [ Inc (B), Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (B), Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((2, 0), logic::emulate (
-				Input { instrs: vec! [ Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Jio (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
 			// jie
 			assert_eq_ok! ((1, 2), logic::emulate (
-				Input { instrs: vec! [ Inc (A), Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (A), Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((0, 1), logic::emulate (
-				Input { instrs: vec! [ Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Jie (A, 2), Inc (B), Inc (B) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((2, 1), logic::emulate (
-				Input { instrs: vec! [ Inc (B), Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (B), Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
 			assert_eq_ok! ((1, 0), logic::emulate (
-				Input { instrs: vec! [ Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Jie (B, 2), Inc (A), Inc (A) ] }, 0, 0, 0, 10));
 			// errors
 			assert_err! ("Infinite loop", logic::emulate (
-				Input { instrs: vec! [ Jmp (0) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Jmp (0) ] }, 0, 0, 0, 10));
 			assert_err! ("Max loops reached", logic::emulate (
-				Input { instrs: vec! [ Inc (A), Jmp (-1) ] }, 0, 0, 0, 10));
+				& Input { instrs: vec! [ Inc (A), Jmp (-1) ] }, 0, 0, 0, 10));
 			assert_err! ("Arithmetic overflow", logic::emulate (
-				Input { instrs: vec! [ Inc (A), Tpl (A), Jmp (-1) ] }, 0, 0, 0, 100));
+				& Input { instrs: vec! [ Inc (A), Tpl (A), Jmp (-1) ] }, 0, 0, 0, 100));
 		}
 
 	}
@@ -203,12 +215,12 @@ pub mod model {
 	pub enum Reg { A, B }
 
 	impl Instr {
-		pub fn parse (input: & str) -> GenResult <Instr> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
 				.map_parse_err (|col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input))
 		}
-		fn parse_real (parser: & mut Parser) -> ParseResult <Instr> {
+		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
 			parser
 				.set_ignore_whitespace (true)
 				.set_word_pred (|ch| ch.is_ascii_alphanumeric ());
@@ -217,46 +229,46 @@ pub mod model {
 					parser.expect_word ("hlf") ?.confirm ();
 					let reg = Reg::parse_real (parser) ?;
 					parser.end () ?;
-					Ok (Instr::Hlf (reg))
+					Ok (Self::Hlf (reg))
 				})
 				.of (|parser| {
 					parser.expect_word ("tpl") ?.confirm ();
 					let reg = Reg::parse_real (parser) ?;
 					parser.end () ?;
-					Ok (Instr::Tpl (reg))
+					Ok (Self::Tpl (reg))
 				})
 				.of (|parser| {
 					parser.expect_word ("inc") ?.confirm ();
 					let reg = Reg::parse_real (parser) ?;
 					parser.end () ?;
-					Ok (Instr::Inc (reg))
+					Ok (Self::Inc (reg))
 				})
 				.of (|parser| {
 					parser.expect_word ("jmp") ?.confirm ();
 					let offset = parser.int () ?;
 					parser.end () ?;
-					Ok (Instr::Jmp (offset))
+					Ok (Self::Jmp (offset))
 				})
 				.of (|parser| {
 					parser.expect_word ("jio") ?.confirm ();
 					let reg = Reg::parse_real (parser) ?;
 					let offset = parser.expect (",") ?.int () ?;
 					parser.end () ?;
-					Ok (Instr::Jio (reg, offset))
+					Ok (Self::Jio (reg, offset))
 				})
 				.of (|parser| {
 					parser.expect_word ("jie") ?.confirm ();
 					let reg = Reg::parse_real (parser) ?;
 					let offset = parser.expect (",") ?.int () ?;
 					parser.end () ?;
-					Ok (Instr::Jie (reg, offset))
+					Ok (Self::Jie (reg, offset))
 				})
 				.done ()
 		}
 	}
 
 	impl Input {
-		pub fn parse (input: & [& str]) -> GenResult <Input> {
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
 			let instrs =
 				input.iter ().enumerate ()
 					.map (|(line_idx, line)|
@@ -265,15 +277,15 @@ pub mod model {
 								format! ("Invalid input: line {}: col {}: {}",
 									line_idx + 1, col_idx + 1, line)))
 					.collect::<GenResult <_>> () ?;
-			Ok (Input { instrs })
+			Ok (Self { instrs })
 		}
 	}
 
 	impl Reg {
-		fn parse_real (parser: & mut Parser) -> ParseResult <Reg> {
+		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
 			parser.any ()
-				.of (|parser| { parser.expect_word ("a") ?; Ok (Reg::A) })
-				.of (|parser| { parser.expect_word ("b") ?; Ok (Reg::B) })
+				.of (|parser| { parser.expect_word ("a") ?; Ok (Self::A) })
+				.of (|parser| { parser.expect_word ("b") ?; Ok (Self::B) })
 				.done ()
 		}
 	}

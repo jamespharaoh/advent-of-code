@@ -1,3 +1,5 @@
+#![ allow (clippy::else_if_without_else) ]
+
 use super::*;
 use model::State;
 use nums::IntConv;
@@ -63,15 +65,15 @@ impl Borrow <[u8]> for Span {
 }
 
 impl From <& [u8]> for Span {
-	fn from (other: & [u8]) -> Span {
-		Span (other.into ())
+	fn from (other: & [u8]) -> Self {
+		Self (other.into ())
 	}
 }
 
 impl TryFrom <& str> for Span {
 	type Error = GenError;
-	fn try_from (src: & str) -> GenResult <Span> {
-		Ok (Span::from (model::State::parse (src) ?.as_slice ()))
+	fn try_from (src: & str) -> GenResult <Self> {
+		Ok (Self::from (model::State::parse (src) ?.as_slice ()))
 	}
 }
 
@@ -82,13 +84,13 @@ impl PartialEq <[u8]> for Span {
 }
 
 impl PartialOrd for Span {
-	fn partial_cmp (& self, other: & Span) -> Option <Ordering> {
+	fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
 		Some (self.cmp (other))
 	}
 }
 
 impl Ord for Span {
-	fn cmp (& self, other: & Span) -> Ordering {
+	fn cmp (& self, other: & Self) -> Ordering {
 		self.0.len ().cmp (& other.len ())
 			.then (self.0.cmp (& other.0))
 	}
@@ -96,7 +98,7 @@ impl Ord for Span {
 
 impl Deref for Span {
 	type Target = [u8];
-	fn deref (& self) -> & [u8] { self.0.deref () }
+	fn deref (& self) -> & [u8] { self.0.as_ref () }
 }
 
 #[ derive (Clone, Debug) ]
@@ -126,8 +128,8 @@ impl Deref for Atomic {
 }
 
 impl From <AtomicInner> for Atomic {
-	fn from (inner: AtomicInner) -> Atomic {
-		Atomic (Rc::new (inner))
+	fn from (inner: AtomicInner) -> Self {
+		Self (Rc::new (inner))
 	}
 }
 
@@ -161,7 +163,7 @@ impl PartialEq <[u8]> for AtomicInner {
 }
 
 impl PartialEq for AtomicInner {
-	fn eq (& self, other: & AtomicInner) -> bool { self.key == other.key }
+	fn eq (& self, other: & Self) -> bool { self.key == other.key }
 }
 
 impl Eq for AtomicInner {}
@@ -178,23 +180,27 @@ impl PartialOrd <[u8]> for AtomicInner {
 	}
 }
 
-fn compatible (prev: u8, next: & [u8]) -> bool {
+const fn compatible (prev: u8, next: & [u8]) -> bool {
 	prev != next [0] && prev != next [1] && prev != next [2]
 }
 
+#[ allow (clippy::needless_pass_by_value) ]
+#[ allow (clippy::print_stdout) ]
+#[ allow (clippy::todo) ]
+#[ allow (clippy::too_many_lines) ]
 pub fn run (args: Args) -> GenResult <()> {
 
 	let stables = find_stables (args.max_length, args.iterations);
 	println! ("NUM STABLES: {}", stables.len ());
 	println! ("NUM SINGULAR: {}", stables.values ().filter (|stable|
-		if let Some (stable) = stable { stable.parts.len () == 1 } else { false }).count ());
+		stable.as_ref ().map_or (false, |stable| stable.parts.len () == 1)).count ());
 
 	let mut destinies: HashMap <Span, Destiny> = HashMap::new ();
 	let mut atomics: HashSet <Atomic> = HashSet::new ();
 
 	for length in (2 ..= args.max_length).step_by (2) {
 
-		'STATE: for state in (0 .. length).map (|_| (1u8 ..= 3u8))
+		'STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 
@@ -213,15 +219,15 @@ pub fn run (args: Args) -> GenResult <()> {
 					destinies.get (& state [prefix_len .. ]).unwrap_or_else (||
 						panic! ("Can't find destiny for {:?}", & state [prefix_len .. ])),
 				) {
-					(Some (_), Destiny::Unstable (_)) => continue,
-					(Some (prefix), Destiny::Atomic (suffix)) => {
+					(Some (_), & Destiny::Unstable (_)) | (None, _) => continue,
+					(Some (prefix), & Destiny::Atomic (ref suffix)) => {
 						if ! compatible (prefix.last, & suffix.first) { continue }
 						destinies.insert (
 							state.as_slice ().into (),
 							Destiny::Stable ([ prefix.clone (), suffix.clone () ].as_slice ().into ()));
 						continue 'STATE;
 					},
-					(Some (prefix), Destiny::Stable (suffix)) => {
+					(Some (prefix), & Destiny::Stable (ref suffix)) => {
 						if ! compatible (prefix.last, & suffix [0].first) { continue }
 						destinies.insert (
 							state.as_slice ().into (),
@@ -232,7 +238,6 @@ pub fn run (args: Args) -> GenResult <()> {
 									.into ()));
 						continue 'STATE;
 					},
-					_ => continue,
 				}
 			}
 
@@ -325,7 +330,7 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 
 	for length in (2 ..= max_length).step_by (2) {
 
-		'STATE: for state in (0 .. length).map (|_| (1u8 ..= 3u8))
+		'STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 

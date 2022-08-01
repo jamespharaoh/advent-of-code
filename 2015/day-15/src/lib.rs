@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -151,16 +153,16 @@ pub mod logic {
 	/// minimum number of ingredients needed for a positive score. It then returns the combination
 	/// which gives the max score for that number of ingredients.
 	///
+	#[ must_use ]
 	pub fn find_start_ingredients (all_ingrs: & [Ingredient]) -> Vec <& Ingredient> {
 		(1 ..= 100)
-			.flat_map (|num| all_ingrs.iter ()
+			.find_map (|num| all_ingrs.iter ()
 				.combinations_with_replacement (num)
 				.map (|ingrs: Vec <& Ingredient>| (ingrs.clone (),
 					calc_score (ingrs.iter_vals ())))
 				.max_by_key (|& (_, score)| score)
 				.filter (|& (_, score)| score > 0)
 				.map (|(ingrs, _)| ingrs))
-			.next ()
 			.unwrap ()
 	}
 
@@ -170,7 +172,7 @@ pub mod logic {
 	/// durability, flavour and texture, then multiplies them all together. If any total is below
 	/// zero, then the score is always zero.
 	///
-	pub fn calc_score <'a> (ingrs: impl IntoIterator <Item = & 'a Ingredient>) -> u64 {
+	pub fn calc_score <'ing> (ingrs: impl IntoIterator <Item = & 'ing Ingredient>) -> u64 {
 		let (cap, dur, fla, tex) = ingrs.into_iter ()
 			.fold ((0_i32, 0_i32, 0_i32, 0_i32), |sums, ingr| (
 				sums.0 + ingr.capacity,
@@ -226,7 +228,7 @@ pub mod model {
 			Parser::wrap (line, |parser| {
 				parser.set_ignore_whitespace (true)
 					.set_word_pred (char::is_alphanumeric);
-				let name = parser.word () ?.to_string ();
+				let name = parser.word () ?.to_owned ();
 				let capacity = parser.expect (": capacity") ?.int () ?;
 				let durability = parser.expect (", durability") ?.int () ?;
 				let flavour = parser.expect (", flavor") ?.int () ?;

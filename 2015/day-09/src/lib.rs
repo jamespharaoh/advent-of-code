@@ -8,6 +8,8 @@
 //! two parameters are alphanumeric strings representing the locations, tand the third is a
 //! integer representing the distance.
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -15,8 +17,8 @@ puzzle_info! {
 	year = 2015;
 	day = 9;
 	parse = |input| model::parse_input (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -25,21 +27,21 @@ pub mod logic {
 	use model::Input;
 	use model::Place;
 
-	pub fn part_one (input: Input) -> GenResult <u32> {
-		sanity_check (& input) ?;
-		Ok (distances (& input).min ().unwrap ())
+	pub fn part_one (input: & Input) -> GenResult <u32> {
+		sanity_check (input) ?;
+		Ok (distances (input).min ().unwrap ())
 	}
 
-	pub fn part_two (input: Input) -> GenResult <u32> {
-		sanity_check (& input) ?;
-		Ok (distances (& input).max ().unwrap ())
+	pub fn part_two (input: & Input) -> GenResult <u32> {
+		sanity_check (input) ?;
+		Ok (distances (input).max ().unwrap ())
 	}
 
 	fn sanity_check (input: & Input) -> GenResult <()> {
 		if input.len () > 60 { Err ("Refusing to handle more than 60 distances") ?; }
 		let num_places =
 			input.iter ()
-				.flat_map (|(from, to, _)| [from, to])
+				.flat_map (|& (ref from, ref to, _)| [from, to])
 				.sorted ()
 				.dedup ()
 				.count ();
@@ -109,7 +111,10 @@ pub mod logic {
 	fn gen_dist_table (input: & Input) -> (usize, Vec <u32>) {
 		let place_indexes: HashMap <Place, usize> =
 			input.iter ()
-				.flat_map (|(place_0, place_1, _)| [ Rc::clone (place_0), Rc::clone (place_1) ])
+				.flat_map (|& (ref place_0, ref place_1, _)| [
+					Rc::clone (place_0),
+					Rc::clone (place_1),
+				])
 				.sorted ()
 				.dedup ()
 				.enumerate ()

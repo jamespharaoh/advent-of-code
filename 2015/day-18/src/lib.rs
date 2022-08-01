@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/18](https://adventofcode.com/2015/day/18)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -98,7 +100,7 @@ pub mod model {
 				.map (|(idx, line)| (idx, line.chars ().count ()))
 				.find (|& (_, len)| len != grid_size [1]) {
 			Err (format! ("Invalid input: line {}: Expected {} chars, not {}",
-				line_idx + 1, grid_size [1], line_len)) ?
+				line_idx + 1, grid_size [1], line_len)) ?;
 		}
 		let grid_data = input.iter ().enumerate ().flat_map (|(line_idx, line)|
 			line.chars ().enumerate ().map (move |(char_idx, ch)| Ok (match ch {

@@ -27,12 +27,12 @@ mod logic {
 		let mut input = model::parse_input (input) ?;
 		let my_scores =
 			input.iter ()
-				.map (|(name, _, _)| name)
+				.map (|& (ref name, _, _)| name)
 				.sorted ()
 				.dedup ()
 				.flat_map (|name| [
-					("Myself".to_string (), name.to_string (), 0_i32),
-					(name.to_string (), "Myself".to_string (), 0_i32),
+					("Myself".to_owned (), name.to_string (), 0_i32),
+					(name.to_string (), "Myself".to_owned (), 0_i32),
 				])
 				.collect::<Vec <_>> ();
 		input.extend (my_scores);
@@ -43,7 +43,7 @@ mod logic {
 	pub fn calc_best (input: & Input) -> i32 {
 		let names: Vec <_> =
 			input.iter ()
-				.map (|(name, _, _)| name)
+				.map (|& (ref name, _, _)| name)
 				.sorted ()
 				.dedup ()
 				.map (String::to_owned)

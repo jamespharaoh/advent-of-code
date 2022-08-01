@@ -31,27 +31,27 @@ mod logic {
 	}
 
 	pub fn calc_sum (value: & Json) -> i32 {
-		match value {
-			Json::Array (items) => items.iter ().map (calc_sum).sum (),
-			Json::Object (items) => items.iter ().map (|(_, item)| calc_sum (item)).sum (),
-			& Json::Number (value) => value.as_i32 (),
+		match * value {
+			Json::Array (ref items) => items.iter ().map (calc_sum).sum (),
+			Json::Object (ref items) => items.iter ().map (|& (_, ref item)| calc_sum (item)).sum (),
+			Json::Number (ref value) => value.as_i32 (),
 			Json::String (_) => 0_i32,
 		}
 	}
 
 	pub fn calc_sum_no_red (value: & Json) -> i32 {
-		match value {
-			Json::Array (items) => items.iter ().map (calc_sum_no_red).sum (),
-			Json::Object (items) => {
-				if ! items.iter ().any (|(_, value)|
-					if let Json::String (value) = value {
+		match * value {
+			Json::Array (ref items) => items.iter ().map (calc_sum_no_red).sum (),
+			Json::Object (ref items) => {
+				if ! items.iter ().any (|& (_, ref value)|
+					if let Json::String (ref value) = * value {
 						value == "red"
 					} else { false }
 				) {
-					items.iter ().map (|(_, item)| calc_sum_no_red (item)).sum ()
+					items.iter ().map (|& (_, ref item)| calc_sum_no_red (item)).sum ()
 				} else { 0_i32 }
 			},
-			& Json::Number (value) => value.as_i32 (),
+			Json::Number (ref value) => value.as_i32 (),
 			Json::String (_) => 0_i32,
 		}
 	}
@@ -71,7 +71,7 @@ mod model {
 	}
 
 	impl Json {
-		pub fn parse (input: & str) -> GenResult <Json> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			use parser::*;
 			fn parse_item (parser: & mut Parser) -> ParseResult <Json> {
 				parser.any ()
@@ -127,7 +127,7 @@ mod model {
 				let mut value = String::new ();
 				loop {
 					match parser.next () {
-						Some ('\\') => todo! (),
+						Some ('\\') => Err (parser.err ()) ?,
 						Some ('"') => break,
 						Some (ch) => value.push (ch),
 						None => Err (parser.err ()) ?,

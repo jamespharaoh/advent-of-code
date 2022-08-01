@@ -17,7 +17,8 @@ pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
 				"x" => RegOrInt::X,
 				"y" => RegOrInt::Y,
 				"z" => RegOrInt::Z,
-				_ => RegOrInt::Int (input.parse::<i64> ().map_err (|_| err ()) ?),
+				_ => RegOrInt::Int (input.parse::<i64> ()
+					.map_err (|_err| err ()) ?),
 			})
 		};
 		let line_parts: Vec <& str> = line.split (' ').collect ();
@@ -35,6 +36,7 @@ pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
 	}).collect ()
 }
 
+#[ must_use ]
 pub fn machine_input (input: [u8; 14]) -> [i64; 14] {
 	let mut result = [0; 14];
 	for idx in 0 .. 14 { result [idx] = input [idx].as_i64 (); }
@@ -54,9 +56,13 @@ pub enum MachineError {
 }
 
 impl Machine {
-	pub fn new () -> Machine {
-		Machine { regs: default () }
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn new () -> Self {
+		Self { regs: default () }
 	}
+
 	pub fn step (& mut self, prog: & [Instr], input: & [i64]) -> Result <bool, MachineError> {
 		let instr = match prog.get (self.regs.pc) {
 			Some (& instr) => instr,
@@ -134,7 +140,7 @@ impl MachineRegs {
 			Reg::Z => self.z = val,
 		}
 	}
-	fn retrieve (& self, reg: Reg) -> i64 {
+	const fn retrieve (& self, reg: Reg) -> i64 {
 		match reg {
 			Reg::W => self.w,
 			Reg::X => self.x,
@@ -142,7 +148,7 @@ impl MachineRegs {
 			Reg::Z => self.z,
 		}
 	}
-	fn retrieve_or_int (& self, reg_or_int: RegOrInt) -> i64 {
+	const fn retrieve_or_int (& self, reg_or_int: RegOrInt) -> i64 {
 		match reg_or_int {
 			RegOrInt::W => self.w,
 			RegOrInt::X => self.x,
@@ -165,13 +171,13 @@ pub enum Instr {
 
 impl fmt::Display for Instr {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match self {
-			Instr::Inp (arg) => write! (formatter, "inp {}", arg) ?,
-			Instr::Add (left, right) => write! (formatter, "add {} {}", left, right) ?,
-			Instr::Mul (left, right) => write! (formatter, "mul {} {}", left, right) ?,
-			Instr::Div (left, right) => write! (formatter, "div {} {}", left, right) ?,
-			Instr::Mod (left, right) => write! (formatter, "mod {} {}", left, right) ?,
-			Instr::Eql (left, right) => write! (formatter, "eql {} {}", left, right) ?,
+		match * self {
+			Self::Inp (arg) => write! (formatter, "inp {}", arg) ?,
+			Self::Add (left, right) => write! (formatter, "add {} {}", left, right) ?,
+			Self::Mul (left, right) => write! (formatter, "mul {} {}", left, right) ?,
+			Self::Div (left, right) => write! (formatter, "div {} {}", left, right) ?,
+			Self::Mod (left, right) => write! (formatter, "mod {} {}", left, right) ?,
+			Self::Eql (left, right) => write! (formatter, "eql {} {}", left, right) ?,
 		}
 		Ok (())
 	}
@@ -182,12 +188,12 @@ pub enum RegOrInt { W, X, Y, Z, Int (i64) }
 
 impl fmt::Display for RegOrInt {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match self {
-			RegOrInt::W => write! (formatter, "w") ?,
-			RegOrInt::X => write! (formatter, "x") ?,
-			RegOrInt::Y => write! (formatter, "y") ?,
-			RegOrInt::Z => write! (formatter, "z") ?,
-			RegOrInt::Int (val) => write! (formatter, "{}", val) ?,
+		match * self {
+			Self::W => write! (formatter, "w") ?,
+			Self::X => write! (formatter, "x") ?,
+			Self::Y => write! (formatter, "y") ?,
+			Self::Z => write! (formatter, "z") ?,
+			Self::Int (val) => write! (formatter, "{}", val) ?,
 		}
 		Ok (())
 	}
@@ -198,11 +204,11 @@ pub enum Reg { W, X, Y, Z }
 
 impl fmt::Display for Reg {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match self {
-			Reg::W => write! (formatter, "w") ?,
-			Reg::X => write! (formatter, "x") ?,
-			Reg::Y => write! (formatter, "y") ?,
-			Reg::Z => write! (formatter, "z") ?,
+		match * self {
+			Self::W => write! (formatter, "w") ?,
+			Self::X => write! (formatter, "x") ?,
+			Self::Y => write! (formatter, "y") ?,
+			Self::Z => write! (formatter, "z") ?,
 		}
 		Ok (())
 	}

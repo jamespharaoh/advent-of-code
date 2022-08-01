@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/7](https://adventofcode.com/2015/day/7)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 7;
 	parse = |input| model::Input::parse (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -21,19 +23,19 @@ pub mod logic {
 	use model::WireInput;
 	use model::WireVal;
 
-	pub fn part_one (input: Input) -> GenResult <u16> {
-		let resolved = resolve (& input, default ());
+	pub fn part_one (input: & Input) -> GenResult <u16> {
+		let resolved = resolve (input, default ());
 		let a_id: WireId = "a".try_into ().unwrap ();
 		let a_val = resolved.get (& a_id).copied ().ok_or ("No value found for a") ?;
 		Ok (a_val)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <u16> {
-		let resolved = resolve (& input, default ());
+	pub fn part_two (input: & Input) -> GenResult <u16> {
+		let resolved = resolve (input, default ());
 		let a_id: WireId = "a".try_into ().unwrap ();
 		let a_val = resolved.get (& a_id).copied ().ok_or ("No value found for a") ?;
 		let b_id: WireId = "b".try_into ().unwrap ();
-		let resolved = resolve (& input, HashMap::from_iter ([ (b_id, a_val) ]));
+		let resolved = resolve (input, HashMap::from_iter ([ (b_id, a_val) ]));
 		let a_val = resolved.get (& a_id).copied ().ok_or ("No value found for a") ?;
 		Ok (a_val)
 	}
@@ -58,7 +60,7 @@ pub mod logic {
 				.map (|wire| (wire.id.clone (), Wire {
 					id: wire.id.clone (),
 					input: wire.input.clone (),
-					inputs: ArrayVec::from_iter (wire.input.inputs ().iter ().copied ().cloned ()),
+					inputs: wire.input.inputs ().iter ().copied ().cloned ().collect (),
 					outputs: default (),
 				}))
 				.collect ();
@@ -104,7 +106,7 @@ pub mod logic {
 						resolved.get (& arg_0).map (|& arg_0| arg_0 << arg_1),
 					WireInput::RightShift (arg_0, arg_1) =>
 						resolved.get (& arg_0).map (|& arg_0| arg_0 >> arg_1),
-				}.expect ("Error resolving wire, should not be possible")
+				}.unwrap ()
 			};
 			resolved.insert (wire.id.clone (), val);
 			let wire_id = wire.id.clone ();
@@ -173,13 +175,13 @@ pub mod model {
 	}
 
 	impl Input {
-		pub fn new (input: Vec <Wire>) -> GenResult <Input> {
+		pub fn new (input: Vec <Wire>) -> GenResult <Self> {
 			let all_wire_ids =
 				input.iter ()
 					.map (|wire| wire.id.clone ())
 					.collect::<HashSet <_>> ();
 			if all_wire_ids.len () < input.len () {
-				Err (format! ("Duplicate wire ids")) ?;
+				Err ("Duplicate wire ids") ?;
 			}
 			if let Some ((wire, input)) =
 				input.iter ()
@@ -189,44 +191,45 @@ pub mod model {
 							.map (move |& input| (wire_id.clone (), input.clone ()))
 							.collect::<ArrayVec <_, 2>> ()
 					})
-					.find (|(_, input)| ! all_wire_ids.contains (input)) {
+					.find (|& (_, ref input)| ! all_wire_ids.contains (input)) {
 				Err (format! ("Wire {} refers to non-existant input {}", wire, input)) ?;
 			}
 			if let Some ((wire, msg)) =
 				input.iter ()
-					.filter_map (|wire| match wire.input {
+					.find_map (|wire| match wire.input {
 						WireInput::LeftShift (_, val) if WireVal::BITS <= val.as_u32 () =>
 							Some ((wire.id.clone (), format! ("Left shift by {} is invalid", val))),
 						WireInput::RightShift (_, val) if WireVal::BITS <= val.as_u32 () =>
 							Some ((wire.id.clone (), format! ("Right shift by {} is invalid", val))),
-						_ => None,
-					})
-					.next () {
+						WireInput::Static (_) | WireInput::Wire (_) | WireInput::Not (_) |
+						WireInput::And (..) | WireInput::AndOne (_) | WireInput::Or (..) |
+						WireInput::LeftShift (..) | WireInput::RightShift (..) => None,
+					}) {
 				Err (format! ("Wire {} has invalid input: {}", wire, msg)) ?;
 			}
-			Ok (Input (input))
+			Ok (Self (input))
 		}
-		pub fn parse (input: & [& str]) -> GenResult <Input> {
-			let wires =
-				input.iter ().enumerate ().map (|(line_idx, line)|
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
+			Self::new (input.iter ()
+				.enumerate ()
+				.map (|(line_idx, line)|
 					Parser::wrap (line, Wire::parse_real)
-						.map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
-							line_idx + 1, col_idx + 1,
-							& line [line.chars ().take (col_idx).map (char::len_utf8).sum () .. ]))
-				).collect::<GenResult <_>> () ?;
-			Self::new (wires)
-		}
+						.map_parse_err (|col_idx|
+							format! ("Invalid input: line {}: col {}: {}",
+								line_idx + 1, col_idx + 1, line)))
+				.collect::<GenResult <_>> () ?)
+	}
 	}
 
 	#[ derive (Clone, Eq, Hash, PartialEq) ]
 	pub struct WireId (Rc <str>);
 
 	impl Wire {
-		pub fn parse (input: & str) -> GenResult <Wire> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
 				.map_parse_err (|col_idx| format! ("Invalid input: col {}", col_idx + 1))
 		}
-		fn parse_real (parser: & mut Parser) -> ParseResult <Wire> {
+		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
 			parser.set_ignore_whitespace (true);
 			let valid_id = |word: & str| word.chars ().all (char::is_lowercase);
 			parser.any ()
@@ -285,22 +288,22 @@ pub mod model {
 					Ok ((id.try_into () ?, WireInput::RightShift (arg_0.try_into () ?, arg_1)))
 				})
 				.done ()
-				.map (|(id, input)| Wire { id, input })
+				.map (|(id, input)| Self { id, input })
 		}
 	}
 
 	impl Deref for WireId {
 		type Target = str;
-		fn deref (& self) -> & str { self.0.deref () }
+		fn deref (& self) -> & str { self.0.as_ref () }
 	}
 
 	impl TryFrom <& str> for WireId {
 		type Error = GenError;
-		fn try_from (src: & str) -> GenResult <WireId> {
+		fn try_from (src: & str) -> GenResult <Self> {
 			if ! src.chars ().all (char::is_lowercase) {
 				Err ("Wire ID must be lowercase") ?;
 			}
-			Ok (WireId (src.to_string ().into ()))
+			Ok (Self (src.to_owned ().into ()))
 		}
 	}
 
@@ -318,13 +321,13 @@ pub mod model {
 	}
 
 	impl PartialOrd for WireId {
-		fn partial_cmp (& self, other: & WireId) -> Option <cmp::Ordering> {
+		fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
 			PartialOrd::partial_cmp (& self.0, & other.0)
 		}
 	}
 
 	impl Ord for WireId {
-		fn cmp (& self, other: & WireId) -> cmp::Ordering {
+		fn cmp (& self, other: & Self) -> cmp::Ordering {
 			Ord::cmp (& self.0, & other.0)
 		}
 	}
@@ -349,34 +352,38 @@ pub mod model {
 
 	impl Debug for WireInput {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			use WireInput::*;
-			match self {
+			use WireInput::{ And, AndOne, LeftShift, Not, Or, RightShift, Static, Wire };
+			match * self {
 				Static (val) => write! (formatter, "Static ({:?})", val) ?,
-				Wire (arg) => write! (formatter, "Wire ({:?})", arg) ?,
-				Not (arg) => write! (formatter, "Not ({:?})", arg) ?,
-				And (arg_0, arg_1) => write! (formatter, "And ({:?}, {:?})", arg_0, arg_1) ?,
-				AndOne (arg) => write! (formatter, "AndOne ({:?})", arg) ?,
-				Or (arg_0, arg_1) => write! (formatter, "Or ({:?}, {:?})", arg_0, arg_1) ?,
-				LeftShift (arg_0, arg_1) => write! (formatter, "LeftShift ({:?}, {:?})", arg_0, arg_1) ?,
-				RightShift (arg_0, arg_1) => write! (formatter, "RightShift ({:?}, {:?})", arg_0, arg_1) ?,
+				Wire (ref arg) => write! (formatter, "Wire ({:?})", arg) ?,
+				Not (ref arg) => write! (formatter, "Not ({:?})", arg) ?,
+				And (ref arg_0, ref arg_1) => write! (formatter, "And ({:?}, {:?})", arg_0, arg_1) ?,
+				AndOne (ref arg) => write! (formatter, "AndOne ({:?})", arg) ?,
+				Or (ref arg_0, ref arg_1) => write! (formatter, "Or ({:?}, {:?})", arg_0, arg_1) ?,
+				LeftShift (ref arg_0, arg_1) => write! (formatter, "LeftShift ({:?}, {:?})", arg_0, arg_1) ?,
+				RightShift (ref arg_0, arg_1) => write! (formatter, "RightShift ({:?}, {:?})", arg_0, arg_1) ?,
 			}
 			Ok (())
 		}
 	}
 
 	impl WireInput {
+
+		#[ inline ]
+		#[ must_use ]
 		pub fn inputs (& self) -> ArrayVec <& WireId, 2> {
-			match self {
-				WireInput::Static (_) => array_vec! [],
-				WireInput::Wire (arg) => array_vec! [ arg ],
-				WireInput::Not (arg) => array_vec! [ arg ],
-				WireInput::And (arg_0, arg_1) => array_vec! [ arg_0, arg_1 ],
-				WireInput::AndOne (arg) => array_vec! [ arg ],
-				WireInput::Or (arg_0, arg_1) => array_vec! [ arg_0, arg_1 ],
-				WireInput::LeftShift (arg_0, _) => array_vec! [ arg_0 ],
-				WireInput::RightShift (arg_0, _) => array_vec! [ arg_0 ],
+			match * self {
+				Self::Static (_) => array_vec! [],
+				Self::Wire (ref arg) => array_vec! [ arg ],
+				Self::Not (ref arg) => array_vec! [ arg ],
+				Self::And (ref arg_0, ref arg_1) => array_vec! [ arg_0, arg_1 ],
+				Self::AndOne (ref arg) => array_vec! [ arg ],
+				Self::Or (ref arg_0, ref arg_1) => array_vec! [ arg_0, arg_1 ],
+				Self::LeftShift (ref arg_0, _) => array_vec! [ arg_0 ],
+				Self::RightShift (ref arg_0, _) => array_vec! [ arg_0 ],
 			}
 		}
+
 	}
 
 }

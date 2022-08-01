@@ -9,44 +9,43 @@ puzzle_info! {
 	year = 2015;
 	day = 21;
 	parse = |input| model::Stats::parse (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| Ok::<_, Infallible> (logic::part_one (input));
+	part_two = |input| Ok::<_, Infallible> (logic::part_two (input));
 }
 
 /// Logic for solving the puzzles.
 ///
-pub mod logic {
+mod logic {
 
 	use super::*;
 	use model::Stats;
 
-	pub fn part_one (boss: Stats) -> GenResult <u32> {
-		Ok (
-			choices ()
-				.filter (|& (_, player)| outcome (player, boss))
-				.map (|(gold, _)| gold)
-				.min ()
-				.unwrap ()
-		)
+	pub fn part_one (boss: Stats) -> u32 {
+		choices ()
+			.filter (|& (_, player)| outcome (player, boss))
+			.map (|(gold, _)| gold)
+			.min ()
+			.unwrap ()
 	}
 
-	pub fn part_two (boss: Stats) -> GenResult <u32> {
-		Ok (
-			choices ()
-				.filter (|& (_, player)| ! outcome (player, boss))
-				.map (|(gold, _)| gold)
-				.max ()
-				.unwrap ()
-		)
+	pub fn part_two (boss: Stats) -> u32 {
+		choices ()
+			.filter (|& (_, player)| ! outcome (player, boss))
+			.map (|(gold, _)| gold)
+			.max ()
+			.unwrap ()
 	}
 
 	fn choices () -> impl Iterator <Item = (u32, Stats)> {
 		PLAYER_STATS [0].iter ()
 			.cartesian_product (PLAYER_STATS [1].iter ())
 			.cartesian_product (PLAYER_STATS [2].iter ())
-			.map (|((a, b), c)| (a, b, c))
-			.map (|((gld_0, dmg_0, arm_0), (gld_1, dmg_1, arm_1), (gld_2, dmg_2, arm_2))|
-				(
+			.map (|((& a, & b), & c)| (a, b, c))
+			.map (|(
+					(gld_0, dmg_0, arm_0),
+					(gld_1, dmg_1, arm_1),
+					(gld_2, dmg_2, arm_2),
+				)| (
 					gld_0 + gld_1 + gld_2,
 					Stats {
 						hit_points: 100,
@@ -57,7 +56,7 @@ pub mod logic {
 			)
 	}
 
-	fn outcome (player: Stats, boss: Stats) -> bool {
+	const fn outcome (player: Stats, boss: Stats) -> bool {
 
 		let mut player_hp = player.hit_points;
 		let mut boss_hp = boss.hit_points;
@@ -104,7 +103,7 @@ pub mod logic {
 
 /// Representation of the puzzle input, etc.
 ///
-pub mod model {
+mod model {
 
 	use super::*;
 	use parser::*;
@@ -117,7 +116,7 @@ pub mod model {
 	}
 
 	impl Stats {
-		pub fn parse (input: & [& str]) -> GenResult <Stats> {
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
 			if input.len () != 3 { Err ("Invalid input") ?; }
 			fn parse_line (line_idx: usize, line: & str, expect: & str) -> GenResult <u32> {
 				Parser::wrap (line, |parser| {
@@ -129,7 +128,7 @@ pub mod model {
 			let hit_points = parse_line (0, input [0], "Hit Points: ") ?;
 			let damage = parse_line (1, input [1], "Damage: ") ?;
 			let armor = parse_line (2, input [2], "Armor: ") ?;
-			Ok (Stats { hit_points, damage, armor })
+			Ok (Self { hit_points, damage, armor })
 		}
 	}
 

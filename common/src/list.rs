@@ -29,53 +29,69 @@ mod base_list {
 	impl <Item: Clone> List <Item> {
 
 		#[ inline ]
-		pub fn new () -> Self { List::Empty }
+		#[ must_use ]
+		pub const fn new () -> Self { Self::Empty }
 
 		#[ inline ]
-		pub fn cons (& self) -> Option <(& Item, & List <Item>)> {
-			match self {
-				List::Present (inner) => {
-					let (head, tail) = inner.deref ();
+		#[ must_use ]
+		pub fn cons (& self) -> Option <(& Item, & Self)> {
+			match * self {
+				Self::Present (ref inner) => {
+					let (ref head, ref tail) = * inner.as_ref ();
 					Some ((head, tail))
 				},
-				List::Empty => None,
+				Self::Empty => None,
 			}
 		}
 
 		#[ inline ]
-		pub fn head (& self) -> Option <& Item> { self.cons ().map (|(head, _)| head) }
+		#[ must_use ]
+		pub fn head (& self) -> Option <& Item> {
+			self.cons ().map (|(head, _)| head)
+		}
 
 		#[ inline ]
-		pub fn tail (& self) -> Option <& List <Item>> { self.cons ().map (|(_, tail)| tail) }
+		#[ must_use ]
+		pub fn tail (& self) -> Option <& Self> {
+			self.cons ().map (|(_, tail)| tail)
+		}
 
 		#[ inline ]
-		pub fn is_empty (& self) -> bool { self.cons ().is_none () }
+		#[ must_use ]
+		pub fn is_empty (& self) -> bool {
+			self.cons ().is_none ()
+		}
 
 		#[ inline ]
+		#[ must_use ]
 		pub fn len (& self) -> usize {
 			let mut cur = self.clone ();
 			let mut len = 0;
-			while let List::Present (inner) = cur {
-				let (_, new) = inner.deref ();
+			while let Self::Present (inner) = cur {
+				let (_, ref new) = * inner.as_ref ();
 				cur = new.clone ();
-				len += 1
+				len += 1;
 			}
 			len
 		}
 
 		#[ inline ]
-		pub fn push_front (& self, head: Item) -> List <Item> {
-			List::Present (Rc::new ((head, self.clone ())))
+		#[ must_use ]
+		pub fn push_front (& self, head: Item) -> Self {
+			Self::Present (Rc::new ((head, self.clone ())))
 		}
 
 		#[ inline ]
-		pub fn iter (& self) -> ListIter <Item> {
+		#[ must_use ]
+		pub const fn iter (& self) -> ListIter <Item> {
 			ListIter { list: self }
 		}
 
 	}
 
 	impl <Item: Clone + Debug> Debug for List <Item> {
+
+		#[ inline ]
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			write! (formatter, "[") ?;
 			let mut cur = self;
@@ -89,18 +105,24 @@ mod base_list {
 			write! (formatter, "]") ?;
 			Ok (())
 		}
+
 	}
 
 	impl <Item: Clone> Clone for List <Item> {
+
+		#[ inline ]
 		fn clone (& self) -> Self {
-			match self {
-				List::Present (inner) => List::Present (Rc::clone (inner)),
-				List::Empty => List::Empty,
+			match * self {
+				Self::Present (ref inner) => Self::Present (Rc::clone (inner)),
+				Self::Empty => Self::Empty,
 			}
 		}
+
 	}
 
 	impl <Item: Clone + PartialEq> PartialEq for List <Item> {
+
+		#[ inline ]
 		fn eq (& self, other: & Self) -> bool {
 			let mut left = self;
 			let mut right = other;
@@ -110,16 +132,19 @@ mod base_list {
 					(Some (_), None) | (None, Some (_)) => return false,
 					(Some ((left_head, left_tail)), Some ((right_head, right_tail))) => {
 						if ! Item::eq (left_head, right_head) { return false }
-						(left, right) = (left_tail, right_tail)
+						(left, right) = (left_tail, right_tail);
 					},
 				}
 			}
 		}
+
 	}
 
 	impl <Item: Clone + Eq> Eq for List <Item> { }
 
 	impl <Item: Clone + Hash> Hash for List <Item> {
+
+		#[ inline ]
 		fn hash <Hshr: Hasher> (& self, hasher: & mut Hshr) {
 			let mut cur = self;
 			while let Some ((head, tail)) = cur.cons () {
@@ -127,27 +152,31 @@ mod base_list {
 				cur = tail;
 			}
 		}
+
 	}
 
 	impl Display for List <char> {
+
+		#[ inline ]
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			let mut cur = self.clone ();
-			while let List::Present (inner) = cur {
-				let & (head, ref tail) = inner.deref ();
+			while let Self::Present (inner) = cur {
+				let & (head, ref tail) = inner.as_ref ();
 				write! (formatter, "{}", head) ?;
 				cur = tail.clone ();
 			}
 			Ok (())
 		}
+
 	}
 
-	pub struct ListIter <'a, Item: Clone> {
-		list: & 'a List <Item>,
+	pub struct ListIter <'dat, Item: Clone> {
+		list: & 'dat List <Item>,
 	}
 
-	impl <'a, Item: Clone> Iterator for ListIter <'a, Item> {
-		type Item = & 'a Item;
-		fn next (& mut self) -> Option <& 'a Item> {
+	impl <'dat, Item: Clone> Iterator for ListIter <'dat, Item> {
+		type Item = & 'dat Item;
+		fn next (& mut self) -> Option <& 'dat Item> {
 			self.list.cons ().map (|(head, tail)| {
 				self.list = tail;
 				head
@@ -164,12 +193,16 @@ mod char_list {
 	pub type CharList = List <char>;
 
 	impl CharList {
+
 		#[ inline ]
+		#[ must_use ]
 		pub fn starts_with (& self, pat: & str) -> bool {
 			self.strip_prefix (pat).is_some ()
 		}
+
 		#[ inline ]
-		pub fn strip_prefix (& self, pat: & str) -> Option <& CharList> {
+		#[ must_use ]
+		pub fn strip_prefix (& self, pat: & str) -> Option <& Self> {
 			let mut cur = self;
 			let mut pat_chars = pat.chars ();
 			loop {
@@ -183,27 +216,30 @@ mod char_list {
 				}
 			}
 		}
+
 		#[ inline ]
-		pub fn prepend (& self, prefix: & str) -> CharList {
+		#[ must_use ]
+		pub fn prepend (& self, prefix: & str) -> Self {
 			let mut cur = self.clone ();
 			for prefix_ch in prefix.chars ().rev () {
 				cur = cur.push_front (prefix_ch);
 			}
 			cur
 		}
+
 	}
 
 	impl From <& str> for CharList {
 		#[ inline ]
-		fn from (src: & str) -> CharList {
-			CharList::Empty.prepend (src)
+		fn from (src: & str) -> Self {
+			Self::Empty.prepend (src)
 		}
 	}
 
 	impl From <& String> for CharList {
 		#[ inline ]
-		fn from (src: & String) -> CharList {
-			CharList::Empty.prepend (src)
+		fn from (src: & String) -> Self {
+			Self::Empty.prepend (src)
 		}
 	}
 

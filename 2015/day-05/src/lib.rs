@@ -9,29 +9,25 @@ puzzle_info! {
 	year = 2015;
 	day = 5;
 	parse = |input| model::parse_input (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| Ok::<_, Infallible> (logic::part_one (& input));
+	part_two = |input| Ok::<_, Infallible> (logic::part_two (& input));
 }
 
-pub mod logic {
+mod logic {
 
 	use super::*;
 	use model::Input;
 
-	pub fn part_one (input: Input) -> GenResult <usize> {
-		Ok (
-			input.iter ()
-				.filter (|line| is_nice_one (line))
-				.count ()
-		)
+	pub fn part_one (input: & Input) -> usize {
+		input.iter ()
+			.filter (|line| is_nice_one (line))
+			.count ()
 	}
 
-	pub fn part_two (input: Input) -> GenResult <usize> {
-		Ok (
-			input.iter ()
-				.filter (|line| is_nice_two (line))
-				.count ()
-		)
+	pub fn part_two (input: & Input) -> usize {
+		input.iter ()
+			.filter (|line| is_nice_two (line))
+			.count ()
 	}
 
 	fn is_nice_one (input: & str) -> bool {
@@ -96,7 +92,7 @@ pub mod logic {
 
 }
 
-pub mod model {
+mod model {
 
 	use super::*;
 
@@ -113,7 +109,7 @@ pub mod model {
 			input.iter ().all (|line| line.chars ()
 					.all (|ch| char::is_ascii_lowercase (& ch)))
 				.then_some (Input (input.iter ()
-					.map (|line| line.to_string ()).collect ()))
+					.map (|& line| line.to_owned ()).collect ()))
 				.ok_or ("Invalid input") ?
 		)
 	}

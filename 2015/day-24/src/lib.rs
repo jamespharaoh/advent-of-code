@@ -37,7 +37,7 @@ puzzle_info! {
 
 /// Logic for solving the puzzles.
 ///
-pub mod logic {
+mod logic {
 
 	use super::*;
 	use model::Input;
@@ -216,7 +216,7 @@ pub mod logic {
 
 /// Representation of the puzzle input, etc.
 ///
-pub mod model {
+mod model {
 
 	use super::*;
 
@@ -226,13 +226,13 @@ pub mod model {
 	}
 
 	impl Input {
-		pub fn parse (input: & [& str]) -> GenResult <Input> {
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
 			let weights = input.iter ().enumerate ()
 				.map (|(line_idx, line)| Ok (
-					line.parse ().map_err (|_|
+					line.parse ().map_err (|_err|
 						format! ("Invalid input: line {}: {}", line_idx + 1, line)) ?))
 				.collect::<GenResult <Vec <_>>> () ?;
-			Ok (Input { weights })
+			Ok (Self { weights })
 		}
 	}
 

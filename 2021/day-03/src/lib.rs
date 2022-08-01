@@ -34,7 +34,7 @@ mod logic {
 		}
 		for sum in sums.iter_vals () {
 			if sum == 0 {
-				Err (format! ("Equal number of bits")) ?;
+				Err ("Equal number of bits") ?;
 			}
 		}
 		let gamma_str: String = sums.iter ().map (|sum|
@@ -80,7 +80,7 @@ mod logic {
 
 mod model {
 
-	#[ derive (PartialEq, Eq) ]
+	#[ derive (Clone, Copy, PartialEq, Eq) ]
 	pub enum Mode { Oxygen, CO2 }
 
 }

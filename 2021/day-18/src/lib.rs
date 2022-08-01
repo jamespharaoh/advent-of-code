@@ -8,8 +8,8 @@ puzzle_info! {
 	name = "Snailfish";
 	year = 2021;
 	day = 18;
-	part_one = |lines| logic::part_one (lines);
-	part_two = |lines| logic::part_two (lines);
+	part_one = |lines| Ok::<_, Infallible> (logic::part_one (lines));
+	part_two = |lines| Ok::<_, Infallible> (logic::part_two (lines));
 }
 
 mod logic {
@@ -17,13 +17,12 @@ mod logic {
 	use super::*;
 	use snailfish::Snailfish;
 
-	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_one (lines: & [& str]) -> i64 {
 		let sum = Snailfish::sum (lines.iter ().copied ().map (Snailfish::parse));
-		let magnitude = sum.magnitude ();
-		Ok (magnitude)
+		sum.magnitude ()
 	}
 
-	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
+	pub fn part_two (lines: & [& str]) -> i64 {
 		let numbers: Vec <Snailfish> = lines.iter ().copied ().map (Snailfish::parse).collect ();
 		let mut best: i64 = i64::MIN;
 		for i in 0 .. numbers.len () {
@@ -33,7 +32,7 @@ mod logic {
 				if value > best { best = value; }
 			}
 		}
-		Ok (best)
+		best
 	}
 
 }
@@ -76,26 +75,29 @@ mod snailfish {
 			left * 3 + right * 2
 		}
 
-		pub fn sum <Item: Borrow <Snailfish>, Iter: Iterator <Item = Item>> (iter: Iter) -> Snailfish {
+		pub fn sum <Item, Iter> (iter: Iter) -> Self
+			where
+				Item: Borrow <Self>,
+				Iter: Iterator <Item = Item> {
 			let mut sum = None;
 			for item in iter {
 				let item = item.borrow ();
 				if let Some (prev_sum) = sum {
-					sum = Some (Snailfish::add (prev_sum, item));
+					sum = Some (Self::add (prev_sum, item));
 				} else {
-					sum = Some (item.to_owned ());
+					sum = Some (item.clone ());
 				}
 			}
 			sum.unwrap ()
 		}
 
-		pub fn add (left: impl Into <Snailfish>, right: impl Into <Snailfish>) -> Snailfish {
-			Snailfish::pair (left, right).reduce ()
+		pub fn add (left: impl Into <Self>, right: impl Into <Self>) -> Self {
+			Self::pair (left, right).reduce ()
 		}
 
-		pub fn pair (left: impl Into <Snailfish>, right: impl Into <Snailfish>) -> Snailfish {
-			let Snailfish { tokens: left_tokens } = left.into ();
-			let Snailfish { tokens: right_tokens } = right.into ();
+		pub fn pair (left: impl Into <Self>, right: impl Into <Self>) -> Self {
+			let Self { tokens: left_tokens } = left.into ();
+			let Self { tokens: right_tokens } = right.into ();
 			match Rc::try_unwrap (left_tokens) {
 				Ok (mut left_tokens) => {
 					left_tokens.insert (0, Token::Open);
@@ -103,7 +105,7 @@ mod snailfish {
 						iter::once (Token::Comma)
 							.chain (right_tokens.iter ().copied ())
 							.chain (iter::once (Token::Close)));
-					Snailfish { tokens: left_tokens.into () }
+					Self { tokens: left_tokens.into () }
 				},
 				Err (left_tokens) => match Rc::try_unwrap (right_tokens) {
 					Ok (mut right_tokens) => {
@@ -112,7 +114,7 @@ mod snailfish {
 								.chain (left_tokens.iter ().copied ())
 								.chain (iter::once (Token::Comma)));
 						right_tokens.push (Token::Close);
-						Snailfish { tokens: right_tokens.into () }
+						Self { tokens: right_tokens.into () }
 					},
 					Err (right_tokens) => {
 						let tokens =
@@ -122,13 +124,13 @@ mod snailfish {
 								.chain (right_tokens.iter ().copied ())
 								.chain (iter::once (Token::Close))
 								.collect::<Tokens> ();
-						Snailfish { tokens: tokens.into () }
+						Self { tokens: tokens.into () }
 					},
 				},
 			}
 		}
 
-		pub fn reduce (self) -> Snailfish {
+		pub fn reduce (self) -> Self {
 			let mut val = self;
 			loop {
 				let reduced;
@@ -137,22 +139,21 @@ mod snailfish {
 			}
 		}
 
-		pub fn reduce_once (self) -> (bool, Snailfish) {
+		pub fn reduce_once (self) -> (bool, Self) {
 			let mut depth = 0_u32;
 			for (pos, token) in self.tokens.iter ().enumerate () {
-				match token {
+				match * token {
 					Token::Open => {
 						if depth == 4 {
 							return (true, self.reduce_explode (pos));
-						} else {
-							depth += 1;
 						}
+						depth += 1;
 					},
 					Token::Close => {
 						if depth == 0 { panic! () }
 						depth -= 1;
 					},
-					_ => (),
+					Token::Comma | Token::Value (_) => (),
 				}
 			}
 			for (pos, token) in self.tokens.iter ().enumerate () {
@@ -165,7 +166,7 @@ mod snailfish {
 			(false, self)
 		}
 
-		fn reduce_explode (self, pos: usize) -> Snailfish {
+		fn reduce_explode (self, pos: usize) -> Self {
 			if ! (self.tokens [pos].is_open ()
 					&& self.tokens [pos + 1].is_value ()
 					&& self.tokens [pos + 2].is_comma ()
@@ -188,7 +189,7 @@ mod snailfish {
 						tokens [pos + 1 + pos_right] =
 							Token::Value (tokens [pos + 1 + pos_right].value () + explode_right);
 					}
-					Snailfish { tokens: tokens.into () }
+					Self { tokens: tokens.into () }
 				},
 				Err (tokens) => {
 					let mut result = Tokens::new ();
@@ -208,12 +209,12 @@ mod snailfish {
 					} else {
 						result.extend (tokens [pos + 5 ..].iter ().copied ());
 					}
-					Snailfish { tokens: result.into () }
+					Self { tokens: result.into () }
 				},
 			}
 		}
 
-		fn reduce_split (self, pos: usize) -> Snailfish {
+		fn reduce_split (self, pos: usize) -> Self {
 			let value = self.tokens [pos].value ();
 			match Rc::try_unwrap (self.tokens) {
 				Ok (mut tokens) => {
@@ -224,7 +225,7 @@ mod snailfish {
 						Token::Value ((value + 1) / 2),
 						Token::Close,
 					]);
-					Snailfish { tokens: tokens.into () }
+					Self { tokens: tokens.into () }
 				},
 				Err (tokens) => {
 					let mut result = Tokens::new ();
@@ -235,28 +236,28 @@ mod snailfish {
 					result.push (Token::Value ((value + 1) / 2));
 					result.push (Token::Close);
 					result.extend (tokens [pos + 1 ..].iter ().copied ());
-					Snailfish { tokens: result.into () }
+					Self { tokens: result.into () }
 				},
 			}
 		}
 
-		pub fn parse (input: & str) -> Snailfish {
-			Snailfish {
+		pub fn parse (input: & str) -> Self {
+			Self {
 				tokens: model::parse_tokens (& mut input.chars ().peekable ()).into (),
 			}
 		}
 
 	}
 
-	impl From <& Snailfish> for Snailfish {
-		fn from (val: & Snailfish) -> Snailfish {
-			Snailfish { tokens: Rc::clone (& val.tokens) }
+	impl From <& Self> for Snailfish {
+		fn from (val: & Self) -> Self {
+			Self { tokens: Rc::clone (& val.tokens) }
 		}
 	}
 
 	impl Display for Snailfish {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			for token in self.tokens.iter () {
+			for token in self.tokens.iter_vals () {
 				match token {
 					Token::Open => write! (formatter, "[") ?,
 					Token::Close => write! (formatter, "]") ?,
@@ -386,7 +387,7 @@ mod model {
 	pub fn parse_tokens (input_iter: & mut Peekable <Chars <'_>>) -> Tokens {
 		let mut result = Tokens::new ();
 		while let Some (letter) = input_iter.peek () {
-			match letter {
+			match * letter {
 				'[' => { input_iter.next ().unwrap (); result.push (Token::Open); },
 				']' => { input_iter.next ().unwrap (); result.push (Token::Close); },
 				',' => { input_iter.next ().unwrap (); result.push (Token::Comma); },
@@ -418,14 +419,15 @@ mod model {
 	}
 
 	impl Token {
-		pub fn is_open (& self) -> bool { matches! (* self, Token::Open) }
-		pub fn is_close (& self) -> bool { matches! (* self, Token::Close) }
-		pub fn is_comma (& self) -> bool { matches! (* self, Token::Comma) }
-		pub fn is_value (& self) -> bool { matches! (* self, Token::Value (_)) }
+		pub const fn is_open (& self) -> bool { matches! (* self, Self::Open) }
+		pub const fn is_close (& self) -> bool { matches! (* self, Self::Close) }
+		pub const fn is_comma (& self) -> bool { matches! (* self, Self::Comma) }
+		pub const fn is_value (& self) -> bool { matches! (* self, Self::Value (_)) }
 		pub fn value (& self) -> i64 {
-			match * self {
-				Token::Value (value) => value,
-				_ => panic! ("Called Token::value() on Token::{:?}", self),
+			if let Self::Value (value) = * self {
+				value
+			} else {
+				panic! ("Called Token::value() on Token::{:?}", self);
 			}
 		}
 	}
@@ -452,13 +454,15 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (4140, logic::part_one (EXAMPLE) ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("4140", puzzle.part_one (EXAMPLE));
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (3993, logic::part_two (EXAMPLE) ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("3993", puzzle.part_two (EXAMPLE));
 		Ok (())
 	}
 

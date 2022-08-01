@@ -88,7 +88,7 @@ mod model {
 		use parser::*;
 		input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
-				let name = parser.word () ?.to_string ();
+				let name = parser.word () ?.to_owned ();
 				let fly_speed = parser.expect (" can fly ") ?.int () ?;
 				let fly_time = parser.expect (" km/s for ") ?.int () ?;
 				let rest_time = parser.expect (" seconds, but then must rest for ") ?.int () ?;

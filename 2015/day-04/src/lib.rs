@@ -2,8 +2,7 @@
 //!
 //! [https://adventofcode.com/2015/day/4](https://adventofcode.com/2015/day/4)
 
-#![ allow (clippy::needless_collect) ]
-#![ allow (clippy::needless_range_loop) ]
+#![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
 
@@ -90,8 +89,9 @@ pub mod logic {
 		let state_mutex = Arc::new (Mutex::new (default::<State> ()));
 		let queue_pushed = Arc::new (Condvar::new ());
 		let queue_pulled = Arc::new (Condvar::new ());
+		#[ allow (clippy::needless_collect) ]
 		let join_handles = (0 .. num_threads).map (|_| {
-			let input = input.to_string ();
+			let input = input.to_owned ();
 			let state_mutex = Arc::clone (& state_mutex);
 			let queue_pushed = Arc::clone (& queue_pushed);
 			let queue_pulled = Arc::clone (& queue_pulled);
@@ -141,7 +141,7 @@ pub mod logic {
 		let state_mutex = Arc::try_unwrap (state_mutex).unwrap ();
 		let state = state_mutex.into_inner ().unwrap ();
 		let mut solutions = state.solutions;
-		solutions.sort ();
+		solutions.sort_unstable ();
 		Ok (solutions.into_iter ().next ().ok_or ("No solution found") ?)
 	}
 
@@ -253,6 +253,8 @@ mod cli {
 
 	}
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (& args.input) ?;
 		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();

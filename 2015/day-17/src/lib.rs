@@ -26,6 +26,8 @@
 //! using [`filter`](Iterator::filter) and [`count`](Iterator::count) to determine the number of
 //! combinations with that specific number of containers.
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -66,9 +68,8 @@ pub mod logic {
 
 		let smallest =
 			combos (& sizes, target)
-				.min_by_key (|combo| combo.len ())
-				.map (|combo| combo.len ())
-				.unwrap_or (0);
+				.min_by_key (Vec::len)
+				.map_or (0, |combo| combo.len ());
 
 		// count combinations with this number
 

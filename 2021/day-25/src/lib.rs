@@ -69,20 +69,21 @@ mod logic {
 		Seafloor::new (size, data)
 	}
 
-	pub fn calc_one_region (
+	pub const fn calc_one_region (
 		above: [Region; 3],
 		level: [Region; 3],
 		below: [Region; 3],
 	) -> Region {
 		use Region::{ Empty as X, East as E, South as S };
+		#[ allow (clippy::unnested_or_patterns) ]
 		match (above, level, below) {
 			([_, _, _], [E, X, _], [_, _, _]) => E,
-			([_, S, _], [_, E, X], [_, _, _]) => S,
-			([_, _, _], [_, E, X], [_, _, _]) => X,
-			([_, S, _], [_, X, _], [_, _, _]) => S,
-			([_, _, _], [_, S, _], [_, E, X]) => X,
-			([_, _, _], [_, S, _], [E, X, _]) => S,
-			([_, _, _], [_, S, _], [_, X, _]) => X,
+			([_, S, _], [_, E, X], [_, _, _])
+				| ([_, S, _], [_, X, _], [_, _, _])
+				| ([_, _, _], [_, S, _], [E, X, _]) => S,
+			([_, _, _], [_, E, X], [_, _, _])
+				| ([_, _, _], [_, S, _], [_, E, X])
+				| ([_, _, _], [_, S, _], [_, X, _]) => X,
 			([_, _, _], [_, h, _], [_, _, _]) => h,
 		}
 	}
@@ -162,14 +163,14 @@ mod model {
 	}
 
 	impl Seafloor {
-		pub fn new (size: Pos, regions: GridInner) -> Seafloor {
+		pub fn new (size: Pos, regions: GridInner) -> Self {
 			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
 			let grid = Grid::wrap (regions, [0, 0], grid_size);
-			Seafloor { grid, size }
+			Self { grid, size }
 		}
-		pub fn size (& self) -> Pos { self.size }
-		pub fn parse (lines: & [& str]) -> GenResult <Seafloor> {
-			if lines.is_empty () { Err (format! ("Invalid input")) ? }
+		pub const fn size (& self) -> Pos { self.size }
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
+			if lines.is_empty () { Err ("Invalid input") ? }
 			let size = Pos { y: lines.len ().as_u16 (), x: lines [0].chars ().count ().as_u16 () };
 			let data = lines.iter ().enumerate ()
 				.flat_map (|(line_idx, line)| {
@@ -185,7 +186,7 @@ mod model {
 				}).collect::<Result <_, _>> () ?;
 			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
 			let grid = Grid::wrap (data, [0, 0], grid_size);
-			Ok (Seafloor { grid, size })
+			Ok (Self { grid, size })
 		}
 		pub fn get (& self, pos: Pos) -> Region {
 			self.grid.get (pos).unwrap ()
@@ -223,16 +224,16 @@ mod model {
 		const BITS: u32 = 2;
 		fn encode (self) -> usize {
 			match self {
-				Region::Empty => 0x0,
-				Region::East => 0x1,
-				Region::South => 0x2,
+				Self::Empty => 0x0,
+				Self::East => 0x1,
+				Self::South => 0x2,
 			}
 		}
-		fn decode (encoded: usize) -> Region {
+		fn decode (encoded: usize) -> Self {
 			match encoded {
-				0 => Region::Empty,
-				1 => Region::East,
-				2 => Region::South,
+				0 => Self::Empty,
+				1 => Self::East,
+				2 => Self::South,
 				_ => panic! ("Invalid encoded value for Region: {:#x}", encoded),
 			}
 		}
@@ -241,9 +242,9 @@ mod model {
 	impl Display for Region {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			write! (formatter, "{}", match * self {
-				Region::Empty => '.',
-				Region::East => '>',
-				Region::South => 'v',
+				Self::Empty => '.',
+				Self::East => '>',
+				Self::South => 'v',
 			})
 		}
 	}

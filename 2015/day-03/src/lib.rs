@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/3](https://adventofcode.com/2015/day/3)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 3;
 	parse = |input| model::parse_input (input [0]);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -19,7 +21,7 @@ pub mod logic {
 	use model::Input;
 	use model::Pos;
 
-	pub fn part_one (input: Input) -> GenResult <u32> {
+	pub fn part_one (input: & Input) -> GenResult <u32> {
 		let (seen, _) = input.iter_vals ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO),
 			|(mut seen, pos), dir| {
@@ -31,7 +33,7 @@ pub mod logic {
 		Ok (seen.len ().try_into () ?)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <u32> {
+	pub fn part_two (input: & Input) -> GenResult <u32> {
 		let (seen, _, _) = input.iter_vals ().fold (
 			(HashMap::<_, u32>::from_iter ([ (Pos::ZERO, 1) ]), Pos::ZERO, Pos::ZERO),
 			|(mut seen, pos_0, pos_1), dir| {
@@ -58,14 +60,17 @@ pub mod model {
 	}
 
 	impl Dir {
+
+		#[ must_use ]
 		pub fn to_pos (self) -> Pos {
 			match self {
-				Dir::North => Pos::ZERO.north (1),
-				Dir::South => Pos::ZERO.south (1),
-				Dir::East => Pos::ZERO.east (1),
-				Dir::West => Pos::ZERO.west (1),
+				Self::North => Pos::ZERO.north (1),
+				Self::South => Pos::ZERO.south (1),
+				Self::East => Pos::ZERO.east (1),
+				Self::West => Pos::ZERO.west (1),
 			}
 		}
+
 	}
 
 	pub fn parse_input (input: & str) -> GenResult <Input> {

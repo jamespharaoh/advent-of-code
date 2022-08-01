@@ -8,8 +8,8 @@ puzzle_info! {
 	name = "Packet Decoder";
 	year = 2021;
 	day = 16;
-	part_one = |lines| logic::part_one (lines [0]);
-	part_two = |lines| logic::part_two (lines [0]);
+	part_one = |lines| Ok::<_, Infallible> (logic::part_one (lines [0]));
+	part_two = |lines| Ok::<_, Infallible> (logic::part_two (lines [0]));
 }
 
 mod logic {
@@ -18,16 +18,16 @@ mod logic {
 	use model::BitIter;
 	use model::Packet;
 
-	pub fn part_one (input: & str) -> GenResult <u64> {
+	pub fn part_one (input: & str) -> u64 {
 		let mut input_iter = BitIter::new (input);
 		let packet = Packet::decode (& mut input_iter).unwrap ();
-		Ok (packet.version_sum ())
+		packet.version_sum ()
 	}
 
-	pub fn part_two (input: & str) -> GenResult <u64> {
+	pub fn part_two (input: & str) -> u64 {
 		let mut input_iter = BitIter::new (input);
 		let packet = Packet::decode (& mut input_iter).unwrap ();
-		Ok (packet_eval (& packet))
+		packet_eval (& packet)
 	}
 
 	fn packet_eval (packet: & Packet) -> u64 {
@@ -64,7 +64,7 @@ mod model {
 	}
 
 	impl Packet {
-		pub fn decode (iter: & mut BitIter <'_>) -> Option <Packet> {
+		pub fn decode (iter: & mut BitIter <'_>) -> Option <Self> {
 			if ! iter.has_next () { return None }
 			let version = iter.next_uint (3).unwrap ();
 			let packet_type = iter.next_uint (3).unwrap ();
@@ -83,31 +83,31 @@ mod model {
 				let child_bits = iter.next_uint (15).unwrap ();
 				let end_position = iter.position + child_bits;
 				while iter.position < end_position {
-					children.push (Packet::decode (iter).unwrap ());
+					children.push (Self::decode (iter).unwrap ());
 				}
 			} else {
 				let num_children = iter.next_uint (11).unwrap ();
 				for _ in 0 .. num_children {
-					children.push (Packet::decode (iter).unwrap ());
+					children.push (Self::decode (iter).unwrap ());
 				}
 			}
-			Some (Packet { version, packet_type, value, children })
+			Some (Self { version, packet_type, value, children })
 		}
 		pub fn version_sum (& self) -> u64 {
-			self.version + self.children.iter ().map (
-				|child| child.version_sum (),
-			).sum::<u64> ()
+			self.version + self.children.iter ()
+				.map (Self::version_sum)
+				.sum::<u64> ()
 		}
 	}
 
-	pub struct BitIter <'a> {
-		inner: Chars <'a>,
+	pub struct BitIter <'inr> {
+		inner: Chars <'inr>,
 		buffer: Vec <u64>,
 		position: u64,
 	}
 
-	impl <'a> BitIter <'a> {
-		pub fn new (inner_str: & 'a str) -> BitIter <'a> {
+	impl <'inr> BitIter <'inr> {
+		pub fn new (inner_str: & 'inr str) -> BitIter <'inr> {
 			BitIter {
 				inner: inner_str.chars (),
 				buffer: Vec::with_capacity (4),
@@ -118,7 +118,7 @@ mod model {
 			if bits > 64 { panic! (); }
 			let mut val = 0;
 			for _ in 0 .. bits {
-				let next_bit = self.next_bit ().unwrap ();
+				let next_bit = some_or! (self.next_bit (), return None);
 				val = val << 1_i32 | next_bit;
 			}
 			Some (val)
@@ -151,26 +151,28 @@ mod examples {
 
 	#[ test ]
 	fn part_one () -> GenResult <()> {
-		assert_eq! (6, logic::part_one ("D2FE28") ?);
-		assert_eq! (9, logic::part_one ("38006F45291200") ?);
-		assert_eq! (14, logic::part_one ("EE00D40C823060") ?);
-		assert_eq! (16, logic::part_one ("8A004A801A8002F478") ?);
-		assert_eq! (12, logic::part_one ("620080001611562C8802118E34") ?);
-		assert_eq! (23, logic::part_one ("C0015000016115A2E0802F182340") ?);
-		assert_eq! (31, logic::part_one ("A0016C880162017C3686B18A3D4780") ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("6", puzzle.part_one (& ["D2FE28"]));
+		assert_eq_ok! ("9", puzzle.part_one (& ["38006F45291200"]));
+		assert_eq_ok! ("14", puzzle.part_one (& ["EE00D40C823060"]));
+		assert_eq_ok! ("16", puzzle.part_one (& ["8A004A801A8002F478"]));
+		assert_eq_ok! ("12", puzzle.part_one (& ["620080001611562C8802118E34"]));
+		assert_eq_ok! ("23", puzzle.part_one (& ["C0015000016115A2E0802F182340"]));
+		assert_eq_ok! ("31", puzzle.part_one (& ["A0016C880162017C3686B18A3D4780"]));
 		Ok (())
 	}
 
 	#[ test ]
 	fn part_two () -> GenResult <()> {
-		assert_eq! (3, logic::part_two ("C200B40A82") ?);
-		assert_eq! (54, logic::part_two ("04005AC33890") ?);
-		assert_eq! (7, logic::part_two ("880086C3E88112") ?);
-		assert_eq! (9, logic::part_two ("CE00C43D881120") ?);
-		assert_eq! (1, logic::part_two ("D8005AC2A8F0") ?);
-		assert_eq! (0, logic::part_two ("F600BC2D8F") ?);
-		assert_eq! (0, logic::part_two ("9C005AC2F8F0") ?);
-		assert_eq! (1, logic::part_two ("9C0141080250320F1802104A08") ?);
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("3", puzzle.part_two (& ["C200B40A82"]));
+		assert_eq_ok! ("54", puzzle.part_two (& ["04005AC33890"]));
+		assert_eq_ok! ("7", puzzle.part_two (& ["880086C3E88112"]));
+		assert_eq_ok! ("9", puzzle.part_two (& ["CE00C43D881120"]));
+		assert_eq_ok! ("1", puzzle.part_two (& ["D8005AC2A8F0"]));
+		assert_eq_ok! ("0", puzzle.part_two (& ["F600BC2D8F"]));
+		assert_eq_ok! ("0", puzzle.part_two (& ["9C005AC2F8F0"]));
+		assert_eq_ok! ("1", puzzle.part_two (& ["9C0141080250320F1802104A08"]));
 		Ok (())
 	}
 

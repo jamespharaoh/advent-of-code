@@ -28,6 +28,7 @@ mod tool {
 
 	}
 
+	#[ allow (clippy::print_stdout) ]
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (args.input) ?;
 		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
@@ -92,21 +93,21 @@ mod logic {
 				}
 			}
 			result.push (match encoded {
-				0x19297a52 => 'A',
-				0x392e4a5c => 'B',
-				0x1928424c => 'C',
-				0x3d0e421e => 'E',
-				0x19285a4e => 'G',
-				0x3d0e4210 => 'F',
-				0x0c210a4c => 'J',
-				0x252f4a52 => 'H',
-				0x254c5292 => 'K',
-				0x2108421e => 'L',
-				0x39297210 => 'P',
-				0x39297292 => 'R',
-				0x25294a4c => 'U',
-				0x3c22221e => 'Z',
-				0x00000000 => break,
+				0x_1929_7a52 => 'A',
+				0x_392e_4a5c => 'B',
+				0x_1928_424c => 'C',
+				0x_3d0e_421e => 'E',
+				0x_1928_5a4e => 'G',
+				0x_3d0e_4210 => 'F',
+				0x_0c21_0a4c => 'J',
+				0x_252f_4a52 => 'H',
+				0x_254c_5292 => 'K',
+				0x_2108_421e => 'L',
+				0x_3929_7210 => 'P',
+				0x_3929_7292 => 'R',
+				0x_2529_4a4c => 'U',
+				0x_3c22_221e => 'Z',
+				0x_0000_0000 => break,
 				_ => Err (format! ("Unrecognised character: {:#08x} in position {}", encoded,
 					result.len () + 1)) ?,
 			});
@@ -114,9 +115,9 @@ mod logic {
 		Ok (result)
 	}
 
-	pub struct DrawDots <'a> (pub & 'a HashSet <Pos>);
+	pub struct DrawDots <'dat> (pub & 'dat HashSet <Pos>);
 
-	impl <'a> fmt::Display for DrawDots <'a> {
+	impl <'dat> fmt::Display for DrawDots <'dat> {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			let dots = {
 				let mut dots_temp: Vec <Pos> =
@@ -157,7 +158,7 @@ mod model {
 	}
 
 	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Input> {
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			let mut lines_iter = lines.iter ();
 			let mut dots = HashSet::new ();
 			for line in lines_iter.by_ref () {
@@ -166,8 +167,8 @@ mod model {
 				let line_parts: Vec <& str> = line.split (',').collect ();
 				if line_parts.len () != 2 { Err (line_err ()) ? }
 				dots.insert (Pos {
-					x: line_parts [0].parse ().map_err (|_| line_err ()) ?,
-					y: line_parts [1].parse ().map_err (|_| line_err ()) ?,
+					x: line_parts [0].parse ().map_err (|_err| line_err ()) ?,
+					y: line_parts [1].parse ().map_err (|_err| line_err ()) ?,
 				});
 			}
 			let mut folds = Vec::new ();
@@ -178,10 +179,10 @@ mod model {
 				} else if let Some (line) = line.strip_prefix ("fold along y=") {
 					folds.push (Fold { axis: Axis::Y, val: line.parse () ? });
 				} else {
-					Err (line_err ()) ?
+					Err (line_err ()) ?;
 				}
 			}
-			Ok (Input { dots, folds })
+			Ok (Self { dots, folds })
 		}
 	}
 

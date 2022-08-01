@@ -122,8 +122,8 @@ mod model {
 	}
 
 	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Input> {
-			let template = lines [0].to_string ();
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
+			let template = lines [0].to_owned ();
 			let mut rules = HashMap::new ();
 			for line in lines.iter ().skip (2) {
 				let line_err = || format! ("Invalid input: {}", line);
@@ -136,7 +136,7 @@ mod model {
 				let letter_insert = line_iter.next ().ok_or_else (line_err) ?;
 				rules.insert ((letter_before, letter_after), letter_insert);
 			}
-			Ok (Input { template, rules })
+			Ok (Self { template, rules })
 		}
 	}
 

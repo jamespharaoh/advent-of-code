@@ -51,7 +51,7 @@ mod logic {
 			let mut basin_size: u64 = 1;
 			while ! todo.is_empty () {
 				let mut next_todo = Vec::new ();
-				for pos in todo.into_iter () {
+				for pos in todo {
 					let height = floor [& pos];
 					for adj_pos in pos.adjacent () {
 						if visited.contains (& adj_pos) { continue }
@@ -68,7 +68,7 @@ mod logic {
 			}
 			basin_sizes.push (basin_size);
 		}
-		basin_sizes.sort ();
+		basin_sizes.sort_unstable ();
 		Ok (basin_sizes.into_iter ().rev ().take (3).product ())
 	}
 
@@ -85,7 +85,9 @@ mod model {
 			let row = row.as_i32 ();
 			for (col, letter) in line.chars ().enumerate () {
 				let col = col.as_i32 ();
-				floor.insert (Pos { row, col }, letter.to_digit (10).unwrap ().as_u8 ());
+				floor.insert (
+					Pos { row, col },
+					letter.to_digit (10).ok_or ("Invalid input") ?.as_u8 ());
 			}
 		}
 		Ok (floor)
@@ -95,12 +97,12 @@ mod model {
 	pub struct Pos { pub row: i32, pub col: i32 }
 
 	impl Pos {
-		pub fn adjacent (& self) -> Vec <Pos> {
+		pub fn adjacent (self) -> Vec <Self> {
 			vec! [
-				Pos { row: self.row, col: self.col - 1 },
-				Pos { row: self.row, col: self.col + 1 },
-				Pos { row: self.row - 1, col: self.col },
-				Pos { row: self.row + 1, col: self.col },
+				Self { row: self.row, col: self.col - 1 },
+				Self { row: self.row, col: self.col + 1 },
+				Self { row: self.row - 1, col: self.col },
+				Self { row: self.row + 1, col: self.col },
 			]
 		}
 	}

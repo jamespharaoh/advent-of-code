@@ -99,7 +99,7 @@ mod logic {
 			where Inpt: Iterator <Item = char> + Clone {
 		input
 			.tuple_windows::<(_, _)> ()
-			.filter (|(a, b)| a == b)
+			.filter (|& (a, b)| a == b)
 			.map (|(a, _)| a)
 			.enumerate ()
 			.next ()

@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/20](https://adventofcode.com/2015/day/20)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {

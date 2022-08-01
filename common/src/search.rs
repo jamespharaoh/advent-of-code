@@ -67,23 +67,27 @@ use grid::GridPos;
 /// assert_eq! (search.next (), None);
 /// ```
 
-pub struct PrioritySearch <Node, Pri, Visitor, Seen>
+pub struct PrioritySearch <Node, Pri, Visitor, SeenImpl>
 	where
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Copy + Debug + Ord,
-		Seen: PrioritySearchSeen <Node, Pri>,
-		Visitor: PrioritySearchVisitor <Node, Pri, Seen> {
+		SeenImpl: Seen <Node, Pri>,
+		Visitor: PrioritySearchVisitor <Node, Pri, SeenImpl> {
 	visitor: Visitor,
-	inner: PrioritySearchInner <Node, Pri, Seen>,
+	inner: PrioritySearchInner <Node, Pri, SeenImpl>,
 }
 
-impl <Node, Pri, Visitor> PrioritySearch <Node, Pri, Visitor, HashMap <Node, PrioritySearchSeenState <Pri>>>
+#[ allow (clippy::implicit_hasher) ]
+impl <Node, Pri, Visitor>
+	PrioritySearch <Node, Pri, Visitor, HashMap <Node, SeenState <Pri>>>
 	where
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Copy + Debug + Ord,
-		Visitor: PrioritySearchVisitor <Node, Pri, HashMap <Node, PrioritySearchSeenState <Pri>>> {
+		Visitor: PrioritySearchVisitor <Node, Pri, HashMap <Node, SeenState <Pri>>> {
+
+	#[ inline ]
 	pub fn with_hash_map (visitor: Visitor) -> Self {
-		PrioritySearch {
+		Self {
 			visitor,
 			inner: PrioritySearchInner {
 				seen: HashMap::new (),
@@ -91,21 +95,24 @@ impl <Node, Pri, Visitor> PrioritySearch <Node, Pri, Visitor, HashMap <Node, Pri
 			},
 		}
 	}
+
 }
 
-impl <Node, Pri, Visitor, const DIMS: usize> PrioritySearch <Node, Pri, Visitor, Grid <Vec <PrioritySearchSeenState <Pri>>, Node, DIMS>>
+impl <Node, Pri, Visitor, const DIMS: usize> PrioritySearch <Node, Pri, Visitor, Grid <Vec <SeenState <Pri>>, Node, DIMS>>
 	where
 		Node: Clone + Debug + Eq + Hash + GridPos <DIMS>,
 		Pri: Clone + Copy + Debug + Ord,
-		Visitor: PrioritySearchVisitor <Node, Pri, Grid <Vec <PrioritySearchSeenState <Pri>>, Node, DIMS>> {
+		Visitor: PrioritySearchVisitor <Node, Pri, Grid <Vec <SeenState <Pri>>, Node, DIMS>> {
+
+	#[ inline ]
 	pub fn with_grid (origin: [isize; DIMS], size: [usize; DIMS], visitor: Visitor) -> Self {
 		let grid = Grid::wrap (
-			iter::repeat (PrioritySearchSeenState::New)
+			iter::repeat (SeenState::New)
 				.take (size.iter ().product ())
 				.collect (),
 			origin,
 			size);
-		PrioritySearch {
+		Self {
 			visitor,
 			inner: PrioritySearchInner {
 				seen: grid,
@@ -113,18 +120,27 @@ impl <Node, Pri, Visitor, const DIMS: usize> PrioritySearch <Node, Pri, Visitor,
 			},
 		}
 	}
+
 }
 
-impl <Node, Pri, Visitor, Seen> PrioritySearch <Node, Pri, Visitor, Seen>
+impl <Node, Pri, Visitor, SeenImpl> PrioritySearch <Node, Pri, Visitor, SeenImpl>
 	where
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Copy + Debug + Ord,
-		Seen: PrioritySearchSeen <Node, Pri>,
-		Visitor: PrioritySearchVisitor <Node, Pri, Seen> {
+		SeenImpl: Seen <Node, Pri>,
+		Visitor: PrioritySearchVisitor <Node, Pri, SeenImpl> {
 
-	pub fn len (& self) -> usize { self.inner.todo.len () }
-	pub fn is_empty (& self) -> bool { self.len () == 0 }
+	#[ inline ]
+	pub fn len (& self) -> usize {
+		self.inner.todo.len ()
+	}
 
+	#[ inline ]
+	pub fn is_empty (& self) -> bool {
+		self.len () == 0
+	}
+
+	#[ inline ]
 	pub fn push (& mut self, node: Node, priority: Pri) -> & mut Self {
 		self.inner.push (node, priority);
 		self
@@ -132,15 +148,16 @@ impl <Node, Pri, Visitor, Seen> PrioritySearch <Node, Pri, Visitor, Seen>
 
 }
 
-impl <Node, Pri, Visitor, Seen> Iterator for PrioritySearch <Node, Pri, Visitor, Seen>
+impl <Node, Pri, Visitor, SeenImpl> Iterator for PrioritySearch <Node, Pri, Visitor, SeenImpl>
 	where
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Copy + Debug + Ord,
-		Seen: PrioritySearchSeen <Node, Pri>,
-		Visitor: PrioritySearchVisitor <Node, Pri, Seen> {
+		SeenImpl: Seen <Node, Pri>,
+		Visitor: PrioritySearchVisitor <Node, Pri, SeenImpl> {
 
 	type Item = Visitor::Item;
 
+	#[ inline ]
 	fn next (& mut self) -> Option <Self::Item> {
 		if let Some (WithPriority { priority, value: node }) = self.inner.pop () {
 			let adder = PrioritySearchAdder { inner: & mut self.inner };
@@ -182,136 +199,166 @@ struct PrioritySearchInner <Node, Pri, Seen> {
 	todo: BinaryHeap <WithPriority <Node, Pri>>,
 }
 
-impl <Node, Pri, Seen> PrioritySearchInner <Node, Pri, Seen>
+impl <Node, Pri, SeenImpl> PrioritySearchInner <Node, Pri, SeenImpl>
 	where
 		Node: Clone + Eq + Hash,
 		Pri: Clone + Ord,
-		Seen: PrioritySearchSeen <Node, Pri> {
+		SeenImpl: Seen <Node, Pri> {
 	fn push (& mut self, node: Node, priority: Pri) {
-		if self.seen.push (node.clone (), priority.clone ()) {
+		if self.seen.seen_push (node.clone (), priority.clone ()) {
 			self.todo.push (WithPriority { priority, value: node });
 		}
 	}
 	fn pop (& mut self) -> Option <WithPriority <Node, Pri>> {
 		while let Some (WithPriority { value: node, priority }) = self.todo.pop () {
-			if self.seen.visited (& node) { continue }
+			if self.seen.seen_visited (& node) { continue }
 			return Some (WithPriority { value: node, priority });
 		}
 		None
 	}
 }
 
-pub struct PrioritySearchAdder <'a, Node, Pri, Seen> {
-	inner: & 'a mut PrioritySearchInner <Node, Pri, Seen>,
+pub struct PrioritySearchAdder <'inr, Node, Pri, Seen> {
+	inner: & 'inr mut PrioritySearchInner <Node, Pri, Seen>,
 }
 
-impl <'a, Node, Pri, Seen> PrioritySearchAdder <'a, Node, Pri, Seen>
+impl <'inr, Node, Pri, SeenImpl> PrioritySearchAdder <'inr, Node, Pri, SeenImpl>
 	where
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Debug + Ord,
-		Seen: PrioritySearchSeen <Node, Pri> {
+		SeenImpl: Seen <Node, Pri> {
+
+	#[ inline ]
 	pub fn add (& mut self, node: Node, priority: Pri) {
 		self.inner.push (node, priority);
 	}
+
 }
 
 pub trait PrioritySearchVisitor <Node, Pri, Seen> {
+
 	type Item;
+
 	fn visit (
 		& mut self,
 		node: Node,
 		priority: Pri,
 		adder: PrioritySearchAdder <Node, Pri, Seen>,
 	) -> Self::Item;
+
 }
 
-impl <VisitorFn, Node, Pri, Item, Seen> PrioritySearchVisitor <Node, Pri, Seen> for VisitorFn
+impl <VisitorFn, Node, Pri, Item, SeenImpl> PrioritySearchVisitor <Node, Pri, SeenImpl> for VisitorFn
 	where
 		Node: Clone,
 		Pri: Clone + Ord,
-		Seen: PrioritySearchSeen <Node, Pri>,
-		VisitorFn: FnMut (Node, Pri, PrioritySearchAdder <Node, Pri, Seen>) -> Item {
+		SeenImpl: Seen <Node, Pri>,
+		VisitorFn: FnMut (Node, Pri, PrioritySearchAdder <Node, Pri, SeenImpl>) -> Item {
+
 	type Item = Item;
+
+	#[ inline ]
 	fn visit (
 		& mut self,
 		node: Node,
 		priority: Pri,
-		adder: PrioritySearchAdder <Node, Pri, Seen>,
+		adder: PrioritySearchAdder <Node, Pri, SeenImpl>,
 	) -> Self::Item {
 		self (node, priority, adder)
 	}
+
 }
 
-impl <Node, Pri, Seen, NextNodesIntoIter> PrioritySearchVisitor <Node, Pri, Seen>
-	for HashMap <Node, NextNodesIntoIter>
+impl <Node, Pri, SeenImpl, NextNodesIntoIter, Hshr> PrioritySearchVisitor <Node, Pri, SeenImpl>
+	for HashMap <Node, NextNodesIntoIter, Hshr>
 	where
+		Hshr: BuildHasher,
 		Node: Clone + Debug + Eq + Hash,
 		Pri: Clone + Debug + Ord + Add <Output = Pri>,
-		Seen: PrioritySearchSeen <Node, Pri>,
-		for <'a> & 'a NextNodesIntoIter: IntoIterator <Item = & 'a (Node, Pri)> {
+		SeenImpl: Seen <Node, Pri>,
+		for <'dat> & 'dat NextNodesIntoIter: IntoIterator <Item = & 'dat (Node, Pri)> {
+
 	type Item = (Node, Pri);
+
+	#[ inline ]
 	fn visit (
 		& mut self,
 		node: Node,
 		priority: Pri,
-		mut adder: PrioritySearchAdder <Node, Pri, Seen>,
+		mut adder: PrioritySearchAdder <Node, Pri, SeenImpl>,
 	) -> Self::Item {
 		if let Some (next_nodes) = self.get (& node) {
-			for (next_node, next_pri) in next_nodes.into_iter () {
+			for & (ref next_node, ref next_pri) in next_nodes {
 				adder.add (next_node.clone (), priority.clone () + next_pri.clone ());
 			}
 		}
 		(node, priority)
 	}
+
 }
 
-pub trait PrioritySearchSeen <Node, Pri> where Node: Clone, Pri: Clone + Ord {
-	fn get_mut (& mut self, node: Node) -> & mut PrioritySearchSeenState <Pri>;
-	fn push (& mut self, node: Node, priority: Pri) -> bool {
-		let seen_state = self.get_mut (node);
+pub trait Seen <Node, Pri> where Node: Clone, Pri: Clone + Ord {
+
+	fn seen_get_mut (& mut self, node: Node) -> & mut SeenState <Pri>;
+
+	#[ inline ]
+	fn seen_push (& mut self, node: Node, priority: Pri) -> bool {
+		let seen_state = self.seen_get_mut (node);
 		match seen_state.clone () {
-			PrioritySearchSeenState::New => {
-				* seen_state = PrioritySearchSeenState::Unvisited (priority);
+			SeenState::New => {
+				* seen_state = SeenState::Unvisited (priority);
 				true
 			},
-			PrioritySearchSeenState::Unvisited (seen_priority) if priority < seen_priority => {
-				* seen_state = PrioritySearchSeenState::Unvisited (priority);
+			SeenState::Unvisited (seen_priority) if priority < seen_priority => {
+				* seen_state = SeenState::Unvisited (priority);
 				true
 			},
-			_ => false,
+			SeenState::Unvisited (_) | SeenState::Visited => false,
 		}
 	}
-	fn visited (& mut self, node: & Node) -> bool {
-		let seen_state = self.get_mut (node.clone ());
-		match seen_state.clone () {
-			PrioritySearchSeenState::Visited => true,
-			_ => {
-				* seen_state = PrioritySearchSeenState::Visited;
-				false
-			},
+
+	#[ inline ]
+	fn seen_visited (& mut self, node: & Node) -> bool {
+		let seen_state = self.seen_get_mut (node.clone ());
+		if let SeenState::Visited = seen_state.clone () {
+			true
+		} else {
+			* seen_state = SeenState::Visited;
+			false
 		}
 	}
+
 }
 
-impl <Node, Pri> PrioritySearchSeen <Node, Pri> for HashMap <Node, PrioritySearchSeenState <Pri>>
-		where Node: Clone + Eq + Hash, Pri: Clone + Ord {
-	fn get_mut (& mut self, node: Node) -> & mut PrioritySearchSeenState <Pri> {
-		self.entry (node).or_insert (PrioritySearchSeenState::New)
+impl <Node, Pri, Hshr> Seen <Node, Pri>
+for HashMap <Node, SeenState <Pri>, Hshr>
+	where
+		Hshr: BuildHasher,
+		Node: Clone + Eq + Hash,
+		Pri: Clone + Ord {
+
+	#[ inline ]
+	fn seen_get_mut (& mut self, node: Node) -> & mut SeenState <Pri> {
+		self.entry (node).or_insert (SeenState::New)
 	}
+
 }
 
-impl <Node, Pri, const DIMS: usize> PrioritySearchSeen <Node, Pri>
-	for Grid <Vec <PrioritySearchSeenState <Pri>>, Node, DIMS>
+impl <Node, Pri, const DIMS: usize> Seen <Node, Pri>
+	for Grid <Vec <SeenState <Pri>>, Node, DIMS>
 	where
 		Node: GridPos <DIMS> + Clone + Eq + Hash,
 		Pri: Clone + Ord {
-	fn get_mut (& mut self, node: Node) -> & mut PrioritySearchSeenState <Pri> {
-		Grid::get_mut (self, node).unwrap ()
+
+	#[ inline ]
+	fn seen_get_mut (& mut self, node: Node) -> & mut SeenState <Pri> {
+		Self::get_mut (self, node).unwrap ()
 	}
+
 }
 
 #[ derive (Clone) ]
-pub enum PrioritySearchSeenState <Pri: Clone> {
+pub enum SeenState <Pri: Clone> {
 	New,
 	Unvisited (Pri),
 	Visited,

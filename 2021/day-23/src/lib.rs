@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2021/day/23](https://adventofcode.com/2021/day/23)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -29,16 +31,16 @@ mod logic {
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = State::parse (lines) ?;
-		calc_result (input)
+		calc_result (& input)
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
 		let lines_modified = modify_input_for_part_two (lines);
 		let input = State::parse (& lines_modified) ?;
-		calc_result (input)
+		calc_result (& input)
 	}
 
-	pub fn modify_input_for_part_two <'a> (lines: & [& 'a str]) -> Vec <& 'a str> {
+	pub fn modify_input_for_part_two <'lin> (lines: & [& 'lin str]) -> Vec <& 'lin str> {
 		vec! [
 			lines [0],
 			lines [1],
@@ -50,17 +52,17 @@ mod logic {
 		]
 	}
 
-	pub fn calc_result (input: State) -> GenResult <i64> {
+	pub fn calc_result (input: & State) -> GenResult <i64> {
 		Ok (
 			iterator (input)
-				.filter (|(state_compact, _)| state_compact.is_finished ())
+				.filter (|& (ref state_compact, _)| state_compact.is_finished ())
 				.map (|(_, score)| score)
 				.next ()
 				.ok_or ("Failed to find solution") ?
 		)
 	}
 
-	pub fn iterator (input: State) -> impl Iterator <Item = (StateCompact, i64)> {
+	pub fn iterator (input: & State) -> impl Iterator <Item = (StateCompact, i64)> {
 		let mut search = PrioritySearch::with_hash_map (
 			|state: StateCompact, score: i64, mut adder: PrioritySearchAdder <'_, _, _, _>| {
 				for (next_state, next_cost) in calc_next_states (state) {
@@ -86,25 +88,24 @@ mod logic {
 		if next_moves.is_empty () { return ArrayVec::new () }
 
 		let blocking = (state.hall () [3], state.hall () [5], state.hall () [7]);
+		use Amph::{ Amber, Bronze, Copper, Desert };
 		let sections = [
 			! matches! (blocking,
-				(Some (Amph::Copper), _, _) | (Some (Amph::Desert), _, _) |
-				(_, Some (Amph::Bronze), _) | (_, Some (Amph::Copper), _) |
-				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
-			),
+				(Some (Copper | Desert), _, _) |
+				(_, Some (Bronze | Copper | Desert), _) |
+				(_, _, Some (Desert))),
 			! matches! (blocking,
-				(Some (Amph::Amber), _, _) | (_, Some (Amph::Copper), _) |
-				(_, Some (Amph::Desert), _) | (_, _, Some (Amph::Desert))
-			),
+				(Some (Amber), _, _) |
+				(_, Some (Copper | Desert), _) |
+				(_, _, Some (Desert))),
 			! matches! (blocking,
-				(Some (Amph::Amber), _, _) | (_, Some (Amph::Amber), _) |
-				(_, Some (Amph::Bronze), _) | (_, _, Some (Amph::Desert))
-			),
+				(Some (Amber), _, _) |
+				(_, Some (Amber | Bronze), _) |
+				(_, _, Some (Desert))),
 			! matches! (blocking,
-				(Some (Amph::Amber), _, _) | (_, Some (Amph::Amber), _) |
-				(_, Some (Amph::Bronze), _) | (_, _, Some (Amph::Amber)) |
-				(_, _, Some (Amph::Bronze)) | (_, _, Some (Amph::Copper))
-			),
+				(Some (Amber), _, _) |
+				(_, Some (Amber | Bronze), _) |
+				(_, _, Some (Amber | Bronze | Copper))),
 		];
 
 		let mut next_states = ArrayVec::new ();
@@ -123,7 +124,7 @@ mod logic {
 					let next_state = state.move_in (from_hall, to_room);
 					return iter::once ((next_state.compact (), cost)).collect ();
 				},
-				_ => (),
+				Move::Out (..) => (),
 			}
 		}
 		for next_move in next_moves.iter ().copied () {
@@ -181,25 +182,22 @@ mod logic {
 					result.clear ();
 					result.push (Move::Between (amph, from_room, to_room));
 					return result;
-				} else {
-					for hall in
-						iter::successors (
-								Some (room_entrance (from_room)),
-								|prev_hall| if prev_hall.idx () > 0 {
-									Some (Place::for_idx (prev_hall.idx () - 1))
-								} else { None })
-							.take_while (|& hall| state.get (hall).is_none ())
-							.chain (
-								iter::successors (
-										Some (room_entrance (from_room)),
-										|prev_hall| if prev_hall.idx () + 1 < 11 {
-											Some (Place::for_idx (prev_hall.idx () + 1))
-										} else { None })
-									.take_while (|& hall| state.get (hall).is_none ()))
-							.filter (|hall| ! hall.entrance ()) {
-						if ! path_clear (room_entrance (from_room), hall) { continue }
-						result.push (Move::Out (amph, from_room, hall));
-					}
+				}
+				for hall in
+					iter::successors (
+							Some (room_entrance (from_room)),
+							|prev_hall| (prev_hall.idx () > 0).then (||
+								Place::for_idx (prev_hall.idx () - 1)))
+						.take_while (|& hall| state.get (hall).is_none ())
+						.chain (
+							iter::successors (
+									Some (room_entrance (from_room)),
+									|prev_hall| (prev_hall.idx () + 1 < 11).then_some (
+										Place::for_idx (prev_hall.idx () + 1)))
+								.take_while (|& hall| state.get (hall).is_none ()))
+						.filter (|hall| ! hall.entrance ()) {
+					if ! path_clear (room_entrance (from_room), hall) { continue }
+					result.push (Move::Out (amph, from_room, hall));
 				}
 			}
 		}
@@ -212,6 +210,7 @@ mod model {
 
 	use aoc_common::*;
 	use nums::IntConv;
+	use parser::*;
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
 	pub struct State {
@@ -225,8 +224,8 @@ mod model {
 
 	impl State {
 
-		pub fn from_array (room_size: usize, places: [Option <Amph>; 27]) -> State {
-			let mut state = State {
+		pub fn from_array (room_size: usize, places: [Option <Amph>; 27]) -> Self {
+			let mut state = Self {
 				room_size,
 				hall: ArrayVec::new (),
 				amber: ArrayVec::new (),
@@ -245,6 +244,7 @@ mod model {
 
 		pub fn as_array (& self) -> [Option <Amph>; 27] {
 			let mut result = [None; 27];
+			#[ allow (clippy::needless_range_loop) ]
 			for idx in 0 .. 11 { result [idx] = self.hall [idx]; }
 			for (idx, amph) in self.amber.iter ().copied ().enumerate () {
 				result [11 + self.room_size - idx - 1] = Some (amph);
@@ -261,7 +261,7 @@ mod model {
 			result
 		}
 
-		pub fn room_size (& self) -> usize { self.room_size }
+		pub const fn room_size (& self) -> usize { self.room_size }
 
 		pub fn get (& self, place: Place) -> Option <Amph> {
 			match place {
@@ -309,7 +309,7 @@ mod model {
 			self.room (room).iter ().copied ().all (|amph| amph == room)
 		}
 
-		pub fn move_out (& self, room: Amph, hall: Place) -> State {
+		pub fn move_out (& self, room: Amph, hall: Place) -> Self {
 			let mut state = self.clone ();
 			let amph = state.room_mut (room).pop ().unwrap ();
 			assert! (state.get (hall).is_none ());
@@ -317,14 +317,14 @@ mod model {
 			state
 		}
 
-		pub fn move_in (& self, hall: Place, room: Amph) -> State {
+		pub fn move_in (& self, hall: Place, room: Amph) -> Self {
 			let mut state = self.clone ();
 			let amph = state.hall [hall.idx ()].take ().unwrap ();
 			state.room_mut (room).push (amph);
 			state
 		}
 
-		pub fn move_between (& self, from: Amph, to: Amph) -> State {
+		pub fn move_between (& self, from: Amph, to: Amph) -> Self {
 			let mut state = self.clone ();
 			let amph = state.room_mut (from).pop ().unwrap ();
 			let to = match to {
@@ -337,9 +337,9 @@ mod model {
 		}
 
 		pub fn pretty_line (& self, line: usize) -> String {
-			let print_amph = |amph: Option <Amph>| amph.map (Amph::letter).unwrap_or (' ');
+			let print_amph = |amph: Option <Amph>| amph.map_or (' ', Amph::letter);
 			if line == 0 {
-				format! ("┌───────────┐")
+				"┌───────────┐".to_owned ()
 			} else if line == 1 {
 				format! ("│{}│",
 					self.hall.iter ().copied ().map (print_amph).collect::<String> ())
@@ -357,13 +357,13 @@ mod model {
 					print_amph (self.get (Place::Room (Amph::Copper, depth))),
 					print_amph (self.get (Place::Room (Amph::Desert, depth))))
 			} else if line == self.room_size.as_usize () + 2 {
-				format! ("  └─┴─┴─┴─┘")
+				"  └─┴─┴─┴─┘".to_owned ()
 			} else {
 				panic! ();
 			}
 		}
 
-		#[ allow (dead_code) ]
+		#[ allow (clippy::print_stdout) ]
 		pub fn print (& self) {
 			for line in 0 .. self.room_size.as_usize () + 3 {
 				println! ("{}", self.pretty_line (line));
@@ -371,7 +371,7 @@ mod model {
 		}
 
 		#[ allow (dead_code) ]
-		pub fn from_str (input: & str) -> Option <State> {
+		pub fn from_str (input: & str) -> Option <Self> {
 			let num_chars = input.chars ().count ();
 			if ! [23, 27, 31].contains (& num_chars) { return None }
 			let room_size = (num_chars - 11) / 5;
@@ -389,39 +389,57 @@ mod model {
 				};
 				place_idx += 1;
 			}
-			Some (State::from_array (room_size, places))
+			Some (Self::from_array (room_size, places))
 		}
 
-		pub fn parse (lines: & [& str]) -> GenResult <State> {
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			let err = |line_idx| format! ("Invalid input: {}: {}", line_idx, lines [line_idx]);
 			if lines.len () < 5 || lines.len () > 7 { Err (err (5)) ?; }
 			if lines [0] != "#############" { Err (err (0)) ?; }
 			if lines [1] != "#...........#" { Err (err (1)) ?; }
-			for line_idx in 2 .. lines.len () - 1 {
-				if line_idx == 2 && lines [line_idx].len () != 13 { Err (err (line_idx)) ?; }
-				if line_idx != 2 && lines [line_idx].len () != 11 { Err (err (line_idx)) ?; }
-				if line_idx == 2 && & lines [line_idx] [0 .. 3] != "###" { Err (err (line_idx)) ?; }
-				if line_idx != 2 && & lines [line_idx] [0 .. 3] != "  #" { Err (err (line_idx)) ?; }
-				if & lines [line_idx] [4 .. 5] != "#" { Err (err (line_idx)) ?; }
-				if & lines [line_idx] [6 .. 7] != "#" { Err (err (line_idx)) ?; }
-				if & lines [line_idx] [8 .. 9] != "#" { Err (err (line_idx)) ?; }
-				if line_idx == 2 && & lines [line_idx] [10 .. 13] != "###" { Err (err (line_idx)) ?; }
-				if line_idx != 2 && & lines [line_idx] [10 .. 11] != "#" { Err (err (line_idx)) ?; }
-			}
-			let line_idx = lines.len () - 1;
-			if lines [line_idx] != "  #########" { Err (err (line_idx)) ?; }
-			let room_size = lines.len () - 3;
-			let parse_amph = |line: usize, col| Amph::from_letter (
-				lines [line].chars ().nth (col).unwrap (),
-			).ok_or_else (|| err (line));
 			let mut places = [None; 27];
-			for idx in 0 .. 11 { places [idx] = parse_amph (1, 1 + idx) ?; }
-			for room in 0 .. 4 {
-				for depth in 0 .. room_size {
-					places [11 + room * 4 + depth] = parse_amph (2 + depth, 3 + room * 2) ?;
-				}
+			for line_idx in 0 .. lines.len () - 1 {
+				Parser::wrap (lines [line_idx], |parser| {
+					fn parse_amph (parser: & mut Parser) -> ParseResult <Option <Amph>> {
+						Amph::from_letter (parser.expect_next () ?)
+							.ok_or_else (|| parser.err ())
+					}
+					if line_idx == 0 {
+						parser.expect ("#############") ?.end () ?;
+					} else if line_idx == 1 {
+						parser.expect ("#") ?;
+						#[ allow (clippy::needless_range_loop) ]
+						for idx in 0 .. 11 {
+							places [idx] = parse_amph (parser) ?;
+						}
+						parser.expect ("#") ?.end () ?;
+					} else if line_idx < lines.len () - 1 {
+						if line_idx == 2 {
+							parser.expect ("###") ?;
+						} else {
+							parser.expect ("  #") ?;
+						}
+						places [11 + (line_idx - 2)] = parse_amph (parser) ?;
+						parser.expect ("#") ?;
+						places [15 + (line_idx - 2)] = parse_amph (parser) ?;
+						parser.expect ("#") ?;
+						places [19 + (line_idx - 2)] = parse_amph (parser) ?;
+						parser.expect ("#") ?;
+						places [23 + (line_idx - 2)] = parse_amph (parser) ?;
+						if line_idx == 2 {
+							parser.expect ("###") ?;
+						} else {
+							parser.expect ("#") ?;
+						}
+						parser.end () ?;
+					} else {
+						parser.expect ("  ##########") ?.end () ?;
+					}
+					Ok (())
+				}) ?;
 			}
-			Ok (State::from_array (room_size, places))
+			let room_size = lines.len () - 3;
+			Ok (Self::from_array (room_size, places))
 		}
 
 		pub fn compact (& self) -> StateCompact {
@@ -449,13 +467,13 @@ mod model {
 	impl fmt::Display for State {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			for amph in self.hall.iter ().copied () {
-				write! (formatter, "{}", amph.map (Amph::letter).unwrap_or ('.')) ?;
+				write! (formatter, "{}", amph.map_or ('.', Amph::letter)) ?;
 			}
 			for room in [& self.amber, & self.bronze, & self.copper, & self.desert] {
 				write! (formatter, "/") ?;
 				for amph in iter::repeat (None).take (self.room_size - room.len ())
 						.chain (room.iter ().copied ().rev ().map (Some)) {
-					write! (formatter, "{}", amph.map (Amph::letter).unwrap_or ('.')) ?;
+					write! (formatter, "{}", amph.map_or ('.', Amph::letter)) ?;
 				}
 			}
 			Ok (())
@@ -469,8 +487,8 @@ mod model {
 
 	impl StateCompact {
 		pub fn expand (self) -> State {
-			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32_i32;
-			let mut amph_bits = self.data & 0x00000000ffffffff;
+			let mut present_bits = (self.data & 0x_07ff_ffff_0000_0000) >> 32_i32;
+			let mut amph_bits = self.data & 0x_0000_0000_ffff_ffff;
 			let mut places = [None; 27];
 			for place_idx in (0 .. 27).rev () {
 				if present_bits & 1 != 0 {
@@ -489,9 +507,9 @@ mod model {
 			State::from_array (room_size, places)
 		}
 		pub fn is_finished (self) -> bool {
-			let mut present_bits = (self.data & 0x07ffffff00000000) >> 32_i32;
-			if present_bits & 0x07ff0000 != 0 { return false }
-			let mut amph_bits = self.data & 0x00000000ffffffff;
+			let mut present_bits = (self.data & 0x_07ff_ffff_0000_0000) >> 32_i32;
+			if present_bits & 0x_07ff_0000 != 0 { return false }
+			let mut amph_bits = self.data & 0x_0000_0000_ffff_ffff;
 			for idx in (0 .. 4).rev () {
 				for _ in 0_i32 .. 4_i32 {
 					if present_bits & 1 != 0 {
@@ -514,21 +532,21 @@ mod model {
 	impl Place {
 		pub fn idx (self) -> usize {
 			match self {
-				Place::Hall (id) => id.as_usize (),
-				Place::Room (Amph::Amber, depth) => 11 + depth.as_usize (),
-				Place::Room (Amph::Bronze, depth) => 15 + depth.as_usize (),
-				Place::Room (Amph::Copper, depth) => 19 + depth.as_usize (),
-				Place::Room (Amph::Desert, depth) => 23 + depth.as_usize (),
+				Self::Hall (id) => id.as_usize (),
+				Self::Room (Amph::Amber, depth) => 11 + depth.as_usize (),
+				Self::Room (Amph::Bronze, depth) => 15 + depth.as_usize (),
+				Self::Room (Amph::Copper, depth) => 19 + depth.as_usize (),
+				Self::Room (Amph::Desert, depth) => 23 + depth.as_usize (),
 			}
 		}
-		pub fn for_idx (idx: usize) -> Place {
+		pub fn for_idx (idx: usize) -> Self {
 			match idx {
-				0 ..= 10 => Place::Hall (idx.as_u8 ()),
-				11 ..= 14 => Place::Room (Amph::Amber, idx.as_u8 () - 11),
-				15 ..= 18 => Place::Room (Amph::Bronze, idx.as_u8 () - 15),
-				19 ..= 22 => Place::Room (Amph::Copper, idx.as_u8 () - 19),
-				23 ..= 26 => Place::Room (Amph::Desert, idx.as_u8 () - 23),
-				_ => panic! (),
+				0 ..= 10 => Self::Hall (idx.as_u8 ()),
+				11 ..= 14 => Self::Room (Amph::Amber, idx.as_u8 () - 11),
+				15 ..= 18 => Self::Room (Amph::Bronze, idx.as_u8 () - 15),
+				19 ..= 22 => Self::Room (Amph::Copper, idx.as_u8 () - 19),
+				23 ..= 26 => Self::Room (Amph::Desert, idx.as_u8 () - 23),
+				_ => panic! ("Invalid index: {}", idx),
 			}
 		}
 		pub fn entrance (self) -> bool { [2, 4, 6, 8].contains (& self.idx ()) }
@@ -538,29 +556,30 @@ mod model {
 	pub enum Amph { Amber, Bronze, Copper, Desert }
 
 	impl Amph {
-		pub fn idx (self) -> usize {
+		pub const fn idx (self) -> usize {
 			match self {
-				Amph::Amber => 0,
-				Amph::Bronze => 1,
-				Amph::Copper => 2,
-				Amph::Desert => 3,
+				Self::Amber => 0,
+				Self::Bronze => 1,
+				Self::Copper => 2,
+				Self::Desert => 3,
 			}
 		}
-		pub fn from_letter (letter: char) -> Option <Option <Amph>> {
+		#[ allow (clippy::option_option) ]
+		pub const fn from_letter (letter: char) -> Option <Option <Self>> {
 			match letter {
-				'A' => Some (Some (Amph::Amber)),
-				'B' => Some (Some (Amph::Bronze)),
-				'C' => Some (Some (Amph::Copper)),
-				'D' => Some (Some (Amph::Desert)),
+				'A' => Some (Some (Self::Amber)),
+				'B' => Some (Some (Self::Bronze)),
+				'C' => Some (Some (Self::Copper)),
+				'D' => Some (Some (Self::Desert)),
 				'.' => Some (None), _ => None,
 			}
 		}
-		pub fn cost (self) -> i64 { Amph::COSTS [self.idx ()] }
-		pub fn letter (self) -> char { Amph::LETTERS [self.idx ()] }
+		pub const fn cost (self) -> i64 { Self::COSTS [self.idx ()] }
+		pub const fn letter (self) -> char { Self::LETTERS [self.idx ()] }
 		const COSTS: & 'static [i64; 4] = & [1, 10, 100, 1000];
 		const LETTERS: & 'static [char; 4] = & ['A', 'B', 'C', 'D'];
-		pub const ALL: & 'static [Amph] = & [
-			Amph::Amber, Amph::Bronze, Amph::Copper, Amph::Desert
+		pub const ALL: & 'static [Self] = & [
+			Self::Amber, Self::Bronze, Self::Copper, Self::Desert
 		];
 	}
 
@@ -583,11 +602,13 @@ pub mod tools {
 
 	use super::*;
 	use model::State;
+	use model::StateCompact;
 	use nums::IntConv;
 	use search::PrioritySearch;
 	use search::PrioritySearchAdder;
 
 	#[ derive (Debug, clap::Parser) ]
+	#[ allow (clippy::struct_excessive_bools) ]
 	pub struct RunArgs {
 
 		#[ clap (long, default_value ("inputs/day-23")) ]
@@ -607,6 +628,7 @@ pub mod tools {
 
 	}
 
+	#[ allow (clippy::needless_pass_by_value) ]
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let mut args = args;
 		if ! (args.part_1 || args.part_2) { args.part_1 = true; args.part_2 = true; }
@@ -622,6 +644,7 @@ pub mod tools {
 		Ok (())
 	}
 
+	#[ allow (clippy::print_stdout) ]
 	pub fn run_part (args: & RunArgs, lines: & [& str]) -> GenResult <()> {
 		let input = State::parse (lines) ?;
 		let mut num_loops = 0_i32;
@@ -666,7 +689,7 @@ pub mod tools {
 						iter::successors (
 								Some (state_compact),
 								|state| prev_states.get (state).copied ())
-							.map (|state_compact| state_compact.expand ())
+							.map (StateCompact::expand)
 							.collect::<Vec <_>> ();
 					println! ("  ▒▒▒▒  Dead end:");
 					for chunk in all_states.chunks (11) {
@@ -689,13 +712,13 @@ pub mod tools {
 			last_cost = cost;
 		};
 		let (final_state_compact, final_cost) =
-			final_cost.ok_or_else (|| format! ("Failed to find a solution")) ?;
+			final_cost.ok_or ("Failed to find a solution") ?;
 		let final_state = final_state_compact.expand ();
 		let mut all_states =
 			iter::successors (
 					Some (final_state_compact),
 					|state| prev_states.get (state).copied ())
-				.map (|state_compact| state_compact.expand ())
+				.map (StateCompact::expand)
 				.collect::<Vec <_>> ();
 		all_states.reverse ();
 		if args.verbose {
@@ -722,6 +745,7 @@ pub mod tools {
 		Ok (())
 	}
 
+	#[ allow (clippy::print_stdout) ]
 	pub fn print_next_states (cur_state: & State, next_states: & [(State, i64)]) {
 		if next_states.is_empty () {
 			println! ("{:^13}", "START");
@@ -736,13 +760,13 @@ pub mod tools {
 		}
 		for (chunk_idx, chunk) in next_states.chunks (10).enumerate () {
 			print! ("{:^13}  ", if chunk_idx == 0 { "START" } else { "" });
-			for (_, cost) in chunk.iter () {
+			for & (_, ref cost) in chunk.iter () {
 				print! (" {:^13}", cost);
 			}
 			print! ("\n");
 			for line in 0 .. (cur_state.room_size ().as_usize () + 3) {
 				print! ("{:13}  ", if chunk_idx == 0 { cur_state.pretty_line (line) } else { String::new () });
-				for (next_state, _) in chunk.iter () {
+				for & (ref next_state, _) in chunk.iter () {
 					print! (" {:13}", next_state.pretty_line (line));
 				}
 				print! ("\n");
@@ -751,8 +775,10 @@ pub mod tools {
 	}
 
 	#[ derive (Debug, clap::Parser) ]
-	pub struct InternalsArgs {}
+	pub struct InternalsArgs;
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
 	pub fn internals (_args: InternalsArgs) -> GenResult <()> {
 		println! ("Data structures:");
 		fn show_struct <Type> () {

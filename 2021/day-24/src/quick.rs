@@ -135,15 +135,22 @@ pub struct Step {
 }
 
 impl Step {
-	pub fn new (random: bool, check: i64, increment: i64) -> Step {
-		Step { random, check, increment }
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn new (random: bool, check: i64, increment: i64) -> Self {
+		Self { random, check, increment }
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn solve (self, progress: i64) -> Option <u8> {
 		let next = progress % 26 + self.check;
-		if (1 ..= 9).contains (& next) {
-			Some (next.as_u8 ())
-		} else { None }
+		(1 ..= 9).contains (& next).then (|| next.as_u8 ())
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn incr (self, progress: i64, next: u8) -> i64 {
 		if self.random {
 			progress * 26 + next.as_i64 () + self.increment
@@ -151,14 +158,15 @@ impl Step {
 			progress / 26
 		}
 	}
+
 }
 
 pub fn steps_for (prog: & [Instr]) -> GenResult <[Step; 14]> {
-	if prog.len () != 14 * 18 { Err (format! ("Programme is not the right length")) ? }
+	if prog.len () != 14 * 18 { Err ("Programme is not the right length") ? }
 	Ok (prog.chunks (18).enumerate ().map (|(chunk_idx, chunk)| {
 		let err = |line_idx|
 			format! ("Unable to generate quick steps for programme at line {}",
-				chunk_idx * 18 + line_idx + 1);
+				chunk_idx * 18 + line_idx + 1).into ();
 		let expect = |line_idx, val| -> GenResult <()> {
 			if chunk [line_idx] == val { Ok (()) } else { Err (err (line_idx)) ? }
 		};
@@ -166,15 +174,12 @@ pub fn steps_for (prog: & [Instr]) -> GenResult <[Step; 14]> {
 		expect (1, Instr::Mul (Reg::X, RegOrInt::Int (0))) ?;
 		expect (2, Instr::Add (Reg::X, RegOrInt::Z)) ?;
 		expect (3, Instr::Mod (Reg::X, RegOrInt::Int (26))) ?;
-		let random = match chunk [4] {
-			Instr::Div (Reg::Z, RegOrInt::Int (26)) => false,
-			Instr::Div (Reg::Z, RegOrInt::Int (1)) => true,
-			_ => Err (err (4)) ?,
-		};
-		let check = match chunk [5] {
-			Instr::Add (Reg::X, RegOrInt::Int (check)) => check,
-			_ => Err (err (5)) ?,
-		};
+		let random = if let Instr::Div (Reg::Z, RegOrInt::Int (val)) = chunk [4] {
+			if val == 26 { false } else if val == 1 { true } else { return Err (err (4)); }
+		} else { Err (err (4)) ? };
+		let check = if let Instr::Add (Reg::X, RegOrInt::Int (check)) = chunk [5] {
+			check
+		} else { Err (err (5)) ? };
 		expect (6, Instr::Eql (Reg::X, RegOrInt::W)) ?;
 		expect (7, Instr::Eql (Reg::X, RegOrInt::Int (0))) ?;
 		expect (8, Instr::Mul (Reg::Y, RegOrInt::Int (0))) ?;
@@ -184,10 +189,9 @@ pub fn steps_for (prog: & [Instr]) -> GenResult <[Step; 14]> {
 		expect (12, Instr::Mul (Reg::Z, RegOrInt::Y)) ?;
 		expect (13, Instr::Mul (Reg::Y, RegOrInt::Int (0))) ?;
 		expect (14, Instr::Add (Reg::Y, RegOrInt::W)) ?;
-		let increment = match chunk [15] {
-			Instr::Add (Reg::Y, RegOrInt::Int (increment)) => increment,
-			_ => Err (err (15)) ?,
-		};
+		let increment = if let Instr::Add (Reg::Y, RegOrInt::Int (increment)) = chunk [15] {
+			increment
+		} else { Err (err (15)) ? };
 		expect (16, Instr::Mul (Reg::Y, RegOrInt::X)) ?;
 		expect (17, Instr::Add (Reg::Z, RegOrInt::Y)) ?;
 		Ok (Step { random, check, increment })
@@ -197,40 +201,54 @@ pub fn steps_for (prog: & [Instr]) -> GenResult <[Step; 14]> {
 pub fn iterator (steps: & [Step; 14], reverse: bool) -> impl Iterator <Item = Input> + '_ {
 	NextNumIter::new (steps, reverse).nest ().nest ().nest ().nest ().nest ().nest ().nest ().nest ()
 		.nest ().nest ().nest ().nest ().nest ().filter_map (|(nums, progress)| {
-			if progress == 0 {
+			(progress == 0).then_some ({
 				let mut answer = [0; 14];
 				for idx in 0 .. 14 { answer [idx] = nums [idx] }
-				Some (answer)
-			} else { None }
+				answer
+			})
 		})
 }
 
 type TempAnswer = (ArrayVec <u8, 14>, i64);
 
-pub enum NextNumIter <'a, Nested> {
-	Outer { steps: & 'a [Step; 14], nested: Nested, reverse: bool },
-	Inner { steps: & 'a [Step; 14], nested: Nested, reverse: bool, nums: ArrayVec <u8, 14>, progress: i64, next_iter: ops::RangeInclusive <u8> },
+pub enum NextNumIter <'stp, Nested> {
+	Outer {
+		steps: & 'stp [Step; 14],
+		nested: Nested,
+		reverse: bool,
+	},
+	Inner {
+		steps: & 'stp [Step; 14],
+		nested: Nested,
+		reverse: bool,
+		nums: ArrayVec <u8, 14>,
+		progress: i64,
+		next_iter: ops::RangeInclusive <u8>,
+	},
 	Poison,
 }
 
-impl <'a> NextNumIter <'a, std::option::IntoIter <TempAnswer>> {
-	fn new (steps: & 'a [Step; 14], reverse: bool) -> NextNumIter <'a, std::option::IntoIter <TempAnswer>> {
+impl <'stp> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
+	fn new (
+		steps: & 'stp [Step; 14],
+		reverse: bool,
+	) -> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
 		let a: TempAnswer = (ArrayVec::new (), 0);
 		NextNumIter::Outer { steps, nested: Some (a).into_iter (), reverse }
 	}
 }
 
-impl <'a, Nested: Iterator <Item = TempAnswer>> NextNumIter <'a, Nested> {
-	fn nest (self) -> NextNumIter <'a, Self> {
+impl <'stp, Nested: Iterator <Item = TempAnswer>> NextNumIter <'stp, Nested> {
+	fn nest (self) -> NextNumIter <'stp, Self> {
 		match & self {
 			& NextNumIter::Outer { steps, reverse, .. } =>
 				NextNumIter::Outer { steps, nested: self, reverse },
-			_ => panic! (),
+			& NextNumIter::Inner { .. } | & NextNumIter::Poison => panic! (),
 		}
 	}
 }
 
-impl <'a, Nested: Iterator <Item = TempAnswer>> Iterator for NextNumIter <'a, Nested> {
+impl <'stp, Nested: Iterator <Item = TempAnswer>> Iterator for NextNumIter <'stp, Nested> {
 	type Item = TempAnswer;
 	#[ allow (clippy::reversed_empty_ranges) ]
 	fn next (& mut self) -> Option <TempAnswer> {
@@ -252,20 +270,17 @@ impl <'a, Nested: Iterator <Item = TempAnswer>> Iterator for NextNumIter <'a, Ne
 					return None;
 				},
 			},
-			NextNumIter::Inner { steps, nested, reverse, nums, progress, mut next_iter } =>
-					match if reverse { next_iter.next_back () } else { next_iter.next () } {
-				Some (next) => {
+			NextNumIter::Inner { steps, nested, reverse, nums, progress, mut next_iter } => {
+				if let Some (next) = if reverse { next_iter.next_back () } else { next_iter.next () } {
 					let step = steps [nums.len ()];
 					let mut new_nums = nums.clone ();
 					new_nums.push (next);
 					let new_progress = step.incr (progress, next);
 					* self = NextNumIter::Inner { steps, nested, reverse, nums, progress, next_iter };
 					return Some ((new_nums, new_progress));
-				},
-				None => {
-					* self = NextNumIter::Outer { steps, nested, reverse };
-					continue;
-				},
+				}
+				* self = NextNumIter::Outer { steps, nested, reverse };
+				continue;
 			},
 			NextNumIter::Poison => panic! (),
 		} }

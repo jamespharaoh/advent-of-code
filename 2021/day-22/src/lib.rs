@@ -11,6 +11,8 @@
 //! the value for each section individually. This drastically cuts down on the number of
 //! intersections we need to make.
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -40,6 +42,7 @@ pub mod logic {
 		Ok (calc_result_with_splits (& input, 10))
 	}
 
+	#[ must_use ]
 	pub fn calc_result_with_splits (steps: & [Step], num_splits: i32) -> i64 {
 		let bound = steps.iter ().copied ().fold (Cube::ZERO, |bound, step| Cube {
 			x0: cmp::min (bound.x0, step.cube.x0),
@@ -78,6 +81,7 @@ pub mod logic {
 		total
 	}
 
+	#[ must_use ]
 	pub fn calc_result (steps: & [Step]) -> i64 {
 		let mut core: Vec <(Cube, bool)> = Vec::new ();
 		let mut buffer: Vec <(Cube, bool)> = Vec::new ();
@@ -149,29 +153,35 @@ pub mod model {
 	}
 
 	impl Cube {
-		pub fn overlaps (self, other: Cube) -> bool {
+
+		#[ must_use ]
+		pub const fn overlaps (self, other: Self) -> bool {
 			self.x0 < other.x1 && other.x0 < self.x1
 				&& self.y0 < other.y1 && other.y0 < self.y1
 				&& self.z0 < other.z1 && other.z0 < self.z1
 		}
-		pub fn intersect (self, other: Cube) -> Option <Cube> {
-			if self.overlaps (other) {
-				Some (Cube {
-					x0: cmp::max (self.x0, other.x0),
-					x1: cmp::min (self.x1, other.x1),
-					y0: cmp::max (self.y0, other.y0),
-					y1: cmp::min (self.y1, other.y1),
-					z0: cmp::max (self.z0, other.z0),
-					z1: cmp::min (self.z1, other.z1),
-				})
-			} else { None }
+
+		#[ must_use ]
+		pub fn intersect (self, other: Self) -> Option <Self> {
+			self.overlaps (other).then_some (Self {
+				x0: cmp::max (self.x0, other.x0),
+				x1: cmp::min (self.x1, other.x1),
+				y0: cmp::max (self.y0, other.y0),
+				y1: cmp::min (self.y1, other.y1),
+				z0: cmp::max (self.z0, other.z0),
+				z1: cmp::min (self.z1, other.z1),
+			} )
 		}
+
+		#[ must_use ]
 		pub fn volume (self) -> i64 {
 			(self.x1.as_i64 () - self.x0.as_i64 ())
 				* (self.y1.as_i64 () - self.y0.as_i64 ())
 				* (self.z1.as_i64 () - self.z0.as_i64 ())
 		}
-		pub const ZERO: Cube = Cube { x0: 0, x1: 0, y0: 0, y1: 0, z0: 0, z1: 0 };
+
+		pub const ZERO: Self = Self { x0: 0, x1: 0, y0: 0, y1: 0, z0: 0, z1: 0 };
+
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]

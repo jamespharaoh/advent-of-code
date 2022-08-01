@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/6](https://adventofcode.com/2015/day/6)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 6;
 	parse = |input| model::parse_input (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -25,15 +27,15 @@ pub mod logic {
 
 	pub type ModeFn = fn (Action, u8) -> u8;
 
-	pub fn part_one (input: Input) -> GenResult <u32> {
-		calc_result (& input, mode_fn_one)
+	pub fn part_one (input: & Input) -> GenResult <u32> {
+		calc_result (input, mode_fn_one)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <u32> {
-		calc_result (& input, mode_fn_two)
+	pub fn part_two (input: & Input) -> GenResult <u32> {
+		calc_result (input, mode_fn_two)
 	}
 
-	fn mode_fn_one (action: Action, old_active: u8) -> u8 {
+	const fn mode_fn_one (action: Action, old_active: u8) -> u8 {
 		match action {
 			Action::On => 1,
 			Action::Off => 0,
@@ -53,7 +55,7 @@ pub mod logic {
 		let steps =
 			steps.iter ().copied ()
 				.enumerate ()
-				.sorted_by_key (|(_, step)| step.origin)
+				.sorted_by_key (|& (_, step)| step.origin)
 				.collect::<Vec <_>> ();
 		let rows =
 			steps.iter ().copied ()
@@ -75,15 +77,15 @@ pub mod logic {
 					prev_active.as_u32 (),
 				).unwrap (),
 			).unwrap ();
-			cur_steps.retain (|(_, step)| row < step.peak.row);
-			while let Some ((_, step)) = steps_iter.peek () {
+			cur_steps.retain (|& (_, step)| row < step.peak.row);
+			while let Some (& (_, step)) = steps_iter.peek () {
 				if step.origin.row != row { break }
 				cur_steps.push (steps_iter.next ().unwrap ());
 			}
 			cur_steps.sort_by_key (|& (idx, _)| idx);
 			row_data.clear ();
 			{
-				let mut steps = & cur_steps [ .. ];
+				let mut steps = & * cur_steps;
 				trait RowIter: Iterator <Item = (Coord, u8)> {}
 				impl <SomeIter: Iterator <Item = (Coord, u8)>> RowIter for SomeIter {}
 				#[ inline ]
@@ -142,7 +144,7 @@ pub mod logic {
 							val.as_u32 (),
 						))
 					.fold (Ok (0), |sum, val| Int::add_2 (sum ?, val ?)) ?;
-			assert! (row_data.last ().copied ().map (|(_, val)| val).unwrap_or (0) == 0);
+			assert! (row_data.last ().copied ().map_or (0, |(_, val)| val) == 0);
 		}
 		Ok (sum)
 	}
@@ -162,7 +164,7 @@ pub mod logic {
 			where Inner: Iterator <Item = (Coord, u8)> {
 		#[ inline ]
 		fn new (inner: Inner, action: Action, start: Coord, end: Coord, mode_fn: ModeFn) -> Self {
-			UpdateLineIter {
+			Self {
 				inner,
 				next: None,
 				action,
@@ -257,14 +259,14 @@ pub mod model {
 
 	impl Step {
 
-		pub fn parse (input: & str) -> GenResult <Step> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
 				.map_parse_err (|col_idx|
-					format! ("Invalid input: col {}: {}", col_idx + 1, & input [col_idx .. ])
+					format! ("Invalid input: col {}: {}", col_idx + 1, input)
 				)
 		}
 
-		fn parse_real (parser: & mut Parser) -> ParseResult <Step> {
+		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
 			parser.set_ignore_whitespace (true);
 			let action = match parser.word () ? {
 				"turn" => match parser.word () ? {
@@ -283,7 +285,7 @@ pub mod model {
 				row: parser.expect ("through") ?.int::<Coord> () ? + 1,
 				col: parser.expect (",") ?.int::<Coord> () ? + 1,
 			};
-			Ok (Step { action, origin, peak })
+			Ok (Self { action, origin, peak })
 		}
 
 	}
@@ -292,12 +294,13 @@ pub mod model {
 	pub enum Action { On, Off, Toggle }
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
-		input.iter ().enumerate ().map (|(line_idx, line)|
-			Parser::wrap (line, Step::parse_real)
-				.map_parse_err (|char_idx| format! ("Invalid input: line {}: col {}: {}",
-					line_idx + 1, char_idx + 1,
-					& line [line.chars ().take (char_idx).map (char::len_utf8).sum () .. ]))
-		).collect::<GenResult <_>> ()
+		input.iter ().enumerate ()
+		    .map (|(line_idx, line)|
+    			Parser::wrap (line, Step::parse_real)
+	    			.map_parse_err (|char_idx|
+		    		    format! ("Invalid input: line {}: col {}: {}",
+			    		    line_idx + 1, char_idx + 1, line)))
+		    .collect::<GenResult <_>> ()
 	}
 
 	#[ cfg (test) ]
@@ -334,18 +337,18 @@ pub mod model {
 			assert_eq_ok! (STEPS [0], Step::parse (STEP_TEXTS [0]));
 			assert_eq_ok! (STEPS [1], Step::parse (STEP_TEXTS [1]));
 			assert_eq_ok! (STEPS [2], Step::parse (STEP_TEXTS [2]));
-			assert_err! ("Invalid input: col 4: on 1,2 through 2,3",
+			assert_err! ("Invalid input: col 4: go on 1,2 through 2,3",
 				Step::parse ("go on 1,2 through 2,3"));
-			assert_err! ("Invalid input: col 10: 1,2 through 2,3",
+			assert_err! ("Invalid input: col 10: turn red 1,2 through 2,3",
 				Step::parse ("turn red 1,2 through 2,3"));
-			assert_err! ("Invalid input: col 9: 1:2 through 2,3",
+			assert_err! ("Invalid input: col 9: turn on 1:2 through 2,3",
 				Step::parse ("turn on 1:2 through 2,3"));
 		}
 
 		#[ test ]
 		fn parse_input () {
 			assert_eq_ok! (STEPS, model::parse_input (STEP_TEXTS));
-			assert_err! ("Invalid input: line 2: col 9: 1:2 through 2,3",
+			assert_err! ("Invalid input: line 2: col 9: turn on 1:2 through 2,3",
 				model::parse_input (& [STEP_TEXTS [0], "turn on 1:2 through 2,3" ]));
 		}
 

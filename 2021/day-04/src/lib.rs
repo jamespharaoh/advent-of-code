@@ -87,13 +87,10 @@ mod logic {
 		for col in 0 .. 5 {
 			if check (called, board.iter_vals ().skip (col).step_by (5)) { winner = true }
 		}
-		if winner {
-			Some (board.iter_vals ().filter (
-				|num| ! called.contains (num),
-			).map (
-				|num| num.as_u16 (),
-			).sum ())
-		} else { None }
+		winner.then_some (board.iter_vals ()
+			.filter (|num| ! called.contains (num))
+			.map (IntConv::as_u16)
+			.sum ())
 	}
 
 }
@@ -110,15 +107,15 @@ mod model {
 	}
 
 	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Rc <Input>> {
+		pub fn parse (lines: & [& str]) -> GenResult <Rc <Self>> {
 
 			let call_order: Vec <u8> =
 				lines [0]
 					.split (',')
 					.map (|num_str| num_str
 						.parse ()
-						.unwrap ())
-					.collect ();
+						.map_err (|_err| "Invalid input".into ()))
+					.collect::<GenResult <_>> () ?;
 
 			let boards: Vec <Board> =
 				lines [2 ..].chunks (6)
@@ -130,10 +127,10 @@ mod model {
 								.parse ()
 								.unwrap ()))
 						.collect_array ()
-						.unwrap ())
-					.collect ();
+						.ok_or_else (|| "Invalid input".into ()))
+					.collect::<GenResult <_>> () ?;
 
-			Ok (Input { call_order, boards }.into ())
+			Ok (Self { call_order, boards }.into ())
 
 		}
 	}

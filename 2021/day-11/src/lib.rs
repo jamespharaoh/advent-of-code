@@ -55,7 +55,7 @@ mod logic {
 			while ! todo.is_empty () {
 				let todo_temp = todo;
 				todo = Vec::new ();
-				for pos in todo_temp.into_iter () {
+				for pos in todo_temp {
 					for adj_pos in pos.adjacent () {
 						if let Some (adj_energy) = octopodes.get_mut (& adj_pos) {
 							if flashed.contains (& adj_pos) { continue }
@@ -89,7 +89,9 @@ mod model {
 			let row = row.as_i16 ();
 			for (col, letter) in line.chars ().enumerate () {
 				let col = col.as_i16 ();
-				octopodes.insert (Pos { row, col }, letter.to_digit (10).unwrap ().as_u8 ());
+				octopodes.insert (
+					Pos { row, col },
+					letter.to_digit (10).ok_or ("Invalid input") ?.as_u8 ());
 			}
 		}
 		Ok (octopodes)
@@ -99,16 +101,16 @@ mod model {
 	pub struct Pos { pub row: i16, pub col: i16 }
 
 	impl Pos {
-		pub fn adjacent (self) -> Vec <Pos> {
+		pub fn adjacent (self) -> Vec <Self> {
 			vec! [
-				Pos { row: self.row - 1, col: self.col - 1 },
-				Pos { row: self.row - 1, col: self.col     },
-				Pos { row: self.row - 1, col: self.col + 1 },
-				Pos { row: self.row    , col: self.col - 1 },
-				Pos { row: self.row    , col: self.col + 1 },
-				Pos { row: self.row + 1, col: self.col - 1 },
-				Pos { row: self.row + 1, col: self.col     },
-				Pos { row: self.row + 1, col: self.col + 1 },
+				Self { row: self.row - 1, col: self.col - 1 },
+				Self { row: self.row - 1, col: self.col     },
+				Self { row: self.row - 1, col: self.col + 1 },
+				Self { row: self.row    , col: self.col - 1 },
+				Self { row: self.row    , col: self.col + 1 },
+				Self { row: self.row + 1, col: self.col - 1 },
+				Self { row: self.row + 1, col: self.col     },
+				Self { row: self.row + 1, col: self.col + 1 },
 			]
 		}
 	}

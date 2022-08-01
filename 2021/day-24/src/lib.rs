@@ -2,6 +2,7 @@
 //!
 //! [https://adventofcode.com/2021/day/24](https://adventofcode.com/2021/day/24)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
 #![ allow (dead_code) ]
 
 use aoc_common::*;
@@ -41,7 +42,7 @@ pub mod logic {
 	pub fn calc_result (prog: & [Instr], reverse: bool) -> GenResult <String> {
 		let steps = quick::steps_for (prog) ?;
 		let result = quick::iterator (& steps, reverse).next ()
-			.ok_or_else (|| format! ("Not found")) ?;
+			.ok_or ("Not found") ?;
 		Ok (model::input_to_str (result))
 	}
 
@@ -54,12 +55,16 @@ pub mod model {
 
 	pub type Input = [u8; 14];
 
+	#[ inline ]
+	#[ must_use ]
 	pub fn input_from_str (input_str: & str) -> Input {
 		input_str.chars ().map (
 			|letter| letter.to_digit (10).unwrap ().as_u8 (),
 		).collect::<Vec <u8>> ().try_into ().unwrap ()
 	}
 
+	#[ inline ]
+	#[ must_use ]
 	pub fn input_to_str (input: Input) -> String {
 		input.into_iter ().map (
 			|val| char::from_digit (val.as_u32 (), 10).unwrap (),
@@ -81,6 +86,7 @@ pub mod tool {
 		input: String,
 	}
 
+	#[ allow (clippy::print_stdout) ]
 	pub fn all (args: AllArgs) -> GenResult <()> {
 		let input_string = fs::read_to_string (args.input) ?;
 		let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
@@ -95,6 +101,8 @@ pub mod tool {
 	#[ derive (clap::Parser) ]
 	pub struct MachineArgs { inputs: Vec <String> }
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
 	pub fn machine (args: MachineArgs) -> GenResult <()> {
 		fn dump_regs (regs: & MachineRegs) -> String {
 			format! ("{:2}  {:10}  {:2}  {:10}", regs.w, regs.x, regs.y, regs.z)
@@ -115,11 +123,10 @@ pub mod tool {
 			}
 			printer (& machines,
 				|| print! ("| {:2}  {:9} |", machines [0].0.regs.pc % 18 + 1,
-					match prog.get (machines [0].0.regs.pc) {
-						Some (instr) => format! ("{}", instr), None => format! ("(end)"),
-					}),
+					prog.get (machines [0].0.regs.pc)
+						.map_or_else (|| "(end)".to_owned (), |instr| format! ("{}", instr))),
 				|machine| print! (" {:30} |", dump_regs (& machine.regs)));
-			for (machine, input) in machines.iter_mut () {
+			for & mut (ref mut machine, ref mut input) in machines.iter_mut () {
 				if machine.step (& prog, input).map_err (|err| format! ("{:?}", err)) ? {
 					done = true;
 				}
@@ -140,7 +147,7 @@ pub mod tool {
 			EachFn: Fn (& Machine),
 		> (machines: & [(Machine, [i64; 14])], before_fn: BeforeFn, each_fn: EachFn) {
 			before_fn ();
-			for (machine, _) in machines.iter () {
+			for & (ref machine, _) in machines.iter () {
 				each_fn (machine);
 			}
 			print! ("\n");
@@ -152,10 +159,16 @@ pub mod tool {
 		args: Vec <String>,
 	}
 
+	#[ allow (clippy::needless_pass_by_value) ]
 	pub fn solver (args: SolverArgs) -> GenResult <()> {
 		let prog = load_prog () ?;
 		let (solver, regs) = Solver::from_prog (& prog);
-		let reg_z = regs.into_iter ().filter (|(name, _)| name.as_ref () == "z").map (|(_, reg)| reg).next ().unwrap ();
+		let reg_z =
+			regs.into_iter ()
+				.filter (|& (ref name, _)| name.as_ref () == "z")
+				.map (|(_, reg)| reg)
+				.next ()
+				.unwrap ();
 		match args.args [0].as_str () {
 			"solver-full" => {
 				solver.dump (3, true);

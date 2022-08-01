@@ -97,7 +97,7 @@ mod model {
 	pub struct Vent { pub start: Pos, pub end: Pos }
 
 	impl Vent {
-		pub fn is_diagonal (self) -> bool {
+		pub const fn is_diagonal (self) -> bool {
 			self.start.x != self.end.x && self.start.y != self.end.y
 		}
 	}

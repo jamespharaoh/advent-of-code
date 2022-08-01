@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/19](https://adventofcode.com/2015/day/19)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 19;
 	parse = |input| model::Input::parse (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 /// Logic for solving the puzzles.
@@ -23,9 +25,10 @@ pub mod logic {
 	use model::Input;
 	use nums::IntConv;
 
-	pub fn part_one (input: Input) -> GenResult <u32> {
+	#[ allow (clippy::string_slice) ]
+	pub fn part_one (input: & Input) -> GenResult <u32> {
 		let mut results = HashSet::new ();
-		for (from, to) in input.replacements.iter () {
+		for & (ref from, ref to) in input.replacements.iter () {
 			let mut last_pos = 0;
 			while let Some (pos) = input.medicine [last_pos .. ].find (from) {
 				let pos = last_pos + pos;
@@ -41,11 +44,11 @@ pub mod logic {
 		Ok (results.len ().as_u32 ())
 	}
 
-	pub fn part_two (input: Input) -> GenResult <u32> {
+	pub fn part_two (input: & Input) -> GenResult <u32> {
 
 		// sanity checks
 
-		if ! input.replacements.iter ().any (|(from, _)| from == "e") {
+		if ! input.replacements.iter ().any (|& (ref from, _)| from == "e") {
 			Err ("Must have at least one replacement from \"e\"") ?;
 		}
 
@@ -57,7 +60,7 @@ pub mod logic {
 			Err ("Medicine must be ASCII alphanumeric") ?;
 		}
 
-		for (from, to) in input.replacements.iter () {
+		for & (ref from, ref to) in input.replacements.iter () {
 
 			if ! from.chars ().all (|ch| ch.is_ascii_alphanumeric ())
 					|| ! to.chars ().all (|ch| ch.is_ascii_alphanumeric ()) {
@@ -101,6 +104,7 @@ pub mod logic {
 			// output a message, disabled for now but could be added as a flag
 
 			const VERBOSE: bool = false;
+			#[ allow (clippy::print_stdout) ]
 			if VERBOSE {
 				if todo_prefix.is_empty () {
 					println! ("queue={} steps={} {}", todo.len (), todo_steps, todo_suffix);
@@ -112,7 +116,7 @@ pub mod logic {
 
 			// add todo items for any replacements at the start of the suffix, also detect success
 
-			for (from, to) in input.replacements.iter () {
+			for & (ref from, ref to) in input.replacements.iter () {
 				if from == "e" {
 
 					// detect success
@@ -153,6 +157,8 @@ pub mod logic {
 						));
 
 					}
+				} else {
+					// no match, carry on
 				}
 			}
 
@@ -169,7 +175,7 @@ pub mod logic {
 				prefix.push (head);
 				suffix = tail;
 				if ! input.replacements.iter ()
-						.any (|(_, to)| to.starts_with (& prefix)) {
+						.any (|& (_, ref to)| to.starts_with (& prefix)) {
 					break;
 				}
 				todo.push_back ((
@@ -195,7 +201,7 @@ pub mod logic {
 		#[ test ]
 		fn part_two () {
 			assert_err! ("Must have at least one replacement from \"e\"",
-				logic::part_two (Input::parse (& ["a => b", "c => d", "", "whatever"]).unwrap ()));
+				logic::part_two (& Input::parse (& ["a => b", "c => d", "", "whatever"]).unwrap ()));
 		}
 
 	}
@@ -219,7 +225,7 @@ pub mod model {
 	pub type Replacement = (String, String);
 
 	impl Input {
-		pub fn parse (input: & [& str]) -> GenResult <Input> {
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
 			if input.len () < 3 { Err ("Invalid input") ?; }
 			if ! input [input.len () - 2].is_empty () { Err ("Invalid input") ?; }
 			let is_chem = |input: & str| input.chars ().all (|ch| ch.is_ascii_alphanumeric ());
@@ -231,13 +237,13 @@ pub mod model {
 						let to = parser.expect_word ("=>") ?.word_if (is_chem) ?;
 						parser.end () ?;
 						if to.len () < from.len () { Err (parser.err ()) ?; }
-						Ok ((from.to_string (), to.to_string ()))
+						Ok ((from.to_owned (), to.to_owned ()))
 					}).map_parse_err (|col_idx| format! (
 						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
 				).collect::<GenResult <Replacements>> () ?;
-			let medicine = input.last ().unwrap ().to_string ();
+			let medicine = input.last ().unwrap ().deref ().to_owned ();
 			if medicine.is_empty () { Err ("Medicine must be at least one character") ?; }
-			Ok (Input { replacements, medicine })
+			Ok (Self { replacements, medicine })
 		}
 	}
 

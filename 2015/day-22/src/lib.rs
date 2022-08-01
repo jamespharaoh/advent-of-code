@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/22](https://adventofcode.com/2015/day/22)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -217,7 +219,7 @@ pub mod model {
 	}
 
 	impl Input {
-		pub fn parse (input: & [& str]) -> GenResult <Input> {
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
 			let player = Player { hit_points: 50, mana: 500 };
 			if input.len () != 2 { Err ("Invalid input") ?; }
 			fn parse_line (line_idx: usize, line: & str, expect: & str) -> GenResult <u16> {
@@ -231,7 +233,7 @@ pub mod model {
 			let damage = parse_line (1, input [1], "Damage: ") ?;
 			if hit_points > 100 { Err ("Boss hit points are limited to 100") ?; }
 			if damage > 15 { Err ("Boss damage is limited to 15") ?; }
-			Ok (Input { player, boss: Boss { hit_points, damage }})
+			Ok (Self { player, boss: Boss { hit_points, damage }})
 		}
 	}
 

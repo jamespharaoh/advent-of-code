@@ -18,13 +18,20 @@ pub enum ParseError {
 }
 
 pub trait ResultExt <Item> {
+
+	/// Map error from [`ParseError`] to `Box <dyn Error>` using the provided function
+	///
+	#[ allow (clippy::missing_errors_doc) ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
 			MapFn: Fn (usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError>;
+
 }
 
 impl <Item> ResultExt <Item> for Result <Item, ParseError> {
+
+	#[ inline ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
 			MapFn: Fn (usize) -> IntoGenErr,
@@ -35,37 +42,49 @@ impl <Item> ResultExt <Item> for Result <Item, ParseError> {
 			Err (ParseError::Wrapped (err)) => Err (err),
 		}
 	}
+
 }
 
 impl Display for ParseError {
+
+	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match self {
-			ParseError::Simple (char_idx) =>
+		match * self {
+			Self::Simple (char_idx) =>
 				write! (formatter, "Parser error at col {}", char_idx + 1) ?,
-			ParseError::Wrapped (inner) =>
+			Self::Wrapped (ref inner) =>
 				Display::fmt (inner, formatter) ?,
 		}
 		Ok (())
 	}
+
 }
 
 impl Error for ParseError {
 }
 
 impl From <GenError> for ParseError {
-    fn from (other: GenError) -> ParseError {
-        ParseError::Wrapped (other)
+
+	#[ inline ]
+    fn from (other: GenError) -> Self {
+        Self::Wrapped (other)
     }
+
 }
 
 impl From <& str> for ParseError {
-	fn from (other: & str) -> ParseError {
-		ParseError::Wrapped (other.into ())
+
+	#[ inline ]
+	fn from (other: & str) -> Self {
+		Self::Wrapped (other.into ())
 	}
+
 }
 
 impl <'inp> Parser <'inp> {
 
+	#[ inline ]
+	#[ must_use ]
 	pub fn new (input: & 'inp str) -> Parser <'inp> {
 		Parser {
 			input,
@@ -76,21 +95,31 @@ impl <'inp> Parser <'inp> {
 		}
 	}
 
+	#[ inline ]
 	pub fn confirm (& mut self) -> & mut Self {
 		self.confirmed = true;
 		self
 	}
 
+	#[ inline ]
 	pub fn set_ignore_whitespace (& mut self, ignore_whitespace: bool) -> & mut Self {
 		self.ignore_whitespace = ignore_whitespace;
 		self
 	}
 
+	#[ inline ]
 	pub fn set_word_pred (& mut self, word_pred: fn (char) -> bool) -> & mut Self {
 		self.word_pred = word_pred;
 		self
 	}
 
+	/// Consume a specific string from the input
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if the input does not match the specified value
+	///
+	#[ inline ]
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
 		for expect_char in expect.chars () {
 			if self.peek () != Some (expect_char) { Err (self.err ()) ? }
@@ -99,25 +128,57 @@ impl <'inp> Parser <'inp> {
 		Ok (self)
 	}
 
+	/// Consume a specific word from the input
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if the input does not match the specified value
+	///
+	#[ inline ]
 	pub fn expect_word (& mut self, expect: & str) -> ParseResult <& mut Self> {
 		if self.word () ? != expect { Err (self.err ()) ? }
 		Ok (self)
 	}
 
+	/// Consume and return a decimal number from the input
+	///
+	/// In fact, this will work for any type which implements [`FromStr`], but it is intended for
+	/// use with numbers.
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if parse returns an `Err`
+	///
+	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
-		if self.ignore_whitespace { self.skip_whitespace (); }
-		let len = self.input.chars ().enumerate ()
-			.take_while (|& (idx, letter)|
-				letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
-			.map (|(_, letter)| letter.len_utf8 ())
-			.sum ();
-		let val = self.input [0 .. len].parse ().map_err (|_| self.err ()) ?;
-		self.input = & self.input [len .. ];
-		if self.ignore_whitespace { self.skip_whitespace (); }
-		Ok (val)
+		self.int_real ().parse ().map_err (|_err| self.err ())
 	}
 
-	pub fn word <'b> (& 'b mut self) -> ParseResult <& 'inp str> {
+	#[ allow (clippy::string_slice) ]
+	fn int_real (& mut self) -> & str {
+		if self.ignore_whitespace { self.skip_whitespace (); }
+		let len =
+			self.input.chars ()
+				.enumerate ()
+				.take_while (|& (idx, letter)|
+					letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
+				.map (|(_, letter)| letter.len_utf8 ())
+				.sum ();
+		let val = & self.input [0 .. len];
+		self.input = & self.input [len .. ];
+		if self.ignore_whitespace { self.skip_whitespace (); }
+		val
+	}
+
+	/// Consume and return a single word from the input
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if there is no word remaining
+	///
+	#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ allow (clippy::string_slice) ]
+	pub fn word <'par> (& 'par mut self) -> ParseResult <& 'inp str> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let input_temp = self.input;
 		let start = self.pos;
@@ -131,22 +192,45 @@ impl <'inp> Parser <'inp> {
 		Ok (& input_temp [ .. end - start])
 	}
 
-	pub fn word_into <'b, Output> (& 'b mut self) -> ParseResult <Output>
-			where Output: TryFrom <& 'b str, Error = GenError> {
+	/// Consume and return a single word from the input, transforming it with [`TryInto::into`]
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if there is no word remaining.
+	///
+	/// Returns `Err (ParseError::Wrapped (err))` if the conversion fails.
+	///
+	#[ inline ]
+	pub fn word_into <'par, Output> (& 'par mut self) -> ParseResult <Output>
+			where Output: TryFrom <& 'par str, Error = GenError> {
 		Ok (self.word () ?.try_into () ?)
 	}
 
-	pub fn word_if <'b, PredFn> (& 'b mut self, pred: PredFn) -> ParseResult <& 'inp str>
+	/// Consume and return a single word from the input, validating it with the provided function
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if there is no word remaining, or if the provided predicate
+	/// function returns false
+	///
+	#[ inline ]
+	pub fn word_if <'par, PredFn> (& 'par mut self, pred: PredFn) -> ParseResult <& 'inp str>
 			where PredFn: Fn (& 'inp str) -> bool {
 		let word = self.word () ?;
 		if ! pred (word) { Err (self.err ()) ?; }
 		Ok (word)
 	}
 
+	/// Return a word from the input without consuming it
+	///
+	#[ inline ]
 	pub fn peek_word (& mut self) -> Option <& 'inp str> {
 		self.clone ().word ().ok ()
 	}
 
+	/// Consume any whitespace from the start of the remaining input
+	///
+	#[ inline ]
 	pub fn skip_whitespace (& mut self) -> & mut Self {
 		while let Some (letter) = self.peek () {
 			if ! letter.is_whitespace () { break }
@@ -155,12 +239,23 @@ impl <'inp> Parser <'inp> {
 		self
 	}
 
+	/// Assert that there is no more input to consume
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if there is more input.
+	///
+	#[ inline ]
 	pub fn end (& mut self) -> ParseResult <()> {
 		if self.peek ().is_some () { Err (self.err ()) ? }
 		Ok (())
 	}
 
+	/// Consume and return the next character from the input
+	///
 	#[ allow (clippy::should_implement_trait) ]
+	#[ allow (clippy::string_slice) ]
+	#[ inline ]
 	pub fn next (& mut self) -> Option <char> {
 		let letter_opt = self.input.chars ().next ();
 		if let Some (letter) = letter_opt {
@@ -170,22 +265,38 @@ impl <'inp> Parser <'inp> {
 		letter_opt
 	}
 
+	/// Return the next character from the input without consuming it
+	///
+	#[ inline ]
 	pub fn peek (& mut self) -> Option <char> {
 		self.input.chars ().next ()
 	}
 
+	/// Consume and return the next character from the input
+	///
+	/// # Errors
+	///
+	/// Will return `Err (self.err ())` if there is no input remaining.
+	///
+	#[ inline ]
 	pub fn expect_next (& mut self) -> ParseResult <char> {
 		self.next ().ok_or_else (|| self.err ())
 	}
 
-	pub fn err (& self) -> ParseError {
+	/// Return a `ParseError` with the current position
+	///
+	#[ inline ]
+	#[ must_use ]
+	pub const fn err (& self) -> ParseError {
 	    ParseError::Simple (self.pos)
 	}
 
+	#[ inline ]
 	pub fn any <Item> (& mut self) -> ParserAny <'_, 'inp, Item> {
 		ParserAny::Parser (self)
 	}
 
+	#[ inline ]
 	pub fn wrap <Output, WrapFn> (input: & str, mut wrap_fn: WrapFn) -> ParseResult <Output>
 			where WrapFn: FnMut (& mut Parser) -> ParseResult <Output> {
 		let mut parser = Parser::new (input);
@@ -202,6 +313,8 @@ pub enum ParserAny <'par, 'inp, Item> {
 
 impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 
+	#[ inline ]
+	#[ must_use ]
 	pub fn of <OfFn> (self, mut of_fn: OfFn) -> Self
 			where OfFn: FnMut (& mut Parser <'inp>) -> ParseResult <Item> {
 		match self {
@@ -223,6 +336,7 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 		}
 	}
 
+	#[ inline ]
 	pub fn done (self) -> ParseResult <Item> {
 		match self {
 			ParserAny::Parser (parser) => Err (parser.err ()),

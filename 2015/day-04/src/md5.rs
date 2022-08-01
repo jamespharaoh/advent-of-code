@@ -5,6 +5,7 @@ use ops::{ BitAnd, BitOr, BitXor, Not };
 #[ derive (Eq, PartialEq) ]
 pub struct Output ([u8; 16]);
 
+#[ must_use ]
 pub fn md5_hash (input: & [u8]) -> Output {
 	let mut md5 = MD5::new ();
 	md5.update (input);
@@ -20,8 +21,19 @@ pub struct MD5 {
 type State = [WrappingU32; 4];
 
 impl Output {
-	pub fn len (& self) -> usize { self.0.len () }
-	pub fn is_empty (& self) -> bool { self.0.is_empty () }
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn len (& self) -> usize {
+		self.0.len ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn is_empty (& self) -> bool {
+		self.0.is_empty ()
+	}
+
 	pub fn from_hex (input: & str) -> GenResult <Self> {
 		let input_len = input.chars ().count ();
 		if input_len != 32 { Err (format! ("Expected 32 chars, not {}", input_len)) ? }
@@ -32,7 +44,7 @@ impl Output {
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
 			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4_i32 | decode (low_ch) ?.as_u8 ();
 		}
-		Ok (Output (result))
+		Ok (Self (result))
 	}
 }
 
@@ -65,8 +77,10 @@ impl Display for Output {
 
 impl MD5 {
 
-	pub fn new () -> MD5 {
-		MD5 {
+	#[ inline ]
+	#[ must_use ]
+	pub fn new () -> Self {
+		Self {
 			state: INITIAL_STATE,
 			message: ArrayVec::new (),
 			len: 0,
@@ -98,6 +112,7 @@ impl MD5 {
 
 	}
 
+	#[ must_use ]
 	pub fn finish (mut self) -> Output {
 
 		// remember the length before padding
@@ -141,6 +156,7 @@ impl MD5 {
 		assert! (self.message.is_full ());
 		let message = {
 			let mut message = [WrappingU32 (0); 16];
+			#[ allow (clippy::needless_range_loop) ]
 			for dst_idx in 0 .. 16 {
 				let src_idx = dst_idx << 2_i32;
 				message [dst_idx] = WrappingU32 (
@@ -195,37 +211,37 @@ impl Default for MD5 {
 struct WrappingU32 (u32);
 
 impl WrappingU32 {
-	fn rotate_left (self, arg: u32) -> Self { WrappingU32 (self.0.rotate_left (arg)) }
+	const fn rotate_left (self, arg: u32) -> Self { Self (self.0.rotate_left (arg)) }
 }
 
 impl Add for WrappingU32 {
 	type Output = Self;
-	fn add (self, other: Self) -> Self { WrappingU32 (self.0.wrapping_add (other.0)) }
+	fn add (self, other: Self) -> Self { Self (self.0.wrapping_add (other.0)) }
 }
 
 impl BitAnd for WrappingU32 {
-	type Output = WrappingU32;
-	fn bitand (self, other: Self) -> Self { WrappingU32 (self.0 & other.0) }
+	type Output = Self;
+	fn bitand (self, other: Self) -> Self { Self (self.0 & other.0) }
 }
 
 impl BitOr for WrappingU32 {
-	type Output = WrappingU32;
-	fn bitor (self, other: Self) -> Self { WrappingU32 (self.0 | other.0) }
+	type Output = Self;
+	fn bitor (self, other: Self) -> Self { Self (self.0 | other.0) }
 }
 
 impl BitXor for WrappingU32 {
-	type Output = WrappingU32;
-	fn bitxor (self, other: Self) -> Self { WrappingU32 (self.0 ^ other.0) }
+	type Output = Self;
+	fn bitxor (self, other: Self) -> Self { Self (self.0 ^ other.0) }
 }
 
 impl Not for WrappingU32 {
-	type Output = WrappingU32;
-	fn not (self) -> Self { WrappingU32 (! self.0) }
+	type Output = Self;
+	fn not (self) -> Self { Self (! self.0) }
 }
 
 const INITIAL_STATE: State = [
-	WrappingU32 (0x67452301), WrappingU32 (0xefcdab89),
-	WrappingU32 (0x98badcfe), WrappingU32 (0x10325476),
+	WrappingU32 (0x_6745_2301), WrappingU32 (0x_efcd_ab89),
+	WrappingU32 (0x_98ba_dcfe), WrappingU32 (0x_1032_5476),
 ];
 
 const ROTATES: [u8; 64] = [
@@ -236,16 +252,17 @@ const ROTATES: [u8; 64] = [
 ];
 
 const ADDS: [u32; 64] = [
-	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613,
-	0xfd469501, 0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193,
-	0xa679438e, 0x49b40821, 0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d,
-	0x02441453, 0xd8a1e681, 0xe7d3fbc8, 0x21e1cde6, 0xc33707d6, 0xf4d50d87, 0x455a14ed,
-	0xa9e3e905, 0xfcefa3f8, 0x676f02d9, 0x8d2a4c8a, 0xfffa3942, 0x8771f681, 0x6d9d6122,
-	0xfde5380c, 0xa4beea44, 0x4bdecfa9, 0xf6bb4b60, 0xbebfbc70, 0x289b7ec6, 0xeaa127fa,
-	0xd4ef3085, 0x04881d05, 0xd9d4d039, 0xe6db99e5, 0x1fa27cf8, 0xc4ac5665, 0xf4292244,
-	0x432aff97, 0xab9423a7, 0xfc93a039, 0x655b59c3, 0x8f0ccc92, 0xffeff47d, 0x85845dd1,
-	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb,
-	0xeb86d391,
+	0x_d76a_a478, 0x_e8c7_b756, 0x_2420_70db, 0x_c1bd_ceee, 0x_f57c_0faf, 0x_4787_c62a,
+	0x_a830_4613, 0x_fd46_9501, 0x_6980_98d8, 0x_8b44_f7af, 0x_ffff_5bb1, 0x_895c_d7be,
+	0x_6b90_1122, 0x_fd98_7193, 0x_a679_438e, 0x_49b4_0821, 0x_f61e_2562, 0x_c040_b340,
+	0x_265e_5a51, 0x_e9b6_c7aa, 0x_d62f_105d, 0x_0244_1453, 0x_d8a1_e681, 0x_e7d3_fbc8,
+	0x_21e1_cde6, 0x_c337_07d6, 0x_f4d5_0d87, 0x_455a_14ed, 0x_a9e3_e905, 0x_fcef_a3f8,
+	0x_676f_02d9, 0x_8d2a_4c8a, 0x_fffa_3942, 0x_8771_f681, 0x_6d9d_6122, 0x_fde5_380c,
+	0x_a4be_ea44, 0x_4bde_cfa9, 0x_f6bb_4b60, 0x_bebf_bc70, 0x_289b_7ec6, 0x_eaa1_27fa,
+	0x_d4ef_3085, 0x_0488_1d05, 0x_d9d4_d039, 0x_e6db_99e5, 0x_1fa2_7cf8, 0x_c4ac_5665,
+	0x_f429_2244, 0x_432a_ff97, 0x_ab94_23a7, 0x_fc93_a039, 0x_655b_59c3, 0x_8f0c_cc92,
+	0x_ffef_f47d, 0x_8584_5dd1, 0x_6fa8_7e4f, 0x_fe2c_e6e0, 0x_a301_4314, 0x_4e08_11a1,
+	0x_f753_7e82, 0x_bd3a_f235, 0x_2ad7_d2bb, 0x_eb86_d391,
 ];
 
 #[ cfg (test) ]

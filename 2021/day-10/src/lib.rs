@@ -52,7 +52,7 @@ mod logic {
 					.fold (0, |total, value| total * 5 + value)
 			)
 		}).collect ();
-		scores.sort ();
+		scores.sort_unstable ();
 		Ok (scores [(scores.len () - 1) / 2])
 	}
 
@@ -77,20 +77,20 @@ mod model {
 	pub enum Delim { Round, Square, Curly, Angle }
 
 	impl Delim {
-		pub fn mismatched_points (self) -> u64 {
+		pub const fn mismatched_points (self) -> u64 {
 			match self {
-				Delim::Round => 3,
-				Delim::Square => 57,
-				Delim::Curly => 1197,
-				Delim::Angle => 25137,
+				Self::Round => 3,
+				Self::Square => 57,
+				Self::Curly => 1197,
+				Self::Angle => 25137,
 			}
 		}
-		pub fn not_closed_points (self) -> u64 {
+		pub const fn not_closed_points (self) -> u64 {
 			match self {
-				Delim::Round => 1,
-				Delim::Square => 2,
-				Delim::Curly => 3,
-				Delim::Angle => 4,
+				Self::Round => 1,
+				Self::Square => 2,
+				Self::Curly => 3,
+				Self::Angle => 4,
 			}
 		}
 	}
@@ -98,7 +98,7 @@ mod model {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum Mode { Open, Close }
 
-	pub fn decode_char (letter: char) -> Option <Token> {
+	pub const fn decode_char (letter: char) -> Option <Token> {
 		match letter {
 			'(' => Some ((Delim::Round, Mode::Open)),
 			')' => Some ((Delim::Round, Mode::Close)),

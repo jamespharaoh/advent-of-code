@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/8](https://adventofcode.com/2015/day/8)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 8;
 	parse = |input| model::parse_input (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -18,19 +20,19 @@ pub mod logic {
 	use super::*;
 	use model::Input;
 
-	pub fn part_one (input: Input) -> GenResult <usize> {
+	pub fn part_one (input: & Input) -> GenResult <usize> {
 		Ok (
 			input.iter ()
-				.map (|(code, value)|
+				.map (|& (ref code, ref value)|
 					code.chars ().count () - value.chars ().count ())
 				.sum ()
 		)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <usize> {
+	pub fn part_two (input: & Input) -> GenResult <usize> {
 		Ok (
 			input.iter ()
-				.map (|(code, _)| (model::encode (code), code))
+				.map (|& (ref code, _)| (model::encode (code), code))
 				.map (|(code, value)|
 					code.chars ().count () - value.chars ().count ())
 				.sum ()
@@ -46,6 +48,7 @@ pub mod model {
 
 	pub type Input = Vec <(String, String)>;
 
+	#[ must_use ]
 	pub fn encode (input: & str) -> String {
 		iter::once ('"')
 			.chain (input.chars ().flat_map::<ArrayVec <char, 2>, _> (|ch|
@@ -91,8 +94,8 @@ pub mod model {
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
 		input.iter ().enumerate ()
-			.map (|(line_idx, line)|
-				Parser::wrap (line, |parser| Ok ((line.to_string (), decode_real (parser) ?)))
+			.map (|(line_idx, & line)|
+				Parser::wrap (line, |parser| Ok ((line.to_owned (), decode_real (parser) ?)))
 					.map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
 						line_idx + 1, col_idx + 1, line)))
 			.collect ()

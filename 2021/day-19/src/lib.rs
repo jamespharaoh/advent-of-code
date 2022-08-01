@@ -18,6 +18,8 @@
 //! means we do a total of ten hashes for each scanner, instead of the twenty four we would have to
 //! with a more naïve algorithm.
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 use bithash::*;
 
@@ -68,8 +70,8 @@ mod logic {
 
 	fn calc_result (input: & Input) -> GenResult <(HashSet <Pos>, HashSet <Pos>)> {
 		let mut arranger = ScannerArranger::new ();
-		if ! arranger.init (input) { Err (format! ("Failed to arrange scanners")) ? }
-		if ! arranger.run () { Err (format! ("Failed to arrange scanners")) ? }
+		if ! arranger.init (input) { Err ("Failed to arrange scanners") ? }
+		if ! arranger.run () { Err ("Failed to arrange scanners") ? }
 		Ok ((arranger.scanner_positions, arranger.beacon_positions))
 	}
 
@@ -85,8 +87,9 @@ mod logic {
 
 	impl ScannerArranger {
 
-		fn new () -> ScannerArranger { default () }
+		fn new () -> Self { default () }
 
+		#[ must_use ]
 		fn init (& mut self, input: & Input) -> bool {
 			self.original_scanners.extend (
 				input.scanners.iter ().map (|scanner|
@@ -106,7 +109,10 @@ mod logic {
 		}
 
 		fn run (& mut self) -> bool {
-			self.place_scanner (& Rc::clone (& self.unplaced_scanners [0]), Rotation::None, Pos::zero ());
+			self.place_scanner (
+				& Rc::clone (& self.unplaced_scanners [0]),
+				Rotation::None,
+				Pos::ZERO);
 			let mut scanner_matches_buffer = Vec::new ();
 			'OUTER: loop {
 				if self.unplaced_scanners.is_empty () { break }
@@ -147,7 +153,7 @@ mod logic {
 					.cartesian_product (placed.beacons.iter ().copied ())
 					.map (|(unplaced_beacon, placed_beacon)| placed_beacon - unplaced_beacon)
 					.sorted ()
-					.group_by (|offset| offset.to_owned ());
+					.group_by (|& offset| offset);
 			offsets_grouped.into_iter ()
 				.map (|(offset, iter)| (offset, iter.count ()))
 				.filter (|& (_, count)| count >= 12)
@@ -284,12 +290,13 @@ mod model {
 
 	#[ derive (Debug) ]
 	pub struct InputScanner {
-		pub name: Rc <String>,
+		pub name: Rc <str>,
 		pub beacons: Vec <Pos>,
 	}
 
 	impl Input {
-		pub fn parse (lines: & [& str]) -> GenResult <Input> {
+		#[ allow (clippy::string_slice) ]
+		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			use parser::*;
 			let mut scanners = Vec::new ();
 			let mut lines_iter = lines.iter ().enumerate ();
@@ -297,7 +304,7 @@ mod model {
 			while let Some ((line_idx, line)) = lines_iter.next () {
 				if ! line.starts_with ("--- ") { Err (err (line_idx, line)) ? }
 				if ! line.ends_with (" ---") { Err (err (line_idx, line)) ? }
-				let name = Rc::new (line [4 .. line.len () - 4].to_string ());
+				let name = Rc::from (& line [4 .. line.len () - 4]);
 				let mut beacons = Vec::new ();
 				for (line_idx, line) in lines_iter.by_ref () {
 					if line.is_empty () { break }
@@ -309,11 +316,11 @@ mod model {
 						});
 						parser.end () ?;
 						Ok (())
-					}).map_parse_err (|_| err (line_idx, line)) ?
+					}).map_parse_err (|_| err (line_idx, line)) ?;
 				}
 				scanners.push (InputScanner { name, beacons });
 			}
-			Ok (Input { scanners })
+			Ok (Self { scanners })
 		}
 	}
 

@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/1](https://adventofcode.com/2015/day/1)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 1;
 	parse = |input| model::parse_input (input [0]);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -18,7 +20,7 @@ pub mod logic {
 	use super::*;
 	use model::Input;
 
-	pub fn part_one (input: Input) -> GenResult <i32> {
+	pub fn part_one (input: & Input) -> GenResult <i32> {
 		Ok (
 			input.iter ().copied ().enumerate ()
 				.scan (0_i32, |floor, (idx, dir)| {
@@ -26,20 +28,18 @@ pub mod logic {
 					Some ((idx, * floor))
 				})
 				.last ()
-				.map (|(_, floor)| floor)
-				.unwrap_or (0_i32)
+				.map_or (0_i32, |(_, floor)| floor)
 		)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <usize> {
+	pub fn part_two (input: & Input) -> GenResult <usize> {
 		Ok (
 			input.iter ().copied ().enumerate ()
 				.scan (0_i32, |floor, (idx, dir)| {
 					* floor += dir.val ();
 					Some ((idx, * floor))
 				})
-				.filter_map (|(idx, floor)| (floor < 0_i32).then_some (idx + 1))
-				.next ()
+				.find_map (|(idx, floor)| (floor < 0_i32).then_some (idx + 1))
 				.ok_or ("Never visited the basement") ?
 		)
 	}
@@ -52,16 +52,16 @@ pub mod logic {
 		#[ test ]
 		fn part_one () -> GenResult <()> {
 			use model::Dir::*;
-			assert_eq! (3, logic::part_one (vec! [Up, Up, Up]) ?);
-			assert_eq! (-1, logic::part_one (vec! [Up, Down, Down]) ?);
+			assert_eq! (3, logic::part_one (& vec! [Up, Up, Up]) ?);
+			assert_eq! (-1, logic::part_one (& vec! [Up, Down, Down]) ?);
 			Ok (())
 		}
 
 		#[ test ]
 		fn part_two () -> GenResult <()> {
 			use model::Dir::*;
-			assert_eq! (3, logic::part_two (vec! [Up, Down, Down]) ?);
-			assert_err! ("Never visited the basement", logic::part_two (vec! [Up, Down]));
+			assert_eq! (3, logic::part_two (& vec! [Up, Down, Down]) ?);
+			assert_err! ("Never visited the basement", logic::part_two (& vec! [Up, Down]));
 			Ok (())
 		}
 
@@ -79,9 +79,12 @@ pub mod model {
 	pub enum Dir { Up, Down }
 
 	impl Dir {
-		pub fn val (& self) -> i32 {
-			match self { Dir::Up => 1_i32, Dir::Down => -1_i32 }
+
+		#[ must_use ]
+		pub const fn val (& self) -> i32 {
+			match * self { Self::Up => 1_i32, Self::Down => -1_i32 }
 		}
+
 	}
 
 	pub fn parse_input (input: & str) -> GenResult <Input> {

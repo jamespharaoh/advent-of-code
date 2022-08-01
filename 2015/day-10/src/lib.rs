@@ -76,7 +76,7 @@ mod model {
 	pub struct State (Vec <u8>);
 
 	impl State {
-		pub fn parse (input: & str) -> GenResult <State> {
+		pub fn parse (input: & str) -> GenResult <Self> {
 			input.chars ().map (|ch|
 				Ok (ch.to_digit (10).ok_or ("Invalid input") ?.as_u8 ())
 			).collect::<GenResult <_>> ()
@@ -100,19 +100,19 @@ mod model {
 	}
 
 	impl FromIterator <u8> for State {
-		fn from_iter <IntoIter> (iter: IntoIter) -> State
+		fn from_iter <IntoIter> (iter: IntoIter) -> Self
 				where IntoIter: IntoIterator <Item = u8> {
-			State (iter.into_iter ().collect ())
+			Self (iter.into_iter ().collect ())
 		}
 	}
 
 	impl TryFrom <Vec <u8>> for State {
 		type Error = GenError;
-		fn try_from (nums: Vec <u8>) -> GenResult <State> {
+		fn try_from (nums: Vec <u8>) -> GenResult <Self> {
 			if nums.iter ().copied ().any (|num| (1 ..= 9).contains (& num)) {
 				Err ("Digits must be 1-9") ?;
 			}
-			Ok (State (nums))
+			Ok (Self (nums))
 		}
 	}
 
@@ -133,13 +133,13 @@ mod model {
 	}
 
 	impl PartialOrd for State {
-		fn partial_cmp (& self, other: & State) -> Option <Ordering> {
+		fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
 			Some (Ord::cmp (self, other))
 		}
 	}
 
 	impl Ord for State {
-		fn cmp (& self, other: & State) -> Ordering {
+		fn cmp (& self, other: & Self) -> Ordering {
 			Ord::cmp (& self.0.len (), & other.0.len ())
 				.then (Ord::cmp (& self.0, & other.0))
 		}
@@ -175,6 +175,8 @@ mod cli {
 
 	}
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
 	pub fn run (args: RunArgs) -> GenResult <()> {
 		let mut state = if let Some (state) = args.state.as_ref () {
 			State::parse (state) ?
@@ -202,8 +204,11 @@ mod cli {
 	}
 
 	#[ derive (Debug, clap::Parser) ]
-	pub struct InternalsArgs {}
+	pub struct InternalsArgs;
 
+	#[ allow (clippy::needless_pass_by_value) ]
+	#[ allow (clippy::print_stdout) ]
+	#[ allow (clippy::unnecessary_wraps) ]
 	pub fn internals (_args: InternalsArgs) -> GenResult <()> {
 		println! ("Data structures:");
 		fn show_struct <Type> () {

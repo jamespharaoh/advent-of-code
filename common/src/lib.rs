@@ -1,4 +1,4 @@
-#![ doc (html_playground_url = "https://play.rust-lang.org/") ]
+//! Common functionality used in all puzzle solutions
 
 use clap::ArgMatches;
 use clap::Command;
@@ -93,17 +93,23 @@ mod iter_ext {
 	use iter::Copied;
 
 	pub trait IntoIteratorExt: IntoIterator + Sized {
-		fn iter_vals <'a, Item> (self) -> Copied <Self::IntoIter>
+
+		#[ inline ]
+		fn iter_vals <'dat, Item> (self) -> Copied <Self::IntoIter>
 			where
-				Item: 'a + Copy,
-				Self: IntoIterator <Item = & 'a Item> {
+				Item: 'dat + Copy,
+				Self: IntoIterator <Item = & 'dat Item> {
 			self.into_iter ().copied ()
 		}
+
 	}
 
-	impl <'a, IntoIter> IntoIteratorExt for & 'a IntoIter where & 'a IntoIter: IntoIterator {}
+	impl <'dat, IntoIter> IntoIteratorExt for & 'dat IntoIter
+		where & 'dat IntoIter: IntoIterator {}
 
 	pub trait IteratorExt: Iterator {
+
+		#[ inline ]
 		fn collect_array <const DIM: usize> (mut self) -> Option <[Self::Item; DIM]>
 				where Self: Sized, Self::Item: Copy + Default {
 			let mut result = [default (); DIM];
@@ -114,6 +120,7 @@ mod iter_ext {
 			if self.next ().is_some () { return None }
 			Some (result)
 		}
+
 	}
 
 	impl <SomeIter: Iterator> IteratorExt for SomeIter {}

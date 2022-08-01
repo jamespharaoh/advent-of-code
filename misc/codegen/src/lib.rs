@@ -1,3 +1,5 @@
+//! Generate boilerplate code, run from build.rs
+
 use std::collections::HashMap;
 use std::env;
 use std::error::Error;
@@ -8,6 +10,18 @@ use std::iter;
 use std::mem;
 use std::path::PathBuf;
 
+/// Entry point for code generation
+///
+/// # Errors
+///
+/// Returns any errors from the underlying IO operations unchanged
+///
+/// # Panics
+///
+/// If the package name does not conform to expectations.
+///
+#[ allow (clippy::missing_inline_in_public_items) ]
+#[ allow (clippy::print_stdout) ]
 pub fn invoke () -> Result <(), Box <dyn Error>> {
 	println! ("cargo:rerun-if-changed=build.rs");
 	println! ("cargo:rerun-if-changed=.");
@@ -21,20 +35,22 @@ pub fn invoke () -> Result <(), Box <dyn Error>> {
 		}
 	} else {
 		let pkg_name_parts: Vec <& str> = pkg_name.split ('-').collect ();
-		if pkg_name_parts.len () < 2 { panic! () }
-		if pkg_name_parts [0] != "aoc" { panic! () }
+		if pkg_name_parts.len () < 2 { Err ("Invalid package name") ? }
+		if pkg_name_parts [0] != "aoc" { Err ("Invalid package name") ? }
 		let year = pkg_name_parts [1];
 		if pkg_name_parts.len () == 2 {
-			prepare_year (year) ?
+			prepare_year (year) ?;
 		} else if pkg_name_parts.len () == 4 {
-			if pkg_name_parts [2] != "day" { panic! () }
+			if pkg_name_parts [2] != "day" { Err ("Invalid package name") ? }
 			let day = pkg_name_parts [3];
-			prepare_day (year, day) ?
-		} else { panic! () }
+			prepare_day (year, day) ?;
+		} else { Err ("Invalid package name") ? }
 	}
 	Ok (())
 }
 
+/// Generate code for a single year
+///
 fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 	let static_part = |template| {
 		replace_placeholders (
@@ -46,15 +62,14 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 	let dynamic_part = |template| {
 		(1_u32 ..= 25)
 			.filter_map (move |day|
-				if PathBuf::from (format! ("day-{:02}", day)).exists () {
-					Some (replace_placeholders (
+				PathBuf::from (format! ("day-{:02}", day)).exists ().then_some (
+					replace_placeholders (
 						template,
 						& HashMap::from_iter (vec! [
 							("${YEAR}", year),
 							("${DAY}", & format! ("{:02}", day)),
 						] ),
-					))
-				} else { None })
+					)))
 			.flatten ()
 	};
 	write_file (
@@ -73,6 +88,8 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 	Ok (())
 }
 
+/// Generate code for a single day
+///
 fn prepare_day (year: & str, day: & str) -> Result <(), Box <dyn Error>> {
 	write_file (
 		"src/main.rs",
@@ -84,13 +101,15 @@ fn prepare_day (year: & str, day: & str) -> Result <(), Box <dyn Error>> {
 	Ok (())
 }
 
+/// Write the provided lines to a named file
+///
 fn write_file <Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
 	name: & str,
 	lines: LinesIter,
 ) -> Result <(), Box <dyn Error>> {
 	let mut new_contents = String::new ();
-	for line in lines.into_iter () {
-		let line = line.as_ref ();
+	for line_temp in lines {
+		let line = line_temp.as_ref ();
 		new_contents.push_str (line);
 		new_contents.push ('\n');
 	}
@@ -102,6 +121,8 @@ fn write_file <Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
 	Ok (())
 }
 
+/// Replace placeholders in some strings
+///
 fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str>) -> Vec <String> {
 	lines.iter ().map (|line| {
 		let (output, buffer) = line.chars ().fold ((String::new (), String::new ()),
@@ -129,10 +150,16 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 	}).collect ()
 }
 
+/// Templates for generated file contents
+///
 mod templates {
 
+	/// Template for lib.rs in a year
+	///
 	pub const YEAR_LIB: & [& [& str]] = & [
 		& [
+			"#![ allow (clippy::missing_inline_in_public_items) ]",
+			"",
 			"use aoc_common::*;",
 			"",
 		],
@@ -141,6 +168,7 @@ mod templates {
 		],
 		& [
 			"",
+			"#[ must_use ]",
 			"pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {",
 			"\tvec! [",
 		],
@@ -153,6 +181,8 @@ mod templates {
 		],
 	];
 
+	/// Template for main.rs in a year
+	///
 	pub const YEAR_MAIN: & [& str] = & [
 		"use aoc_common::*;",
 		"",
@@ -161,6 +191,8 @@ mod templates {
 		"}",
 	];
 
+	/// Template for main.rs in a day
+	///
 	pub const DAY_MAIN: & [& str] = & [
 		"use std::env;",
 		"use std::ffi::OsString;",

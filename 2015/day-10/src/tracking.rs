@@ -18,10 +18,12 @@ pub struct Args {
 
 }
 
+#[ allow (clippy::needless_pass_by_value) ]
+#[ allow (clippy::print_stdout) ]
 pub fn run (args: Args) -> GenResult <()> {
 	let mut states = Vec::new ();
 	states.push (State::parse (& args.state) ?);
-	for cur_gen in 0u16 .. {
+	for cur_gen in 0_u16 .. {
 		if cur_gen == args.loops { break }
 		let cur_state = states.last ().unwrap ();
 		let next_state = {
@@ -116,9 +118,9 @@ impl State {
 }
 
 impl FromIterator <Item> for State {
-	fn from_iter <IntoIter> (iter: IntoIter) -> State
+	fn from_iter <IntoIter> (iter: IntoIter) -> Self
 			where IntoIter: IntoIterator <Item = Item> {
-		State {
+		Self {
 			items: iter.into_iter ().collect (),
 		}
 	}
@@ -126,11 +128,11 @@ impl FromIterator <Item> for State {
 
 impl TryFrom <model::State> for State {
 	type Error = GenError;
-	fn try_from (state: model::State) -> GenResult <State> {
+	fn try_from (state: model::State) -> GenResult <Self> {
 		if state.len () % 2 != 0 {
 			Err ("TrackingState requires an even numbers of items") ?;
 		}
-		Ok (State {
+		Ok (Self {
 			items: state.iter ().copied ()
 				.tuples::<(_, _)> ()
 				.enumerate ()

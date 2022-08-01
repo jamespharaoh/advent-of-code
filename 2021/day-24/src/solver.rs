@@ -56,7 +56,10 @@ pub enum SymVal {
 }
 
 impl Solver {
-	pub fn from_prog (input: & [Instr]) -> (Solver, Vec <(Rc <str>, Symbol)>) {
+
+	#[ allow (clippy::too_many_lines) ]
+	#[ must_use ]
+	pub fn from_prog (input: & [Instr]) -> (Self, Vec <(Rc <str>, Symbol)>) {
 		struct Context {
 			namer: VerNamer,
 			solver: Solver,
@@ -107,7 +110,7 @@ impl Solver {
 		}
 		let mut ctx = {
 			let mut namer = VerNamer::new ();
-			let solver = Solver::new ();
+			let solver = Self::new ();
 			let literal_name = "lit".into ();
 			let reg_w_name: Rc <str> = "w".into ();
 			let reg_x_name: Rc <str> = "x".into ();
@@ -164,6 +167,8 @@ impl Solver {
 			(ctx.reg_z_name, ctx.reg_z),
 		])
 	}
+
+	#[ allow (clippy::todo) ]
 	pub fn eval (& self, input: & [& [i64]], symbol: & Symbol) -> Result <Vec <i64>, MachineError> {
 		self.require_own_symbol ("eval", symbol);
 		let inner = self.inner.as_ref ();
@@ -172,22 +177,25 @@ impl Solver {
 		seen.insert (symbol.clone ());
 		let mut todo: Vec <Symbol> = vec! [ symbol.clone () ];
 		while let Some (symbol) = todo.pop () {
-			for child in symbol.children ().into_iter () {
+			for child in symbol.children () {
 				if seen.insert (child.clone ()) {
 					todo.push (child);
 				}
 			}
 		}
-		let mut values: HashMap <Symbol, Rc <Vec <i64>>> = HashMap::new ();
+		let mut values: HashMap <Symbol, Rc <[i64]>> = HashMap::new ();
 		for symbol in state.symbols_ordered.iter () {
 			if ! seen.contains (symbol) { continue }
-			let value = symbol.eval (& |sym| Rc::clone (values.get (sym).unwrap ()), input) ?;
-			let value = Rc::new (value);
+			let value = symbol.eval (& |sym| Rc::clone (& values [sym]), input) ?;
+			let value = Rc::from (value.as_slice ());
 			values.insert (symbol.clone (), Rc::clone (& value));
 		}
 		todo! ();
 	}
-	pub fn new () -> Solver {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn new () -> Self {
 		let inner = Rc::new (SolverInner {
 			state: RefCell::new (SolverState {
 				symbols: HashMap::new (),
@@ -195,25 +203,27 @@ impl Solver {
 			}),
 		});
 		let inner_weak = Rc::downgrade (& inner);
-		Solver { inner, inner_weak }
+		Self { inner, inner_weak }
 	}
-	pub fn fork (& self, symbols: & mut [& mut Symbol], input: & [i64]) -> Solver {
+
+	#[ must_use ]
+	pub fn fork (& self, symbols: & mut [& mut Symbol], input: & [i64]) -> Self {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		let mut seen: HashSet <Symbol> = symbols.iter ().map (|a| & ** a).cloned ().collect ();
 		let mut todo: Vec <Symbol> = seen.iter ().cloned ().collect ();
 		while let Some (symbol) = todo.pop () {
-			for child in symbol.children ().into_iter () {
+			for child in symbol.children () {
 				if seen.insert (child.clone ()) {
 					todo.push (child);
 				}
 			}
 		}
-		let mut new_solver = Solver::new ();
+		let mut new_solver = Self::new ();
 		for symbol in state.symbols_ordered.iter () {
 			if ! seen.contains (symbol) { continue }
 			let new_value = symbol.value ().migrate (& mut new_solver, input);
-			new_solver.define (Rc::clone (symbol.name ()), new_value);
+			let _symbol = new_solver.define (Rc::clone (symbol.name ()), new_value);
 		}
 		for old_symbol in symbols.iter_mut () {
 			let new_symbol = new_solver.get (old_symbol.name ()).unwrap ();
@@ -221,10 +231,15 @@ impl Solver {
 		}
 		new_solver
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn get (& self, name: & Rc <str>) -> Option <Symbol> {
 		let state = self.inner.state.borrow ();
 		state.symbols.get (name).cloned ()
 	}
+
+	#[ must_use ]
 	pub fn define (& self, name: Rc <str>, value: SymVal) -> Symbol {
 		value.children ().iter ().for_each (|child| self.require_own_symbol ("define", child));
 		let mut state = self.inner.state.borrow_mut ();
@@ -261,6 +276,7 @@ impl Solver {
 		state.symbols_ordered.push (symbol.clone ());
 		symbol
 	}
+
 	pub fn dump (& self, depth: usize, show_original: bool) {
 		let options = FormatExpandOptions::Depth (depth);
 		let state = self.inner.state.borrow ();
@@ -268,18 +284,20 @@ impl Solver {
 			symbol.dump (options, show_original, None);
 		}
 	}
+
 	fn require_own_symbol (& self, fn_name: & str, symbol: & Symbol) {
-		if ! RcWeak::ptr_eq (& self.inner_weak, & symbol.inner.solver_inner) {
-			panic! ("Tried to call Solver::{} on solver at {:p} with a symbol from solver at {:p}",
-				fn_name,
-				Rc::as_ptr (& self.inner),
-				RcWeak::as_ptr (& symbol.inner.solver_inner));
-		}
+		assert! (
+			RcWeak::ptr_eq (& self.inner_weak, & symbol.inner.solver_inner),
+			"Tried to call Solver::{} on solver at {:p} with a symbol from solver at {:p}",
+			fn_name,
+			Rc::as_ptr (& self.inner),
+			RcWeak::as_ptr (& symbol.inner.solver_inner));
 	}
+
 	pub fn dump_symbol (& self, depth: usize, show_original: bool, symbol: & Symbol) {
 		self.require_own_symbol ("dump_symbol", symbol);
 		let state = self.inner.state.borrow ();
-		let counts = state.symbol_use_counts (symbol);
+		let counts = symbol.use_counts ();
 		let options = FormatExpandOptions::Depth (depth);
 		for symbol in state.symbols_ordered.iter () {
 			let count = match counts.get (symbol) {
@@ -289,68 +307,66 @@ impl Solver {
 			symbol.dump (options, show_original, Some (count));
 		}
 	}
+
 	pub fn dump_symbol_auto (& self, symbol: & Symbol) {
 		self.require_own_symbol ("dump_symbol_auto", symbol);
 		let state = self.inner.state.borrow ();
-		let counts = state.symbol_use_counts (symbol);
-		let break_symbols: HashSet <Symbol> = counts.iter ().filter_map (
-			|(symbol, & count)| if count > 1 { Some (symbol) } else { None },
-		).cloned ().collect ();
-let a: Vec <Symbol> = break_symbols.iter ().cloned ().collect ();
-for b in a.iter () { println! ("{:?}", b); }
+		let counts = symbol.use_counts ();
+		let break_symbols: HashSet <Symbol> =
+			counts.iter ()
+				.filter_map (|(symbol, & count)| (count > 1).then_some (symbol))
+				.cloned ()
+				.collect ();
 		let options = FormatExpandOptions::BreakSymbols (& break_symbols);
 		for symbol in state.symbols_ordered.iter () {
-			if counts.get (symbol).map (|count| * count == 1).unwrap_or (true) { continue }
+			if counts.get (symbol).map_or (true, |count| * count == 1) { continue }
 			symbol.dump (options, true, None);
 		}
 	}
-}
 
-impl SolverState {
-	fn symbol_use_counts (& self, symbol: & Symbol) -> HashMap <Symbol, usize> {
-		let mut counts: HashMap <Symbol, usize> = HashMap::new ();
-		counts.insert (symbol.clone (), 0);
-		let mut todo: Vec <Symbol> = Vec::new ();
-		todo.push (symbol.clone ());
-		while let Some (symbol) = todo.pop () {
-			for child in symbol.original_children ().into_iter () {
-				let child_count = counts.entry (child.clone ()).or_insert (0);
-				if * child_count == 0 {
-					todo.push (child.clone ());
-				}
-				* child_count += 1;
-			}
-		}
-		counts
-	}
 }
 
 impl Symbol {
+
 	pub fn eval (
 		& self,
-		lookup: & dyn Fn (& Symbol) -> Rc <Vec <i64>>, input: & [& [i64]],
+		lookup: & dyn Fn (& Self) -> Rc <[i64]>, input: & [& [i64]],
 	) -> Result <Vec <i64>, MachineError> {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.value.eval (lookup, input)
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn name (& self) -> & Rc <str> {
 		& self.inner.name
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn value (& self) -> SymVal {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.value.clone ()
 	}
-	pub fn children (& self) -> ArrayVec <Symbol, 2> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn children (& self) -> ArrayVec <Self, 2> {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.value.children ()
 	}
-	pub fn original_children (& self) -> ArrayVec <Symbol, 2> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn original_children (& self) -> ArrayVec <Self, 2> {
 		let inner = self.inner.as_ref ();
 		inner.original_children.clone ()
 	}
+
+	#[ allow (clippy::print_stdout) ]
 	fn dump (
 		& self,
 		options: FormatExpandOptions,
@@ -366,7 +382,7 @@ impl Symbol {
 		match options {
 			FormatExpandOptions::Depth (depth) => {
 				if show_original {
-					if let Some (original_value) = & inner.original_value {
+					if let Some (original_value) = inner.original_value.as_ref () {
 						print! (" ← {}", original_value.expand (1));
 					}
 				}
@@ -378,25 +394,43 @@ impl Symbol {
 		}
 		print! ("\n");
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn depth (& self) -> usize {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.depth
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn len (& self) -> usize {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.len
 	}
-	pub fn is_empty (& self) -> bool { self.len () == 0 }
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn is_empty (& self) -> bool {
+		self.len () == 0
+	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn original_depth (& self) -> usize {
 		let inner = self.inner.as_ref ();
 		inner.original_depth
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn original_len (& self) -> usize {
 		let inner = self.inner.as_ref ();
 		inner.original_len
 	}
+
 	fn fmt_expand (
 		& self,
 		formatter: & mut fmt::Formatter,
@@ -425,10 +459,28 @@ impl Symbol {
 		}
 		Ok (())
 	}
+
+	fn use_counts (& self) -> HashMap <Self, usize> {
+		let mut counts: HashMap <Self, usize> = HashMap::new ();
+		counts.insert (self.clone (), 0);
+		let mut todo: Vec <Self> = Vec::new ();
+		todo.push (self.clone ());
+		while let Some (symbol) = todo.pop () {
+			for child in symbol.original_children () {
+				let child_count = counts.entry (child.clone ()).or_insert (0);
+				if * child_count == 0 {
+					todo.push (child.clone ());
+				}
+				* child_count += 1;
+			}
+		}
+		counts
+	}
+
 }
 
 impl cmp::PartialOrd for Symbol {
-	fn partial_cmp (& self, other: & Symbol) -> Option <cmp::Ordering> {
+	fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
 		self.inner.name.partial_cmp (& other.inner.name)
 	}
 }
@@ -459,65 +511,110 @@ impl hash::Hash for Symbol {
 }
 
 impl PartialEq for Symbol {
-	fn eq (& self, other: & Symbol) -> bool { self.inner.name == other.inner.name }
+	fn eq (& self, other: & Self) -> bool { self.inner.name == other.inner.name }
 }
 
 impl Eq for Symbol {}
 
 impl SymVal {
-	fn eval (& self, lookup: & dyn Fn (& Symbol) -> Rc <Vec <i64>>, input: & [& [i64]]) -> Result <Vec <i64>, MachineError> {
-		fn combine <Combine: Fn (i64, i64) -> i64> (left: Rc <Vec <i64>>, right: Rc <Vec <i64>>, combine: Combine) -> Vec <i64> {
+
+	fn eval (
+		& self,
+		lookup: & dyn Fn (& Symbol) -> Rc <[i64]>,
+		input: & [& [i64]],
+	) -> Result <Vec <i64>, MachineError> {
+
+		fn combine <Combine: Fn (i64, i64) -> i64> (
+			left: & Rc <[i64]>,
+			right: & Rc <[i64]>,
+			combine: Combine,
+		) -> Vec <i64> {
 			let mut results = HashSet::new ();
 			for left in left.iter ().copied () { for right in right.iter ().copied () {
 				results.insert (combine (left, right));
 			} }
 			let mut results: Vec <i64> = results.into_iter ().collect ();
-			results.sort ();
+			results.sort_unstable ();
 			results
 		}
-		Ok (match self {
-			SymVal::Symbol (arg) => lookup (arg).to_vec (),
-			SymVal::Input (arg) => input.get (* arg).copied ().ok_or (MachineError::NoMoreInput) ?.to_vec (),
-			SymVal::Add (left, right) => combine (lookup (left), lookup (right), |a, b| a + b),
-			SymVal::Multiply (left, right) => combine (lookup (left), lookup (right), |a, b| a * b),
-			SymVal::Divide (left, right) => combine (lookup (left), lookup (right), |a, b| a / b),
-			SymVal::Modulo (left, right) => combine (lookup (left), lookup (right), |a, b| a % b),
-			SymVal::IsEqual (left, right) => combine (lookup (left), lookup (right), |a, b| if a == b { 1 } else { 0 }),
-			SymVal::IsUnequal (left, right) => combine (lookup (left), lookup (right), |a, b| if a != b { 1 } else { 0 }),
-			SymVal::Value (arg) => vec! [ * arg ],
-			SymVal::Error (arg) => Err (* arg) ?,
+
+		Ok (match * self {
+			Self::Symbol (ref arg) =>
+				lookup (arg).to_vec (),
+			Self::Input (ref arg) =>
+				input.get (* arg).copied ().ok_or (MachineError::NoMoreInput) ?.to_vec (),
+			Self::Add (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| a + b),
+			Self::Multiply (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| a * b),
+			Self::Divide (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| a / b),
+			Self::Modulo (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| a % b),
+			Self::IsEqual (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| if a == b { 1 } else { 0 }),
+			Self::IsUnequal (ref left, ref right) =>
+				combine (& lookup (left), & lookup (right), |a, b| if a != b { 1 } else { 0 }),
+			Self::Value (ref arg) =>
+				vec! [ * arg ],
+			Self::Error (ref arg) =>
+				Err (* arg) ?,
 		})
+
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn depth (& self) -> usize {
-		self.children ().iter ().map (|child| child.depth ()).max ().unwrap_or (0) + 1
+		self.children ().iter ()
+			.map (Symbol::depth)
+			.max ()
+			.unwrap_or (0) + 1
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn len (& self) -> usize {
 		self.children ().iter ().fold (1, |len, child| len + child.len ())
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn is_empty (& self) -> bool {
 		self.children ().iter ().next ().is_some ()
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn original_depth (& self) -> usize {
-		self.children ().iter ().map (|child| child.original_depth ()).max ().unwrap_or (0) + 1
+		self.children ().iter ()
+			.map (Symbol::original_depth)
+			.max ()
+			.unwrap_or (0) + 1
 	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn original_len (& self) -> usize {
 		self.children ().iter ().fold (1, |len, child| len + child.original_len ())
 	}
+
+	#[ must_use ]
 	pub fn children (& self) -> ArrayVec <Symbol, 2> {
 		fn make <const CAP: usize> (arg: [& Symbol; CAP]) -> ArrayVec <Symbol, 2> {
 			arg.into_iter ().cloned ().collect ()
 		}
-		match self {
-			SymVal::Symbol (arg) => make ([ arg ]),
-			SymVal::Input (_) => make ([ ]),
-			SymVal::Add (left, right) => make ([ left, right ]),
-			SymVal::Multiply (left, right) => make ([ left, right ]),
-			SymVal::Divide (left, right) => make ([ left, right ]),
-			SymVal::Modulo (left, right) => make ([ left, right ]),
-			SymVal::IsEqual (left, right) => make ([ left, right ]),
-			SymVal::IsUnequal (left, right) => make ([ left, right ]),
-			SymVal::Value (_) => make ([ ]),
-			SymVal::Error (_) => make ([ ]),
+		match * self {
+			Self::Symbol (ref arg) => make ([ arg ]),
+			Self::Input (_) => make ([ ]),
+			Self::Add (ref left, ref right) => make ([ left, right ]),
+			Self::Multiply (ref left, ref right) => make ([ left, right ]),
+			Self::Divide (ref left, ref right) => make ([ left, right ]),
+			Self::Modulo (ref left, ref right) => make ([ left, right ]),
+			Self::IsEqual (ref left, ref right) => make ([ left, right ]),
+			Self::IsUnequal (ref left, ref right) => make ([ left, right ]),
+			Self::Value (_) => make ([ ]),
+			Self::Error (_) => make ([ ]),
 		}
 	}
 	fn fmt_expand (
@@ -528,41 +625,41 @@ impl SymVal {
 	) -> fmt::Result {
 		let expand = |symbol, wrap| FormatExpand::Symbol (options, wrap, symbol);
 		let (open, close) = if wrap { ("(", ")") } else { ("", "") };
-		match self {
-			SymVal::Symbol (other_symbol) =>
+		match * self {
+			Self::Symbol (ref other_symbol) =>
 				write! (formatter, "{}", expand (other_symbol, wrap)) ?,
-			SymVal::Input (index) =>
+			Self::Input (ref index) =>
 				write! (formatter, "input [{}]", index) ?,
-			SymVal::Add (left, right) =>
+			Self::Add (ref left, ref right) =>
 				write! (formatter, "{}{} + {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::Multiply (left, right) =>
+			Self::Multiply (ref left, ref right) =>
 				write! (formatter, "{}{} × {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::Divide (left, right) =>
+			Self::Divide (ref left, ref right) =>
 				write! (formatter, "{}{} ÷ {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::Modulo (left, right) =>
+			Self::Modulo (ref left, ref right) =>
 				write! (formatter, "{}{} mod {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::IsEqual (left, right) =>
+			Self::IsEqual (ref left, ref right) =>
 				write! (formatter, "{}{} = {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::IsUnequal (left, right) =>
+			Self::IsUnequal (ref left, ref right) =>
 				write! (formatter, "{}{} ≠ {}{}", open, expand (left, true), expand (right, true), close) ?,
-			SymVal::Value (value) =>
+			Self::Value (ref value) =>
 				write! (formatter, "{}", value) ?,
-			SymVal::Error (arg) =>
+			Self::Error (ref arg) =>
 				write! (formatter, "{:?}", arg) ?,
 		}
 		Ok (())
 	}
-	fn expand (& self, depth: usize) -> FormatExpand {
+	const fn expand (& self, depth: usize) -> FormatExpand {
 		let options = FormatExpandOptions::Depth (depth);
 		FormatExpand::SymVal (options, false, self)
 	}
-	fn simplified (& self) -> SymVal {
+	fn simplified (& self) -> Self {
 		match self.simplify () {
 			Some (val) => val,
 			None => self.clone (),
 		}
 	}
-	fn simplify (& self) -> Option <SymVal> {
+	fn simplify (& self) -> Option <Self> {
 		let mut value = self;
 		let mut result = None;
 		while let Some (temp) = value.simplify_real () {
@@ -571,126 +668,127 @@ impl SymVal {
 		}
 		result
 	}
-	fn simplify_real (& self) -> Option <SymVal> {
-		match self {
-			SymVal::Input (_) => None,
-			SymVal::Add (left_sym, right_sym) => {
+	#[ allow (clippy::todo) ]
+	fn simplify_real (& self) -> Option <Self> {
+		match * self {
+			Self::Input (_) => None,
+			Self::Add (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(SymVal::Value (left_val), SymVal::Value (right_val)) =>
-						Some (SymVal::Value (left_val + right_val)),
-					(_, SymVal::Value (0)) => Some (left_symval),
-					(SymVal::Value (0), _) => Some (right_symval),
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::Value (ref left_val), & Self::Value (ref right_val)) =>
+						Some (Self::Value (left_val + right_val)),
+					(_, & Self::Value (0)) => Some (left_symval),
+					(& Self::Value (0), _) => Some (right_symval),
 					(_, _) if left_symval == right_symval => todo! (),
 					_ => None,
 				}
 			},
-			SymVal::Multiply (left_sym, right_sym) => {
+			Self::Multiply (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(SymVal::Value (left_val), SymVal::Value (right_val)) =>
-						Some (SymVal::Value (left_val * right_val)),
-					(_, SymVal::Value (0)) => Some (SymVal::Value (0)),
-					(SymVal::Value (0), _) => Some (SymVal::Value (0)),
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::Value (left_val), & Self::Value (right_val)) =>
+						Some (Self::Value (left_val * right_val)),
+					(_, & Self::Value (0)) => Some (Self::Value (0)),
+					(& Self::Value (0), _) => Some (Self::Value (0)),
 					_ => None,
 				}
 			},
-			SymVal::Divide (left_sym, right_sym) => {
+			Self::Divide (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(SymVal::Value (left_val), SymVal::Value (right_val)) =>
-						Some (SymVal::Value (left_val / right_val)),
-					(_, SymVal::Value (1)) => Some (left_symval),
-					(_, SymVal::Value (0)) =>
-						Some (SymVal::Error (MachineError::DivideByZero)),
-					(SymVal::Value (0), _) => Some (SymVal::Value (0)),
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::Value (left_val), & Self::Value (right_val)) =>
+						Some (Self::Value (left_val / right_val)),
+					(_, & Self::Value (1)) => Some (left_symval),
+					(_, & Self::Value (0)) =>
+						Some (Self::Error (MachineError::DivideByZero)),
+					(& Self::Value (0), _) => Some (Self::Value (0)),
 					(_, _) if left_symval == right_symval => todo! (),
 					_ => None,
 				}
 			}
-			SymVal::Modulo (left_sym, right_sym) => {
+			Self::Modulo (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(& SymVal::Value (left_val), & SymVal::Value (right_val)) => {
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::Value (left_val), & Self::Value (right_val)) => {
 						if left_val >= 0 && right_val > 0 {
-							Some (SymVal::Value (left_val % right_val))
+							Some (Self::Value (left_val % right_val))
 						} else if right_val == 0 {
-							Some (SymVal::Error (MachineError::DivideByZero))
+							Some (Self::Error (MachineError::DivideByZero))
 						} else {
-							Some (SymVal::Error (MachineError::NegativeModulo))
+							Some (Self::Error (MachineError::NegativeModulo))
 						}
 					},
-					(_, SymVal::Value (0)) =>
-						Some (SymVal::Error (MachineError::DivideByZero)),
-					(_, & SymVal::Value (right_val)) if right_val < 0 =>
-						Some (SymVal::Error (MachineError::NegativeModulo)),
-					(& SymVal::Value (left_val), _) if left_val < 0 =>
-						Some (SymVal::Error (MachineError::NegativeModulo)),
+					(_, & Self::Value (0)) =>
+						Some (Self::Error (MachineError::DivideByZero)),
+					(_, & Self::Value (right_val)) if right_val < 0 =>
+						Some (Self::Error (MachineError::NegativeModulo)),
+					(& Self::Value (left_val), _) if left_val < 0 =>
+						Some (Self::Error (MachineError::NegativeModulo)),
 					_ => None,
 				}
 			},
-			SymVal::IsEqual (left_sym, right_sym) => {
+			Self::IsEqual (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(SymVal::IsEqual (inner_left_sym, inner_right_sym), SymVal::Value (0)) =>
-						Some (SymVal::IsUnequal (inner_left_sym.clone (), inner_right_sym.clone ())),
-					(SymVal::Value (0), SymVal::IsEqual (inner_left_sym, inner_right_sym)) =>
-						Some (SymVal::IsUnequal (inner_left_sym.clone (), inner_right_sym.clone ())),
-					(SymVal::IsEqual (_, _), SymVal::Value (1)) => Some (left_symval),
-					(SymVal::Value (1), SymVal::IsEqual (_, _)) => Some (right_symval),
-					(SymVal::Value (left_val), SymVal::Value (right_val)) =>
-						Some (SymVal::Value (if left_val == right_val { 1 } else { 0 })),
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::IsEqual (ref inner_left_sym, ref inner_right_sym), & Self::Value (0)) =>
+						Some (Self::IsUnequal (inner_left_sym.clone (), inner_right_sym.clone ())),
+					(& Self::Value (0), & Self::IsEqual (ref inner_left_sym, ref inner_right_sym)) =>
+						Some (Self::IsUnequal (inner_left_sym.clone (), inner_right_sym.clone ())),
+					(& Self::IsEqual (_, _), & Self::Value (1)) => Some (left_symval),
+					(& Self::Value (1), & Self::IsEqual (_, _)) => Some (right_symval),
+					(& Self::Value (left_val), & Self::Value (right_val)) =>
+						Some (Self::Value (if left_val == right_val { 1 } else { 0 })),
 					_ => None,
 				}
 			},
-			SymVal::IsUnequal (left_sym, right_sym) => {
+			Self::IsUnequal (ref left_sym, ref right_sym) => {
 				let left_symval = left_sym.value ();
 				let right_symval = right_sym.value ();
 				match (& left_symval, & right_symval) {
-					(SymVal::Error (_), _) => Some (left_symval),
-					(_, SymVal::Error (_)) => Some (right_symval),
-					(SymVal::Value (left_val), SymVal::Value (right_val)) =>
-						Some (SymVal::Value (if left_val != right_val { 1 } else { 0 })),
+					(& Self::Error (_), _) => Some (left_symval),
+					(_, & Self::Error (_)) => Some (right_symval),
+					(& Self::Value (ref left_val), & Self::Value (ref right_val)) =>
+						Some (Self::Value (if left_val != right_val { 1 } else { 0 })),
 					_ => None,
 				}
 			},
-			SymVal::Value (_) => None,
-			_ => todo! ("SymVal::{:?}", self),
+			Self::Value (_) => None,
+			Self::Symbol (_) | Self::Error (_) => todo! ("SymVal::{:?}", self),
 		}
 	}
-	fn migrate (& self, solver: & mut Solver, input: & [i64]) -> SymVal {
+	fn migrate (& self, solver: & mut Solver, input: & [i64]) -> Self {
 		let dup = |arg: Symbol| solver.get (arg.name ()).unwrap ();
 		match self.clone () {
-			SymVal::Symbol (arg) => SymVal::Symbol (dup (arg)),
-			SymVal::Input (arg) =>
+			Self::Symbol (arg) => Self::Symbol (dup (arg)),
+			Self::Input (arg) =>
 				if let Some (& val) = input.get (arg) {
-					SymVal::Value (val)
+					Self::Value (val)
 				} else {
-					SymVal::Input (arg)
+					Self::Input (arg)
 				},
-			SymVal::Add (left, right) => SymVal::Add (dup (left), dup (right)),
-			SymVal::Multiply (left, right) => SymVal::Multiply (dup (left), dup (right)),
-			SymVal::Divide (left, right) => SymVal::Divide (dup (left), dup (right)),
-			SymVal::Modulo (left, right) => SymVal::Modulo (dup (left), dup (right)),
-			SymVal::IsEqual (left, right) => SymVal::IsEqual (dup (left), dup (right)),
-			SymVal::IsUnequal (left, right) => SymVal::IsUnequal (dup (left), dup (right)),
-			SymVal::Value (arg) => SymVal::Value (arg),
-			SymVal::Error (arg) => SymVal::Error (arg),
+			Self::Add (left, right) => Self::Add (dup (left), dup (right)),
+			Self::Multiply (left, right) => Self::Multiply (dup (left), dup (right)),
+			Self::Divide (left, right) => Self::Divide (dup (left), dup (right)),
+			Self::Modulo (left, right) => Self::Modulo (dup (left), dup (right)),
+			Self::IsEqual (left, right) => Self::IsEqual (dup (left), dup (right)),
+			Self::IsUnequal (left, right) => Self::IsUnequal (dup (left), dup (right)),
+			Self::Value (arg) => Self::Value (arg),
+			Self::Error (arg) => Self::Error (arg),
 		}
 	}
 }
@@ -704,12 +802,12 @@ impl fmt::Display for SymVal {
 	}
 }
 
-enum FormatExpand <'a> {
-	Symbol (FormatExpandOptions <'a>, bool, & 'a Symbol),
-	SymVal (FormatExpandOptions <'a>, bool, & 'a SymVal),
+enum FormatExpand <'dat> {
+	Symbol (FormatExpandOptions <'dat>, bool, & 'dat Symbol),
+	SymVal (FormatExpandOptions <'dat>, bool, & 'dat SymVal),
 }
 
-impl <'a> fmt::Display for FormatExpand <'a> {
+impl <'dat> fmt::Display for FormatExpand <'dat> {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		match * self {
 			FormatExpand::Symbol (options, wrap, symbol) =>
@@ -721,9 +819,9 @@ impl <'a> fmt::Display for FormatExpand <'a> {
 }
 
 #[ derive (Clone, Copy) ]
-enum FormatExpandOptions <'a> {
+enum FormatExpandOptions <'dat> {
 	Depth (usize),
-	BreakSymbols (& 'a HashSet <Symbol>),
+	BreakSymbols (& 'dat HashSet <Symbol>),
 }
 
 struct VerNamer {
@@ -738,8 +836,8 @@ struct VerNamerEntry {
 
 impl VerNamer {
 
-	fn new () -> VerNamer {
-		VerNamer {
+	fn new () -> Self {
+		Self {
 			entries: HashMap::new (),
 		}
 	}

@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/2](https://adventofcode.com/2015/day/2)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -9,8 +11,8 @@ puzzle_info! {
 	year = 2015;
 	day = 2;
 	parse = |input| model::parse_input (input);
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 pub mod logic {
@@ -20,7 +22,7 @@ pub mod logic {
 	use model::Input;
 	use nums::Int;
 
-	pub fn part_one (input: Input) -> GenResult <Dim> {
+	pub fn part_one (input: & Input) -> GenResult <Dim> {
 		Ok (
 			input.iter_vals ().map (|(l, w, h)|
 				Int::add_4 (
@@ -34,7 +36,7 @@ pub mod logic {
 		)
 	}
 
-	pub fn part_two (input: Input) -> GenResult <Dim> {
+	pub fn part_two (input: & Input) -> GenResult <Dim> {
 		Ok (
 			input.iter_vals ().map (|(l, w, h)|
 				Int::add_2 (
@@ -56,22 +58,22 @@ pub mod logic {
 
 		#[ test ]
 		fn part_one () {
-			assert_eq_ok! (0, logic::part_one (vec! []));
-			assert_eq_ok! (101, logic::part_one (vec! [(2, 3, 4), (1, 1, 10)]));
+			assert_eq_ok! (0, logic::part_one (& vec! []));
+			assert_eq_ok! (101, logic::part_one (& vec! [(2, 3, 4), (1, 1, 10)]));
 			const BIG: u32 = 24770;
-			assert_is_ok! (logic::part_one (vec! [(BIG, BIG, BIG)]));
-			assert_err! ("Overflow", logic::part_one (vec! [(BIG + 1, BIG + 1, BIG + 1)]));
-			assert_err! ("Overflow", logic::part_one (vec! [(BIG, BIG, BIG), (BIG, BIG, BIG)]));
+			assert_is_ok! (logic::part_one (& vec! [(BIG, BIG, BIG)]));
+			assert_err! ("Overflow", logic::part_one (& vec! [(BIG + 1, BIG + 1, BIG + 1)]));
+			assert_err! ("Overflow", logic::part_one (& vec! [(BIG, BIG, BIG), (BIG, BIG, BIG)]));
 		}
 
 		#[ test ]
 		fn part_two () {
-			assert_eq_ok! (0, logic::part_two (vec! []));
-			assert_eq_ok! (48, logic::part_two (vec! [(2, 3, 4), (1, 1, 10)]));
+			assert_eq_ok! (0, logic::part_two (& vec! []));
+			assert_eq_ok! (48, logic::part_two (& vec! [(2, 3, 4), (1, 1, 10)]));
 			const BIG: u32 = 1625;
-			assert_is_ok! (logic::part_two (vec! [(BIG, BIG, BIG)]));
-			assert_err! ("Overflow", logic::part_two (vec! [(BIG + 1, BIG + 1, BIG + 1)]));
-			assert_err! ("Overflow", logic::part_two (vec! [(BIG, BIG, BIG), (BIG, BIG, BIG)]));
+			assert_is_ok! (logic::part_two (& vec! [(BIG, BIG, BIG)]));
+			assert_err! ("Overflow", logic::part_two (& vec! [(BIG + 1, BIG + 1, BIG + 1)]));
+			assert_err! ("Overflow", logic::part_two (& vec! [(BIG, BIG, BIG), (BIG, BIG, BIG)]));
 		}
 
 	}
