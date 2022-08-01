@@ -55,7 +55,12 @@
 <span id="55">55</span>
 <span id="56">56</span>
 <span id="57">57</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+</pre><pre class="rust"><code><span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+
+<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2021_day_01</span> <span class="kw">as</span> <span class="ident">day_01</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2021_day_02</span> <span class="kw">as</span> <span class="ident">day_02</span>;
@@ -83,6 +88,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2021_day_24</span> <span class="kw">as</span> <span class="ident">day_24</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2021_day_25</span> <span class="kw">as</span> <span class="ident">day_25</span>;
 
+<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">puzzle_metadata</span> () -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">puzzle::Puzzle</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 	<span class="macro">vec!</span> [
 		<span class="ident">day_01::puzzle_metadata</span> (),

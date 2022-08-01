@@ -119,9 +119,13 @@
 <span id="119">119</span>
 <span id="120">120</span>
 <span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 20: Infinite Elves and Infinite Houses</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/20](https://adventofcode.com/2015/day/20)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -171,7 +175,7 @@
 					<span class="op">*</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::sub_2</span> (<span class="ident">div</span>, <span class="number">1</span>) <span class="question-mark">?</span>;
 					<span class="kw">let</span> <span class="ident">comp</span> <span class="op">=</span>
 						<span class="kw">if</span> <span class="ident">div</span> <span class="op">==</span> <span class="ident">Val::ONE</span> { <span class="ident">house</span> }
-						<span class="kw">else</span> <span class="kw">if</span> <span class="ident">div</span> <span class="op">==</span> <span class="number">2</span> { <span class="ident">house</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1</span> }
+						<span class="kw">else</span> <span class="kw">if</span> <span class="ident">div</span> <span class="op">==</span> <span class="number">2</span> { <span class="ident">house</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">1_i32</span> }
 						<span class="kw">else</span> { <span class="ident">Val::div_2</span> (<span class="ident">house</span>, <span class="ident">div</span>) <span class="question-mark">?</span> };
 					<span class="kw">if</span> <span class="ident">comp</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">lim</span> {
 						<span class="ident">total</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">total</span>, <span class="ident">Val::mul_2</span> (<span class="ident">div</span>, <span class="ident">mul</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>;

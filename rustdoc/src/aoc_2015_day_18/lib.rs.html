@@ -138,9 +138,13 @@
 <span id="138">138</span>
 <span id="139">139</span>
 <span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 18: Like a GIF For Your Yard</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/18](https://adventofcode.com/2015/day/18)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -238,7 +242,7 @@
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">idx</span>, <span class="ident">line</span>)<span class="op">|</span> (<span class="ident">idx</span>, <span class="ident">line</span>.<span class="ident">chars</span> ().<span class="ident">count</span> ()))
 				.<span class="ident">find</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">len</span>)<span class="op">|</span> <span class="ident">len</span> <span class="op">!</span><span class="op">=</span> <span class="ident">grid_size</span> [<span class="number">1</span>]) {
 			<span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: Expected {} chars, not {}&quot;</span>,
-				<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">grid_size</span> [<span class="number">1</span>], <span class="ident">line_len</span>)) <span class="question-mark">?</span>
+				<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">grid_size</span> [<span class="number">1</span>], <span class="ident">line_len</span>)) <span class="question-mark">?</span>;
 		}
 		<span class="kw">let</span> <span class="ident">grid_data</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ().<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
 			<span class="ident">line</span>.<span class="ident">chars</span> ().<span class="ident">enumerate</span> ().<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span>(<span class="ident">char_idx</span>, <span class="ident">ch</span>)<span class="op">|</span> <span class="prelude-val">Ok</span> (<span class="kw">match</span> <span class="ident">ch</span> {

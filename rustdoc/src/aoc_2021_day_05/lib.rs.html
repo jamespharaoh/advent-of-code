@@ -233,7 +233,7 @@
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Vent</span> { <span class="kw">pub</span> <span class="ident">start</span>: <span class="ident">Pos</span>, <span class="kw">pub</span> <span class="ident">end</span>: <span class="ident">Pos</span> }
 
 	<span class="kw">impl</span> <span class="ident">Vent</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_diagonal</span> (<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_diagonal</span> (<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
 			<span class="self">self</span>.<span class="ident">start</span>.<span class="ident">x</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">end</span>.<span class="ident">x</span> <span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">start</span>.<span class="ident">y</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">end</span>.<span class="ident">y</span>
 		}
 	}

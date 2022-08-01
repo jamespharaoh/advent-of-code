@@ -137,9 +137,13 @@
 <span id="137">137</span>
 <span id="138">138</span>
 <span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 16: Aunt Sue</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/16](https://adventofcode.com/2015/day/16)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -160,7 +164,7 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">all_sues</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>) -&gt; <span class="ident">u8</span> {
+		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>) -&gt; <span class="ident">u8</span> {
 			<span class="kw">match</span> <span class="ident">attr</span> {
 				<span class="ident">Attr::Children</span> =&gt; <span class="number">3</span>,
 				<span class="ident">Attr::Cats</span> =&gt; <span class="number">7</span>,
@@ -184,7 +188,7 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">all_sues</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>, <span class="ident">num</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
+		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>, <span class="ident">num</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
 			<span class="kw">match</span> <span class="ident">attr</span> {
 				<span class="ident">Attr::Children</span> =&gt; <span class="ident">num</span> <span class="op">==</span> <span class="number">3</span>,
 				<span class="ident">Attr::Cats</span> =&gt; <span class="ident">num</span> <span class="op">&gt;</span> <span class="number">7</span>,

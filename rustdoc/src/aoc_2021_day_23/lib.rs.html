@@ -797,9 +797,37 @@
 <span id="797">797</span>
 <span id="798">798</span>
 <span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 23: Amphipod</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/23](https://adventofcode.com/2021/day/23)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -828,16 +856,16 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">State::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
-		<span class="ident">calc_result</span> (<span class="ident">input</span>)
+		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">input</span>)
 	}
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">lines_modified</span> <span class="op">=</span> <span class="ident">modify_input_for_part_two</span> (<span class="ident">lines</span>);
 		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">State::parse</span> (<span class="op">&amp;</span> <span class="ident">lines_modified</span>) <span class="question-mark">?</span>;
-		<span class="ident">calc_result</span> (<span class="ident">input</span>)
+		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">input</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modify_input_for_part_two</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="lifetime">&#39;a</span> <span class="ident">str</span>]) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">modify_input_for_part_two</span> <span class="op">&lt;</span><span class="lifetime">&#39;lin</span><span class="op">&gt;</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="lifetime">&#39;lin</span> <span class="ident">str</span>]) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="lifetime">&#39;lin</span> <span class="ident">str</span><span class="op">&gt;</span> {
 		<span class="macro">vec!</span> [
 			<span class="ident">lines</span> [<span class="number">0</span>],
 			<span class="ident">lines</span> [<span class="number">1</span>],
@@ -849,17 +877,17 @@
 		]
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="ident">State</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">State</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
 		<span class="prelude-val">Ok</span> (
 			<span class="ident">iterator</span> (<span class="ident">input</span>)
-				.<span class="ident">filter</span> (<span class="op">|</span>(<span class="ident">state_compact</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">state_compact</span>.<span class="ident">is_finished</span> ())
+				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">state_compact</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">state_compact</span>.<span class="ident">is_finished</span> ())
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span>)
 				.<span class="ident">next</span> ()
 				.<span class="ident">ok_or</span> (<span class="string">&quot;Failed to find solution&quot;</span>) <span class="question-mark">?</span>
 		)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span> (<span class="ident">input</span>: <span class="ident">State</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">StateCompact</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">State</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> (<span class="ident">StateCompact</span>, <span class="ident">i64</span>)<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">PrioritySearch::with_hash_map</span> (
 			<span class="op">|</span><span class="ident">state</span>: <span class="ident">StateCompact</span>, <span class="ident">score</span>: <span class="ident">i64</span>, <span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
 				<span class="kw">for</span> (<span class="ident">next_state</span>, <span class="ident">next_cost</span>) <span class="kw">in</span> <span class="ident">calc_next_states</span> (<span class="ident">state</span>) {
@@ -885,25 +913,24 @@
 		<span class="kw">if</span> <span class="ident">next_moves</span>.<span class="ident">is_empty</span> () { <span class="kw">return</span> <span class="ident">ArrayVec::new</span> () }
 
 		<span class="kw">let</span> <span class="ident">blocking</span> <span class="op">=</span> (<span class="ident">state</span>.<span class="ident">hall</span> () [<span class="number">3</span>], <span class="ident">state</span>.<span class="ident">hall</span> () [<span class="number">5</span>], <span class="ident">state</span>.<span class="ident">hall</span> () [<span class="number">7</span>]);
+		<span class="kw">use</span> <span class="ident">Amph</span>::{ <span class="ident">Amber</span>, <span class="ident">Bronze</span>, <span class="ident">Copper</span>, <span class="ident">Desert</span> };
 		<span class="kw">let</span> <span class="ident">sections</span> <span class="op">=</span> [
 			<span class="op">!</span> <span class="macro">matches!</span> (<span class="ident">blocking</span>,
-				(<span class="prelude-val">Some</span> (<span class="ident">Amph::Copper</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> (<span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Bronze</span>), <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Copper</span>), <span class="kw">_</span>) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>), <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>))
-			),
+				(<span class="prelude-val">Some</span> (<span class="ident">Copper</span> <span class="op">|</span> <span class="ident">Desert</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Bronze</span> <span class="op">|</span> <span class="ident">Copper</span> <span class="op">|</span> <span class="ident">Desert</span>), <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Desert</span>))),
 			<span class="op">!</span> <span class="macro">matches!</span> (<span class="ident">blocking</span>,
-				(<span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Copper</span>), <span class="kw">_</span>) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>), <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>))
-			),
+				(<span class="prelude-val">Some</span> (<span class="ident">Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Copper</span> <span class="op">|</span> <span class="ident">Desert</span>), <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Desert</span>))),
 			<span class="op">!</span> <span class="macro">matches!</span> (<span class="ident">blocking</span>,
-				(<span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>), <span class="kw">_</span>) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Bronze</span>), <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>))
-			),
+				(<span class="prelude-val">Some</span> (<span class="ident">Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amber</span> <span class="op">|</span> <span class="ident">Bronze</span>), <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Desert</span>))),
 			<span class="op">!</span> <span class="macro">matches!</span> (<span class="ident">blocking</span>,
-				(<span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>), <span class="kw">_</span>) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Bronze</span>), <span class="kw">_</span>) <span class="op">|</span> (<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>)) <span class="op">|</span>
-				(<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Bronze</span>)) <span class="op">|</span> (<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amph::Copper</span>))
-			),
+				(<span class="prelude-val">Some</span> (<span class="ident">Amber</span>), <span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amber</span> <span class="op">|</span> <span class="ident">Bronze</span>), <span class="kw">_</span>) <span class="op">|</span>
+				(<span class="kw">_</span>, <span class="kw">_</span>, <span class="prelude-val">Some</span> (<span class="ident">Amber</span> <span class="op">|</span> <span class="ident">Bronze</span> <span class="op">|</span> <span class="ident">Copper</span>))),
 		];
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">next_states</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
@@ -922,7 +949,7 @@
 					<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">move_in</span> (<span class="ident">from_hall</span>, <span class="ident">to_room</span>);
 					<span class="kw">return</span> <span class="ident">iter::once</span> ((<span class="ident">next_state</span>.<span class="ident">compact</span> (), <span class="ident">cost</span>)).<span class="ident">collect</span> ();
 				},
-				<span class="kw">_</span> =&gt; (),
+				<span class="ident">Move::Out</span> (..) =&gt; (),
 			}
 		}
 		<span class="kw">for</span> <span class="ident">next_move</span> <span class="kw">in</span> <span class="ident">next_moves</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
@@ -980,25 +1007,22 @@
 					<span class="ident">result</span>.<span class="ident">clear</span> ();
 					<span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Move::Between</span> (<span class="ident">amph</span>, <span class="ident">from_room</span>, <span class="ident">to_room</span>));
 					<span class="kw">return</span> <span class="ident">result</span>;
-				} <span class="kw">else</span> {
-					<span class="kw">for</span> <span class="ident">hall</span> <span class="kw">in</span>
-						<span class="ident">iter::successors</span> (
-								<span class="prelude-val">Some</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>)),
-								<span class="op">|</span><span class="ident">prev_hall</span><span class="op">|</span> <span class="kw">if</span> <span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">&gt;</span> <span class="number">0</span> {
-									<span class="prelude-val">Some</span> (<span class="ident">Place::for_idx</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">-</span> <span class="number">1</span>))
-								} <span class="kw">else</span> { <span class="prelude-val">None</span> })
-							.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">hall</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">get</span> (<span class="ident">hall</span>).<span class="ident">is_none</span> ())
-							.<span class="ident">chain</span> (
-								<span class="ident">iter::successors</span> (
-										<span class="prelude-val">Some</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>)),
-										<span class="op">|</span><span class="ident">prev_hall</span><span class="op">|</span> <span class="kw">if</span> <span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">+</span> <span class="number">1</span> <span class="op">&lt;</span> <span class="number">11</span> {
-											<span class="prelude-val">Some</span> (<span class="ident">Place::for_idx</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">+</span> <span class="number">1</span>))
-										} <span class="kw">else</span> { <span class="prelude-val">None</span> })
-									.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">hall</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">get</span> (<span class="ident">hall</span>).<span class="ident">is_none</span> ()))
-							.<span class="ident">filter</span> (<span class="op">|</span><span class="ident">hall</span><span class="op">|</span> <span class="op">!</span> <span class="ident">hall</span>.<span class="ident">entrance</span> ()) {
-						<span class="kw">if</span> <span class="op">!</span> <span class="ident">path_clear</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>), <span class="ident">hall</span>) { <span class="kw">continue</span> }
-						<span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Move::Out</span> (<span class="ident">amph</span>, <span class="ident">from_room</span>, <span class="ident">hall</span>));
-					}
+				}
+				<span class="kw">for</span> <span class="ident">hall</span> <span class="kw">in</span>
+					<span class="ident">iter::successors</span> (
+							<span class="prelude-val">Some</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>)),
+							<span class="op">|</span><span class="ident">prev_hall</span><span class="op">|</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">&gt;</span> <span class="number">0</span>).<span class="ident">then</span> (<span class="op">|</span><span class="op">|</span>
+								<span class="ident">Place::for_idx</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">-</span> <span class="number">1</span>)))
+						.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">hall</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">get</span> (<span class="ident">hall</span>).<span class="ident">is_none</span> ())
+						.<span class="ident">chain</span> (
+							<span class="ident">iter::successors</span> (
+									<span class="prelude-val">Some</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>)),
+									<span class="op">|</span><span class="ident">prev_hall</span><span class="op">|</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">+</span> <span class="number">1</span> <span class="op">&lt;</span> <span class="number">11</span>).<span class="ident">then_some</span> (
+										<span class="ident">Place::for_idx</span> (<span class="ident">prev_hall</span>.<span class="ident">idx</span> () <span class="op">+</span> <span class="number">1</span>)))
+								.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">hall</span><span class="op">|</span> <span class="ident">state</span>.<span class="ident">get</span> (<span class="ident">hall</span>).<span class="ident">is_none</span> ()))
+						.<span class="ident">filter</span> (<span class="op">|</span><span class="ident">hall</span><span class="op">|</span> <span class="op">!</span> <span class="ident">hall</span>.<span class="ident">entrance</span> ()) {
+					<span class="kw">if</span> <span class="op">!</span> <span class="ident">path_clear</span> (<span class="ident">room_entrance</span> (<span class="ident">from_room</span>), <span class="ident">hall</span>) { <span class="kw">continue</span> }
+					<span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Move::Out</span> (<span class="ident">amph</span>, <span class="ident">from_room</span>, <span class="ident">hall</span>));
 				}
 			}
 		}
@@ -1011,6 +1035,7 @@
 
 	<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">State</span> {
@@ -1024,8 +1049,8 @@
 
 	<span class="kw">impl</span> <span class="ident">State</span> {
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_array</span> (<span class="ident">room_size</span>: <span class="ident">usize</span>, <span class="ident">places</span>: [<span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span>; <span class="number">27</span>]) -&gt; <span class="ident">State</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_array</span> (<span class="ident">room_size</span>: <span class="ident">usize</span>, <span class="ident">places</span>: [<span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span>; <span class="number">27</span>]) -&gt; <span class="self">Self</span> {
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">Self</span> {
 				<span class="ident">room_size</span>,
 				<span class="ident">hall</span>: <span class="ident">ArrayVec::new</span> (),
 				<span class="ident">amber</span>: <span class="ident">ArrayVec::new</span> (),
@@ -1044,6 +1069,7 @@
 
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_array</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; [<span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span>; <span class="number">27</span>] {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="prelude-val">None</span>; <span class="number">27</span>];
+			<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_range_loop</span>) ]</span>
 			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">11</span> { <span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">hall</span> [<span class="ident">idx</span>]; }
 			<span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">amph</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">amber</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">enumerate</span> () {
 				<span class="ident">result</span> [<span class="number">11</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">idx</span> <span class="op">-</span> <span class="number">1</span>] <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident">amph</span>);
@@ -1060,7 +1086,7 @@
 			<span class="ident">result</span>
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">room_size</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">room_size</span> }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">room_size</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">room_size</span> }
 
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">place</span>: <span class="ident">Place</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span> {
 			<span class="kw">match</span> <span class="ident">place</span> {
@@ -1108,7 +1134,7 @@
 			<span class="self">self</span>.<span class="ident">room</span> (<span class="ident">room</span>).<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">all</span> (<span class="op">|</span><span class="ident">amph</span><span class="op">|</span> <span class="ident">amph</span> <span class="op">==</span> <span class="ident">room</span>)
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_out</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">room</span>: <span class="ident">Amph</span>, <span class="ident">hall</span>: <span class="ident">Place</span>) -&gt; <span class="ident">State</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_out</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">room</span>: <span class="ident">Amph</span>, <span class="ident">hall</span>: <span class="ident">Place</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
 			<span class="kw">let</span> <span class="ident">amph</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">room_mut</span> (<span class="ident">room</span>).<span class="ident">pop</span> ().<span class="ident">unwrap</span> ();
 			<span class="macro">assert!</span> (<span class="ident">state</span>.<span class="ident">get</span> (<span class="ident">hall</span>).<span class="ident">is_none</span> ());
@@ -1116,14 +1142,14 @@
 			<span class="ident">state</span>
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_in</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">hall</span>: <span class="ident">Place</span>, <span class="ident">room</span>: <span class="ident">Amph</span>) -&gt; <span class="ident">State</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_in</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">hall</span>: <span class="ident">Place</span>, <span class="ident">room</span>: <span class="ident">Amph</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
 			<span class="kw">let</span> <span class="ident">amph</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">hall</span> [<span class="ident">hall</span>.<span class="ident">idx</span> ()].<span class="ident">take</span> ().<span class="ident">unwrap</span> ();
 			<span class="ident">state</span>.<span class="ident">room_mut</span> (<span class="ident">room</span>).<span class="ident">push</span> (<span class="ident">amph</span>);
 			<span class="ident">state</span>
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_between</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">from</span>: <span class="ident">Amph</span>, <span class="ident">to</span>: <span class="ident">Amph</span>) -&gt; <span class="ident">State</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">move_between</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">from</span>: <span class="ident">Amph</span>, <span class="ident">to</span>: <span class="ident">Amph</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
 			<span class="kw">let</span> <span class="ident">amph</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">room_mut</span> (<span class="ident">from</span>).<span class="ident">pop</span> ().<span class="ident">unwrap</span> ();
 			<span class="kw">let</span> <span class="ident">to</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">to</span> {
@@ -1136,9 +1162,9 @@
 		}
 
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pretty_line</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">line</span>: <span class="ident">usize</span>) -&gt; <span class="ident">String</span> {
-			<span class="kw">let</span> <span class="ident">print_amph</span> <span class="op">=</span> <span class="op">|</span><span class="ident">amph</span>: <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">amph</span>.<span class="ident">map</span> (<span class="ident">Amph::letter</span>).<span class="ident">unwrap_or</span> (<span class="string">&#39; &#39;</span>);
+			<span class="kw">let</span> <span class="ident">print_amph</span> <span class="op">=</span> <span class="op">|</span><span class="ident">amph</span>: <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span><span class="op">|</span> <span class="ident">amph</span>.<span class="ident">map_or</span> (<span class="string">&#39; &#39;</span>, <span class="ident">Amph::letter</span>);
 			<span class="kw">if</span> <span class="ident">line</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="macro">format!</span> (<span class="string">&quot;┌───────────┐&quot;</span>)
+				<span class="string">&quot;┌───────────┐&quot;</span>.<span class="ident">to_owned</span> ()
 			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">==</span> <span class="number">1</span> {
 				<span class="macro">format!</span> (<span class="string">&quot;│{}│&quot;</span>,
 					<span class="self">self</span>.<span class="ident">hall</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="ident">print_amph</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> ())
@@ -1156,13 +1182,13 @@
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>))),
 					<span class="ident">print_amph</span> (<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>))))
 			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line</span> <span class="op">==</span> <span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">2</span> {
-				<span class="macro">format!</span> (<span class="string">&quot;  └─┴─┴─┴─┘&quot;</span>)
+				<span class="string">&quot;  └─┴─┴─┴─┘&quot;</span>.<span class="ident">to_owned</span> ()
 			} <span class="kw">else</span> {
 				<span class="macro">panic!</span> ();
 			}
 		}
 
-		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">dead_code</span>) ]</span>
+		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print</span> (<span class="op">&amp;</span> <span class="self">self</span>) {
 			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">3</span> {
 				<span class="macro">println!</span> (<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>));
@@ -1170,7 +1196,7 @@
 		}
 
 		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">dead_code</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">num_chars</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span> ().<span class="ident">count</span> ();
 			<span class="kw">if</span> <span class="op">!</span> [<span class="number">23</span>, <span class="number">27</span>, <span class="number">31</span>].<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">num_chars</span>) { <span class="kw">return</span> <span class="prelude-val">None</span> }
 			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> (<span class="ident">num_chars</span> <span class="op">-</span> <span class="number">11</span>) <span class="op">/</span> <span class="number">5</span>;
@@ -1188,49 +1214,67 @@
 				};
 				<span class="ident">place_idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 			}
-			<span class="prelude-val">Some</span> (<span class="ident">State::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>))
+			<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>))
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">State</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="op">|</span><span class="ident">line_idx</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}: {}&quot;</span>, <span class="ident">line_idx</span>, <span class="ident">lines</span> [<span class="ident">line_idx</span>]);
 			<span class="kw">if</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="number">5</span> <span class="op">|</span><span class="op">|</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">&gt;</span> <span class="number">7</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">5</span>)) <span class="question-mark">?</span>; }
 			<span class="kw">if</span> <span class="ident">lines</span> [<span class="number">0</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#############&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">0</span>)) <span class="question-mark">?</span>; }
 			<span class="kw">if</span> <span class="ident">lines</span> [<span class="number">1</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#...........#&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">1</span>)) <span class="question-mark">?</span>; }
-			<span class="kw">for</span> <span class="ident">line_idx</span> <span class="kw">in</span> <span class="number">2</span> .. <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span> {
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>].<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">13</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>].<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">11</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">0</span> .. <span class="number">3</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;###&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">0</span> .. <span class="number">3</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;  #&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">4</span> .. <span class="number">5</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">6</span> .. <span class="number">7</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">8</span> .. <span class="number">9</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">10</span> .. <span class="number">13</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;###&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-				<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">!</span><span class="op">=</span> <span class="number">2</span> <span class="op">&amp;&amp;</span> <span class="op">&amp;</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] [<span class="number">10</span> .. <span class="number">11</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;#&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-			}
-			<span class="kw">let</span> <span class="ident">line_idx</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span>;
-			<span class="kw">if</span> <span class="ident">lines</span> [<span class="ident">line_idx</span>] <span class="op">!</span><span class="op">=</span> <span class="string">&quot;  #########&quot;</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span>; }
-			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">3</span>;
-			<span class="kw">let</span> <span class="ident">parse_amph</span> <span class="op">=</span> <span class="op">|</span><span class="ident">line</span>: <span class="ident">usize</span>, <span class="ident">col</span><span class="op">|</span> <span class="ident">Amph::from_letter</span> (
-				<span class="ident">lines</span> [<span class="ident">line</span>].<span class="ident">chars</span> ().<span class="ident">nth</span> (<span class="ident">col</span>).<span class="ident">unwrap</span> (),
-			).<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="ident">err</span> (<span class="ident">line</span>));
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">places</span> <span class="op">=</span> [<span class="prelude-val">None</span>; <span class="number">27</span>];
-			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">11</span> { <span class="ident">places</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="number">1</span>, <span class="number">1</span> <span class="op">+</span> <span class="ident">idx</span>) <span class="question-mark">?</span>; }
-			<span class="kw">for</span> <span class="ident">room</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">4</span> {
-				<span class="kw">for</span> <span class="ident">depth</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">room_size</span> {
-					<span class="ident">places</span> [<span class="number">11</span> <span class="op">+</span> <span class="ident">room</span> <span class="op">*</span> <span class="number">4</span> <span class="op">+</span> <span class="ident">depth</span>] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="number">2</span> <span class="op">+</span> <span class="ident">depth</span>, <span class="number">3</span> <span class="op">+</span> <span class="ident">room</span> <span class="op">*</span> <span class="number">2</span>) <span class="question-mark">?</span>;
-				}
+			<span class="kw">for</span> <span class="ident">line_idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span> {
+				<span class="ident">Parser::wrap</span> (<span class="ident">lines</span> [<span class="ident">line_idx</span>], <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
+					<span class="kw">fn</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+						<span class="ident">Amph::from_letter</span> (<span class="ident">parser</span>.<span class="ident">expect_next</span> () <span class="question-mark">?</span>)
+							.<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="ident">parser</span>.<span class="ident">err</span> ())
+					}
+					<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">0</span> {
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#############&quot;</span>) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
+					} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">1</span> {
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>;
+						<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_range_loop</span>) ]</span>
+						<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">11</span> {
+							<span class="ident">places</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
+						}
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
+					} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">&lt;</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span> {
+						<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">2</span> {
+							<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;###&quot;</span>) <span class="question-mark">?</span>;
+						} <span class="kw">else</span> {
+							<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;  #&quot;</span>) <span class="question-mark">?</span>;
+						}
+						<span class="ident">places</span> [<span class="number">11</span> <span class="op">+</span> (<span class="ident">line_idx</span> <span class="op">-</span> <span class="number">2</span>)] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>;
+						<span class="ident">places</span> [<span class="number">15</span> <span class="op">+</span> (<span class="ident">line_idx</span> <span class="op">-</span> <span class="number">2</span>)] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>;
+						<span class="ident">places</span> [<span class="number">19</span> <span class="op">+</span> (<span class="ident">line_idx</span> <span class="op">-</span> <span class="number">2</span>)] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>;
+						<span class="ident">places</span> [<span class="number">23</span> <span class="op">+</span> (<span class="ident">line_idx</span> <span class="op">-</span> <span class="number">2</span>)] <span class="op">=</span> <span class="ident">parse_amph</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
+						<span class="kw">if</span> <span class="ident">line_idx</span> <span class="op">==</span> <span class="number">2</span> {
+							<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;###&quot;</span>) <span class="question-mark">?</span>;
+						} <span class="kw">else</span> {
+							<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;#&quot;</span>) <span class="question-mark">?</span>;
+						}
+						<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
+					} <span class="kw">else</span> {
+						<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;  ##########&quot;</span>) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
+					}
+					<span class="prelude-val">Ok</span> (())
+				}) <span class="question-mark">?</span>;
 			}
-			<span class="prelude-val">Ok</span> (<span class="ident">State::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>))
+			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">3</span>;
+			<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>))
 		}
 
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">compact</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">StateCompact</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">place_bits</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0</span>;
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">amph_bits</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0</span>;
 			<span class="kw">for</span> <span class="ident">amph</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">as_array</span> () {
-				<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="op">=</span> <span class="number">1</span>;
+				<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="op">=</span> <span class="number">1_u64</span>;
 				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">amph</span>) <span class="op">=</span> <span class="ident">amph</span> {
 					<span class="ident">place_bits</span> <span class="op">|</span><span class="op">=</span> <span class="number">1</span>;
-					<span class="ident">amph_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="op">=</span> <span class="number">2</span>;
+					<span class="ident">amph_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span><span class="op">=</span> <span class="number">2_i32</span>;
 					<span class="ident">amph_bits</span> <span class="op">|</span><span class="op">=</span> <span class="kw">match</span> <span class="ident">amph</span> {
 						<span class="ident">Amph::Amber</span> =&gt; <span class="number">0</span>, <span class="ident">Amph::Bronze</span> =&gt; <span class="number">1</span>,
 						<span class="ident">Amph::Copper</span> =&gt; <span class="number">2</span>, <span class="ident">Amph::Desert</span> =&gt; <span class="number">3</span>,
@@ -1239,7 +1283,7 @@
 			}
 			<span class="macro">assert!</span> (<span class="number">64</span> <span class="op">-</span> <span class="ident">place_bits</span>.<span class="ident">leading_zeros</span> () <span class="op">&lt;</span><span class="op">=</span> <span class="number">27</span>);
 			<span class="macro">assert!</span> (<span class="number">64</span> <span class="op">-</span> <span class="ident">amph_bits</span>.<span class="ident">leading_zeros</span> () <span class="op">&lt;</span><span class="op">=</span> <span class="number">32</span>);
-			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> ((<span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_u64</span> ()) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">59</span>) <span class="op">|</span> (<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">32</span>) <span class="op">|</span> <span class="ident">amph_bits</span>;
+			<span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> ((<span class="self">self</span>.<span class="ident">room_size</span>.<span class="ident">as_u64</span> ()) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">59_i32</span>) <span class="op">|</span> (<span class="ident">place_bits</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">32_i32</span>) <span class="op">|</span> <span class="ident">amph_bits</span>;
 			<span class="ident">StateCompact</span> { <span class="ident">data</span> }
 		}
 
@@ -1248,13 +1292,13 @@
 	<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">State</span> {
 		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
 			<span class="kw">for</span> <span class="ident">amph</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">hall</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-				<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">amph</span>.<span class="ident">map</span> (<span class="ident">Amph::letter</span>).<span class="ident">unwrap_or</span> (<span class="string">&#39;.&#39;</span>)) <span class="question-mark">?</span>;
+				<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">amph</span>.<span class="ident">map_or</span> (<span class="string">&#39;.&#39;</span>, <span class="ident">Amph::letter</span>)) <span class="question-mark">?</span>;
 			}
 			<span class="kw">for</span> <span class="ident">room</span> <span class="kw">in</span> [<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">amber</span>, <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">bronze</span>, <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">copper</span>, <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">desert</span>] {
 				<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;/&quot;</span>) <span class="question-mark">?</span>;
 				<span class="kw">for</span> <span class="ident">amph</span> <span class="kw">in</span> <span class="ident">iter::repeat</span> (<span class="prelude-val">None</span>).<span class="ident">take</span> (<span class="self">self</span>.<span class="ident">room_size</span> <span class="op">-</span> <span class="ident">room</span>.<span class="ident">len</span> ())
 						.<span class="ident">chain</span> (<span class="ident">room</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">rev</span> ().<span class="ident">map</span> (<span class="prelude-val">Some</span>)) {
-					<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">amph</span>.<span class="ident">map</span> (<span class="ident">Amph::letter</span>).<span class="ident">unwrap_or</span> (<span class="string">&#39;.&#39;</span>)) <span class="question-mark">?</span>;
+					<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">amph</span>.<span class="ident">map_or</span> (<span class="string">&#39;.&#39;</span>, <span class="ident">Amph::letter</span>)) <span class="question-mark">?</span>;
 				}
 			}
 			<span class="prelude-val">Ok</span> (())
@@ -1268,8 +1312,8 @@
 
 	<span class="kw">impl</span> <span class="ident">StateCompact</span> {
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expand</span> (<span class="self">self</span>) -&gt; <span class="ident">State</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">present_bits</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x07ffffff00000000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">32</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">amph_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x00000000ffffffff</span>;
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">present_bits</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x_07ff_ffff_0000_0000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">32_i32</span>;
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">amph_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x_0000_0000_ffff_ffff</span>;
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">places</span> <span class="op">=</span> [<span class="prelude-val">None</span>; <span class="number">27</span>];
 			<span class="kw">for</span> <span class="ident">place_idx</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="number">27</span>).<span class="ident">rev</span> () {
 				<span class="kw">if</span> <span class="ident">present_bits</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
@@ -1280,24 +1324,24 @@
 						<span class="number">3</span> =&gt; <span class="ident">places</span> [<span class="ident">place_idx</span>] <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>),
 						<span class="kw">_</span> =&gt; <span class="macro">unreachable!</span> (),
 					}
-					<span class="ident">amph_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span>;
+					<span class="ident">amph_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">2_i32</span>;
 				}
-				<span class="ident">present_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>;
+				<span class="ident">present_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1_i32</span>;
 			}
-			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">59</span>).<span class="ident">as_usize</span> ();
+			<span class="kw">let</span> <span class="ident">room_size</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">59_i32</span>).<span class="ident">as_usize</span> ();
 			<span class="ident">State::from_array</span> (<span class="ident">room_size</span>, <span class="ident">places</span>)
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_finished</span> (<span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">present_bits</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x07ffffff00000000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">32</span>;
-			<span class="kw">if</span> <span class="ident">present_bits</span> <span class="op">&amp;</span> <span class="number">0x07ff0000</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">return</span> <span class="bool-val">false</span> }
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">amph_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x00000000ffffffff</span>;
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">present_bits</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x_07ff_ffff_0000_0000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">32_i32</span>;
+			<span class="kw">if</span> <span class="ident">present_bits</span> <span class="op">&amp;</span> <span class="number">0x_07ff_0000</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">return</span> <span class="bool-val">false</span> }
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">amph_bits</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> <span class="op">&amp;</span> <span class="number">0x_0000_0000_ffff_ffff</span>;
 			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="number">4</span>).<span class="ident">rev</span> () {
-				<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">4</span> {
+				<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0_i32</span> .. <span class="number">4_i32</span> {
 					<span class="kw">if</span> <span class="ident">present_bits</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
 						<span class="kw">if</span> <span class="ident">amph_bits</span> <span class="op">&amp;</span> <span class="number">0x3</span> <span class="op">!</span><span class="op">=</span> <span class="ident">idx</span> { <span class="kw">return</span> <span class="bool-val">false</span> }
-						<span class="ident">amph_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span>;
+						<span class="ident">amph_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">2_i32</span>;
 					}
-					<span class="ident">present_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>;
+					<span class="ident">present_bits</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">1_i32</span>;
 				}
 			}
 			<span class="bool-val">true</span>
@@ -1313,21 +1357,21 @@
 	<span class="kw">impl</span> <span class="ident">Place</span> {
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">idx</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
 			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">Place::Hall</span> (<span class="ident">id</span>) =&gt; <span class="ident">id</span>.<span class="ident">as_usize</span> (),
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>) =&gt; <span class="number">11</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>) =&gt; <span class="number">15</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>) =&gt; <span class="number">19</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
-				<span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt; <span class="number">23</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident"><span class="self">Self</span>::Hall</span> (<span class="ident">id</span>) =&gt; <span class="ident">id</span>.<span class="ident">as_usize</span> (),
+				<span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">depth</span>) =&gt; <span class="number">11</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">depth</span>) =&gt; <span class="number">15</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">depth</span>) =&gt; <span class="number">19</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
+				<span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">depth</span>) =&gt; <span class="number">23</span> <span class="op">+</span> <span class="ident">depth</span>.<span class="ident">as_usize</span> (),
 			}
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_idx</span> (<span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Place</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">for_idx</span> (<span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">match</span> <span class="ident">idx</span> {
-				<span class="number">0</span> ..<span class="op">=</span> <span class="number">10</span> =&gt; <span class="ident">Place::Hall</span> (<span class="ident">idx</span>.<span class="ident">as_u8</span> ()),
-				<span class="number">11</span> ..<span class="op">=</span> <span class="number">14</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">11</span>),
-				<span class="number">15</span> ..<span class="op">=</span> <span class="number">18</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">15</span>),
-				<span class="number">19</span> ..<span class="op">=</span> <span class="number">22</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">19</span>),
-				<span class="number">23</span> ..<span class="op">=</span> <span class="number">26</span> =&gt; <span class="ident">Place::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">23</span>),
-				<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (),
+				<span class="number">0</span> ..<span class="op">=</span> <span class="number">10</span> =&gt; <span class="ident"><span class="self">Self</span>::Hall</span> (<span class="ident">idx</span>.<span class="ident">as_u8</span> ()),
+				<span class="number">11</span> ..<span class="op">=</span> <span class="number">14</span> =&gt; <span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Amber</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">11</span>),
+				<span class="number">15</span> ..<span class="op">=</span> <span class="number">18</span> =&gt; <span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Bronze</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">15</span>),
+				<span class="number">19</span> ..<span class="op">=</span> <span class="number">22</span> =&gt; <span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Copper</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">19</span>),
+				<span class="number">23</span> ..<span class="op">=</span> <span class="number">26</span> =&gt; <span class="ident"><span class="self">Self</span>::Room</span> (<span class="ident">Amph::Desert</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> () <span class="op">-</span> <span class="number">23</span>),
+				<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (<span class="string">&quot;Invalid index: {}&quot;</span>, <span class="ident">idx</span>),
 			}
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">entrance</span> (<span class="self">self</span>) -&gt; <span class="ident">bool</span> { [<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>].<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">idx</span> ()) }
@@ -1337,29 +1381,30 @@
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Amph</span> { <span class="ident">Amber</span>, <span class="ident">Bronze</span>, <span class="ident">Copper</span>, <span class="ident">Desert</span> }
 
 	<span class="kw">impl</span> <span class="ident">Amph</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">idx</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">idx</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
 			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">Amph::Amber</span> =&gt; <span class="number">0</span>,
-				<span class="ident">Amph::Bronze</span> =&gt; <span class="number">1</span>,
-				<span class="ident">Amph::Copper</span> =&gt; <span class="number">2</span>,
-				<span class="ident">Amph::Desert</span> =&gt; <span class="number">3</span>,
+				<span class="ident"><span class="self">Self</span>::Amber</span> =&gt; <span class="number">0</span>,
+				<span class="ident"><span class="self">Self</span>::Bronze</span> =&gt; <span class="number">1</span>,
+				<span class="ident"><span class="self">Self</span>::Copper</span> =&gt; <span class="number">2</span>,
+				<span class="ident"><span class="self">Self</span>::Desert</span> =&gt; <span class="number">3</span>,
 			}
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_letter</span> (<span class="ident">letter</span>: <span class="ident">char</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Amph</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::option_option</span>) ]</span>
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">from_letter</span> (<span class="ident">letter</span>: <span class="ident">char</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 			<span class="kw">match</span> <span class="ident">letter</span> {
-				<span class="string">&#39;A&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident">Amph::Amber</span>)),
-				<span class="string">&#39;B&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident">Amph::Bronze</span>)),
-				<span class="string">&#39;C&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident">Amph::Copper</span>)),
-				<span class="string">&#39;D&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident">Amph::Desert</span>)),
+				<span class="string">&#39;A&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::Amber</span>)),
+				<span class="string">&#39;B&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::Bronze</span>)),
+				<span class="string">&#39;C&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::Copper</span>)),
+				<span class="string">&#39;D&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::Desert</span>)),
 				<span class="string">&#39;.&#39;</span> =&gt; <span class="prelude-val">Some</span> (<span class="prelude-val">None</span>), <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
 			}
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cost</span> (<span class="self">self</span>) -&gt; <span class="ident">i64</span> { <span class="ident">Amph::COSTS</span> [<span class="self">self</span>.<span class="ident">idx</span> ()] }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">letter</span> (<span class="self">self</span>) -&gt; <span class="ident">char</span> { <span class="ident">Amph::LETTERS</span> [<span class="self">self</span>.<span class="ident">idx</span> ()] }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">cost</span> (<span class="self">self</span>) -&gt; <span class="ident">i64</span> { <span class="ident"><span class="self">Self</span>::COSTS</span> [<span class="self">self</span>.<span class="ident">idx</span> ()] }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">letter</span> (<span class="self">self</span>) -&gt; <span class="ident">char</span> { <span class="ident"><span class="self">Self</span>::LETTERS</span> [<span class="self">self</span>.<span class="ident">idx</span> ()] }
 		<span class="kw">const</span> <span class="ident">COSTS</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> [<span class="ident">i64</span>; <span class="number">4</span>] <span class="op">=</span> <span class="op">&amp;</span> [<span class="number">1</span>, <span class="number">10</span>, <span class="number">100</span>, <span class="number">1000</span>];
 		<span class="kw">const</span> <span class="ident">LETTERS</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> [<span class="ident">char</span>; <span class="number">4</span>] <span class="op">=</span> <span class="op">&amp;</span> [<span class="string">&#39;A&#39;</span>, <span class="string">&#39;B&#39;</span>, <span class="string">&#39;C&#39;</span>, <span class="string">&#39;D&#39;</span>];
-		<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALL</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> [<span class="ident">Amph</span>] <span class="op">=</span> <span class="op">&amp;</span> [
-			<span class="ident">Amph::Amber</span>, <span class="ident">Amph::Bronze</span>, <span class="ident">Amph::Copper</span>, <span class="ident">Amph::Desert</span>
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALL</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> [<span class="self">Self</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+			<span class="ident"><span class="self">Self</span>::Amber</span>, <span class="ident"><span class="self">Self</span>::Bronze</span>, <span class="ident"><span class="self">Self</span>::Copper</span>, <span class="ident"><span class="self">Self</span>::Desert</span>
 		];
 	}
 
@@ -1382,11 +1427,13 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::State</span>;
+	<span class="kw">use</span> <span class="ident">model::StateCompact</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
 	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>, <span class="ident">clap::Parser</span>) ]</span>
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::struct_excessive_bools</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RunArgs</span> {
 
 		<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> (<span class="string">&quot;inputs/day-23&quot;</span>)) ]</span>
@@ -1406,6 +1453,7 @@
 
 	}
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">RunArgs</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>;
 		<span class="kw">if</span> <span class="op">!</span> (<span class="ident">args</span>.<span class="ident">part_1</span> <span class="op">|</span><span class="op">|</span> <span class="ident">args</span>.<span class="ident">part_2</span>) { <span class="ident">args</span>.<span class="ident">part_1</span> <span class="op">=</span> <span class="bool-val">true</span>; <span class="ident">args</span>.<span class="ident">part_2</span> <span class="op">=</span> <span class="bool-val">true</span>; }
@@ -1421,10 +1469,11 @@
 		<span class="prelude-val">Ok</span> (())
 	}
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_part</span> (<span class="ident">args</span>: <span class="op">&amp;</span> <span class="ident">RunArgs</span>, <span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">State::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_loops</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_cost</span> <span class="op">=</span> <span class="op">-</span><span class="number">1</span>;
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_loops</span> <span class="op">=</span> <span class="number">0_i32</span>;
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">last_cost</span> <span class="op">=</span> <span class="op">-</span><span class="number">1_i64</span>;
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_states</span> <span class="op">=</span> <span class="ident">HashMap::new</span> ();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">PrioritySearch::with_hash_map</span> (
 			<span class="op">|</span><span class="ident">state_compact</span>, <span class="ident">score</span>, <span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
@@ -1442,7 +1491,7 @@
 				<span class="prelude-val">Some</span> (<span class="ident">val</span>) =&gt; <span class="ident">val</span>,
 				<span class="prelude-val">None</span> =&gt; <span class="kw">break</span> <span class="prelude-val">None</span>,
 			};
-			<span class="ident">num_loops</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+			<span class="ident">num_loops</span> <span class="op">+</span><span class="op">=</span> <span class="number">1_i32</span>;
 			<span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state_compact</span>.<span class="ident">expand</span> ();
 			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">is_finished</span> () {
 				<span class="kw">break</span> <span class="prelude-val">Some</span> ((<span class="ident">state_compact</span>, <span class="ident">cost</span>));
@@ -1465,7 +1514,7 @@
 						<span class="ident">iter::successors</span> (
 								<span class="prelude-val">Some</span> (<span class="ident">state_compact</span>),
 								<span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="ident">prev_states</span>.<span class="ident">get</span> (<span class="ident">state</span>).<span class="ident">copied</span> ())
-							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">state_compact</span><span class="op">|</span> <span class="ident">state_compact</span>.<span class="ident">expand</span> ())
+							.<span class="ident">map</span> (<span class="ident">StateCompact::expand</span>)
 							.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
 					<span class="macro">println!</span> (<span class="string">&quot;  ▒▒▒▒  Dead end:&quot;</span>);
 					<span class="kw">for</span> <span class="ident">chunk</span> <span class="kw">in</span> <span class="ident">all_states</span>.<span class="ident">chunks</span> (<span class="number">11</span>) {
@@ -1488,13 +1537,13 @@
 			<span class="ident">last_cost</span> <span class="op">=</span> <span class="ident">cost</span>;
 		};
 		<span class="kw">let</span> (<span class="ident">final_state_compact</span>, <span class="ident">final_cost</span>) <span class="op">=</span>
-			<span class="ident">final_cost</span>.<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Failed to find a solution&quot;</span>)) <span class="question-mark">?</span>;
+			<span class="ident">final_cost</span>.<span class="ident">ok_or</span> (<span class="string">&quot;Failed to find a solution&quot;</span>) <span class="question-mark">?</span>;
 		<span class="kw">let</span> <span class="ident">final_state</span> <span class="op">=</span> <span class="ident">final_state_compact</span>.<span class="ident">expand</span> ();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">all_states</span> <span class="op">=</span>
 			<span class="ident">iter::successors</span> (
 					<span class="prelude-val">Some</span> (<span class="ident">final_state_compact</span>),
 					<span class="op">|</span><span class="ident">state</span><span class="op">|</span> <span class="ident">prev_states</span>.<span class="ident">get</span> (<span class="ident">state</span>).<span class="ident">copied</span> ())
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">state_compact</span><span class="op">|</span> <span class="ident">state_compact</span>.<span class="ident">expand</span> ())
+				.<span class="ident">map</span> (<span class="ident">StateCompact::expand</span>)
 				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
 		<span class="ident">all_states</span>.<span class="ident">reverse</span> ();
 		<span class="kw">if</span> <span class="ident">args</span>.<span class="ident">verbose</span> {
@@ -1521,6 +1570,7 @@
 		<span class="prelude-val">Ok</span> (())
 	}
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">print_next_states</span> (<span class="ident">cur_state</span>: <span class="op">&amp;</span> <span class="ident">State</span>, <span class="ident">next_states</span>: <span class="op">&amp;</span> [(<span class="ident">State</span>, <span class="ident">i64</span>)]) {
 		<span class="kw">if</span> <span class="ident">next_states</span>.<span class="ident">is_empty</span> () {
 			<span class="macro">println!</span> (<span class="string">&quot;{:^13}&quot;</span>, <span class="string">&quot;START&quot;</span>);
@@ -1535,13 +1585,13 @@
 		}
 		<span class="kw">for</span> (<span class="ident">chunk_idx</span>, <span class="ident">chunk</span>) <span class="kw">in</span> <span class="ident">next_states</span>.<span class="ident">chunks</span> (<span class="number">10</span>).<span class="ident">enumerate</span> () {
 			<span class="macro">print!</span> (<span class="string">&quot;{:^13}  &quot;</span>, <span class="kw">if</span> <span class="ident">chunk_idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="string">&quot;START&quot;</span> } <span class="kw">else</span> { <span class="string">&quot;&quot;</span> });
-			<span class="kw">for</span> (<span class="kw">_</span>, <span class="ident">cost</span>) <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span> () {
+			<span class="kw">for</span> <span class="op">&amp;</span> (<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">cost</span>) <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span> () {
 				<span class="macro">print!</span> (<span class="string">&quot; {:^13}&quot;</span>, <span class="ident">cost</span>);
 			}
 			<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
 			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="number">0</span> .. (<span class="ident">cur_state</span>.<span class="ident">room_size</span> ().<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">3</span>) {
 				<span class="macro">print!</span> (<span class="string">&quot;{:13}  &quot;</span>, <span class="kw">if</span> <span class="ident">chunk_idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">cur_state</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>) } <span class="kw">else</span> { <span class="ident">String::new</span> () });
-				<span class="kw">for</span> (<span class="ident">next_state</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span> () {
+				<span class="kw">for</span> <span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">next_state</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="ident">chunk</span>.<span class="ident">iter</span> () {
 					<span class="macro">print!</span> (<span class="string">&quot; {:13}&quot;</span>, <span class="ident">next_state</span>.<span class="ident">pretty_line</span> (<span class="ident">line</span>));
 				}
 				<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
@@ -1550,8 +1600,10 @@
 	}
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>, <span class="ident">clap::Parser</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InternalsArgs</span> {}
+	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InternalsArgs</span>;
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">internals</span> (<span class="ident">_args</span>: <span class="ident">InternalsArgs</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="macro">println!</span> (<span class="string">&quot;Data structures:&quot;</span>);
 		<span class="kw">fn</span> <span class="ident">show_struct</span> <span class="op">&lt;</span><span class="ident">Type</span><span class="op">&gt;</span> () {

@@ -377,6 +377,13 @@
 <span id="377">377</span>
 <span id="378">378</span>
 <span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 19: Beacon Scanner</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/19](https://adventofcode.com/2021/day/19)</span>
@@ -396,6 +403,8 @@
 <span class="doccomment">//! six other positions. since almost all scanners will first be unplaced and later placed, this</span>
 <span class="doccomment">//! means we do a total of ten hashes for each scanner, instead of the twenty four we would have to</span>
 <span class="doccomment">//! with a more naïve algorithm.</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">bithash</span>::<span class="kw-2">*</span>;
@@ -447,8 +456,8 @@
 
 	<span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>(<span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>, <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">arranger</span> <span class="op">=</span> <span class="ident">ScannerArranger::new</span> ();
-		<span class="kw">if</span> <span class="op">!</span> <span class="ident">arranger</span>.<span class="ident">init</span> (<span class="ident">input</span>) { <span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Failed to arrange scanners&quot;</span>)) <span class="question-mark">?</span> }
-		<span class="kw">if</span> <span class="op">!</span> <span class="ident">arranger</span>.<span class="ident">run</span> () { <span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Failed to arrange scanners&quot;</span>)) <span class="question-mark">?</span> }
+		<span class="kw">if</span> <span class="op">!</span> <span class="ident">arranger</span>.<span class="ident">init</span> (<span class="ident">input</span>) { <span class="prelude-val">Err</span> (<span class="string">&quot;Failed to arrange scanners&quot;</span>) <span class="question-mark">?</span> }
+		<span class="kw">if</span> <span class="op">!</span> <span class="ident">arranger</span>.<span class="ident">run</span> () { <span class="prelude-val">Err</span> (<span class="string">&quot;Failed to arrange scanners&quot;</span>) <span class="question-mark">?</span> }
 		<span class="prelude-val">Ok</span> ((<span class="ident">arranger</span>.<span class="ident">scanner_positions</span>, <span class="ident">arranger</span>.<span class="ident">beacon_positions</span>))
 	}
 
@@ -464,8 +473,9 @@
 
 	<span class="kw">impl</span> <span class="ident">ScannerArranger</span> {
 
-		<span class="kw">fn</span> <span class="ident">new</span> () -&gt; <span class="ident">ScannerArranger</span> { <span class="ident">default</span> () }
+		<span class="kw">fn</span> <span class="ident">new</span> () -&gt; <span class="self">Self</span> { <span class="ident">default</span> () }
 
+		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 		<span class="kw">fn</span> <span class="ident">init</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">bool</span> {
 			<span class="self">self</span>.<span class="ident">original_scanners</span>.<span class="ident">extend</span> (
 				<span class="ident">input</span>.<span class="ident">scanners</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">scanner</span><span class="op">|</span>
@@ -485,7 +495,10 @@
 		}
 
 		<span class="kw">fn</span> <span class="ident">run</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-			<span class="self">self</span>.<span class="ident">place_scanner</span> (<span class="op">&amp;</span> <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">unplaced_scanners</span> [<span class="number">0</span>]), <span class="ident">Rotation::None</span>, <span class="ident">Pos::zero</span> ());
+			<span class="self">self</span>.<span class="ident">place_scanner</span> (
+				<span class="op">&amp;</span> <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">unplaced_scanners</span> [<span class="number">0</span>]),
+				<span class="ident">Rotation::None</span>,
+				<span class="ident">Pos::ZERO</span>);
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scanner_matches_buffer</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
 			<span class="lifetime">&#39;OUTER</span>: <span class="kw">loop</span> {
 				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">unplaced_scanners</span>.<span class="ident">is_empty</span> () { <span class="kw">break</span> }
@@ -526,7 +539,7 @@
 					.<span class="ident">cartesian_product</span> (<span class="ident">placed</span>.<span class="ident">beacons</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ())
 					.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">unplaced_beacon</span>, <span class="ident">placed_beacon</span>)<span class="op">|</span> <span class="ident">placed_beacon</span> <span class="op">-</span> <span class="ident">unplaced_beacon</span>)
 					.<span class="ident">sorted</span> ()
-					.<span class="ident">group_by</span> (<span class="op">|</span><span class="ident">offset</span><span class="op">|</span> <span class="ident">offset</span>.<span class="ident">to_owned</span> ());
+					.<span class="ident">group_by</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">offset</span><span class="op">|</span> <span class="ident">offset</span>);
 			<span class="ident">offsets_grouped</span>.<span class="ident">into_iter</span> ()
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">offset</span>, <span class="ident">iter</span>)<span class="op">|</span> (<span class="ident">offset</span>, <span class="ident">iter</span>.<span class="ident">count</span> ()))
 				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">count</span>)<span class="op">|</span> <span class="ident">count</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">12</span>)
@@ -578,7 +591,7 @@
 			<span class="ident">rotates</span>: <span class="op">&amp;</span> [<span class="ident">Rotation</span>; <span class="ident">LEN</span>],
 		) -&gt; [<span class="ident">ScannerHash</span>; <span class="ident">LEN</span>] {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hashers</span> <span class="op">=</span>
-				[<span class="number">0</span>; <span class="ident">LEN</span>].<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ScannerHasher::new_with_hasher</span> (<span class="self">self</span>.<span class="ident">hash_builder</span>.<span class="ident">clone</span> ()));
+				[<span class="number">0_i32</span>; <span class="ident">LEN</span>].<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ScannerHasher::new_with_hasher</span> (<span class="self">self</span>.<span class="ident">hash_builder</span>.<span class="ident">clone</span> ()));
 			<span class="kw">for</span> <span class="ident">offset</span> <span class="kw">in</span> <span class="ident">beacons</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">enumerate</span> ()
 				.<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">beacon_0_idx</span>, <span class="ident">beacon_0</span>)<span class="op">|</span> <span class="ident">beacons</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
 					.<span class="ident">skip</span> (<span class="ident">beacon_0_idx</span> <span class="op">+</span> <span class="number">1</span>)
@@ -663,12 +676,13 @@
 
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">InputScanner</span> {
-		<span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span>,
+		<span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span>,
 		<span class="kw">pub</span> <span class="ident">beacons</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>,
 	}
 
 	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Input</span><span class="op">&gt;</span> {
+		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::string_slice</span>) ]</span>
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scanners</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lines_iter</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ();
@@ -676,7 +690,7 @@
 			<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">line_idx</span>, <span class="ident">line</span>)) <span class="op">=</span> <span class="ident">lines_iter</span>.<span class="ident">next</span> () {
 				<span class="kw">if</span> <span class="op">!</span> <span class="ident">line</span>.<span class="ident">starts_with</span> (<span class="string">&quot;--- &quot;</span>) { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>)) <span class="question-mark">?</span> }
 				<span class="kw">if</span> <span class="op">!</span> <span class="ident">line</span>.<span class="ident">ends_with</span> (<span class="string">&quot; ---&quot;</span>) { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>)) <span class="question-mark">?</span> }
-				<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Rc::new</span> (<span class="ident">line</span> [<span class="number">4</span> .. <span class="ident">line</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">4</span>].<span class="ident">to_string</span> ());
+				<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Rc::from</span> (<span class="op">&amp;</span> <span class="ident">line</span> [<span class="number">4</span> .. <span class="ident">line</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">4</span>]);
 				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">beacons</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
 				<span class="kw">for</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>) <span class="kw">in</span> <span class="ident">lines_iter</span>.<span class="ident">by_ref</span> () {
 					<span class="kw">if</span> <span class="ident">line</span>.<span class="ident">is_empty</span> () { <span class="kw">break</span> }
@@ -688,11 +702,11 @@
 						});
 						<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
 						<span class="prelude-val">Ok</span> (())
-					}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>)) <span class="question-mark">?</span>
+					}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>)) <span class="question-mark">?</span>;
 				}
 				<span class="ident">scanners</span>.<span class="ident">push</span> (<span class="ident">InputScanner</span> { <span class="ident">name</span>, <span class="ident">beacons</span> });
 			}
-			<span class="prelude-val">Ok</span> (<span class="ident">Input</span> { <span class="ident">scanners</span> })
+			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">scanners</span> })
 		}
 	}
 

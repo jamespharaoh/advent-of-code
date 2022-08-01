@@ -144,7 +144,7 @@
 		}
 		<span class="kw">for</span> <span class="ident">sum</span> <span class="kw">in</span> <span class="ident">sums</span>.<span class="ident">iter_vals</span> () {
 			<span class="kw">if</span> <span class="ident">sum</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Equal number of bits&quot;</span>)) <span class="question-mark">?</span>;
+				<span class="prelude-val">Err</span> (<span class="string">&quot;Equal number of bits&quot;</span>) <span class="question-mark">?</span>;
 			}
 		}
 		<span class="kw">let</span> <span class="ident">gamma_str</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">sums</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">sum</span><span class="op">|</span>
@@ -190,7 +190,7 @@
 
 <span class="kw">mod</span> <span class="ident">model</span> {
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">PartialEq</span>, <span class="ident">Eq</span>) ]</span>
+	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mode</span> { <span class="ident">Oxygen</span>, <span class="ident">CO2</span> }
 
 }

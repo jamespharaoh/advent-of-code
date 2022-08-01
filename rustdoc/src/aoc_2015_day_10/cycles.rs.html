@@ -443,7 +443,14 @@
 <span id="443">443</span>
 <span id="444">444</span>
 <span id="445">445</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+</pre><pre class="rust"><code><span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::else_if_without_else</span>) ]</span>
+
+<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">model::State</span>;
 <span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
@@ -508,15 +515,15 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">Span</span> {
-		<span class="ident">Span</span> (<span class="ident">other</span>.<span class="ident">into</span> ())
+	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> (<span class="ident">other</span>.<span class="ident">into</span> ())
 	}
 }
 
 <span class="kw">impl</span> <span class="ident">TryFrom</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
 	<span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">GenError</span>;
-	<span class="kw">fn</span> <span class="ident">try_from</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> (<span class="ident">Span::from</span> (<span class="ident">model::State::parse</span> (<span class="ident">src</span>) <span class="question-mark">?</span>.<span class="ident">as_slice</span> ()))
+	<span class="kw">fn</span> <span class="ident">try_from</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::from</span> (<span class="ident">model::State::parse</span> (<span class="ident">src</span>) <span class="question-mark">?</span>.<span class="ident">as_slice</span> ()))
 	}
 }
 
@@ -527,13 +534,13 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PartialOrd</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">partial_cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">Span</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
+	<span class="kw">fn</span> <span class="ident">partial_cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
 		<span class="prelude-val">Some</span> (<span class="self">self</span>.<span class="ident">cmp</span> (<span class="ident">other</span>))
 	}
 }
 
 <span class="kw">impl</span> <span class="ident">Ord</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">Span</span>) -&gt; <span class="ident">Ordering</span> {
+	<span class="kw">fn</span> <span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">Ordering</span> {
 		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">len</span> ().<span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="ident">other</span>.<span class="ident">len</span> ())
 			.<span class="ident">then</span> (<span class="self">self</span>.<span class="number">0</span>.<span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="ident">other</span>.<span class="number">0</span>))
 	}
@@ -541,7 +548,7 @@
 
 <span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Span</span> {
 	<span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> [<span class="ident">u8</span>];
-	<span class="kw">fn</span> <span class="ident">deref</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> [<span class="ident">u8</span>] { <span class="self">self</span>.<span class="number">0</span>.<span class="ident">deref</span> () }
+	<span class="kw">fn</span> <span class="ident">deref</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> [<span class="ident">u8</span>] { <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span> () }
 }
 
 <span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>) ]</span>
@@ -571,8 +578,8 @@ state can be:
 }
 
 <span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="ident">AtomicInner</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Atomic</span> {
-	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">inner</span>: <span class="ident">AtomicInner</span>) -&gt; <span class="ident">Atomic</span> {
-		<span class="ident">Atomic</span> (<span class="ident">Rc::new</span> (<span class="ident">inner</span>))
+	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">inner</span>: <span class="ident">AtomicInner</span>) -&gt; <span class="self">Self</span> {
+		<span class="self">Self</span> (<span class="ident">Rc::new</span> (<span class="ident">inner</span>))
 	}
 }
 
@@ -606,7 +613,7 @@ state can be:
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {
-	<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">AtomicInner</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">key</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">key</span> }
+	<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">key</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">key</span> }
 }
 
 <span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {}
@@ -623,23 +630,27 @@ state can be:
 	}
 }
 
-<span class="kw">fn</span> <span class="ident">compatible</span> (<span class="ident">prev</span>: <span class="ident">u8</span>, <span class="ident">next</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
+<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">compatible</span> (<span class="ident">prev</span>: <span class="ident">u8</span>, <span class="ident">next</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
 	<span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">0</span>] <span class="op">&amp;&amp;</span> <span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">1</span>] <span class="op">&amp;&amp;</span> <span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">2</span>]
 }
 
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::todo</span>) ]</span>
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::too_many_lines</span>) ]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">Args</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 
 	<span class="kw">let</span> <span class="ident">stables</span> <span class="op">=</span> <span class="ident">find_stables</span> (<span class="ident">args</span>.<span class="ident">max_length</span>, <span class="ident">args</span>.<span class="ident">iterations</span>);
 	<span class="macro">println!</span> (<span class="string">&quot;NUM STABLES: {}&quot;</span>, <span class="ident">stables</span>.<span class="ident">len</span> ());
 	<span class="macro">println!</span> (<span class="string">&quot;NUM SINGULAR: {}&quot;</span>, <span class="ident">stables</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="ident">stable</span><span class="op">|</span>
-		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">stable</span>) <span class="op">=</span> <span class="ident">stable</span> { <span class="ident">stable</span>.<span class="ident">parts</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">1</span> } <span class="kw">else</span> { <span class="bool-val">false</span> }).<span class="ident">count</span> ());
+		<span class="ident">stable</span>.<span class="ident">as_ref</span> ().<span class="ident">map_or</span> (<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">stable</span><span class="op">|</span> <span class="ident">stable</span>.<span class="ident">parts</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">1</span>)).<span class="ident">count</span> ());
 
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">destinies</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Span</span>, <span class="ident">Destiny</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap::new</span> ();
 	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">atomics</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Atomic</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
 
 	<span class="kw">for</span> <span class="ident">length</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">args</span>.<span class="ident">max_length</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1u8</span> ..<span class="op">=</span> <span class="number">3u8</span>))
+		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1_u8</span> ..<span class="op">=</span> <span class="number">3_u8</span>))
 			.<span class="ident">multi_cartesian_product</span> ()
 			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">nums</span><span class="op">|</span> <span class="ident">State::try_from</span> (<span class="ident">nums</span>).<span class="ident">unwrap</span> ()) {
 
@@ -658,15 +669,15 @@ state can be:
 					<span class="ident">destinies</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">state</span> [<span class="ident">prefix_len</span> .. ]).<span class="ident">unwrap_or_else</span> (<span class="op">|</span><span class="op">|</span>
 						<span class="macro">panic!</span> (<span class="string">&quot;Can&#39;t find destiny for {:?}&quot;</span>, <span class="op">&amp;</span> <span class="ident">state</span> [<span class="ident">prefix_len</span> .. ])),
 				) {
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="ident">Destiny::Unstable</span> (<span class="kw">_</span>)) =&gt; <span class="kw">continue</span>,
-					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="ident">Destiny::Atomic</span> (<span class="ident">suffix</span>)) =&gt; {
+					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Unstable</span> (<span class="kw">_</span>)) <span class="op">|</span> (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">continue</span>,
+					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Atomic</span> (<span class="kw-2">ref</span> <span class="ident">suffix</span>)) =&gt; {
 						<span class="kw">if</span> <span class="op">!</span> <span class="ident">compatible</span> (<span class="ident">prefix</span>.<span class="ident">last</span>, <span class="op">&amp;</span> <span class="ident">suffix</span>.<span class="ident">first</span>) { <span class="kw">continue</span> }
 						<span class="ident">destinies</span>.<span class="ident">insert</span> (
 							<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
 							<span class="ident">Destiny::Stable</span> ([ <span class="ident">prefix</span>.<span class="ident">clone</span> (), <span class="ident">suffix</span>.<span class="ident">clone</span> () ].<span class="ident">as_slice</span> ().<span class="ident">into</span> ()));
 						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
 					},
-					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="ident">Destiny::Stable</span> (<span class="ident">suffix</span>)) =&gt; {
+					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Stable</span> (<span class="kw-2">ref</span> <span class="ident">suffix</span>)) =&gt; {
 						<span class="kw">if</span> <span class="op">!</span> <span class="ident">compatible</span> (<span class="ident">prefix</span>.<span class="ident">last</span>, <span class="op">&amp;</span> <span class="ident">suffix</span> [<span class="number">0</span>].<span class="ident">first</span>) { <span class="kw">continue</span> }
 						<span class="ident">destinies</span>.<span class="ident">insert</span> (
 							<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
@@ -677,7 +688,6 @@ state can be:
 									.<span class="ident">into</span> ()));
 						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
 					},
-					<span class="kw">_</span> =&gt; <span class="kw">continue</span>,
 				}
 			}
 
@@ -770,7 +780,7 @@ state can be:
 
 	<span class="kw">for</span> <span class="ident">length</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">max_length</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1u8</span> ..<span class="op">=</span> <span class="number">3u8</span>))
+		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1_u8</span> ..<span class="op">=</span> <span class="number">3_u8</span>))
 			.<span class="ident">multi_cartesian_product</span> ()
 			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">nums</span><span class="op">|</span> <span class="ident">State::try_from</span> (<span class="ident">nums</span>).<span class="ident">unwrap</span> ()) {
 

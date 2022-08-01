@@ -199,7 +199,7 @@
 					.<span class="ident">fold</span> (<span class="number">0</span>, <span class="op">|</span><span class="ident">total</span>, <span class="ident">value</span><span class="op">|</span> <span class="ident">total</span> <span class="op">*</span> <span class="number">5</span> <span class="op">+</span> <span class="ident">value</span>)
 			)
 		}).<span class="ident">collect</span> ();
-		<span class="ident">scores</span>.<span class="ident">sort</span> ();
+		<span class="ident">scores</span>.<span class="ident">sort_unstable</span> ();
 		<span class="prelude-val">Ok</span> (<span class="ident">scores</span> [(<span class="ident">scores</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>])
 	}
 
@@ -224,20 +224,20 @@
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Delim</span> { <span class="ident">Round</span>, <span class="ident">Square</span>, <span class="ident">Curly</span>, <span class="ident">Angle</span> }
 
 	<span class="kw">impl</span> <span class="ident">Delim</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">mismatched_points</span> (<span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">mismatched_points</span> (<span class="self">self</span>) -&gt; <span class="ident">u64</span> {
 			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">Delim::Round</span> =&gt; <span class="number">3</span>,
-				<span class="ident">Delim::Square</span> =&gt; <span class="number">57</span>,
-				<span class="ident">Delim::Curly</span> =&gt; <span class="number">1197</span>,
-				<span class="ident">Delim::Angle</span> =&gt; <span class="number">25137</span>,
+				<span class="ident"><span class="self">Self</span>::Round</span> =&gt; <span class="number">3</span>,
+				<span class="ident"><span class="self">Self</span>::Square</span> =&gt; <span class="number">57</span>,
+				<span class="ident"><span class="self">Self</span>::Curly</span> =&gt; <span class="number">1197</span>,
+				<span class="ident"><span class="self">Self</span>::Angle</span> =&gt; <span class="number">25137</span>,
 			}
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">not_closed_points</span> (<span class="self">self</span>) -&gt; <span class="ident">u64</span> {
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">not_closed_points</span> (<span class="self">self</span>) -&gt; <span class="ident">u64</span> {
 			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">Delim::Round</span> =&gt; <span class="number">1</span>,
-				<span class="ident">Delim::Square</span> =&gt; <span class="number">2</span>,
-				<span class="ident">Delim::Curly</span> =&gt; <span class="number">3</span>,
-				<span class="ident">Delim::Angle</span> =&gt; <span class="number">4</span>,
+				<span class="ident"><span class="self">Self</span>::Round</span> =&gt; <span class="number">1</span>,
+				<span class="ident"><span class="self">Self</span>::Square</span> =&gt; <span class="number">2</span>,
+				<span class="ident"><span class="self">Self</span>::Curly</span> =&gt; <span class="number">3</span>,
+				<span class="ident"><span class="self">Self</span>::Angle</span> =&gt; <span class="number">4</span>,
 			}
 		}
 	}
@@ -245,7 +245,7 @@
 	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Mode</span> { <span class="ident">Open</span>, <span class="ident">Close</span> }
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decode_char</span> (<span class="ident">letter</span>: <span class="ident">char</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">decode_char</span> (<span class="ident">letter</span>: <span class="ident">char</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Token</span><span class="op">&gt;</span> {
 		<span class="kw">match</span> <span class="ident">letter</span> {
 			<span class="string">&#39;(&#39;</span> =&gt; <span class="prelude-val">Some</span> ((<span class="ident">Delim::Round</span>, <span class="ident">Mode::Open</span>)),
 			<span class="string">&#39;)&#39;</span> =&gt; <span class="prelude-val">Some</span> ((<span class="ident">Delim::Round</span>, <span class="ident">Mode::Close</span>)),

@@ -316,6 +316,53 @@
 <span id="316">316</span>
 <span id="317">317</span>
 <span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Iterative search algorithms for solutions in a problem space</span>
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
@@ -385,23 +432,27 @@
 <span class="doccomment">/// assert_eq! (search.next (), None);</span>
 <span class="doccomment">/// ```</span>
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
+		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> {
 	<span class="ident">visitor</span>: <span class="ident">Visitor</span>,
-	<span class="ident">inner</span>: <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
+	<span class="ident">inner</span>: <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span><span class="op">&gt;</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::implicit_hasher</span>) ]</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span><span class="op">&gt;</span>
+	<span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_hash_map</span> (<span class="ident">visitor</span>: <span class="ident">Visitor</span>) -&gt; <span class="self">Self</span> {
-		<span class="ident">PrioritySearch</span> {
+		<span class="self">Self</span> {
 			<span class="ident">visitor</span>,
 			<span class="ident">inner</span>: <span class="ident">PrioritySearchInner</span> {
 				<span class="ident">seen</span>: <span class="ident">HashMap::new</span> (),
@@ -409,21 +460,24 @@
 			},
 		}
 	}
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="kw">const</span> <span class="ident">DIMS</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="kw">const</span> <span class="ident">DIMS</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">GridPos</span> <span class="op">&lt;</span><span class="ident">DIMS</span><span class="op">&gt;</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_grid</span> (<span class="ident">origin</span>: [<span class="ident">isize</span>; <span class="ident">DIMS</span>], <span class="ident">size</span>: [<span class="ident">usize</span>; <span class="ident">DIMS</span>], <span class="ident">visitor</span>: <span class="ident">Visitor</span>) -&gt; <span class="self">Self</span> {
 		<span class="kw">let</span> <span class="ident">grid</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (
-			<span class="ident">iter::repeat</span> (<span class="ident">PrioritySearchSeenState::New</span>)
+			<span class="ident">iter::repeat</span> (<span class="ident">SeenState::New</span>)
 				.<span class="ident">take</span> (<span class="ident">size</span>.<span class="ident">iter</span> ().<span class="ident">product</span> ())
 				.<span class="ident">collect</span> (),
 			<span class="ident">origin</span>,
 			<span class="ident">size</span>);
-		<span class="ident">PrioritySearch</span> {
+		<span class="self">Self</span> {
 			<span class="ident">visitor</span>,
 			<span class="ident">inner</span>: <span class="ident">PrioritySearchInner</span> {
 				<span class="ident">seen</span>: <span class="ident">grid</span>,
@@ -431,18 +485,27 @@
 			},
 		}
 	}
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
+		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> {
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">todo</span>.<span class="ident">len</span> () }
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">0</span> }
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
+		<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">todo</span>.<span class="ident">len</span> ()
+	}
 
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+		<span class="self">self</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">0</span>
+	}
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>, <span class="ident">priority</span>: <span class="ident">Pri</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">Self</span> {
 		<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">push</span> (<span class="ident">node</span>, <span class="ident">priority</span>);
 		<span class="self">self</span>
@@ -450,15 +513,16 @@
 
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
+		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> {
 
 	<span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Visitor::Item</span>;
 
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">next</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Item</span><span class="op">&gt;</span> {
 		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">WithPriority</span> { <span class="ident">priority</span>, <span class="ident">value</span>: <span class="ident">node</span> }) <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">pop</span> () {
 			<span class="kw">let</span> <span class="ident">adder</span> <span class="op">=</span> <span class="ident">PrioritySearchAdder</span> { <span class="ident">inner</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">inner</span> };
@@ -500,136 +564,166 @@
 	<span class="ident">todo</span>: <span class="ident">BinaryHeap</span> <span class="op">&lt;</span><span class="ident">WithPriority</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> {
 	<span class="kw">fn</span> <span class="ident">push</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>, <span class="ident">priority</span>: <span class="ident">Pri</span>) {
-		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">seen</span>.<span class="ident">push</span> (<span class="ident">node</span>.<span class="ident">clone</span> (), <span class="ident">priority</span>.<span class="ident">clone</span> ()) {
+		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">seen</span>.<span class="ident">seen_push</span> (<span class="ident">node</span>.<span class="ident">clone</span> (), <span class="ident">priority</span>.<span class="ident">clone</span> ()) {
 			<span class="self">self</span>.<span class="ident">todo</span>.<span class="ident">push</span> (<span class="ident">WithPriority</span> { <span class="ident">priority</span>, <span class="ident">value</span>: <span class="ident">node</span> });
 		}
 	}
 	<span class="kw">fn</span> <span class="ident">pop</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">WithPriority</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">WithPriority</span> { <span class="ident">value</span>: <span class="ident">node</span>, <span class="ident">priority</span> }) <span class="op">=</span> <span class="self">self</span>.<span class="ident">todo</span>.<span class="ident">pop</span> () {
-			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">seen</span>.<span class="ident">visited</span> (<span class="op">&amp;</span> <span class="ident">node</span>) { <span class="kw">continue</span> }
+			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">seen</span>.<span class="ident">seen_visited</span> (<span class="op">&amp;</span> <span class="ident">node</span>) { <span class="kw">continue</span> }
 			<span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">WithPriority</span> { <span class="ident">value</span>: <span class="ident">node</span>, <span class="ident">priority</span> });
 		}
 		<span class="prelude-val">None</span>
 	}
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
-	<span class="ident">inner</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;inr</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
+	<span class="ident">inner</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;inr</span> <span class="kw-2">mut</span> <span class="ident">PrioritySearchInner</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;inr</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;inr</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> {
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>, <span class="ident">priority</span>: <span class="ident">Pri</span>) {
 		<span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">push</span> (<span class="ident">node</span>, <span class="ident">priority</span>);
 	}
+
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> {
+
 	<span class="kw">type</span> <span class="ident">Item</span>;
+
 	<span class="kw">fn</span> <span class="ident">visit</span> (
 		<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>,
 		<span class="ident">node</span>: <span class="ident">Node</span>,
 		<span class="ident">priority</span>: <span class="ident">Pri</span>,
 		<span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
 	) -&gt; <span class="ident"><span class="self">Self</span>::Item</span>;
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">VisitorFn</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Item</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">VisitorFn</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">VisitorFn</span>, <span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Item</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">VisitorFn</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">Clone</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="ident">VisitorFn</span>: <span class="ident">FnMut</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>) -&gt; <span class="ident">Item</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
+		<span class="ident">VisitorFn</span>: <span class="ident">FnMut</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>) -&gt; <span class="ident">Item</span> {
+
 	<span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Item</span>;
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">visit</span> (
 		<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>,
 		<span class="ident">node</span>: <span class="ident">Node</span>,
 		<span class="ident">priority</span>: <span class="ident">Pri</span>,
-		<span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
+		<span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>,
 	) -&gt; <span class="ident"><span class="self">Self</span>::Item</span> {
 		<span class="self">self</span> (<span class="ident">node</span>, <span class="ident">priority</span>, <span class="ident">adder</span>)
 	}
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span>, <span class="ident">NextNodesIntoIter</span><span class="op">&gt;</span> <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>
-	<span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">NextNodesIntoIter</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span>, <span class="ident">NextNodesIntoIter</span>, <span class="ident">Hshr</span><span class="op">&gt;</span> <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>
+	<span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">NextNodesIntoIter</span>, <span class="ident">Hshr</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
+		<span class="ident">Hshr</span>: <span class="ident">BuildHasher</span>,
 		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Add</span> <span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="ident">Seen</span>: <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
-		<span class="kw">for</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">&amp;</span> <span class="lifetime">&#39;a</span> <span class="ident">NextNodesIntoIter</span>: <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;a</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>)<span class="op">&gt;</span> {
+		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
+		<span class="kw">for</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span><span class="op">&gt;</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">NextNodesIntoIter</span>: <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>)<span class="op">&gt;</span> {
+
 	<span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>);
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">visit</span> (
 		<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>,
 		<span class="ident">node</span>: <span class="ident">Node</span>,
 		<span class="ident">priority</span>: <span class="ident">Pri</span>,
-		<span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Seen</span><span class="op">&gt;</span>,
+		<span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">SeenImpl</span><span class="op">&gt;</span>,
 	) -&gt; <span class="ident"><span class="self">Self</span>::Item</span> {
 		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">next_nodes</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">node</span>) {
-			<span class="kw">for</span> (<span class="ident">next_node</span>, <span class="ident">next_pri</span>) <span class="kw">in</span> <span class="ident">next_nodes</span>.<span class="ident">into_iter</span> () {
+			<span class="kw">for</span> <span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">next_node</span>, <span class="kw-2">ref</span> <span class="ident">next_pri</span>) <span class="kw">in</span> <span class="ident">next_nodes</span> {
 				<span class="ident">adder</span>.<span class="ident">add</span> (<span class="ident">next_node</span>.<span class="ident">clone</span> (), <span class="ident">priority</span>.<span class="ident">clone</span> () <span class="op">+</span> <span class="ident">next_pri</span>.<span class="ident">clone</span> ());
 			}
 		}
 		(<span class="ident">node</span>, <span class="ident">priority</span>)
 	}
+
 }
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Node</span>: <span class="ident">Clone</span>, <span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
-	<span class="kw">fn</span> <span class="ident">get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span>;
-	<span class="kw">fn</span> <span class="ident">push</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>, <span class="ident">priority</span>: <span class="ident">Pri</span>) -&gt; <span class="ident">bool</span> {
-		<span class="kw">let</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span> (<span class="ident">node</span>);
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Node</span>: <span class="ident">Clone</span>, <span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
+
+	<span class="kw">fn</span> <span class="ident">seen_get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span>;
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">seen_push</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>, <span class="ident">priority</span>: <span class="ident">Pri</span>) -&gt; <span class="ident">bool</span> {
+		<span class="kw">let</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">seen_get_mut</span> (<span class="ident">node</span>);
 		<span class="kw">match</span> <span class="ident">seen_state</span>.<span class="ident">clone</span> () {
-			<span class="ident">PrioritySearchSeenState::New</span> =&gt; {
-				<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">PrioritySearchSeenState::Unvisited</span> (<span class="ident">priority</span>);
+			<span class="ident">SeenState::New</span> =&gt; {
+				<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">SeenState::Unvisited</span> (<span class="ident">priority</span>);
 				<span class="bool-val">true</span>
 			},
-			<span class="ident">PrioritySearchSeenState::Unvisited</span> (<span class="ident">seen_priority</span>) <span class="kw">if</span> <span class="ident">priority</span> <span class="op">&lt;</span> <span class="ident">seen_priority</span> =&gt; {
-				<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">PrioritySearchSeenState::Unvisited</span> (<span class="ident">priority</span>);
+			<span class="ident">SeenState::Unvisited</span> (<span class="ident">seen_priority</span>) <span class="kw">if</span> <span class="ident">priority</span> <span class="op">&lt;</span> <span class="ident">seen_priority</span> =&gt; {
+				<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">SeenState::Unvisited</span> (<span class="ident">priority</span>);
 				<span class="bool-val">true</span>
 			},
-			<span class="kw">_</span> =&gt; <span class="bool-val">false</span>,
+			<span class="ident">SeenState::Unvisited</span> (<span class="kw">_</span>) <span class="op">|</span> <span class="ident">SeenState::Visited</span> =&gt; <span class="bool-val">false</span>,
 		}
 	}
-	<span class="kw">fn</span> <span class="ident">visited</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="op">&amp;</span> <span class="ident">Node</span>) -&gt; <span class="ident">bool</span> {
-		<span class="kw">let</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_mut</span> (<span class="ident">node</span>.<span class="ident">clone</span> ());
-		<span class="kw">match</span> <span class="ident">seen_state</span>.<span class="ident">clone</span> () {
-			<span class="ident">PrioritySearchSeenState::Visited</span> =&gt; <span class="bool-val">true</span>,
-			<span class="kw">_</span> =&gt; {
-				<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">PrioritySearchSeenState::Visited</span>;
-				<span class="bool-val">false</span>
-			},
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">seen_visited</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="op">&amp;</span> <span class="ident">Node</span>) -&gt; <span class="ident">bool</span> {
+		<span class="kw">let</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">seen_get_mut</span> (<span class="ident">node</span>.<span class="ident">clone</span> ());
+		<span class="kw">if</span> <span class="kw">let</span> <span class="ident">SeenState::Visited</span> <span class="op">=</span> <span class="ident">seen_state</span>.<span class="ident">clone</span> () {
+			<span class="bool-val">true</span>
+		} <span class="kw">else</span> {
+			<span class="op">*</span> <span class="ident">seen_state</span> <span class="op">=</span> <span class="ident">SeenState::Visited</span>;
+			<span class="bool-val">false</span>
 		}
 	}
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>
-		<span class="kw">where</span> <span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>, <span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
-	<span class="kw">fn</span> <span class="ident">get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">entry</span> (<span class="ident">node</span>).<span class="ident">or_insert</span> (<span class="ident">PrioritySearchSeenState::New</span>)
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Hshr</span><span class="op">&gt;</span> <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>
+<span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span>, <span class="ident">Hshr</span><span class="op">&gt;</span>
+	<span class="kw">where</span>
+		<span class="ident">Hshr</span>: <span class="ident">BuildHasher</span>,
+		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
+		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">seen_get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span> {
+		<span class="self">self</span>.<span class="ident">entry</span> (<span class="ident">node</span>).<span class="ident">or_insert</span> (<span class="ident">SeenState::New</span>)
 	}
+
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="kw">const</span> <span class="ident">DIMS</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">PrioritySearchSeen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>
-	<span class="kw">for</span> <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span>
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="kw">const</span> <span class="ident">DIMS</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>
+	<span class="kw">for</span> <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Node</span>, <span class="ident">DIMS</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Node</span>: <span class="ident">GridPos</span> <span class="op">&lt;</span><span class="ident">DIMS</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
-	<span class="kw">fn</span> <span class="ident">get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span> {
-		<span class="ident">Grid::get_mut</span> (<span class="self">self</span>, <span class="ident">node</span>).<span class="ident">unwrap</span> ()
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">seen_get_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">node</span>: <span class="ident">Node</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span> {
+		<span class="ident"><span class="self">Self</span>::get_mut</span> (<span class="self">self</span>, <span class="ident">node</span>).<span class="ident">unwrap</span> ()
 	}
+
 }
 
 <span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PrioritySearchSeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span>: <span class="ident">Clone</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span>: <span class="ident">Clone</span><span class="op">&gt;</span> {
 	<span class="ident">New</span>,
 	<span class="ident">Unvisited</span> (<span class="ident">Pri</span>),
 	<span class="ident">Visited</span>,

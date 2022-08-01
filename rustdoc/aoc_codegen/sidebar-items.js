@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["invoke",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["invoke","Entry point for code generation"]]};

@@ -179,6 +179,11 @@
 <span id="179">179</span>
 <span id="180">180</span>
 <span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 9: All in a Single Night</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/9](https://adventofcode.com/2015/day/9)</span>
@@ -189,6 +194,8 @@
 <span class="doccomment">//! two parameters are alphanumeric strings representing the locations, tand the third is a</span>
 <span class="doccomment">//! integer representing the distance.</span>
 
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
 <span class="macro">puzzle_info!</span> {
@@ -196,8 +203,8 @@
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">9</span>;
 	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
 }
 
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
@@ -206,21 +213,21 @@
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
 	<span class="kw">use</span> <span class="ident">model::Place</span>;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="ident">sanity_check</span> (<span class="op">&amp;</span> <span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">distances</span> (<span class="op">&amp;</span> <span class="ident">input</span>).<span class="ident">min</span> ().<span class="ident">unwrap</span> ())
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+		<span class="ident">sanity_check</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span> (<span class="ident">distances</span> (<span class="ident">input</span>).<span class="ident">min</span> ().<span class="ident">unwrap</span> ())
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="ident">sanity_check</span> (<span class="op">&amp;</span> <span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">distances</span> (<span class="op">&amp;</span> <span class="ident">input</span>).<span class="ident">max</span> ().<span class="ident">unwrap</span> ())
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+		<span class="ident">sanity_check</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok</span> (<span class="ident">distances</span> (<span class="ident">input</span>).<span class="ident">max</span> ().<span class="ident">unwrap</span> ())
 	}
 
 	<span class="kw">fn</span> <span class="ident">sanity_check</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="kw">if</span> <span class="ident">input</span>.<span class="ident">len</span> () <span class="op">&gt;</span> <span class="number">60</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to handle more than 60 distances&quot;</span>) <span class="question-mark">?</span>; }
 		<span class="kw">let</span> <span class="ident">num_places</span> <span class="op">=</span>
 			<span class="ident">input</span>.<span class="ident">iter</span> ()
-				.<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">from</span>, <span class="ident">to</span>, <span class="kw">_</span>)<span class="op">|</span> [<span class="ident">from</span>, <span class="ident">to</span>])
+				.<span class="ident">flat_map</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">from</span>, <span class="kw-2">ref</span> <span class="ident">to</span>, <span class="kw">_</span>)<span class="op">|</span> [<span class="ident">from</span>, <span class="ident">to</span>])
 				.<span class="ident">sorted</span> ()
 				.<span class="ident">dedup</span> ()
 				.<span class="ident">count</span> ();
@@ -290,7 +297,10 @@
 	<span class="kw">fn</span> <span class="ident">gen_dist_table</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; (<span class="ident">usize</span>, <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>) {
 		<span class="kw">let</span> <span class="ident">place_indexes</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Place</span>, <span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span>
 			<span class="ident">input</span>.<span class="ident">iter</span> ()
-				.<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">place_0</span>, <span class="ident">place_1</span>, <span class="kw">_</span>)<span class="op">|</span> [ <span class="ident">Rc::clone</span> (<span class="ident">place_0</span>), <span class="ident">Rc::clone</span> (<span class="ident">place_1</span>) ])
+				.<span class="ident">flat_map</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">place_0</span>, <span class="kw-2">ref</span> <span class="ident">place_1</span>, <span class="kw">_</span>)<span class="op">|</span> [
+					<span class="ident">Rc::clone</span> (<span class="ident">place_0</span>),
+					<span class="ident">Rc::clone</span> (<span class="ident">place_1</span>),
+				])
 				.<span class="ident">sorted</span> ()
 				.<span class="ident">dedup</span> ()
 				.<span class="ident">enumerate</span> ()

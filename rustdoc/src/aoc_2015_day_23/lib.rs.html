@@ -337,9 +337,23 @@
 <span id="337">337</span>
 <span id="338">338</span>
 <span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -348,8 +362,8 @@
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">23</span>;
 	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
 }
 
 <span class="doccomment">/// Logic for solving the puzzles.</span>
@@ -364,18 +378,18 @@
 	<span class="kw">use</span> <span class="ident">nums::Int</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">reg_b</span>) <span class="op">=</span> <span class="ident">emulate</span> (<span class="ident">input</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok</span> (<span class="ident">reg_b</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">reg_b</span>) <span class="op">=</span> <span class="ident">emulate</span> (<span class="ident">input</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok</span> (<span class="ident">reg_b</span>)
 	}
 
 	<span class="kw">fn</span> <span class="ident">emulate</span> (
-		<span class="ident">input</span>: <span class="ident">Input</span>,
+		<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>,
 		<span class="kw-2">mut</span> <span class="ident">reg_a</span>: <span class="ident">Val</span>,
 		<span class="kw-2">mut</span> <span class="ident">reg_b</span>: <span class="ident">Val</span>,
 		<span class="kw-2">mut</span> <span class="ident">next</span>: <span class="ident">Val</span>,
@@ -385,7 +399,8 @@
 		<span class="comment">// main loop</span>
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">while</span> <span class="ident">next</span> <span class="op">&lt;</span> <span class="ident">Val::from_usize</span> (<span class="ident">input</span>.<span class="ident">instrs</span>.<span class="ident">len</span> ()).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span> {
+		<span class="kw">while</span> <span class="ident">next</span> <span class="op">&lt;</span> <span class="ident">Val::from_usize</span> (<span class="ident">input</span>.<span class="ident">instrs</span>.<span class="ident">len</span> ())
+			.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span> {
 
 			<span class="comment">// abort when we reach max_loops</span>
 
@@ -403,31 +418,40 @@
 				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::A</span>) =&gt; <span class="ident">reg_a</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,
 				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::B</span>) =&gt; <span class="ident">reg_b</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,
 				<span class="ident">Instr::Tpl</span> (<span class="ident">Reg::A</span>) =&gt;
-					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_a</span>, <span class="number">3</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
+					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_a</span>, <span class="number">3</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
 				<span class="ident">Instr::Tpl</span> (<span class="ident">Reg::B</span>) =&gt;
-					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_b</span>, <span class="number">3</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
+					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_b</span>, <span class="number">3</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
 				<span class="ident">Instr::Inc</span> (<span class="ident">Reg::A</span>) =&gt;
-					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_a</span>, <span class="number">1</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
+					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_a</span>, <span class="number">1</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
 				<span class="ident">Instr::Inc</span> (<span class="ident">Reg::B</span>) =&gt;
-					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_b</span>, <span class="number">1</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
+					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_b</span>, <span class="number">1</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
 				<span class="ident">Instr::Jmp</span> (<span class="ident">offset</span>) =&gt; {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 				<span class="ident">Instr::Jie</span> (<span class="ident">Reg::A</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_a</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 				<span class="ident">Instr::Jie</span> (<span class="ident">Reg::B</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_b</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 				<span class="ident">Instr::Jio</span> (<span class="ident">Reg::A</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_a</span> <span class="op">==</span> <span class="number">1</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 				<span class="ident">Instr::Jio</span> (<span class="ident">Reg::B</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_b</span> <span class="op">==</span> <span class="number">1</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>).<span class="ident">map_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
+						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 			}
@@ -456,10 +480,10 @@
 
 	<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">EmulateError</span> {
 		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="kw">match</span> <span class="self">self</span> {
-				<span class="ident">EmulateError::InfiniteLoop</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Infinite loop&quot;</span>) <span class="question-mark">?</span>,
-				<span class="ident">EmulateError::Overflow</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Arithmetic overflow&quot;</span>) <span class="question-mark">?</span>,
-				<span class="ident">EmulateError::MaxLoops</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Max loops reached&quot;</span>) <span class="question-mark">?</span>,
+			<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
+				<span class="ident"><span class="self">Self</span>::InfiniteLoop</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Infinite loop&quot;</span>) <span class="question-mark">?</span>,
+				<span class="ident"><span class="self">Self</span>::Overflow</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Arithmetic overflow&quot;</span>) <span class="question-mark">?</span>,
+				<span class="ident"><span class="self">Self</span>::MaxLoops</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Max loops reached&quot;</span>) <span class="question-mark">?</span>,
 			}
 			<span class="prelude-val">Ok</span> (())
 		}
@@ -476,37 +500,37 @@
 			<span class="kw">use</span> <span class="ident">Reg</span>::<span class="kw-2">*</span>;
 			<span class="comment">// inc, hlf, tpl</span>
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Hlf</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Hlf</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Hlf</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Hlf</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="comment">// jmp</span>
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="number">2</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="number">2</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="comment">// jio</span>
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="comment">// jie</span>
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="comment">// errors</span>
 			<span class="macro">assert_err!</span> (<span class="string">&quot;Infinite loop&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jmp</span> (<span class="number">0</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jmp</span> (<span class="number">0</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_err!</span> (<span class="string">&quot;Max loops reached&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
 			<span class="macro">assert_err!</span> (<span class="string">&quot;Arithmetic overflow&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));
+				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));
 		}
 
 	}
@@ -542,12 +566,12 @@
 	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Reg</span> { <span class="ident">A</span>, <span class="ident">B</span> }
 
 	<span class="kw">impl</span> <span class="ident">Instr</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="ident">Parser::wrap</span> (<span class="ident">input</span>, <span class="ident"><span class="self">Self</span>::parse_real</span>)
 				.<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
 					<span class="macro">format!</span> (<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">input</span>))
 		}
-		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="ident">parser</span>
 				.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>)
 				.<span class="ident">set_word_pred</span> (<span class="op">|</span><span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">is_ascii_alphanumeric</span> ());
@@ -556,46 +580,46 @@
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;hlf&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Hlf</span> (<span class="ident">reg</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Hlf</span> (<span class="ident">reg</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;tpl&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Tpl</span> (<span class="ident">reg</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Tpl</span> (<span class="ident">reg</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;inc&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Inc</span> (<span class="ident">reg</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Inc</span> (<span class="ident">reg</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jmp&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Jmp</span> (<span class="ident">offset</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jmp</span> (<span class="ident">offset</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jio&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
 					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Jio</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jio</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
 					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jie&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
 					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
 					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">Instr::Jie</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
+					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jie</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
 				})
 				.<span class="ident">done</span> ()
 		}
 	}
 
 	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Input</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">instrs</span> <span class="op">=</span>
 				<span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ()
 					.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
@@ -604,15 +628,15 @@
 								<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
 									<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
 					.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="ident">Input</span> { <span class="ident">instrs</span> })
+			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">instrs</span> })
 		}
 	}
 
 	<span class="kw">impl</span> <span class="ident">Reg</span> {
-		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="ident">Reg</span><span class="op">&gt;</span> {
+		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="ident">parser</span>.<span class="ident">any</span> ()
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;a&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Reg::A</span>) })
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;b&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Reg::B</span>) })
+				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;a&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::A</span>) })
+				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;b&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::B</span>) })
 				.<span class="ident">done</span> ()
 		}
 	}

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["BitHash",""],["BitHasher",""]],"trait":[["IteratorBitHash",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["BitHash","A bit hash value"],["BitHasher","State for building a [`BitHash`] iteratively"]],"trait":[["IteratorBitHash","Extension trait to [`Iterator`] for working with [`BitHash`]"]]};

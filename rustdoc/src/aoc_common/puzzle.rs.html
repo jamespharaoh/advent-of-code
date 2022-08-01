@@ -481,12 +481,46 @@
 <span id="481">481</span>
 <span id="482">482</span>
 <span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
+<span id="496">496</span>
+<span id="497">497</span>
+<span id="498">498</span>
+<span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
+<span id="513">513</span>
+<span id="514">514</span>
+<span id="515">515</span>
+<span id="516">516</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fs::File</span>;
 <span class="kw">use</span> <span class="ident">std::io</span>;
 <span class="kw">use</span> <span class="ident">std::io::BufRead</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">std::io::BufReader</span>;
 <span class="kw">use</span> <span class="ident">std::io::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
 <span class="kw">use</span> <span class="ident">std::path::PathBuf</span>;
+<span class="kw">use</span> <span class="ident">std::time::Instant</span>;
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">nums::IntConv</span>;
@@ -497,6 +531,7 @@
 	<span class="ident">num_unknown</span>: <span class="ident">usize</span>,
 }
 
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_year_and_exit</span> (
 	<span class="ident">puzzles</span>: <span class="op">&amp;</span> [<span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Puzzle</span><span class="op">&gt;</span>],
 	<span class="ident">require_answers</span>: <span class="ident">bool</span>,
@@ -505,11 +540,14 @@
 	<span class="kw">let</span> <span class="ident">num_errors</span> <span class="op">=</span>
 		<span class="kw">if</span> <span class="ident">require_answers</span> { <span class="ident">stats</span>.<span class="ident">num_incorrect</span> <span class="op">+</span> <span class="ident">stats</span>.<span class="ident">num_unknown</span> }
 		<span class="kw">else</span> { <span class="ident">stats</span>.<span class="ident">num_incorrect</span> };
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::exit</span>) ]</span>
 	<span class="ident">std::process::exit</span> (
 		<span class="kw">if</span> <span class="ident">num_errors</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">0</span> }
 		<span class="kw">else</span> { <span class="number">1</span> });
 }
 
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_year</span> (<span class="ident">puzzles</span>: <span class="op">&amp;</span> [<span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Puzzle</span><span class="op">&gt;</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">RunStats</span><span class="op">&gt;</span> {
 
 	<span class="kw">let</span> <span class="ident">flush</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="ident">io::stdout</span> ().<span class="ident">flush</span> ().<span class="ident">unwrap</span> ();
@@ -581,41 +619,41 @@
 		<span class="comment">// iterate over parts</span>
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-		<span class="kw">for</span> <span class="ident">part</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">2</span> {
+		<span class="kw">for</span> (<span class="ident">part_idx</span>, <span class="ident">part_name</span>) <span class="kw">in</span> [ <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot;</span> ].<span class="ident">into_iter</span> ().<span class="ident">enumerate</span> () {
 
 			<span class="comment">// handle missing part</span>
 
-			<span class="kw">if</span> <span class="ident">puzzle</span>.<span class="ident">num_parts</span> () <span class="op">&lt;</span> <span class="ident">part</span> <span class="op">+</span> <span class="number">1</span> {
+			<span class="kw">if</span> <span class="ident">puzzle</span>.<span class="ident">num_parts</span> () <span class="op">&lt;</span> <span class="ident">part_idx</span> <span class="op">+</span> <span class="number">1</span> {
 				<span class="macro">print!</span> (<span class="string">&quot;{:24}&quot;</span>, <span class="string">&quot;&quot;</span>);
 				<span class="kw">continue</span>;
 			}
 
 			<span class="comment">// print part name</span>
 
-			<span class="kw">const</span> <span class="ident">PART_NAMES</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [ <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot;</span> ];
-			<span class="macro">print!</span> (<span class="string">&quot;  {}: &quot;</span>, <span class="ident">PART_NAMES</span> [<span class="ident">part</span>]);
+			<span class="macro">print!</span> (<span class="string">&quot;  {}: &quot;</span>, <span class="ident">part_name</span>);
 
 			<span class="comment">// calculate result</span>
 
 			<span class="ident">flush</span> ();
 
 			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span>
-				<span class="kw">if</span> <span class="ident">part</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> }
-				<span class="kw">else</span> <span class="kw">if</span> <span class="ident">part</span> <span class="op">==</span> <span class="number">1</span> { <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> }
-				<span class="kw">else</span> { <span class="macro">panic!</span> () };
+				<span class="kw">if</span> <span class="ident">part_idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> }
+				<span class="kw">else</span> { <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> };
 
 			<span class="comment">// check against answers</span>
 
-			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">answer</span>) <span class="op">=</span> <span class="ident">answers</span>.<span class="ident">get</span> (<span class="op">&amp;</span> (<span class="ident">puzzle</span>.<span class="ident">day</span> (), <span class="ident">part</span>.<span class="ident">as_u8</span> ())) {
+			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">answer</span>) <span class="op">=</span> <span class="ident">answers</span>.<span class="ident">get</span> (<span class="op">&amp;</span> (<span class="ident">puzzle</span>.<span class="ident">day</span> (), <span class="ident">part_idx</span>.<span class="ident">as_u8</span> ())) {
 				<span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">result</span> <span class="op">==</span> <span class="ident">answer</span> {
 					<span class="ident">stats</span>.<span class="ident">num_correct</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 				} <span class="kw">else</span> <span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">result</span> <span class="op">!</span><span class="op">=</span> <span class="ident">answer</span> {
 					<span class="ident">stats</span>.<span class="ident">num_incorrect</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 					<span class="ident">errors</span>.<span class="ident">push</span> (<span class="macro">format!</span> (
 						<span class="string">&quot;Part {part}: Expected {answer:?}, but calculated {result:?}&quot;</span>,
-						<span class="ident">part</span> <span class="op">=</span> <span class="ident">part</span> <span class="op">+</span> <span class="number">1</span>,
+						<span class="ident">part</span> <span class="op">=</span> <span class="ident">part_idx</span> <span class="op">+</span> <span class="number">1</span>,
 						<span class="ident">answer</span> <span class="op">=</span> <span class="ident">answer</span>,
 						<span class="ident">result</span> <span class="op">=</span> <span class="ident">result</span>));
+				} <span class="kw">else</span> {
+					<span class="comment">// no answer</span>
 				}
 			} <span class="kw">else</span> { <span class="ident">stats</span>.<span class="ident">num_unknown</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>; }
 
@@ -647,6 +685,7 @@
 
 }
 
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 <span class="kw">fn</span> <span class="ident">puzzle_invoke_real</span> (
 	<span class="ident">puzzle</span>: <span class="op">&amp;</span> <span class="kw">dyn</span> <span class="ident">Puzzle</span>,
 	<span class="ident">args</span>: <span class="op">&amp;</span> [<span class="ident">OsString</span>],
@@ -673,61 +712,6 @@
 	<span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">get_matches_from</span> (<span class="ident">args</span>);
 	<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">load_input</span> () <span class="question-mark">?</span>;
 	<span class="kw">let</span> <span class="ident">input_lines</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input_string</span>.<span class="ident">trim</span> ().<span class="ident">split</span> (<span class="string">&#39;\n&#39;</span>).<span class="ident">collect</span> ();
-	<span class="kw">use</span> <span class="ident">time::Instant</span>;
-	<span class="kw">fn</span> <span class="ident">percentile</span> (<span class="ident">times</span>: <span class="op">&amp;</span> [<span class="ident">u64</span>], <span class="ident">num</span>: <span class="ident">u64</span>, <span class="ident">denom</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-		<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">len</span> ().<span class="ident">as_u64</span> () <span class="op">-</span> <span class="number">1</span>;
-		<span class="kw">let</span> <span class="ident">idx</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">/</span> <span class="ident">denom</span>;
-		<span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">%</span> <span class="ident">denom</span>;
-		<span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] }
-		<span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] <span class="op">*</span> (<span class="ident">denom</span> <span class="op">-</span> <span class="ident">rem</span>) <span class="op">/</span> <span class="ident">denom</span>
-			<span class="op">+</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">1</span>] <span class="op">*</span> <span class="ident">rem</span> <span class="op">/</span> <span class="ident">denom</span>
-	}
-	<span class="kw">fn</span> <span class="ident">runner</span> <span class="op">&lt;</span><span class="ident">InnerFn</span>: <span class="ident">Fn</span> (<span class="ident">u64</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> (<span class="ident">repeat</span>: <span class="ident">u64</span>, <span class="ident">inner_fn</span>: <span class="ident">InnerFn</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">times</span> <span class="op">=</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">times</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span> .. <span class="ident">repeat</span>)
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> { <span class="ident">inner_fn</span> (<span class="ident">idx</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Instant::now</span> ()) })
-				.<span class="ident">scan</span> (<span class="ident">Instant::now</span> (), <span class="op">|</span><span class="ident">state</span>, <span class="ident">cur</span><span class="op">|</span>
-					<span class="prelude-val">Some</span> (<span class="ident">cur</span>.<span class="ident">map</span> (<span class="op">|</span><span class="ident">cur</span><span class="op">|</span> <span class="ident">cur</span> <span class="op">-</span> <span class="ident">mem::replace</span> (<span class="ident">state</span>, <span class="ident">cur</span>))))
-				.<span class="ident">map_ok</span> (<span class="op">|</span><span class="ident">duration</span><span class="op">|</span> <span class="ident">duration</span>.<span class="ident">as_micros</span> ().<span class="ident">as_u64</span> ())
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="ident">times</span>.<span class="ident">sort</span> ();
-			<span class="ident">times</span>
-		};
-		<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">==</span> <span class="number">1</span> { <span class="kw">return</span> <span class="prelude-val">Ok</span> (()) }
-		<span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_u128</span> ()).<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">u128</span><span class="op">&gt;</span> ();
-		<span class="kw">let</span> <span class="ident">mean</span> <span class="op">=</span> (<span class="ident">total</span> <span class="op">/</span> <span class="ident">repeat</span>.<span class="ident">as_u128</span> ()).<span class="ident">as_u64</span> ();
-		<span class="kw">let</span> <span class="ident">disp_float</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>, <span class="ident">ref_val</span><span class="op">|</span>
-			<span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000_000.0</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}s&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000_000.0</span>) }
-			<span class="kw">else</span> <span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000.0</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}ms&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000.0</span>) }
-			<span class="kw">else</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.0}µs&quot;</span>, <span class="ident">val</span>) };
-		<span class="kw">let</span> <span class="ident">disp</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u128</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">val</span>.<span class="ident">as_f64</span> ());
-		<span class="kw">let</span> <span class="ident">disp_mean</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u64</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
-		<span class="kw">let</span> <span class="ident">disp_pc</span> <span class="op">=</span> <span class="op">|</span><span class="ident">pc</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">percentile</span> (<span class="op">&amp;</span> <span class="ident">times</span>, <span class="ident">pc</span>, <span class="number">1000</span>).<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
-		<span class="macro">print!</span> (<span class="string">&quot;Statistics: total={} count={} mean={},&quot;</span>, <span class="ident">disp</span> (<span class="ident">total</span>), <span class="ident">repeat</span>, <span class="ident">disp_mean</span> (<span class="ident">mean</span>));
-		<span class="kw">const</span> <span class="ident">PERCENTILE_OPTIONS</span>: <span class="op">&amp;</span> [(<span class="ident">u64</span>, <span class="op">&amp;</span> [<span class="ident">u64</span>])] <span class="op">=</span> <span class="op">&amp;</span> [
-			(<span class="number">1000</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">999</span>, <span class="number">1000</span>]),
-			(<span class="number">100</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">1000</span>]),
-			(<span class="number">25</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">750</span>, <span class="number">900</span>, <span class="number">1000</span>]),
-			(<span class="number">10</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">1000</span>]),
-			(<span class="number">0</span>, <span class="op">&amp;</span> []),
-		];
-		<span class="kw">for</span> (<span class="ident">min_repeat</span>, <span class="ident">percentiles</span>) <span class="kw">in</span> <span class="ident">PERCENTILE_OPTIONS</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">&lt;</span> <span class="ident">min_repeat</span> <span class="op">*</span> <span class="number">2</span> { <span class="kw">continue</span> }
-			<span class="kw">for</span> <span class="ident">percentile</span> <span class="kw">in</span> <span class="ident">percentiles</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-				<span class="kw">if</span> <span class="ident">percentile</span> <span class="op">%</span> <span class="number">10</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span> <span class="op">/</span> <span class="number">10</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
-				} <span class="kw">else</span> {
-					<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span>.<span class="ident">as_f64</span> () <span class="op">/</span> <span class="number">10.0</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
-				}
-			}
-			<span class="kw">if</span> <span class="ident">percentiles</span>.<span class="ident">is_empty</span> () {
-				<span class="macro">print!</span> (<span class="string">&quot; min={} median={} max={}&quot;</span>, <span class="ident">disp_pc</span> (<span class="number">0</span>), <span class="ident">disp_pc</span> (<span class="number">500</span>), <span class="ident">disp_pc</span> (<span class="number">1000</span>));
-			}
-			<span class="kw">break</span>;
-		}
-		<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
-		<span class="prelude-val">Ok</span> (())
-	}
 	<span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">subcommand</span> () {
 		<span class="prelude-val">None</span> =&gt; {
 			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
@@ -765,6 +749,64 @@
 	<span class="prelude-val">Ok</span> (())
 }
 
+<span class="kw">fn</span> <span class="ident">percentile</span> (<span class="ident">times</span>: <span class="op">&amp;</span> [<span class="ident">u64</span>], <span class="ident">num</span>: <span class="ident">u64</span>, <span class="ident">denom</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
+	<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">len</span> ().<span class="ident">as_u64</span> () <span class="op">-</span> <span class="number">1</span>;
+	<span class="kw">let</span> <span class="ident">idx</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">/</span> <span class="ident">denom</span>;
+	<span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">%</span> <span class="ident">denom</span>;
+	<span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] }
+	<span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] <span class="op">*</span> (<span class="ident">denom</span> <span class="op">-</span> <span class="ident">rem</span>) <span class="op">/</span> <span class="ident">denom</span>
+		<span class="op">+</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">1</span>] <span class="op">*</span> <span class="ident">rem</span> <span class="op">/</span> <span class="ident">denom</span>
+}
+
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
+<span class="kw">fn</span> <span class="ident">runner</span> <span class="op">&lt;</span><span class="ident">InnerFn</span>: <span class="ident">Fn</span> (<span class="ident">u64</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> (<span class="ident">repeat</span>: <span class="ident">u64</span>, <span class="ident">inner_fn</span>: <span class="ident">InnerFn</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">let</span> <span class="ident">times</span> <span class="op">=</span> {
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">times</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span> .. <span class="ident">repeat</span>)
+			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> { <span class="ident">inner_fn</span> (<span class="ident">idx</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Instant::now</span> ()) })
+			.<span class="ident">scan</span> (<span class="ident">Instant::now</span> (), <span class="op">|</span><span class="ident">state</span>, <span class="ident">cur</span><span class="op">|</span>
+				<span class="prelude-val">Some</span> (<span class="ident">cur</span>.<span class="ident">map</span> (<span class="op">|</span><span class="ident">cur</span><span class="op">|</span> <span class="ident">cur</span> <span class="op">-</span> <span class="ident">mem::replace</span> (<span class="ident">state</span>, <span class="ident">cur</span>))))
+			.<span class="ident">map_ok</span> (<span class="op">|</span><span class="ident">duration</span><span class="op">|</span> <span class="ident">duration</span>.<span class="ident">as_micros</span> ().<span class="ident">as_u64</span> ())
+			.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
+		<span class="ident">times</span>.<span class="ident">sort_unstable</span> ();
+		<span class="ident">times</span>
+	};
+	<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">==</span> <span class="number">1</span> { <span class="kw">return</span> <span class="prelude-val">Ok</span> (()) }
+	<span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_u128</span> ()).<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">u128</span><span class="op">&gt;</span> ();
+	<span class="kw">let</span> <span class="ident">mean</span> <span class="op">=</span> (<span class="ident">total</span> <span class="op">/</span> <span class="ident">repeat</span>.<span class="ident">as_u128</span> ()).<span class="ident">as_u64</span> ();
+	<span class="kw">let</span> <span class="ident">disp_float</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>, <span class="ident">ref_val</span><span class="op">|</span>
+		<span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000_000_f64</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}s&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000_000_f64</span>) }
+		<span class="kw">else</span> <span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000_f64</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}ms&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000_f64</span>) }
+		<span class="kw">else</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.0}µs&quot;</span>, <span class="ident">val</span>) };
+	<span class="kw">let</span> <span class="ident">disp</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u128</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">val</span>.<span class="ident">as_f64</span> ());
+	<span class="kw">let</span> <span class="ident">disp_mean</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u64</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
+	<span class="kw">let</span> <span class="ident">disp_pc</span> <span class="op">=</span> <span class="op">|</span><span class="ident">pc</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">percentile</span> (<span class="op">&amp;</span> <span class="ident">times</span>, <span class="ident">pc</span>, <span class="number">1000</span>).<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
+	<span class="macro">print!</span> (<span class="string">&quot;Statistics: total={} count={} mean={},&quot;</span>, <span class="ident">disp</span> (<span class="ident">total</span>), <span class="ident">repeat</span>, <span class="ident">disp_mean</span> (<span class="ident">mean</span>));
+	<span class="kw">const</span> <span class="ident">PERCENTILE_OPTIONS</span>: <span class="op">&amp;</span> [(<span class="ident">u64</span>, <span class="op">&amp;</span> [<span class="ident">u64</span>])] <span class="op">=</span> <span class="op">&amp;</span> [
+		(<span class="number">1000</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">999</span>, <span class="number">1000</span>]),
+		(<span class="number">100</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">1000</span>]),
+		(<span class="number">25</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">750</span>, <span class="number">900</span>, <span class="number">1000</span>]),
+		(<span class="number">10</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">1000</span>]),
+		(<span class="number">0</span>, <span class="op">&amp;</span> []),
+	];
+	<span class="kw">for</span> (<span class="ident">min_repeat</span>, <span class="ident">percentiles</span>) <span class="kw">in</span> <span class="ident">PERCENTILE_OPTIONS</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
+		<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">&lt;</span> <span class="ident">min_repeat</span> <span class="op">*</span> <span class="number">2</span> { <span class="kw">continue</span> }
+		<span class="kw">for</span> <span class="ident">percentile</span> <span class="kw">in</span> <span class="ident">percentiles</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
+			<span class="kw">if</span> <span class="ident">percentile</span> <span class="op">%</span> <span class="number">10</span> <span class="op">==</span> <span class="number">0</span> {
+				<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span> <span class="op">/</span> <span class="number">10</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
+			} <span class="kw">else</span> {
+				<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span>.<span class="ident">as_f64</span> () <span class="op">/</span> <span class="number">10.0_f64</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
+			}
+		}
+		<span class="kw">if</span> <span class="ident">percentiles</span>.<span class="ident">is_empty</span> () {
+			<span class="macro">print!</span> (<span class="string">&quot; min={} median={} max={}&quot;</span>, <span class="ident">disp_pc</span> (<span class="number">0</span>), <span class="ident">disp_pc</span> (<span class="number">500</span>), <span class="ident">disp_pc</span> (<span class="number">1000</span>));
+		}
+		<span class="kw">break</span>;
+	}
+	<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
+	<span class="prelude-val">Ok</span> (())
+}
+
+<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Puzzle</span> {
 
 	<span class="kw">fn</span> <span class="ident">dyn_puzzle</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="kw">dyn</span> <span class="ident">Puzzle</span>;
@@ -772,18 +814,31 @@
 	<span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span>;
 	<span class="kw">fn</span> <span class="ident">year</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u16</span>;
 	<span class="kw">fn</span> <span class="ident">day</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u8</span>;
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">_lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> { <span class="macro">unimplemented!</span> () }
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">_lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> { <span class="macro">unimplemented!</span> () }
+
 	<span class="kw">fn</span> <span class="ident">num_parts</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span>;
 
-	<span class="kw">fn</span> <span class="ident">commands</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PuzzleCommand</span><span class="op">&gt;</span> { <span class="ident">Vec::new</span> () }
-
-	<span class="kw">fn</span> <span class="ident">set_default_params</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) { }
-	<span class="kw">fn</span> <span class="ident">set_param_real</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>);
-	<span class="kw">fn</span> <span class="ident">set_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="op">&amp;</span> <span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) {
-		<span class="self">self</span>.<span class="ident">set_param_real</span> (<span class="ident">name</span>.<span class="ident">to_string</span> (), <span class="ident">value</span>);
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">commands</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PuzzleCommand</span><span class="op">&gt;</span> {
+		<span class="ident">Vec::new</span> ()
 	}
 
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">set_default_params</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) { }
+
+	<span class="kw">fn</span> <span class="ident">set_param_real</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>);
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">set_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="op">&amp;</span> <span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) {
+		<span class="self">self</span>.<span class="ident">set_param_real</span> (<span class="ident">name</span>.<span class="ident">to_owned</span> (), <span class="ident">value</span>);
+	}
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">invoke</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">args</span>: <span class="op">&amp;</span> [<span class="ident">OsString</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="ident">puzzle_invoke_real</span> (<span class="self">self</span>.<span class="ident">dyn_puzzle</span> (), <span class="ident">args</span>)
 	}
@@ -825,13 +880,14 @@
 
 <span class="kw">impl</span> <span class="ident">PuzzleCommand</span> {
 
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span> <span class="op">&lt;</span>
 		<span class="ident">Args</span>: <span class="ident">clap::Parser</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 		<span class="ident">InvokeFn</span>: <span class="ident">Fn</span> (<span class="ident">Args</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 	<span class="op">&gt;</span> (
 		<span class="ident">name</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span>,
 		<span class="ident">invoke_fn</span>: <span class="ident">InvokeFn</span>,
-	) -&gt; <span class="ident">PuzzleCommand</span> {
+	) -&gt; <span class="self">Self</span> {
 
 		<span class="kw">let</span> <span class="ident">invoke_fn</span> <span class="op">=</span> <span class="ident">Box::new</span> (
 			<span class="kw">move</span> <span class="op">|</span><span class="ident">matches</span>: <span class="op">&amp;</span> <span class="kw">_</span><span class="op">|</span> <span class="ident">invoke_fn</span> (<span class="ident">Args::from_arg_matches</span> (<span class="ident">matches</span>).<span class="ident">unwrap</span> ()),
@@ -841,13 +897,23 @@
 			<span class="ident">phantom</span>: <span class="ident">PhantomData</span>,
 		});
 
-		<span class="ident">PuzzleCommand</span> { <span class="ident">name</span>, <span class="ident">invoke_fn</span>, <span class="ident">magic</span> }
+		<span class="self">Self</span> { <span class="ident">name</span>, <span class="ident">invoke_fn</span>, <span class="ident">magic</span> }
 
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="ident">str</span> { <span class="self">self</span>.<span class="ident">name</span> }
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> { <span class="self">self</span>.<span class="ident">magic</span>.<span class="ident">command</span> () }
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="ident">str</span> {
+		<span class="self">self</span>.<span class="ident">name</span>
+	}
 
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> {
+		<span class="self">self</span>.<span class="ident">magic</span>.<span class="ident">command</span> ()
+	}
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">args</span>: <span class="op">&amp;</span> <span class="ident">ArgMatches</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		(<span class="self">self</span>.<span class="ident">invoke_fn</span>) (<span class="ident">args</span>)
 	}
@@ -944,7 +1010,7 @@
 
 	( @<span class="ident">params</span> ) =&gt; {};
 	( @<span class="ident">params</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span> ; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>.<span class="ident">set_param_real</span> (<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>).<span class="ident">to_string</span> (), <span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">type</span>));
+		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>.<span class="ident">set_param_real</span> (<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>).<span class="ident">to_owned</span> (), <span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">type</span>));
 		<span class="macro">puzzle_info!</span> { @<span class="macro-nonterminal">params</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
 	};
 

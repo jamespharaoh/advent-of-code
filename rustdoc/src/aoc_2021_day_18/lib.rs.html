@@ -463,6 +463,10 @@
 <span id="463">463</span>
 <span id="464">464</span>
 <span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 18: Snailfish</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/18](https://adventofcode.com/2021/day/18)</span>
@@ -473,8 +477,8 @@
 	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Snailfish&quot;</span>;
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2021</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">18</span>;
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">lines</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">lines</span>);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> (<span class="ident">logic::part_one</span> (<span class="ident">lines</span>));
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> (<span class="ident">logic::part_two</span> (<span class="ident">lines</span>));
 }
 
 <span class="kw">mod</span> <span class="ident">logic</span> {
@@ -482,13 +486,12 @@
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">snailfish::Snailfish</span>;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">i64</span> {
 		<span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">Snailfish::sum</span> (<span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="ident">Snailfish::parse</span>));
-		<span class="kw">let</span> <span class="ident">magnitude</span> <span class="op">=</span> <span class="ident">sum</span>.<span class="ident">magnitude</span> ();
-		<span class="prelude-val">Ok</span> (<span class="ident">magnitude</span>)
+		<span class="ident">sum</span>.<span class="ident">magnitude</span> ()
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">i64</span> {
 		<span class="kw">let</span> <span class="ident">numbers</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="ident">Snailfish::parse</span>).<span class="ident">collect</span> ();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">best</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="ident">i64::MIN</span>;
 		<span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">numbers</span>.<span class="ident">len</span> () {
@@ -498,7 +501,7 @@
 				<span class="kw">if</span> <span class="ident">value</span> <span class="op">&gt;</span> <span class="ident">best</span> { <span class="ident">best</span> <span class="op">=</span> <span class="ident">value</span>; }
 			}
 		}
-		<span class="prelude-val">Ok</span> (<span class="ident">best</span>)
+		<span class="ident">best</span>
 	}
 
 }
@@ -541,26 +544,29 @@
 			<span class="ident">left</span> <span class="op">*</span> <span class="number">3</span> <span class="op">+</span> <span class="ident">right</span> <span class="op">*</span> <span class="number">2</span>
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sum</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Borrow</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span>, <span class="ident">Iter</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> (<span class="ident">iter</span>: <span class="ident">Iter</span>) -&gt; <span class="ident">Snailfish</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sum</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Iter</span><span class="op">&gt;</span> (<span class="ident">iter</span>: <span class="ident">Iter</span>) -&gt; <span class="self">Self</span>
+			<span class="kw">where</span>
+				<span class="ident">Item</span>: <span class="ident">Borrow</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>,
+				<span class="ident">Iter</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Item</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sum</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 			<span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="ident">iter</span> {
 				<span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="ident">item</span>.<span class="ident">borrow</span> ();
 				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">prev_sum</span>) <span class="op">=</span> <span class="ident">sum</span> {
-					<span class="ident">sum</span> <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident">Snailfish::add</span> (<span class="ident">prev_sum</span>, <span class="ident">item</span>));
+					<span class="ident">sum</span> <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::add</span> (<span class="ident">prev_sum</span>, <span class="ident">item</span>));
 				} <span class="kw">else</span> {
-					<span class="ident">sum</span> <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident">item</span>.<span class="ident">to_owned</span> ());
+					<span class="ident">sum</span> <span class="op">=</span> <span class="prelude-val">Some</span> (<span class="ident">item</span>.<span class="ident">clone</span> ());
 				}
 			}
 			<span class="ident">sum</span>.<span class="ident">unwrap</span> ()
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span> (<span class="ident">left</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span>, <span class="ident">right</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span>) -&gt; <span class="ident">Snailfish</span> {
-			<span class="ident">Snailfish::pair</span> (<span class="ident">left</span>, <span class="ident">right</span>).<span class="ident">reduce</span> ()
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span> (<span class="ident">left</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">right</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+			<span class="ident"><span class="self">Self</span>::pair</span> (<span class="ident">left</span>, <span class="ident">right</span>).<span class="ident">reduce</span> ()
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pair</span> (<span class="ident">left</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span>, <span class="ident">right</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="ident">Snailfish</span><span class="op">&gt;</span>) -&gt; <span class="ident">Snailfish</span> {
-			<span class="kw">let</span> <span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">left_tokens</span> } <span class="op">=</span> <span class="ident">left</span>.<span class="ident">into</span> ();
-			<span class="kw">let</span> <span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">right_tokens</span> } <span class="op">=</span> <span class="ident">right</span>.<span class="ident">into</span> ();
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pair</span> (<span class="ident">left</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">right</span>: <span class="kw">impl</span> <span class="ident">Into</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
+			<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">left_tokens</span> } <span class="op">=</span> <span class="ident">left</span>.<span class="ident">into</span> ();
+			<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">right_tokens</span> } <span class="op">=</span> <span class="ident">right</span>.<span class="ident">into</span> ();
 			<span class="kw">match</span> <span class="ident">Rc::try_unwrap</span> (<span class="ident">left_tokens</span>) {
 				<span class="prelude-val">Ok</span> (<span class="kw-2">mut</span> <span class="ident">left_tokens</span>) =&gt; {
 					<span class="ident">left_tokens</span>.<span class="ident">insert</span> (<span class="number">0</span>, <span class="ident">Token::Open</span>);
@@ -568,7 +574,7 @@
 						<span class="ident">iter::once</span> (<span class="ident">Token::Comma</span>)
 							.<span class="ident">chain</span> (<span class="ident">right_tokens</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ())
 							.<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">Token::Close</span>)));
-					<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">left_tokens</span>.<span class="ident">into</span> () }
+					<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">left_tokens</span>.<span class="ident">into</span> () }
 				},
 				<span class="prelude-val">Err</span> (<span class="ident">left_tokens</span>) =&gt; <span class="kw">match</span> <span class="ident">Rc::try_unwrap</span> (<span class="ident">right_tokens</span>) {
 					<span class="prelude-val">Ok</span> (<span class="kw-2">mut</span> <span class="ident">right_tokens</span>) =&gt; {
@@ -577,7 +583,7 @@
 								.<span class="ident">chain</span> (<span class="ident">left_tokens</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ())
 								.<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">Token::Comma</span>)));
 						<span class="ident">right_tokens</span>.<span class="ident">push</span> (<span class="ident">Token::Close</span>);
-						<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">right_tokens</span>.<span class="ident">into</span> () }
+						<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">right_tokens</span>.<span class="ident">into</span> () }
 					},
 					<span class="prelude-val">Err</span> (<span class="ident">right_tokens</span>) =&gt; {
 						<span class="kw">let</span> <span class="ident">tokens</span> <span class="op">=</span>
@@ -587,13 +593,13 @@
 								.<span class="ident">chain</span> (<span class="ident">right_tokens</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ())
 								.<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">Token::Close</span>))
 								.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Tokens</span><span class="op">&gt;</span> ();
-						<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
+						<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
 					},
 				},
 			}
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce</span> (<span class="self">self</span>) -&gt; <span class="ident">Snailfish</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">val</span> <span class="op">=</span> <span class="self">self</span>;
 			<span class="kw">loop</span> {
 				<span class="kw">let</span> <span class="ident">reduced</span>;
@@ -602,22 +608,21 @@
 			}
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce_once</span> (<span class="self">self</span>) -&gt; (<span class="ident">bool</span>, <span class="ident">Snailfish</span>) {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">depth</span> <span class="op">=</span> <span class="number">0</span>;
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce_once</span> (<span class="self">self</span>) -&gt; (<span class="ident">bool</span>, <span class="self">Self</span>) {
+			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">depth</span> <span class="op">=</span> <span class="number">0_u32</span>;
 			<span class="kw">for</span> (<span class="ident">pos</span>, <span class="ident">token</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">tokens</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
-				<span class="kw">match</span> <span class="ident">token</span> {
+				<span class="kw">match</span> <span class="op">*</span> <span class="ident">token</span> {
 					<span class="ident">Token::Open</span> =&gt; {
 						<span class="kw">if</span> <span class="ident">depth</span> <span class="op">==</span> <span class="number">4</span> {
 							<span class="kw">return</span> (<span class="bool-val">true</span>, <span class="self">self</span>.<span class="ident">reduce_explode</span> (<span class="ident">pos</span>));
-						} <span class="kw">else</span> {
-							<span class="ident">depth</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 						}
+						<span class="ident">depth</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 					},
 					<span class="ident">Token::Close</span> =&gt; {
 						<span class="kw">if</span> <span class="ident">depth</span> <span class="op">==</span> <span class="number">0</span> { <span class="macro">panic!</span> () }
 						<span class="ident">depth</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
 					},
-					<span class="kw">_</span> =&gt; (),
+					<span class="ident">Token::Comma</span> <span class="op">|</span> <span class="ident">Token::Value</span> (<span class="kw">_</span>) =&gt; (),
 				}
 			}
 			<span class="kw">for</span> (<span class="ident">pos</span>, <span class="ident">token</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">tokens</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
@@ -630,7 +635,7 @@
 			(<span class="bool-val">false</span>, <span class="self">self</span>)
 		}
 
-		<span class="kw">fn</span> <span class="ident">reduce_explode</span> (<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Snailfish</span> {
+		<span class="kw">fn</span> <span class="ident">reduce_explode</span> (<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">if</span> <span class="op">!</span> (<span class="self">self</span>.<span class="ident">tokens</span> [<span class="ident">pos</span>].<span class="ident">is_open</span> ()
 					<span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span>].<span class="ident">is_value</span> ()
 					<span class="op">&amp;&amp;</span> <span class="self">self</span>.<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">2</span>].<span class="ident">is_comma</span> ()
@@ -653,7 +658,7 @@
 						<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">pos_right</span>] <span class="op">=</span>
 							<span class="ident">Token::Value</span> (<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span> <span class="op">+</span> <span class="ident">pos_right</span>].<span class="ident">value</span> () <span class="op">+</span> <span class="ident">explode_right</span>);
 					}
-					<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
+					<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
 				},
 				<span class="prelude-val">Err</span> (<span class="ident">tokens</span>) =&gt; {
 					<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Tokens::new</span> ();
@@ -673,12 +678,12 @@
 					} <span class="kw">else</span> {
 						<span class="ident">result</span>.<span class="ident">extend</span> (<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">5</span> ..].<span class="ident">iter</span> ().<span class="ident">copied</span> ());
 					}
-					<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">result</span>.<span class="ident">into</span> () }
+					<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">result</span>.<span class="ident">into</span> () }
 				},
 			}
 		}
 
-		<span class="kw">fn</span> <span class="ident">reduce_split</span> (<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) -&gt; <span class="ident">Snailfish</span> {
+		<span class="kw">fn</span> <span class="ident">reduce_split</span> (<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) -&gt; <span class="self">Self</span> {
 			<span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">tokens</span> [<span class="ident">pos</span>].<span class="ident">value</span> ();
 			<span class="kw">match</span> <span class="ident">Rc::try_unwrap</span> (<span class="self">self</span>.<span class="ident">tokens</span>) {
 				<span class="prelude-val">Ok</span> (<span class="kw-2">mut</span> <span class="ident">tokens</span>) =&gt; {
@@ -689,7 +694,7 @@
 						<span class="ident">Token::Value</span> ((<span class="ident">value</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>),
 						<span class="ident">Token::Close</span>,
 					]);
-					<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
+					<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">tokens</span>.<span class="ident">into</span> () }
 				},
 				<span class="prelude-val">Err</span> (<span class="ident">tokens</span>) =&gt; {
 					<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Tokens::new</span> ();
@@ -700,28 +705,28 @@
 					<span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Token::Value</span> ((<span class="ident">value</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">2</span>));
 					<span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Token::Close</span>);
 					<span class="ident">result</span>.<span class="ident">extend</span> (<span class="ident">tokens</span> [<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span> ..].<span class="ident">iter</span> ().<span class="ident">copied</span> ());
-					<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">result</span>.<span class="ident">into</span> () }
+					<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">result</span>.<span class="ident">into</span> () }
 				},
 			}
 		}
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">Snailfish</span> {
-			<span class="ident">Snailfish</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
+			<span class="self">Self</span> {
 				<span class="ident">tokens</span>: <span class="ident">model::parse_tokens</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">input</span>.<span class="ident">chars</span> ().<span class="ident">peekable</span> ()).<span class="ident">into</span> (),
 			}
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Snailfish</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Snailfish</span> {
-		<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">val</span>: <span class="op">&amp;</span> <span class="ident">Snailfish</span>) -&gt; <span class="ident">Snailfish</span> {
-			<span class="ident">Snailfish</span> { <span class="ident">tokens</span>: <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">val</span>.<span class="ident">tokens</span>) }
+	<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="self">Self</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Snailfish</span> {
+		<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">val</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="self">Self</span> {
+			<span class="self">Self</span> { <span class="ident">tokens</span>: <span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">val</span>.<span class="ident">tokens</span>) }
 		}
 	}
 
 	<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Snailfish</span> {
 		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="kw">for</span> <span class="ident">token</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">tokens</span>.<span class="ident">iter</span> () {
+			<span class="kw">for</span> <span class="ident">token</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">tokens</span>.<span class="ident">iter_vals</span> () {
 				<span class="kw">match</span> <span class="ident">token</span> {
 					<span class="ident">Token::Open</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;[&quot;</span>) <span class="question-mark">?</span>,
 					<span class="ident">Token::Close</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;]&quot;</span>) <span class="question-mark">?</span>,
@@ -851,7 +856,7 @@
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_tokens</span> (<span class="ident">input_iter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Peekable</span> <span class="op">&lt;</span><span class="ident">Chars</span> <span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span>) -&gt; <span class="ident">Tokens</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Tokens::new</span> ();
 		<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">letter</span>) <span class="op">=</span> <span class="ident">input_iter</span>.<span class="ident">peek</span> () {
-			<span class="kw">match</span> <span class="ident">letter</span> {
+			<span class="kw">match</span> <span class="op">*</span> <span class="ident">letter</span> {
 				<span class="string">&#39;[&#39;</span> =&gt; { <span class="ident">input_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> (); <span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Token::Open</span>); },
 				<span class="string">&#39;]&#39;</span> =&gt; { <span class="ident">input_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> (); <span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Token::Close</span>); },
 				<span class="string">&#39;,&#39;</span> =&gt; { <span class="ident">input_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> (); <span class="ident">result</span>.<span class="ident">push</span> (<span class="ident">Token::Comma</span>); },
@@ -883,14 +888,15 @@
 	}
 
 	<span class="kw">impl</span> <span class="ident">Token</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_open</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Token::Open</span>) }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_close</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Token::Close</span>) }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_comma</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Token::Comma</span>) }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_value</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Token::Value</span> (<span class="kw">_</span>)) }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_open</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident"><span class="self">Self</span>::Open</span>) }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_close</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident"><span class="self">Self</span>::Close</span>) }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_comma</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident"><span class="self">Self</span>::Comma</span>) }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_value</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident"><span class="self">Self</span>::Value</span> (<span class="kw">_</span>)) }
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">value</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">i64</span> {
-			<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-				<span class="ident">Token::Value</span> (<span class="ident">value</span>) =&gt; <span class="ident">value</span>,
-				<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (<span class="string">&quot;Called Token::value() on Token::{:?}&quot;</span>, <span class="self">self</span>),
+			<span class="kw">if</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Value</span> (<span class="ident">value</span>) <span class="op">=</span> <span class="op">*</span> <span class="self">self</span> {
+				<span class="ident">value</span>
+			} <span class="kw">else</span> {
+				<span class="macro">panic!</span> (<span class="string">&quot;Called Token::value() on Token::{:?}&quot;</span>, <span class="self">self</span>);
 			}
 		}
 	}
@@ -917,13 +923,15 @@
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">part_one</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">4140</span>, <span class="ident">logic::part_one</span> (<span class="ident">EXAMPLE</span>) <span class="question-mark">?</span>);
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;4140&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
 		<span class="prelude-val">Ok</span> (())
 	}
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">part_two</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">3993</span>, <span class="ident">logic::part_two</span> (<span class="ident">EXAMPLE</span>) <span class="question-mark">?</span>);
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;3993&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
 		<span class="prelude-val">Ok</span> (())
 	}
 

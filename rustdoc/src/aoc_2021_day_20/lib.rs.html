@@ -269,9 +269,16 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 20: Trench Map</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/20](https://adventofcode.com/2021/day/20)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -321,6 +328,7 @@
 		<span class="ident">first</span>: <span class="ident">bool</span>,
 	}
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::large_types_passed_by_value</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">image_iter</span> <span class="op">&lt;</span><span class="ident">IntoImage</span>: <span class="ident">Into</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Image</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> (
 		<span class="ident">algorithm</span>: <span class="ident">Algorithm</span>,
 		<span class="ident">image</span>: <span class="ident">IntoImage</span>,
@@ -357,7 +365,7 @@
 				<span class="prelude-val">Some</span> (<span class="op">*</span> <span class="ident">state</span>)
 			}).<span class="ident">skip</span> (<span class="number">2</span>).<span class="ident">map</span> (<span class="op">|</span><span class="ident">bits</span><span class="op">|</span> {
 				<span class="kw">let</span> <span class="ident">algorithm_idx</span> <span class="op">=</span> <span class="ident">bits</span>.<span class="ident">into_iter</span> ()
-					.<span class="ident">fold</span> (<span class="number">0</span>, <span class="op">|</span><span class="ident">val</span>, <span class="ident">bit</span><span class="op">|</span> (<span class="ident">val</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1</span>) <span class="op">|</span> <span class="kw">if</span> <span class="ident">bit</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> });
+					.<span class="ident">fold</span> (<span class="number">0</span>, <span class="op">|</span><span class="ident">val</span>, <span class="ident">bit</span><span class="op">|</span> (<span class="ident">val</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1_i32</span>) <span class="op">|</span> <span class="kw">if</span> <span class="ident">bit</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> });
 				<span class="ident">algorithm</span> [<span class="ident">algorithm_idx</span>]
 			})
 		).<span class="ident">collect</span> ();
@@ -383,7 +391,7 @@
 	}
 
 	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Input</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="op">|</span><span class="ident">idx</span>, <span class="ident">msg</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}: {}&quot;</span>, <span class="ident">idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">msg</span>);
 			<span class="kw">let</span> <span class="ident">algorithm</span> <span class="op">=</span> {
 				<span class="kw">let</span> <span class="ident">line_0_len</span> <span class="op">=</span> <span class="ident">lines</span> [<span class="number">0</span>].<span class="ident">chars</span> ().<span class="ident">count</span> ();
@@ -395,22 +403,22 @@
 					<span class="kw">match</span> <span class="ident">letter</span> {
 						<span class="string">&#39;#&#39;</span> =&gt; <span class="ident">algorithm</span> [<span class="ident">letter_idx</span>] <span class="op">=</span> <span class="bool-val">true</span>,
 						<span class="string">&#39;.&#39;</span> =&gt; (),
-						<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">0</span>, <span class="macro">format!</span> (<span class="string">&quot;Invalid character in algorithm&quot;</span>))) <span class="question-mark">?</span>,
+						<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">0</span>, <span class="string">&quot;Invalid character in algorithm&quot;</span>.<span class="ident">to_owned</span> ())) <span class="question-mark">?</span>,
 					}
 				}
 				<span class="ident">algorithm</span>
 			};
-			<span class="kw">if</span> <span class="op">!</span> <span class="ident">lines</span> [<span class="number">1</span>].<span class="ident">is_empty</span> () { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">1</span>, <span class="macro">format!</span> (<span class="string">&quot;Expected blank line&quot;</span>))) <span class="question-mark">?</span>; }
+			<span class="kw">if</span> <span class="op">!</span> <span class="ident">lines</span> [<span class="number">1</span>].<span class="ident">is_empty</span> () { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">1</span>, <span class="string">&quot;Expected blank line&quot;</span>.<span class="ident">to_owned</span> ())) <span class="question-mark">?</span>; }
 			<span class="kw">let</span> <span class="ident">pixels</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ().<span class="ident">skip</span> (<span class="number">2</span>).<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span> {
 				<span class="ident">line</span>.<span class="ident">chars</span> ().<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span><span class="ident">letter</span><span class="op">|</span> { <span class="kw">match</span> <span class="ident">letter</span> {
 					<span class="string">&#39;#&#39;</span> =&gt; <span class="prelude-val">Ok</span> (<span class="bool-val">true</span>),
 					<span class="string">&#39;.&#39;</span> =&gt; <span class="prelude-val">Ok</span> (<span class="bool-val">false</span>),
-					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="macro">format!</span> (<span class="string">&quot;Invalid character&quot;</span>))),
+					<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>, <span class="string">&quot;Invalid character&quot;</span>.<span class="ident">to_owned</span> ())),
 				}})
 			}).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
 			<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> [<span class="ident">lines</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">2</span>, <span class="ident">lines</span> [<span class="number">2</span>].<span class="ident">chars</span> ().<span class="ident">count</span> ()];
 			<span class="kw">let</span> <span class="ident">pixels</span> <span class="op">=</span> <span class="ident">Pixels::wrap</span> (<span class="ident">pixels</span>, [<span class="number">0</span>, <span class="number">0</span>], <span class="ident">size</span>);
-			<span class="prelude-val">Ok</span> (<span class="ident">Input</span> { <span class="ident">algorithm</span>, <span class="ident">pixels</span> })
+			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">algorithm</span>, <span class="ident">pixels</span> })
 		}
 	}
 
@@ -421,31 +429,31 @@
 	}
 
 	<span class="kw">impl</span> <span class="ident">Image</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_from</span> (<span class="ident">pixels</span>: <span class="ident">Pixels</span>, <span class="ident">inverted</span>: <span class="ident">bool</span>) -&gt; <span class="ident">Image</span> {
-			<span class="ident">Image</span> { <span class="ident">pixels</span>, <span class="ident">inverted</span> }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new_from</span> (<span class="ident">pixels</span>: <span class="ident">Pixels</span>, <span class="ident">inverted</span>: <span class="ident">bool</span>) -&gt; <span class="self">Self</span> {
+			<span class="self">Self</span> { <span class="ident">pixels</span>, <span class="ident">inverted</span> }
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">num_pixels</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
 			<span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">val</span><span class="op">|</span> <span class="ident">val</span> <span class="op">!</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">inverted</span>).<span class="ident">count</span> ()
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">height</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">size</span> () [<span class="number">0</span>] }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">width</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">size</span> () [<span class="number">1</span>] }
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">inverted</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">inverted</span> }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">height</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">size</span> () [<span class="number">0</span>] }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">width</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">size</span> () [<span class="number">1</span>] }
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">inverted</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">inverted</span> }
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">Pos</span>) -&gt; <span class="ident">bool</span> {
 			<span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">get</span> (<span class="ident">pos</span>).<span class="ident">unwrap_or</span> (<span class="self">self</span>.<span class="ident">inverted</span>)
 		}
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">range</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; (<span class="ident">Pos</span>, <span class="ident">Pos</span>) {
 			(<span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">origin</span> (), <span class="self">self</span>.<span class="ident">pixels</span>.<span class="ident">peak</span> () <span class="op">+</span> <span class="ident">Pos</span> { <span class="ident">y</span>: <span class="number">1</span>, <span class="ident">x</span>: <span class="number">1</span> })
 		}
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">dump</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ImageDump</span> {
+		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">dump</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ImageDump</span> {
 			<span class="ident">ImageDump</span> (<span class="self">self</span>)
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ImageDump</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="lifetime">&#39;a</span> <span class="ident">Image</span>);
+	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ImageDump</span> <span class="op">&lt;</span><span class="lifetime">&#39;img</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="lifetime">&#39;img</span> <span class="ident">Image</span>);
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ImageDump</span> <span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+	<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;img</span><span class="op">&gt;</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">ImageDump</span> <span class="op">&lt;</span><span class="lifetime">&#39;img</span><span class="op">&gt;</span> {
 		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="kw">let</span> <span class="ident">ImageDump</span> (<span class="ident">image</span>) <span class="op">=</span> <span class="self">self</span>;
+			<span class="kw">let</span> <span class="ident">ImageDump</span> (<span class="ident">image</span>) <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
 			<span class="kw">let</span> (<span class="ident">origin</span>, <span class="ident">peak</span>) <span class="op">=</span> <span class="ident">image</span>.<span class="ident">range</span> ();
 			<span class="kw">for</span> <span class="ident">y</span> <span class="kw">in</span> <span class="ident">origin</span>.<span class="ident">y</span> .. <span class="ident">peak</span>.<span class="ident">y</span> {
 				<span class="kw">for</span> <span class="ident">x</span> <span class="kw">in</span> <span class="ident">origin</span>.<span class="ident">x</span> .. <span class="ident">peak</span>.<span class="ident">x</span> {
@@ -483,6 +491,8 @@
 
 	}
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">RunArgs</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">fs::read_to_string</span> (<span class="op">&amp;</span> <span class="ident">args</span>.<span class="ident">input</span>) <span class="question-mark">?</span>;
 		<span class="kw">let</span> <span class="ident">input_lines</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input_string</span>.<span class="ident">trim</span> ().<span class="ident">split</span> (<span class="string">&#39;\n&#39;</span>).<span class="ident">collect</span> ();
@@ -490,7 +500,7 @@
 		<span class="kw">let</span> <span class="ident">start_image</span> <span class="op">=</span> <span class="ident">Image::new_from</span> (<span class="ident">input</span>.<span class="ident">pixels</span>, <span class="bool-val">false</span>);
 		<span class="kw">let</span> <span class="ident">end_image</span> <span class="op">=</span> <span class="ident">logic::image_iter</span> (<span class="ident">input</span>.<span class="ident">algorithm</span>, <span class="ident">start_image</span>)
 			.<span class="ident">enumerate</span> ()
-			.<span class="ident">inspect</span> (<span class="op">|</span>(<span class="ident">steps</span>, <span class="ident">image</span>)<span class="op">|</span> <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">verbose</span> {
+			.<span class="ident">inspect</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">steps</span>, <span class="kw-2">ref</span> <span class="ident">image</span>)<span class="op">|</span> <span class="kw">if</span> <span class="ident">args</span>.<span class="ident">verbose</span> {
 				<span class="macro">print!</span> (
 					<span class="string">&quot;After {} steps: {} pixels {}\n{}&quot;</span>,
 					<span class="ident">steps</span>,

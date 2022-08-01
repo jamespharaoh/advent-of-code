@@ -157,7 +157,7 @@
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">cave</span> <span class="op">=</span> <span class="ident">Cave::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
-		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">cave</span>)
+		<span class="prelude-val">Ok</span> (<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">cave</span>))
 	}
 
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
@@ -174,10 +174,10 @@
 		<span class="kw">let</span> <span class="ident">new_size</span> <span class="op">=</span> [<span class="ident">cave</span>.<span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">0</span>] <span class="op">*</span> <span class="number">5</span>, <span class="ident">cave</span>.<span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">1</span>] <span class="op">*</span> <span class="number">5</span>];
 		<span class="ident">cave</span>.<span class="ident">risks</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (<span class="ident">risks</span>, [<span class="number">0</span>, <span class="number">0</span>], <span class="ident">new_size</span>);
 		<span class="ident">cave</span>.<span class="ident">end</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">y</span>: (<span class="ident">cave</span>.<span class="ident">end</span>.<span class="ident">y</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> <span class="number">5</span> <span class="op">-</span> <span class="number">1</span>, <span class="ident">x</span>: (<span class="ident">cave</span>.<span class="ident">end</span>.<span class="ident">x</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">*</span> <span class="number">5</span> <span class="op">-</span> <span class="number">1</span> };
-		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">cave</span>)
+		<span class="prelude-val">Ok</span> (<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">cave</span>))
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">cave</span>: <span class="op">&amp;</span> <span class="ident">Cave</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">cave</span>: <span class="op">&amp;</span> <span class="ident">Cave</span>) -&gt; <span class="ident">u64</span> {
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">PrioritySearch::with_grid</span> (
 			[<span class="number">0</span>, <span class="number">0</span>],
 			<span class="ident">cave</span>.<span class="ident">risks</span>.<span class="ident">size</span> (),
@@ -192,11 +192,11 @@
 			},
 		);
 		<span class="ident">search</span>.<span class="ident">push</span> (<span class="ident">cave</span>.<span class="ident">start</span>, <span class="number">0</span>);
-		<span class="kw">let</span> <span class="ident">best</span> <span class="op">=</span> <span class="ident">search</span>
+		<span class="ident">search</span>
 			.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">pos</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">pos</span> <span class="op">==</span> <span class="ident">cave</span>.<span class="ident">end</span>)
 			.<span class="ident">map</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span>)
-			.<span class="ident">next</span> ().<span class="ident">unwrap</span> ();
-		<span class="prelude-val">Ok</span> (<span class="ident">best</span>)
+			.<span class="ident">next</span> ()
+			.<span class="ident">unwrap</span> ()
 	}
 
 }
@@ -216,7 +216,7 @@
 	}
 
 	<span class="kw">impl</span> <span class="ident">Cave</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Cave</span><span class="op">&gt;</span> {
+		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">risks</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
 			<span class="kw">for</span> (<span class="ident">line_idx</span>, <span class="ident">line</span>) <span class="kw">in</span> <span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
 				<span class="kw">let</span> <span class="ident">line_err</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input on line {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>);
@@ -227,7 +227,7 @@
 			<span class="kw">let</span> <span class="ident">risks</span> <span class="op">=</span> <span class="ident">Grid::wrap</span> (<span class="ident">risks</span>, [<span class="number">0</span>, <span class="number">0</span>], [<span class="ident">lines</span>.<span class="ident">len</span> (), <span class="ident">lines</span> [<span class="number">0</span>].<span class="ident">len</span> ()]);
 			<span class="kw">let</span> <span class="ident">start</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="number">0</span>, <span class="ident">y</span>: <span class="number">0</span> };
 			<span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">1</span>].<span class="ident">as_i16</span> () <span class="op">-</span> <span class="number">1</span>, <span class="ident">y</span>: <span class="ident">risks</span>.<span class="ident">size</span> () [<span class="number">0</span>].<span class="ident">as_i16</span> () <span class="op">-</span> <span class="number">1</span> };
-			<span class="prelude-val">Ok</span> (<span class="ident">Cave</span> { <span class="ident">risks</span>, <span class="ident">start</span>, <span class="ident">end</span> })
+			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">risks</span>, <span class="ident">start</span>, <span class="ident">end</span> })
 		}
 	}
 
