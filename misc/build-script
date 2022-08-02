@@ -44,14 +44,14 @@ function main {
 			cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
 			;;
 		(fuzz)
-			cd $year/fuzz
+			cd fuzz
 			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
 			case "$fuzz_mode" in
 				(run|cmin)
-					cargo +nightly fuzz "$fuzz_mode" "day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
+					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
 					;;
 				(repr)
-					cargo +nightly fuzz run "day-$day" "${extra_args[@]}"
+					cargo +nightly fuzz run "$year-day-$day" "${extra_args[@]}"
 					;;
 				(*)
 					echo "Syntax error" >&2

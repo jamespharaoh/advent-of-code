@@ -1,11 +1,14 @@
 use super::*;
 use nums::Int;
+use nums::NumResult;
 
 pub use coord::Coord;
+pub use dim_2::DirGeo;
 pub use dim_2::PosXY;
 pub use dim_2::PosYX;
 pub use dim_2::PosGeo;
 pub use dim_2::PosRowCol;
+pub use dim_2::Turn2d;
 pub use dim_3::PosXYZ;
 
 macro_rules! pos_ops {
@@ -122,10 +125,14 @@ mod dim_2 {
 
 	use super::*;
 
+	pub use geo::DirGeo;
 	pub use geo::PosGeo;
 	pub use row_col::PosRowCol;
 	pub use xy::PosXY;
 	pub use yx::PosYX;
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum Turn2d { None, Left, Right, Around }
 
 	mod xy {
 
@@ -307,6 +314,45 @@ mod dim_2 {
 
 		pos_ops! (PosGeo: Debug);
 		pos_ops! (PosGeo: Add, Neg, Rem, Sub);
+
+		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		pub enum DirGeo { North, South, East, West }
+
+		impl Add <Turn2d> for DirGeo {
+
+			type Output = Self;
+
+			#[ inline ]
+			fn add (self, other: Turn2d) -> Self {
+				use Turn2d::{ None, Left, Right, Around };
+				use DirGeo::{ North, South, East, West };
+				match (self, other) {
+					(North, None) | (West, Right) | (East, Left) | (South, Around) => North,
+					(South, None) | (East, Right) | (West, Left) | (North, Around) => South,
+					(East, None) | (North, Right) | (South, Left) | (West, Around) => East,
+					(West, None) | (South, Right) | (North, Left) | (East, Around) => West,
+				}
+			}
+
+		}
+
+		impl <Val: Int> Add <(DirGeo, Val)> for PosGeo <Val> {
+
+			type Output = NumResult <Self>;
+
+			#[ inline ]
+			fn add (self, (dir, dist): (DirGeo, Val)) -> NumResult <Self> {
+				let mut result = self;
+				match dir {
+					DirGeo::North => result.n = Val::add_2 (result.n, dist) ?,
+					DirGeo::South => result.n = Val::sub_2 (result.n, dist) ?,
+					DirGeo::East => result.e = Val::add_2 (result.e, dist) ?,
+					DirGeo::West => result.e = Val::sub_2 (result.e, dist) ?,
+				}
+				Ok (result)
+			}
+
+		}
 
 	}
 

@@ -40,7 +40,10 @@ function aoc {
 			if [[ -z "$year" ]]; then echo "Must set year" >&2; fi
 			if [[ -z "$day" ]]; then echo "Must set day" >&2; fi
 			if [[ -n "$year" && -n "$day" ]]; then
-				nano $year/{day-$day/src/*.rs,fuzz/src/day-$day.rs,day-$day/Cargo.toml}
+				nano \
+					$year/day-$day/src/*.rs \
+					fuzz/src/$year-day-$day.rs \
+					$year/day-$day/Cargo.toml
 			fi
 			;;
 		(*)

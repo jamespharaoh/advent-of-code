@@ -1,0 +1,204 @@
+[package]
+
+	name = "aoc-fuzz"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	publish = false
+	edition = "2018"
+
+[package.metadata]
+
+	cargo-fuzz = true
+
+[dependencies]
+
+	libfuzzer-sys = "0.4"
+
+	aoc-2015 = { path = "../2015" }
+	aoc-2016 = { path = "../2016" }
+
+[workspace]
+
+	members = [ "." ]
+
+[[bin]]
+
+	name = "2015-day-01"
+	path = "src/2015-day-01.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-02"
+	path = "src/2015-day-02.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-03"
+	path = "src/2015-day-03.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-04"
+	path = "src/2015-day-04.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-05"
+	path = "src/2015-day-05.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-06"
+	path = "src/2015-day-06.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-07"
+	path = "src/2015-day-07.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-08"
+	path = "src/2015-day-08.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-09"
+	path = "src/2015-day-09.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-10"
+	path = "src/2015-day-10.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-11"
+	path = "src/2015-day-11.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-12"
+	path = "src/2015-day-12.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-13"
+	path = "src/2015-day-13.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-14"
+	path = "src/2015-day-14.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-15"
+	path = "src/2015-day-15.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-16"
+	path = "src/2015-day-16.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-17"
+	path = "src/2015-day-17.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-18"
+	path = "src/2015-day-18.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-19"
+	path = "src/2015-day-19.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-20"
+	path = "src/2015-day-20.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-21"
+	path = "src/2015-day-21.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-22"
+	path = "src/2015-day-22.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-23"
+	path = "src/2015-day-23.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-24"
+	path = "src/2015-day-24.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2015-day-25"
+	path = "src/2015-day-25.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2016-day-01"
+	path = "src/2016-day-01.rs"
+	test = false
+	doc = false
