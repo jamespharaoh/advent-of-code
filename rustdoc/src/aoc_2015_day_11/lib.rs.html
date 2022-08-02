@@ -128,9 +128,13 @@
 <span id="128">128</span>
 <span id="129">129</span>
 <span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 11: Corporate Policy</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/11](https://adventofcode.com/2015/day/11)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -142,7 +146,7 @@
 	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span> [<span class="number">0</span>]);
 }
 
-<span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
