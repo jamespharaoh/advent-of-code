@@ -180,9 +180,15 @@
 <span id="180">180</span>
 <span id="181">181</span>
 <span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 21: RPG Simulator 20XX</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/21](https://adventofcode.com/2015/day/21)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -197,11 +203,12 @@
 
 <span class="doccomment">/// Logic for solving the puzzles.</span>
 <span class="doccomment">///</span>
-<span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Stats</span>;
 
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">boss</span>: <span class="ident">Stats</span>) -&gt; <span class="ident">u32</span> {
 		<span class="ident">choices</span> ()
 			.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">player</span>)<span class="op">|</span> <span class="ident">outcome</span> (<span class="ident">player</span>, <span class="ident">boss</span>))
@@ -210,6 +217,7 @@
 			.<span class="ident">unwrap</span> ()
 	}
 
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">boss</span>: <span class="ident">Stats</span>) -&gt; <span class="ident">u32</span> {
 		<span class="ident">choices</span> ()
 			.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">player</span>)<span class="op">|</span> <span class="op">!</span> <span class="ident">outcome</span> (<span class="ident">player</span>, <span class="ident">boss</span>))
@@ -285,7 +293,7 @@
 
 <span class="doccomment">/// Representation of the puzzle input, etc.</span>
 <span class="doccomment">///</span>
-<span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;

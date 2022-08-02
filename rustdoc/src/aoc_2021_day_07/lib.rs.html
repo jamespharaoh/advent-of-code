@@ -108,6 +108,10 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 7: The Treachery of Whales</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2021/day/7](https://adventofcode.com/2021/day/7)</span>
@@ -170,9 +174,13 @@
 		<span class="ident">scan_fn</span>: <span class="ident">ScanFn</span>,
 	) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 		<span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="ident">start_posns</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">max</span> ().<span class="ident">unwrap</span> ();
-		<span class="kw">let</span> <span class="ident">lower</span> <span class="op">=</span> (<span class="number">0</span> ..<span class="op">=</span> <span class="ident">max</span>).<span class="ident">scan</span> (<span class="ident">initial_state</span>, <span class="ident">scan_fn</span>.<span class="ident">clone</span> ());
-		<span class="kw">let</span> <span class="ident">higher</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span> ..<span class="op">=</span> <span class="ident">max</span>).<span class="ident">rev</span> ().<span class="ident">scan</span> (<span class="ident">initial_state</span>, <span class="ident">scan_fn</span>).<span class="ident">collect</span> ();
-		<span class="prelude-val">Ok</span> (<span class="ident">Iterator::zip</span> (<span class="ident">lower</span>, <span class="ident">higher</span>.<span class="ident">into_iter</span> ().<span class="ident">rev</span> ())
+		<span class="prelude-val">Ok</span> (<span class="ident">Iterator::zip</span> (
+			(<span class="number">0</span> ..<span class="op">=</span> <span class="ident">max</span>).<span class="ident">scan</span> (<span class="ident">initial_state</span>, <span class="ident">scan_fn</span>.<span class="ident">clone</span> ()),
+			(<span class="number">0</span> ..<span class="op">=</span> <span class="ident">max</span>).<span class="ident">rev</span> ()
+				.<span class="ident">scan</span> (<span class="ident">initial_state</span>, <span class="ident">scan_fn</span>)
+				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ()
+				.<span class="ident">into_iter</span> ()
+				.<span class="ident">rev</span> ())
 			.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">lower</span>, <span class="ident">higher</span>)<span class="op">|</span> <span class="ident">lower</span> <span class="op">+</span> <span class="ident">higher</span>)
 			.<span class="ident">min</span> ()
 			.<span class="ident">unwrap</span> ()

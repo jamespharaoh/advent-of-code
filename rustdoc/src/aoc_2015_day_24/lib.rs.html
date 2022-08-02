@@ -270,6 +270,8 @@
 <span id="270">270</span>
 <span id="271">271</span>
 <span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
@@ -296,6 +298,8 @@
 <span class="doccomment">//! - Once we find a solution for all three piles, record the size and product of the first pile,</span>
 <span class="doccomment">//!   and only consider solutions with a first pile which would signify an improvement.</span>
 
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
 <span class="macro">puzzle_info!</span> {
@@ -309,7 +313,7 @@
 
 <span class="doccomment">/// Logic for solving the puzzles.</span>
 <span class="doccomment">///</span>
-<span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Input</span>;
@@ -488,7 +492,7 @@
 
 <span class="doccomment">/// Representation of the puzzle input, etc.</span>
 <span class="doccomment">///</span>
-<span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
