@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/5](https://adventofcode.com/2015/day/5)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -13,17 +15,19 @@ puzzle_info! {
 	part_two = |input| Ok::<_, Infallible> (logic::part_two (& input));
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
 	use model::Input;
 
+	#[ must_use ]
 	pub fn part_one (input: & Input) -> usize {
 		input.iter ()
 			.filter (|line| is_nice_one (line))
 			.count ()
 	}
 
+	#[ must_use ]
 	pub fn part_two (input: & Input) -> usize {
 		input.iter ()
 			.filter (|line| is_nice_two (line))
@@ -92,7 +96,7 @@ mod logic {
 
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 

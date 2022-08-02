@@ -60,9 +60,13 @@ pub mod logic {
 		scan_fn: ScanFn,
 	) -> GenResult <u64> {
 		let max = start_posns.iter ().copied ().max ().unwrap ();
-		let lower = (0 ..= max).scan (initial_state, scan_fn.clone ());
-		let higher: Vec <_> = (0 ..= max).rev ().scan (initial_state, scan_fn).collect ();
-		Ok (Iterator::zip (lower, higher.into_iter ().rev ())
+		Ok (Iterator::zip (
+			(0 ..= max).scan (initial_state, scan_fn.clone ()),
+			(0 ..= max).rev ()
+				.scan (initial_state, scan_fn)
+				.collect::<Vec <_>> ()
+				.into_iter ()
+				.rev ())
 			.map (|(lower, higher)| lower + higher)
 			.min ()
 			.unwrap ()

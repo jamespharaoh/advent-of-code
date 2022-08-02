@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/21](https://adventofcode.com/2015/day/21)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -15,11 +17,12 @@ puzzle_info! {
 
 /// Logic for solving the puzzles.
 ///
-mod logic {
+pub mod logic {
 
 	use super::*;
 	use model::Stats;
 
+	#[ must_use ]
 	pub fn part_one (boss: Stats) -> u32 {
 		choices ()
 			.filter (|& (_, player)| outcome (player, boss))
@@ -28,6 +31,7 @@ mod logic {
 			.unwrap ()
 	}
 
+	#[ must_use ]
 	pub fn part_two (boss: Stats) -> u32 {
 		choices ()
 			.filter (|& (_, player)| ! outcome (player, boss))
@@ -103,7 +107,7 @@ mod logic {
 
 /// Representation of the puzzle input, etc.
 ///
-mod model {
+pub mod model {
 
 	use super::*;
 	use parser::*;
