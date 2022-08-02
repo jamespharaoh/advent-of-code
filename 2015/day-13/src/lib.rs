@@ -2,60 +2,67 @@
 //!
 //! [https://adventofcode.com/2015/day/13](https://adventofcode.com/2015/day/13)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "Knights of the Dinner Table";
 	year = 2015;
 	day = 13;
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	parse = |input| model::parse_input (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
 	use model::Input;
 
-	pub fn part_one (input: & [& str]) -> GenResult <i32> {
-		let input = model::parse_input (input) ?;
-		let best = calc_best (& input);
+	pub fn part_one (input: & Input) -> GenResult <i32> {
+		let best = calc_best (input) ?;
 		Ok (best)
 	}
 
-	pub fn part_two (input: & [& str]) -> GenResult <i32> {
-		let mut input = model::parse_input (input) ?;
+	pub fn part_two (input: & Input) -> GenResult <i32> {
 		let my_scores =
 			input.iter ()
 				.map (|& (ref name, _, _)| name)
 				.sorted ()
 				.dedup ()
 				.flat_map (|name| [
-					("Myself".to_owned (), name.to_string (), 0_i32),
-					(name.to_string (), "Myself".to_owned (), 0_i32),
+					(Rc::from ("Myself"), Rc::clone (name), 0_i32),
+					(Rc::clone (name), Rc::from ("Myself"), 0_i32),
 				])
 				.collect::<Vec <_>> ();
-		input.extend (my_scores);
-		let best = calc_best (& input);
+		let input: Vec <_> =
+			input.iter ().cloned ()
+				.chain (my_scores)
+				.collect ();
+		let best = calc_best (& input) ?;
 		Ok (best)
 	}
 
-	pub fn calc_best (input: & Input) -> i32 {
+	pub fn calc_best (input: & Input) -> GenResult <i32> {
 		let names: Vec <_> =
 			input.iter ()
 				.map (|& (ref name, _, _)| name)
 				.sorted ()
 				.dedup ()
-				.map (String::to_owned)
+				.map (Rc::clone)
 				.collect ();
 		let scores =
 			input.iter ().cloned ()
 				.chain (names.iter ()
-					.map (|name| (name.to_string (), name.to_string (), 0_i32)))
+					.map (|name| (Rc::clone (name), Rc::clone (name), 0_i32)))
 				.sorted ()
 				.map (|(_, _, score)| score)
 				.collect::<Vec <_>> ();
-		(0 .. names.len ())
+		if scores.len () != names.len () * names.len () {
+			Err ("Missing scores for some combinations of names") ?;
+		}
+		Ok ((0 .. names.len ())
 			.permutations (names.len ())
 			.map (|plan| plan.iter ()
 				.circular_tuple_windows::<(_, _)> ()
@@ -66,16 +73,16 @@ mod logic {
 				})
 				.sum ())
 			.max ()
-			.unwrap ()
+			.unwrap ())
 	}
 
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 
-	pub type Item = (String, String, i32);
+	pub type Item = (Rc <str>, Rc <str>, i32);
 	pub type Input = Vec <Item>;
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
@@ -125,9 +132,15 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one () -> GenResult <()> {
-		assert_eq! (330, logic::part_one (EXAMPLE) ?);
-		Ok (())
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("330", puzzle.part_one (EXAMPLE));
+	}
+
+	#[ test ]
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("286", puzzle.part_two (EXAMPLE));
 	}
 
 }
