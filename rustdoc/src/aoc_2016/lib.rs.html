@@ -12,18 +12,22 @@
 <span id="12">12</span>
 <span id="13">13</span>
 <span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
 </pre><pre class="rust"><code><span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2016_day_01</span> <span class="kw">as</span> <span class="ident">day_01</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2016_day_02</span> <span class="kw">as</span> <span class="ident">day_02</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">aoc_2016_day_03</span> <span class="kw">as</span> <span class="ident">day_03</span>;
 
 <span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">puzzle_metadata</span> () -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">puzzle::Puzzle</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 	<span class="macro">vec!</span> [
 		<span class="ident">day_01::puzzle_metadata</span> (),
 		<span class="ident">day_02::puzzle_metadata</span> (),
+		<span class="ident">day_03::puzzle_metadata</span> (),
 	]
 }
 </code></pre></div>
