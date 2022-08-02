@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2015/day/11](https://adventofcode.com/2015/day/11)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
@@ -12,7 +14,7 @@ puzzle_info! {
 	part_two = |input| logic::part_two (input [0]);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
 	use nums::IntConv;
