@@ -266,7 +266,6 @@
 <span id="266">266</span>
 <span id="267">267</span>
 <span id="268">268</span>
-<span id="269">269</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 15: Science for Hungry People</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)</span>
@@ -279,8 +278,9 @@
 	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Science for Hungry People&quot;</span>;
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">15</span>;
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
 }
 
 <span class="doccomment">/// Logic for solving the puzzles.</span>
@@ -289,6 +289,7 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Ingredient</span>;
+	<span class="kw">use</span> <span class="ident">model::Input</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
 	<span class="doccomment">/// Part one: Find the combination of ingredients which gives the maximum possible score.</span>
@@ -296,10 +297,9 @@
 	<span class="doccomment">/// Uses [`find_start_ingredients`] to work out which ingredients to include as a minimum, and</span>
 	<span class="doccomment">/// [`calc_score`] to work out the score for a given combination of ingredients.</span>
 	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">all_ingrs</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 
-		<span class="kw">let</span> <span class="ident">all_ingrs</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">start_ingrs</span> <span class="op">=</span> <span class="ident">find_start_ingredients</span> (<span class="op">&amp;</span> <span class="ident">all_ingrs</span>);
+		<span class="kw">let</span> <span class="ident">start_ingrs</span> <span class="op">=</span> <span class="ident">find_start_ingredients</span> (<span class="ident">all_ingrs</span>) <span class="question-mark">?</span>;
 
 		<span class="comment">// keep adding one ingredient at a time, maximising the score each time, until we have the</span>
 		<span class="comment">// right number</span>
@@ -337,13 +337,12 @@
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// Uses [`calc_score`] to work out the score for a given combination of ingredients.</span>
 	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">ingrs</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
 
-		<span class="kw">let</span> <span class="ident">all_ingrs</span> <span class="op">=</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ingrs</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-			<span class="ident">ingrs</span>.<span class="ident">sort_by_key</span> (<span class="op">|</span><span class="ident">ingr</span><span class="op">|</span> <span class="ident">cmp::Reverse</span> (<span class="ident">ingr</span>.<span class="ident">calories</span>));
-			<span class="ident">ingrs</span>
-		};
+		<span class="kw">let</span> <span class="ident">all_ingrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span>
+			<span class="ident">ingrs</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ()
+				.<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="ident">ingr</span><span class="op">|</span> <span class="ident">cmp::Reverse</span> (<span class="ident">ingr</span>.<span class="ident">calories</span>))
+				.<span class="ident">collect</span> ();
 
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span> [];
 		<span class="kw">let</span> <span class="ident">ingr_combos</span> <span class="op">=</span> <span class="ident">iter::from_fn</span> (<span class="op">|</span><span class="op">|</span> {
@@ -410,7 +409,7 @@
 		<span class="kw">let</span> <span class="ident">max_score</span> <span class="op">=</span> <span class="ident">ingr_combos</span>
 			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ingrs</span><span class="op">|</span> <span class="ident">calc_score</span> (<span class="ident">ingrs</span>.<span class="ident">iter_vals</span> ()))
 			.<span class="ident">max</span> ()
-			.<span class="ident">unwrap</span> ();
+			.<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 
 		<span class="prelude-val">Ok</span> (<span class="ident">max_score</span>)
 
@@ -422,9 +421,8 @@
 	<span class="doccomment">/// minimum number of ingredients needed for a positive score. It then returns the combination</span>
 	<span class="doccomment">/// which gives the max score for that number of ingredients.</span>
 	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_start_ingredients</span> (<span class="ident">all_ingrs</span>: <span class="op">&amp;</span> [<span class="ident">Ingredient</span>]) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Ingredient</span><span class="op">&gt;</span> {
-		(<span class="number">1</span> ..<span class="op">=</span> <span class="number">100</span>)
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_start_ingredients</span> (<span class="ident">all_ingrs</span>: <span class="op">&amp;</span> [<span class="ident">Ingredient</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Ingredient</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span> ((<span class="number">1</span> ..<span class="op">=</span> <span class="number">100</span>)
 			.<span class="ident">find_map</span> (<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="ident">all_ingrs</span>.<span class="ident">iter</span> ()
 				.<span class="ident">combinations_with_replacement</span> (<span class="ident">num</span>)
 				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ingrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Ingredient</span><span class="op">&gt;</span><span class="op">|</span> (<span class="ident">ingrs</span>.<span class="ident">clone</span> (),
@@ -432,7 +430,7 @@
 				.<span class="ident">max_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span>)
 				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span> <span class="op">&gt;</span> <span class="number">0</span>)
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">ingrs</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">ingrs</span>))
-			.<span class="ident">unwrap</span> ()
+			.<span class="ident">ok_or</span> (<span class="string">&quot;No solution_found&quot;</span>) <span class="question-mark">?</span>)
 	}
 
 	<span class="doccomment">/// Works out the score for a given combination of ingredients.</span>
@@ -524,15 +522,15 @@
 	];
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">62842880</span>, <span class="ident">logic::part_one</span> (<span class="ident">EXAMPLE</span>) <span class="question-mark">?</span>);
-		<span class="prelude-val">Ok</span> (())
+	<span class="kw">fn</span> <span class="ident">part_one</span> () {
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;62842880&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
 	}
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">57600000</span>, <span class="ident">logic::part_two</span> (<span class="ident">EXAMPLE</span>) <span class="question-mark">?</span>);
-		<span class="prelude-val">Ok</span> (())
+	<span class="kw">fn</span> <span class="ident">part_two</span> () {
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;57600000&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
 	}
 
 }
