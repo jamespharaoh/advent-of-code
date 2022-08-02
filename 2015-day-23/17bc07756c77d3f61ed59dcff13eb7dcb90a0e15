@@ -1,0 +1,4 @@
+incb
+inca
+jio b,1
+jmp-2

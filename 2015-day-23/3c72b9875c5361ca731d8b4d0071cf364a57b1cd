@@ -1,0 +1,51 @@
+jio a,4
+jio a,94
+jio b,55
+jio b,55
+jio  b,55
+jio  b,5
+jio b,5
+jio  a,88
+jio b,5
+jio a,2
+jio b,5
+jio  b,5
+jio a,1
+jio b,5
+jio a,994
+jio a,4
+jio b,6
+jio a,2
+jio b,5
+jio a,1
+jio a,4
+jio b,5
+jio b,5
+jio b,5
+jio  a,94
+jio b,6
+jio a,2
+jio b,51
+jio a,4
+jio  b,55
+jio  b,4
+jio b,52
+jio b,5
+jio a,1
+				jio a,-0
+jmp+04
+jio a,94
+jio b,5
+jio b,5
+jio a,1
+jio b,4
+jio b,5
+jio b,5		
+jio b,94
+jio b,5
+jio  b,994
+jio a,2
+jio b,2
+jio b,5	
+jio 		b,52
+jio b,aio

@@ -1,0 +1,11 @@
+toggle 8,7through82,7
+turn	off 80,9through7,7
+turn	off 58,7through5,5
+turn	off 79,7through5,7
+turn	off 79,7through5,7
+turn	off 79,7through5,7
+toggle 3,7through82,8r
+turn	off 79,7through5,7
+turn	off 79,7through5,7
+toggle 3,7through82,7
+turn	off 8,7through5,7
