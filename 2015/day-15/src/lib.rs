@@ -10,8 +10,9 @@ puzzle_info! {
 	name = "Science for Hungry People";
 	year = 2015;
 	day = 15;
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	parse = |input| model::parse_input (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 /// Logic for solving the puzzles.
@@ -20,6 +21,7 @@ pub mod logic {
 
 	use super::*;
 	use model::Ingredient;
+	use model::Input;
 	use nums::IntConv;
 
 	/// Part one: Find the combination of ingredients which gives the maximum possible score.
@@ -27,10 +29,9 @@ pub mod logic {
 	/// Uses [`find_start_ingredients`] to work out which ingredients to include as a minimum, and
 	/// [`calc_score`] to work out the score for a given combination of ingredients.
 	///
-	pub fn part_one (input: & [& str]) -> GenResult <u64> {
+	pub fn part_one (all_ingrs: & Input) -> GenResult <u64> {
 
-		let all_ingrs = model::parse_input (input) ?;
-		let start_ingrs = find_start_ingredients (& all_ingrs);
+		let start_ingrs = find_start_ingredients (all_ingrs) ?;
 
 		// keep adding one ingredient at a time, maximising the score each time, until we have the
 		// right number
@@ -68,13 +69,12 @@ pub mod logic {
 	///
 	/// Uses [`calc_score`] to work out the score for a given combination of ingredients.
 	///
-	pub fn part_two (input: & [& str]) -> GenResult <u64> {
+	pub fn part_two (ingrs: & Input) -> GenResult <u64> {
 
-		let all_ingrs = {
-			let mut ingrs = model::parse_input (input) ?;
-			ingrs.sort_by_key (|ingr| cmp::Reverse (ingr.calories));
-			ingrs
-		};
+		let all_ingrs: Vec <_> =
+			ingrs.iter ().cloned ()
+				.sorted_by_key (|ingr| cmp::Reverse (ingr.calories))
+				.collect ();
 
 		let mut stack: Vec <i32> = vec! [];
 		let ingr_combos = iter::from_fn (|| {
@@ -141,7 +141,7 @@ pub mod logic {
 		let max_score = ingr_combos
 			.map (|ingrs| calc_score (ingrs.iter_vals ()))
 			.max ()
-			.unwrap ();
+			.ok_or ("No solution found") ?;
 
 		Ok (max_score)
 
@@ -153,9 +153,8 @@ pub mod logic {
 	/// minimum number of ingredients needed for a positive score. It then returns the combination
 	/// which gives the max score for that number of ingredients.
 	///
-	#[ must_use ]
-	pub fn find_start_ingredients (all_ingrs: & [Ingredient]) -> Vec <& Ingredient> {
-		(1 ..= 100)
+	pub fn find_start_ingredients (all_ingrs: & [Ingredient]) -> GenResult <Vec <& Ingredient>> {
+		Ok ((1 ..= 100)
 			.find_map (|num| all_ingrs.iter ()
 				.combinations_with_replacement (num)
 				.map (|ingrs: Vec <& Ingredient>| (ingrs.clone (),
@@ -163,7 +162,7 @@ pub mod logic {
 				.max_by_key (|& (_, score)| score)
 				.filter (|& (_, score)| score > 0)
 				.map (|(ingrs, _)| ingrs))
-			.unwrap ()
+			.ok_or ("No solution_found") ?)
 	}
 
 	/// Works out the score for a given combination of ingredients.
@@ -255,15 +254,15 @@ mod examples {
 	];
 
 	#[ test ]
-	fn part_one () -> GenResult <()> {
-		assert_eq! (62842880, logic::part_one (EXAMPLE) ?);
-		Ok (())
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("62842880", puzzle.part_one (EXAMPLE));
 	}
 
 	#[ test ]
-	fn part_two () -> GenResult <()> {
-		assert_eq! (57600000, logic::part_two (EXAMPLE) ?);
-		Ok (())
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("57600000", puzzle.part_two (EXAMPLE));
 	}
 
 }
