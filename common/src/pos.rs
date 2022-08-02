@@ -3,6 +3,7 @@ use nums::Int;
 use nums::NumResult;
 
 pub use coord::Coord;
+pub use dim_2::Dir2d;
 pub use dim_2::DirGeo;
 pub use dim_2::PosXY;
 pub use dim_2::PosYX;
@@ -127,6 +128,7 @@ mod dim_2 {
 
 	pub use geo::DirGeo;
 	pub use geo::PosGeo;
+	pub use row_col::Dir2d;
 	pub use row_col::PosRowCol;
 	pub use xy::PosXY;
 	pub use yx::PosYX;
@@ -386,6 +388,45 @@ mod dim_2 {
 
 		pos_ops! (PosRowCol: Debug);
 		pos_ops! (PosRowCol: Add, Neg, Rem, Sub);
+
+		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		pub enum Dir2d { Up, Down, Left, Right }
+
+		impl Add <Turn2d> for Dir2d {
+
+			type Output = Self;
+
+			#[ inline ]
+			fn add (self, other: Turn2d) -> Self {
+				use Turn2d::{ None, Left as TLeft, Right as TRight, Around };
+				use Dir2d::{ Up, Down, Left as DLeft, Right as DRight };
+				match (self, other) {
+					(Up, None) | (DLeft, TRight) | (DRight, TLeft) | (Down, Around) => Up,
+					(Down, None) | (DRight, TRight) | (DLeft, TLeft) | (Up, Around) => Down,
+					(DLeft, None) | (Down, TRight) | (Up, TLeft) | (DRight, Around) => DLeft,
+					(DRight, None) | (Up, TRight) | (Down, TLeft) | (DLeft, Around) => DRight,
+				}
+			}
+
+		}
+
+		impl <Val: Int> Add <(Dir2d, Val)> for PosRowCol <Val> {
+
+			type Output = NumResult <Self>;
+
+			#[ inline ]
+			fn add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
+				let mut result = self;
+				match dir {
+					Dir2d::Up => result.row = Val::sub_2 (result.row, dist) ?,
+					Dir2d::Down => result.row = Val::add_2 (result.row, dist) ?,
+					Dir2d::Left => result.col = Val::sub_2 (result.col, dist) ?,
+					Dir2d::Right => result.col = Val::add_2 (result.col, dist) ?,
+				}
+				Ok (result)
+			}
+
+		}
 
 	}
 

@@ -202,3 +202,10 @@
 	path = "src/2016-day-01.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2016-day-02"
+	path = "src/2016-day-02.rs"
+	test = false
+	doc = false
