@@ -10,8 +10,9 @@ puzzle_info! {
 	name = "Aunt Sue";
 	year = 2015;
 	day = 16;
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
+	parse = |input| model::parse_input (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
 /// Logic for solving the puzzles.
@@ -20,9 +21,9 @@ pub mod logic {
 
 	use super::*;
 	use model::Attr;
+	use model::Input;
 
-	pub fn part_one (input: & [& str]) -> GenResult <u16> {
-		let all_sues = model::parse_input (input) ?;
+	pub fn part_one (all_sues: & Input) -> GenResult <u16> {
 		const fn ticker (attr: Attr) -> u8 {
 			match attr {
 				Attr::Children => 3,
@@ -45,8 +46,7 @@ pub mod logic {
 		Ok (the_sue.number)
 	}
 
-	pub fn part_two (input: & [& str]) -> GenResult <u16> {
-		let all_sues = model::parse_input (input) ?;
+	pub fn part_two (all_sues: & Input) -> GenResult <u16> {
 		const fn ticker (attr: Attr, num: u8) -> bool {
 			match attr {
 				Attr::Children => num == 3,
@@ -123,6 +123,10 @@ pub mod model {
 						_ => Err (parser.err ()) ?,
 					};
 					let num = parser.expect (":") ?.int () ?;
+					if attrs.is_full () 
+							|| attrs.iter ().any (|& (some_attr, _)| some_attr == attr) {
+						Err (parser.err ()) ?;
+					}
 					attrs.push ((attr, num));
 					match parser.next () {
 						Some (',') => continue,

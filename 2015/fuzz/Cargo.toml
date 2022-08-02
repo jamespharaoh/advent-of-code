@@ -125,7 +125,12 @@
 	test = false
 	doc = false
 
-# TODO day-16
+[[bin]]
+
+	name = "day-16"
+	path = "src/day-16.rs"
+	test = false
+	doc = false
 
 [[bin]]
 
