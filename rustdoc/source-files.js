@@ -28,6 +28,7 @@ sourcesIndex["aoc_2015_day_24"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2015_day_25"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2016"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2016_day_01"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["aoc_2016_day_02"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2021"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2021_day_01"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["aoc_2021_day_02"] = {"name":"","files":["lib.rs"]};

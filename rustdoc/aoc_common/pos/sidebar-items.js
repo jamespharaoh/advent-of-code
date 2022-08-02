@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["DirGeo",""],["Turn2d",""]],"struct":[["PosGeo",""],["PosRowCol",""],["PosXY",""],["PosXYZ",""],["PosYX",""]],"trait":[["Coord",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["Dir2d",""],["DirGeo",""],["Turn2d",""]],"struct":[["PosGeo",""],["PosRowCol",""],["PosXY",""],["PosXYZ",""],["PosYX",""]],"trait":[["Coord",""]]};
