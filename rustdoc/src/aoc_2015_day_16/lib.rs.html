@@ -139,6 +139,10 @@
 <span id="139">139</span>
 <span id="140">140</span>
 <span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 16: Aunt Sue</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/16](https://adventofcode.com/2015/day/16)</span>
@@ -151,8 +155,9 @@
 	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Aunt Sue&quot;</span>;
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">16</span>;
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
 }
 
 <span class="doccomment">/// Logic for solving the puzzles.</span>
@@ -161,9 +166,9 @@
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use</span> <span class="ident">model::Attr</span>;
+	<span class="kw">use</span> <span class="ident">model::Input</span>;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">all_sues</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">all_sues</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
 		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>) -&gt; <span class="ident">u8</span> {
 			<span class="kw">match</span> <span class="ident">attr</span> {
 				<span class="ident">Attr::Children</span> =&gt; <span class="number">3</span>,
@@ -186,8 +191,7 @@
 		<span class="prelude-val">Ok</span> (<span class="ident">the_sue</span>.<span class="ident">number</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">all_sues</span> <span class="op">=</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">all_sues</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
 		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">ticker</span> (<span class="ident">attr</span>: <span class="ident">Attr</span>, <span class="ident">num</span>: <span class="ident">u8</span>) -&gt; <span class="ident">bool</span> {
 			<span class="kw">match</span> <span class="ident">attr</span> {
 				<span class="ident">Attr::Children</span> =&gt; <span class="ident">num</span> <span class="op">==</span> <span class="number">3</span>,
@@ -264,6 +268,10 @@
 						<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) <span class="question-mark">?</span>,
 					};
 					<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;:&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">if</span> <span class="ident">attrs</span>.<span class="ident">is_full</span> () 
+							<span class="op">|</span><span class="op">|</span> <span class="ident">attrs</span>.<span class="ident">iter</span> ().<span class="ident">any</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">some_attr</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">some_attr</span> <span class="op">==</span> <span class="ident">attr</span>) {
+						<span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) <span class="question-mark">?</span>;
+					}
 					<span class="ident">attrs</span>.<span class="ident">push</span> ((<span class="ident">attr</span>, <span class="ident">num</span>));
 					<span class="kw">match</span> <span class="ident">parser</span>.<span class="ident">next</span> () {
 						<span class="prelude-val">Some</span> (<span class="string">&#39;,&#39;</span>) =&gt; <span class="kw">continue</span>,
