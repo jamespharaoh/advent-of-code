@@ -2,35 +2,36 @@
 //!
 //! [https://adventofcode.com/2015/day/12](https://adventofcode.com/2015/day/12)
 
+#![ allow (clippy::missing_inline_in_public_items) ]
+
 use aoc_common::*;
 
 puzzle_info! {
 	name = "JSAbacusFramework.io";
 	year = 2015;
 	day = 12;
-	part_one = |input| logic::part_one (input [0]);
-	part_two = |input| logic::part_two (input [0]);
+	parse = |input| model::Json::parse (input [0]);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 }
 
-mod logic {
+pub mod logic {
 
 	use super::*;
-	use model::*;
+	use model::Json;
 	use nums::IntConv;
 
-	pub fn part_one (input: & str) -> GenResult <i32> {
-		let input = Json::parse (input) ?;
-		let sum = calc_sum (& input);
+	pub fn part_one (input: & Json) -> GenResult <i32> {
+		let sum = calc_sum (input);
 		Ok (sum)
 	}
 
-	pub fn part_two (input: & str) -> GenResult <i32> {
-		let input = Json::parse (input) ?;
-		let sum = calc_sum_no_red (& input);
+	pub fn part_two (input: & Json) -> GenResult <i32> {
+		let sum = calc_sum_no_red (input);
 		Ok (sum)
 	}
 
-	pub fn calc_sum (value: & Json) -> i32 {
+	fn calc_sum (value: & Json) -> i32 {
 		match * value {
 			Json::Array (ref items) => items.iter ().map (calc_sum).sum (),
 			Json::Object (ref items) => items.iter ().map (|& (_, ref item)| calc_sum (item)).sum (),
@@ -39,7 +40,7 @@ mod logic {
 		}
 	}
 
-	pub fn calc_sum_no_red (value: & Json) -> i32 {
+	fn calc_sum_no_red (value: & Json) -> i32 {
 		match * value {
 			Json::Array (ref items) => items.iter ().map (calc_sum_no_red).sum (),
 			Json::Object (ref items) => {
@@ -58,7 +59,7 @@ mod logic {
 
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 
@@ -151,25 +152,25 @@ mod examples {
 	use super::*;
 
 	#[ test ]
-	fn part_one () -> GenResult <()> {
-		assert_eq! (6, logic::part_one ("[1,2,3]") ?);
-		assert_eq! (6, logic::part_one ("{\"a\":2,\"b\":4}") ?);
-		assert_eq! (3, logic::part_one ("[[[3]]]") ?);
-		assert_eq! (3, logic::part_one ("{\"a\":{\"b\":4},\"c\":-1}") ?);
-		assert_eq! (0, logic::part_one ("{\"a\":[-1,1]}") ?);
-		assert_eq! (0, logic::part_one ("[-1,{\"a\":1}]") ?);
-		assert_eq! (0, logic::part_one ("[]") ?);
-		assert_eq! (0, logic::part_one ("{}") ?);
-		Ok (())
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("6", puzzle.part_one (& ["[1,2,3]"]));
+		assert_eq_ok! ("6", puzzle.part_one (& ["{\"a\":2,\"b\":4}"]));
+		assert_eq_ok! ("3", puzzle.part_one (& ["[[[3]]]"]));
+		assert_eq_ok! ("3", puzzle.part_one (& ["{\"a\":{\"b\":4},\"c\":-1}"]));
+		assert_eq_ok! ("0", puzzle.part_one (& ["{\"a\":[-1,1]}"]));
+		assert_eq_ok! ("0", puzzle.part_one (& ["[-1,{\"a\":1}]"]));
+		assert_eq_ok! ("0", puzzle.part_one (& ["[]"]));
+		assert_eq_ok! ("0", puzzle.part_one (& ["{}"]));
 	}
 
 	#[ test ]
-	fn part_two () -> GenResult <()> {
-		assert_eq! (6, logic::part_two ("[1,2,3]") ?);
-		assert_eq! (4, logic::part_two ("[1,{\"c\":\"red\",\"b\":2},3]") ?);
-		assert_eq! (0, logic::part_two ("{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}") ?);
-		assert_eq! (6, logic::part_two ("[1,\"red\",5]") ?);
-		Ok (())
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("6", puzzle.part_two (& ["[1,2,3]"]));
+		assert_eq_ok! ("4", puzzle.part_two (& ["[1,{\"c\":\"red\",\"b\":2},3]"]));
+		assert_eq_ok! ("0", puzzle.part_two (& ["{\"d\":\"red\",\"e\":[1,2,3,4],\"f\":5}"]));
+		assert_eq_ok! ("6", puzzle.part_two (& ["[1,\"red\",5]"]));
 	}
 
 }
