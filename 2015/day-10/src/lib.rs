@@ -2,10 +2,7 @@
 //!
 //! [https://adventofcode.com/2015/day/10](https://adventofcode.com/2015/day/10)
 
-#![ deny (bindings_with_variant_name) ]
-#![ deny (non_camel_case_types) ]
-#![ deny (non_snake_case) ]
-#![ deny (non_upper_case_globals) ]
+#![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
 
@@ -13,8 +10,9 @@ puzzle_info! {
 	name = "Elves Look, Elves Say";
 	year = 2015;
 	day = 10;
-	part_one = |input| logic::part_one (input [0]);
-	part_two = |input| logic::part_two (input [0]);
+	parse = |input| model::State::parse (input [0]);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 	commands = [
 		( name = "internals"; method = cli::internals; ),
 		( name = "run"; method = cli::run; ),
@@ -26,14 +24,14 @@ puzzle_info! {
 mod cycles;
 mod tracking;
 
-mod logic {
+pub mod logic {
 
 	use super::*;
 	use model::State;
 	use nums::IntConv;
 
-	pub fn part_one (input: & str) -> GenResult <u32> {
-		let input = State::parse (input) ?;
+	pub fn part_one (input: & State) -> GenResult <u32> {
+		let input = input.clone ();
 		Ok (
 			iter::successors (
 					Some (input),
@@ -44,8 +42,8 @@ mod logic {
 		)
 	}
 
-	pub fn part_two (input: & str) -> GenResult <u32> {
-		let input = State::parse (input) ?;
+	pub fn part_two (input: & State) -> GenResult <u32> {
+		let input = input.clone ();
 		Ok (
 			iter::successors (
 					Some (input),
@@ -56,6 +54,7 @@ mod logic {
 		)
 	}
 
+	#[ must_use ]
 	pub fn one_round (state: & State) -> State {
 		let group_by =
 			state.iter ().copied ()
@@ -67,7 +66,7 @@ mod logic {
 
 }
 
-mod model {
+pub mod model {
 
 	use super::*;
 	use nums::IntConv;
@@ -77,9 +76,9 @@ mod model {
 
 	impl State {
 		pub fn parse (input: & str) -> GenResult <Self> {
-			input.chars ().map (|ch|
-				Ok (ch.to_digit (10).ok_or ("Invalid input") ?.as_u8 ())
-			).collect::<GenResult <_>> ()
+			input.chars ()
+				.map (|ch| Ok (ch.to_digit (10).ok_or ("Invalid input") ?.as_u8 ()))
+				.collect::<GenResult <_>> ()
 		}
 		pub fn iter (& self) -> SliceIter <'_, u8> {
 			self.0.iter ()
