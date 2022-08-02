@@ -173,9 +173,12 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
+<span id="176">176</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 12: JSAbacusFramework.io</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/12](https://adventofcode.com/2015/day/12)</span>
+
+<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
 <span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
 
@@ -183,29 +186,28 @@
 	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;JSAbacusFramework.io&quot;</span>;
 	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
 	<span class="ident">day</span> <span class="op">=</span> <span class="number">12</span>;
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span> [<span class="number">0</span>]);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span> [<span class="number">0</span>]);
+	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Json::parse</span> (<span class="ident">input</span> [<span class="number">0</span>]);
+	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
 }
 
-<span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model</span>::<span class="kw-2">*</span>;
+	<span class="kw">use</span> <span class="ident">model::Json</span>;
 	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Json::parse</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">calc_sum</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+		<span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">calc_sum</span> (<span class="ident">input</span>);
 		<span class="prelude-val">Ok</span> (<span class="ident">sum</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Json::parse</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">calc_sum_no_red</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+		<span class="kw">let</span> <span class="ident">sum</span> <span class="op">=</span> <span class="ident">calc_sum_no_red</span> (<span class="ident">input</span>);
 		<span class="prelude-val">Ok</span> (<span class="ident">sum</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_sum</span> (<span class="ident">value</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">i32</span> {
+	<span class="kw">fn</span> <span class="ident">calc_sum</span> (<span class="ident">value</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">i32</span> {
 		<span class="kw">match</span> <span class="op">*</span> <span class="ident">value</span> {
 			<span class="ident">Json::Array</span> (<span class="kw-2">ref</span> <span class="ident">items</span>) =&gt; <span class="ident">items</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="ident">calc_sum</span>).<span class="ident">sum</span> (),
 			<span class="ident">Json::Object</span> (<span class="kw-2">ref</span> <span class="ident">items</span>) =&gt; <span class="ident">items</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">item</span>)<span class="op">|</span> <span class="ident">calc_sum</span> (<span class="ident">item</span>)).<span class="ident">sum</span> (),
@@ -214,7 +216,7 @@
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_sum_no_red</span> (<span class="ident">value</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">i32</span> {
+	<span class="kw">fn</span> <span class="ident">calc_sum_no_red</span> (<span class="ident">value</span>: <span class="op">&amp;</span> <span class="ident">Json</span>) -&gt; <span class="ident">i32</span> {
 		<span class="kw">match</span> <span class="op">*</span> <span class="ident">value</span> {
 			<span class="ident">Json::Array</span> (<span class="kw-2">ref</span> <span class="ident">items</span>) =&gt; <span class="ident">items</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="ident">calc_sum_no_red</span>).<span class="ident">sum</span> (),
 			<span class="ident">Json::Object</span> (<span class="kw-2">ref</span> <span class="ident">items</span>) =&gt; {
@@ -233,7 +235,7 @@
 
 }
 
-<span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
 
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
@@ -326,25 +328,25 @@
 	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">6</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;[1,2,3]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">6</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;{\&quot;a\&quot;:2,\&quot;b\&quot;:4}&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">3</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;[[[3]]]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">3</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;{\&quot;a\&quot;:{\&quot;b\&quot;:4},\&quot;c\&quot;:-1}&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">0</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;{\&quot;a\&quot;:[-1,1]}&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">0</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;[-1,{\&quot;a\&quot;:1}]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">0</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;[]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">0</span>, <span class="ident">logic::part_one</span> (<span class="string">&quot;{}&quot;</span>) <span class="question-mark">?</span>);
-		<span class="prelude-val">Ok</span> (())
+	<span class="kw">fn</span> <span class="ident">part_one</span> () {
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;[1,2,3]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;{\&quot;a\&quot;:2,\&quot;b\&quot;:4}&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;3&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;[[[3]]]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;3&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;{\&quot;a\&quot;:{\&quot;b\&quot;:4},\&quot;c\&quot;:-1}&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;{\&quot;a\&quot;:[-1,1]}&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;[-1,{\&quot;a\&quot;:1}]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;[]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;{}&quot;</span>]));
 	}
 
 	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">6</span>, <span class="ident">logic::part_two</span> (<span class="string">&quot;[1,2,3]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">4</span>, <span class="ident">logic::part_two</span> (<span class="string">&quot;[1,{\&quot;c\&quot;:\&quot;red\&quot;,\&quot;b\&quot;:2},3]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">0</span>, <span class="ident">logic::part_two</span> (<span class="string">&quot;{\&quot;d\&quot;:\&quot;red\&quot;,\&quot;e\&quot;:[1,2,3,4],\&quot;f\&quot;:5}&quot;</span>) <span class="question-mark">?</span>);
-		<span class="macro">assert_eq!</span> (<span class="number">6</span>, <span class="ident">logic::part_two</span> (<span class="string">&quot;[1,\&quot;red\&quot;,5]&quot;</span>) <span class="question-mark">?</span>);
-		<span class="prelude-val">Ok</span> (())
+	<span class="kw">fn</span> <span class="ident">part_two</span> () {
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;[1,2,3]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;4&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;[1,{\&quot;c\&quot;:\&quot;red\&quot;,\&quot;b\&quot;:2},3]&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;{\&quot;d\&quot;:\&quot;red\&quot;,\&quot;e\&quot;:[1,2,3,4],\&quot;f\&quot;:5}&quot;</span>]));
+		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;[1,\&quot;red\&quot;,5]&quot;</span>]));
 	}
 
 }
