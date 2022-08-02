@@ -174,9 +174,47 @@
 <span id="174">174</span>
 <span id="175">175</span>
 <span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 12: JSAbacusFramework.io</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2015/day/12](https://adventofcode.com/2015/day/12)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Input</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! A single line of a subset of JSON. Support for arrays, objects, integers and strings (without</span>
+<span class="doccomment">//! escapes). Only the first line is considered.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Part one</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Sum of all numbers in the input.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Part two</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Sum of all numbers in the input, excluding any objects (and all children) which directly</span>
+<span class="doccomment">//! contain the value &quot;red&quot;.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Algorithm</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This is very simple. Data is parsed into a data structure. A recursive function calculates the</span>
+<span class="doccomment">//! result for each part.</span>
 
 <span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
 
