@@ -251,6 +251,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-2016-day-01",
  "aoc-2016-day-02",
+ "aoc-2016-day-03",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -265,6 +266,14 @@ dependencies = [
 
 [[package]]
 name = "aoc-2016-day-02"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2016-day-03"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",
