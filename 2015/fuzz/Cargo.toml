@@ -111,7 +111,14 @@
 	test = false
 	doc = false
 
-# TODO day-14 to day-16
+[[bin]]
+
+	name = "day-14"
+	path = "src/day-14.rs"
+	test = false
+	doc = false
+
+# TODO day-15 to day-16
 
 [[bin]]
 
