@@ -183,7 +183,7 @@
 				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">room</span>)<span class="op">|</span> <span class="ident">room</span> <span class="op">==</span> <span class="string">&quot;northpole object storage&quot;</span>)
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">sector</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">sector</span>)
 				.<span class="ident">next</span> ()
-				.<span class="ident">unwrap</span> ();
+				.<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok</span> (<span class="ident">sector</span>)
 	}
 

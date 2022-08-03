@@ -446,7 +446,7 @@
 <span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span><span class="op">&gt;</span>
 	<span class="ident">PrioritySearch</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">Visitor</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
-		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
+		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Ord</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span>,
 		<span class="ident">Visitor</span>: <span class="ident">PrioritySearchVisitor</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span>, <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 
@@ -638,7 +638,7 @@
 	<span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">NextNodesIntoIter</span>, <span class="ident">Hshr</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Hshr</span>: <span class="ident">BuildHasher</span>,
-		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
+		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Ord</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Add</span> <span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">Pri</span><span class="op">&gt;</span>,
 		<span class="ident">SeenImpl</span>: <span class="ident">Seen</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">Pri</span><span class="op">&gt;</span>,
 		<span class="kw">for</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span><span class="op">&gt;</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">NextNodesIntoIter</span>: <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> (<span class="ident">Node</span>, <span class="ident">Pri</span>)<span class="op">&gt;</span> {
@@ -699,7 +699,7 @@
 <span class="kw">for</span> <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Node</span>, <span class="ident">SeenState</span> <span class="op">&lt;</span><span class="ident">Pri</span><span class="op">&gt;</span>, <span class="ident">Hshr</span><span class="op">&gt;</span>
 	<span class="kw">where</span>
 		<span class="ident">Hshr</span>: <span class="ident">BuildHasher</span>,
-		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span>,
+		<span class="ident">Node</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Ord</span>,
 		<span class="ident">Pri</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
 
 	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
