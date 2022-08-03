@@ -134,6 +134,25 @@
 <span id="134">134</span>
 <span id="135">135</span>
 <span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 4: Security Through Obscurity</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2016/day/4](https://adventofcode.com/2016/day/4)</span>
@@ -249,6 +268,19 @@
 		}
 	}
 
+	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
+	<span class="kw">mod</span> <span class="ident">tests</span> {
+
+		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ <span class="ident">test</span> ]</span>
+		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 1: col 13: abc[def]ghi]&quot;</span>,
+				<span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;abc[def]ghi]&quot;</span> ]));
+		}
+
+	}
+
 }
 
 <span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
@@ -267,6 +299,12 @@
 	<span class="kw">fn</span> <span class="ident">part_one</span> () {
 		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
 		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1514&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	}
+
+	<span class="attribute">#[ <span class="ident">test</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">part_two</span> () {
+		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
+		<span class="macro">assert_err!</span> (<span class="string">&quot;No solution found&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
 	}
 
 }
