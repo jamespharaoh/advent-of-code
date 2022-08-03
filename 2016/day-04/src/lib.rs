@@ -113,6 +113,19 @@ pub mod model {
 		}
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn input_parse () {
+			assert_err! ("Invalid input: line 1: col 13: abc[def]ghi]",
+				Input::parse (& [ "abc[def]ghi]" ]));
+		}
+
+	}
+
 }
 
 #[ cfg (test) ]
@@ -131,6 +144,12 @@ mod examples {
 	fn part_one () {
 		let puzzle = puzzle_metadata ();
 		assert_eq_ok! ("1514", puzzle.part_one (EXAMPLE));
+	}
+
+	#[ test ]
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_err! ("No solution found", puzzle.part_two (EXAMPLE));
 	}
 
 }
