@@ -742,6 +742,27 @@
 <span id="742">742</span>
 <span id="743">743</span>
 <span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std::fmt</span>::{ <span class="ident">Debug</span>, <span class="ident">Display</span> };
 
@@ -1067,6 +1088,11 @@
 			}
 
 			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+			<span class="kw">fn</span> <span class="ident">to_char</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
+				<span class="self">self</span>.<span class="ident">to_u32</span> () <span class="question-mark">?</span>.<span class="ident">try_into</span> ().<span class="ident">ok</span> ().<span class="ident">ok_or</span> (<span class="ident">Overflow</span>)
+			}
+
+			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 			<span class="kw">fn</span> <span class="ident">to_i8</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">i8</span><span class="op">&gt;</span> {
 				<span class="self">self</span>.<span class="ident">try_into</span> ().<span class="ident">ok</span> ().<span class="ident">ok_or</span> (<span class="ident">Overflow</span>)
 			}
@@ -1133,6 +1159,11 @@
 			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 			<span class="kw">fn</span> <span class="ident">from_usize</span> (<span class="ident">val</span>: <span class="ident">usize</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 				<span class="ident">val</span>.<span class="ident">try_into</span> ().<span class="ident">ok</span> ().<span class="ident">ok_or</span> (<span class="ident">Overflow</span>)
+			}
+
+			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+			<span class="kw">fn</span> <span class="ident">to_char</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
+				<span class="self">self</span>.<span class="ident">to_u32</span> () <span class="question-mark">?</span>.<span class="ident">try_into</span> ().<span class="ident">ok</span> ().<span class="ident">ok_or</span> (<span class="ident">Overflow</span>)
 			}
 
 			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
@@ -1294,6 +1325,10 @@
 	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">as_usize</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="self">self</span>.<span class="ident">to_usize</span> ().<span class="ident">unwrap</span> () }
 
+	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::wrong_self_convention</span>) ]</span>
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">as_char</span> (<span class="self">self</span>) -&gt; <span class="ident">char</span> { <span class="self">self</span>.<span class="ident">to_char</span> ().<span class="ident">unwrap</span> () }
+
 	<span class="doccomment">/// Safely convert from [`usize`]</span>
 	<span class="doccomment">///</span>
 	<span class="doccomment">/// # Errors</span>
@@ -1416,6 +1451,8 @@
 	<span class="doccomment">///</span>
 	<span class="kw">fn</span> <span class="ident">to_usize</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>;
 
+	<span class="kw">fn</span> <span class="ident">to_char</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>;
+
 }
 
 <span class="kw">impl</span> <span class="ident">IntConv</span> <span class="kw">for</span> <span class="ident">char</span> {
@@ -1423,6 +1460,11 @@
 	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="kw">fn</span> <span class="ident">from_usize</span> (<span class="ident">val</span>: <span class="ident">usize</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 		<span class="ident">val</span>.<span class="ident">to_u32</span> () <span class="question-mark">?</span>.<span class="ident">try_into</span> ().<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">Overflow</span>)
+	}
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">to_char</span> (<span class="self">self</span>) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
+		<span class="prelude-val">Ok</span> (<span class="self">self</span>)
 	}
 
 	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
