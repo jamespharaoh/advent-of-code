@@ -10,14 +10,11 @@ puzzle_info! {
 	name = "The Ideal Stocking Stuffer";
 	year = 2015;
 	day = 4;
-	parse = |input| Ok::<_, Infallible> (input [0]);
-	part_one = |input, max_threads: usize| logic::part_one (input, max_threads);
-	part_two = |input, max_threads: usize| logic::part_two (input, max_threads);
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
 	commands = [
 		( name = "run"; method = cli::run; ),
-	];
-	params = [
-		max_threads: usize = usize::MAX;
 	];
 }
 
@@ -25,21 +22,32 @@ pub mod logic {
 
 	use super::*;
 	use md5::Output;
+	use model::Input;
 
-	pub fn part_one (input: & str, max_threads: usize) -> GenResult <usize> {
-		calc_result (input, 5, max_threads)
+	pub fn part_one (input: & Input) -> GenResult <usize> {
+		let input = Input {
+			seed: input.seed.clone (),
+			num_zeros: Some (input.num_zeros.unwrap_or (5)),
+			.. * input
+		};
+		calc_result (& input)
 	}
 
-	pub fn part_two (input: & str, max_threads: usize) -> GenResult <usize> {
-		calc_result (input, 6, max_threads)
+	pub fn part_two (input: & Input) -> GenResult <usize> {
+		let input = Input {
+			seed: input.seed.clone (),
+			num_zeros: Some (input.num_zeros.unwrap_or (6)),
+			.. * input
+		};
+		calc_result (& input)
 	}
 
-	pub fn calc_result (input: & str, num_zeros: usize, max_threads: usize) -> GenResult <usize> {
-		let num_threads = cmp::min (get_num_threads ().unwrap_or (1), max_threads);
+	pub fn calc_result (input: & Input) -> GenResult <usize> {
+		let num_threads = cmp::min (get_num_threads ().unwrap_or (1), input.max_threads);
 		if num_threads < 2 {
-			calc_result_serial (input, num_zeros)
+			calc_result_serial (& input.seed, input.num_zeros.unwrap ())
 		} else {
-			calc_result_parallel (input, num_zeros, num_threads)
+			calc_result_parallel (& input.seed, input.num_zeros.unwrap (), num_threads)
 		}
 	}
 
@@ -232,10 +240,32 @@ pub mod logic {
 
 }
 
+pub mod model {
+
+	use super::*;
+
+	pub struct Input {
+		pub seed: String,
+		pub num_zeros: Option <usize>,
+		pub max_threads: usize,
+	}
+
+	impl Input {
+		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
+			let num_zeros = parser::input_param_opt (& mut input, "NUM_ZEROS=") ?;
+			let max_threads = parser::input_param (& mut input, "MAX_THREADS=", usize::MAX) ?;
+			let seed = input [0].to_owned ();
+			Ok (Self { seed, num_zeros, max_threads })
+		}
+	}
+
+}
+
 #[ cfg (not (tarpaulin_include)) ]
 mod cli {
 
 	use super::*;
+	use model::Input;
 
 	#[ derive (clap::Parser) ]
 	pub struct RunArgs {
@@ -258,11 +288,12 @@ mod cli {
 		let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 		println! ("Using input file: {}", & args.input);
 		println! ("Looking for {} zeros", args.zeros);
-		let result = logic::calc_result (
-			input_lines [0],
-			args.zeros,
-			args.max_threads.unwrap_or (usize::MAX),
-		) ?;
+		let input = Input {
+			seed: input_lines [0].to_owned (),
+			num_zeros: Some (args.zeros),
+			max_threads: args.max_threads.unwrap_or (usize::MAX),
+		};
+		let result = logic::calc_result (& input) ?;
 		println! ("Result: {}", result);
 		Ok (())
 	}
@@ -274,19 +305,28 @@ mod examples {
 
 	use super::*;
 
-	const EXAMPLE: & str = "abcdef";
+	const EXAMPLE_ONE: & [& str] = & [
+		"NUM_ZEROS=1",
+		"MAX_THREADS=1",
+		"abcdef",
+	];
+
+	const EXAMPLE_TWO: & [& str] = & [
+		"NUM_ZEROS=2",
+		"MAX_THREADS=1",
+		"abcdef",
+	];
 
 	#[ test ]
 	fn part_one () {
-		let mut puzzle = puzzle_metadata ();
-		puzzle.set_param ("max_threads", 1.to_string ());
-		assert_eq_ok! ("609043", puzzle.part_one (& [EXAMPLE]));
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("31", puzzle.part_one (EXAMPLE_ONE));
 	}
 
 	#[ test ]
 	fn part_two () {
 		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("6742839", puzzle.part_two (& [EXAMPLE]));
+		assert_eq_ok! ("298", puzzle.part_two (EXAMPLE_TWO));
 	}
 
 }

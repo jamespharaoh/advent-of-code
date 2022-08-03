@@ -367,3 +367,17 @@ pub fn input_param <Val: FromStr> (
 		} else { default }
 	)
 }
+
+#[ inline ]
+pub fn input_param_opt <Val: FromStr> (
+	input: & mut & [& str],
+	prefix: & str,
+) -> GenResult <Option <Val>>
+		where Val::Err: Error + 'static {
+	Ok (
+		if let Some (val) = input [0].strip_prefix (prefix) {
+			* input = & (* input) [1 .. ];
+			Some (val.parse () ?)
+		} else { None }
+	)
+}
