@@ -266,6 +266,22 @@ mod test_map {
 
 	}
 
+	impl <Key, Val> Clone for HashMap <Key, Val> where Key: Clone, Val: Clone {
+		fn clone (& self) -> Self {
+			Self {
+				map: self.map.clone (),
+				phantom: PhantomData,
+			}
+		}
+	}
+
+	impl <Key, Val> Debug for HashMap <Key, Val>
+			where Key: Debug, Val: Debug {
+		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+			self.map.fmt (formatter)
+		}
+	}
+
 	impl <Key, Val> Default for HashMap <Key, Val> {
 		fn default () -> Self {
 			Self {
