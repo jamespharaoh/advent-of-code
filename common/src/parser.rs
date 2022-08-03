@@ -352,3 +352,18 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 	}
 
 }
+
+#[ inline ]
+pub fn input_param <Val: FromStr> (
+	input: & mut & [& str],
+	prefix: & str,
+	default: Val,
+) -> GenResult <Val>
+		where Val::Err: Error + 'static {
+	Ok (
+		if let Some (val) = input [0].strip_prefix (prefix) {
+			* input = & (* input) [1 .. ];
+			val.parse () ?
+		} else { default }
+	)
+}

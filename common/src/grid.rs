@@ -4,6 +4,7 @@ use bitvec::BitVec;
 use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
 use nums::Int;
+use pos::PosRowCol;
 use pos::PosYX;
 
 /// Multi dimensional abstraction over a single dimensional collection
@@ -18,6 +19,28 @@ pub struct Grid <Storage, Pos, const DIMS: usize = 2> {
 	origin: [isize; DIMS],
 	size: [usize; DIMS],
 	phantom: PhantomData <Pos>,
+}
+
+impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
+	where
+		Item: Clone + Default,
+		Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn new_vec (
+		origin: [isize; DIMS],
+		size: [usize; DIMS],
+	) -> Self {
+		assert! (origin == [0; DIMS]);
+		Self::wrap (
+			iter::repeat (default ())
+				.take (size.iter_vals ().product ())
+				.collect::<Vec <_>> (),
+			origin,
+			size)
+	}
+
 }
 
 impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
@@ -83,9 +106,10 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
-		self.storage.storage_set (
-			Pos::to_scalar (& pos, self.origin, self.size).unwrap (),
-			item);
+		let idx = some_or! (
+			Pos::to_scalar (& pos, self.origin, self.size),
+			panic! ("Unable to map GridPos to scalar: {:?}", pos));
+		self.storage.storage_set (idx, item);
 	}
 
 	#[ inline ]
@@ -131,7 +155,8 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 ///
 /// This iterator wraps the iterator from an implementation of [`GridStorage`] and maps from `Item`
 /// to `([GridPos], Item)`.
-
+///
+#[ derive (Clone) ]
 pub struct GridIter <Storage, Pos, const DIMS: usize> {
 	storage: Storage,
 	idx: usize,
@@ -227,7 +252,7 @@ impl <Item, Encoding> GridStorage for BitVec <Item, Encoding>
 }
 
 /// Additional trait for backing stores which which can provide references to items
-
+///
 pub trait GridStorageMut: GridStorage {
 	fn storage_ref (& self, idx: usize) -> Option <& Self::Item>;
 	fn storage_mut (& mut self, idx: usize) -> Option <& mut Self::Item>;
@@ -252,7 +277,7 @@ impl <Item> GridStorageMut for Vec <Item> where Item: Clone {
 /// This is a separate trait to make the lifetimes work. It should be implemented on a reference to
 /// the storage, rather than directly. This allows us to capture the lifetime without polluting the
 /// main trait.
-
+///
 pub trait GridStorageIntoIter {
 
 	type Item;
@@ -296,8 +321,8 @@ impl <'sto, Item, Encoding> GridStorageIntoIter for & 'sto BitVec <Item, Encodin
 ///
 /// This trait provides methods to translate whatever coordinate system is in use to and from a
 /// single `usize` value.
-
-pub trait GridPos <const DIMS: usize>: Copy + Sized {
+///
+pub trait GridPos <const DIMS: usize>: Copy + Debug + Sized {
 	fn to_scalar (& self, origin: [isize; DIMS], size: [usize; DIMS]) -> Option <usize>;
 	fn from_scalar (scalar: usize, origin: [isize; DIMS], size: [usize; DIMS]) -> Option <Self>;
 }
@@ -340,13 +365,35 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 
 }
 
+impl <Val: Int> GridPos <2> for PosRowCol <Val> {
+
+	#[ inline ]
+	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
+		if origin != [0, 0] { unimplemented! () }
+		let row = ok_or! (self.row.to_usize (), return None);
+		let col = ok_or! (self.col.to_usize (), return None);
+		if row >= size [0] || col >= size [1] { return None }
+		Some (row * size [1] + col)
+	}
+
+	#[ inline ]
+	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
+		if origin != [0, 0] { unimplemented! () }
+		let row = ok_or! (Val::from_usize (scalar / size [1]), return None);
+		let col = ok_or! (Val::from_usize (scalar % size [1]), return None);
+		Some (Self { row, col })
+	}
+
+}
+
 /// Wrapping iterator which clones items.
 ///
 /// We don't use [`Cloned`](iter::Cloned) from the standard library because it doesn't handle
 /// [`Iterator::skip`] the way we would like. Although it says in the documentation that there is
 /// no guarantee each element will be processed, it seems like it does so. Instead, we want to
 /// completely bypass any elements which aren't required.
-
+///
+#[ derive (Clone) ]
 pub struct GridStorageClone <Storage> {
 	storage: Storage,
 }

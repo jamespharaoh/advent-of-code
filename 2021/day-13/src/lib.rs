@@ -19,6 +19,7 @@ mod tool {
 
 	use super::*;
 	use model::Input;
+	use model::Pos;
 
 	#[ derive (clap::Parser) ]
 	pub struct RunArgs {
@@ -37,7 +38,7 @@ mod tool {
 		for fold in input.folds.iter () {
 			dots = logic::fold_dots (fold, & dots);
 		}
-		print! ("{}", logic::DrawDots (& dots));
+		print! ("{}", ocr::DrawDots (dots.iter_vals ().map (|Pos { y, x }| (y, x))));
 		Ok (())
 	}
 
@@ -64,7 +65,7 @@ mod logic {
 		for fold in input.folds.iter () {
 			dots = fold_dots (fold, & dots);
 		}
-		let result = read_dots (& dots) ?;
+		let result = ocr::read_dots (& |y, x| dots.contains (& Pos { y, x })) ?;
 		Ok (result)
 	}
 
@@ -80,76 +81,13 @@ mod logic {
 		new_dots
 	}
 
-	pub fn read_dots (dots: & HashSet <Pos>) -> GenResult <String> {
-		let mut result = String::new ();
-		for offset in (0 .. ).step_by (5) {
-			let mut encoded: u32 = 0;
-			for row in 0 .. 6 {
-				for col in 0 .. 5 {
-					encoded <<= 1_i32;
-					if dots.contains (& Pos { x: offset + col, y: row }) {
-						encoded |= 1;
-					}
-				}
-			}
-			result.push (match encoded {
-				0x_1929_7a52 => 'A',
-				0x_392e_4a5c => 'B',
-				0x_1928_424c => 'C',
-				0x_3d0e_421e => 'E',
-				0x_1928_5a4e => 'G',
-				0x_3d0e_4210 => 'F',
-				0x_0c21_0a4c => 'J',
-				0x_252f_4a52 => 'H',
-				0x_254c_5292 => 'K',
-				0x_2108_421e => 'L',
-				0x_3929_7210 => 'P',
-				0x_3929_7292 => 'R',
-				0x_2529_4a4c => 'U',
-				0x_3c22_221e => 'Z',
-				0x_0000_0000 => break,
-				_ => Err (format! ("Unrecognised character: {:#08x} in position {}", encoded,
-					result.len () + 1)) ?,
-			});
-		}
-		Ok (result)
-	}
-
-	pub struct DrawDots <'dat> (pub & 'dat HashSet <Pos>);
-
-	impl <'dat> fmt::Display for DrawDots <'dat> {
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			let dots = {
-				let mut dots_temp: Vec <Pos> =
-					self.0.iter_vals ().collect ();
-				dots_temp.sort_by_key (|pos| (pos.y, pos.x));
-				dots_temp
-			};
-			let mut row: i64 = -1;
-			let mut col: i64 = -1;
-			for dot in dots {
-				while row < dot.y {
-					write! (formatter, "\n") ?;
-					col = -1;
-					row += 1;
-				}
-				while col < dot.x {
-					write! (formatter, "  ") ?;
-					col += 1;
-				}
-				write! (formatter, "##") ?;
-				col += 1;
-			}
-			write! (formatter, "\n\n") ?;
-			Ok (())
-		}
-	}
-
 }
 
 mod model {
 
 	use super::*;
+
+	pub type Pos = pos::PosYX <i64>;
 
 	#[ derive (Debug) ]
 	pub struct Input {
@@ -194,9 +132,6 @@ mod model {
 
 	#[ derive (Clone, Copy, Debug) ]
 	pub enum Axis { X, Y }
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
-	pub struct Pos { pub x: i64, pub y: i64 }
 
 }
 

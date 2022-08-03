@@ -12,6 +12,7 @@ pub mod grid;
 pub mod list;
 pub mod md5;
 pub mod nums;
+pub mod ocr;
 pub mod parser;
 pub mod pos;
 pub mod puzzle;
@@ -196,6 +197,8 @@ mod prelude {
 	pub use std::time;
 	pub use crate::iter_ext::IntoIteratorExt as _;
 	pub use crate::iter_ext::IteratorExt as _;
+	pub use crate::nums::Int;
+	pub use crate::nums::IntConv as _;
 
 	#[ cfg (not (fuzzing)) ]
 	pub use std::collections::HashSet;
