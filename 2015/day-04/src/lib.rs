@@ -21,8 +21,6 @@ puzzle_info! {
 	];
 }
 
-pub mod md5;
-
 pub mod logic {
 
 	use super::*;

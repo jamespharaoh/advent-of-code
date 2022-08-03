@@ -5,6 +5,7 @@ use ops::{ BitAnd, BitOr, BitXor, Not };
 #[ derive (Eq, PartialEq) ]
 pub struct Output ([u8; 16]);
 
+#[ inline ]
 #[ must_use ]
 pub fn md5_hash (input: & [u8]) -> Output {
 	let mut md5 = MD5::new ();
@@ -34,6 +35,7 @@ impl Output {
 		self.0.is_empty ()
 	}
 
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn from_hex (input: & str) -> GenResult <Self> {
 		let input_len = input.chars ().count ();
 		if input_len != 32 { Err (format! ("Expected 32 chars, not {}", input_len)) ? }
@@ -46,16 +48,36 @@ impl Output {
 		}
 		Ok (Self (result))
 	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn num_zeros (& self) -> u8 {
+		let mut result = 0;
+		for byte in self.0.iter_vals () {
+			if byte & 0xf0 != 0 { break }
+			result += 1;
+			if byte & 0x0f != 0 { break }
+			result += 1;
+		}
+		result
+	}
+
 }
 
 impl Index <usize> for Output {
+
 	type Output = u8;
+
+	#[ inline ]
 	fn index (& self, idx: usize) -> & u8 {
 		& self.0 [idx]
 	}
+
 }
 
 impl Debug for Output {
+
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		write! (formatter, "md5::Output (\"") ?;
 		for idx in 0 .. 16 {
@@ -64,15 +86,19 @@ impl Debug for Output {
 		write! (formatter, "\")") ?;
 		Ok (())
 	}
+
 }
 
 impl Display for Output {
+
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		for idx in 0 .. 16 {
 			write! (formatter, "{:02x}", self.0 [idx]) ?;
 		}
 		Ok (())
 	}
+
 }
 
 impl MD5 {
@@ -87,6 +113,7 @@ impl MD5 {
 		}
 	}
 
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn update (& mut self, mut message: & [u8]) {
 
 		// iterate over message
@@ -112,6 +139,7 @@ impl MD5 {
 
 	}
 
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	#[ must_use ]
 	pub fn finish (mut self) -> Output {
 
@@ -204,7 +232,12 @@ impl MD5 {
 }
 
 impl Default for MD5 {
-	fn default () -> Self { Self::new () }
+
+	#[ inline ]
+	fn default () -> Self {
+		Self::new ()
+	}
+
 }
 
 #[ derive (Clone, Copy) ]

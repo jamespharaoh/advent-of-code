@@ -10,6 +10,7 @@ pub mod bithash;
 pub mod bitvec;
 pub mod grid;
 pub mod list;
+pub mod md5;
 pub mod nums;
 pub mod parser;
 pub mod pos;
@@ -153,6 +154,7 @@ mod prelude {
 	pub use std::fmt;
 	pub use std::fmt::Debug;
 	pub use std::fmt::Display;
+	pub use std::fmt::Write as _;
 	pub use std::fs;
 	pub use std::hash;
 	pub use std::hash::BuildHasher;
