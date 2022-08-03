@@ -6,9 +6,6 @@
 
 use aoc_common::*;
 
-#[ cfg (fuzzing) ]
-use std::collections::BTreeSet as HashSet;
-
 puzzle_info! {
 	name = "No Time for a Taxicab";
 	year = 2016;

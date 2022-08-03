@@ -81,7 +81,7 @@ pub struct PrioritySearch <Node, Pri, Visitor, SeenImpl>
 impl <Node, Pri, Visitor>
 	PrioritySearch <Node, Pri, Visitor, HashMap <Node, SeenState <Pri>>>
 	where
-		Node: Clone + Debug + Eq + Hash,
+		Node: Clone + Debug + Eq + Hash + Ord,
 		Pri: Clone + Copy + Debug + Ord,
 		Visitor: PrioritySearchVisitor <Node, Pri, HashMap <Node, SeenState <Pri>>> {
 
@@ -273,7 +273,7 @@ impl <Node, Pri, SeenImpl, NextNodesIntoIter, Hshr> PrioritySearchVisitor <Node,
 	for HashMap <Node, NextNodesIntoIter, Hshr>
 	where
 		Hshr: BuildHasher,
-		Node: Clone + Debug + Eq + Hash,
+		Node: Clone + Debug + Eq + Hash + Ord,
 		Pri: Clone + Debug + Ord + Add <Output = Pri>,
 		SeenImpl: Seen <Node, Pri>,
 		for <'dat> & 'dat NextNodesIntoIter: IntoIterator <Item = & 'dat (Node, Pri)> {
@@ -334,7 +334,7 @@ impl <Node, Pri, Hshr> Seen <Node, Pri>
 for HashMap <Node, SeenState <Pri>, Hshr>
 	where
 		Hshr: BuildHasher,
-		Node: Clone + Eq + Hash,
+		Node: Clone + Eq + Hash + Ord,
 		Pri: Clone + Ord {
 
 	#[ inline ]

@@ -101,21 +101,14 @@ impl Deref for Span {
 	fn deref (& self) -> & [u8] { self.0.as_ref () }
 }
 
-#[ derive (Clone, Debug) ]
+#[ derive (Clone, Debug, Eq, Ord, PartialEq, PartialOrd) ]
 enum Destiny {
 	Unstable (Span),
 	Atomic (Atomic),
 	Stable (Rc <[Atomic]>),
 }
 
-/*
-state can be:
-- unstable
-- atomic stable state
-- group of atomic stable states
-*/
-
-#[ derive (Clone, Eq, Hash, PartialEq) ]
+#[ derive (Clone, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 struct Atomic (Rc <AtomicInner>);
 
 impl Borrow <[u8]> for Atomic {
@@ -133,7 +126,7 @@ impl From <AtomicInner> for Atomic {
 	}
 }
 
-#[ derive (Clone) ]
+#[ derive (Clone, Ord, PartialOrd) ]
 struct AtomicInner {
 	key: Span,
 	next: Rc <[Atomic]>,
@@ -421,7 +414,8 @@ pub trait Intern <Item> where Item: Eq + Hash {
 	fn intern_get (self, item: & Item) -> Option <Self::Shared>;
 }
 
-impl <Item> Intern <Item> for & RefCell <HashSet <Rc <Item>>> where Item: Eq + Hash {
+impl <Item> Intern <Item> for & RefCell <HashSet <Rc <Item>>>
+		where Item: Eq + Hash + Ord {
 	type Shared = Rc <Item>;
 	fn intern (self, item: Item) -> Rc <Item> {
 		let mut lock = self.borrow_mut ();
@@ -434,7 +428,8 @@ impl <Item> Intern <Item> for & RefCell <HashSet <Rc <Item>>> where Item: Eq + H
 	}
 }
 
-impl <Item> Intern <Item> for & mut HashSet <Rc <Item>> where Item: Eq + Hash {
+impl <Item> Intern <Item> for & mut HashSet <Rc <Item>>
+		where Item: Eq + Hash + Ord {
 	type Shared = Rc <Item>;
 	fn intern (self, item: Item) -> Rc <Item> {
 		if let Some (shared) = self.get (& item) {

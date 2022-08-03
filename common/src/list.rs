@@ -22,8 +22,8 @@ mod base_list {
 	use super::*;
 
 	pub enum List <Item> {
-		Present (Rc <(Item, List <Item>)>),
 		Empty,
+		Present (Rc <(Item, List <Item>)>),
 	}
 
 	impl <Item: Clone> List <Item> {
@@ -138,6 +138,57 @@ mod base_list {
 			}
 		}
 
+	}
+
+	impl <Item> PartialOrd for List <Item> where Item: Clone + PartialOrd {
+		#[ inline ]
+		fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
+			let mut left = self;
+			let mut right = other;
+			loop {
+				match (left.cons (), right.cons ()) {
+					(None, None) => return Some (Ordering::Equal),
+					(None, Some (_)) => return Some (Ordering::Less),
+					(Some (_), None) => return Some (Ordering::Greater),
+					(Some ((left_head, left_tail)), Some ((right_head, right_tail))) => {
+						match left_head.partial_cmp (right_head) {
+							Some (Ordering::Equal) => {
+								left = left_tail;
+								right = right_tail;
+							},
+							Some (Ordering::Greater) => return Some (Ordering::Greater),
+							Some (Ordering::Less) => return Some (Ordering::Less),
+							None => return None,
+						}
+					},
+				}
+			}
+		}
+	}
+
+	impl <Item> Ord for List <Item> where Item: Clone + Ord {
+		#[ inline ]
+		fn cmp (& self, other: & Self) -> Ordering {
+			let mut left = self;
+			let mut right = other;
+			loop {
+				match (left.cons (), right.cons ()) {
+					(None, None) => return Ordering::Equal,
+					(None, Some (_)) => return Ordering::Less,
+					(Some (_), None) => return Ordering::Greater,
+					(Some ((left_head, left_tail)), Some ((right_head, right_tail))) => {
+						match left_head.cmp (right_head) {
+							Ordering::Equal => {
+								left = left_tail;
+								right = right_tail;
+							},
+							Ordering::Greater => return Ordering::Greater,
+							Ordering::Less => return Ordering::Less,
+						}
+					},
+				}
+			}
+		}
 	}
 
 	impl <Item: Clone + Eq> Eq for List <Item> { }

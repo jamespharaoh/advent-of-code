@@ -129,6 +129,7 @@ mod iter_ext {
 }
 
 mod prelude {
+
 	pub use arrayvec::ArrayVec;
 	pub use clap;
 	pub use itertools;
@@ -143,10 +144,14 @@ mod prelude {
 	pub use std::cmp;
 	pub use std::cmp::Ordering;
 	pub use std::collections::BinaryHeap;
-	pub use std::collections::HashMap;
-	pub use std::collections::HashSet;
+	pub use std::collections::BTreeMap;
+	pub use std::collections::BTreeSet;
 	pub use std::collections::VecDeque;
+	pub use std::collections::btree_map::Entry as BTreeEntry;
+	pub use std::collections::btree_map::Iter as BTreeIter;
+	pub use std::collections::btree_map::Values as BTreeValues;
 	pub use std::collections::hash_map::DefaultHasher;
+	pub use std::collections::hash_map::Entry as HashMapEntry;
 	pub use std::collections::hash_map::RandomState as RandomHasher;
 	pub use std::convert::Infallible;
 	pub use std::error::Error;
@@ -191,4 +196,104 @@ mod prelude {
 	pub use std::time;
 	pub use crate::iter_ext::IntoIteratorExt as _;
 	pub use crate::iter_ext::IteratorExt as _;
+
+	#[ cfg (not (fuzzing)) ]
+	pub use std::collections::HashSet;
+	#[ cfg (not (fuzzing)) ]
+	pub use std::collections::HashMap;
+
+	#[ cfg (fuzzing) ]
+	pub use crate::test_map::HashMap;
+
+	#[ cfg (fuzzing) ]
+	pub use std::collections::BTreeSet as HashSet;
+
+}
+
+#[ cfg (fuzzing) ]
+mod test_map {
+
+	use super::*;
+
+	pub struct HashMap <Key, Val, Hshr = RandomHasher> {
+		map: BTreeMap <Key, Val>,
+		phantom: PhantomData <Hshr>,
+	}
+
+	impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
+		where Key: Ord {
+
+		pub fn new () -> Self {
+			Self {
+				map: BTreeMap::new (),
+				phantom: PhantomData,
+			}
+		}
+
+		pub fn get <Qry> (& self, key: & Qry) -> Option <& Val>
+			where
+				Key: Borrow <Qry>,
+				Qry: Eq + Hash + Ord + ?Sized {
+			self.map.get (key)
+		}
+
+		pub fn get_mut <Qry> (& mut self, key: & Qry) -> Option <& mut Val>
+			where
+				Key: Borrow <Qry>,
+				Qry: Eq + Hash + Ord + ?Sized {
+			self.map.get_mut (key)
+		}
+
+		pub fn entry (& mut self, key: Key) -> BTreeEntry <'_, Key, Val> {
+			self.map.entry (key)
+		}
+
+		pub fn insert (& mut self, key: Key, val: Val) -> Option <Val> {
+			self.map.insert (key, val)
+		}
+
+		pub fn iter (& self) -> BTreeIter <'_, Key, Val> {
+			self.map.iter ()
+		}
+
+		pub fn len (& self) -> usize {
+			self.map.len ()
+		}
+
+		pub fn values (& self) -> BTreeValues <Key, Val> {
+			self.map.values ()
+		}
+
+	}
+
+	impl <Key, Val> Default for HashMap <Key, Val> {
+		fn default () -> Self {
+			Self {
+				map: BTreeMap::default (),
+				phantom: PhantomData,
+			}
+		}
+	}
+
+	impl <Key, Val> FromIterator <(Key, Val)> for HashMap <Key, Val>
+			where Key: Ord {
+		fn from_iter <Iter> (iter: Iter) -> Self
+				where Iter: IntoIterator <Item = (Key, Val)> {
+			Self {
+				map: BTreeMap::from_iter (iter),
+				phantom: PhantomData,
+			}
+		}
+	}
+
+	impl <Key, Val, Qry> Index <& '_ Qry> for HashMap <Key, Val>
+		where
+			Key: Ord + Borrow <Qry>,
+			Qry: Ord + ?Sized {
+		type Output = Val;
+		fn index (& self, query: & Qry) -> & Val {
+			self.map.get (query).unwrap ()
+		}
+	}
+
 }

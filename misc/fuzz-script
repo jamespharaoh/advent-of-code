@@ -1,8 +1,14 @@
 #!/bin/bash
 
-declare -a cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 )
-declare time_limit=300
-declare -a years=( 2015 )
+declare -a cpus
+declare time_limit=60
+declare -a years=( {2015..2016} )
+
+case "$HOSTNAME" in
+	("simba") cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 ) ;;
+	("scar") cpus=( 1 2 ) ;;
+	(*) echo "Hostname not recognised" >&2; exit 1 ;;
+esac
 
 function dispatch {
 	local command="${1:-fuzz}"; shift
@@ -56,21 +62,23 @@ function launch {
 
 function iterator {
 	local repeat="$1"
-	local days=$(
-		for day in {01..25}; do
-			if [[ ! -f "2015/fuzz/src/day-$day.rs" ]]; then continue; fi
-			echo $day
+	local targets=$(
+		for year in {2015..2016}; do
+			for day in {01..25}; do
+				if [[ ! -f "fuzz/src/$year-day-$day.rs" ]]; then continue; fi
+				echo $year-day-$day
+			done
 		done | shuf
 	)
 	if "$repeat"; then
 		while true; do
-			for day in $days; do
-				echo "$mode 2015 $day"
+			for target in $targets; do
+				echo "$mode $target"
 			done
 		done
 	else
-		for day in $days; do
-			echo "$mode 2015 $day"
+		for target in $targets; do
+			echo "$mode $target"
 		done
 		while true; do
 			echo "done"
@@ -147,8 +155,9 @@ function worker {
 		read -u 3 -a input
 		local mode="${input[0]}"
 		if [[ "$mode" == "done" ]]; then exit 0; fi
-		local year="${input[1]}"
-		local day="${input[2]}"
+		local target="${input[1]}"
+		local year="${target%-day-*}"
+		local day="${target#*-day-}"
 
 		# execute task
 

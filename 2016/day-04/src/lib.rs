@@ -47,7 +47,7 @@ pub mod logic {
 				.filter (|& (_, ref room)| room == "northpole object storage")
 				.map (|(sector, _)| sector)
 				.next ()
-				.unwrap ();
+				.ok_or ("No solution found") ?;
 		Ok (sector)
 	}
 

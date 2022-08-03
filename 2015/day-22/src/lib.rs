@@ -162,20 +162,20 @@ pub mod logic {
 
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	struct Outcome {
 		winner: Contender,
 		mana: u16,
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	struct Effects {
 		shield: u8,
 		poison: u8,
 		recharge: u8,
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	struct State {
 		player: Player,
 		boss: Boss,
@@ -185,10 +185,10 @@ pub mod logic {
 		mana: u16,
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	enum Contender { Player, Boss }
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	enum Difficulty { Easy, Hard }
 
 }
@@ -206,13 +206,13 @@ pub mod model {
 		pub boss: Boss,
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub struct Player {
 		pub hit_points: u16,
 		pub mana: u16,
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub struct Boss {
 		pub hit_points: u16,
 		pub damage: u16,
