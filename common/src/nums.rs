@@ -323,6 +323,11 @@ macro_rules! prim_int {
 			}
 
 			#[ inline ]
+			fn to_char (self) -> NumResult <char> {
+				self.to_u32 () ?.try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
 			fn to_i8 (self) -> NumResult <i8> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
@@ -389,6 +394,11 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn from_usize (val: usize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn to_char (self) -> NumResult <char> {
+				self.to_u32 () ?.try_into ().ok ().ok_or (Overflow)
 			}
 
 			#[ inline ]
@@ -550,6 +560,10 @@ pub trait IntConv: Sized {
 	#[ inline ]
 	fn as_usize (self) -> usize { self.to_usize ().unwrap () }
 
+	#[ allow (clippy::wrong_self_convention) ]
+	#[ inline ]
+	fn as_char (self) -> char { self.to_char ().unwrap () }
+
 	/// Safely convert from [`usize`]
 	///
 	/// # Errors
@@ -672,6 +686,8 @@ pub trait IntConv: Sized {
 	///
 	fn to_usize (self) -> NumResult <usize>;
 
+	fn to_char (self) -> NumResult <char>;
+
 }
 
 impl IntConv for char {
@@ -679,6 +695,11 @@ impl IntConv for char {
 	#[ inline ]
 	fn from_usize (val: usize) -> NumResult <Self> {
 		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+	}
+
+	#[ inline ]
+	fn to_char (self) -> NumResult <char> {
+		Ok (self)
 	}
 
 	#[ inline ]

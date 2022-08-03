@@ -1,11 +1,11 @@
 [package]
 
-	name = "aoc-2016-day-02"
+	name = "aoc-2016-day-04"
 	version = "0.1.0"
 	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
-	description = "Advent of Code 2016: Day 2: Bathroom Security"
-	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2016/day-02"
+	description = "Advent of Code 2016: Day 4: Security Through Obscurity"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2016/day-04"
 	license = "MIT"
 	publish = false
 
@@ -23,7 +23,7 @@
 
 [[bin]]
 
-	name = "aoc-2016-day-02"
+	name = "aoc-2016-day-04"
 	test = false
 	doctest = false
 	bench = false

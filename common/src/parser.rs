@@ -303,6 +303,12 @@ impl <'inp> Parser <'inp> {
 		wrap_fn (& mut parser)
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub const fn rest (& self) -> & str {
+		self.input
+	}
+
 }
 
 pub enum ParserAny <'par, 'inp, Item> {
