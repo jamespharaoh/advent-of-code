@@ -553,7 +553,7 @@
 		<span class="kw">let</span> <span class="ident">state_mutex</span> <span class="op">=</span> <span class="ident">Arc::try_unwrap</span> (<span class="ident">state_mutex</span>).<span class="ident">unwrap</span> ();
 		<span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state_mutex</span>.<span class="ident">into_inner</span> ().<span class="ident">unwrap</span> ();
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">solutions</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">solutions</span>;
-		<span class="ident">solutions</span>.<span class="ident">sort_unstable</span> ();
+		<span class="ident">solutions</span>.<span class="ident">sort</span> ();
 		<span class="prelude-val">Ok</span> (<span class="ident">solutions</span>.<span class="ident">into_iter</span> ().<span class="ident">next</span> ().<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
 	}
 
