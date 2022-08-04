@@ -72,6 +72,15 @@ impl From <GenError> for ParseError {
 
 }
 
+impl From <nums::Overflow> for ParseError {
+
+	#[ inline ]
+	fn from (other: nums::Overflow) -> Self {
+		Self::Wrapped (Box::new (other))
+	}
+
+}
+
 impl From <& str> for ParseError {
 
 	#[ inline ]
