@@ -6,7 +6,7 @@ declare -a years=( {2015..2016} )
 
 case "$HOSTNAME" in
 	("simba") cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 ) ;;
-	("scar") cpus=( 4 8 ) ;;
+	("scar") cpus=( 1 2 4 8 ) ;;
 	(*) echo "Hostname not recognised" >&2; exit 1 ;;
 esac
 

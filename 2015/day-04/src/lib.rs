@@ -148,7 +148,7 @@ pub mod logic {
 		let state_mutex = Arc::try_unwrap (state_mutex).unwrap ();
 		let state = state_mutex.into_inner ().unwrap ();
 		let mut solutions = state.solutions;
-		solutions.sort_unstable ();
+		solutions.sort ();
 		Ok (solutions.into_iter ().next ().ok_or ("No solution found") ?)
 	}
 
