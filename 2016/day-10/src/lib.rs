@@ -53,6 +53,7 @@ pub mod logic {
 		}
 	}
 
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	struct Event {
 		from_bot: Val,
 		low_chip: Val,
@@ -121,6 +122,40 @@ pub mod logic {
 		Ok (events)
 	}
 
+	#[ cfg (test) ]
+	mod tests {
+
+		use super::*;
+
+		#[ test ]
+		fn events () {
+			assert_err! ("Bot 0 gives to unknown bot 1", logic::events (& Input {
+				steps: vec! [
+					Step::Input { val: 1, bot: 0 },
+					Step::Input { val: 2, bot: 0 },
+					Step::Give { bot: 0, low: Target::Bot (1), high: Target::Bot (2) },
+				],
+				.. default ()
+			}));
+			assert_err! ("Bot 0 has too many chips", logic::events (& Input {
+				steps: vec! [
+					Step::Input { val: 1, bot: 0 },
+					Step::Input { val: 2, bot: 0 },
+					Step::Input { val: 3, bot: 0 },
+				],
+				.. default ()
+			}));
+			assert_err! ("Bot 0 gives more than once", logic::events (& Input {
+				steps: vec! [
+					Step::Give { bot: 0, low: Target::Bot (1), high: Target::Bot (2) },
+					Step::Give { bot: 0, low: Target::Bot (3), high: Target::Bot (4) },
+				],
+				.. default ()
+			}));
+		}
+
+	}
+
 }
 
 pub mod model {
@@ -130,7 +165,7 @@ pub mod model {
 
 	pub type Val = u16;
 
-	#[ derive (Clone, Debug, Eq, PartialEq) ]
+	#[ derive (Clone, Debug, Default, Eq, PartialEq) ]
 	pub struct Input {
 		pub steps: Vec <Step>,
 		pub low: Val,
@@ -224,12 +259,14 @@ mod examples {
 		assert_eq_ok! ("0", puzzle.part_one (& with_params (["LOW=3", "HIGH=5"], EXAMPLE)));
 		assert_eq_ok! ("1", puzzle.part_one (& with_params (["LOW=2", "HIGH=3"], EXAMPLE)));
 		assert_eq_ok! ("2", puzzle.part_one (& with_params (["LOW=2", "HIGH=5"], EXAMPLE)));
+		assert_err! ("No solution found", puzzle.part_one (EXAMPLE));
 	}
 
 	#[ test ]
 	fn part_two () {
 		let puzzle = puzzle_metadata ();
 		assert_eq_ok! ("30", puzzle.part_two (EXAMPLE));
+		assert_err! ("No solution found", puzzle.part_one (& EXAMPLE [1 .. ]));
 	}
 
 }
