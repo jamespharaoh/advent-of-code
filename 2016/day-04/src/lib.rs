@@ -35,19 +35,19 @@ pub mod logic {
 		let sector =
 			input.rooms.iter ()
 				.filter (|room| room_is_valid (room))
-				.map (|room| (
+				.map (|room| Ok::<_, GenError> ((
 					room.sector,
 					room.name.chars ().map (|ch| match ch {
-						'-' => ' ',
-						'a' ..= 'z' => (
+						'-' => Ok (' '),
+						'a' ..= 'z' => Ok ((
 							(ch.as_u32 () - 'a'.as_u32 () + room.sector) % 26 + 'a'.as_u32 ()
-						).as_char (),
-						_ => panic! (),
-					}).collect::<String> ()))
-				.filter (|& (_, ref room)| room == "northpole object storage")
-				.map (|(sector, _)| sector)
+						).as_char ()),
+						_ => Err (format! ("Invalid char: {}", ch).into ()),
+					}).collect::<GenResult <String>> () ?)))
+				.filter_ok (|& (_, ref room)| room == "northpole object storage")
+				.map_ok (|(sector, _)| sector)
 				.next ()
-				.ok_or ("No solution found") ?;
+				.ok_or ("No solution found") ? ?;
 		Ok (sector)
 	}
 

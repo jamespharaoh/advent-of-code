@@ -15,7 +15,7 @@ function main {
 			(day-*) day="${arg:4}" ;;
 			(coverage|dev|release|release-lto) profile="$arg" ;;
 			(build|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test) mode="$arg" ;;
-			(cmin|repr) fuzz_mode="$arg" ;;
+			(cmin|init|repr) fuzz_mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;
@@ -44,18 +44,23 @@ function main {
 			cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
 			;;
 		(fuzz)
-			local sum_output="$(sha1sum "$year/inputs/day-$day")"
-			local sum="${sum_output:0:40}"
-			mkdir -p "fuzz/corpus/$year-day-$day"
-			cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
-			cd fuzz
 			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
 			case "$fuzz_mode" in
 				(run|cmin)
+					pushd fuzz
 					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
+					popd
 					;;
 				(repr)
+					pushd fuzz
 					cargo +nightly fuzz run "$year-day-$day" "${extra_args[@]}"
+					popd
+					;;
+				(init)
+					local sum_output="$(sha1sum "$year/inputs/day-$day")"
+					local sum="${sum_output:0:40}"
+					mkdir -p "fuzz/corpus/$year-day-$day"
+					cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
 					;;
 				(*)
 					echo "Syntax error" >&2
