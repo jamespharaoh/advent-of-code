@@ -113,7 +113,8 @@ pub mod model {
 					match step {
 						Step::Rect { width: step_width, height: step_height } =>
 							step_width >= width || step_height >= height,
-						Step::RotateRow { .. } | Step::RotateCol { .. } => false,
+						Step::RotateRow { row, .. } => height <= row,
+						Step::RotateCol { col, .. } => width <= col,
 					}) {
 				Err ("Invalid input") ?;
 			}
