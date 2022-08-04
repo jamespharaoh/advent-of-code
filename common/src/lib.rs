@@ -127,6 +127,24 @@ mod iter_ext {
 
 	impl <SomeIter: Iterator> IteratorExt for SomeIter {}
 
+	pub trait IteratorResultExt <Item, Error>: Iterator <Item = Result <Item, Error>> {
+
+		#[ inline ]
+		fn collect_array_ok <const DIM: usize> (mut self) -> Result <Option <[Item; DIM]>, Error>
+				where Self: Sized, Item: Copy + Default {
+			let mut result = [default (); DIM];
+			for idx in 0 .. DIM {
+				assert! (idx < result.len ());
+				result [idx] = some_or! (self.next (), return Ok (None)) ?;
+			}
+			if self.next ().is_some () { return Ok (None) }
+			Ok (Some (result))
+		}
+
+	}
+
+	impl <Item, Error, SomeIter: Iterator <Item = Result <Item, Error>>> IteratorResultExt <Item, Error> for SomeIter {}
+
 }
 
 mod prelude {
@@ -197,6 +215,7 @@ mod prelude {
 	pub use std::time;
 	pub use crate::iter_ext::IntoIteratorExt as _;
 	pub use crate::iter_ext::IteratorExt as _;
+	pub use crate::iter_ext::IteratorResultExt as _;
 	pub use crate::nums::Int;
 	pub use crate::nums::IntConv as _;
 

@@ -403,7 +403,7 @@
 --deny clippy::size_of_in_element_count
 --deny clippy::skip_while_next
 --deny clippy::slow_vector_initialization
---deny clippy::stable_sort_primitive
+--allow clippy::stable_sort_primitive
 --deny clippy::str_to_string
 --deny clippy::string_add
 --deny clippy::string_add_assign
