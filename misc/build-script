@@ -44,6 +44,10 @@ function main {
 			cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
 			;;
 		(fuzz)
+			local sum_output="$(sha1sum "$year/inputs/day-$day")"
+			local sum="${sum_output:0:40}"
+			mkdir -p "fuzz/corpus/$year-day-$day"
+			cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
 			cd fuzz
 			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
 			case "$fuzz_mode" in

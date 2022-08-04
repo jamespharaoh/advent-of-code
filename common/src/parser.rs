@@ -130,10 +130,12 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ inline ]
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		for expect_char in expect.chars () {
 			if self.peek () != Some (expect_char) { Err (self.err ()) ? }
 			self.next ();
 		}
+		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (self)
 	}
 
@@ -161,6 +163,11 @@ impl <'inp> Parser <'inp> {
 	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
 		self.int_real ().parse ().map_err (|_err| self.err ())
+	}
+
+	#[ inline ]
+	pub fn item <Item> (& mut self) -> ParseResult <Item> where Item: FromParser {
+		Item::from_parser (self)
 	}
 
 	#[ allow (clippy::string_slice) ]
@@ -362,6 +369,8 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 
 }
 
+/// Utility method to parse a parameter from the start of an input with default value
+///
 #[ inline ]
 pub fn input_param <Val: FromStr> (
 	input: & mut & [& str],
@@ -370,13 +379,17 @@ pub fn input_param <Val: FromStr> (
 ) -> GenResult <Val>
 		where Val::Err: Error + 'static {
 	Ok (
-		if let Some (val) = input [0].strip_prefix (prefix) {
-			* input = & (* input) [1 .. ];
-			val.parse () ?
+		if let Some (line) = input.first () {
+			if let Some (val) = line.strip_prefix (prefix) {
+				* input = & (* input) [1 .. ];
+				val.parse () ?
+			} else { default }
 		} else { default }
 	)
 }
 
+/// Utility method to parse an optional parameter from the start of an input
+///
 #[ inline ]
 pub fn input_param_opt <Val: FromStr> (
 	input: & mut & [& str],
@@ -389,4 +402,23 @@ pub fn input_param_opt <Val: FromStr> (
 			Some (val.parse () ?)
 		} else { None }
 	)
+}
+
+/// Utility method to prepend parameters to an example
+///
+#[ inline ]
+#[ must_use ]
+pub fn with_params <const LEN: usize> (
+	params: [& 'static str; LEN],
+	example: & [& 'static str],
+) -> Vec <& 'static str> {
+	params.into_iter ()
+		.chain (example.iter ().copied ())
+		.collect ()
+}
+
+/// Trait implemented by types which can be produced by [`Parser::item`]
+///
+pub trait FromParser: Sized {
+	fn from_parser (parser: & mut Parser) -> ParseResult <Self>;
 }
