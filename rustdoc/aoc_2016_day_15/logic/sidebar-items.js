@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["part_one","Implementation for part one"],["part_two","Implementation for part two"]]};

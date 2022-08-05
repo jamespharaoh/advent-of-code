@@ -438,15 +438,15 @@
 	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
 	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
 	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_hex_bytes</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; [<span class="ident">u8</span>; <span class="number">32</span>] {
+		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">nibble_as_hex</span> (<span class="ident">nibble</span>: <span class="ident">u8</span>) -&gt; <span class="ident">u8</span> {
+			<span class="kw">if</span> <span class="ident">nibble</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">10</span> { <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> <span class="op">-</span> <span class="number">10</span> } <span class="kw">else</span> { <span class="string">b&#39;0&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> }
+		}
 		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">32</span>];
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">idx</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">let</span> <span class="ident">nibble</span> <span class="op">=</span> <span class="ident">byte</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4_u32</span>;
-			<span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="kw">if</span> <span class="ident">nibble</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">10</span> { <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> <span class="op">-</span> <span class="number">10</span> } <span class="kw">else</span> { <span class="string">b&#39;0&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> };
-			<span class="ident">idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-			<span class="kw">let</span> <span class="ident">nibble</span> <span class="op">=</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xf</span>;
-			<span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="kw">if</span> <span class="ident">nibble</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">10</span> { <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> <span class="op">-</span> <span class="number">10</span> } <span class="kw">else</span> { <span class="string">b&#39;0&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> };
-			<span class="ident">idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_iter</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">iter_mut</span> ();
+		<span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> () {
+			<span class="op">*</span> <span class="ident">result_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> () <span class="op">=</span> <span class="ident">nibble_as_hex</span> (<span class="ident">byte</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4_u32</span>);
+			<span class="op">*</span> <span class="ident">result_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> () <span class="op">=</span> <span class="ident">nibble_as_hex</span> (<span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xf</span>);
 		}
 		<span class="ident">result</span>
 	}
