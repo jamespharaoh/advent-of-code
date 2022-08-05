@@ -1,6 +1,5 @@
 use super::*;
 use nums::IntConv;
-use ops::{ BitAnd, BitOr, BitXor, Not };
 
 #[ derive (Eq, PartialEq) ]
 pub struct Output ([u8; 16]);
@@ -15,11 +14,12 @@ pub fn md5_hash (input: & [u8]) -> Output {
 
 pub struct MD5 {
 	state: State,
-	message: ArrayVec <u8, 64>,
+	message: [u8; 64],
+	message_len: usize,
 	len: usize,
 }
 
-type State = [WrappingU32; 4];
+type State = [u32; 4];
 
 impl Output {
 
@@ -62,6 +62,22 @@ impl Output {
 		result
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub fn as_hex_bytes (& self) -> [u8; 32] {
+		let mut result = [0; 32];
+		let mut idx = 0;
+		for byte in self.0.iter ().copied () {
+			let nibble = byte >> 4_u32;
+			result [idx] = if nibble >= 10 { b'a' + nibble - 10 } else { b'0' + nibble };
+			idx += 1;
+			let nibble = byte & 0xf;
+			result [idx] = if nibble >= 10 { b'a' + nibble - 10 } else { b'0' + nibble };
+			idx += 1;
+		}
+		result
+	}
+
 }
 
 impl Index <usize> for Output {
@@ -79,11 +95,9 @@ impl Debug for Output {
 
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter, "md5::Output (\"") ?;
-		for idx in 0 .. 16 {
-			write! (formatter, "{:02x}", self.0 [idx]) ?;
-		}
-		write! (formatter, "\")") ?;
+		formatter.write_str ("md5::Output (\"") ?;
+		Display::fmt (self, formatter) ?;
+		formatter.write_str ("\")") ?;
 		Ok (())
 	}
 
@@ -91,10 +105,12 @@ impl Debug for Output {
 
 impl Display for Output {
 
-	#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		for idx in 0 .. 16 {
-			write! (formatter, "{:02x}", self.0 [idx]) ?;
+		for byte in self.0.iter ().copied () {
+			let byte = byte.as_u32 ();
+			formatter.write_char (char::from_digit (byte >> 4, 16).unwrap ()) ?;
+			formatter.write_char (char::from_digit (byte & 0xf, 16).unwrap ()) ?;
 		}
 		Ok (())
 	}
@@ -105,15 +121,32 @@ impl MD5 {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn new () -> Self {
+	pub const fn new () -> Self {
 		Self {
 			state: INITIAL_STATE,
-			message: ArrayVec::new (),
+			message: [0; 64],
+			message_len: 0,
 			len: 0,
 		}
 	}
 
-	#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ inline ]
+	pub fn reset (& mut self) {
+		self.state = INITIAL_STATE;
+		self.message_len = 0;
+		self.len = 0;
+	}
+
+	#[ inline ]
+	pub fn push (& mut self, byte: u8) {
+		self.message [self.message_len] = byte;
+		self.message_len += 1;
+		if self.message_len == 64 {
+			self.apply ();
+		}
+	}
+
+	#[ inline ]
 	pub fn update (& mut self, mut message: & [u8]) {
 
 		// iterate over message
@@ -122,14 +155,15 @@ impl MD5 {
 
 			// copy max sized chunk to buffer
 
-			let bytes = cmp::min (self.message.remaining_capacity (), message.len ());
-			self.message.extend (message.iter ().copied ().take (bytes));
+			let bytes = cmp::min (64 - self.message_len, message.len ());
+			self.message [self.message_len .. self.message_len + bytes].copy_from_slice (& message [ .. bytes]);
+			self.message_len += bytes;
 			message = & message [bytes .. ];
 			self.len = self.len.wrapping_add (bytes << 3);
 
 			// stop now if buffer is part filled
 
-			if ! self.message.is_full () { return }
+			if self.message_len != 64 { return }
 
 			// consume buffer
 
@@ -139,38 +173,55 @@ impl MD5 {
 
 	}
 
-	#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ inline ]
 	#[ must_use ]
 	pub fn finish (mut self) -> Output {
+		self.finish_real ()
+	}
+
+	#[ inline ]
+	pub fn finish_reset (& mut self) -> Output {
+		let output = self.finish_real ();
+		self.reset ();
+		output
+	}
+
+	#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ must_use ]
+	fn finish_real (& mut self) -> Output {
 
 		// remember the length before padding
 
-		let mut len = self.len;
+		let len = self.len;
 
-		// add one then zeros
+		// add one then zeros, leaving exactly 56 bytes buffered
 
-		self.update (& [ 0x80 ]);
-		while self.message.remaining_capacity () != 8 {
-			self.update (& [ 0x00 ]);
+		self.push (0x80);
+		if self.message_len > 56 {
+			for idx in self.message_len .. 64 { self.message [idx] = 0; }
+			self.message_len = 64;
+			self.apply ();
 		}
+		for idx in self.message_len .. 56 { self.message [idx] = 0; }
+		self.message_len = 56;
 
-		// then the length
+		// then the length, which takes us to 64 bytes
 
-		for _ in 0_i32 .. 8_i32 {
-			self.update (& [ (len & 0xff).as_u8 () ]);
-			len >>= 8_i32;
-		}
+		self.message [56 .. 64].copy_from_slice (& len.to_le_bytes ());
+		self.message_len += 8;
+		self.apply ();
 
 		// convert result words to byte array
 
-		assert! (self.message.is_empty ());
+		assert! (self.message_len == 0);
+
 		let mut result = [0; 16];
 		for src_idx in 0 .. 4 {
 			let dst_idx = src_idx << 2_i32;
-			result [dst_idx] = (self.state [src_idx].0 & 0xff).as_u8 ();
-			result [dst_idx + 1] = (self.state [src_idx].0 >> 8_i32 & 0xff).as_u8 ();
-			result [dst_idx + 2] = (self.state [src_idx].0 >> 16_i32 & 0xff).as_u8 ();
-			result [dst_idx + 3] = (self.state [src_idx].0 >> 24_i32 & 0xff).as_u8 ();
+			result [dst_idx] = (self.state [src_idx] & 0xff).as_u8 ();
+			result [dst_idx + 1] = (self.state [src_idx] >> 8_i32 & 0xff).as_u8 ();
+			result [dst_idx + 2] = (self.state [src_idx] >> 16_i32 & 0xff).as_u8 ();
+			result [dst_idx + 3] = (self.state [src_idx] >> 24_i32 & 0xff).as_u8 ();
 		}
 
 		Output (result)
@@ -181,51 +232,62 @@ impl MD5 {
 
 		// convert message buffer into words
 
-		assert! (self.message.is_full ());
-		let message = {
-			let mut message = [WrappingU32 (0); 16];
-			#[ allow (clippy::needless_range_loop) ]
-			for dst_idx in 0 .. 16 {
-				let src_idx = dst_idx << 2_i32;
-				message [dst_idx] = WrappingU32 (
-					(self.message [src_idx]).as_u32 ()
-						| (self.message [src_idx + 1].as_u32 ()) << 8
-						| (self.message [src_idx + 2].as_u32 ()) << 16
-						| (self.message [src_idx + 3].as_u32 ()) << 24
-				);
-			}
-			message
-		};
+		assert! (self.message_len == 64);
+
+		let mut message = [0; 16];
+		#[ allow (clippy::needless_range_loop) ]
+		for dst_idx in 0_usize .. 16_usize {
+			let src_idx = dst_idx << 2_u32;
+			message [dst_idx] = u32::from_le_bytes (
+				self.message [src_idx .. src_idx + 4].try_into ().unwrap ());
+		}
 
 		// apply rounds as specified
 
 		let [mut a, mut b, mut c, mut d] = self.state;
+
 		for op in 0 .. 16 {
-			let func = ((b & c) | (! b & d)) + a + WrappingU32 (ADDS [op]) + message [op];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
+			let func = ((b & c) | (! b & d))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [op]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
 		}
+
 		for op in 16 .. 32 {
-			let func = ((d & b) | (! d & c)) + a + WrappingU32 (ADDS [op]) + message [(5 * op + 1) % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
+			let func = ((d & b) | (! d & c))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [(5 * op + 1) % 16]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
 		}
+
 		for op in 32 .. 48 {
-			let func = (b ^ c ^ d) + a + WrappingU32 (ADDS [op]) + message [(3 * op + 5) % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
+			let func = (b ^ c ^ d)
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [(3 * op + 5) % 16]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
 		}
+
 		for op in 48 .. 64 {
-			let func = (c ^ (b | ! d)) + a + WrappingU32 (ADDS [op]) + message [7 * op % 16];
-			(a, b, c, d) = (d, b + func.rotate_left (ROTATES [op].as_u32 ()), b, c);
+			let func = (c ^ (b | ! d))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [7 * op % 16]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
 		}
+
 		self.state = [
-			self.state [0] + a,
-			self.state [1] + b,
-			self.state [2] + c,
-			self.state [3] + d,
+			self.state [0].wrapping_add (a),
+			self.state [1].wrapping_add (b),
+			self.state [2].wrapping_add (c),
+			self.state [3].wrapping_add (d),
 		];
 
 		// clear buffer
 
-		self.message.clear ();
+		self.message_len = 0;
 
 	}
 
@@ -240,42 +302,7 @@ impl Default for MD5 {
 
 }
 
-#[ derive (Clone, Copy) ]
-struct WrappingU32 (u32);
-
-impl WrappingU32 {
-	const fn rotate_left (self, arg: u32) -> Self { Self (self.0.rotate_left (arg)) }
-}
-
-impl Add for WrappingU32 {
-	type Output = Self;
-	fn add (self, other: Self) -> Self { Self (self.0.wrapping_add (other.0)) }
-}
-
-impl BitAnd for WrappingU32 {
-	type Output = Self;
-	fn bitand (self, other: Self) -> Self { Self (self.0 & other.0) }
-}
-
-impl BitOr for WrappingU32 {
-	type Output = Self;
-	fn bitor (self, other: Self) -> Self { Self (self.0 | other.0) }
-}
-
-impl BitXor for WrappingU32 {
-	type Output = Self;
-	fn bitxor (self, other: Self) -> Self { Self (self.0 ^ other.0) }
-}
-
-impl Not for WrappingU32 {
-	type Output = Self;
-	fn not (self) -> Self { Self (! self.0) }
-}
-
-const INITIAL_STATE: State = [
-	WrappingU32 (0x_6745_2301), WrappingU32 (0x_efcd_ab89),
-	WrappingU32 (0x_98ba_dcfe), WrappingU32 (0x_1032_5476),
-];
+const INITIAL_STATE: State = [ 0x_6745_2301, 0x_efcd_ab89, 0x_98ba_dcfe, 0x_1032_5476 ];
 
 const ROTATES: [u8; 64] = [
 	7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,

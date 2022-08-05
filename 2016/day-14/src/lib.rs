@@ -1,0 +1,208 @@
+//! Advent of Code 2016: Day 14: One-Time Pad
+//!
+//! [https://adventofcode.com/2016/day/14](https://adventofcode.com/2016/day/14)
+
+#![ allow (clippy::missing_inline_in_public_items) ]
+
+use aoc_common::*;
+
+puzzle_info! {
+	name = "One-Time Pad";
+	year = 2016;
+	day = 14;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (& input);
+	part_two = |input| logic::part_two (& input);
+}
+
+pub mod logic {
+
+	use super::*;
+	use model::Input;
+
+	pub fn part_one (input: & Input) -> GenResult <u32> {
+		Ok (KeyIndexIter::new (input, 0)
+			.nth (input.num_keys.as_usize () - 1)
+			.unwrap ())
+	}
+
+	pub fn part_two (input: & Input) -> GenResult <u32> {
+		Ok (KeyIndexIter::new (input, input.hash_reps)
+			.nth (input.num_keys.as_usize () - 1)
+			.unwrap ())
+	}
+
+	struct KeyIndexIter {
+		hashes: MultiPeek <HashesIter>,
+		idx: u32,
+		num_next: u32,
+	}
+
+	impl KeyIndexIter {
+
+		#[ inline ]
+		fn new (input: & Input, hash_reps: u32) -> Self {
+			Self {
+				hashes: HashesIter::new (input, hash_reps).multipeek (),
+				idx: 0,
+				num_next: input.num_next,
+			}
+		}
+
+	}
+
+	impl Iterator for KeyIndexIter {
+
+		type Item = u32;
+
+		#[ inline ]
+		fn next (& mut self) -> Option <u32> {
+			loop {
+				let hash_0 = self.hashes.next ().unwrap ();
+				if let Some (ch_0) = find_triple (& hash_0) {
+					for _ in 0 .. self.num_next.as_usize () {
+						if ! has_quintuple (self.hashes.peek ().unwrap (), ch_0) { continue }
+						self.idx += 1;
+						return Some (self.idx - 1);
+					}
+				}
+				self.idx += 1;
+			}
+		}
+
+	}
+
+	fn find_triple (hash: & [u8; 32]) -> Option <u8> {
+		hash.iter_vals ()
+			.tuple_windows::<(_, _, _)> ()
+			.filter (|& (a, b, c)| a == b && a == c)
+			.map (|(a, _, _)| a)
+			.next ()
+	}
+
+	fn has_quintuple (hash: & [u8; 32], ch_0: u8) -> bool {
+		hash.iter_vals ()
+			.fold ((false, 0_u32), |(matched, count), ch_1|
+				if matched || (ch_0 == ch_1 && count == 4){ (true, 0) }
+				else if ch_0 == ch_1 { (false, count + 1) }
+				else { (false, 0) }
+			).0
+	}
+
+	struct HashesIter {
+		buffer: String,
+		salt_len: usize,
+		idx: u32,
+		hash_reps: u32,
+	}
+
+	impl HashesIter {
+
+		#[ inline ]
+		fn new (input: & Input, hash_reps: u32) -> Self {
+			Self {
+				buffer: input.salt.clone (),
+				salt_len: input.salt.len (),
+				idx: 0,
+				hash_reps,
+			}
+		}
+
+	}
+
+	impl Iterator for HashesIter {
+
+		type Item = [u8; 32];
+
+		#[ inline ]
+		fn next (& mut self) -> Option <[u8; 32]> {
+			self.buffer.truncate (self.salt_len);
+			write! (& mut self.buffer, "{}", self.idx).unwrap ();
+			self.idx += 1;
+			Some (stretched_hash (& self.buffer, self.hash_reps))
+		}
+
+	}
+
+	#[ inline ]
+	fn stretched_hash (input: & str, hash_reps: u32) -> [u8; 32] {
+		let mut hasher = md5::MD5::new ();
+		hasher.update (input.as_bytes ());
+		let mut hash = hasher.finish_reset ();
+		for _ in 0 .. hash_reps {
+			hasher.update (& hash.as_hex_bytes ());
+			hash = hasher.finish_reset ();
+		}
+		hash.as_hex_bytes ()
+	}
+
+}
+
+pub mod model {
+
+	use super::*;
+	use parser::*;
+
+	#[ derive (Clone, Debug, Default, Eq, PartialEq) ]
+	pub struct Input {
+		pub salt: String,
+		pub num_keys: u32,
+		pub num_next: u32,
+		pub hash_reps: u32,
+	}
+
+	impl Input {
+		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
+
+			let num_keys = parser::input_param (& mut input, "NUM_KEYS=", 64) ?;
+			if num_keys < 1 { return Err ("Number of keys must be at least one".into ()) }
+			if num_keys > 100 { return Err ("Number of keys must be 100 or less".into ()) }
+
+			let num_next = parser::input_param (& mut input, "NUM_NEXT=", 1000) ?;
+			if num_next < 1 { return Err ("Number of next hashes must be at least one".into ()) }
+			if num_next > 2000 { return Err ("Number of next hashes must be 2000 or less".into ()) }
+
+			let hash_reps = parser::input_param (& mut input, "HASH_REPS=", 2016) ?;
+			if hash_reps < 2 { return Err ("Hash reps must be at least one".into ()) }
+			if hash_reps > 3000 { return Err ("Hash reps must be 3000 or less".into ()) }
+
+			if input.len () != 1 { return Err ("Invalid input: more than one line".into ()) }
+
+			let salt =
+				Parser::wrap (input [0], |parser| Ok (parser.rest ().to_owned ()))
+					.map_parse_err (|col_idx|
+						format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
+			if salt.is_empty () { return Err ("Salt must be at least one character".into ()) }
+
+			Ok (Self { salt, num_keys, num_next, hash_reps })
+
+		}
+	}
+
+}
+
+#[ cfg (test) ]
+mod examples {
+
+	use super::*;
+
+	const EXAMPLE: & [& str] = & [
+		"NUM_KEYS=16",
+		"NUM_NEXT=1000",
+		"HASH_REPS=16",
+		"abc",
+	];
+
+	#[ test ]
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("1144", puzzle.part_one (EXAMPLE));
+	}
+
+	#[ test ]
+	fn part_two () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("4684", puzzle.part_two (EXAMPLE));
+	}
+
+}

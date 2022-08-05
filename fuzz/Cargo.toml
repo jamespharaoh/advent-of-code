@@ -12,7 +12,6 @@
 
 [dependencies]
 
-	afl = "0.12"
 	libfuzzer-sys = "0.4"
 
 	aoc-2015 = { path = "../2015" }
@@ -285,5 +284,12 @@
 
 	name = "2016-day-13"
 	path = "src/2016-day-13.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2016-day-14"
+	path = "src/2016-day-14.rs"
 	test = false
 	doc = false
