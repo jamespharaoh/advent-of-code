@@ -22,6 +22,7 @@ impl Error for Overflow {
 pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps + IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;
+	const BITS: u32;
 	const ZERO: Self;
 	const ONE: Self;
 	const MIN: Self;
@@ -149,6 +150,8 @@ macro_rules! prim_int {
 			type Signed = $signed;
 			type Unsigned = $unsigned;
 
+			const BITS: u32 = $signed::BITS;
+
 			#[ allow (clippy::default_numeric_fallback) ]
 			const ZERO: $signed = 0;
 
@@ -211,6 +214,7 @@ macro_rules! prim_int {
 			type Signed = $signed;
 			type Unsigned = $unsigned;
 
+			const BITS: u32 = $signed::BITS;
 			const ZERO: $unsigned = 0;
 			const ONE: $unsigned = 1;
 			const MIN: $unsigned = $unsigned::MIN;
@@ -482,11 +486,12 @@ pub trait IntUnsigned: Int {}
 
 pub trait IntSized <const BITS: usize>: Int {}
 
-pub trait IntOpsRust: Sized
-	+ Add <Output = Self> + Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self>
-	+ Sub <Output = Self> {}
-impl <Val> IntOpsRust for Val where Val: Sized
-	+ Add <Output = Self> + Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self>
+pub trait IntOpsRust: Sized + Add <Output = Self> + BitAnd + BitAndAssign + BitOr + BitOrAssign
+	+ Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
+	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
+impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + BitAnd + BitAndAssign
+	+ BitOr + BitOrAssign + Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self>
+	+ Shl <u32, Output = Self> + ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32>
 	+ Sub <Output = Self> {}
 
 pub trait IntOpsSafe: Sized {

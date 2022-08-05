@@ -192,6 +192,10 @@ mod prelude {
 	pub use std::mem;
 	pub use std::ops;
 	pub use std::ops::Add;
+	pub use std::ops::BitAnd;
+	pub use std::ops::BitAndAssign;
+	pub use std::ops::BitOr;
+	pub use std::ops::BitOrAssign;
 	pub use std::ops::Deref;
 	pub use std::ops::Div;
 	pub use std::ops::Index;
@@ -201,6 +205,10 @@ mod prelude {
 	pub use std::ops::Range;
 	pub use std::ops::RangeInclusive;
 	pub use std::ops::Rem;
+	pub use std::ops::Shl;
+	pub use std::ops::ShlAssign;
+	pub use std::ops::Shr;
+	pub use std::ops::ShrAssign;
 	pub use std::ops::Sub;
 	pub use std::path::Path;
 	pub use std::rc::Rc;
