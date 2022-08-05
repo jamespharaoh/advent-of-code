@@ -336,6 +336,14 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Common functionality used in all puzzle solutions</span>
 
 <span class="kw">use</span> <span class="ident">clap::ArgMatches</span>;
@@ -530,6 +538,10 @@
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::mem</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Add</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitAnd</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitAndAssign</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitOr</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitOrAssign</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Div</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Index</span>;
@@ -539,6 +551,10 @@
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Range</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::RangeInclusive</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Rem</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Shl</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::ShlAssign</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Shr</span>;
+	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::ShrAssign</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Sub</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::path::Path</span>;
 	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
