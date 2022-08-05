@@ -65,15 +65,15 @@ impl Output {
 	#[ inline ]
 	#[ must_use ]
 	pub fn as_hex_bytes (& self) -> [u8; 32] {
+		#[ inline ]
+		const fn nibble_as_hex (nibble: u8) -> u8 {
+			if nibble >= 10 { b'a' + nibble - 10 } else { b'0' + nibble }
+		}
 		let mut result = [0; 32];
-		let mut idx = 0;
-		for byte in self.0.iter ().copied () {
-			let nibble = byte >> 4_u32;
-			result [idx] = if nibble >= 10 { b'a' + nibble - 10 } else { b'0' + nibble };
-			idx += 1;
-			let nibble = byte & 0xf;
-			result [idx] = if nibble >= 10 { b'a' + nibble - 10 } else { b'0' + nibble };
-			idx += 1;
+		let mut result_iter = result.iter_mut ();
+		for byte in self.0.iter () {
+			* result_iter.next ().unwrap () = nibble_as_hex (byte >> 4_u32);
+			* result_iter.next ().unwrap () = nibble_as_hex (byte & 0xf);
 		}
 		result
 	}

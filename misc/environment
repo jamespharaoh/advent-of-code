@@ -43,6 +43,7 @@ function aoc {
 				nano \
 					$year/day-$day/src/*.rs \
 					fuzz/src/$year-day-$day.rs \
+					fuzz/dictionaries/$year-day-$day \
 					$year/day-$day/Cargo.toml
 			fi
 			;;

@@ -7,7 +7,8 @@ function main {
 	local package
 	local profile
 	local toolchain
-	local -a extra_args
+	local -a extra_args_0
+	local -a extra_args_1
 	while [[ "$#" != 0 ]]; do
 		local arg="$1"; shift
 		case "$arg" in
@@ -20,7 +21,15 @@ function main {
 			(nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;
 			(--width) flamegraph_width="$1"; shift ;;
-			(--) extra_args=( "$@" ); shift $# ;;
+			(--)
+				while [[ "$#" != 0 ]]; do
+					local extra_arg="$1"
+					shift
+					if [[ "$extra_arg" = "--" ]]; then break; fi
+					extra_args_0+=( "$extra_arg" )
+				done
+				extra_args_1+=( "$@" )
+				;;
 			(*) echo "Unknown command: $arg" >&2; exit 1 ;;
 		esac
 	done
@@ -36,7 +45,7 @@ function main {
 	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
 	case "$mode" in
 		(build)
-			time env time -v cargo $toolchain build "${extra_args[@]}"
+			time env time -v cargo $toolchain build "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(clippy)
 			local -a clippy_args=( $(cat "$(dirname "$0")"/clippy-args) )
@@ -48,12 +57,17 @@ function main {
 			case "$fuzz_mode" in
 				(run|cmin)
 					pushd fuzz
-					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" "${extra_args[@]}"
+					if [[ -f "dictionaries/$year-day-$day" ]]; then
+						extra_args_1+=( -dict="$PWD/dictionaries/$year-day-$day" )
+					fi
+					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" \
+						"${extra_args_0[@]}" -- "${extra_args_1[@]}"
 					popd
 					;;
 				(repr)
 					pushd fuzz
-					cargo +nightly fuzz run "$year-day-$day" "${extra_args[@]}"
+					cargo +nightly fuzz run "$year-day-$day" \
+						"${extra_args_0[@]}" -- "${extra_args_1[@]}"
 					popd
 					;;
 				(init)
@@ -69,14 +83,17 @@ function main {
 			esac
 			;;
 		(run-test)
-			time env time -v cargo $toolchain run "${cargo_args[@]}" -- "${extra_args[@]}"
+			time env time -v cargo $toolchain run "${cargo_args[@]}" \
+				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			time env time -v cargo $toolchain test "${cargo_args[@]}"
 			;;
 		(run)
-			time env time -v cargo $toolchain run "${cargo_args[@]}" -- "${extra_args[@]}"
+			time env time -v cargo $toolchain run "${cargo_args[@]}" \
+				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(test)
-			time env time -v cargo $toolchain test "${cargo_args[@]}" -- "${extra_args[@]}"
+			time env time -v cargo $toolchain test "${cargo_args[@]}" \
+				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(flamegraph)
 			cargo_args+=( --image-width "${flamegraph_width:-4000}" )
@@ -85,8 +102,7 @@ function main {
 			if cargo $toolchain flamegraph \
 				"${cargo_args[@]}" \
 				--output target/flamegraph-$timestamp.svg \
-				-- \
-				"${extra_args[@]}"
+				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			then
 				(eog flamegraph.svg target/flamegraph-$timestamp.svg &)
 				mv perf.data target/flamegraph-$timestamp.perf-data
