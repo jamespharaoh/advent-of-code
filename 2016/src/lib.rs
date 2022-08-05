@@ -18,6 +18,7 @@ pub use aoc_2016_day_13 as day_13;
 pub use aoc_2016_day_14 as day_14;
 pub use aoc_2016_day_15 as day_15;
 pub use aoc_2016_day_16 as day_16;
+pub use aoc_2016_day_17 as day_17;
 
 #[ must_use ]
 pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {
@@ -38,5 +39,6 @@ pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {
 		day_14::puzzle_metadata (),
 		day_15::puzzle_metadata (),
 		day_16::puzzle_metadata (),
+		day_17::puzzle_metadata (),
 	]
 }

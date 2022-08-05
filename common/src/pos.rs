@@ -1,5 +1,6 @@
 use super::*;
 use nums::Int;
+use nums::IntSigned;
 use nums::NumResult;
 
 pub use coord::Coord;
@@ -19,7 +20,8 @@ macro_rules! pos_ops {
 			#[ inline ]
 			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 				let self_coords = self.coord_to_array ();
-				formatter.write_str ("PosXYZ (") ?;
+				formatter.write_str (stringify! ($name)) ?;
+				formatter.write_str (" (") ?;
 				for idx in 0 .. self_coords.len () {
 					if idx != 0 { formatter.write_str (", ") ?; }
 					Debug::fmt (& self_coords [idx], formatter) ?;
@@ -32,6 +34,20 @@ macro_rules! pos_ops {
 	};
 
 	( $name:ident : Add $(, $rest:tt)* ) => {
+		impl <Val: Int> $name <Val> {
+			#[ inline ]
+			pub fn try_add (self, other: $name <Val::Signed>) -> Option <Self> {
+				let self_coords = self.coord_to_array ();
+				let other_coords = other.coord_to_array ();
+				let mut result_coords = Self::ZERO.coord_to_array ();
+				for idx in 0 .. self_coords.len () {
+					result_coords [idx] = ok_or! (
+						self_coords [idx].add_signed (other_coords [idx]),
+						return None);
+				}
+				Some (Self::coord_from_array (result_coords))
+			}
+		}
 		impl <Val: Int> Add <$name <Val::Signed>> for $name <Val> {
 			type Output = Self;
 			#[ inline ]
@@ -234,12 +250,26 @@ mod dim_2 {
 
 			#[ inline ]
 			fn coord_to_array (self) -> [Val; 2] {
-				[ self.x, self.y ]
+				[ self.y, self.x ]
 			}
 
 			#[ inline ]
 			fn coord_from_array (arr: [Val; 2]) -> Self {
 				Self { y: arr [0], x: arr [1] }
+			}
+
+		}
+
+		impl <Val: Int <Signed = Val> + IntSigned> From <Dir2d> for PosYX <Val> {
+
+			#[ inline ]
+			fn from (dir: Dir2d) -> Self {
+				match dir {
+					Dir2d::Up => Self { y: Val::NEG_ONE, x: Val::ZERO },
+					Dir2d::Down => Self { y: Val::ONE, x: Val::ZERO },
+					Dir2d::Left => Self { y: Val::ZERO, x: Val::NEG_ONE },
+					Dir2d::Right => Self { y: Val::ZERO, x: Val::ONE },
+				}
 			}
 
 		}
