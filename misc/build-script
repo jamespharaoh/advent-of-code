@@ -29,6 +29,7 @@ function main {
 					extra_args_0+=( "$extra_arg" )
 				done
 				extra_args_1+=( "$@" )
+				while [[ "$#" != 0 ]]; do shift; done
 				;;
 			(*) echo "Unknown command: $arg" >&2; exit 1 ;;
 		esac
@@ -56,10 +57,10 @@ function main {
 			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
 			case "$fuzz_mode" in
 				(run|cmin)
-					pushd fuzz
-					if [[ -f "dictionaries/$year-day-$day" ]]; then
-						extra_args_1+=( -dict="$PWD/dictionaries/$year-day-$day" )
+					if [[ -f "fuzz/dictionaries/$year-day-$day" ]]; then
+						extra_args_1+=( -dict="$PWD/fuzz/dictionaries/$year-day-$day" )
 					fi
+					pushd fuzz
 					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" \
 						"${extra_args_0[@]}" -- "${extra_args_1[@]}"
 					popd

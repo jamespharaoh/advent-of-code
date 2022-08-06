@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -a cpus
-declare time_limit=300
+declare time_limit=600
 declare -a years=( {2015..2016} )
 
 case "$HOSTNAME" in
@@ -167,8 +167,7 @@ function worker {
 				screen -X title "$year/day-$day fuzzing"
 				misc/build-script fuzz year-$year day-$day \
 					-- \
-					-- \
-					-max_total_time=$time_limit
+					-- -max_total_time=$time_limit
 				;;
 
 			(minimise)
