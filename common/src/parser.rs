@@ -194,7 +194,7 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	#[ allow (clippy::string_slice) ]
-	pub fn word <'par> (& 'par mut self) -> ParseResult <& 'inp str> {
+	pub fn word (& mut self) -> ParseResult <& 'inp str> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let input_temp = self.input;
 		let start = self.pos;
@@ -217,8 +217,8 @@ impl <'inp> Parser <'inp> {
 	/// Returns `Err (ParseError::Wrapped (err))` if the conversion fails.
 	///
 	#[ inline ]
-	pub fn word_into <'par, Output> (& 'par mut self) -> ParseResult <Output>
-			where Output: TryFrom <& 'par str, Error = GenError> {
+	pub fn word_into <'par_1, Output> (& 'par_1 mut self) -> ParseResult <Output>
+			where Output: TryFrom <& 'par_1 str, Error = GenError> {
 		Ok (self.word () ?.try_into () ?)
 	}
 
@@ -230,7 +230,10 @@ impl <'inp> Parser <'inp> {
 	/// function returns false
 	///
 	#[ inline ]
-	pub fn word_if <'par, PredFn> (& 'par mut self, pred: PredFn) -> ParseResult <& 'inp str>
+	pub fn word_if <'par_1, PredFn> (
+		& 'par_1 mut self,
+		pred: PredFn,
+	) -> ParseResult <& 'inp str>
 			where PredFn: Fn (& 'inp str) -> bool {
 		let word = self.word () ?;
 		if ! pred (word) { Err (self.err ()) ?; }
@@ -313,8 +316,12 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn wrap <Output, WrapFn> (input: & str, mut wrap_fn: WrapFn) -> ParseResult <Output>
-			where WrapFn: FnMut (& mut Parser) -> ParseResult <Output> {
+	pub fn wrap <Output, WrapFn> (
+		input: & 'inp str,
+		mut wrap_fn: WrapFn,
+	) -> ParseResult <Output>
+		where
+			WrapFn: FnMut (& mut Parser) -> ParseResult <Output> {
 		let mut parser = Parser::new (input);
 		wrap_fn (& mut parser)
 	}

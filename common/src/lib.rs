@@ -57,6 +57,11 @@ mod assertions {
 			assert! (actual.is_ok (), "Expected Ok but got {:?}", actual);
 			assert_eq! ($expect, actual.unwrap ());
 		};
+		( $expect: expr , $actual:expr , $($rest:tt)* ) => {
+			let actual = $actual;
+			assert! (actual.is_ok (), $($rest)*);
+			assert_eq! ($expect, actual.unwrap ());
+		};
 	}
 
 	#[ macro_export ]
