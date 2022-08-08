@@ -353,7 +353,7 @@
 
 	<span class="kw">impl</span> <span class="ident">Input</span> {
 		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="kw-2">mut</span> <span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">ops_limit</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">input</span>, <span class="string">&quot;OPS_LIMIT=&quot;</span>, <span class="number">100_000_000</span>) <span class="question-mark">?</span>;
+			<span class="kw">let</span> <span class="ident">ops_limit</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">input</span>, <span class="string">&quot;OPS_LIMIT=&quot;</span>, <span class="number">100_000_000_u32</span>) <span class="question-mark">?</span>;
 			<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::redundant_closure_for_method_calls</span>) ]</span>
 			<span class="kw">let</span> <span class="ident">instrs</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter</span> ()
 				.<span class="ident">enumerate</span> ()
