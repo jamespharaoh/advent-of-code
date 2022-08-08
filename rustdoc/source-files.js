@@ -51,6 +51,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2016_day_21":["",[],["lib.rs"]],\
 "aoc_2016_day_22":["",[],["lib.rs"]],\
 "aoc_2016_day_23":["",[],["lib.rs"]],\
+"aoc_2016_day_24":["",[],["lib.rs"]],\
 "aoc_2021":["",[],["lib.rs"]],\
 "aoc_2021_day_01":["",[],["lib.rs"]],\
 "aoc_2021_day_02":["",[],["lib.rs"]],\
