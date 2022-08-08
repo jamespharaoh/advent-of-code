@@ -1,0 +1,30 @@
+[package]
+
+	name = "aoc-2016-day-24"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2016: Day 24: Air Duct Spelunking"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2016/day-24"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+	aoc-2016-cpu = { path = "../cpu" }
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[[bin]]
+
+	name = "aoc-2016-day-24"
+	test = false
+	doctest = false
+	bench = false

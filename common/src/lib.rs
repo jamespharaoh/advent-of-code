@@ -273,6 +273,13 @@ mod test_map {
 			self.map.get (key)
 		}
 
+		pub fn contains_key <Qry> (& self, key: & Qry) -> bool
+			where
+				Key: Borrow <Qry>,
+				Qry: Eq + Hash + Ord + ?Sized {
+			self.map.contains_key (key)
+		}
+
 		pub fn get_mut <Qry> (& mut self, key: & Qry) -> Option <& mut Val>
 			where
 				Key: Borrow <Qry>,

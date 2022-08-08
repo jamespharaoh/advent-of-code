@@ -1,0 +1,83 @@
+//! Advent of Code 2016: Day 19: An Elephant Named Joseph
+//!
+//! [https://adventofcode.com/2016/day/19](https://adventofcode.com/2016/day/19)
+
+#![ allow (clippy::missing_inline_in_public_items) ]
+
+use aoc_common::*;
+
+puzzle_info! {
+	name = "An Elephant Named Joseph";
+	year = 2016;
+	day = 19;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (& input);
+	//part_two = |input| logic::part_two (& input);
+}
+
+pub mod logic {
+
+	use super::*;
+	use model::Input;
+
+	pub fn part_one (input: & Input) -> GenResult <u32> {
+		if input.num_elves < 2 { return Err ("Must have at least two elves".into ()) }
+		let mut elves = vec! [ 1; input.num_elves.as_usize () ];
+		let mut num_with = elves.len ();
+		while num_with > 1 {
+			for cur_idx in 0 .. elves.len () {
+				if elves [cur_idx] == 0 { continue }
+				let left_idx = (cur_idx + 1) % elves.len ();
+				elves [cur_idx] += elves [left_idx];
+				elves [left_idx] = 0;
+				num_with -= 1;
+			}
+		}
+		let last_elf = elves.iter_vals ().find (|& elf| elf > 0).unwrap ();
+		Ok (last_elf + 1)
+	}
+
+}
+
+pub mod model {
+
+	use super::*;
+	use parser::*;
+
+	#[ derive (Clone, Debug, Eq, PartialEq) ]
+	pub struct Input {
+		pub num_elves: u32,
+	}
+
+	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	pub enum Tile { Trap, Safe }
+
+	impl Input {
+
+		#[ allow (clippy::) ]
+		pub fn parse (input: & [& str]) -> GenResult <Self> {
+			if input.len () != 1 { return Err ("Input must have exactly one line".into ()) }
+			let num_elves = Parser::wrap (input [0], Parser::int)
+				.map_parse_err (|col_idx|
+					format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
+			Ok (Self { num_elves })
+		}
+
+	}
+
+}
+
+#[ cfg (test) ]
+mod examples {
+
+	use super::*;
+
+	const EXAMPLE: & [& str] = & [ "5" ];
+
+	#[ test ]
+	fn part_one () {
+		let puzzle = puzzle_metadata ();
+		assert_eq_ok! ("3", puzzle.part_one (EXAMPLE));
+	}
+
+}

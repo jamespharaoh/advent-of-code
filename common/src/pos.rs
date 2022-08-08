@@ -396,7 +396,44 @@ mod dim_2 {
 		pub struct PosRowCol <Val> { pub row: Val, pub col: Val }
 
 		impl <Val: Int> PosRowCol <Val> {
+
 			pub const ZERO: Self = Self { row: Val::ZERO, col: Val::ZERO };
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn up (self, num: Val) -> Self {
+				Self { row: self.row.safe_sub (num), col: self.col }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn down (self, num: Val) -> Self {
+				Self { row: self.row.safe_add (num), col: self.col }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn left (& self, num: Val) -> Self {
+				Self { row: self.row, col: self.col.safe_sub (num) }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn right (& self, num: Val) -> Self {
+				Self { row: self.row, col: self.col.safe_add (num) }
+			}
+
+			#[ inline ]
+			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
+				let mut result = ArrayVec::new ();
+				let Self { row, col } = * self;
+				if row > Val::MIN { result.push (Self { row: row - Val::ONE, col }); }
+				if row < Val::MAX { result.push (Self { row: row + Val::ONE, col }); }
+				if col > Val::MIN { result.push (Self { row, col: col - Val::ONE }); }
+				if col < Val::MAX { result.push (Self { row, col: col + Val::ONE }); }
+				result
+			}
+
 		}
 
 		impl <Val: Int> Coord <2> for PosRowCol <Val> {
