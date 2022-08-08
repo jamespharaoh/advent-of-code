@@ -271,7 +271,15 @@ dependencies = [
  "aoc-2016-day-20",
  "aoc-2016-day-21",
  "aoc-2016-day-22",
+ "aoc-2016-day-23",
  "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2016-cpu"
+version = "0.1.0"
+dependencies = [
  "aoc-common",
 ]
 
@@ -367,6 +375,7 @@ dependencies = [
 name = "aoc-2016-day-12"
 version = "0.1.0"
 dependencies = [
+ "aoc-2016-cpu",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -447,6 +456,15 @@ dependencies = [
 name = "aoc-2016-day-22"
 version = "0.1.0"
 dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2016-day-23"
+version = "0.1.0"
+dependencies = [
+ "aoc-2016-cpu",
  "aoc-codegen",
  "aoc-common",
 ]
