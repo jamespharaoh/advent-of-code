@@ -211,6 +211,83 @@
 <span id="211">211</span>
 <span id="212">212</span>
 <span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: CPU</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! CPU used in the following puzzles:</span>
@@ -227,7 +304,7 @@
 
 <span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Default</span>) ]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Cpu</span> {
-	<span class="kw">pub</span> <span class="ident">instrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span>,
+	<span class="kw">pub</span> <span class="ident">instrs</span>: <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span><span class="op">&gt;</span>,
 	<span class="kw">pub</span> <span class="ident">reg_a</span>: <span class="ident">i32</span>,
 	<span class="kw">pub</span> <span class="ident">reg_b</span>: <span class="ident">i32</span>,
 	<span class="kw">pub</span> <span class="ident">reg_c</span>: <span class="ident">i32</span>,
@@ -258,7 +335,7 @@
 		}
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exec</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
+	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exec</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span><span class="op">&gt;</span> {
 		<span class="kw">while</span> <span class="self">self</span>.<span class="ident">next</span>.<span class="ident">as_usize</span> () <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">instrs</span>.<span class="ident">len</span> () {
 			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">limit</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Reached ops limit&quot;</span>.<span class="ident">into</span> ()) }
 			<span class="self">self</span>.<span class="ident">limit</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
@@ -270,19 +347,26 @@
 				<span class="ident">Instr::Jnz</span> (<span class="ident">src</span>, <span class="ident">dst</span>) =&gt; { <span class="self">self</span>.<span class="ident">jnz</span> (<span class="ident">src</span>, <span class="ident">dst</span>) <span class="question-mark">?</span>; <span class="kw">continue</span> }
 				<span class="ident">Instr::Tgl</span> (<span class="ident">dst</span>) =&gt; {
 					<span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> <span class="ident">u32::add_signed</span> (<span class="self">self</span>.<span class="ident">next</span>, <span class="self">self</span>.<span class="ident">load</span> (<span class="ident">dst</span>)) <span class="question-mark">?</span>;
-					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">instr</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">instrs</span>.<span class="ident">get_mut</span> (<span class="ident">idx</span>.<span class="ident">as_usize</span> ()) {
+					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">instr</span>) <span class="op">=</span>
+						<span class="ident">Rc::make_mut</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">instrs</span>)
+							.<span class="ident">get_mut</span> (<span class="ident">idx</span>.<span class="ident">as_usize</span> ()) {
 						<span class="op">*</span> <span class="ident">instr</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">*</span> <span class="ident">instr</span> {
 							<span class="ident">Instr::Cpy</span> (<span class="ident">src</span>, <span class="ident">dst</span>) =&gt; <span class="ident">Instr::Jnz</span> (<span class="ident">src</span>, <span class="ident">dst</span>),
 							<span class="ident">Instr::Jnz</span> (<span class="ident">src</span>, <span class="ident">dst</span>) =&gt; <span class="ident">Instr::Cpy</span> (<span class="ident">src</span>, <span class="ident">dst</span>),
 							<span class="ident">Instr::Inc</span> (<span class="ident">arg</span>) =&gt; <span class="ident">Instr::Dec</span> (<span class="ident">arg</span>),
-							<span class="ident">Instr::Dec</span> (<span class="ident">arg</span>) <span class="op">|</span> <span class="ident">Instr::Tgl</span> (<span class="ident">arg</span>) =&gt; <span class="ident">Instr::Inc</span> (<span class="ident">arg</span>),
+							<span class="ident">Instr::Dec</span> (<span class="ident">arg</span>) <span class="op">|</span> <span class="ident">Instr::Tgl</span> (<span class="ident">arg</span>) <span class="op">|</span> <span class="ident">Instr::Out</span> (<span class="ident">arg</span>) =&gt;
+								<span class="ident">Instr::Inc</span> (<span class="ident">arg</span>),
 						};
 					}
+				},
+				<span class="ident">Instr::Out</span> (<span class="ident">arg</span>) =&gt; {
+					<span class="self">self</span>.<span class="ident">next</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+					<span class="kw">return</span> <span class="prelude-val">Ok</span> (<span class="prelude-val">Some</span> (<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">arg</span>)));
 				},
 			}
 			<span class="self">self</span>.<span class="ident">next</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 		}
-		<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Ok</span> (<span class="prelude-val">None</span>)
 	}
 
 	<span class="kw">fn</span> <span class="ident">jnz</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">src</span>: <span class="ident">Arg</span>, <span class="ident">dst</span>: <span class="ident">Arg</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
@@ -308,10 +392,31 @@
 					<span class="ident">Instr::Inc</span> (<span class="ident">dst</span>),
 					<span class="ident">Instr::Dec</span> (<span class="ident">arg</span>),
 					<span class="ident">Instr::Jnz</span> (<span class="ident">arg_0</span>, <span class="ident">Arg::Imm</span> (<span class="op">-</span><span class="number">2_i32</span>)),
-				] <span class="kw">if</span> <span class="ident">arg</span> <span class="op">==</span> <span class="ident">arg_0</span> <span class="op">&amp;&amp;</span> <span class="ident">dst</span> <span class="op">!</span><span class="op">=</span> <span class="ident">arg</span> =&gt; {
+				] <span class="kw">if</span> <span class="ident">arg</span> <span class="op">==</span> <span class="ident">arg_0</span> <span class="op">&amp;&amp;</span> <span class="ident">dst</span> <span class="op">!</span><span class="op">=</span> <span class="ident">arg</span> <span class="op">&amp;&amp;</span> <span class="ident">arg</span>.<span class="ident">is_reg</span> () <span class="op">&amp;&amp;</span> <span class="ident">dst</span>.<span class="ident">is_reg</span> () =&gt; {
 					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">dst</span>, <span class="ident">i32::add_2</span> (<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">dst</span>), <span class="self">self</span>.<span class="ident">load</span> (<span class="ident">arg</span>)) <span class="question-mark">?</span>);
 					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">arg</span>, <span class="number">0</span>);
 					<span class="kw">return</span> <span class="prelude-val">Ok</span> (());
+				},
+				<span class="kw">_</span> =&gt; (),
+			}
+		}
+
+		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">next</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">4</span> {
+			<span class="kw">match</span> <span class="op">&lt;</span>[<span class="ident">Instr</span>; <span class="number">5</span>]<span class="op">&gt;</span><span class="ident">::try_from</span> (
+				<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">instrs</span> [<span class="self">self</span>.<span class="ident">next</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">4</span> .. <span class="self">self</span>.<span class="ident">next</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">1</span>],
+			).<span class="ident">unwrap</span> () {
+				[
+					<span class="ident">Instr::Jnz</span> (<span class="ident">arg</span>, <span class="ident">Arg::Imm</span> (<span class="number">2_i32</span>)),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">Arg::Imm</span> (<span class="number">1_i32</span>), <span class="ident">Arg::Imm</span> (<span class="number">4_i32</span>)),
+					<span class="ident">Instr::Dec</span> (<span class="ident">dst</span>),
+					<span class="ident">Instr::Dec</span> (<span class="ident">arg_0</span>),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">Arg::Imm</span> (<span class="number">1_i32</span>), <span class="ident">Arg::Imm</span> (<span class="op">-</span><span class="number">4_i32</span>)),
+				] <span class="kw">if</span> <span class="ident">arg</span> <span class="op">==</span> <span class="ident">arg_0</span> <span class="op">&amp;&amp;</span> <span class="ident">arg</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dst</span> <span class="op">&amp;&amp;</span> <span class="ident">arg</span>.<span class="ident">is_reg</span> () <span class="op">&amp;&amp;</span> <span class="ident">dst</span>.<span class="ident">is_reg</span> () =&gt; {
+					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">dst</span>, <span class="ident">i32::sub_2</span> (
+						<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">dst</span>),
+						<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">arg</span>),
+					) <span class="question-mark">?</span>);
+					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">arg</span>, <span class="number">0</span>);
 				},
 				<span class="kw">_</span> =&gt; (),
 			}
@@ -329,7 +434,8 @@
 					<span class="ident">Instr::Dec</span> (<span class="ident">ctr</span>),
 					<span class="ident">Instr::Jnz</span> (<span class="ident">ctr_0</span>, <span class="ident">Arg::Imm</span> (<span class="op">-</span><span class="number">5_i32</span>)),
 				] <span class="kw">if</span> <span class="ident">tmp</span> <span class="op">==</span> <span class="ident">tmp_0</span> <span class="op">&amp;&amp;</span> <span class="ident">tmp</span> <span class="op">==</span> <span class="ident">tmp_1</span> <span class="op">&amp;&amp;</span> <span class="ident">ctr</span> <span class="op">==</span> <span class="ident">ctr_0</span> <span class="op">&amp;&amp;</span> <span class="ident">arg</span> <span class="op">!</span><span class="op">=</span> <span class="ident">tmp</span> <span class="op">&amp;&amp;</span> <span class="ident">arg</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dst</span>
-						<span class="op">&amp;&amp;</span> <span class="ident">arg</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> <span class="op">|</span><span class="op">|</span> <span class="ident">tmp</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dst</span> <span class="op">&amp;&amp;</span> <span class="ident">tmp</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> <span class="op">&amp;&amp;</span> <span class="ident">dst</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> =&gt; {
+						<span class="op">&amp;&amp;</span> <span class="ident">arg</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> <span class="op">&amp;&amp;</span> <span class="ident">tmp</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dst</span> <span class="op">&amp;&amp;</span> <span class="ident">tmp</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> <span class="op">&amp;&amp;</span> <span class="ident">dst</span> <span class="op">!</span><span class="op">=</span> <span class="ident">ctr</span> <span class="op">&amp;&amp;</span> <span class="ident">dst</span>.<span class="ident">is_reg</span> ()
+						<span class="op">&amp;&amp;</span> <span class="ident">tmp</span>.<span class="ident">is_reg</span> () <span class="op">&amp;&amp;</span> <span class="ident">ctr</span>.<span class="ident">is_reg</span> () =&gt; {
 					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">dst</span>, <span class="ident">i32::add_2</span> (
 						<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">dst</span>),
 						<span class="ident">i32::mul_2</span> (<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">arg</span>), <span class="self">self</span>.<span class="ident">load</span> (<span class="ident">ctr</span>)) <span class="question-mark">?</span>,
@@ -337,6 +443,35 @@
 					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">tmp</span>, <span class="number">0</span>);
 					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">ctr</span>, <span class="number">0</span>);
 					<span class="kw">return</span> <span class="prelude-val">Ok</span> (());
+				},
+				<span class="kw">_</span> =&gt; (),
+			}
+		}
+
+		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">next</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">7</span> {
+			<span class="kw">match</span> <span class="op">&lt;</span>[<span class="ident">Instr</span>; <span class="number">8</span>]<span class="op">&gt;</span><span class="ident">::try_from</span> (
+				<span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">instrs</span> [<span class="self">self</span>.<span class="ident">next</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">7</span> .. <span class="self">self</span>.<span class="ident">next</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">1</span>],
+			).<span class="ident">unwrap</span> () {
+				[
+					<span class="ident">Instr::Cpy</span> (<span class="ident">Arg::Imm</span> (<span class="ident">div</span>), <span class="ident">rem</span>),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">mul</span>, <span class="ident">Arg::Imm</span> (<span class="number">2_i32</span>)),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">Arg::Imm</span> (<span class="number">1_i32</span>), <span class="ident">Arg::Imm</span> (<span class="number">6_i32</span>)),
+					<span class="ident">Instr::Dec</span> (<span class="ident">mul_0</span>),
+					<span class="ident">Instr::Dec</span> (<span class="ident">rem_0</span>),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">rem_1</span>, <span class="ident">Arg::Imm</span> (<span class="op">-</span><span class="number">4_i32</span>)),
+					<span class="ident">Instr::Inc</span> (<span class="ident">out</span>),
+					<span class="ident">Instr::Jnz</span> (<span class="ident">Arg::Imm</span> (<span class="number">1_i32</span>), <span class="ident">Arg::Imm</span> (<span class="op">-</span><span class="number">7_i32</span>)),
+				] <span class="kw">if</span> <span class="ident">rem</span> <span class="op">!</span><span class="op">=</span> <span class="ident">mul</span> <span class="op">&amp;&amp;</span> <span class="ident">rem</span> <span class="op">!</span><span class="op">=</span> <span class="ident">out</span> <span class="op">&amp;&amp;</span> <span class="ident">mul</span> <span class="op">!</span><span class="op">=</span> <span class="ident">out</span> <span class="op">&amp;&amp;</span> <span class="ident">mul</span> <span class="op">==</span> <span class="ident">mul_0</span> <span class="op">&amp;&amp;</span> <span class="ident">rem</span> <span class="op">==</span> <span class="ident">rem_0</span>
+						<span class="op">&amp;&amp;</span> <span class="ident">rem</span> <span class="op">==</span> <span class="ident">rem_1</span> <span class="op">&amp;&amp;</span> <span class="ident">rem</span>.<span class="ident">is_reg</span> () <span class="op">&amp;&amp;</span> <span class="ident">mul</span>.<span class="ident">is_reg</span> () <span class="op">&amp;&amp;</span> <span class="ident">out</span>.<span class="ident">is_reg</span> () =&gt; {
+					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">out</span>, <span class="ident">i32::add_2</span> (
+						<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">out</span>),
+						<span class="ident">i32::div_2</span> (<span class="self">self</span>.<span class="ident">load</span> (<span class="ident">mul</span>), <span class="ident">div</span>) <span class="question-mark">?</span>,
+					) <span class="question-mark">?</span>);
+					<span class="kw">let</span> <span class="ident">rem_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">load</span> (<span class="ident">mul</span>) <span class="op">%</span> <span class="ident">div</span>;
+					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">rem</span>, <span class="kw">if</span> <span class="ident">rem_val</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">div</span> } <span class="kw">else</span> { <span class="ident">rem_val</span> });
+					<span class="self">self</span>.<span class="ident">store</span> (<span class="ident">mul</span>, <span class="number">0</span>);
+					<span class="self">self</span>.<span class="ident">next</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+					<span class="kw">return</span> <span class="prelude-val">Ok</span> (())
 				},
 				<span class="kw">_</span> =&gt; (),
 			}
@@ -358,6 +493,7 @@
 	<span class="ident">Dec</span> (<span class="ident">Arg</span>),
 	<span class="ident">Jnz</span> (<span class="ident">Arg</span>, <span class="ident">Arg</span>),
 	<span class="ident">Tgl</span> (<span class="ident">Arg</span>),
+	<span class="ident">Out</span> (<span class="ident">Arg</span>),
 }
 
 <span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
@@ -375,6 +511,12 @@
 	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_v2</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
 		<span class="kw">use</span> <span class="ident">Instr</span>::{ <span class="ident">Cpy</span>, <span class="ident">Dec</span>, <span class="ident">Inc</span>, <span class="ident">Jnz</span>, <span class="ident">Tgl</span> };
 		<span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Cpy</span> (<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> <span class="ident">Inc</span> (<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Dec</span> (<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Jnz</span> (<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> <span class="ident">Tgl</span> (<span class="kw">_</span>))
+	}
+
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_v3</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+		<span class="kw">use</span> <span class="ident">Instr</span>::{ <span class="ident">Cpy</span>, <span class="ident">Dec</span>, <span class="ident">Inc</span>, <span class="ident">Jnz</span>, <span class="ident">Out</span> };
+		<span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident">Cpy</span> (<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> <span class="ident">Inc</span> (<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Dec</span> (<span class="kw">_</span>) <span class="op">|</span> <span class="ident">Jnz</span> (<span class="kw">_</span>, <span class="kw">_</span>) <span class="op">|</span> <span class="ident">Out</span> (<span class="kw">_</span>))
 	}
 
 }
@@ -409,7 +551,19 @@
 				<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
 				<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Tgl</span> (<span class="ident">arg</span>))
 			})
+			.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
+				<span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;out &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">item</span> () <span class="question-mark">?</span>;
+				<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
+				<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Out</span> (<span class="ident">arg</span>))
+			})
 			.<span class="ident">done</span> ()
+	}
+}
+
+<span class="kw">impl</span> <span class="ident">Arg</span> {
+	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
+	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_reg</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+		<span class="macro">matches!</span> (<span class="op">*</span> <span class="self">self</span>, <span class="ident"><span class="self">Self</span>::RegA</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::RegB</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::RegC</span> <span class="op">|</span> <span class="ident"><span class="self">Self</span>::RegD</span>)
 	}
 }
 
