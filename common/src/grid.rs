@@ -5,6 +5,7 @@ use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
 use nums::Int;
 use pos::PosRowCol;
+use pos::PosXY;
 use pos::PosYX;
 
 /// Multi dimensional abstraction over a single dimensional collection
@@ -340,6 +341,27 @@ impl GridPos <2> for (usize, usize) {
 	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
 		if origin != [0, 0] { unimplemented! () }
 		Some ((scalar / size [1], scalar % size [1]))
+	}
+
+}
+
+impl <Val: Int> GridPos <2> for PosXY <Val> {
+
+	#[ inline ]
+	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
+		if origin != [0, 0] { unimplemented! () }
+		let x = ok_or! (self.x.to_usize (), return None);
+		let y = ok_or! (self.y.to_usize (), return None);
+		if x >= size [0] || y >= size [1] { return None }
+		Some (x * size [1] + y)
+	}
+
+	#[ inline ]
+	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
+		if origin != [0, 0] { unimplemented! () }
+		let x = ok_or! (Val::from_usize (scalar / size [1]), return None);
+		let y = ok_or! (Val::from_usize (scalar % size [1]), return None);
+		Some (Self { x, y })
 	}
 
 }

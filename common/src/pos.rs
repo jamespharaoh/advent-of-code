@@ -166,7 +166,7 @@ mod dim_2 {
 			#[ inline ]
 			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> {
 				let mut result = ArrayVec::new ();
-				let (x, y) = (self.x, self.y);
+				let Self { x, y } = * self;
 				if self.x > Val::MIN { result.push (Self { x: x - Val::ONE, y }); }
 				if self.x < Val::MAX { result.push (Self { x: x + Val::ONE, y }); }
 				if self.y > Val::MIN { result.push (Self { x, y: y - Val::ONE }); }
