@@ -24,7 +24,7 @@ pub mod logic {
 
 	pub fn part_one (input: & Input) -> GenResult <i32> {
 		let mut cpu = Cpu {
-			instrs: input.instrs.clone (),
+			instrs: Rc::new (input.instrs.clone ()),
 			reg_a: 7,
 			limit: 1000,
 			.. default ()
@@ -35,7 +35,7 @@ pub mod logic {
 
 	pub fn part_two (input: & Input) -> GenResult <i32> {
 		let mut cpu = Cpu {
-			instrs: input.instrs.clone (),
+			instrs: Rc::new (input.instrs.clone ()),
 			reg_a: 12,
 			limit: 1000,
 			.. default ()
