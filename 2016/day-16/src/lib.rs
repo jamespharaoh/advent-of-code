@@ -212,10 +212,10 @@ pub mod model {
 
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
 
-			let disk_size_one = parser::input_param (& mut input, "DISK_SIZE_ONE=", 272) ?;
+			let disk_size_one = parser::input_param (& mut input, "DISK_SIZE_ONE=", 272_u32) ?;
 			if disk_size_one < 1 { return Err ("Disk size one must be at least 1".into ()) };
 
-			let disk_size_two = parser::input_param (& mut input, "DISK_SIZE_TWO=", 35_651_584) ?;
+			let disk_size_two = parser::input_param (& mut input, "DISK_SIZE_TWO=", 35_651_584_u32) ?;
 			if disk_size_two < 1 { return Err ("Disk size two must be at least 1".into ()) };
 
 			if input.len () != 1 { return Err ("Input must have exactly one line".into ()) }

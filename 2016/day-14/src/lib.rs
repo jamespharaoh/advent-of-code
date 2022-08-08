@@ -154,15 +154,15 @@ pub mod model {
 	impl Input {
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
 
-			let num_keys = parser::input_param (& mut input, "NUM_KEYS=", 64) ?;
+			let num_keys = parser::input_param (& mut input, "NUM_KEYS=", 64_u32) ?;
 			if num_keys < 1 { return Err ("Number of keys must be at least one".into ()) }
 			if num_keys > 100 { return Err ("Number of keys must be 100 or less".into ()) }
 
-			let num_next = parser::input_param (& mut input, "NUM_NEXT=", 1000) ?;
+			let num_next = parser::input_param (& mut input, "NUM_NEXT=", 1000_u32) ?;
 			if num_next < 1 { return Err ("Number of next hashes must be at least one".into ()) }
 			if num_next > 2000 { return Err ("Number of next hashes must be 2000 or less".into ()) }
 
-			let hash_reps = parser::input_param (& mut input, "HASH_REPS=", 2016) ?;
+			let hash_reps = parser::input_param (& mut input, "HASH_REPS=", 2016_u32) ?;
 			if hash_reps < 2 { return Err ("Hash reps must be at least one".into ()) }
 			if hash_reps > 3000 { return Err ("Hash reps must be 3000 or less".into ()) }
 

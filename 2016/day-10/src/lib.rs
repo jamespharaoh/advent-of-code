@@ -186,8 +186,8 @@ pub mod model {
 
 	impl Input {
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-			let low = input_param (& mut input, "LOW=", 17) ?;
-			let high = input_param (& mut input, "HIGH=", 61) ?;
+			let low = input_param (& mut input, "LOW=", 17_u16) ?;
+			let high = input_param (& mut input, "HIGH=", 61_u16) ?;
 			let steps = input.iter ()
 				.enumerate ()
 				.map (|(line_idx, line)|

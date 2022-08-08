@@ -79,14 +79,14 @@ pub mod model {
 
 	impl Input {
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-			let start_x = parser::input_param (& mut input, "START_X=", 1) ?;
-			let start_y = parser::input_param (& mut input, "START_Y=", 1) ?;
+			let start_x = parser::input_param (& mut input, "START_X=", 1_u32) ?;
+			let start_y = parser::input_param (& mut input, "START_Y=", 1_u32) ?;
 			let start = Pos { x: start_x, y: start_y };
-			let end_x = parser::input_param (& mut input, "END_X=", 31) ?;
-			let end_y = parser::input_param (& mut input, "END_Y=", 39) ?;
+			let end_x = parser::input_param (& mut input, "END_X=", 31_u32) ?;
+			let end_y = parser::input_param (& mut input, "END_Y=", 39_u32) ?;
 			let end = Pos { x: end_x, y: end_y };
-			let max_dist = parser::input_param (& mut input, "MAX_DIST=", 100) ?;
-			let count_dist = parser::input_param (& mut input, "COUNT_DIST=", 50) ?;
+			let max_dist = parser::input_param (& mut input, "MAX_DIST=", 100_u32) ?;
+			let count_dist = parser::input_param (& mut input, "COUNT_DIST=", 50_u32) ?;
 			if input.len () != 1 { return Err ("Input must be one line only".into ()) }
 			let seed =
 				Parser::wrap (input [0],

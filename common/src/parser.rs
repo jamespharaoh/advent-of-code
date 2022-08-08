@@ -379,10 +379,10 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 /// Utility method to parse a parameter from the start of an input with default value
 ///
 #[ inline ]
-pub fn input_param <Val: FromStr> (
+pub fn input_param <Val: FromStr, Def: Into <Val>> (
 	input: & mut & [& str],
 	prefix: & str,
-	default: Val,
+	default: Def,
 ) -> GenResult <Val>
 		where Val::Err: Error + 'static {
 	Ok (
@@ -390,8 +390,8 @@ pub fn input_param <Val: FromStr> (
 			if let Some (val) = line.strip_prefix (prefix) {
 				* input = & (* input) [1 .. ];
 				val.parse () ?
-			} else { default }
-		} else { default }
+			} else { default.into () }
+		} else { default.into () }
 	)
 }
 

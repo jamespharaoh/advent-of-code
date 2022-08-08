@@ -126,7 +126,7 @@ pub mod model {
 
 	impl Input {
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-			let ops_limit = parser::input_param (& mut input, "OPS_LIMIT=", 100_000_000) ?;
+			let ops_limit = parser::input_param (& mut input, "OPS_LIMIT=", 100_000_000_u32) ?;
 			#[ allow (clippy::redundant_closure_for_method_calls) ]
 			let instrs = input.iter ()
 				.enumerate ()

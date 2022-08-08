@@ -35,16 +35,16 @@ pub mod logic {
 		let mut row: u128 = 0;
 		let mut mask: u128 = 0;
 		for tile in first_row.iter ().copied () {
-			row <<= 1_u32;
+			row <<= 1;
 			if tile == Tile::Trap { row |= 1; }
-			mask <<= 1_u32;
+			mask <<= 1;
 			mask |= 1;
 		}
 		let num_tiles = mask.count_ones ();
 		let mut num_safe = 0;
 		for _ in 0 .. num_rows {
 			num_safe += num_tiles - row.count_ones ();
-			row = ((row << 1_u32) ^ (row >> 1_u32)) & mask;
+			row = ((row << 1) ^ (row >> 1)) & mask;
 		}
 		Ok (num_safe)
 	}
@@ -69,8 +69,8 @@ pub mod model {
 	impl Input {
 
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-			let num_rows_one = parser::input_param (& mut input, "NUM_ROWS_ONE=", 40_u32) ?;
-			let num_rows_two = parser::input_param (& mut input, "NUM_ROWS_TWO=", 400_000_u32) ?;
+			let num_rows_one = parser::input_param (& mut input, "NUM_ROWS_ONE=", 40) ?;
+			let num_rows_two = parser::input_param (& mut input, "NUM_ROWS_TWO=", 400_000) ?;
 			if input.len () != 1 { return Err ("Input must have exactly one line".into ()) }
 			let first_row = Parser::wrap (input [0], |parser| {
 					let mut items = Vec::new ();
@@ -97,8 +97,7 @@ mod examples {
 	use super::*;
 
 	const EXAMPLE: & [& str] = & [
-		"NUM_ROWS_ONE=10",
-		"NUM_ROWS_TWO=20",
+		"NUM_ROWS=10",
 		".^^.^.^^^^",
 	];
 
@@ -106,12 +105,6 @@ mod examples {
 	fn part_one () {
 		let puzzle = puzzle_metadata ();
 		assert_eq_ok! ("38", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("93", puzzle.part_two (EXAMPLE));
 	}
 
 }

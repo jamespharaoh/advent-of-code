@@ -98,8 +98,8 @@ pub mod model {
 
 	impl Input {
 		pub fn parse (mut lines: & [& str]) -> GenResult <Self> {
-			let width = parser::input_param (& mut lines, "WIDTH=", 50) ?;
-			let height = parser::input_param (& mut lines, "HEIGHT=", 6) ?;
+			let width = parser::input_param (& mut lines, "WIDTH=", 50_u32) ?;
+			let height = parser::input_param (& mut lines, "HEIGHT=", 6_u32) ?;
 			let steps = lines.iter ()
 				.enumerate ()
 				.map (|(line_idx, line)|
