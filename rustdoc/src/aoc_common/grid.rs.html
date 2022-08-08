@@ -422,6 +422,28 @@
 <span id="422">422</span>
 <span id="423">423</span>
 <span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use</span> <span class="ident">bitvec::BitVec</span>;
@@ -429,6 +451,7 @@
 <span class="kw">use</span> <span class="ident">bitvec::BitVecIter</span>;
 <span class="kw">use</span> <span class="ident">nums::Int</span>;
 <span class="kw">use</span> <span class="ident">pos::PosRowCol</span>;
+<span class="kw">use</span> <span class="ident">pos::PosXY</span>;
 <span class="kw">use</span> <span class="ident">pos::PosYX</span>;
 
 <span class="doccomment">/// Multi dimensional abstraction over a single dimensional collection</span>
@@ -764,6 +787,27 @@
 	<span class="kw">fn</span> <span class="ident">from_scalar</span> (<span class="ident">scalar</span>: <span class="ident">usize</span>, <span class="ident">origin</span>: [<span class="ident">isize</span>; <span class="number">2</span>], <span class="ident">size</span>: [<span class="ident">usize</span>; <span class="number">2</span>]) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 		<span class="kw">if</span> <span class="ident">origin</span> <span class="op">!</span><span class="op">=</span> [<span class="number">0</span>, <span class="number">0</span>] { <span class="macro">unimplemented!</span> () }
 		<span class="prelude-val">Some</span> ((<span class="ident">scalar</span> <span class="op">/</span> <span class="ident">size</span> [<span class="number">1</span>], <span class="ident">scalar</span> <span class="op">%</span> <span class="ident">size</span> [<span class="number">1</span>]))
+	}
+
+}
+
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">GridPos</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosXY</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">to_scalar</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">origin</span>: [<span class="ident">isize</span>; <span class="number">2</span>], <span class="ident">size</span>: [<span class="ident">usize</span>; <span class="number">2</span>]) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+		<span class="kw">if</span> <span class="ident">origin</span> <span class="op">!</span><span class="op">=</span> [<span class="number">0</span>, <span class="number">0</span>] { <span class="macro">unimplemented!</span> () }
+		<span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="macro">ok_or!</span> (<span class="self">self</span>.<span class="ident">x</span>.<span class="ident">to_usize</span> (), <span class="kw">return</span> <span class="prelude-val">None</span>);
+		<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="macro">ok_or!</span> (<span class="self">self</span>.<span class="ident">y</span>.<span class="ident">to_usize</span> (), <span class="kw">return</span> <span class="prelude-val">None</span>);
+		<span class="kw">if</span> <span class="ident">x</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">size</span> [<span class="number">0</span>] <span class="op">|</span><span class="op">|</span> <span class="ident">y</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">size</span> [<span class="number">1</span>] { <span class="kw">return</span> <span class="prelude-val">None</span> }
+		<span class="prelude-val">Some</span> (<span class="ident">x</span> <span class="op">*</span> <span class="ident">size</span> [<span class="number">1</span>] <span class="op">+</span> <span class="ident">y</span>)
+	}
+
+	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+	<span class="kw">fn</span> <span class="ident">from_scalar</span> (<span class="ident">scalar</span>: <span class="ident">usize</span>, <span class="ident">origin</span>: [<span class="ident">isize</span>; <span class="number">2</span>], <span class="ident">size</span>: [<span class="ident">usize</span>; <span class="number">2</span>]) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+		<span class="kw">if</span> <span class="ident">origin</span> <span class="op">!</span><span class="op">=</span> [<span class="number">0</span>, <span class="number">0</span>] { <span class="macro">unimplemented!</span> () }
+		<span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="macro">ok_or!</span> (<span class="ident">Val::from_usize</span> (<span class="ident">scalar</span> <span class="op">/</span> <span class="ident">size</span> [<span class="number">1</span>]), <span class="kw">return</span> <span class="prelude-val">None</span>);
+		<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="macro">ok_or!</span> (<span class="ident">Val::from_usize</span> (<span class="ident">scalar</span> <span class="op">%</span> <span class="ident">size</span> [<span class="number">1</span>]), <span class="kw">return</span> <span class="prelude-val">None</span>);
+		<span class="prelude-val">Some</span> (<span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span> })
 	}
 
 }
