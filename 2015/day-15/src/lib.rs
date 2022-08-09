@@ -71,6 +71,8 @@ pub mod logic {
 	///
 	pub fn part_two (ingrs: & Input) -> GenResult <u64> {
 
+		if ingrs.len () < 2 { return Err ("Must have at least two ingredients".into ()) }
+
 		let all_ingrs: Vec <_> =
 			ingrs.iter ().cloned ()
 				.sorted_by_key (|ingr| cmp::Reverse (ingr.calories))

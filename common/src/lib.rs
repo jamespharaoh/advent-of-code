@@ -98,7 +98,7 @@ mod prelude {
 	pub use crate::iter_ext::IntoIteratorExt as _;
 	pub use crate::iter_ext::IteratorExt as _;
 	pub use crate::iter_ext::IteratorResultExt as _;
-	pub use crate::nums::Int as _;
-	pub use crate::nums::IntConv as _;
+	pub use crate::nums::Int;
+	pub use crate::nums::IntConv;
 
 }

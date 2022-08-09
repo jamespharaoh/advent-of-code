@@ -66,14 +66,14 @@ pub mod logic {
 			.permutations (names.len ())
 			.map (|plan| plan.iter ()
 				.circular_tuple_windows::<(_, _)> ()
-				.map (|indexes| {
+				.fold (Ok (0_i32), |sum, indexes| sum.and_then (|sum| {
 					let score_0 = scores [indexes.0 * names.len () + indexes.1];
 					let score_1 = scores [indexes.1 * names.len () + indexes.0];
-					score_0 + score_1
-				})
-				.sum ())
-			.max ()
-			.unwrap ())
+					i32::add_3 (sum, score_0, score_1)
+				})))
+			.fold (Ok (i32::MIN), |max, item| max
+				.and_then (|max| item
+					.map (|item| cmp::max (max, item)))) ?)
 	}
 
 }

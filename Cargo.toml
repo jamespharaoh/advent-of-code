@@ -14,6 +14,7 @@
 	aoc-common = { path = "common" }
 	aoc-2015 = { path = "2015" }
 	aoc-2016 = { path = "2016" }
+	aoc-2017 = { path = "2017" }
 	aoc-2021 = { path = "2021" }
 
 [profile.coverage]
@@ -45,8 +46,8 @@
 [workspace]
 
 	members = [
-		"common/md5",
-		"common/nums",
-		"common/pos",
+		#"common/md5",
+		#"common/nums",
+		#"common/pos",
 		"misc/codegen",
 	]

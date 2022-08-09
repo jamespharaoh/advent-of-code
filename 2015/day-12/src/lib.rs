@@ -39,40 +39,42 @@ pub mod logic {
 	use super::*;
 	use model::Json;
 	use nums::IntConv;
+	use nums::NumResult;
 
 	pub fn part_one (input: & Json) -> GenResult <i32> {
-		let sum = calc_sum (input);
+		let sum = calc_sum (input) ?;
 		Ok (sum)
 	}
 
 	pub fn part_two (input: & Json) -> GenResult <i32> {
-		let sum = calc_sum_no_red (input);
+		let sum = calc_sum_no_red (input) ?;
 		Ok (sum)
 	}
 
-	fn calc_sum (value: & Json) -> i32 {
+	fn calc_sum (value: & Json) -> NumResult <i32> {
 		match * value {
-			Json::Array (ref items) => items.iter ().map (calc_sum).sum (),
-			Json::Object (ref items) => items.iter ().map (|& (_, ref item)| calc_sum (item)).sum (),
-			Json::Number (ref value) => value.as_i32 (),
-			Json::String (_) => 0_i32,
+			Json::Array (ref items) => items.iter ().fold (Ok (0_i32), |sum, item| sum
+				.and_then (|sum| i32::add_2 (sum, calc_sum (item) ?))),
+			Json::Object (ref items) => items.iter ().fold (Ok (0_i32), |sum, & (_, ref item)| sum
+				.and_then (|sum| i32::add_2 (sum, calc_sum (item) ?))),
+			Json::Number (ref value) => Ok (value.as_i32 ()),
+			Json::String (_) => Ok (0_i32),
 		}
 	}
 
-	fn calc_sum_no_red (value: & Json) -> i32 {
+	fn calc_sum_no_red (value: & Json) -> NumResult <i32> {
 		match * value {
-			Json::Array (ref items) => items.iter ().map (calc_sum_no_red).sum (),
+			Json::Array (ref items) => items.iter ().fold (Ok (0_i32), |sum, item| sum
+				.and_then (|sum| i32::add_2 (sum, calc_sum_no_red (item) ?))),
 			Json::Object (ref items) => {
 				if ! items.iter ().any (|& (_, ref value)|
-					if let Json::String (ref value) = * value {
-						value == "red"
-					} else { false }
-				) {
-					items.iter ().map (|& (_, ref item)| calc_sum_no_red (item)).sum ()
-				} else { 0_i32 }
+						matches! (value, & Json::String (ref value) if value == "red")) {
+					items.iter ().fold (Ok (0_i32), |sum, & (_, ref item)| sum
+						.and_then (|sum| i32::add_2 (sum, calc_sum_no_red (item) ?)))
+				} else { Ok (0_i32) }
 			},
-			Json::Number (ref value) => value.as_i32 (),
-			Json::String (_) => 0_i32,
+			Json::Number (ref value) => Ok (value.as_i32 ()),
+			Json::String (_) => Ok (0_i32),
 		}
 	}
 

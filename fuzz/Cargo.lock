@@ -323,6 +323,7 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-md5",
+ "aoc-parallel",
 ]
 
 [[package]]
@@ -401,6 +402,7 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-md5",
+ "aoc-parallel",
 ]
 
 [[package]]
@@ -501,6 +503,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-2017"
+version = "0.1.0"
+dependencies = [
+ "aoc-2017-day-01",
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2017-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
 name = "aoc-bitvec"
 version = "0.1.0"
 dependencies = [
@@ -527,6 +546,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-2015",
  "aoc-2016",
+ "aoc-2017",
  "libfuzzer-sys",
 ]
 
@@ -574,6 +594,10 @@ dependencies = [
  "aoc-misc",
  "aoc-nums",
 ]
+
+[[package]]
+name = "aoc-parallel"
+version = "0.1.0"
 
 [[package]]
 name = "aoc-pos"

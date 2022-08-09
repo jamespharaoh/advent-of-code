@@ -19,8 +19,10 @@ pub mod logic {
 
 	use super::*;
 	use model::Input;
+	use model::Side;
 
 	pub fn part_one (input: & Input) -> GenResult <usize> {
+		sanity_check (input) ?;
 		let num_possible =
 			input.triangles.iter_vals ()
 				.map (|(a, b, c)| [a, b, c])
@@ -31,6 +33,7 @@ pub mod logic {
 	}
 
 	pub fn part_two (input: & Input) -> GenResult <usize> {
+		sanity_check (input) ?;
 		let num_possible =
 			input.triangles.iter_vals ()
 				.tuples::<(_, _, _)> ()
@@ -42,6 +45,14 @@ pub mod logic {
 				.filter (|& [a, b, c]| c < a + b)
 				.count ();
 		Ok (num_possible)
+	}
+
+	fn sanity_check (input: & Input) -> GenResult <()> {
+		if input.triangles.iter_vals ()
+				.any (|(a, b, c)| Side::add_3 (a, b, c).is_err ()) {
+			return Err ("Overflow".into ());
+		}
+		Ok (())
 	}
 
 }

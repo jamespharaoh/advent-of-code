@@ -16,7 +16,7 @@ function main {
 			(day-*) day="${arg:4}" ;;
 			(coverage|dev|release|release-lto) profile="$arg" ;;
 			(build|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test) mode="$arg" ;;
-			(cmin|init|repr) fuzz_mode="$arg" ;;
+			(cmin|init|repr|review) fuzz_mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
 			(nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;
@@ -76,6 +76,51 @@ function main {
 					local sum="${sum_output:0:40}"
 					mkdir -p "fuzz/corpus/$year-day-$day"
 					cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
+					;;
+				(review)
+					pushd fuzz
+					local temp=$(mktemp)
+					local cutoff_date=$(mktemp)
+					touch --date "3 days ago" "$cutoff_date"
+					for year in {2015..2021}; do
+						for day in {01..25}; do
+							if [[ ! -d artifacts/$year-day-$day ]]; then continue; fi
+							for artifact in $(find artifacts/$year-day-$day -type f); do
+								if [[ "$artifact" == */slow-unit-* ]]; then continue; fi
+								if [[ "$artifact" == */timeout-* ]]; then continue; fi
+								echo -n "Running $year-day-$day with $artifact..."
+								cargo +nightly fuzz run "$year-day-$day" "$artifact" \
+									-- -timeout=5 -timeout_exitcode=88 \
+									&>"$temp"
+								cargo_result="$?"
+								if [[ $cargo_result == 0 ]]; then
+									if [[ "$artifact" -ot "$cutoff_date" ]]; then
+										echo " (deleted)"
+										rm -f "$artifact"
+									else
+										echo
+									fi
+									continue
+								fi
+								if grep --quiet "SUMMARY: libFuzzer: timeout" "$temp"; then
+									echo " (timeout, ignored)"
+									continue
+								fi
+								echo " (status=$cargo_result)"
+								echo
+								echo "========== $artifact =========="
+								echo
+								cat "$temp"
+								echo
+								echo "aoc fuzz repr year-$year day-$day -- $artifact"
+								echo
+								echo "========== $artifact =========="
+								echo
+							done
+						done
+					done
+					rm -f "$temp" "$cutoff_date"
+					popd
 					;;
 				(*)
 					echo "Syntax error" >&2
