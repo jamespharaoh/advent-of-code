@@ -269,7 +269,6 @@
 <span id="269">269</span>
 <span id="270">270</span>
 <span id="271">271</span>
-<span id="272">272</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 10: Balance Bots</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2016/day/10](https://adventofcode.com/2016/day/10)</span>
@@ -464,7 +463,6 @@
 				.<span class="ident">enumerate</span> ()
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
 					<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-						<span class="ident">parser</span>.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>);
 						<span class="ident">parser</span>.<span class="ident">item</span> ()
 					}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
 						<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
@@ -477,15 +475,15 @@
 		<span class="kw">fn</span> <span class="ident">from_parser</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="ident">parser</span>.<span class="ident">any</span> ()
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;value&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;goes to bot&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;value &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; goes to bot &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Input</span> { <span class="ident">val</span>, <span class="ident">bot</span> })
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;bot&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">low</span>: <span class="ident">Target</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;gives low to&quot;</span>) <span class="question-mark">?</span>.<span class="ident">item</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">high</span>: <span class="ident">Target</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;and high to&quot;</span>) <span class="question-mark">?</span>.<span class="ident">item</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;bot &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">low</span>: <span class="ident">Target</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; gives low to &quot;</span>) <span class="question-mark">?</span>.<span class="ident">item</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">high</span>: <span class="ident">Target</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; and high to &quot;</span>) <span class="question-mark">?</span>.<span class="ident">item</span> () <span class="question-mark">?</span>;
 					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Give</span> { <span class="ident">bot</span>, <span class="ident">low</span>, <span class="ident">high</span> })
 				})
@@ -497,11 +495,11 @@
 		<span class="kw">fn</span> <span class="ident">from_parser</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
 			<span class="ident">parser</span>.<span class="ident">any</span> ()
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;bot&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">bot</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;bot &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Bot</span> (<span class="ident">bot</span>))
 				})
 				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;output&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
+					<span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;output &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Output</span> (<span class="ident">output</span>))
 				})
 				.<span class="ident">done</span> ()

@@ -57,7 +57,7 @@ run on the thread that causes the process to exit. This is because the
 other threads may be forcibly terminated.</li>
 </ol>
 <h3 id="synchronization-in-thread-local-destructors"><a href="#synchronization-in-thread-local-destructors">Synchronization in thread-local destructors</a></h3>
-<p>On Windows, synchronization operations (such as <a href="struct.JoinHandle.html#method.join"><code>JoinHandle::join</code></a>) in
+<p>On Windows, synchronization operations (such as <a href="../struct.JoinHandle.html#method.join"><code>JoinHandle::join</code></a>) in
 thread local destructors are prone to deadlocks and so should be avoided.
 This is because the <a href="https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-best-practices">loader lock</a> is held while a destructor is run. The
 lock is acquired whenever a thread starts or exits or when a DLL is loaded

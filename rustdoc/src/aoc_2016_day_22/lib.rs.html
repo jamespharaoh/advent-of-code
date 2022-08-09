@@ -219,8 +219,6 @@
 <span id="219">219</span>
 <span id="220">220</span>
 <span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 22: Grid Computing</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2016/day/22](https://adventofcode.com/2016/day/22)</span>
@@ -363,34 +361,32 @@
 
 	}
 
+	<span class="kw">impl</span> <span class="ident">Node</span> {
+
+		<span class="kw">fn</span> <span class="ident">new</span> (<span class="ident">pos</span>: <span class="ident">Pos</span>, <span class="ident">size</span>: <span class="ident">Size</span>, <span class="ident">used</span>: <span class="ident">Size</span>, <span class="ident">avail</span>: <span class="ident">Size</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+			<span class="kw">if</span> <span class="ident">pos</span>.<span class="ident">x</span> <span class="op">==</span> <span class="ident">Coord::MAX</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;&#39;pos.x&#39; out of range&quot;</span>.<span class="ident">into</span> ()) }
+			<span class="kw">if</span> <span class="ident">pos</span>.<span class="ident">y</span> <span class="op">==</span> <span class="ident">Coord::MAX</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;&#39;pos.y&#39; out of range&quot;</span>.<span class="ident">into</span> ()) }
+			<span class="kw">if</span> <span class="ident">used</span> <span class="op">&gt;</span> <span class="ident">size</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;&#39;used&#39; greater than &#39;size&#39;&quot;</span>.<span class="ident">into</span> ()) }
+			<span class="kw">if</span> <span class="ident">avail</span> <span class="op">&gt;</span> <span class="ident">size</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;&#39;avail&#39; greater than &#39;size&#39;&quot;</span>.<span class="ident">into</span> ()) }
+			<span class="kw">if</span> <span class="ident">Size::add_2</span> (<span class="ident">used</span>, <span class="ident">avail</span>) <span class="question-mark">?</span> <span class="op">!</span><span class="op">=</span> <span class="ident">size</span> {
+				<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;&#39;used&#39; plus &#39;avail&#39; does not equal &#39;size&#39;&quot;</span>.<span class="ident">into</span> ());
+			}
+			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">pos</span>, <span class="ident">size</span>, <span class="ident">used</span>, <span class="ident">avail</span> })
+		}
+
+	}
+
 	<span class="kw">impl</span> <span class="ident">FromParser</span> <span class="kw">for</span> <span class="ident">Node</span> {
 		<span class="kw">fn</span> <span class="ident">from_parser</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-
 			<span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;/dev/grid/node-x&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">x</span> <span class="op">==</span> <span class="ident">Coord::MAX</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-
 			<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;-y&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">y</span> <span class="op">==</span> <span class="ident">Coord::MAX</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-
 			<span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>, <span class="ident">y</span> };
-
 			<span class="kw">let</span> <span class="ident">size</span>: <span class="ident">Size</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">skip_whitespace</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-
 			<span class="kw">let</span> <span class="ident">used</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;T&quot;</span>) <span class="question-mark">?</span>.<span class="ident">skip_whitespace</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">used</span> <span class="op">&gt;</span> <span class="ident">size</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-
 			<span class="kw">let</span> <span class="ident">avail</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;T&quot;</span>) <span class="question-mark">?</span>.<span class="ident">skip_whitespace</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">avail</span> <span class="op">&gt;</span> <span class="ident">size</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-			<span class="kw">if</span> <span class="ident">Size::add_2</span> (<span class="ident">used</span>, <span class="ident">avail</span>) <span class="question-mark">?</span> <span class="op">!</span><span class="op">=</span> <span class="ident">size</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-
-			<span class="kw">let</span> <span class="ident">use_pc</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;T&quot;</span>) <span class="question-mark">?</span>.<span class="ident">skip_whitespace</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">expect_pc</span> <span class="op">=</span> <span class="ident">Size::div_2</span> (<span class="ident">Size::mul_2</span> (<span class="ident">used</span>, <span class="number">100</span>) <span class="question-mark">?</span>, <span class="ident">size</span>) <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">use_pc</span>.<span class="ident">as_u16</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">expect_pc</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
-
+			<span class="kw">let</span> <span class="ident">_use_pc</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;T&quot;</span>) <span class="question-mark">?</span>.<span class="ident">skip_whitespace</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
 			<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;%&quot;</span>) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">pos</span>, <span class="ident">size</span>, <span class="ident">used</span>, <span class="ident">avail</span> })
-
+			<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::new</span> (<span class="ident">pos</span>, <span class="ident">size</span>, <span class="ident">used</span>, <span class="ident">avail</span>) <span class="question-mark">?</span>)
 		}
 	}
 

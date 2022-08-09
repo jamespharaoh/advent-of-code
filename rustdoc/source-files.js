@@ -89,6 +89,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_misc":["",[],["misc.rs"]],\
 "aoc_nums":["",[],["nums.rs"]],\
 "aoc_ocr":["",[],["ocr.rs"]],\
+"aoc_parallel":["",[],["parallel.rs"]],\
 "aoc_pos":["",[],["pos.rs"]],\
 "aoc_search":["",[],["search.rs"]],\
 "arrayvec":["",[],["array_string.rs","arrayvec.rs","arrayvec_impl.rs","char.rs","errors.rs","lib.rs","utils.rs"]],\

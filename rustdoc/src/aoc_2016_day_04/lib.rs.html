@@ -153,6 +153,12 @@
 <span id="153">153</span>
 <span id="154">154</span>
 <span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 4: Security Through Obscurity</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! [https://adventofcode.com/2016/day/4](https://adventofcode.com/2016/day/4)</span>
@@ -207,15 +213,19 @@
 	}
 
 	<span class="kw">fn</span> <span class="ident">room_is_valid</span> (<span class="ident">room</span>: <span class="op">&amp;</span> <span class="ident">Room</span>) -&gt; <span class="ident">bool</span> {
-		<span class="ident">room</span>.<span class="ident">checksum</span> <span class="op">==</span>
+		<span class="kw">let</span> <span class="ident">char_groups</span> <span class="op">=</span>
 			<span class="ident">room</span>.<span class="ident">name</span>.<span class="ident">chars</span> ()
 				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span> <span class="op">!</span><span class="op">=</span> <span class="string">&#39;-&#39;</span>)
-				.<span class="ident">counts</span> ()
-				.<span class="ident">into_iter</span> ()
+				.<span class="ident">sorted</span> ()
+				.<span class="ident">group_by</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>);
+		<span class="kw">let</span> <span class="ident">expected_checksum</span> <span class="op">=</span>
+			<span class="ident">char_groups</span>.<span class="ident">into_iter</span> ()
+				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">ch</span>, <span class="ident">group</span>)<span class="op">|</span> (<span class="ident">ch</span>, <span class="ident">group</span>.<span class="ident">count</span> ()))
 				.<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">ch</span>, <span class="ident">num</span>)<span class="op">|</span> (<span class="ident">cmp::Reverse</span> (<span class="ident">num</span>), <span class="ident">ch</span>))
 				.<span class="ident">take</span> (<span class="number">5</span>)
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">ch</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">ch</span>)
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> ()
+				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> ();
+		<span class="ident">room</span>.<span class="ident">checksum</span> <span class="op">==</span> <span class="ident">expected_checksum</span>
 	}
 
 }
@@ -243,11 +253,13 @@
 				.<span class="ident">enumerate</span> ()
 				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
 					<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-						<span class="ident">parser</span>.<span class="ident">set_word_pred</span> (<span class="ident">char::is_alphabetic</span>);
+						<span class="ident">parser</span>.<span class="ident">set_word_pred</span> (<span class="op">|</span><span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">is_ascii_lowercase</span> ());
 						<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_dashes</span> <span class="op">=</span>
 							<span class="ident">parser</span>.<span class="ident">rest</span> ().<span class="ident">chars</span> ()
+								.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">is_ascii_lowercase</span> () <span class="op">|</span><span class="op">|</span> <span class="ident">ch</span> <span class="op">==</span> <span class="string">&#39;-&#39;</span>)
 								.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span> <span class="op">==</span> <span class="string">&#39;-&#39;</span>)
 								.<span class="ident">count</span> ();
+						<span class="kw">if</span> <span class="ident">num_dashes</span> <span class="op">&lt;</span> <span class="number">1</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()) }
 						<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">String::new</span> ();
 						<span class="kw">loop</span> {
 							<span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect_next</span> () <span class="question-mark">?</span>;
@@ -275,7 +287,7 @@
 
 		<span class="attribute">#[ <span class="ident">test</span> ]</span>
 		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 1: col 13: abc[def]ghi]&quot;</span>,
+			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 1: col 1: abc[def]ghi]&quot;</span>,
 				<span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;abc[def]ghi]&quot;</span> ]));
 		}
 

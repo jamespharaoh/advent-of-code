@@ -17,7 +17,7 @@ in Rust can nonetheless be caught (unless compiling with <code>panic=abort</code
 from, or alternatively be resumed with
 <a href="../../std/panic/fn.resume_unwind.html"><code>resume_unwind</code></a>. If the panic
 is not caught the thread will exit, but the panic may optionally be
-detected from a different thread with <a href="struct.JoinHandle.html#method.join"><code>join</code></a>. If the main thread panics
+detected from a different thread with <a href="../struct.JoinHandle.html#method.join"><code>join</code></a>. If the main thread panics
 without the panic being caught, the application will exit with a
 non-zero exit code.</p>
 <p>When the main thread of a Rust program terminates, the entire program shuts
@@ -35,7 +35,7 @@ thread (i.e., join).</p>
 <p>In this example, the spawned thread is “detached,” which means that there is
 no way for the program to learn when the spawned thread completes or otherwise
 terminates.</p>
-<p>To learn when a thread completes, it is necessary to capture the <a href="struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a>
+<p>To learn when a thread completes, it is necessary to capture the <a href="../struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a>
 object that is returned by the call to <a href="fn.spawn.html" title="spawn"><code>spawn</code></a>, which provides
 a <code>join</code> method that allows the caller to wait for the completion of the
 spawned thread:</p>
@@ -47,7 +47,7 @@ spawned thread:</p>
 });
 <span class="comment">// some work here</span>
 <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">thread_join_handle</span>.<span class="ident">join</span>();</code></pre></div>
-<p>The <a href="struct.JoinHandle.html#method.join"><code>join</code></a> method returns a <a href="type.Result.html"><code>thread::Result</code></a> containing <a href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html#variant.Ok"><code>Ok</code></a> of the final
+<p>The <a href="../struct.JoinHandle.html#method.join"><code>join</code></a> method returns a <a href="type.Result.html"><code>thread::Result</code></a> containing <a href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html#variant.Ok"><code>Ok</code></a> of the final
 value produced by the spawned thread, or <a href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html#variant.Err"><code>Err</code></a> of the value given to
 a call to <a href="https://doc.rust-lang.org/nightly/std/macro.panic.html" title="panic!"><code>panic!</code></a> if the thread panicked.</p>
 <p>Note that there is no parent/child relationship between a thread that spawns a
@@ -67,7 +67,7 @@ which currently allows you to set the name and stack size for the thread:</p>
 two ways:</p>
 <ul>
 <li>By spawning a new thread, e.g., using the <a href="fn.spawn.html" title="spawn"><code>thread::spawn</code></a>
-function, and calling <a href="struct.JoinHandle.html#method.thread" title="JoinHandle::thread"><code>thread</code></a> on the <a href="struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a>.</li>
+function, and calling <a href="../struct.JoinHandle.html#method.thread" title="JoinHandle::thread"><code>thread</code></a> on the <a href="../struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a>.</li>
 <li>By requesting the current thread, using the <a href="fn.current.html"><code>thread::current</code></a> function.</li>
 </ul>
 <p>The <a href="fn.current.html"><code>thread::current</code></a> function is available even for threads not spawned
@@ -124,7 +124,7 @@ the specified duration has been reached (may wake spuriously).</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.scope.html" title="aoc_misc::thread::scope fn">scope</a></div><div class="item-right docblock-short"><p>Create a scope for spawning scoped threads.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.sleep.html" title="aoc_misc::thread::sleep fn">sleep</a></div><div class="item-right docblock-short"><p>Puts the current thread to sleep for at least the specified amount of time.</p>
 </div></div><div class="item-row"><div class="item-left deprecated module-item"><a class="fn" href="fn.sleep_ms.html" title="aoc_misc::thread::sleep_ms fn">sleep_ms</a><span class="stab deprecated" title="">Deprecated</span></div><div class="item-right docblock-short"><p>Puts the current thread to sleep for at least the specified amount of time.</p>
-</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn.html" title="aoc_misc::thread::spawn fn">spawn</a></div><div class="item-right docblock-short"><p>Spawns a new thread, returning a <a href="struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a> for it.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.spawn.html" title="aoc_misc::thread::spawn fn">spawn</a></div><div class="item-right docblock-short"><p>Spawns a new thread, returning a <a href="../struct.JoinHandle.html" title="JoinHandle"><code>JoinHandle</code></a> for it.</p>
 </div></div><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.yield_now.html" title="aoc_misc::thread::yield_now fn">yield_now</a></div><div class="item-right docblock-short"><p>Cooperatively gives up a timeslice to the OS scheduler.</p>
 </div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.Result.html" title="aoc_misc::thread::Result type">Result</a></div><div class="item-right docblock-short"><p>A specialized <a href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html"><code>Result</code></a> type for threads.</p>
 </div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_misc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (f03ce3096 2022-08-08)" ></div></body></html>
