@@ -212,14 +212,14 @@
 			.<span class="ident">permutations</span> (<span class="ident">names</span>.<span class="ident">len</span> ())
 			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">plan</span><span class="op">|</span> <span class="ident">plan</span>.<span class="ident">iter</span> ()
 				.<span class="ident">circular_tuple_windows</span>::<span class="op">&lt;</span>(<span class="kw">_</span>, <span class="kw">_</span>)<span class="op">&gt;</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">indexes</span><span class="op">|</span> {
+				.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0_i32</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">indexes</span><span class="op">|</span> <span class="ident">sum</span>.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">sum</span><span class="op">|</span> {
 					<span class="kw">let</span> <span class="ident">score_0</span> <span class="op">=</span> <span class="ident">scores</span> [<span class="ident">indexes</span>.<span class="number">0</span> <span class="op">*</span> <span class="ident">names</span>.<span class="ident">len</span> () <span class="op">+</span> <span class="ident">indexes</span>.<span class="number">1</span>];
 					<span class="kw">let</span> <span class="ident">score_1</span> <span class="op">=</span> <span class="ident">scores</span> [<span class="ident">indexes</span>.<span class="number">1</span> <span class="op">*</span> <span class="ident">names</span>.<span class="ident">len</span> () <span class="op">+</span> <span class="ident">indexes</span>.<span class="number">0</span>];
-					<span class="ident">score_0</span> <span class="op">+</span> <span class="ident">score_1</span>
-				})
-				.<span class="ident">sum</span> ())
-			.<span class="ident">max</span> ()
-			.<span class="ident">unwrap</span> ())
+					<span class="ident">i32::add_3</span> (<span class="ident">sum</span>, <span class="ident">score_0</span>, <span class="ident">score_1</span>)
+				})))
+			.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="ident">i32::MIN</span>), <span class="op">|</span><span class="ident">max</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">max</span>
+				.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">max</span><span class="op">|</span> <span class="ident">item</span>
+					.<span class="ident">map</span> (<span class="op">|</span><span class="ident">item</span><span class="op">|</span> <span class="ident">cmp::max</span> (<span class="ident">max</span>, <span class="ident">item</span>)))) <span class="question-mark">?</span>)
 	}
 
 }
