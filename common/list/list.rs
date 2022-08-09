@@ -12,7 +12,7 @@
 //! We also declare [`CharList`] as `List <char>`, and implement some extra methods and traits to
 //! make it work nicely with [`String`] and [`str`].
 
-use super::*;
+use aoc_misc::*;
 
 pub use base_list::List;
 pub use char_list::CharList;

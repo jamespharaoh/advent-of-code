@@ -5,6 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_md5 as md5;
 
 puzzle_info! {
 	name = "One-Time Pad";

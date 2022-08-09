@@ -1,11 +1,15 @@
-use super::*;
+use std::fmt::{ self, Display };
+
+use aoc_misc::*;
+use aoc_nums as nums;
+use nums::Int;
 
 pub struct DrawDots <Val, Iter> (pub Iter)
 	where
 		Val: Int,
 		Iter: Iterator <Item = (Val, Val)> + Clone;
 
-impl <Val, Iter> fmt::Display for DrawDots <Val, Iter>
+impl <Val, Iter> Display for DrawDots <Val, Iter>
 	where
 		Iter: Iterator <Item = (Val, Val)> + Clone,
 		Val: Int {

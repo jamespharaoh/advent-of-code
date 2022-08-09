@@ -1,4 +1,9 @@
-use super::*;
+use std::cmp;
+use std::fmt::{ self, Debug, Display, Write as _ };
+use std::ops::Index;
+
+#[ cfg (test) ] use aoc_misc::*;
+use aoc_nums as nums;
 use nums::IntConv;
 
 #[ derive (Eq, PartialEq) ]
@@ -36,13 +41,14 @@ impl Output {
 	}
 
 	#[ allow (clippy::missing_inline_in_public_items) ]
-	pub fn from_hex (input: & str) -> GenResult <Self> {
+	pub fn from_hex (input: & str) -> Result <Self, String> {
 		let input_len = input.chars ().count ();
-		if input_len != 32 { Err (format! ("Expected 32 chars, not {}", input_len)) ? }
+		if input_len != 32 { return Err (format! ("Expected 32 chars, not {}", input_len)) }
 		let mut result = [0; 16];
 		let mut input_iter = input.chars ();
 		for result_ch in result.iter_mut () {
-			let (high_ch, low_ch) = input_iter.next_tuple ().unwrap ();
+			let high_ch = input_iter.next ().unwrap ();
+			let low_ch = input_iter.next ().unwrap ();
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
 			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4_i32 | decode (low_ch) ?.as_u8 ();
 		}
@@ -53,7 +59,7 @@ impl Output {
 	#[ must_use ]
 	pub fn num_zeros (& self) -> u8 {
 		let mut result = 0;
-		for byte in self.0.iter_vals () {
+		for byte in self.0.iter ().copied () {
 			if byte & 0xf0 != 0 { break }
 			result += 1;
 			if byte & 0x0f != 0 { break }

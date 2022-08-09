@@ -3,6 +3,8 @@
 //! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)
 
 use aoc_common::*;
+use aoc_ocr as ocr;
+use aoc_pos as pos;
 
 puzzle_info! {
 	name = "Transparent Origami";

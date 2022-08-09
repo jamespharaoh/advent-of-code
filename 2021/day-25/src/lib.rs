@@ -2,7 +2,10 @@
 //!
 //! [https://adventofcode.com/2021/day/25](https://adventofcode.com/2021/day/25)
 
+use aoc_bitvec as bitvec;
 use aoc_common::*;
+use aoc_grid as grid;
+use aoc_pos as pos;
 
 puzzle_info! {
 	name = "Sea Cucumber";

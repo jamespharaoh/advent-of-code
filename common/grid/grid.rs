@@ -1,5 +1,12 @@
-use super::*;
+use std::fmt::Debug;
+use std::iter;
+use std::marker::PhantomData;
+use std::slice::Iter as SliceIter;
 
+use aoc_bitvec as bitvec;
+use aoc_misc::*;
+use aoc_nums as nums;
+use aoc_pos as pos;
 use bitvec::BitVec;
 use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
@@ -36,7 +43,7 @@ impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
 		assert! (origin == [0; DIMS]);
 		Self::wrap (
 			iter::repeat (default ())
-				.take (size.iter_vals ().product ())
+				.take (size.iter ().copied ().product ())
 				.collect::<Vec <_>> (),
 			origin,
 			size)

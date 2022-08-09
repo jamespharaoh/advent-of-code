@@ -1,0 +1,17 @@
+[package]
+
+	name = "aoc-grid"
+	version = "0.1.0"
+	edition = "2021"
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+	path = "grid.rs"
+
+[dependencies]
+
+	aoc-bitvec = { path = "../bitvec" }
+	aoc-misc = { path = "../misc" }
+	aoc-nums = { path = "../nums" }
+	aoc-pos = { path = "../pos" }

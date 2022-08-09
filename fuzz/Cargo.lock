@@ -57,6 +57,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -65,6 +66,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -81,6 +83,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -177,6 +180,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -209,6 +214,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-search",
 ]
 
 [[package]]
@@ -281,6 +287,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -289,6 +296,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -313,6 +321,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -337,6 +346,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-ocr",
 ]
 
 [[package]]
@@ -378,6 +389,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -386,6 +398,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -410,6 +423,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -450,6 +465,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -467,6 +484,9 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+ "aoc-search",
 ]
 
 [[package]]
@@ -479,6 +499,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-bitvec"
+version = "0.1.0"
+dependencies = [
+ "aoc-nums",
+]
+
+[[package]]
 name = "aoc-codegen"
 version = "0.1.0"
 
@@ -486,7 +513,8 @@ version = "0.1.0"
 name = "aoc-common"
 version = "0.1.0"
 dependencies = [
- "arrayvec",
+ "aoc-misc",
+ "aoc-nums",
  "clap",
  "itertools",
 ]
@@ -498,6 +526,59 @@ dependencies = [
  "aoc-2015",
  "aoc-2016",
  "libfuzzer-sys",
+]
+
+[[package]]
+name = "aoc-grid"
+version = "0.1.0"
+dependencies = [
+ "aoc-bitvec",
+ "aoc-misc",
+ "aoc-nums",
+ "aoc-pos",
+]
+
+[[package]]
+name = "aoc-md5"
+version = "0.1.0"
+dependencies = [
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-misc"
+version = "0.1.0"
+dependencies = [
+ "arrayvec",
+ "itertools",
+]
+
+[[package]]
+name = "aoc-nums"
+version = "0.1.0"
+
+[[package]]
+name = "aoc-ocr"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-pos"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-search"
+version = "0.1.0"
+dependencies = [
+ "aoc-grid",
+ "aoc-misc",
 ]
 
 [[package]]

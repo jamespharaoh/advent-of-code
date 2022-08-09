@@ -12,6 +12,8 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
+	aoc-ocr = { path = "../../common/ocr" }
+	aoc-pos = { path = "../../common/pos" }
 
 [build-dependencies]
 

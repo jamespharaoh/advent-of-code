@@ -1,6 +1,9 @@
 //! Dynamically sized array of items encoded as bits and packed
 
-use super::*;
+use std::cmp;
+use std::marker::PhantomData;
+
+use aoc_nums as nums;
 use nums::IntConv;
 
 /// Dynamically sized array of items encoded as bits and packed

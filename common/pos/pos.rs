@@ -1,4 +1,8 @@
-use super::*;
+use std::fmt::{ self, Debug };
+use std::ops::{ Add, Neg, Rem, Sub };
+
+use aoc_misc::*;
+use aoc_nums as nums;
 use nums::Int;
 use nums::IntSigned;
 use nums::NumResult;
@@ -41,9 +45,11 @@ macro_rules! pos_ops {
 				let other_coords = other.coord_to_array ();
 				let mut result_coords = Self::ZERO.coord_to_array ();
 				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = ok_or! (
-						self_coords [idx].add_signed (other_coords [idx]),
-						return None);
+					result_coords [idx] =
+						match self_coords [idx].add_signed (other_coords [idx]) {
+							Ok (val) => val,
+							Err (_) => return None,
+						};
 				}
 				Some (Self::coord_from_array (result_coords))
 			}

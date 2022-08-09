@@ -21,7 +21,8 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use bithash::*;
+use aoc_bithash::*;
+use aoc_pos as pos;
 
 pub mod rotation;
 
@@ -279,7 +280,7 @@ mod logic {
 
 mod model {
 
-	use aoc_common::*;
+	use super::*;
 
 	pub type Coord = i16;
 	pub type Pos = pos::PosXYZ <Coord>;

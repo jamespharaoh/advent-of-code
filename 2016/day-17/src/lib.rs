@@ -5,6 +5,8 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_md5 as md5;
+use aoc_pos as pos;
 
 puzzle_info! {
 	name = "Two Steps Forward";

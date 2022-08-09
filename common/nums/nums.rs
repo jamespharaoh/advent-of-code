@@ -1,5 +1,8 @@
-use super::*;
-use std::fmt::{ Debug, Display };
+use std::error::Error;
+use std::fmt::{ self, Debug, Display };
+use std::hash::Hash;
+use std::ops::{ Add, BitAnd, BitAndAssign, BitOr, BitOrAssign, Div, Mul, Neg, Rem, Shl, ShlAssign,
+	Shr, ShrAssign, Sub };
 
 pub type NumResult <Val> = Result <Val, Overflow>;
 

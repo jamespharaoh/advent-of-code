@@ -1,6 +1,7 @@
 //! Iterative search algorithms for solutions in a problem space
 
-use super::*;
+use aoc_grid as grid;
+use aoc_misc::*;
 use grid::Grid;
 use grid::GridPos;
 
@@ -23,8 +24,8 @@ use grid::GridPos;
 /// directly, of course.
 ///
 /// ```
-/// # use aoc_common::*;
-/// # use aoc_common::search::*;
+/// # use aoc_misc::*;
+/// # use aoc_search::*;
 /// // set up a data structure with a map of connected nodes and the distance between them
 /// let nodes: HashMap <& str, Vec <(& str, u64)>> = {
 ///

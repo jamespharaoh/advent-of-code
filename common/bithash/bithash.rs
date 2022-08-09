@@ -1,6 +1,10 @@
 //! Bloom filter
 
-use super::*;
+use std::fmt::{ self, Display };
+use std::hash::{ BuildHasher, Hash, Hasher };
+use std::ops::{ BitAnd, Not };
+
+use aoc_nums as nums;
 use nums::IntConv;
 
 /// State for building a [`BitHash`] iteratively
@@ -105,7 +109,7 @@ impl <const LEN: usize> BitHash <LEN> {
 
 }
 
-impl <const LEN: usize> fmt::Display for BitHash <LEN> {
+impl <const LEN: usize> Display for BitHash <LEN> {
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		for idx in 0 .. LEN {
@@ -115,7 +119,7 @@ impl <const LEN: usize> fmt::Display for BitHash <LEN> {
 	}
 }
 
-impl <const LEN: usize> ops::BitAnd for BitHash <LEN> {
+impl <const LEN: usize> BitAnd for BitHash <LEN> {
 
 	type Output = Self;
 
@@ -127,7 +131,7 @@ impl <const LEN: usize> ops::BitAnd for BitHash <LEN> {
 
 }
 
-impl <const LEN: usize> ops::Not for BitHash <LEN> {
+impl <const LEN: usize> Not for BitHash <LEN> {
 
 	type Output = Self;
 

@@ -5,6 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_list as list;
 
 puzzle_info! {
 	name = "Medicine for Rudolph";

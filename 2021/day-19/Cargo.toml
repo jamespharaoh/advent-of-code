@@ -11,7 +11,9 @@
 
 [dependencies]
 
+	aoc-bithash = { path = "../../common/bithash" }
 	aoc-common = { path = "../../common" }
+	aoc-pos = { path = "../../common/pos" }
 
 [build-dependencies]
 

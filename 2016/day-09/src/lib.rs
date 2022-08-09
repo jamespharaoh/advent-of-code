@@ -21,7 +21,7 @@ pub mod logic {
 
 	pub fn part_one (input: & str) -> GenResult <usize> {
 		let sum = Parser::wrap (input, |parser| {
-			let mut sum = 0;
+			let mut sum = 0_usize;
 			while parser.peek ().is_some () {
 				if parser.peek ().unwrap () == '(' {
 					let len: usize = parser.expect ("(") ?.int () ?;
@@ -29,7 +29,7 @@ pub mod logic {
 					parser.expect (")") ?;
 					for _ in 0 .. len {
 						parser.expect_next () ?;
-						sum = Int::add_2 (sum, num) ?;
+						sum = usize::add_2 (sum, num) ?;
 					}
 				} else {
 					parser.expect_next () ?;
@@ -50,8 +50,8 @@ pub mod logic {
 					let num: usize = parser.expect ("x") ?.int () ?;
 					parser.expect (")") ?;
 					let byte_len = parser.rest ().chars ().take (len).map (char::len_utf8).sum ();
-					sum = Int::add_2 (sum,
-						Int::mul_2 (num,
+					sum = usize::add_2 (sum,
+						usize::mul_2 (num,
 							part_two (
 								#[ allow (clippy::string_slice) ]
 								& parser.rest () [0 .. byte_len],

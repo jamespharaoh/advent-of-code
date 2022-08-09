@@ -5,6 +5,9 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_grid as grid;
+use aoc_pos as pos;
+use aoc_search as search;
 
 puzzle_info! {
 	name = "Air Duct Spelunking";

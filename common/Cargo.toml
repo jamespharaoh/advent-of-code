@@ -6,7 +6,8 @@
 
 [dependencies]
 
-	arrayvec = "*"
+	aoc-misc = { path = "misc" }
+	aoc-nums = { path = "nums" }
 	clap = { version = "*", features = [ "derive" ] }
 	itertools = "*"
 

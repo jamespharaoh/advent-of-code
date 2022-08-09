@@ -12,6 +12,8 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
+	aoc-grid = { path = "../../common/grid" }
+	aoc-pos = { path = "../../common/pos" }
 
 [lib]
 

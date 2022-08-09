@@ -11,7 +11,10 @@
 
 [dependencies]
 
+	aoc-bitvec = { path = "../../common/bitvec" }
 	aoc-common = { path = "../../common" }
+	aoc-grid = { path = "../../common/grid" }
+	aoc-pos = { path = "../../common/pos" }
 
 [build-dependencies]
 

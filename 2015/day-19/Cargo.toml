@@ -12,6 +12,7 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
+	aoc-list = { path = "../../common/list" }
 
 [lib]
 

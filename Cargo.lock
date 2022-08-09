@@ -67,6 +67,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -75,6 +76,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -91,6 +93,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -187,6 +190,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -195,6 +200,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-list",
 ]
 
 [[package]]
@@ -219,6 +225,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-search",
 ]
 
 [[package]]
@@ -291,6 +298,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -299,6 +307,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -323,6 +332,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -347,6 +357,9 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-ocr",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -388,6 +401,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -396,6 +410,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
 ]
 
 [[package]]
@@ -420,6 +435,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-md5",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -460,6 +477,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -477,6 +496,9 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+ "aoc-search",
 ]
 
 [[package]]
@@ -559,6 +581,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -623,6 +647,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-ocr",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -639,6 +665,9 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+ "aoc-search",
 ]
 
 [[package]]
@@ -669,8 +698,10 @@ dependencies = [
 name = "aoc-2021-day-19"
 version = "0.1.0"
 dependencies = [
+ "aoc-bithash",
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -679,6 +710,8 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -703,6 +736,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-search",
 ]
 
 [[package]]
@@ -717,8 +751,25 @@ dependencies = [
 name = "aoc-2021-day-25"
 version = "0.1.0"
 dependencies = [
+ "aoc-bitvec",
  "aoc-codegen",
  "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+]
+
+[[package]]
+name = "aoc-bithash"
+version = "0.1.0"
+dependencies = [
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-bitvec"
+version = "0.1.0"
+dependencies = [
+ "aoc-nums",
 ]
 
 [[package]]
@@ -729,9 +780,71 @@ version = "0.1.0"
 name = "aoc-common"
 version = "0.1.0"
 dependencies = [
- "arrayvec",
+ "aoc-misc",
+ "aoc-nums",
  "clap",
  "itertools",
+]
+
+[[package]]
+name = "aoc-grid"
+version = "0.1.0"
+dependencies = [
+ "aoc-bitvec",
+ "aoc-misc",
+ "aoc-nums",
+ "aoc-pos",
+]
+
+[[package]]
+name = "aoc-list"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+]
+
+[[package]]
+name = "aoc-md5"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-misc"
+version = "0.1.0"
+dependencies = [
+ "arrayvec",
+ "itertools",
+]
+
+[[package]]
+name = "aoc-nums"
+version = "0.1.0"
+
+[[package]]
+name = "aoc-ocr"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-pos"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-search"
+version = "0.1.0"
+dependencies = [
+ "aoc-grid",
+ "aoc-misc",
 ]
 
 [[package]]
@@ -765,9 +878,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "clap"
-version = "3.2.15"
+version = "3.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "44bbe24bbd31a185bc2c4f7c2abe80bea13a20d57ee4e55be70ac512bdc76417"
+checksum = "a3dbbb6653e7c55cc8595ad3e1f7be8f32aba4eb7ff7f0fd1163d4f3d137c0a9"
 dependencies = [
  "atty",
  "bitflags",
@@ -850,9 +963,9 @@ dependencies = [
 
 [[package]]
 name = "libc"
-version = "0.2.126"
+version = "0.2.127"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
+checksum = "505e71a4706fa491e9b1b55f51b95d4037d0821ee40131190475f692b35b009b"
 
 [[package]]
 name = "once_cell"
@@ -892,18 +1005,18 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.42"
+version = "1.0.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c278e965f1d8cf32d6e0e96de3d3e79712178ae67986d9cf9151f51e95aac89b"
+checksum = "0a2ca2c61bc9f3d74d2886294ab7b9853abd9c1ad903a3ac7815c58989bb7bab"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "quote"
-version = "1.0.20"
+version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3bcdf212e9776fbcb2d23ab029360416bb1706b1aea2d1a5ba002727cbcab804"
+checksum = "bbe448f377a7d6961e30f5955f9b8d106c3f5e449d493ee1b125c1d43c2b5179"
 dependencies = [
  "proc-macro2",
 ]
@@ -916,9 +1029,9 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 
 [[package]]
 name = "syn"
-version = "1.0.98"
+version = "1.0.99"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c50aef8a904de4c23c788f104b7dddc7d6f79c647c7c8ce4cc8f73eb0ca773dd"
+checksum = "58dbef6ec655055e20b86b15a8cc6d439cca19b667537ac6a1369572d151ab13"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -942,9 +1055,9 @@ checksum = "b1141d4d61095b28419e22cb0bbf02755f5e54e0526f97f1e3d1d160e60885fb"
 
 [[package]]
 name = "unicode-ident"
-version = "1.0.2"
+version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15c61ba63f9235225a22310255a29b806b907c9b8c964bcbd0a2c70f3f2deea7"
+checksum = "c4f5b37a154999a8f3f98cc23a628d850e154479cd94decf3414696e12e31aaf"
 
 [[package]]
 name = "version_check"
