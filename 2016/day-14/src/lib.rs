@@ -6,6 +6,8 @@
 
 use aoc_common::*;
 use aoc_md5 as md5;
+use aoc_parallel as parallel;
+use parallel::ThreadMap;
 
 puzzle_info! {
 	name = "One-Time Pad";
@@ -22,37 +24,37 @@ pub mod logic {
 	use model::Input;
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
-		Ok (KeyIndexIter::new (input, 0)
+		Ok (key_indexes (input, 0)
 			.nth (input.num_keys.as_usize () - 1)
 			.unwrap ())
 	}
 
 	pub fn part_two (input: & Input) -> GenResult <u32> {
-		Ok (KeyIndexIter::new (input, input.hash_reps)
+		Ok (key_indexes (input, input.hash_reps)
 			.nth (input.num_keys.as_usize () - 1)
 			.unwrap ())
 	}
 
-	struct KeyIndexIter {
+	struct KeyIndexIter <HashesIter: Iterator> {
 		hashes: MultiPeek <HashesIter>,
 		idx: u32,
 		num_next: u32,
 	}
 
-	impl KeyIndexIter {
-
-		#[ inline ]
-		fn new (input: & Input, hash_reps: u32) -> Self {
-			Self {
-				hashes: HashesIter::new (input, hash_reps).multipeek (),
-				idx: 0,
-				num_next: input.num_next,
-			}
+	#[ inline ]
+	fn key_indexes (
+		input: & Input,
+		hash_reps: u32,
+	) -> KeyIndexIter <impl Iterator <Item = [u8; 32]>> {
+		KeyIndexIter {
+			hashes: hashes_iter (input, hash_reps).multipeek (),
+			idx: 0,
+			num_next: input.num_next,
 		}
-
 	}
 
-	impl Iterator for KeyIndexIter {
+	impl <HashesIter> Iterator for KeyIndexIter <HashesIter>
+		where HashesIter: Iterator <Item = [u8; 32]> {
 
 		type Item = u32;
 
@@ -90,39 +92,30 @@ pub mod logic {
 			).0
 	}
 
-	struct HashesIter {
-		buffer: String,
-		salt_len: usize,
-		idx: u32,
+	fn hashes_iter (
+		input: & Input,
 		hash_reps: u32,
+	) -> impl Iterator <Item = [u8; 32]> {
+		const BATCH_SIZE: usize = 1000;
+		let salt = input.salt.clone ();
+		let num_start_iter = (0_i32 .. ).step_by (BATCH_SIZE);
+		let map_fn = move |num_start| {
+			let mut buffer = salt.clone ();
+			(num_start .. )
+				.take (BATCH_SIZE)
+				.map (|num| {
+					buffer.truncate (salt.len ());
+					write! (& mut buffer, "{}", num).unwrap ();
+					stretched_hash (& buffer, hash_reps)
+				})
+				.collect::<Vec <_>> ()
+		};
+		ThreadMap::start (num_start_iter, map_fn, get_num_threads (input)).flatten ()
 	}
 
-	impl HashesIter {
-
-		#[ inline ]
-		fn new (input: & Input, hash_reps: u32) -> Self {
-			Self {
-				buffer: input.salt.clone (),
-				salt_len: input.salt.len (),
-				idx: 0,
-				hash_reps,
-			}
-		}
-
-	}
-
-	impl Iterator for HashesIter {
-
-		type Item = [u8; 32];
-
-		#[ inline ]
-		fn next (& mut self) -> Option <[u8; 32]> {
-			self.buffer.truncate (self.salt_len);
-			write! (& mut self.buffer, "{}", self.idx).unwrap ();
-			self.idx += 1;
-			Some (stretched_hash (& self.buffer, self.hash_reps))
-		}
-
+	fn get_num_threads (input: & Input) -> usize {
+		if input.max_threads == 1 { return input.max_threads }
+		parallel::num_cpus ().unwrap_or (input.max_threads)
 	}
 
 	#[ inline ]
@@ -150,6 +143,7 @@ pub mod model {
 		pub num_keys: u32,
 		pub num_next: u32,
 		pub hash_reps: u32,
+		pub max_threads: usize,
 	}
 
 	impl Input {
@@ -164,8 +158,11 @@ pub mod model {
 			if num_next > 2000 { return Err ("Number of next hashes must be 2000 or less".into ()) }
 
 			let hash_reps = parser::input_param (& mut input, "HASH_REPS=", 2016_u32) ?;
-			if hash_reps < 2 { return Err ("Hash reps must be at least one".into ()) }
+			if hash_reps < 1 { return Err ("Hash reps must be at least one".into ()) }
 			if hash_reps > 3000 { return Err ("Hash reps must be 3000 or less".into ()) }
+
+			let max_threads = parser::input_param (& mut input, "MAX_THREADS=", usize::MAX) ?;
+			if hash_reps < 1 { return Err ("Hash reps must be at least one".into ()) }
 
 			if input.len () != 1 { return Err ("Invalid input: more than one line".into ()) }
 
@@ -175,7 +172,7 @@ pub mod model {
 						format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			if salt.is_empty () { return Err ("Salt must be at least one character".into ()) }
 
-			Ok (Self { salt, num_keys, num_next, hash_reps })
+			Ok (Self { salt, num_keys, num_next, hash_reps, max_threads })
 
 		}
 	}
@@ -191,6 +188,7 @@ mod examples {
 		"NUM_KEYS=16",
 		"NUM_NEXT=1000",
 		"HASH_REPS=16",
+		"MAX_THREADS=2",
 		"abc",
 	];
 

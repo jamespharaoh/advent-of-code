@@ -68,7 +68,10 @@ pub use std::str::FromStr;
 pub use std::sync::Arc;
 pub use std::sync::Condvar;
 pub use std::sync::Mutex;
+pub use std::sync::atomic::AtomicUsize;
+pub use std::sync::atomic::Ordering as AtomicOrdering;
 pub use std::thread;
+pub use std::thread::JoinHandle;
 pub use std::time;
 
 #[ cfg (not (fuzzing)) ]

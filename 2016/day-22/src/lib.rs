@@ -140,34 +140,32 @@ pub mod model {
 
 	}
 
+	impl Node {
+
+		fn new (pos: Pos, size: Size, used: Size, avail: Size) -> GenResult <Self> {
+			if pos.x == Coord::MAX { return Err ("'pos.x' out of range".into ()) }
+			if pos.y == Coord::MAX { return Err ("'pos.y' out of range".into ()) }
+			if used > size { return Err ("'used' greater than 'size'".into ()) }
+			if avail > size { return Err ("'avail' greater than 'size'".into ()) }
+			if Size::add_2 (used, avail) ? != size {
+				return Err ("'used' plus 'avail' does not equal 'size'".into ());
+			}
+			Ok (Self { pos, size, used, avail })
+		}
+
+	}
+
 	impl FromParser for Node {
 		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
-
 			let x = parser.expect ("/dev/grid/node-x") ?.int () ?;
-			if x == Coord::MAX { return Err (parser.err ()) }
-
 			let y = parser.expect ("-y") ?.int () ?;
-			if y == Coord::MAX { return Err (parser.err ()) }
-
 			let pos = Pos { x, y };
-
 			let size: Size = parser.skip_whitespace ().int () ?;
-
 			let used = parser.expect ("T") ?.skip_whitespace ().int () ?;
-			if used > size { return Err (parser.err ()) }
-
 			let avail = parser.expect ("T") ?.skip_whitespace ().int () ?;
-			if avail > size { return Err (parser.err ()) }
-			if Size::add_2 (used, avail) ? != size { return Err (parser.err ()) }
-
-			let use_pc: u8 = parser.expect ("T") ?.skip_whitespace ().int () ?;
-			let expect_pc = Size::div_2 (Size::mul_2 (used, 100) ?, size) ?;
-			if use_pc.as_u16 () != expect_pc { return Err (parser.err ()) }
-
+			let _use_pc: u8 = parser.expect ("T") ?.skip_whitespace ().int () ?;
 			parser.expect ("%") ?.end () ?;
-
-			Ok (Self { pos, size, used, avail })
-
+			Ok (Self::new (pos, size, used, avail) ?)
 		}
 	}
 

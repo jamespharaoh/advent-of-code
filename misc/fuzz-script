@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -a cpus
-declare time_limit=600
+declare time_limit=900
 declare -a years=( {2015..2016} )
 
 case "$HOSTNAME" in

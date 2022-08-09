@@ -52,15 +52,19 @@ pub mod logic {
 	}
 
 	fn room_is_valid (room: & Room) -> bool {
-		room.checksum ==
+		let char_groups =
 			room.name.chars ()
 				.filter (|& ch| ch != '-')
-				.counts ()
-				.into_iter ()
+				.sorted ()
+				.group_by (|& ch| ch);
+		let expected_checksum =
+			char_groups.into_iter ()
+				.map (|(ch, group)| (ch, group.count ()))
 				.sorted_by_key (|& (ch, num)| (cmp::Reverse (num), ch))
 				.take (5)
 				.map (|(ch, _)| ch)
-				.collect::<String> ()
+				.collect::<String> ();
+		room.checksum == expected_checksum
 	}
 
 }
@@ -88,11 +92,13 @@ pub mod model {
 				.enumerate ()
 				.map (|(line_idx, line)|
 					Parser::wrap (line, |parser| {
-						parser.set_word_pred (char::is_alphabetic);
+						parser.set_word_pred (|ch| ch.is_ascii_lowercase ());
 						let mut num_dashes =
 							parser.rest ().chars ()
+								.take_while (|& ch| ch.is_ascii_lowercase () || ch == '-')
 								.filter (|& ch| ch == '-')
 								.count ();
+						if num_dashes < 1 { return Err (parser.err ()) }
 						let mut name = String::new ();
 						loop {
 							let next = parser.expect_next () ?;
@@ -120,7 +126,7 @@ pub mod model {
 
 		#[ test ]
 		fn input_parse () {
-			assert_err! ("Invalid input: line 1: col 13: abc[def]ghi]",
+			assert_err! ("Invalid input: line 1: col 1: abc[def]ghi]",
 				Input::parse (& [ "abc[def]ghi]" ]));
 		}
 

@@ -32,12 +32,14 @@
 
 [profile.dev.package.aoc-2015-day-04]
 
-	# includes an MD5 implementation which runs very slowly without optimisation
 	opt-level = 2
 
 [profile.dev.package.aoc-2016-day-14]
 
-	# includes an MD5 implementation which runs very slowly without optimisation
+	opt-level = 2
+
+[profile.dev.package.aoc-md5]
+
 	opt-level = 2
 
 [workspace]

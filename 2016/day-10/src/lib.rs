@@ -192,7 +192,6 @@ pub mod model {
 				.enumerate ()
 				.map (|(line_idx, line)|
 					Parser::wrap (line, |parser| {
-						parser.set_ignore_whitespace (true);
 						parser.item ()
 					}).map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
 						line_idx + 1, col_idx + 1, line)))
@@ -205,15 +204,15 @@ pub mod model {
 		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
-					let val = parser.expect ("value") ?.confirm ().int () ?;
-					let bot = parser.expect ("goes to bot") ?.int () ?;
+					let val = parser.expect ("value ") ?.confirm ().int () ?;
+					let bot = parser.expect (" goes to bot ") ?.int () ?;
 					parser.end () ?;
 					Ok (Self::Input { val, bot })
 				})
 				.of (|parser| {
-					let bot = parser.expect ("bot") ?.confirm ().int () ?;
-					let low: Target = parser.expect ("gives low to") ?.item () ?;
-					let high: Target = parser.expect ("and high to") ?.item () ?;
+					let bot = parser.expect ("bot ") ?.confirm ().int () ?;
+					let low: Target = parser.expect (" gives low to ") ?.item () ?;
+					let high: Target = parser.expect (" and high to ") ?.item () ?;
 					parser.end () ?;
 					Ok (Self::Give { bot, low, high })
 				})
@@ -225,11 +224,11 @@ pub mod model {
 		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
-					let bot = parser.expect ("bot") ?.confirm ().int () ?;
+					let bot = parser.expect ("bot ") ?.confirm ().int () ?;
 					Ok (Self::Bot (bot))
 				})
 				.of (|parser| {
-					let output = parser.expect ("output") ?.confirm ().int () ?;
+					let output = parser.expect ("output ") ?.confirm ().int () ?;
 					Ok (Self::Output (output))
 				})
 				.done ()

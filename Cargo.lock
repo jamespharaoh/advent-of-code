@@ -333,6 +333,7 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-md5",
+ "aoc-parallel",
 ]
 
 [[package]]
@@ -411,6 +412,7 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-md5",
+ "aoc-parallel",
 ]
 
 [[package]]
@@ -830,6 +832,10 @@ dependencies = [
  "aoc-misc",
  "aoc-nums",
 ]
+
+[[package]]
+name = "aoc-parallel"
+version = "0.1.0"
 
 [[package]]
 name = "aoc-pos"

@@ -23,12 +23,15 @@
 //! # Algorithm
 //!
 //! We use the md5 implementation in [`aoc_common`]. Iterate over integers to append until we find
-//! a match and build up the password.
+//! a match and build up the password. To make things faster we use [`aoc_parallel::ThreadMap`] to
+//! generate hashes parallely in separate threads.
 
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_parallel as parallel;
 use aoc_md5 as md5;
+use parallel::ThreadMap;
 use md5::md5_hash;
 
 puzzle_info! {
@@ -48,13 +51,8 @@ pub mod logic {
 
 	pub fn part_one (input: & Input) -> GenResult <String> {
 		let mut password = String::new ();
-		let mut attempt = input.door_id.clone ();
-		for idx in 0_u32 .. {
+		for hash in iter_hashes (input) {
 			if password.len () == 8 { break }
-			attempt.truncate (input.door_id.len ());
-			write! (& mut attempt, "{}", idx).unwrap ();
-			let hash = md5_hash (attempt.as_bytes ());
-			if hash.num_zeros () < input.num_zeros { continue }
 			let hash_str = hash.to_string ();
 			password.push (hash_str.chars ().nth (5).unwrap ());
 		}
@@ -63,13 +61,8 @@ pub mod logic {
 
 	pub fn part_two (input: & Input) -> GenResult <String> {
 		let mut password = [None; 8];
-		let mut attempt = input.door_id.clone ();
-		for idx in 0_u32 .. {
+		for hash in iter_hashes (input) {
 			if ! password.iter ().any (Option::is_none) { break }
-			attempt.truncate (input.door_id.len ());
-			write! (& mut attempt, "{}", idx).unwrap ();
-			let hash = md5_hash (attempt.as_bytes ());
-			if hash.num_zeros () < input.num_zeros { continue }
 			let hash_str = hash.to_string ();
 			let pos =
 				hash_str.chars ()
@@ -90,6 +83,31 @@ pub mod logic {
 		Ok (password)
 	}
 
+	fn iter_hashes (input: & Input) -> impl Iterator <Item = md5::Output> {
+		const BATCH_SIZE: usize = 1000;
+		let door_id: Arc <str> = Arc::from (input.door_id.as_str ());
+		let inner_iter = (0_u32 .. ).step_by (BATCH_SIZE);
+		let num_zeros = input.num_zeros;
+		let map_fn = move |num_start| {
+			let mut hashes = Vec::new ();
+			let mut buffer = door_id.deref ().to_owned ();
+			for num in (num_start .. ).take (BATCH_SIZE) {
+				buffer.truncate (door_id.len ());
+				write! (buffer, "{}", num).unwrap ();
+				let hash = md5_hash (buffer.as_bytes ());
+				if hash.num_zeros () < num_zeros { continue }
+				hashes.push (hash);
+			}
+			hashes
+		};
+		ThreadMap::start (inner_iter, map_fn, get_max_threads (input)).flatten ()
+	}
+
+	fn get_max_threads (input: & Input) -> usize {
+		if input.max_threads == 1 { return 1 }
+		cmp::min (input.max_threads, parallel::num_cpus ().unwrap_or (1))
+	}
+
 }
 
 pub mod model {
@@ -99,19 +117,16 @@ pub mod model {
 	pub struct Input {
 		pub door_id: String,
 		pub num_zeros: u8,
+		pub max_threads: usize,
 	}
 
 	impl Input {
 		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-			let num_zeros =
-				input [0].strip_prefix ("NUM_ZEROS=")
-					.map_or (Ok (5), |num_zeros| {
-						input = & input [1 .. ];
-						num_zeros.parse ()
-					}) ?;
+			let num_zeros = parser::input_param (& mut input, "NUM_ZEROS=", 5) ?;
+			let max_threads = parser::input_param (& mut input, "MAX_THREADS=", usize::MAX) ?;
 			if input.len () != 1 { Err ("Invalid input") ?; }
 			let door_id = input [0].to_owned ();
-			Ok (Self { door_id, num_zeros })
+			Ok (Self { door_id, num_zeros, max_threads })
 		}
 	}
 
@@ -122,7 +137,7 @@ mod examples {
 
 	use super::*;
 
-	const EXAMPLE: & [& str] = & [ "NUM_ZEROS=1", "abc" ];
+	const EXAMPLE: & [& str] = & [ "NUM_ZEROS=1", "MAX_THREADS=1", "abc" ];
 
 	#[ test ]
 	fn part_one () {

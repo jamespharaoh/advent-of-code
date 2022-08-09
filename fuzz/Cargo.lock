@@ -190,6 +190,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-list",
 ]
 
 [[package]]
@@ -348,6 +349,7 @@ dependencies = [
  "aoc-common",
  "aoc-grid",
  "aoc-ocr",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -539,9 +541,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-list"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
+]
+
+[[package]]
 name = "aoc-md5"
 version = "0.1.0"
 dependencies = [
+ "aoc-misc",
  "aoc-nums",
 ]
 

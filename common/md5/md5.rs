@@ -6,7 +6,7 @@ use std::ops::Index;
 use aoc_nums as nums;
 use nums::IntConv;
 
-#[ derive (Eq, PartialEq) ]
+#[ derive (Clone, Copy, Default, Eq, PartialEq) ]
 pub struct Output ([u8; 16]);
 
 #[ inline ]
