@@ -2,7 +2,7 @@
 
 declare -a cpus
 declare time_limit=900
-declare -a years=( {2015..2016} )
+declare -a years=( {2015..2021} )
 
 case "$HOSTNAME" in
 	("simba") cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 ) ;;

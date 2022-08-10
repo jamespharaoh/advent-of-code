@@ -440,6 +440,27 @@ mod dim_2 {
 				result
 			}
 
+			#[ inline ]
+			pub fn adjacent_8 (& self) -> ArrayVec <Self, 8> where Val: Int {
+				let mut result = ArrayVec::new ();
+				let Self { row, col } = * self;
+				if self.row > Val::MIN {
+					let row = row - Val::ONE;
+					if self.col > Val::MIN { result.push (Self { row, col: col - Val::ONE }); }
+					result.push (Self { row, col });
+					if self.col < Val::MAX { result.push (Self { row, col: col + Val::ONE }); }
+				}
+				if self.col > Val::MIN { result.push (Self { row, col: col - Val::ONE }); }
+				if self.col < Val::MAX { result.push (Self { row, col: col + Val::ONE }); }
+				if self.row < Val::MAX {
+					let row = row + Val::ONE;
+					if self.col > Val::MIN { result.push (Self { row, col: col - Val::ONE }); }
+					result.push (Self { row, col });
+					if self.col < Val::MAX { result.push (Self { row, col: col + Val::ONE }); }
+				}
+				result
+			}
+
 		}
 
 		impl <Val: Int> Coord <2> for PosRowCol <Val> {

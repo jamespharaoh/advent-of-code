@@ -1,0 +1,30 @@
+[package]
+
+	name = "aoc-2017-day-03"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2017: Day 3: Spiral Memory"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2017/day-03"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+	aoc-pos = { path = "../../common/pos" }
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[[bin]]
+
+	name = "aoc-2017-day-03"
+	test = false
+	doctest = false
+	bench = false
