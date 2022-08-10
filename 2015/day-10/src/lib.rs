@@ -10,7 +10,7 @@ puzzle_info! {
 	name = "Elves Look, Elves Say";
 	year = 2015;
 	day = 10;
-	parse = |input| model::State::parse (input [0]);
+	parse = |input| model::Input::parse (input);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 	commands = [
@@ -27,31 +27,50 @@ mod tracking;
 pub mod logic {
 
 	use super::*;
+	use model::Input;
 	use model::State;
 	use nums::IntConv;
 
-	pub fn part_one (input: & State) -> GenResult <u32> {
-		let input = input.clone ();
-		Ok (
-			iter::successors (
-					Some (input),
-					|state| Some (one_round (state)))
-				.nth (40)
-				.unwrap ()
-				.len ().as_u32 ()
-		)
+	pub fn part_one (input: & Input) -> GenResult <u32> {
+		Ok (calc_result (input.state.iter_vals (), input.iters_one))
 	}
 
-	pub fn part_two (input: & State) -> GenResult <u32> {
-		let input = input.clone ();
-		Ok (
-			iter::successors (
-					Some (input),
-					|state| Some (one_round (state)))
-				.nth (50)
-				.unwrap ()
-				.len ().as_u32 ()
-		)
+	pub fn part_two (input: & Input) -> GenResult <u32> {
+		Ok (calc_result (input.state.iter_vals (), input.iters_two))
+	}
+
+	fn calc_result (iter: impl Iterator <Item = u8>, num_iters: u32) -> u32 {
+		let mut iter: Box <dyn Iterator <Item = u8>> = Box::new (iter);
+		for _ in 0 .. num_iters {
+			iter = Box::new (make_iter (iter));
+		}
+		iter.count ().as_u32 ()
+	}
+
+	fn make_iter (inner: impl Iterator <Item = u8>) -> impl Iterator <Item = u8> {
+		let mut inner = inner.peekable ();
+		let mut last = 0xff;
+		let mut count = 0_u8;
+		iter::from_fn (move || {
+			while let Some (& next) = inner.peek () {
+				if next != last && last != 0xff {
+					let result = [count.as_u8 (), last];
+					last = 0xff;
+					count = 0_u8;
+					return Some (result);
+				}
+				inner.next ().unwrap ();
+				last = next;
+				count += 1;
+			}
+			if last != 0xff {
+				let result = [count.as_u8 (), last];
+				last = 0xff;
+				count = 0;
+				return Some (result);
+			}
+			None
+		}).flatten ()
 	}
 
 	#[ must_use ]
@@ -71,8 +90,24 @@ pub mod model {
 	use super::*;
 	use nums::IntConv;
 
+	pub struct Input {
+		pub state: State,
+		pub iters_one: u32,
+		pub iters_two: u32,
+	}
+
 	#[ derive (Clone, Eq, Hash, PartialEq) ]
 	pub struct State (Vec <u8>);
+
+	impl Input {
+		pub fn parse (mut input: & [& str]) -> GenResult <Self> {
+			let iters_one = parser::input_param (& mut input, "NUM_ITERS_ONE=", 40_u32) ?;
+			let iters_two = parser::input_param (& mut input, "NUM_ITERS_ONE=", 50_u32) ?;
+			if input.len () != 1 { return Err ("Input must be exactly one line".into ()) }
+			let state = State::parse (input [0]) ?;
+			Ok (Self { state, iters_one, iters_two })
+		}
+	}
 
 	impl State {
 		pub fn parse (input: & str) -> GenResult <Self> {
