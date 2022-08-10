@@ -547,6 +547,27 @@
 <span id="547">547</span>
 <span id="548">548</span>
 <span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{ <span class="self">self</span>, <span class="ident">Debug</span> };
 <span class="kw">use</span> <span class="ident">std::ops</span>::{ <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span> };
 
@@ -989,6 +1010,27 @@
 				<span class="ident">result</span>
 			}
 
+			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
+			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_8</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">8</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
+				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
+				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
+				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">row</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> {
+					<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">row</span> <span class="op">-</span> <span class="ident">Val::ONE</span>;
+					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
+					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> });
+					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
+				}
+				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
+				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
+				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">row</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> {
+					<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">row</span> <span class="op">+</span> <span class="ident">Val::ONE</span>;
+					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
+					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> });
+					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
+				}
+				<span class="ident">result</span>
+			}
+
 		}
 
 		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
@@ -1097,4 +1139,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_pos" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (f03ce3096 2022-08-08)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_pos" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
