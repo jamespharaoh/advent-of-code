@@ -151,18 +151,35 @@ impl <'inp> Parser <'inp> {
 		Ok (self)
 	}
 
-	/// Consume and return a decimal number from the input
+	/// Consume and return a decimal integer from the input
 	///
-	/// In fact, this will work for any type which implements [`FromStr`], but it is intended for
-	/// use with numbers.
+	/// This consumes a string of the form [-+]?[0-9]+ from the input and calls [`str::parse`] to
+	/// convert it to the specified type.
 	///
 	/// # Errors
 	///
-	/// Returns `Err (self.err ())` if parse returns an `Err`
+	/// Returns `Err (self.err ())` if `parse` returns an `Err`
 	///
 	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
 		self.int_real ().parse ().map_err (|_err| self.err ())
+	}
+
+	/// Consume and return an unsigned decimal integer from the input
+	///
+	/// This consumes a string of the form [0-9]+ from the input and calls [`str::parse`] to
+	/// convert it to the specified type.
+	///
+	/// This will actually work with signed integers, although note that it will only match digits
+	/// and never a leading minus sign.
+	///
+	/// # Errors
+	///
+	/// Returns `Err (self.err ())` if `parse` returns an `Err`
+	///
+	#[ inline ]
+	pub fn uint <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
+		self.uint_real ().parse ().map_err (|_err| self.err ())
 	}
 
 	#[ inline ]
@@ -179,6 +196,20 @@ impl <'inp> Parser <'inp> {
 				.take_while (|& (idx, letter)|
 					letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
 				.map (|(_, letter)| letter.len_utf8 ())
+				.sum ();
+		let val = & self.input [0 .. len];
+		self.input = & self.input [len .. ];
+		if self.ignore_whitespace { self.skip_whitespace (); }
+		val
+	}
+
+	#[ allow (clippy::string_slice) ]
+	fn uint_real (& mut self) -> & str {
+		if self.ignore_whitespace { self.skip_whitespace (); }
+		let len =
+			self.input.chars ()
+				.take_while (|& letter| letter.is_ascii_digit ())
+				.map (char::len_utf8)
 				.sum ();
 		let val = & self.input [0 .. len];
 		self.input = & self.input [len .. ];
