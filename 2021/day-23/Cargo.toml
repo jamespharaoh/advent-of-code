@@ -20,10 +20,12 @@
 
 [lib]
 
+	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [[bin]]
 
 	name = "aoc-2021-day-23"
 	test = false
+	doctest = false
 	bench = false

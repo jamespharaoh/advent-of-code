@@ -16,6 +16,7 @@
 [lib]
 
 	path = "lib.rs"
+	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [build-dependencies]

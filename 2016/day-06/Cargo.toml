@@ -15,6 +15,7 @@
 
 [lib]
 
+	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [build-dependencies]

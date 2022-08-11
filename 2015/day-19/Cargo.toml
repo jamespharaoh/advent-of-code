@@ -16,6 +16,7 @@
 
 [lib]
 
+	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [build-dependencies]
@@ -26,4 +27,5 @@
 
 	name = "aoc-2015-day-19"
 	test = false
+	doctest = false
 	bench = false
