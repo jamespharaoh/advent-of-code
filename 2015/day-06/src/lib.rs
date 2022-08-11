@@ -245,7 +245,6 @@ pub mod model {
 
 	use super::*;
 	use pos::PosRowCol;
-	use parser::*;
 
 	pub type Coord = u16;
 	pub type Pos = PosRowCol <Coord>;

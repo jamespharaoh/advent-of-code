@@ -88,7 +88,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Coord = u8;
 	pub type Size = u16;

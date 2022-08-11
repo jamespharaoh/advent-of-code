@@ -49,7 +49,6 @@ pub mod model {
 
 	use super::*;
 	use cpu::Instr as Instr;
-	use parser::*;
 
 	#[ derive (Clone, Debug, Default, Eq, PartialEq) ]
 	pub struct Input {

@@ -44,7 +44,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Input = Vec <(String, String)>;
 

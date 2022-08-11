@@ -79,7 +79,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub struct Input {
 		pub deers: Vec <Reindeer>,

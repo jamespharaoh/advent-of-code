@@ -211,7 +211,6 @@ mod model {
 
 	use aoc_common::*;
 	use nums::IntConv;
-	use parser::*;
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
 	pub struct State {

@@ -132,7 +132,6 @@ pub mod model {
 
 	use super::*;
 	use nums::IntConv;
-	use parser::*;
 
 	pub type Input = (Vec <u32>, u32);
 

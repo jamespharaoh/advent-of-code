@@ -199,7 +199,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
 	pub struct Input {

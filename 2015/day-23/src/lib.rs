@@ -191,7 +191,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Val = u32;
 	pub type Offset = i32;

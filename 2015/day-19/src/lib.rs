@@ -214,7 +214,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	#[ derive (Clone, Debug) ]
 	pub struct Input {

@@ -1,5 +1,4 @@
 use super::*;
-use parser::*;
 
 pub type Val = i32;
 

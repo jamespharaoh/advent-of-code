@@ -60,7 +60,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Side = u16;
 	pub type Triangle = (Side, Side, Side);

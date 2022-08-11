@@ -81,7 +81,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Pos = pos::PosRowCol <u32>;
 

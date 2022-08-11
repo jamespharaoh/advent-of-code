@@ -102,5 +102,9 @@ mod prelude {
 	pub use crate::nums::Int;
 	pub use crate::nums::IntConv;
 	pub use crate::inpstr::InpStr;
+	pub use crate::parser::FromParser;
+	pub use crate::parser::Parser;
+	pub use crate::parser::ParseResult;
+	pub use crate::parser::ResultParser as _;
 
 }

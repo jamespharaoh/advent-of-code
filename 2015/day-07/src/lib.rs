@@ -162,7 +162,6 @@ pub mod model {
 
 	use super::*;
 	use nums::IntConv;
-	use parser::*;
 
 	pub type WireVal = u16;
 

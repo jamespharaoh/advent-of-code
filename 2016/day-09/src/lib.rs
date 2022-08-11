@@ -17,7 +17,6 @@ puzzle_info! {
 pub mod logic {
 
 	use super::*;
-	use parser::*;
 
 	pub fn part_one (input: & str) -> GenResult <usize> {
 		let sum = Parser::wrap (input, |parser| {

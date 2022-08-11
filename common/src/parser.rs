@@ -17,7 +17,7 @@ pub enum ParseError {
 	Wrapped (GenError),
 }
 
-pub trait ResultExt <Item> {
+pub trait ResultParser <Item> {
 
 	/// Map error from [`ParseError`] to `Box <dyn Error>` using the provided function
 	///
@@ -27,9 +27,12 @@ pub trait ResultExt <Item> {
 			MapFn: Fn (usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError>;
 
+	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item>;
+	fn map_parse_err_col (self, line: & str) -> GenResult <Item>;
+
 }
 
-impl <Item> ResultExt <Item> for Result <Item, ParseError> {
+impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 
 	#[ inline ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
@@ -41,6 +44,18 @@ impl <Item> ResultExt <Item> for Result <Item, ParseError> {
 			Err (ParseError::Simple (char_idx)) => Err (map_fn (char_idx).into ()),
 			Err (ParseError::Wrapped (err)) => Err (err),
 		}
+	}
+
+	#[ inline ]
+	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item> {
+		self.map_parse_err (|col_idx|
+			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
+	}
+
+	#[ inline ]
+	fn map_parse_err_col (self, line: & str) -> GenResult <Item> {
+		self.map_parse_err (|col_idx|
+			format! ("Invalid input: col {}: {}", col_idx + 1, line))
 	}
 
 }
@@ -364,9 +379,52 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
+	pub fn wrap_auto <Output> (
+		input: & 'inp str,
+		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
+	) -> GenResult <Output> {
+		Self::wrap (input, & mut wrap_fn)
+			.map_parse_err_col (input)
+	}
+
+	#[ inline ]
+	pub fn wrap_lines_auto <Output, WrapFn> (
+		input: impl Iterator <Item = (usize, & 'inp str)>,
+		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
+	) -> GenResult <Vec <Output>> {
+		input
+			.map (|(line_idx, line)| Self::wrap (line, & mut wrap_fn)
+				.map_parse_err_line (line_idx, line))
+			.collect ()
+	}
+
+	#[ inline ]
 	#[ must_use ]
 	pub const fn rest (& self) -> & str {
 		self.input
+	}
+
+	#[ inline ]
+	pub fn delim_fn <Output: FromParser <'inp>> (
+		& mut self,
+		delim: & str,
+		mut parse_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
+	) -> ParseResult <Vec <Output>> {
+		let mut result = Vec::new ();
+		result.push (parse_fn (self) ?);
+		while self.rest ().starts_with (delim) {
+			self.expect_next () ?;
+			result.push (parse_fn (self) ?);
+		}
+		Ok (result)
+	}
+
+	#[ inline ]
+	pub fn delim_items <Output: FromParser <'inp>> (
+		& mut self,
+		delim: & str,
+	) -> ParseResult <Vec <Output>> {
+		self.delim_fn (delim, Parser::item)
 	}
 
 }
@@ -465,4 +523,82 @@ pub fn with_params <const LEN: usize> (
 ///
 pub trait FromParser <'inp>: Sized {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self>;
+}
+
+#[ macro_export ]
+macro_rules! parse_display_enum {
+	(
+		$( #[ $($attrs:tt)* ] )*
+		$vis:vis enum $enum_name:ident {
+			$( $mem_name:ident = $mem_str:literal , )*
+		}
+	) => {
+
+		$( #[ $($attrs)* ] )*
+		$vis enum $enum_name {
+			$( $mem_name, )*
+		}
+
+		impl ::std::fmt::Display for $enum_name {
+			fn fmt (
+				& self,
+				formatter: & mut ::std::fmt::Formatter,
+			) -> ::std::fmt::Result {
+				write! (formatter, "{}", match * self {
+					$( Self::$mem_name => $mem_str, )*
+				}) ?;
+				Ok (())
+			}
+		}
+
+		impl <'inp> ::aoc_common::parser::FromParser <'inp> for $enum_name {
+			fn from_parser (
+				parser: & mut ::aoc_common::parser::Parser <'inp>,
+			) -> ::aoc_common::parser::ParseResult <Self> {
+				parser.any ()
+					$( .of (|parser| {
+						parser.expect ($mem_str) ?;
+						Ok (Self::$mem_name)
+					}) ) *
+					.done ()
+			}
+		}
+
+	};
+}
+
+#[ macro_export ]
+macro_rules! input_params {
+	(
+		$( #[ $($attrs:tt)* ] )*
+		pub struct $struct_name:ident { }
+	) => {
+
+		$( #[ $($attrs)* ] )*
+		pub struct $struct_name {
+		}
+
+		impl $struct_name {
+			pub fn parse (_input: & mut & [& str]) -> ::aoc_common::GenResult <Self> {
+				Ok (Self {})
+			}
+		}
+
+		impl ::std::default::Default for $struct_name {
+			fn default () -> Self {
+				Self {
+				}
+			}
+		}
+
+		impl ::std::fmt::Display for $struct_name {
+			fn fmt (
+				& self,
+				formatter: & mut ::std::fmt::Formatter,
+			) -> ::std::fmt::Result {
+				Ok (())
+			}
+		}
+
+	};
 }

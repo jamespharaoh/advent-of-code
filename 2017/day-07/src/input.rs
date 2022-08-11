@@ -1,5 +1,4 @@
 use super::*;
-use parser::*;
 
 #[ derive (Clone, Debug) ]
 pub struct Input <'inp> {

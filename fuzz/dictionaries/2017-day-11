@@ -1,0 +1,9 @@
+dir_nw="nw"
+dir_n="n"
+dir_ne="ne"
+dir_sw="sw"
+dir_s="s"
+dir_se="se"
+
+misc_comma=","
+misc_newline="\x0a"

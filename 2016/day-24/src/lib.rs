@@ -213,7 +213,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Coord = u16;
 	pub type TilesGrid = grid::Grid <Vec <Tile>, Pos>;

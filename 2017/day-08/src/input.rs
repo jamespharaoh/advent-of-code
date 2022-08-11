@@ -1,6 +1,5 @@
 use super::*;
 use cpu::Instr;
-use parser::*;
 
 #[ derive (Clone, Debug) ]
 pub struct Input <'inp> {

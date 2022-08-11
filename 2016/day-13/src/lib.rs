@@ -64,7 +64,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Coord = u32;
 	pub type Pos = pos::PosXY <Coord>;

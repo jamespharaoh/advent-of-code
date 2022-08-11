@@ -58,7 +58,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use parser::*;
 
 	pub type Dir = pos::DirGeo;
 	pub type Pos = pos::PosGeo <i32>;
