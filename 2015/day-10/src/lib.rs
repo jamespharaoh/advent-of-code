@@ -61,7 +61,7 @@ pub mod logic {
 				}
 				inner.next ().unwrap ();
 				last = next;
-				count += 1;
+				if count < 9 { count += 1; }
 			}
 			if last != 0xff {
 				let result = [count.as_u8 (), last];
