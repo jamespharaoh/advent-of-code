@@ -40,11 +40,20 @@ function aoc {
 			if [[ -z "$year" ]]; then echo "Must set year" >&2; fi
 			if [[ -z "$day" ]]; then echo "Must set day" >&2; fi
 			if [[ -n "$year" && -n "$day" ]]; then
-				nano \
-					$year/day-$day/src/*.rs \
-					fuzz/src/$year-day-$day.rs \
-					fuzz/dictionaries/$year-day-$day \
-					$year/day-$day/Cargo.toml
+				if [[ -d "$year/day-$day/src" ]]; then
+					nano \
+						$year/day-$day/src/*.rs \
+						fuzz/src/$year-day-$day.rs \
+						fuzz/dictionaries/$year-day-$day \
+						$year/day-$day/Cargo.toml
+				else
+					nano \
+						$year/day-$day/lib.rs \
+						$(ls $year/day-$day/*.rs | egrep -v "/(build|lib|main)\\.rs\$") \
+						fuzz/src/$year-day-$day.rs \
+						fuzz/dictionaries/$year-day-$day \
+						$year/day-$day/Cargo.toml
+				fi
 			fi
 			;;
 		(*)

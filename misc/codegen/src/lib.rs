@@ -8,6 +8,7 @@ use std::fs::File;
 use std::io::Write;
 use std::iter;
 use std::mem;
+use std::path::Path;
 use std::path::PathBuf;
 
 /// Entry point for code generation
@@ -72,8 +73,11 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 					)))
 			.flatten ()
 	};
+	let src_path = PathBuf::from (if Path::new ("src/").exists () { "src/" } else { "./" });
+	let mut lib_path = src_path.clone ();
+	lib_path.push ("lib.rs");
 	write_file (
-		"src/lib.rs",
+		lib_path,
 		iter::empty ()
 			.chain (static_part (templates::YEAR_LIB [0]))
 			.chain (dynamic_part (templates::YEAR_LIB [1]))
@@ -81,8 +85,10 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 			.chain (dynamic_part (templates::YEAR_LIB [3]))
 			.chain (static_part (templates::YEAR_LIB [4])),
 	) ?;
+	let mut main_path = src_path;
+	main_path.push ("main.rs");
 	write_file (
-		"src/main.rs",
+		main_path,
 		static_part (templates::YEAR_MAIN),
 	) ?;
 	Ok (())
@@ -91,8 +97,11 @@ fn prepare_year (year: & str) -> Result <(), Box <dyn Error>> {
 /// Generate code for a single day
 ///
 fn prepare_day (year: & str, day: & str) -> Result <(), Box <dyn Error>> {
+	let src_path = PathBuf::from (if Path::new ("src/").exists () { "src/" } else { "./" });
+	let mut main_path = src_path;
+	main_path.push ("main.rs");
 	write_file (
-		"src/main.rs",
+		main_path,
 		replace_placeholders (templates::DAY_MAIN, & HashMap::from_iter (vec! [
 			("${YEAR}", year),
 			("${DAY}", day),
@@ -103,9 +112,9 @@ fn prepare_day (year: & str, day: & str) -> Result <(), Box <dyn Error>> {
 
 /// Write the provided lines to a named file
 ///
-fn write_file <Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
-	name: & str,
-	lines: LinesIter,
+fn write_file (
+	name: impl AsRef <Path>,
+	lines: impl IntoIterator <Item = impl AsRef <str>>,
 ) -> Result <(), Box <dyn Error>> {
 	let mut new_contents = String::new ();
 	for line_temp in lines {
@@ -113,7 +122,7 @@ fn write_file <Item: AsRef <str>, LinesIter: IntoIterator <Item = Item>> (
 		new_contents.push_str (line);
 		new_contents.push ('\n');
 	}
-	let old_contents = fs::read_to_string (name).unwrap_or_default ();
+	let old_contents = fs::read_to_string (& name).unwrap_or_default ();
 	if old_contents != new_contents {
 		let mut main_rs_file = File::create (name) ?;
 		write! (& mut main_rs_file, "{}", new_contents) ?;
