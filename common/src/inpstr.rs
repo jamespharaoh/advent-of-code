@@ -55,6 +55,13 @@ impl <'inp> Display for InpStr <'inp> {
 impl <'inp> Eq for InpStr <'inp> {
 }
 
+impl <'inp> From <& 'inp str> for InpStr <'inp> {
+	#[ inline ]
+	fn from (from: & 'inp str) -> Self {
+		Self::borrow (from)
+	}
+}
+
 impl <'inp> Hash for InpStr <'inp> {
 	#[ inline ]
 	fn hash <Hshr: Hasher> (& self, hasher: & mut Hshr) {
