@@ -108,8 +108,8 @@ pub mod model {
 		}
 	}
 
-	impl FromParser for Disc {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Disc {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			let delay = parser.expect ("Disc #") ?.int () ?;
 			if delay > 100 { return Err ("Max disc delay is 100".into ()) }
 			let num_posns = parser.expect (" has ") ?.int () ?;

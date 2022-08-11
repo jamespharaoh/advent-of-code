@@ -194,8 +194,8 @@ pub mod model {
 
 	}
 
-	impl FromParser for ScrambleOp {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for ScrambleOp {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
 					let pos_0 = parser.expect ("swap position ") ?.confirm ().int () ?;

@@ -80,8 +80,8 @@ pub mod model {
 
 	}
 
-	impl FromParser for Rule {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Rule {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			let start = parser.int () ?;
 			let end = parser.expect ("-") ?.int () ?;
 			parser.end () ?;

@@ -1,3 +1,6 @@
 [build]
 
-	rustflags = [ "-C", "prefer-dynamic" ]
+	rustflags = [
+		"--codegen", "prefer-dynamic",
+		"--codegen", "target-cpu=native",
+	]

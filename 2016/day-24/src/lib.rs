@@ -276,8 +276,8 @@ pub mod model {
 
 	}
 
-	impl FromParser for Tile {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Tile {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			Ok (match parser.expect_next () ? {
 				'#' => Self::Wall,
 				'.' => Self::Open,

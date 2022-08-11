@@ -278,8 +278,8 @@ pub mod model {
 		}
 	}
 
-	impl FromParser for Component {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Component {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
 					let name = parser.word () ?;

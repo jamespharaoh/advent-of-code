@@ -200,8 +200,8 @@ pub mod model {
 		}
 	}
 
-	impl FromParser for Step {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Step {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
 					let val = parser.expect ("value ") ?.confirm ().int () ?;
@@ -220,8 +220,8 @@ pub mod model {
 		}
 	}
 
-	impl FromParser for Target {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Target {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
 					let bot = parser.expect ("bot ") ?.confirm ().int () ?;

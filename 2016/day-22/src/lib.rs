@@ -155,8 +155,8 @@ pub mod model {
 
 	}
 
-	impl FromParser for Node {
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+	impl <'inp> FromParser <'inp> for Node {
+		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			let x = parser.expect ("/dev/grid/node-x") ?.int () ?;
 			let y = parser.expect ("-y") ?.int () ?;
 			let pos = Pos { x, y };

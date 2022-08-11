@@ -6,6 +6,7 @@ use clap::Command;
 #[ doc (no_inline) ]
 pub use prelude::*;
 
+pub mod inpstr;
 pub mod parser;
 pub mod puzzle;
 
@@ -100,5 +101,6 @@ mod prelude {
 	pub use crate::iter_ext::IteratorResultExt as _;
 	pub use crate::nums::Int;
 	pub use crate::nums::IntConv;
+	pub use crate::inpstr::InpStr;
 
 }

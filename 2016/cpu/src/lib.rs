@@ -231,8 +231,8 @@ impl Instr {
 
 }
 
-impl FromParser for Instr {
-	fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+impl <'inp> FromParser <'inp> for Instr {
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 		parser.any ()
 			.of (|parser| {
 				let arg_0 = parser.expect ("cpy ") ?.confirm ().item () ?;
@@ -277,8 +277,8 @@ impl Arg {
 	}
 }
 
-impl FromParser for Arg {
-	fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
+impl <'inp> FromParser <'inp> for Arg {
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 		parser.any ()
 			.of (|parser| { parser.expect ("a") ?; Ok (Self::RegA) })
 			.of (|parser| { parser.expect ("b") ?; Ok (Self::RegB) })

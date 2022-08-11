@@ -52,6 +52,10 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.len ()
 	}
 
+	pub fn is_empty (& self) -> bool {
+		self.map.is_empty ()
+	}
+
 	pub fn values (& self) -> BTreeValues <Key, Val> {
 		self.map.values ()
 	}
@@ -83,6 +87,10 @@ impl <Key, Val> Default for HashMap <Key, Val> {
 	}
 }
 
+impl <Key, Val> Eq for HashMap <Key, Val>
+	where Key: Eq, Val: Eq {
+}
+
 impl <Key, Val> FromIterator <(Key, Val)> for HashMap <Key, Val>
 		where Key: Ord {
 	fn from_iter <Iter> (iter: Iter) -> Self
@@ -101,5 +109,12 @@ impl <Key, Val, Qry> Index <& '_ Qry> for HashMap <Key, Val>
 	type Output = Val;
 	fn index (& self, query: & Qry) -> & Val {
 		self.map.get (query).unwrap ()
+	}
+}
+
+impl <Key, Val> PartialEq for HashMap <Key, Val>
+		where Key: PartialEq, Val: PartialEq {
+	fn eq (& self, other: & Self) -> bool {
+		self.map.eq (& other.map)
 	}
 }

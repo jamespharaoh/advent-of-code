@@ -2,7 +2,7 @@
 
 coproc watcher {
 	coproc fswatch {
-		exec fswatch . ../{common,misc} \
+		exec fswatch . \
 			--recursive \
 			--latency 0.1 \
 			--event Created \
@@ -17,7 +17,9 @@ coproc watcher {
 			--exclude '^\.git/' \
 			--exclude 'target/' \
 			--exclude '[^/]+\.swp$' \
-			--exclude '/fuzz/'
+			--exclude '/fuzz/artifacts' \
+			--exclude '/fuzz/corpus' \
+			--exclude '/fuzz/target'
 	}
 	trap "kill $fswatch_PID" EXIT
 	while true; do

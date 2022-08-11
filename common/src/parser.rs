@@ -183,7 +183,7 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn item <Item> (& mut self) -> ParseResult <Item> where Item: FromParser {
+	pub fn item <Item> (& mut self) -> ParseResult <Item> where Item: FromParser <'inp> {
 		Item::from_parser (self)
 	}
 
@@ -289,6 +289,12 @@ impl <'inp> Parser <'inp> {
 		self
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub const fn is_empty (& self) -> bool {
+		self.input.is_empty ()
+	}
+
 	/// Assert that there is no more input to consume
 	///
 	/// # Errors
@@ -352,7 +358,7 @@ impl <'inp> Parser <'inp> {
 		mut wrap_fn: WrapFn,
 	) -> ParseResult <Output>
 		where
-			WrapFn: FnMut (& mut Parser) -> ParseResult <Output> {
+			WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 		let mut parser = Parser::new (input);
 		wrap_fn (& mut parser)
 	}
@@ -457,6 +463,6 @@ pub fn with_params <const LEN: usize> (
 
 /// Trait implemented by types which can be produced by [`Parser::item`]
 ///
-pub trait FromParser: Sized {
-	fn from_parser (parser: & mut Parser) -> ParseResult <Self>;
+pub trait FromParser <'inp>: Sized {
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self>;
 }
