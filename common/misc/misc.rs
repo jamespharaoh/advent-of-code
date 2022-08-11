@@ -45,6 +45,7 @@ pub use std::ops::BitAnd;
 pub use std::ops::BitAndAssign;
 pub use std::ops::BitOr;
 pub use std::ops::BitOrAssign;
+pub use std::ops::Bound;
 pub use std::ops::Deref;
 pub use std::ops::Div;
 pub use std::ops::Index;

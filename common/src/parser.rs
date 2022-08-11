@@ -198,7 +198,8 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn item <Item> (& mut self) -> ParseResult <Item> where Item: FromParser <'inp> {
+	pub fn item <'par, Item> (& 'par mut self) -> ParseResult <Item>
+			where Item: FromParser <'inp> {
 		Item::from_parser (self)
 	}
 
@@ -388,7 +389,7 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn wrap_lines_auto <Output, WrapFn> (
+	pub fn wrap_lines_auto <Output> (
 		input: impl Iterator <Item = (usize, & 'inp str)>,
 		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
 	) -> GenResult <Vec <Output>> {
@@ -405,26 +406,71 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn delim_fn <Output: FromParser <'inp>> (
-		& mut self,
-		delim: & str,
-		mut parse_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
-	) -> ParseResult <Vec <Output>> {
-		let mut result = Vec::new ();
-		result.push (parse_fn (self) ?);
-		while self.rest ().starts_with (delim) {
-			self.expect_next () ?;
-			result.push (parse_fn (self) ?);
+	pub fn delim_fn <'par, Output, ParseFn> (
+		& 'par mut self,
+		delim: & 'par str,
+		parse_fn: ParseFn,
+	) -> ParserDelim <'par, 'inp, Output, ParseFn>
+			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+		ParserDelim {
+			parser: self,
+			delim,
+			parse_fn,
+			first: true,
 		}
-		Ok (result)
+	}
+
+	/*
+	#[ inline ]
+	pub fn delim_items <'par,, Output: FromParser <'inp> + 'out> (
+		& 'par mut self,
+		delim: & 'par str,
+	) -> impl Iterator <Item = ParseResult <Output>> + 'par + 'inp {
+		self.delim_fn (delim, Parser::item)
 	}
 
 	#[ inline ]
-	pub fn delim_items <Output: FromParser <'inp>> (
-		& mut self,
-		delim: & str,
-	) -> ParseResult <Vec <Output>> {
-		self.delim_fn (delim, Parser::item)
+	pub fn delim_uints <'par, 'out: 'par, Output: FromStr + 'out> (
+		& 'par mut self,
+		delim: & 'par str,
+	) -> impl Iterator <Item = ParseResult <Output>> + 'par + 'inp {
+		self.delim_fn (delim, |parser| parser.uint ())
+	}
+
+	#[ inline ]
+	pub fn delim_ints <Output: FromStr + 'static> (
+		& 'par mut self,
+		delim: & 'par str,
+	) -> impl Iterator <Item = ParseResult <Output>> + 'par {
+		self.delim_fn (delim, Parser::int)
+	}
+	*/
+
+}
+
+pub struct ParserDelim <
+	'par,
+	'inp,
+	Output,
+	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> ,
+> {
+	parser: & 'par mut Parser <'inp>,
+	delim: & 'par str,
+	parse_fn: ParseFn,
+	first: bool,
+}
+
+impl <'par, 'inp, Output, ParseFn> Iterator for ParserDelim <'par, 'inp, Output, ParseFn>
+		where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+
+	type Item = ParseResult <Output>;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <ParseResult <Output>> {
+		if ! self.first {
+			if self.parser.expect (self.delim).is_err () { return None }
+		} else { self.first = false; }
+		Some ((self.parse_fn) (self.parser))
 	}
 
 }
@@ -522,7 +568,14 @@ pub fn with_params <const LEN: usize> (
 /// Trait implemented by types which can be produced by [`Parser::item`]
 ///
 pub trait FromParser <'inp>: Sized {
+
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self>;
+
+	#[ inline ]
+	fn parse_from_str (input: & 'inp str) -> GenResult <Self> {
+		Parser::wrap_auto (input, Parser::item)
+	}
+
 }
 
 #[ macro_export ]
