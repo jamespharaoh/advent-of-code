@@ -1,19 +1,21 @@
-//! Advent of Code 2017: Day 10: Knot Hash
+//! Advent of Code 2017: Day 14: Disk Defragmentation
 //!
-//! [https://adventofcode.com/2017/day/10](https://adventofcode.com/2017/day/10)
+//! [https://adventofcode.com/2017/day/14](https://adventofcode.com/2017/day/14)
 
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_2017_knot as knot;
 use aoc_common::*;
+use aoc_grid as grid;
+use aoc_pos as pos;
 
 pub mod input;
 pub mod logic;
 
 puzzle_info! {
-	name = "Knot Hash";
+	name = "Disk Defragmentation";
 	year = 2017;
-	day = 10;
+	day = 14;
 	parse = |input| input::Input::parse (input);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
@@ -24,24 +26,16 @@ mod examples {
 
 	use super::*;
 
-	const EXAMPLE_ONE: & [& str] = & [
-		"3,4,1,5",
-	];
-
-	const EXAMPLE_TWO: & [& str] = & [
-		"3,4,1,5",
-	];
-
 	#[ test ]
 	fn part_one () {
 		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("2", puzzle.part_one (EXAMPLE_ONE));
+		assert_eq_ok! ("8108", puzzle.part_one (& [ "flqrgnkx" ]));
 	}
 
 	#[ test ]
 	fn part_two () {
 		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("4a19451b02fb05416d73aea0ec8c00c0", puzzle.part_two (EXAMPLE_TWO));
+		assert_eq_ok! ("1242", puzzle.part_two (& [ "flqrgnkx" ]));
 	}
 
 }

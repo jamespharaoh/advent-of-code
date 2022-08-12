@@ -5,6 +5,7 @@ pub use itertools::EitherOrBoth;
 pub use itertools::Itertools;
 pub use itertools::MultiPeek;
 pub use itertools::izip;
+pub use std::array;
 pub use std::borrow::Borrow;
 pub use std::borrow::Cow;
 pub use std::cell::Cell;

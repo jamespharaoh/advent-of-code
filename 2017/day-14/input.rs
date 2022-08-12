@@ -2,29 +2,31 @@ use super::*;
 
 #[ derive (Clone, Debug) ]
 pub struct Input <'inp> {
-	pub data: InpStr <'inp>,
+	pub key: InpStr <'inp>,
 	pub params: InputParams,
 }
 
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub rounds_two: u32 = ("ROUNDS_TWO=", 64, (1_u32 ..= 64)),
+		pub num_rounds: u32 = ("NUM_ROUNDS=", 64, (1_u32 ..= 64)),
+		pub num_rows: u32 = ("NUM_ROWS=", 128, (1_u32 ..= 128)),
 	}
 }
 
 impl <'inp> Input <'inp> {
 	pub fn parse (mut input: & [& 'inp str]) -> GenResult <Self> {
 		let params = InputParams::parse (& mut input) ?;
-		let data = InpStr::borrow (input [0]);
-		Ok (Self { data, params })
+		if input.len () != 1 { return Err ("Input must be exactly one line".into ()) }
+		let key = InpStr::borrow (input [0]);
+		Ok (Self { key, params })
 	}
 }
 
 impl <'inp> Display for Input <'inp> {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
-		write! (formatter, "{}\n", self.data) ?;
+		write! (formatter, "{}\n", self.key) ?;
 		Ok (())
 	}
 }

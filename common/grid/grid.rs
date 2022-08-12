@@ -113,6 +113,16 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
+	pub fn get_raw (& self, pos: [usize; DIMS]) -> Option <Storage::Item> {
+		let mut idx = 0;
+		for (val, size) in pos.iter ().copied ().zip (self.size.iter ().copied ()) {
+			if size <= val { return None }
+			idx = idx * size + val;
+		}
+		self.storage.storage_get (idx)
+	}
+
+	#[ inline ]
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
 		let idx = some_or! (
 			Pos::to_scalar (& pos, self.origin, self.size),
@@ -448,6 +458,48 @@ impl <'sto, Storage, Item> Iterator for GridStorageClone <Storage>
 	#[ inline ]
 	fn nth (& mut self, num: usize) -> Option <Item> {
 		self.storage.nth (num).cloned ()
+	}
+
+}
+
+pub struct GridPrint <'grd, Storage, Pos>
+	where
+		Storage: GridStorage + Clone,
+		Pos: GridPos <2> {
+	grid: & 'grd Grid <Storage, Pos, 2>,
+	map_fn: fn (Storage::Item) -> & 'static str,
+}
+
+impl <'grd, Storage, Pos> Display for GridPrint <'grd, Storage, Pos>
+	where
+		Storage: GridStorage + Clone,
+		Pos: GridPos <2> {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		for row in 0 .. self.grid.size [0] {
+			for col in 0 .. self.grid.size [1] {
+				let item = self.grid.get_raw ([row, col]).unwrap ();
+				write! (formatter, "{}", (self.map_fn) (item)) ?;
+			}
+			write! (formatter, "\n") ?;
+		}
+		Ok (())
+	}
+
+}
+
+impl <Storage, Pos> Grid <Storage, Pos, 2>
+	where
+		Storage: GridStorage + Clone,
+		Pos: GridPos <2> {
+
+	#[ inline ]
+	pub fn print (
+		& self,
+		map_fn: fn (Storage::Item) -> & 'static str,
+	) -> GridPrint <Storage, Pos> {
+		GridPrint { grid: self, map_fn }
 	}
 
 }

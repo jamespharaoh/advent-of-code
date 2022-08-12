@@ -635,22 +635,87 @@ macro_rules! parse_display_enum {
 macro_rules! input_params {
 	(
 		$( #[ $($attrs:tt)* ] )*
-		pub struct $struct_name:ident { }
+		pub struct $struct_name:ident {
+			$(
+				pub $member_name:ident: $member_type:ty =
+					($member_prefix:literal, $member_default:literal, $member_range:expr),
+			)*
+		}
 	) => {
 
 		$( #[ $($attrs)* ] )*
 		pub struct $struct_name {
+			$( pub $member_name: $member_type, )*
 		}
 
 		impl $struct_name {
-			pub fn parse (_input: & mut & [& str]) -> ::aoc_common::GenResult <Self> {
-				Ok (Self {})
+			pub fn parse (input: & mut & [& str]) -> ::aoc_common::GenResult <Self> {
+				use ::aoc_common::parser as parser;
+				use ::std::ops::Bound as Bound;
+				use ::std::ops::RangeBounds as _;
+				use ::std::result::Result as Result;
+				let default = Self::default ();
+				$(
+					let $member_name =
+						parser::input_param (
+							input,
+							$member_prefix,
+							default.$member_name) ?;
+					if ! $member_range.contains (& $member_name) {
+						match ($member_range.start_bound (), $member_range.end_bound ()) {
+							(Bound::Included (start), Bound::Included (end)) =>
+								return Result::Err (format! (
+									"{} must be between {} and {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									end,
+									$member_name,
+								).into ()),
+							(Bound::Included (start), Bound::Unbounded) =>
+								return Result::Err (format! (
+									"{} must be at least {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									$member_name,
+								).into ()),
+							(Bound::Excluded (start), Bound::Unbounded) =>
+								return Result::Err (format! (
+									"{} must be more than {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									$member_name,
+								).into ()),
+							(Bound::Unbounded, Bound::Included (end)) =>
+								return Result::Err (format! (
+									"{} must be at most {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									end,
+									$member_name,
+								).into ()),
+							(Bound::Unbounded, Bound::Excluded (end)) =>
+								return Result::Err (format! (
+									"{} must be less than {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									end,
+									$member_name,
+								).into ()),
+							_ =>
+								return Result::Err (format! (
+									"{} is out of acceptable range: {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									$member_name,
+								).into ()),
+						}
+					}
+				)*
+				Ok (Self { $( $member_name, )* })
 			}
 		}
 
 		impl ::std::default::Default for $struct_name {
 			fn default () -> Self {
 				Self {
+					$( $member_name: $member_default, )*
 				}
 			}
 		}
@@ -660,6 +725,12 @@ macro_rules! input_params {
 				& self,
 				formatter: & mut ::std::fmt::Formatter,
 			) -> ::std::fmt::Result {
+				let default = Self::default ();
+				$(
+					if self.$member_name != default.$member_name {
+						write! (formatter, "{}{}\n", $member_prefix, self.$member_name) ?;
+					}
+				)*
 				Ok (())
 			}
 		}

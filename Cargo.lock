@@ -530,6 +530,7 @@ dependencies = [
  "aoc-2017-day-11",
  "aoc-2017-day-12",
  "aoc-2017-day-13",
+ "aoc-2017-day-14",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -611,6 +612,7 @@ dependencies = [
 name = "aoc-2017-day-10"
 version = "0.1.0"
 dependencies = [
+ "aoc-2017-knot",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -637,6 +639,24 @@ name = "aoc-2017-day-13"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2017-day-14"
+version = "0.1.0"
+dependencies = [
+ "aoc-2017-knot",
+ "aoc-codegen",
+ "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+]
+
+[[package]]
+name = "aoc-2017-knot"
+version = "0.1.0"
+dependencies = [
  "aoc-common",
 ]
 
