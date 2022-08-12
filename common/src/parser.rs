@@ -400,6 +400,17 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
+	pub fn wrap_lines_auto_items <Output: FromParser <'inp>> (
+		input: impl Iterator <Item = (usize, & 'inp str)>,
+	) -> GenResult <Vec <Output>> {
+		Self::wrap_lines_auto (input, |parser| {
+			let item = parser.item () ?;
+			parser.end () ?;
+			Ok (item)
+		})
+	}
+
+	#[ inline ]
 	#[ must_use ]
 	pub const fn rest (& self) -> & str {
 		self.input
