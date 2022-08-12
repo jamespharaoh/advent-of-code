@@ -1,0 +1,18 @@
+params_0="REPS_ONE="
+params_1="REPS_TWO="
+
+input_0="Generator A starts with "
+input_1="Generator B starts with "
+
+misc_newline="\x0a"
+
+digit_0="0"
+digit_1="1"
+digit_2="2"
+digit_3="3"
+digit_4="4"
+digit_5="5"
+digit_6="6"
+digit_7="7"
+digit_8="8"
+digit_9="9"
