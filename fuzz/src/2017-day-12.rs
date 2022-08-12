@@ -92,6 +92,8 @@ mod mutator {
 			(40, 1, split),
 			(5, 1, sort),
 			(5, 1, shuffle),
+			(3, 1, sequentialise),
+			(2, 1, randomise),
 		];
 
 		pub fn random (input: & mut Input, rng: & mut StdRng) {
@@ -176,6 +178,45 @@ mod mutator {
 				let right = villages.into_iter ().collect ();
 				let new_idx = rng.gen_range (0 ..= input.pipes.len ());
 				input.pipes.insert (new_idx, InputPipe { left, right });
+			}
+			Some (())
+		}
+
+		fn sequentialise (input: & mut Input, _rng: & mut StdRng) -> Option <()> {
+			let mut next = Village::ZERO;
+			let mut map: HashMap <Village, Village> = HashMap::new ();
+			let mut apply = |village: & mut Village| {
+				* village = * map.entry (* village).or_insert_with (|| {
+					let val = next;
+					next += 1;
+					val
+				});
+			};
+			for pipe in input.pipes.iter_mut () {
+				apply (& mut pipe.left);
+			}
+			for pipe in input.pipes.iter_mut () {
+				pipe.right.iter_mut ().for_each (& mut apply);
+			}
+			Some (())
+		}
+
+		fn randomise (input: & mut Input, rng: & mut StdRng) -> Option <()> {
+			let mut map: HashMap <Village, Village> = HashMap::new ();
+			let mut assigned: HashSet <Village> = HashSet::new ();
+			let mut apply = |village: & mut Village, rng: & mut StdRng| {
+				* village = * map.entry (* village).or_insert_with (|| {
+					loop {
+						let next = rng.gen_range (0 ..= 9999);
+						if assigned.insert (next) { return next }
+					}
+				});
+			};
+			for pipe in input.pipes.iter_mut () {
+				apply (& mut pipe.left, rng);
+			}
+			for pipe in input.pipes.iter_mut () {
+				pipe.right.iter_mut ().for_each (|village| apply (village, rng));
 			}
 			Some (())
 		}
