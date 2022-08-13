@@ -462,18 +462,22 @@ impl <'sto, Storage, Item> Iterator for GridStorageClone <Storage>
 
 }
 
-pub struct GridPrint <'grd, Storage, Pos>
+pub struct GridPrint <'grd, Storage, Pos, MapFn, Out>
 	where
 		Storage: GridStorage + Clone,
-		Pos: GridPos <2> {
+		Pos: GridPos <2>,
+		MapFn: Fn (Storage::Item) -> Out,
+		Out: Display {
 	grid: & 'grd Grid <Storage, Pos, 2>,
-	map_fn: fn (Storage::Item) -> & 'static str,
+	map_fn: MapFn,
 }
 
-impl <'grd, Storage, Pos> Display for GridPrint <'grd, Storage, Pos>
+impl <'grd, Storage, Pos, MapFn, Out> Display for GridPrint <'grd, Storage, Pos, MapFn, Out>
 	where
 		Storage: GridStorage + Clone,
-		Pos: GridPos <2> {
+		Pos: GridPos <2>,
+		MapFn: Fn (Storage::Item) -> Out,
+		Out: Display {
 
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
@@ -490,15 +494,14 @@ impl <'grd, Storage, Pos> Display for GridPrint <'grd, Storage, Pos>
 }
 
 impl <Storage, Pos> Grid <Storage, Pos, 2>
-	where
-		Storage: GridStorage + Clone,
-		Pos: GridPos <2> {
+	where Storage: GridStorage + Clone, Pos: GridPos <2> {
 
 	#[ inline ]
-	pub fn print (
+	pub const fn print <MapFn, Out> (
 		& self,
-		map_fn: fn (Storage::Item) -> & 'static str,
-	) -> GridPrint <Storage, Pos> {
+		map_fn: MapFn,
+	) -> GridPrint <Storage, Pos, MapFn, Out>
+			where MapFn: Fn (Storage::Item) -> Out, Out: Display {
 		GridPrint { grid: self, map_fn }
 	}
 

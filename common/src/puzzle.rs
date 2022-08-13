@@ -94,7 +94,7 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 
 		let input_string = puzzle.load_input () ?;
 		let input_lines: Vec <& str> =
-			input_string.trim ().split ('\n').collect ();
+			input_string.trim_end ().split ('\n').collect ();
 
 		// print day and puzzle name
 
@@ -203,7 +203,7 @@ fn puzzle_invoke_real (
 	}
 	let matches = command.get_matches_from (args);
 	let input_string = puzzle.load_input () ?;
-	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
+	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
 	match matches.subcommand () {
 		None => {
 			let result = puzzle.part_one (& input_lines) ?;
