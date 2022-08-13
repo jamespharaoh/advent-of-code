@@ -135,6 +135,14 @@ pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps + IntCo
 		Self::mul_2 (Self::mul_3 (arg_0, arg_1, arg_2) ?, arg_3)
 	}
 
+	/// Find the remainder from dividing one number by another
+	///
+	/// # Errors
+	///
+	/// Returns `Err (Overflow)` if the result can't be represented
+	///
+	fn rem_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
+
 	/// Subtract one number from another
 	///
 	/// # Errors
@@ -203,6 +211,11 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn mul_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
 				$signed::checked_mul (arg_0, arg_1).ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn rem_2 (arg_0: $signed, arg_1: $signed) -> NumResult <$signed> {
+				$signed::checked_rem (arg_0, arg_1).ok_or (Overflow)
 			}
 
 			#[ inline ]
@@ -276,6 +289,11 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn mul_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
 				$unsigned::checked_mul (arg_0, arg_1).ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn rem_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
+				$unsigned::checked_rem (arg_0, arg_1).ok_or (Overflow)
 			}
 
 			#[ inline ]
