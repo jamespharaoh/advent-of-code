@@ -78,6 +78,14 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 				.collect::<GenResult <_>> () ?
 		} else { HashMap::new () };
 
+	let answer_lens =
+		answers.iter ()
+			.fold ([0, 0], |[mut part_0, mut part_1], (& (_day, part), answer)| {
+				if part == 0 { part_0 = cmp::max (part_0, answer.len ()); }
+				if part == 1 { part_1 = cmp::max (part_1, answer.len ()); }
+				[part_0, part_1]
+			});
+
 	// iterate puzzles
 
 	for puzzle in puzzles.iter () {
@@ -91,10 +99,10 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 		// print day and puzzle name
 
 		print! (
-			"{day:02}  {name:name_len$}",
+			"{day:02} {name:len$}",
 			day = puzzle.day (),
 			name = puzzle.name (),
-			name_len = name_len);
+			len = name_len + 2);
 
 		// start timer
 
@@ -108,13 +116,13 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 			// handle missing part
 
 			if puzzle.num_parts () < part_idx + 1 {
-				print! ("{:24}", "");
+				print! ("{:len$}", "", len = answer_lens [part_idx] + 7);
 				continue;
 			}
 
 			// print part name
 
-			print! ("  {}: ", part_name);
+			print! ("{}: ", part_name);
 
 			// calculate result
 
@@ -143,7 +151,7 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 
 			// print result
 
-			print! ("{:17}", result);
+			print! ("{result:len$}", len = answer_lens [part_idx] + 2);
 
 		}
 

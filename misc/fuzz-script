@@ -1,19 +1,20 @@
 #!/bin/bash
 
 declare -a cpus
-declare time_limit=900
 declare -a years=( {2015..2021} )
+declare default_fuzz_time=15
+declare default_shrink_time=5
 
 case "$HOSTNAME" in
-	("simba") cpus=( 0100 0200 0400 0800 1000 2000 4000 8000 ) ;;
-	("scar") cpus=( 1 2 4 8 ) ;;
+	("simba") cpus=( {8..15} ) ;;
+	("scar") cpus=( {0..3} ) ;;
 	(*) echo "Hostname not recognised" >&2; exit 1 ;;
 esac
 
 function dispatch {
 	local command="${1:-fuzz}"; shift
 	case "$command" in
-		(fuzz|minimise) launch "$command" "$@" ;;
+		(fuzz|minimise|shrink) launch "$command" "$@" ;;
 		(worker) worker "$@" ;;
 		(*) echo "Syntax error" >&2; exit 1 ;;
 	esac
@@ -52,7 +53,8 @@ function launch {
 				echo "split"
 				echo "focus"
 			fi
-			echo "screen taskset $cpu nice misc/fuzz-script worker $main_pid $cpu"
+			let cpu_mask=$(printf "0x%x" $((1 << cpu)))
+			echo "screen taskset $cpu_mask nice misc/fuzz-script worker $main_pid $cpu"
 		done
 	} > $screenrc
 
@@ -61,7 +63,8 @@ function launch {
 }
 
 function iterator {
-	local repeat="$1"
+	local mode="$1"
+	local repeat="$2"
 	local targets=$(
 		for year in {2015..2016}; do
 			for day in {01..25}; do
@@ -105,8 +108,9 @@ function controller {
 
 	coproc iterate {
 		case "$mode" in
-			(fuzz) iterator true ;;
-			(minimise) iterator false ;;
+			(fuzz) iterator "$mode" true ;;
+			(minimise) iterator "$mode" false ;;
+			(shrink) iterator "$mode" true ;;
 		esac
 	}
 
@@ -135,6 +139,7 @@ function worker {
 	declare main_pid="$1"
 	declare cpu="$2"
 	declare work_dir="/run/user/$UID/aoc-fuzz-script-$main_pid"
+	declare title_prefix="[cpu $cpu]"
 
 	# exit entire screen session on interrupt
 
@@ -149,7 +154,7 @@ function worker {
 
 		# get task from controller
 
-		screen -X title "looking for work"
+		screen -X title "$title_prefix looking for work"
 		echo "ready" >&4
 		local -a input
 		read -u 3 -a input
@@ -164,14 +169,21 @@ function worker {
 		case "$mode" in
 
 			(fuzz)
-				screen -X title "$year/day-$day fuzzing"
+				screen -X title "$title_prefix $year/day-$day fuzzing"
 				misc/build-script fuzz year-$year day-$day \
 					-- \
-					-- -max_total_time=$time_limit
+					-- -max_total_time=$((default_fuzz_time * 60))
+				;;
+
+			(shrink)
+				screen -X title "$title_prefix $year/day-$day shrinking"
+				misc/build-script fuzz year-$year day-$day \
+					-- \
+					-- -max_total_time=$((default_shrink_time * 60)) -shrink=1
 				;;
 
 			(minimise)
-				screen -X title "$year/day-$day minimising"
+				screen -X title "$title_prefix $year/day-$day minimising"
 				misc/build-script fuzz year-$year day-$day cmin
 				;;
 

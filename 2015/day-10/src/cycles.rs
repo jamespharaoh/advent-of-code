@@ -419,7 +419,6 @@ impl <Item> Intern <Item> for & RefCell <HashSet <Rc <Item>>>
 	type Shared = Rc <Item>;
 	fn intern (self, item: Item) -> Rc <Item> {
 		let mut lock = self.borrow_mut ();
-		use std::ops::DerefMut;
 		lock.deref_mut ().intern (item)
 	}
 	fn intern_get (self, item: & Item) -> Option <Rc <Item>> {
