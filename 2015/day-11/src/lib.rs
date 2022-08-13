@@ -38,6 +38,9 @@ pub mod logic {
 	}
 
 	pub fn next_password (input: & str) -> GenResult <String> {
+		if input.chars ().count () != 8 {
+			return Err ("Password must have eight characters".into ());
+		}
 		let disallowed_idxs =
 			DISALLOWED_CHARS.iter ().copied ()
 				.map (|ch| ALL_CHARS.iter ().copied ()

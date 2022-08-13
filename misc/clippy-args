@@ -202,7 +202,6 @@
 --deny clippy::let_underscore_must_use
 --deny clippy::let_unit_value
 --deny clippy::linkedlist
---deny clippy::logic_bug
 --deny clippy::lossy_float_literal
 --deny clippy::macro_use_imports
 --deny clippy::main_recursion
@@ -331,6 +330,7 @@
 --deny clippy::or_then_unwrap
 --deny clippy::out_of_bounds_indexing
 --deny clippy::overflow_check_conditional
+--deny clippy::overly_complex_bool_expr
 --allow clippy::panic
 --allow clippy::panic_in_result_fn
 --deny clippy::panicking_unwrap
