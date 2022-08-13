@@ -485,3 +485,10 @@
 	path = "src/2017-day-16.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2017-day-17"
+	path = "src/2017-day-17.rs"
+	test = false
+	doc = false
