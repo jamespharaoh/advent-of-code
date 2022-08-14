@@ -10,27 +10,6 @@ pub mod inpstr;
 pub mod parser;
 pub mod puzzle;
 
-#[ macro_export ]
-macro_rules! array_vec {
-	( ) => { ArrayVec::new () };
-	( $($vals:expr),+ ) => {
-		{
-			let mut result = ArrayVec::new ();
-			array_vec! (@push result, $($vals,)*);
-			result
-		}
-	};
-	( @push $result:ident $(,)? ) => {};
-	( @push $result:ident , $val:expr $(, $rest:expr)* ) => {
-		$result.push ($val);
-		array_vec! (@push $result, $($rest),*);
-	};
-	( @push $result:ident , $val:expr $(, $rest:expr)* , ) => {
-		$result.push ($val);
-		array_vec! (@push $result, $($rest),*);
-	};
-}
-
 mod iter_ext {
 
 	use super::*;
@@ -101,6 +80,9 @@ mod prelude {
 	pub use crate::iter_ext::IteratorResultExt as _;
 	pub use crate::nums::Int;
 	pub use crate::nums::IntConv;
+	pub use crate::nums::IntSigned;
+	pub use crate::nums::IntUnsigned;
+	pub use crate::nums::NumResult;
 	pub use crate::inpstr::InpStr;
 	pub use crate::parser::FromParser;
 	pub use crate::parser::Parser;

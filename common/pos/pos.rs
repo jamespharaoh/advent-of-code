@@ -15,6 +15,7 @@ pub use dim_2::PosYX;
 pub use dim_2::PosGeo;
 pub use dim_2::PosRowCol;
 pub use dim_2::Turn2d;
+pub use dim_3::AxisXYZ;
 pub use dim_3::PosXYZ;
 
 macro_rules! pos_ops {
@@ -532,6 +533,9 @@ mod dim_3 {
 
 	pub use xyz::PosXYZ;
 
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisXYZ { X, Y, Z }
+
 	mod xyz {
 
 		use super::*;
@@ -558,6 +562,34 @@ mod dim_3 {
 			#[ inline ]
 			fn coord_from_array (arr: [Val; 3]) -> Self {
 				Self { x: arr [0], y: arr [1], z: arr [2] }
+			}
+
+		}
+
+		impl <Val: Int> Index <AxisXYZ> for PosXYZ <Val> {
+
+			type Output = Val;
+
+			#[ inline ]
+			fn index (& self, axis: AxisXYZ) -> & Val {
+				match axis {
+					AxisXYZ::X => & self.x,
+					AxisXYZ::Y => & self.y,
+					AxisXYZ::Z => & self.z,
+				}
+			}
+
+		}
+
+		impl <Val: Int> IndexMut <AxisXYZ> for PosXYZ <Val> {
+
+			#[ inline ]
+			fn index_mut (& mut self, axis: AxisXYZ) -> & mut Val {
+				match axis {
+					AxisXYZ::X => & mut self.x,
+					AxisXYZ::Y => & mut self.y,
+					AxisXYZ::Z => & mut self.z,
+				}
 			}
 
 		}

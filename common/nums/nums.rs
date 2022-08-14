@@ -1,8 +1,11 @@
 use std::error::Error;
-use std::fmt::{ self, Debug, Display };
+use std::fmt;
+use std::fmt::Debug;
+use std::fmt::Display;
 use std::hash::Hash;
 use std::ops::{ Add, BitAnd, BitAndAssign, BitOr, BitOrAssign, Div, Mul, Neg, Rem, Shl, ShlAssign,
 	Shr, ShrAssign, Sub };
+use std::str::FromStr;
 
 pub type NumResult <Val> = Result <Val, Overflow>;
 
@@ -22,7 +25,7 @@ impl Display for Overflow {
 impl Error for Overflow {
 }
 
-pub trait Int: Clone + Copy + Debug + Display + Eq + Hash + Ord + IntOps + IntConv {
+pub trait Int: Clone + Copy + Debug + Display + Eq + FromStr + Hash + Ord + IntOps + IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;
 	const BITS: u32;

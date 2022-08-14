@@ -737,3 +737,51 @@ macro_rules! input_params {
 
 	};
 }
+
+#[ macro_export ]
+macro_rules! parse {
+	( $parser:expr $(, $item:tt)* ) => {
+		$( parse! (@item $parser, $item); )*
+	};
+	( @item $parser:expr, $expect_str:literal ) => {
+		$parser.expect ($expect_str) ?;
+	};
+	( @item $parser:expr, $item_name:ident ) => {
+		let $item_name = $parser.item () ?;
+	};
+	( @item $parser:expr, ($item_name:ident: $item_type:ty) ) => {
+		let $item_name: $item_type = $parser.item () ?;
+	};
+	( @item $parser:expr, (@uint $item_name:ident: $item_type:ty) ) => {
+		let $item_name: $item_type = $parser.uint () ?;
+	};
+	( @item $parser:expr, (@int $item_name:ident: $item_type:ty) ) => {
+		let $item_name: $item_type = $parser.int () ?;
+	};
+	( @item $parser:expr, (@end) ) => {
+		$parser.end () ?;
+	};
+}
+
+macro_rules! from_parser_impl {
+	( $name:ident, $method:ident ) => {
+		impl <'inp> FromParser <'inp> for $name {
+			#[ inline ]
+			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <$name> {
+				parser.$method ()
+			}
+		}
+	};
+}
+
+from_parser_impl! (i8, int);
+from_parser_impl! (i16, int);
+from_parser_impl! (i32, int);
+from_parser_impl! (i64, int);
+from_parser_impl! (i128, int);
+
+from_parser_impl! (u8, uint);
+from_parser_impl! (u16, uint);
+from_parser_impl! (u32, uint);
+from_parser_impl! (u64, uint);
+from_parser_impl! (u128, uint);

@@ -206,21 +206,12 @@ mod iter_ext {
 
 #[ macro_export ]
 macro_rules! array_vec {
-	( ) => { ArrayVec::new () };
-	( $($vals:expr),+ ) => {
+	() => { ArrayVec::new () };
+	( $($val:expr),* $(,)? ) => {
 		{
 			let mut result = ArrayVec::new ();
-			array_vec! (@push result, $($vals,)*);
+			$( result.push ($val); )*
 			result
 		}
-	};
-	( @push $result:ident $(,)? ) => {};
-	( @push $result:ident , $val:expr $(, $rest:expr)* ) => {
-		$result.push ($val);
-		array_vec! (@push $result, $($rest),*);
-	};
-	( @push $result:ident , $val:expr $(, $rest:expr)* , ) => {
-		$result.push ($val);
-		array_vec! (@push $result, $($rest),*);
 	};
 }
