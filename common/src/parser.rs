@@ -594,7 +594,7 @@ macro_rules! parse_display_enum {
 	(
 		$( #[ $($attrs:tt)* ] )*
 		$vis:vis enum $enum_name:ident {
-			$( $mem_name:ident = $mem_str:literal , )*
+			$( $mem_name:ident = $mem_str:literal ),* $(,)?
 		}
 	) => {
 
@@ -760,6 +760,9 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, (@end) ) => {
 		$parser.end () ?;
+	};
+	( @item $parser:expr, (@confirm) ) => {
+		$parser.confirm ();
 	};
 }
 
