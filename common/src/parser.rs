@@ -24,7 +24,7 @@ pub trait ResultParser <Item> {
 	#[ allow (clippy::missing_errors_doc) ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: Fn (usize) -> IntoGenErr,
+			MapFn: FnOnce (usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError>;
 
 	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item>;
@@ -37,7 +37,7 @@ impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 	#[ inline ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: Fn (usize) -> IntoGenErr,
+			MapFn: FnOnce (usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError> {
 		match self {
 			Ok (item) => Ok (item),
@@ -277,11 +277,10 @@ impl <'inp> Parser <'inp> {
 	/// function returns false
 	///
 	#[ inline ]
-	pub fn word_if <'par_1, PredFn> (
+	pub fn word_if <'par_1> (
 		& 'par_1 mut self,
-		pred: PredFn,
-	) -> ParseResult <& 'inp str>
-			where PredFn: Fn (& 'inp str) -> bool {
+		pred: impl FnOnce (& 'inp str) -> bool,
+	) -> ParseResult <& 'inp str> {
 		let word = self.word () ?;
 		if ! pred (word) { Err (self.err ()) ?; }
 		Ok (word)

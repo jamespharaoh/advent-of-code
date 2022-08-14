@@ -63,7 +63,9 @@ impl <Val, Iter> DrawDots <Val, Iter>
 }
 
 #[ allow (clippy::missing_inline_in_public_items) ]
-pub fn read_dots <Val: Int> (dots: & dyn Fn (Val, Val) -> bool) -> GenResult <String> {
+pub fn read_dots <Val: Int> (
+	dots: & dyn Fn (Val, Val) -> bool,
+) -> GenResult <String> {
 	let mut result = String::new ();
 	for offset in (0 .. ).step_by (5) {
 		let mut encoded: u32 = 0;

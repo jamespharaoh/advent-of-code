@@ -251,7 +251,10 @@ fn percentile (times: & [u64], num: u64, denom: u64) -> u64 {
 }
 
 #[ allow (clippy::print_stdout) ]
-fn runner <InnerFn: Fn (u64) -> GenResult <()>> (repeat: u64, inner_fn: InnerFn) -> GenResult <()> {
+fn runner (
+	repeat: u64,
+	mut inner_fn: impl FnMut (u64) -> GenResult <()>,
+) -> GenResult <()> {
 	let times = {
 		let mut times: Vec <_> = (0 .. repeat)
 			.map (|idx| { inner_fn (idx) ?; Ok (Instant::now ()) })
