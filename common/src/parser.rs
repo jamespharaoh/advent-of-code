@@ -603,6 +603,15 @@ macro_rules! parse_display_enum {
 			$( $mem_name, )*
 		}
 
+		impl $enum_name {
+			#[ inline ]
+			pub fn as_str (& self) -> & 'static str {
+				match * self {
+					$( Self::$mem_name => $mem_str, )*
+				}
+			}
+		}
+
 		impl ::std::fmt::Display for $enum_name {
 			fn fmt (
 				& self,

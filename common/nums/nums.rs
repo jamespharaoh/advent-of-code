@@ -351,6 +351,11 @@ macro_rules! prim_int {
 			}
 
 			#[ inline ]
+			fn from_isize (val: isize) -> NumResult <Self> {
+				val.try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
 			fn to_char (self) -> NumResult <char> {
 				self.to_u32 () ?.try_into ().ok ().ok_or (Overflow)
 			}
@@ -421,6 +426,11 @@ macro_rules! prim_int {
 
 			#[ inline ]
 			fn from_usize (val: usize) -> NumResult <Self> {
+				val.try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn from_isize (val: isize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
@@ -601,6 +611,8 @@ pub trait IntConv: Sized {
 	///
 	fn from_usize (val: usize) -> NumResult <Self>;
 
+	fn from_isize (val: isize) -> NumResult <Self>;
+
 	/// Safely convert to [`f32`]
 	///
 	/// # Errors
@@ -723,6 +735,11 @@ impl IntConv for char {
 
 	#[ inline ]
 	fn from_usize (val: usize) -> NumResult <Self> {
+		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+	}
+
+	#[ inline ]
+	fn from_isize (val: isize) -> NumResult <Self> {
 		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 

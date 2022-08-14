@@ -11,6 +11,7 @@ use bitvec::BitVec;
 use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
 use nums::Int;
+use nums::IntConv;
 use pos::PosRowCol;
 use pos::PosXY;
 use pos::PosYX;
@@ -408,18 +409,32 @@ impl <Val: Int> GridPos <2> for PosRowCol <Val> {
 
 	#[ inline ]
 	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		if origin != [0, 0] { unimplemented! () }
-		let row = ok_or! (self.row.to_usize (), return None);
-		let col = ok_or! (self.col.to_usize (), return None);
+		let row = isize::add_2 (
+				self.row.to_isize ().ok () ?,
+				origin [0]).ok () ?
+			.to_usize ().ok () ?;
+		let col = isize::add_2 (
+				self.col.to_isize ().ok () ?,
+				origin [1]).ok () ?
+			.to_usize ().ok () ?;
 		if row >= size [0] || col >= size [1] { return None }
 		Some (row * size [1] + col)
 	}
 
 	#[ inline ]
 	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		if origin != [0, 0] { unimplemented! () }
-		let row = ok_or! (Val::from_usize (scalar / size [1]), return None);
-		let col = ok_or! (Val::from_usize (scalar % size [1]), return None);
+		let raw_row =
+			isize::sub_2 (
+				usize::div_2 (scalar, size [1]).ok () ?.as_isize (),
+				origin [0],
+			).ok () ?;
+		let raw_col =
+			isize::sub_2 (
+				usize::rem_2 (scalar, size [1]).ok () ?.as_isize (),
+				origin [1],
+			).ok () ?;
+		let row = Val::from_isize (raw_row).ok () ?;
+		let col = Val::from_isize (raw_col).ok () ?;
 		Some (Self { row, col })
 	}
 
