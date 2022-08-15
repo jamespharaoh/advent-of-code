@@ -75,6 +75,7 @@ fn exec_optimised (cpu: & mut Cpu, verbose: bool) -> GenResult <Option <Val>> {
 				if verbose {
 					println! ("Optimised check prime (target={target_val}, prime={prime})");
 				}
+				continue;
 			},
 		};
 		if let Some (val) = cpu.step () ? { return Ok (Some (val)) }

@@ -19,28 +19,29 @@ macro_rules! cpu_optimise {
 	) => {
 		use aoc_2017_cpu::{ DstArg, Reg, SrcArg };
 		let match_len = [ $( stringify! ($instr) ),* ].len ().as_u64 ();
-		for _ in 0 .. 1 {
-			if ($cpu).instrs ().len ().as_u64 () < ($cpu).next () + match_len { break }
-			struct Args {
-				$( $reg: Option <Reg>, )*
-			}
-			let mut args = Args {
-				$( $reg: None, )*
-			};
+		struct Args {
+			$( $reg: Option <Reg>, )*
+		}
+		let mut args = Args {
+			$( $reg: None, )*
+		};
+		let matched = loop {
+			if ($cpu).instrs ().len ().as_u64 () < ($cpu).next () + match_len { break false }
 			let mut match_idx = ($cpu).next ().as_usize ();
 			$(
 				if let cpu_optimise! (@instr_let_args $instr, $($instr_arg)*) =
 						($cpu).instrs () [match_idx] {
 					cpu_optimise! (@instr_check_args args, $($instr_arg)*);
 				} else {
-					break;
+					break false;
 				}
 				match_idx += 1;
 			)*
-			{
-				$( let $reg = args.$reg.unwrap (); )*
-				$( $run_body )*
-			}
+			break true;
+		};
+		if matched {
+			$( let $reg = args.$reg.unwrap (); )*
+			$( $run_body )*
 		}
 	};
 
@@ -72,7 +73,7 @@ macro_rules! cpu_optimise {
 	};
 	( @instr_check_arg $args:ident, reg $name:ident) => {
 		if let Some (prev) = $args.$name {
-			if prev != $name { break }
+			if prev != $name { break false }
 		} else {
 			$args.$name = Some ($name);
 		}
