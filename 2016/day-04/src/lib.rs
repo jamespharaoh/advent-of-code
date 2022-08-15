@@ -111,7 +111,7 @@ pub mod model {
 						let checksum = parser.expect ("[") ?.word () ?.to_owned ();
 						parser.expect ("]") ?.end () ?;
 						Ok (Room { name, sector, checksum })
-					}).map_parse_err (|col_idx| format! (
+					}).map_parse_err (|_, col_idx| format! (
 						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?;
 			Ok (Self { rooms })

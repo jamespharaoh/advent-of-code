@@ -80,7 +80,7 @@ pub mod model {
 						let side_1 = parser.int () ?;
 						let side_2 = parser.int () ?;
 						Ok ((side_0, side_1, side_2))
-					}).map_parse_err (|col_idx| format! (
+					}).map_parse_err (|_, col_idx| format! (
 						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
 				)
 				.collect::<GenResult <_>> () ?;

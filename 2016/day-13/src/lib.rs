@@ -94,7 +94,7 @@ pub mod model {
 						let seed = parser.int () ?;
 						parser.end () ?;
 						Ok (seed)
-					}).map_parse_err (|col_idx|
+					}).map_parse_err (|_, col_idx|
 						format! ("Invalid input: {}: {}", col_idx + 1, input [0])) ?;
 			Ok (Self { seed, start, end, max_dist, count_dist })
 		}

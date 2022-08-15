@@ -108,8 +108,8 @@ pub mod model {
 					Parser::wrap (line, |parser| {
 						parser.set_ignore_whitespace (true);
 						Step::parse_real (parser)
-					}).map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
-						line_idx + 1, col_idx + 1, line)))
+					}).map_parse_err (|_, col_idx| format! (
+						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <Vec <Step>>> () ?;
 			if steps.iter_vals ().any (|step|
 					match step {

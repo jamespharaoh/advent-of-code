@@ -68,7 +68,7 @@ pub mod model {
 				.map (|(line_idx, line)| {
 					#[ allow (clippy::redundant_closure_for_method_calls) ]
 					Parser::wrap (line, |parser| parser.item ())
-						.map_parse_err (|col_idx| 
+						.map_parse_err (|_, col_idx| 
 							format! ("Invalid input: line {}: col {}: {}",
 								line_idx + 1, col_idx + 1, input [0]))
 				})

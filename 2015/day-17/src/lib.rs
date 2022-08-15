@@ -144,8 +144,8 @@ pub mod model {
 				let val = parser.int::<u8> () ?.as_u32 ();
 				parser.end () ?;
 				Ok (val)
-			}).map_parse_err (|char_idx| format! ("Invalid input: line {}: col {}: {}",
-					line_idx + 1, char_idx + 1, line))
+			}).map_parse_err (|_, char_idx|
+				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line))
 		).collect::<GenResult <_>> () ?;
 		Ok (( buckets, target ))
 	}

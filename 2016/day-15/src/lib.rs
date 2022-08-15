@@ -98,7 +98,7 @@ pub mod model {
 				.enumerate ()
 				.map (|(line_idx, line)|
 					Parser::wrap (line, |parser| parser.item ())
-						.map_parse_err (|col_idx|
+						.map_parse_err (|_, col_idx|
 							format! ("Invalid input: line {}: col {}: {}",
 								line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?;

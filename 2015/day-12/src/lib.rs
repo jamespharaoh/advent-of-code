@@ -161,7 +161,7 @@ pub mod model {
 				let item = parse_item (parser) ?;
 				parser.skip_whitespace ().end () ?;
 				Ok (item)
-			}).map_parse_err (|char_idx| format! ("Invalid input: col {}", char_idx + 1))
+			}).map_parse_err (|_, char_idx| format! ("Invalid input: col {}", char_idx + 1))
 		}
 	}
 

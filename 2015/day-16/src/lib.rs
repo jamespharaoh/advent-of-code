@@ -136,7 +136,7 @@ pub mod model {
 				}
 				parser.end () ?;
 				Ok (AuntSue { number, attrs })
-			}).map_parse_err (|char_idx|
+			}).map_parse_err (|_, char_idx|
 				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line)
 			)
 		).collect ()

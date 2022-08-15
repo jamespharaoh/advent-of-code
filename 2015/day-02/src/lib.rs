@@ -96,7 +96,7 @@ pub mod model {
 					parser.expect ("x") ?.int () ?,
 					parser.expect ("x") ?.int () ?,
 				))
-			).map_parse_err (|char_idx|
+			).map_parse_err (|_, char_idx|
 				format! ("Invalid input: line {}: col {}: {}",
 					line_idx + 1, char_idx + 1, line)
 			)
@@ -111,7 +111,7 @@ pub mod model {
 		#[ test ]
 		fn parse_input () -> GenResult <()> {
 			assert_eq! (vec! [(1, 2, 3), (4, 5, 6)], model::parse_input (& ["1x2x3", "4x5x6"]) ?);
-			assert_err! ("Invalid input: line 2: col 2: 4xx5x6",
+			assert_err! ("Invalid input: line 2: col 3: 4xx5x6",
 				model::parse_input (& ["1x2x3", "4xx5x6"]));
 			Ok (())
 		}

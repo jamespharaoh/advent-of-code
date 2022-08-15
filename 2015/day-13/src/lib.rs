@@ -103,7 +103,7 @@ pub mod model {
 				let name_1 = parser.expect ("happiness units by sitting next to ") ?.word () ?;
 				parser.expect (".") ?.end () ?;
 				Ok ((name_0.into (), name_1.into (), amount))
-			}).map_parse_err (|char_idx|
+			}).map_parse_err (|_, char_idx|
 				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line)
 			)
 		).collect ()

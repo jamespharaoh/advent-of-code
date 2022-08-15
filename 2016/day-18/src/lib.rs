@@ -81,7 +81,7 @@ pub mod model {
 						});
 					}
 					Ok (items)
-				}).map_parse_err (|col_idx|
+				}).map_parse_err (|_, col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			Ok (Self { first_row, num_rows_one, num_rows_two })
 		}

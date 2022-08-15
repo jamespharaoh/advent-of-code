@@ -36,7 +36,8 @@ pub mod logic {
 				}
 			}
 			Ok (sum)
-		}).map_parse_err (|col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input)) ?;
+		}).map_parse_err (|_, col_idx|
+			format! ("Invalid input: col {}: {}", col_idx + 1, input)) ?;
 		Ok (sum)
 	}
 
@@ -63,7 +64,8 @@ pub mod logic {
 				}
 			}
 			Ok (sum)
-		}).map_parse_err (|col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input)) ?;
+		}).map_parse_err (|_, col_idx|
+			format! ("Invalid input: col {}: {}", col_idx + 1, input)) ?;
 		Ok (sum)
 	}
 

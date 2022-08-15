@@ -62,7 +62,7 @@ pub mod model {
 
 	pub fn decode (input: & str) -> GenResult <String> {
 		Parser::wrap (input, decode_real)
-			.map_parse_err (|col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
+			.map_parse_err (|_, col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
 	}
 
 	fn decode_real (parser: & mut Parser) -> ParseResult <String> {
@@ -95,7 +95,7 @@ pub mod model {
 		input.iter ().enumerate ()
 			.map (|(line_idx, & line)|
 				Parser::wrap (line, |parser| Ok ((line.to_owned (), decode_real (parser) ?)))
-					.map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
+					.map_parse_err (|_, col_idx| format! ("Invalid input: line {}: col {}: {}",
 						line_idx + 1, col_idx + 1, line)))
 			.collect ()
 	}

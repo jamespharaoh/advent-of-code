@@ -82,7 +82,7 @@ pub mod model {
 						banks.push (parser.uint () ?);
 					}
 					Ok (banks)
-				}).map_parse_err (|col_idx|
+				}).map_parse_err (|_, col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			Ok (Self { banks })
 		}

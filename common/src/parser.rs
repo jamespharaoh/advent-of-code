@@ -4,8 +4,11 @@ pub type ParseResult <Item> = Result <Item, ParseError>;
 
 #[ derive (Clone) ]
 pub struct Parser <'inp> {
-	input: & 'inp str,
-	pos: usize,
+	input_line: & 'inp str,
+	input_lines: & 'inp [& 'inp str],
+	line_idx: usize,
+	col_idx: usize,
+	byte_idx: usize,
 	word_pred: fn (char) -> bool,
 	ignore_whitespace: bool,
 	confirmed: bool,
@@ -13,7 +16,7 @@ pub struct Parser <'inp> {
 
 #[ derive (Debug) ]
 pub enum ParseError {
-	Simple (usize),
+	Simple (usize, usize),
 	Wrapped (GenError),
 }
 
@@ -24,11 +27,12 @@ pub trait ResultParser <Item> {
 	#[ allow (clippy::missing_errors_doc) ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: FnOnce (usize) -> IntoGenErr,
+			MapFn: FnOnce (usize, usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError>;
 
+	fn map_parse_err_auto (self, parser: & Parser) -> GenResult <Item>;
+
 	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item>;
-	fn map_parse_err_col (self, line: & str) -> GenResult <Item>;
 
 }
 
@@ -37,25 +41,28 @@ impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 	#[ inline ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: FnOnce (usize) -> IntoGenErr,
+			MapFn: FnOnce (usize, usize) -> IntoGenErr,
 			IntoGenErr: Into <GenError> {
 		match self {
 			Ok (item) => Ok (item),
-			Err (ParseError::Simple (char_idx)) => Err (map_fn (char_idx).into ()),
+			Err (ParseError::Simple (line_idx, col_idx)) =>
+				Err (map_fn (line_idx, col_idx).into ()),
 			Err (ParseError::Wrapped (err)) => Err (err),
 		}
 	}
 
 	#[ inline ]
-	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item> {
-		self.map_parse_err (|col_idx|
-			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
+	fn map_parse_err_auto (self, parser: & Parser) -> GenResult <Item> {
+		self.map_parse_err (|line_idx, col_idx| {
+			let line = parser.input_lines [line_idx];
+			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)
+		})
 	}
 
 	#[ inline ]
-	fn map_parse_err_col (self, line: & str) -> GenResult <Item> {
-		self.map_parse_err (|col_idx|
-			format! ("Invalid input: col {}: {}", col_idx + 1, line))
+	fn map_parse_err_line (self, line_idx: usize, line: & str) -> GenResult <Item> {
+		self.map_parse_err (|_, col_idx|
+			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
 	}
 
 }
@@ -65,8 +72,8 @@ impl Display for ParseError {
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		match * self {
-			Self::Simple (char_idx) =>
-				write! (formatter, "Parser error at col {}", char_idx + 1) ?,
+			Self::Simple (line_idx, col_idx) =>
+				write! (formatter, "Parser error at line {}, col {}", line_idx + 1, col_idx + 1) ?,
 			Self::Wrapped (ref inner) =>
 				Display::fmt (inner, formatter) ?,
 		}
@@ -105,14 +112,41 @@ impl From <& str> for ParseError {
 
 }
 
+impl From <String> for ParseError {
+
+	#[ inline ]
+	fn from (other: String) -> Self {
+		Self::Wrapped (other.into ())
+	}
+
+}
+
 impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn new (input: & 'inp str) -> Parser <'inp> {
+	pub fn new (input_line: & 'inp str) -> Parser <'inp> {
 		Parser {
-			input,
-			pos: 0,
+			input_line,
+			input_lines: & [],
+			line_idx: 0,
+			col_idx: 0,
+			byte_idx: 0,
+			word_pred: |ch| ! ch.is_whitespace (),
+			ignore_whitespace: false,
+			confirmed: false,
+		}
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn new_lines (input_lines: & 'inp [& 'inp str]) -> Parser <'inp> {
+		Parser {
+			input_line: input_lines.first ().copied ().unwrap_or (""),
+			input_lines,
+			line_idx: 0,
+			col_idx: 0,
+			byte_idx: 0,
 			word_pred: |ch| ! ch.is_whitespace (),
 			ignore_whitespace: false,
 			confirmed: false,
@@ -147,8 +181,8 @@ impl <'inp> Parser <'inp> {
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		for expect_char in expect.chars () {
-			if self.peek () != Some (expect_char) { Err (self.err ()) ? }
-			self.next ();
+			if self.peek () != Some (expect_char) { return Err (self.err ()) }
+			self.next ().unwrap ();
 		}
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (self)
@@ -206,15 +240,16 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	fn int_real (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		let len =
-			self.input.chars ()
+		let (num_chars, num_bytes) =
+			self.rest ().chars ()
 				.enumerate ()
 				.take_while (|& (idx, letter)|
 					letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
 				.map (|(_, letter)| letter.len_utf8 ())
-				.sum ();
-		let val = & self.input [0 .. len];
-		self.input = & self.input [len .. ];
+				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
+					(num_chars + 1, num_bytes + ch_bytes));
+		let val = & self.rest () [ .. num_bytes];
+		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
@@ -222,13 +257,14 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	fn uint_real (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		let len =
-			self.input.chars ()
+		let (num_chars, num_bytes) =
+			self.rest ().chars ()
 				.take_while (|& letter| letter.is_ascii_digit ())
 				.map (char::len_utf8)
-				.sum ();
-		let val = & self.input [0 .. len];
-		self.input = & self.input [len .. ];
+				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
+					(num_chars + 1, num_bytes + ch_bytes));
+		let val = & self.rest () [ .. num_bytes];
+		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
@@ -243,16 +279,17 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	pub fn word (& mut self) -> ParseResult <& 'inp str> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		let input_temp = self.input;
-		let start = self.pos;
-		while let Some (letter) = self.peek () {
-			if ! (self.word_pred) (letter) { break }
-			self.next ().unwrap ();
-		}
-		let end = self.pos;
-		if start == end { Err (self.err ()) ? }
+		let (num_chars, num_bytes) =
+			self.rest ().chars ()
+				.take_while (|& ch| (self.word_pred) (ch))
+				.map (char::len_utf8)
+				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
+					(num_chars + 1, num_bytes + ch_bytes));
+		if num_chars == 0 { return Err (self.err ()) }
+		let word = & self.rest () [ .. num_bytes];
+		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		Ok (& input_temp [ .. end - start])
+		Ok (word)
 	}
 
 	/// Consume and return a single word from the input, transforming it with [`TryInto::into`]
@@ -304,12 +341,6 @@ impl <'inp> Parser <'inp> {
 		self
 	}
 
-	#[ inline ]
-	#[ must_use ]
-	pub const fn is_empty (& self) -> bool {
-		self.input.is_empty ()
-	}
-
 	/// Assert that there is no more input to consume
 	///
 	/// # Errors
@@ -328,19 +359,26 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn next (& mut self) -> Option <char> {
-		let letter_opt = self.input.chars ().next ();
-		if let Some (letter) = letter_opt {
-			self.input = & self.input [letter.len_utf8 () .. ];
-			self.pos += letter.len_utf8 ();
+		if self.input_line.is_empty () && self.line_idx + 1 < self.input_lines.len () {
+			self.line_idx += 1;
+			self.input_line = self.input_lines [self.line_idx];
+			self.col_idx = 0;
+			return Some ('\n');
 		}
-		letter_opt
+		let ch = self.input_line.chars ().next () ?;
+		self.input_line = & self.input_line [ch.len_utf8 () .. ];
+		self.col_idx += 1;
+		self.byte_idx += ch.len_utf8 ();
+		Some (ch)
 	}
 
 	/// Return the next character from the input without consuming it
 	///
 	#[ inline ]
 	pub fn peek (& mut self) -> Option <char> {
-		self.input.chars ().next ()
+		if let Some (ch) = self.input_line.chars ().next () { return Some (ch) }
+		if self.line_idx + 1 < self.input_lines.len () { return Some ('\n') }
+		None
 	}
 
 	/// Consume and return the next character from the input
@@ -359,7 +397,7 @@ impl <'inp> Parser <'inp> {
 	#[ inline ]
 	#[ must_use ]
 	pub const fn err (& self) -> ParseError {
-	    ParseError::Simple (self.pos)
+		ParseError::Simple (self.line_idx, self.col_idx)
 	}
 
 	#[ inline ]
@@ -372,8 +410,7 @@ impl <'inp> Parser <'inp> {
 		input: & 'inp str,
 		mut wrap_fn: WrapFn,
 	) -> ParseResult <Output>
-		where
-			WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 		let mut parser = Parser::new (input);
 		wrap_fn (& mut parser)
 	}
@@ -383,8 +420,11 @@ impl <'inp> Parser <'inp> {
 		input: & 'inp str,
 		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
 	) -> GenResult <Output> {
-		Self::wrap (input, & mut wrap_fn)
-			.map_parse_err_col (input)
+		Self::wrap (input, |parser| {
+			let item = wrap_fn (parser) ?;
+			parser.end () ?;
+			Ok (item)
+		}).map_parse_err_line (0, input)
 	}
 
 	#[ inline ]
@@ -396,6 +436,17 @@ impl <'inp> Parser <'inp> {
 			.map (|(line_idx, line)| Self::wrap (line, & mut wrap_fn)
 				.map_parse_err_line (line_idx, line))
 			.collect ()
+	}
+
+	#[ inline ]
+	pub fn wrap_lines <Output> (
+		input_lines: & 'inp [& 'inp str],
+		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
+	) -> GenResult <Output> {
+		let mut parser = Parser::new_lines (input_lines);
+		let item = wrap_fn (& mut parser).map_parse_err_auto (& parser) ?;
+		parser.end ().map_parse_err_auto (& parser) ?;
+		Ok (item)
 	}
 
 	#[ inline ]
@@ -411,8 +462,8 @@ impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub const fn rest (& self) -> & str {
-		self.input
+	pub const fn rest (& self) -> & 'inp str {
+		self.input_line
 	}
 
 	#[ inline ]
@@ -502,8 +553,10 @@ impl <'par, 'inp, Item> ParserAny <'par, 'inp, Item> {
 				let mut sub_parser = Parser { confirmed: false, .. * parser };
 				match of_fn (& mut sub_parser) {
 					Ok (item) => {
-						parser.input = sub_parser.input;
-						parser.pos = sub_parser.pos;
+						parser.input_line = sub_parser.input_line;
+						parser.line_idx = sub_parser.line_idx;
+						parser.col_idx = sub_parser.col_idx;
+						parser.byte_idx = sub_parser.byte_idx;
 						ParserAny::Item (item)
 					},
 					Err (err) =>
@@ -590,12 +643,12 @@ pub trait FromParser <'inp>: Sized {
 
 #[ macro_export ]
 macro_rules! parse_display_enum {
-	(
+	( $(
 		$( #[ $($attrs:tt)* ] )*
 		$vis:vis enum $enum_name:ident {
 			$( $mem_name:ident = $mem_str:literal ),* $(,)?
 		}
-	) => {
+	)* ) => { $(
 
 		$( #[ $($attrs)* ] )*
 		$vis enum $enum_name {
@@ -636,7 +689,7 @@ macro_rules! parse_display_enum {
 			}
 		}
 
-	};
+	)* };
 }
 
 #[ macro_export ]
@@ -743,12 +796,75 @@ macro_rules! input_params {
 			}
 		}
 
+		impl <'inp> FromParser <'inp> for $struct_name {
+			fn from_parser (parser: & mut Parser <'inp>) -> ::aoc_common::parser::ParseResult <Self> {
+				use ::aoc_common::parser as parser;
+				use ::std::ops::Bound as Bound;
+				use ::std::ops::RangeBounds as _;
+				use ::std::result::Result as Result;
+				let default = Self::default ();
+				$(
+					let $member_name = parser.any ().of (|parser| {
+						parse! (parser, $member_prefix, val, "\n");
+						Ok (val)
+					}).done ().unwrap_or (default.$member_name);
+					if ! $member_range.contains (& $member_name) {
+						match ($member_range.start_bound (), $member_range.end_bound ()) {
+							(Bound::Included (start), Bound::Included (end)) =>
+								return Result::Err (format! (
+									"{} must be between {} and {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									end,
+									$member_name,
+								).into ()),
+							(Bound::Included (start), Bound::Unbounded) =>
+								return Result::Err (format! (
+									"{} must be at least {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									$member_name,
+								).into ()),
+							(Bound::Excluded (start), Bound::Unbounded) =>
+								return Result::Err (format! (
+									"{} must be more than {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									start,
+									$member_name,
+								).into ()),
+							(Bound::Unbounded, Bound::Included (end)) =>
+								return Result::Err (format! (
+									"{} must be at most {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									end,
+									$member_name,
+								).into ()),
+							(Bound::Unbounded, Bound::Excluded (end)) =>
+								return Result::Err (format! (
+									"{} must be less than {}, but was {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									end,
+									$member_name,
+								).into ()),
+							_ =>
+								return Result::Err (format! (
+									"{} is out of acceptable range: {}",
+									& $member_prefix [0 .. $member_prefix.len () - 1],
+									$member_name,
+								).into ()),
+						}
+					}
+				)*
+				Ok (Self { $( $member_name, )* })
+			}
+		}
+
 	};
 }
 
 #[ macro_export ]
 macro_rules! parse {
-	( $parser:expr $(, $item:tt)* ) => {
+	( $parser:expr $(, $item:tt)* $(,)? ) => {
 		$( parse! (@item $parser, $item); )*
 	};
 	( @item $parser:expr, $expect_str:literal ) => {
@@ -765,6 +881,9 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, (@int $item_name:ident: $item_type:ty) ) => {
 		let $item_name: $item_type = $parser.int () ?;
+	};
+	( @item $parser:expr, ($item_name:ident = $item_parse:ident) ) => {
+		let $item_name = $item_parse ($parser) ?;
 	};
 	( @item $parser:expr, (@end) ) => {
 		$parser.end () ?;
@@ -796,3 +915,17 @@ from_parser_impl! (u16, uint);
 from_parser_impl! (u32, uint);
 from_parser_impl! (u64, uint);
 from_parser_impl! (u128, uint);
+
+from_parser_impl! (char, expect_next);
+
+impl <'inp> FromParser <'inp> for bool {
+
+	#[ inline ]
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+		parser.any ()
+			.of (|parser| { parser.expect ("true") ?; Ok (true) })
+			.of (|parser| { parser.expect ("false") ?; Ok (false) })
+			.done ()
+	}
+
+}

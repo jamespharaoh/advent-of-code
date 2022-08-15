@@ -253,7 +253,7 @@ pub mod model {
 							.collect::<ParseResult <_>> () ?;
 						parser.end () ?;
 						Ok (items)
-					}).map_parse_err (|col_idx|
+					}).map_parse_err (|_, col_idx|
 						format! ("Invalid input: line {}: col {}: {}",
 							line_idx + 1, col_idx + 1, line)))
 				.flatten_ok ()

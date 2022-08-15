@@ -167,7 +167,7 @@ pub mod model {
 
 			let salt =
 				Parser::wrap (input [0], |parser| Ok (parser.rest ().to_owned ()))
-					.map_parse_err (|col_idx|
+					.map_parse_err (|_, col_idx|
 						format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			if salt.is_empty () { return Err ("Salt must be at least one character".into ()) }
 

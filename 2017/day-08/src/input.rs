@@ -16,7 +16,7 @@ impl <'inp> Input <'inp> {
 					.set_ignore_whitespace (true)
 					.set_word_pred (|ch| ch.is_ascii_lowercase ());
 				parser.item ()
-			}).map_parse_err (|col_idx|
+			}).map_parse_err (|_, col_idx|
 				format! ("Invalid input: line {}: col {}: {}",
 					line_idx + 1, col_idx + 1, line)))
 			.collect::<GenResult <_>> () ?;

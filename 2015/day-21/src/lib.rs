@@ -126,7 +126,7 @@ pub mod model {
 					let value = parser.expect (expect) ?.int () ?;
 					parser.end () ?;
 					Ok (value)
-				}).map_parse_err (|_| format! ("Invalid input: line {}: {}", line_idx + 1, line))
+				}).map_parse_err (|_, _| format! ("Invalid input: line {}: {}", line_idx + 1, line))
 			}
 			let hit_points = parse_line (0, input [0], "Hit Points: ") ?;
 			let damage = parse_line (1, input [1], "Damage: ") ?;

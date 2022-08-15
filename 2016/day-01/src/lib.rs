@@ -86,7 +86,8 @@ pub mod model {
 					parser.expect (", ") ?;
 				}
 				Ok (Self { steps })
-			}).map_parse_err (|col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
+			}).map_parse_err (|_, col_idx|
+				format! ("Invalid input: col {}: {}", col_idx + 1, input))
 		}
 	}
 

@@ -90,7 +90,7 @@ mod model {
 					target_x: x_min ..= x_max,
 					target_y: y_min ..= y_max,
 				})
-			}).map_parse_err (|char_idx|
+			}).map_parse_err (|_, char_idx|
 				format! ("Invalid input: col {}: {}", char_idx + 1, input)
 			)
 		}

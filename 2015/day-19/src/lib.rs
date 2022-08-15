@@ -238,7 +238,7 @@ pub mod model {
 						parser.end () ?;
 						if to.len () < from.len () { Err (parser.err ()) ?; }
 						Ok ((from.to_owned (), to.to_owned ()))
-					}).map_parse_err (|col_idx| format! (
+					}).map_parse_err (|_, col_idx| format! (
 						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line))
 				).collect::<GenResult <Replacements>> () ?;
 			let medicine = input.last ().unwrap ().deref ().to_owned ();

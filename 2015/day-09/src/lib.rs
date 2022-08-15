@@ -151,7 +151,7 @@ pub mod model {
 				if distance < 1 { Err ("Distance must be at least one") ?; }
 				parser.end () ?;
 				Ok ((place_0.into (), place_1.into (), distance))
-			}).map_parse_err (|col_idx|
+			}).map_parse_err (|_, col_idx|
 				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)
 			)
 		).collect ()

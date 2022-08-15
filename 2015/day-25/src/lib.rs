@@ -61,7 +61,7 @@ pub mod model {
 				parser.expect (".") ?.end () ?;
 				if row < 1 || col < 1 { Err ("Row and column start at one") ?; }
 				Ok (Self { row: row - 1, col: col - 1 })
-			}).map_parse_err (|col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
+			}).map_parse_err (|_, col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
 		}
 	}
 

@@ -82,7 +82,7 @@ pub mod model {
 			if input.len () != 1 { return Err ("Input must have exactly one line".into ()) }
 			#[ allow (clippy::redundant_closure_for_method_calls) ]
 			let num_elves = Parser::wrap (input [0], |parser| parser.int ())
-				.map_parse_err (|col_idx|
+				.map_parse_err (|_, col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			Ok (Self { num_elves })
 		}

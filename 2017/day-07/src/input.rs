@@ -20,7 +20,7 @@ impl <'inp> Input <'inp> {
 			.map (|(line_idx, line)| Parser::wrap (line, |parser| {
 				parser.set_word_pred (|ch| ch.is_ascii_lowercase ());
 				parser.item ()
-			}).map_parse_err (|col_idx|
+			}).map_parse_err (|_, col_idx|
 				format! ("Invalid input: line {}: col {}: {}",
 					line_idx + 1, col_idx + 1, line)))
 			.collect::<GenResult <_>> () ?;
@@ -55,7 +55,7 @@ impl <'inp> FromParser <'inp> for Prog <'inp> {
 		let name = parser.word () ?;
 		let weight = parser.expect (" (") ?.uint () ?;
 		parser.expect (")") ?;
-		let holds = if ! parser.is_empty () {
+		let holds = if ! parser.rest ().is_empty () {
 			let mut holds = ArrayVec::new ();
 			holds.push (InpStr::borrow (parser.expect (" -> ") ?.word () ?));
 			while parser.peek () == Some (',') {

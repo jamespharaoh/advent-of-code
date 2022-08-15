@@ -237,7 +237,7 @@ pub mod model {
 				let calories = parser.expect (", calories") ?.int () ?;
 				parser.end () ?;
 				Ok (Ingredient { name, capacity, durability, flavour, texture, calories })
-			}).map_parse_err (|char_idx|
+			}).map_parse_err (|_, char_idx|
 				format! ("Invalid input: line {}: col {}: {}", line_idx + 1, char_idx + 1, line)
 			)
 		).collect ()

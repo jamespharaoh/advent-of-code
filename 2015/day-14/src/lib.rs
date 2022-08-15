@@ -114,7 +114,7 @@ pub mod model {
 							if rest_time < 1 { Err ("Rest time must be at least 1") ?; }
 							parser.expect (" seconds.") ?.end () ?;
 							Ok (Reindeer { name, fly_speed, fly_time, rest_time })
-						}).map_parse_err (|char_idx|
+						}).map_parse_err (|_, char_idx|
 							format! ("Invalid input: line {}: col {}: {}",
 								line_idx + 1, char_idx + 1, line)))
 					.collect::<GenResult <_>> () ?;

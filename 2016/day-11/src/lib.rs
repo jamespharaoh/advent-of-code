@@ -270,8 +270,8 @@ pub mod model {
 								Ok (comps)
 							})
 							.done ()
-					}).map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
-						line_idx + 1, col_idx + 1, line)))
+					}).map_parse_err (|_, col_idx| format! (
+						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?;
 			Ok (Self { floors })
 		}

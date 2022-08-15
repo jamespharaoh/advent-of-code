@@ -213,9 +213,9 @@ pub mod model {
 				.enumerate ()
 				.map (|(line_idx, line)|
 					Parser::wrap (line, Wire::parse_real)
-						.map_parse_err (|col_idx|
-							format! ("Invalid input: line {}: col {}: {}",
-								line_idx + 1, col_idx + 1, line)))
+						.map_parse_err (|_, col_idx| format! (
+							"Invalid input: line {}: col {}: {}",
+							line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?)
 	}
 	}
@@ -226,7 +226,7 @@ pub mod model {
 	impl Wire {
 		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
-				.map_parse_err (|col_idx| format! ("Invalid input: col {}", col_idx + 1))
+				.map_parse_err (|_, col_idx| format! ("Invalid input: col {}", col_idx + 1))
 		}
 		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
 			parser.set_ignore_whitespace (true);

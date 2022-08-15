@@ -261,7 +261,7 @@ pub mod model {
 
 		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
-				.map_parse_err (|col_idx|
+				.map_parse_err (|_, col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input)
 				)
 		}
@@ -295,12 +295,12 @@ pub mod model {
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
 		input.iter ().enumerate ()
-		    .map (|(line_idx, line)|
-    			Parser::wrap (line, Step::parse_real)
-	    			.map_parse_err (|char_idx|
-		    		    format! ("Invalid input: line {}: col {}: {}",
-			    		    line_idx + 1, char_idx + 1, line)))
-		    .collect::<GenResult <_>> ()
+			.map (|(line_idx, line)|
+				Parser::wrap (line, Step::parse_real)
+					.map_parse_err (|_, char_idx|
+						format! ("Invalid input: line {}: col {}: {}",
+							line_idx + 1, char_idx + 1, line)))
+			.collect::<GenResult <_>> ()
 	}
 
 	#[ cfg (test) ]
@@ -341,14 +341,14 @@ pub mod model {
 				Step::parse ("go on 1,2 through 2,3"));
 			assert_err! ("Invalid input: col 10: turn red 1,2 through 2,3",
 				Step::parse ("turn red 1,2 through 2,3"));
-			assert_err! ("Invalid input: col 9: turn on 1:2 through 2,3",
+			assert_err! ("Invalid input: col 10: turn on 1:2 through 2,3",
 				Step::parse ("turn on 1:2 through 2,3"));
 		}
 
 		#[ test ]
 		fn parse_input () {
 			assert_eq_ok! (STEPS, model::parse_input (STEP_TEXTS));
-			assert_err! ("Invalid input: line 2: col 9: turn on 1:2 through 2,3",
+			assert_err! ("Invalid input: line 2: col 10: turn on 1:2 through 2,3",
 				model::parse_input (& [STEP_TEXTS [0], "turn on 1:2 through 2,3" ]));
 		}
 

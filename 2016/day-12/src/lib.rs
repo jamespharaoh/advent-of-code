@@ -67,7 +67,7 @@ pub mod model {
 						let instr: Instr = parser.item () ?;
 						if ! instr.is_v1 () { return Err (parser.err ()) }
 						Ok (instr)
-					}).map_parse_err (|col_idx|
+					}).map_parse_err (|_, col_idx|
 						format! ("Invalid input: line {}: col {}: {}",
 							line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?;

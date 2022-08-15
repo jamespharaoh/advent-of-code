@@ -317,7 +317,7 @@ mod model {
 						});
 						parser.end () ?;
 						Ok (())
-					}).map_parse_err (|_| err (line_idx, line)) ?;
+					}).map_parse_err (|_, _| err (line_idx, line)) ?;
 				}
 				scanners.push (InputScanner { name, beacons });
 			}

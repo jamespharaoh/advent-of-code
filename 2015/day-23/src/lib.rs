@@ -216,7 +216,7 @@ pub mod model {
 	impl Instr {
 		pub fn parse (input: & str) -> GenResult <Self> {
 			Parser::wrap (input, Self::parse_real)
-				.map_parse_err (|col_idx|
+				.map_parse_err (|_, col_idx|
 					format! ("Invalid input: col {}: {}", col_idx + 1, input))
 		}
 		fn parse_real (parser: & mut Parser) -> ParseResult <Self> {
@@ -272,7 +272,7 @@ pub mod model {
 				input.iter ().enumerate ()
 					.map (|(line_idx, line)|
 						Parser::wrap (line, Instr::parse_real)
-							.map_parse_err (|col_idx|
+							.map_parse_err (|_, col_idx|
 								format! ("Invalid input: line {}: col {}: {}",
 									line_idx + 1, col_idx + 1, line)))
 					.collect::<GenResult <_>> () ?;
@@ -296,7 +296,7 @@ pub mod model {
 
 		#[ test ]
 		fn input_parse () {
-			assert_err! ("Invalid input: line 2: col 8: jio a, +-5",
+			assert_err! ("Invalid input: line 2: col 9: jio a, +-5",
 				Input::parse (& [ "inc a", "jio a, +-5" ]));
 		}
 

@@ -134,7 +134,7 @@ pub mod model {
 				};
 				parser.end () ?;
 				Ok (Step { state, cube })
-			}).map_parse_err (|char_idx|
+			}).map_parse_err (|_, char_idx|
 				format! ("Invalid input: line {}: char {}: {}", line_idx + 1, char_idx + 1, line))
 		).collect ()
 	}

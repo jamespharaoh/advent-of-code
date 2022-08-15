@@ -193,7 +193,7 @@ pub mod model {
 				.map (|(line_idx, line)|
 					Parser::wrap (line, |parser| {
 						parser.item ()
-					}).map_parse_err (|col_idx| format! ("Invalid input: line {}: col {}: {}",
+					}).map_parse_err (|_, col_idx| format! ("Invalid input: line {}: col {}: {}",
 						line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <_>> () ?;
 			Ok (Self { steps, low, high })
