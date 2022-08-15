@@ -181,7 +181,7 @@ pub mod logic {
 				}
 				todo.push_back ((
 					todo_steps,
-					todo_prefix.push_front (prefix.clone ()),
+					todo_prefix.with_push_front (prefix.clone ()),
 					suffix.clone (),
 				));
 			}

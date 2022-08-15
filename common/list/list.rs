@@ -77,7 +77,7 @@ mod base_list {
 
 		#[ inline ]
 		#[ must_use ]
-		pub fn push_front (& self, head: Item) -> Self {
+		pub fn with_push_front (& self, head: Item) -> Self {
 			Self::Present (Rc::new ((head, self.clone ())))
 		}
 
@@ -85,6 +85,18 @@ mod base_list {
 		#[ must_use ]
 		pub const fn iter (& self) -> ListIter <Item> {
 			ListIter { list: self }
+		}
+
+		#[ inline ]
+		pub fn contains (& self, item: & Item) -> bool
+				where Item: Eq {
+			let mut cur = self.clone ();
+			while let Self::Present (ref inner) = cur {
+				let (ref head, ref tail) = * inner.as_ref ();
+				if head == item { return true }
+				cur = tail.clone ();
+			}
+			false
 		}
 
 	}
@@ -273,7 +285,7 @@ mod char_list {
 		pub fn prepend (& self, prefix: & str) -> Self {
 			let mut cur = self.clone ();
 			for prefix_ch in prefix.chars ().rev () {
-				cur = cur.push_front (prefix_ch);
+				cur = cur.with_push_front (prefix_ch);
 			}
 			cur
 		}
