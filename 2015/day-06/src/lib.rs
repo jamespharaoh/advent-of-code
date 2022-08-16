@@ -26,7 +26,7 @@ pub mod logic {
 	use nums::Int;
 	use nums::IntConv;
 
-	pub type ModeFn = fn (Action, u8) -> u8;
+	pub type ModeFn = fn (Action, u8) -> NumResult <u8>;
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		calc_result (input, mode_fn_one)
@@ -36,20 +36,21 @@ pub mod logic {
 		calc_result (input, mode_fn_two)
 	}
 
-	const fn mode_fn_one (action: Action, old_active: u8) -> u8 {
-		match action {
+	#[ allow (clippy::unnecessary_wraps) ]
+	const fn mode_fn_one (action: Action, old_active: u8) -> NumResult <u8> {
+		Ok (match action {
 			Action::On => 1,
 			Action::Off => 0,
 			Action::Toggle => if old_active == 0 { 1 } else { 0 },
-		}
+		})
 	}
 
-	fn mode_fn_two (action: Action, old_active: u8) -> u8 {
-		match action {
-			Action::On => u8::checked_add (old_active, 1).unwrap (),
+	fn mode_fn_two (action: Action, old_active: u8) -> NumResult <u8> {
+		Ok (match action {
+			Action::On => u8::add_2 (old_active, 1) ?,
 			Action::Off => u8::saturating_sub (old_active, 1),
-			Action::Toggle => u8::checked_add (old_active, 2).unwrap (),
-		}
+			Action::Toggle => u8::add_2 (old_active, 2) ?,
+		})
 	}
 
 	fn calc_result (steps: & [Step], mode_fn: ModeFn) -> GenResult <u32> {
@@ -87,8 +88,8 @@ pub mod logic {
 			row_data.clear ();
 			{
 				let mut steps = & * cur_steps;
-				trait RowIter: Iterator <Item = (Coord, u8)> {}
-				impl <SomeIter: Iterator <Item = (Coord, u8)>> RowIter for SomeIter {}
+				trait RowIter: Iterator <Item = NumResult <(Coord, u8)>> {}
+				impl <SomeIter: Iterator <Item = NumResult <(Coord, u8)>>> RowIter for SomeIter {}
 				#[ inline ]
 				fn update_once (iter: impl RowIter, step: Step, mode_fn: ModeFn) -> impl RowIter {
 					UpdateLineIter::new (iter, step.action, step.origin.col, step.peak.col, mode_fn)
@@ -108,21 +109,25 @@ pub mod logic {
 				while steps.len () >= 8 {
 					mem::swap (& mut row_data, & mut row_data_temp);
 					assert! (row_data.is_empty ());
-					row_data.extend (
+					for item in
 						update_eight_x (
-							row_data_temp.drain ( .. ),
+							row_data_temp.drain ( .. ).map (Ok),
 							& steps [0 .. 8 ],
-							mode_fn));
+							mode_fn) {
+						row_data.push (item ?);
+					}
 					steps = & steps [ 8 .. ];
 				}
 				while ! steps.is_empty () {
 					mem::swap (& mut row_data, & mut row_data_temp);
 					assert! (row_data.is_empty ());
-					row_data.extend (
+					for item in 
 						update_once (
-							row_data_temp.drain ( .. ),
+							row_data_temp.drain ( .. ).map (Ok),
 							steps [0].1,
-							mode_fn));
+							mode_fn) {
+						row_data.push (item ?);
+					}
 					steps = & steps [ 1 .. ];
 				}
 			}
@@ -150,9 +155,9 @@ pub mod logic {
 		Ok (sum)
 	}
 
-	struct UpdateLineIter <Inner: Iterator> {
+	struct UpdateLineIter <Inner: Iterator <Item = NumResult <(Coord, u8)>>> {
 		inner: Inner,
-		next: Option <Inner::Item>,
+		next: Option <(Coord, u8)>,
 		action: Action,
 		step: ArrayVec <Coord, 2>,
 		old_active: u8,
@@ -162,7 +167,7 @@ pub mod logic {
 	}
 
 	impl <Inner> UpdateLineIter <Inner>
-			where Inner: Iterator <Item = (Coord, u8)> {
+			where Inner: Iterator <Item = NumResult <(Coord, u8)>> {
 		#[ inline ]
 		fn new (inner: Inner, action: Action, start: Coord, end: Coord, mode_fn: ModeFn) -> Self {
 			Self {
@@ -179,11 +184,17 @@ pub mod logic {
 	}
 
 	impl <Inner> Iterator for UpdateLineIter <Inner>
-		where Inner: Iterator <Item = (Coord, u8)> {
-		type Item = (Coord, u8);
-		fn next (& mut self) -> Option <(Coord, u8)> {
+		where Inner: Iterator <Item = NumResult <(Coord, u8)>> {
+		type Item = NumResult <(Coord, u8)>;
+		fn next (& mut self) -> Option <NumResult <(Coord, u8)>> {
 			loop {
-				if self.next.is_none () { self.next = self.inner.next (); }
+				if self.next.is_none () {
+					self.next = match self.inner.next () {
+						Some (Ok (val)) => Some (val),
+						Some (Err (err)) => return Some (Err (err)),
+						None => None,
+					}
+				}
 				let (pos, old_val, step) = match (self.next, self.step.last ().copied ()) {
 					(Some ((pos, val)), None) => (pos, Some (val), false),
 					(Some ((pos_0, val)), Some (pos_1)) if pos_0 < pos_1 => (pos_0, Some (val), false),
@@ -196,11 +207,14 @@ pub mod logic {
 				if let Some (val) = old_val { self.old_active = val; self.next = None; }
 				if step { self.in_step = ! self.in_step; self.step.pop ().unwrap (); }
 				let want_active = if self.in_step {
-					(self.mode_fn) (self.action, self.old_active)
+					match (self.mode_fn) (self.action, self.old_active) {
+						Ok (val) => val,
+						Err (err) => return Some (Err (err)),
+					}
 				} else { self.old_active };
 				if self.cur_active != want_active {
 					self.cur_active = want_active;
-					return Some ((pos, want_active));
+					return Some (Ok ((pos, want_active)));
 				}
 			}
 		}
