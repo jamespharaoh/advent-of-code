@@ -16,7 +16,7 @@ input_params! {
 impl <'inp> Input <'inp> {
 	pub fn parse (mut input: & [& 'inp str]) -> GenResult <Self> {
 		let params = InputParams::parse (& mut input) ?;
-		let data = InpStr::borrow (input [0]);
+		let data = InpStr::borrow (input.first ().copied ().unwrap_or (""));
 		Ok (Self { data, params })
 	}
 }
