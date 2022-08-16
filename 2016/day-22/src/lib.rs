@@ -47,9 +47,15 @@ pub mod logic {
 				.filter (|node| node.used == 0)
 				.map (|node| node.pos)
 				.exactly_one ()
-				.map_err (|_err| "Must have exactly one empty node") ?;
+				.ok ()
+				.ok_or ("Must have exactly one empty node") ?;
 
-		let lowest = input.nodes.iter ().filter (|node| node.used > 0).map (|node| node.used).min ().unwrap ();
+		let lowest =
+			input.nodes.iter ()
+				.filter (|node| node.used > 0)
+				.map (|node| node.used)
+				.min ()
+				.ok_or ("No nodes have used data") ?;
 
 		let grid_size = [input.width.as_usize (), input.height.as_usize ()];
 		let mut walls = Walls::new_vec ([0, 0], grid_size);
