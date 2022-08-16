@@ -30,7 +30,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		guard_min_sleep.iter ()
 			.max_by_key (|& (_, & mins)| mins)
 			.map (|(& (guard, min), _)| (guard, min))
-			.unwrap ();
+			.ok_or ("No solution found") ?;
 	Ok (guard * min)
 }
 

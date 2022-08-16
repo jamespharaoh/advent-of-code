@@ -952,6 +952,9 @@ macro_rules! parse {
 	( @item $parser:expr, (@rest $item_name:ident) ) => {
 		let $item_name = $parser.take_rest ();
 	};
+	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr) ) => {
+		let $item_name = $parser.take_rest_while ($item_ch_pred);
+	};
 	( @item $parser:expr, (@line_items $item_name:ident) ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", Parser::item)
