@@ -16,11 +16,11 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		let rules = Parser::wrap_lines_auto_items (
-			input.iter ().copied ().enumerate ()) ?;
-		Ok (Self { rules, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params, (@line_items rules));
+			Ok (Self { rules, params })
+		})
 	}
 }
 
@@ -68,7 +68,6 @@ impl <'inp> FromParser <'inp> for InputRule {
 			.done ()
 	}
 }
-
 
 pub fn parse_pixels (parser: & mut Parser <'_>, size: usize) -> ParseResult <u64> {
 	let mut val = 0_u64;

@@ -257,7 +257,7 @@ pub mod model {
 								let comp = parser.expect ("a ") ?.item () ?;
 								let mut comps = vec! [ comp ];
 								loop {
-									if parser.rest ().starts_with (", and a ") {
+									if parser.peek_rest ().starts_with (", and a ") {
 										let comp: Component =
 											parser.expect (", and a ") ?.item () ?;
 										parser.expect (".") ?;

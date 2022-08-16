@@ -49,12 +49,15 @@ pub mod logic {
 					let len: usize = parser.int () ?;
 					let num: usize = parser.expect ("x") ?.int () ?;
 					parser.expect (")") ?;
-					let byte_len = parser.rest ().chars ().take (len).map (char::len_utf8).sum ();
+					let byte_len = parser.peek_rest ().chars ()
+						.take (len)
+						.map (char::len_utf8)
+						.sum ();
 					sum = usize::add_2 (sum,
 						usize::mul_2 (num,
 							part_two (
 								#[ allow (clippy::string_slice) ]
-								& parser.rest () [0 .. byte_len],
+								& parser.peek_rest () [0 .. byte_len],
 							) ?,
 						) ?,
 					) ?;

@@ -15,23 +15,22 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		if input.len () != 1 { return Err ("Input must be exactly one line".into ()) }
-		let steps = Parser::wrap_auto (input [0], |parser| {
-			let steps = parser.delim_fn (",", Parser::item).collect::<ParseResult <_>> () ?;
-			parser.end () ?;
-			Ok (steps)
-		}) ?;
-		Ok (Self { steps, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params);
+			let steps = parser.delim_fn (",", Parser::item).try_collect () ?;
+			Ok (Self { steps, params })
+		})
 	}
 }
 
 impl Display for Input {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
-		for step in self.steps.iter () {
-			Display::fmt (step, formatter) ?;
+		for item in Itertools::intersperse (
+				self.steps.iter ().map (Either::Left),
+				Either::Right (",")) {
+			Display::fmt (& item, formatter) ?;
 		}
 		Ok (())
 	}

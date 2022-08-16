@@ -18,9 +18,7 @@ impl Display for Layer {
 
 impl <'inp> FromParser <'inp> for Layer {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		let depth: LayerDepth = parser.uint () ?;
-		let range: LayerRange = parser.expect (": ") ?.uint () ?;
-		if range < 1 { return Err (parser.err ()) }
+		parse! (parser, depth, ": ", range);
 		Ok (Self { depth, range })
 	}
 }

@@ -463,14 +463,8 @@ mod model {
 		#[ inline ]
 		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
-				.of (|parser| {
-					let reg = parser.item::<Reg> () ?;
-					Ok (Self::Reg (reg))
-				})
-				.of (|parser| {
-					let val = parser.int () ?;
-					Ok (Self::Imm (val))
-				})
+				.of (|parser| { parse! (parser, reg); Ok (Self::Reg (reg)) })
+				.of (|parser| { parse! (parser, val); Ok (Self::Imm (val)) })
 				.done ()
 		}
 

@@ -35,9 +35,9 @@ mod particle {
 	impl <'inp> FromParser <'inp> for Particle {
 		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
 			parse! (parser,
-				"p=<", (pos_x: Coord), ",", (pos_y: Coord), ",", (pos_z: Coord), ">, ",
-				"v=<", (vel_x: Coord), ",", (vel_y: Coord), ",", (vel_z: Coord), ">, ",
-				"a=<", (acc_x: Coord), ",", (acc_y: Coord), ",", (acc_z: Coord), ">");
+				"p=<", pos_x, ",", pos_y, ",", pos_z, ">, ",
+				"v=<", vel_x, ",", vel_y, ",", vel_z, ">, ",
+				"a=<", acc_x, ",", acc_y, ",", acc_z, ">");
 			let pos = Pos { x: pos_x, y: pos_y, z: pos_z };
 			let vel = Pos { x: vel_x, y: vel_y, z: vel_z };
 			let acc = Pos { x: acc_x, y: acc_y, z: acc_z };

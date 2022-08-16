@@ -93,7 +93,7 @@ pub mod model {
 					Parser::wrap (line, |parser| {
 						parser.set_word_pred (|ch| ch.is_ascii_lowercase ());
 						let mut num_dashes =
-							parser.rest ().chars ()
+							parser.peek_rest ().chars ()
 								.take_while (|& ch| ch.is_ascii_lowercase () || ch == '-')
 								.filter (|& ch| ch == '-')
 								.count ();

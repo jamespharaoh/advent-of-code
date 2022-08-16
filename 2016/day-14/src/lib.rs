@@ -166,7 +166,7 @@ pub mod model {
 			if input.len () != 1 { return Err ("Invalid input: more than one line".into ()) }
 
 			let salt =
-				Parser::wrap (input [0], |parser| Ok (parser.rest ().to_owned ()))
+				Parser::wrap (input [0], |parser| Ok (parser.peek_rest ().to_owned ()))
 					.map_parse_err (|_, col_idx|
 						format! ("Invalid input: col {}: {}", col_idx + 1, input [0])) ?;
 			if salt.is_empty () { return Err ("Salt must be at least one character".into ()) }

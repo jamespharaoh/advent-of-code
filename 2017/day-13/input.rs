@@ -14,11 +14,12 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		let layers = Parser::wrap_lines_auto_items (
-			input.iter ().copied ().enumerate ()) ?;
-		Ok (Self { layers, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params);
+			let layers = parser.delim_fn ("\n", Parser::item).try_collect () ?;
+			Ok (Self { layers, params })
+		})
 	}
 }
 

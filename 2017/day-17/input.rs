@@ -13,15 +13,11 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		if input.len () != 1 { return Err ("Input must be exactly one line".into ()) }
-		let advance = Parser::wrap_auto (input [0], |parser| {
-			let advance = parser.uint () ?;
-			parser.end () ?;
-			Ok (advance)
-		}) ?;
-		Ok (Self { advance, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params, advance);
+			Ok (Self { advance, params })
+		})
 	}
 }
 

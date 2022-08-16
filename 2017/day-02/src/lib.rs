@@ -71,7 +71,7 @@ pub mod model {
 				.map (|(line_idx, line)|
 					Parser::wrap (line.trim (), |parser| {
 						let mut row = Vec::new ();
-						while ! parser.rest ().is_empty () {
+						while ! parser.peek_rest ().is_empty () {
 							let value = parser.int () ?;
 							if value == 0 { return Err ("Zero is not allowed".into ()) }
 							row.push (value);

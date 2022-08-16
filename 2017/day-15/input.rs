@@ -16,30 +16,27 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		if input.len () != 2 { return Err ("Input must be exactly two lines".into ()) }
-		let vals_temp = Parser::wrap_lines_auto (
-			input.iter ().copied ().enumerate (),
-			|parser| {
-				let id = parser.expect ("Generator ") ?.expect_next () ?;
-				let val = parser.expect (" starts with ") ?.uint () ?;
-				parser.end () ?;
-				Ok ((id, val))
-			}) ?;
-		if vals_temp [0].0 != 'A' || vals_temp [1].0 != 'B' {
-			return Err ("Invalid input".into ());
-		}
-		let (start_a, start_b) = (vals_temp [0].1, vals_temp [1].1);
-		Ok (Self { start_a, start_b, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params,
+				"Generator A starts with ", start_a, "\n",
+				"Generator B starts with ", start_b);
+			Ok (Self { start_a, start_b, params })
+		})
 	}
 }
 
 impl Display for Input {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
-		write! (formatter, "Generator A starts with {}\n", self.start_a) ?;
-		write! (formatter, "Generator B starts with {}\n", self.start_b) ?;
+		write! (formatter,
+			concat! (
+				"Generator A starts with {start_a}\n",
+				"Generator B starts with {start_b}\n",
+			),
+			start_a = self.start_a,
+			start_b = self.start_b,
+		) ?;
 		Ok (())
 	}
 }

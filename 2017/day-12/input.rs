@@ -24,16 +24,12 @@ pub struct InputPipe {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		let pipes = Parser::wrap_lines_auto (
-			input.iter ().copied ().enumerate (),
-			|parser| {
-				let item = parser.item () ?;
-				parser.end () ?;
-				Ok (item)
-			}) ?;
-		Ok (Self { pipes, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params);
+			let pipes = parser.delim_fn ("\n", Parser::item).try_collect () ?;
+			Ok (Self { pipes, params })
+		})
 	}
 }
 
@@ -59,8 +55,7 @@ impl Display for InputPipe {
 
 impl <'inp> FromParser <'inp> for InputPipe {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		let left: Village = parser.uint () ?;
-		parser.expect (" <-> ") ?;
+		parse! (parser, left, " <-> ");
 		let right_temp: ArrayVec <Village, 11> = parser
 			.delim_fn (", ", Parser::uint)
 			.take (MAX_PIPES + 1)

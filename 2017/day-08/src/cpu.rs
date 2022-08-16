@@ -9,11 +9,15 @@ pub struct Cpu <'inp> {
 	next: usize,
 }
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum ChkOp { Gtr, GtrEq, Lsr, LsrEq, Eq, NotEq }
+parse_display_enum! {
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum DstOp { Inc, Dec }
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum ChkOp { GtrEq = ">=", LsrEq = "<=", Eq = "==", NotEq = "!=", Gtr = ">", Lsr = "<" }
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum DstOp { Inc = "inc", Dec = "dec" }
+
+}
 
 #[ derive (Clone, Debug, Eq, PartialEq) ]
 pub struct Instr <'inp> {
@@ -85,52 +89,6 @@ impl <'inp> Cpu <'inp> {
 		self.regs.insert (name.clone (), val);
 	}
 
-}
-
-impl Display for ChkOp {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::Gtr => write! (formatter, ">") ?,
-			Self::GtrEq => write! (formatter, ">=") ?,
-			Self::Lsr => write! (formatter, "<") ?,
-			Self::LsrEq => write! (formatter, "<=") ?,
-			Self::Eq => write! (formatter, "==") ?,
-			Self::NotEq => write! (formatter, "!=") ?,
-		}
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for ChkOp {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parser.any ()
-			.of (|parser| { parser.expect (">=") ?; Ok (Self::GtrEq) })
-			.of (|parser| { parser.expect ("<=") ?; Ok (Self::LsrEq) })
-			.of (|parser| { parser.expect ("==") ?; Ok (Self::Eq) })
-			.of (|parser| { parser.expect ("!=") ?; Ok (Self::NotEq) })
-			.of (|parser| { parser.expect (">") ?; Ok (Self::Gtr) })
-			.of (|parser| { parser.expect ("<") ?; Ok (Self::Lsr) })
-			.done ()
-	}
-}
-
-impl Display for DstOp {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::Inc => write! (formatter, "inc") ?,
-			Self::Dec => write! (formatter, "dec") ?,
-		}
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for DstOp {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parser.any ()
-			.of (|parser| { parser.expect ("inc") ?; Ok (Self::Inc) })
-			.of (|parser| { parser.expect ("dec") ?; Ok (Self::Dec) })
-			.done ()
-	}
 }
 
 impl <'inp> Display for Instr <'inp> {

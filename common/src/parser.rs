@@ -241,14 +241,14 @@ impl <'inp> Parser <'inp> {
 	fn int_real (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let (num_chars, num_bytes) =
-			self.rest ().chars ()
+			self.input_line.chars ()
 				.enumerate ()
 				.take_while (|& (idx, letter)|
 					letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
 				.map (|(_, letter)| letter.len_utf8 ())
 				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
 					(num_chars + 1, num_bytes + ch_bytes));
-		let val = & self.rest () [ .. num_bytes];
+		let val = & self.input_line [ .. num_bytes];
 		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
@@ -258,12 +258,12 @@ impl <'inp> Parser <'inp> {
 	fn uint_real (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let (num_chars, num_bytes) =
-			self.rest ().chars ()
+			self.input_line.chars ()
 				.take_while (|& letter| letter.is_ascii_digit ())
 				.map (char::len_utf8)
 				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
 					(num_chars + 1, num_bytes + ch_bytes));
-		let val = & self.rest () [ .. num_bytes];
+		let val = & self.input_line [ .. num_bytes];
 		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
@@ -280,13 +280,13 @@ impl <'inp> Parser <'inp> {
 	pub fn word (& mut self) -> ParseResult <& 'inp str> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		let (num_chars, num_bytes) =
-			self.rest ().chars ()
+			self.input_line.chars ()
 				.take_while (|& ch| (self.word_pred) (ch))
 				.map (char::len_utf8)
 				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
 					(num_chars + 1, num_bytes + ch_bytes));
 		if num_chars == 0 { return Err (self.err ()) }
-		let word = & self.rest () [ .. num_bytes];
+		let word = & self.input_line [ .. num_bytes];
 		for _ in 0 .. num_chars { self.next ().unwrap (); }
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (word)
@@ -462,8 +462,16 @@ impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub const fn rest (& self) -> & 'inp str {
+	pub const fn peek_rest (& self) -> & 'inp str {
 		self.input_line
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn take_rest (& mut self) -> InpStr <'inp> {
+		let result = self.input_line;
+		self.input_line = "";
+		InpStr::borrow (result)
 	}
 
 	#[ inline ]
@@ -478,6 +486,18 @@ impl <'inp> Parser <'inp> {
 			delim,
 			parse_fn,
 			first: true,
+		}
+	}
+
+	#[ inline ]
+	pub fn repeat <'par, Output, ParseFn> (
+		& 'par mut self,
+		parse_fn: ParseFn,
+	) -> ParserRepeat <'par, 'inp, Output, ParseFn>
+			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+		ParserRepeat {
+			parser: self,
+			parse_fn,
 		}
 	}
 
@@ -532,6 +552,29 @@ impl <'par, 'inp, Output, ParseFn> Iterator for ParserDelim <'par, 'inp, Output,
 			if self.parser.expect (self.delim).is_err () { return None }
 		} else { self.first = false; }
 		Some ((self.parse_fn) (self.parser))
+	}
+
+}
+
+pub struct ParserRepeat <
+	'par,
+	'inp,
+	Output,
+	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> ,
+> {
+	parser: & 'par mut Parser <'inp>,
+	parse_fn: ParseFn,
+}
+
+impl <'par, 'inp, Output, ParseFn> Iterator for ParserRepeat <'par, 'inp, Output, ParseFn>
+		where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+
+	type Item = Output;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <Output> {
+		self.parser.any ().of (& mut self.parse_fn).done ().ok ()
+		//Some ((self.parse_fn) (self.parser))
 	}
 
 }
@@ -884,6 +927,12 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, ($item_name:ident = $item_parse:ident) ) => {
 		let $item_name = $item_parse ($parser) ?;
+	};
+	( @item $parser:expr, (@rest $item_name:ident) ) => {
+		let $item_name = $parser.take_rest ();
+	};
+	( @item $parser:expr, (@line_items $item_name:ident) ) => {
+		let $item_name = $parser.delim_fn ("\n", Parser::item).try_collect () ?;
 	};
 	( @item $parser:expr, (@end) ) => {
 		$parser.end () ?;

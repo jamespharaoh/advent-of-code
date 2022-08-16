@@ -55,7 +55,7 @@ impl <'inp> FromParser <'inp> for Prog <'inp> {
 		let name = parser.word () ?;
 		let weight = parser.expect (" (") ?.uint () ?;
 		parser.expect (")") ?;
-		let holds = if ! parser.rest ().is_empty () {
+		let holds = if ! parser.peek_rest ().is_empty () {
 			let mut holds = ArrayVec::new ();
 			holds.push (InpStr::borrow (parser.expect (" -> ") ?.word () ?));
 			while parser.peek () == Some (',') {

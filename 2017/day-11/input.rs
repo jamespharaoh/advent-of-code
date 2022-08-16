@@ -14,16 +14,13 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		if input.len () != 1 {
-			return Err ("Input must be exactly one line".into ());
-		}
-		let steps =
-			Parser::wrap_auto (input [0], |parser|
-				parser.delim_fn (",", Parser::item)
-					.collect::<ParseResult <Vec <VHexDir>>> ()) ?;
-		Ok (Self { steps, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params);
+			let steps = parser.delim_fn (",", Parser::item)
+				.collect::<ParseResult <Vec <VHexDir>>> () ?;
+			Ok (Self { steps, params })
+		})
 	}
 }
 

@@ -14,11 +14,11 @@ input_params! {
 }
 
 impl Input {
-	pub fn parse (mut input: & [& str]) -> GenResult <Self> {
-		let params = InputParams::parse (& mut input) ?;
-		let particles = Parser::wrap_lines_auto_items (
-			input.iter ().copied ().enumerate ()) ?;
-		Ok (Self { particles, params })
+	pub fn parse (input: & [& str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, |parser| {
+			parse! (parser, params, (@line_items particles));
+			Ok (Self { particles, params })
+		})
 	}
 }
 
