@@ -44,6 +44,10 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.insert (key, val)
 	}
 
+	pub fn clear (& mut self) {
+		self.map.clear ();
+	}
+
 	pub fn iter (& self) -> BTreeIter <'_, Key, Val> {
 		self.map.iter ()
 	}

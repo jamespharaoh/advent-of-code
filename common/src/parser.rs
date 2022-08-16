@@ -475,6 +475,20 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
+	#[ must_use ]
+	pub fn take_rest_while (& mut self, pred: fn (char) -> bool) -> InpStr <'inp> {
+		let result = self.input_line;
+		let mut num_bytes = 0;
+		while let Some (ch) = self.peek () {
+			if ! pred (ch) { break }
+			self.next ().unwrap ();
+			num_bytes += ch.len_utf8 ();
+		}
+		#[ allow (clippy::string_slice) ]
+		InpStr::borrow (& result [ .. num_bytes])
+	}
+
+	#[ inline ]
 	pub fn delim_fn <'par, Output, ParseFn> (
 		& 'par mut self,
 		delim: & 'par str,
@@ -932,7 +946,19 @@ macro_rules! parse {
 		let $item_name = $parser.take_rest ();
 	};
 	( @item $parser:expr, (@line_items $item_name:ident) ) => {
-		let $item_name = $parser.delim_fn ("\n", Parser::item).try_collect () ?;
+		let $item_name = $parser
+			.delim_fn ("\n", Parser::item)
+			.try_collect () ?;
+	};
+	( @item $parser:expr, (@lines $item_name:ident) ) => {
+		let $item_name = $parser
+			.delim_fn ("\n", |parser| Ok (parser.take_rest ()))
+			.try_collect () ?;
+	};
+	( @item $parser:expr, (@lines $item_name:ident = $item_ch_pred:expr) ) => {
+		let $item_name = $parser
+			.delim_fn ("\n", |parser| Ok (parser.take_rest_while ($item_ch_pred)))
+			.try_collect () ?;
 	};
 	( @item $parser:expr, (@end) ) => {
 		$parser.end () ?;
