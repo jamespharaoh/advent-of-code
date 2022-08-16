@@ -942,6 +942,13 @@ macro_rules! parse {
 	( @item $parser:expr, ($item_name:ident = $item_parse:ident) ) => {
 		let $item_name = $item_parse ($parser) ?;
 	};
+	( @item $parser:expr, ($item_name:ident = $item_range:expr) ) => {
+		let $item_name = $parser.any ().of (|parser| {
+			let val = parser.item () ?;
+			if ! $item_range.contains (& val) { return Err (parser.err ()) }
+			Ok (val)
+		}).done () ?;
+	};
 	( @item $parser:expr, (@rest $item_name:ident) ) => {
 		let $item_name = $parser.take_rest ();
 	};
