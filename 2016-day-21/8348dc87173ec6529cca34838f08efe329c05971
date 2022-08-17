@@ -1,0 +1,18 @@
+START_TWO=hrough 6
+move position 2 to position 2
+rotate based on position of letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 0 steps
+rotate based on position of letter h
+rotate based on position of letter a
+rotate based on position of letter !
+swap letter b with letter a
+rotate based on position of letter f
+rotate left 1 step
+rotate based on position of letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 0 steps
+rotate based on position of letter a
+swap letter b with letter e

@@ -1,0 +1,3 @@
+inc 8
+inc b
+jnz b -2

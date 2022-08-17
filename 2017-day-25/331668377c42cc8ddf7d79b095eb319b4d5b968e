@@ -1,0 +1,92 @@
+Begin in state E.
+Perform a diagnostic checksum after 7 steps.
+
+In state I:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state I.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state F.
+
+In state V:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state V.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state V.
+
+In state L:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state L.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state E.
+
+In state E:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Q.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state Q.
+
+In state Y:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Y.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state E.
+
+In state S:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state E.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state S.
+
+In state B:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state Q.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Q.
+
+In state F:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state V.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state V.
+
+In state Q:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state S.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Q.

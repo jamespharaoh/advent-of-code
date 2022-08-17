@@ -1,0 +1,7 @@
+cpy 72 b
+dec b
+jnz b -1
+cpy a b
+inc b
+dec b
+jnz b -2

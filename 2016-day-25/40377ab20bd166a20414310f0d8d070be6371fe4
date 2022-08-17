@@ -1,0 +1,3 @@
+jnz a a
+jnz 1 4
+jnz a -1

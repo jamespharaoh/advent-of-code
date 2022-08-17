@@ -1,0 +1,48 @@
+ dj dec 558 if r <= 8
+cpkg inc -30 if csu <= -16761
+pmp inc -432685 if hp <= -58
+bs dec -427 if ke > 1077
+k inc -31 if csu <= -1670
+ifd dec -1452 if yk > 1640
+ifd dec -140 if ke != 2273
+if dec -496 if pep <= 1037
+k inc -30 if csu <= -16761
+pmp inc -432685 if hp <= -58
+bs dec -42if yk > 1640
+ifd dec -140 if ke != 2273
+if dec -496 if pep <= -58
+bs dec -427 if ke > 1037
+k inc -30 if csu <= 16761
+pmp inc -432685 if hp <= -58
+bs dec -496 if pep <= -58
+bs dec -427 if ke > 1037
+k inc -30 if csu <= -16761
+pmp inc -432685 if hp <= -58
+bs dec -4270 if c<= -16761
+pmp inc -432685 if hp <= -51
+bs dec -427 if ke > 1037
+k inc -30 if csu <= -1670
+ifd dec -1452 if yk > 0820
+ifd dec -140 if ke != 2273
+if dec -496 if pep <= -58
+bs dec -470 if csu <= -16761
+pmp inc -432685 if hp <= 3
+if dec -496 if pep <= -58
+bs dec -427 if ke > 1037
+k inc -30 if csu <= -16761
+pmp inc -432685 if hp <= -8
+bs dec -470 if csueg <=-1671
+pmp inc -432685 if h <=7
+k inc -30 if csu <= -1670
+ifd dec -1452 if yk > 1640
+ifd dec -140 if ke != 2273
+if dec -496 if pep <= -58
+bs dec -470 if csu <= -16761
+pmp inc -432685 if hp <= -58
+bs dec -427 if ke > 1037
+k inc -30 if csu <= -1670
+ifd dec 96 if pep <= -58
+bs dec -27 if ke > 1037
+k inc -30 if csu <= -16761
+pmp inc -432685 if hp <= d -58
+bsf vt > pi

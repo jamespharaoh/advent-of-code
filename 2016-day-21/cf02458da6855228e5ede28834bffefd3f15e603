@@ -1,0 +1,3 @@
+START_ONE=o ste a
+rotate right 1 step
+swap position 5 with position 6

@@ -1,0 +1,3 @@
+mul i 3
+add i 2
+jgz 6 -2

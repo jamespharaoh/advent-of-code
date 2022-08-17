@@ -1,0 +1,68 @@
+cpy 117 b
+inc b
+jnz a a
+cpy b 6
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b b
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+cpy b 6362
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b b
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+cpy b 63
+out c
+cpy b 2
+out 1
+dec b
+jnz c c
+jnz b -4
+dec c

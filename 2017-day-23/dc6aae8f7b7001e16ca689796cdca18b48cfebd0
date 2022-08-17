@@ -1,0 +1,5 @@
+set f 0
+set d 2
+jnz g 5
+jgz f b
+sub g 3

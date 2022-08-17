@@ -1,0 +1,4 @@
+cpy 80 b
+jnz 1 a
+dec b
+jnz b -2

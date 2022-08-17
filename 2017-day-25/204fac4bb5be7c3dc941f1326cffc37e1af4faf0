@@ -1,0 +1,41 @@
+Begin in state E.
+Perform a diagnostic checksum after 789 steps.
+
+In state F:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state A.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state H.
+
+In state K:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state O.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state F.
+
+In state U:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state B.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state X.
+
+In state W:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state K.
+  If the current value is 1:
+    - Write the value 0.
+    - Move  G.

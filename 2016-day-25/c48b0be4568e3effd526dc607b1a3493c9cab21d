@@ -1,0 +1,2 @@
+cpy d 0
+jnz 2 b

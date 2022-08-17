@@ -1,0 +1,37 @@
+e dec5if w<9
+	p dec 190 if t > 10
+hp dec -252 if csu > -3671
+bs inc -158 if hp > -144
+hp inc -302 if cpv > 783
+dtf inc48 if pif > -1190
+rcb dec 819 if nwg > -2693
+sdj dec -726 if sdj > -3433
+hp dec 190 if t > 108
+hp dec5if w<9
+	p dec 190 if t> 108
+hp dec -252 if csu > -1
+bs inc -158 if hp > -144
+hp inc -33302 if cpv > 783
+dtf inc48 if pif > -190
+rcb dec 818 if nwg > -2693
+sdj dec -726 if sdj > -3433
+hp dec 190 if t > 235
+sdj inc 42 if sdj == -3440
+r inc -03 if cpv > 375
+dtf inc48 if pif > -1193
+rcb dec 818 if nwg > -2693
+hp dec 190 if t > 108
+hp dec5if w<9
+	p dec 190 if t > 108
+hp dec -252 if csu > -3671
+bs inc -158 if hp > -144
+r inc -302 if cpv > 783
+dtf inc48 if pif > -1190
+pmp dec 818 if nwg > -2693
+sdj dec -726 if sdj > -3433
+hp dec 190 if t > 235
+sdj inc 42 if sdj == -3440
+r inc -302 if cpv > 375
+dtf inc48 if pif > -1193
+rcb dec 818 if nwg > -269335
+sdj inc 42 if sdpv > 6 if p

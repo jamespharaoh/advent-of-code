@@ -1,0 +1,5 @@
+cpy 94 b
+out c
+out 1
+dec b
+jnz b -3

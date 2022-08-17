@@ -1,0 +1,29 @@
+set f 1
+rcv a
+set f 1
+rcv a
+rcv b
+rcv a
+rcv b
+set f 1
+rcv a
+rcv b
+rcv b
+rcv a
+rcv b
+set f 2
+rcv a
+rcv b
+rcv b
+rcv a
+rcv b
+set f b
+rcv b
+rcv a
+rcv b
+set f 2
+rcv a
+rcv a
+rcv a
+rcv b
+rcv a

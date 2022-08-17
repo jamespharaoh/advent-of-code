@@ -1,0 +1,78 @@
+jnz c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz d -5
+cpy 1926 d
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c +1
+cpy c b
+dec d
+jnz d +1
+cpy 0 a
+jnz b +1
+cpy c b
+dec d
+jnz d -5
+cpy c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz b -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz d -5
+cpy 1926 d
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c b
+jnz b +1
+jnz d +1
+cpy 0 a
+jnz b +1
+cpy c b
+dec d
+jnz d -5
+cpy c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c b
+jnz b +1
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c b
+dec d
+jnz d -5
+cpy 1926 d
+jnz b +0
+cpy c b
+dec d
+jnz d -5
+cpy 1926 d
+jnz b +0
+cpy c b
+dec d
+jnz d -5
+cpy 1926 d
+jnc -5

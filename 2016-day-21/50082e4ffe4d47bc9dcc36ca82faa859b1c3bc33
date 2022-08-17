@@ -1,0 +1,38 @@
+START_TWO=
+move position 6 to position 5
+reverse positions 1 through 4
+reverse positions 6 through 7
+reverse positions 4 through 7
+reverse positions 2 through 4
+reverse positions 6 through 7
+reverse positions 4 through 4
+move position 7 to position 0
+move position 2 to position 0
+reverse positions 4 through 4
+rotate left 5 steps
+swap position 6 with position 5
+move position 3 to position 2
+move position 6 to position 5
+reverse positions 1 through 4
+rotate based on position of letter e
+reverse positions 3 through 7
+move position 6 to position 5
+reverse positions 1 through 4
+reverse positions 6 through 7
+reverse positions 4 through 7
+reverse positions 2 through 4
+reverse positions 6 through 7
+reverse positions 4 through 4
+move position 7 to position 0
+move position 2 to position 4
+rotate left 5 steps
+swap position 6 with position 5
+move position 3 to position 2
+move position 6 to position 5
+reverse positions 1 through 4
+rotate based on position of letter e
+reverse positions 3 through 7
+move position 6 to position 5
+reverse positions 1 through 4
+reverse positions 6 through 7
+reverse positionsAG

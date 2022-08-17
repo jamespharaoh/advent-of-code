@@ -1,0 +1,129 @@
+					
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 46
+snd 3
+snd 3
+snd 3
+snd 21
+add p b
+jgz 1 3
+snd 2
+set f 1
+add i -2
+add a -14
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 46
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 36
+add p b
+jgz 1 3
+snd 2
+set f 1
+add i -2
+add a -1
+set i 167
+set p b
+jgz 1 3
+snd 24
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 46
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 46
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3667
+set p b
+jgz 1 3
+snd 24
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3641
+add p b
+jgz 1 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 2
+snd 3
+snd 3
+snd 3
+snd 3
+snd 46
+snd 3
+snd 3
+snd 3
+jgz 2 
+2

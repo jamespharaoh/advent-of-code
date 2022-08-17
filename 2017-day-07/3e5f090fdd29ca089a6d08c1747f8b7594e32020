@@ -1,0 +1,5 @@
+n (3) -> v
+n (3) -> v, u, n, u, u, u, n
+nu (3) -> v, u, n, u, n
+n (3) -> v, u, n, u, u, u, n
+n (3) -> v, v, u, n, u, u, n

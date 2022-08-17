@@ -1,0 +1,8 @@
+toggle 3,0through50,3
+toggle 3,7through8,8r
+toggle 4,7through8,8
+toggle 4,7through7,2
+toggle 3,0through50,7
+toggle 3,7through8,8r
+toggle 4,7through8,9
+toggle 4,77through8,8u

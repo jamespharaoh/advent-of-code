@@ -1,0 +1,17 @@
+cpy 1 2
+jnz 1 2
+cpy 2 d
+jnz c 2
+jnz 1 6
+dec b
+jnz 2 -1
+cpy 6 d
+jnz c 2
+jnz c 2
+jnz 4 2
+jnz 1 2
+jnz 1 2
+cpy 2 1
+cpy 26 d
+jnz c 2
+jnz c 1 z3

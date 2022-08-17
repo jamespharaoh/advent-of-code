@@ -1,0 +1,4 @@
+set i 58
+snd b
+add i -2
+jgz i -2

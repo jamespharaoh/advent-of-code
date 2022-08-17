@@ -1,0 +1,11 @@
+cpy d b
+inc a
+dec b
+jnz b -2
+dec c
+jnz c -5
+inc b
+jnz a a
+out b
+dec c
+jnz 4 c

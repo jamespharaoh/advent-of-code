@@ -1,0 +1,2 @@
+set i p
+jgz 3 -1

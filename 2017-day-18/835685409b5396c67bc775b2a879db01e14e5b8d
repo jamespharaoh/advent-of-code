@@ -1,0 +1,4 @@
+set i p
+snd 1
+rcv b
+jgz i -3

@@ -1,0 +1,2 @@
+jnz c b
+dec 4

@@ -1,0 +1,38 @@
+START_ONE=oughb6otasteph 4n positio :
+rotate right 4 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter e
+swap position 6 with position 5
+move position 3 to position 5
+swap position 7 with position 4
+swap letter e with letter c
+swap letter f with letter d
+swap letter a with letter e
+swap position 2 with position 7
+swap position 1 with position 7
+swap letter d with letter c
+swap letter b with letter e
+swap position 6 with position 5
+move position 3 to position 2
+swap letter e with letter c
+swap letter f with letter d
+swap letter a with letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 5 steps
+rotate based on position of letter h
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 3 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter a
+rotate based on position of letter !
+swap letter f with letter h
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 5 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter e

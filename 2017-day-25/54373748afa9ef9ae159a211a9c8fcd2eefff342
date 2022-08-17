@@ -1,0 +1,81 @@
+Begin in state A.
+Perform a diagnostic checksum after 9476 steps.
+
+In state A:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state B.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state C.
+
+In state Z:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state B.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state O.
+
+In state B:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state A.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the right.
+    - Continue with state D.
+
+In state N:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the right.
+    - Continue with state O.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state W.
+
+In state D:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state A.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the right.
+    - Continue with state D.
+
+In state E:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state E.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state A.
+
+In state P:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state L.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state L.
+
+In state J:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state Z.
+  If the current value is 1:
+    - Write the value 1.
+    - L.

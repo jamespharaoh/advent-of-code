@@ -1,0 +1,78 @@
+Begin in state U.
+Perform a diagnostic checksum after 6789 steps.
+
+In state A:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state Y.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state X.
+
+In state R:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state C.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state G.
+
+In state E:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state F.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state C.
+
+In state O:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state J.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Y.
+
+In state J:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state T.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state B.
+
+In state N:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state E.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state X.
+
+In state K:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state L.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state S.
+
+In state Q:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+ 

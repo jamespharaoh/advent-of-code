@@ -1,0 +1,5 @@
+cpy 63 b
+out c
+out 1
+dec b
+jnz b -3

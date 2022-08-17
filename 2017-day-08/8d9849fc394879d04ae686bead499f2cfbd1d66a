@@ -1,0 +1,17 @@
+d dec5if r<8
+d  dec7if rmoe < -6210
+zx dec 569 if b< -818
+r dec9if pmp < -2319
+pmp inc -13if r<0
+d dec7if rmoe < -6210
+zx dec 56981 if pmp < -2319
+pmp inc -13if r<0
+d dec7if rmoe < -6210
+zx dec 569 if bs < -818
+r dec981 if pmp < -2319
+pmp inc -13if r<0
+d dec6if e < -6210
+zx dec91355 if oj> 0789
+d dec7if r < -818
+r dec981 if pmp < -319
+pmp inc -135 if oj> 0789

@@ -1,0 +1,259 @@
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+jnz c -2
+dec d
+jnz d c
+jnz d c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec a
+jnz 2 -1
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 87 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 0 c
+cpy 80 c
+jnz 70 c
+jnz 7 c
+jnz 716 c
+jnz 1 c
+cpy 80 c
+jnz 70 c
+jnz 7 c
+jnz 77 d
+inc a
+inc d
+jnz d -2
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz 70 c
+jnz 7 c
+jnz 77 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 8 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -3
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -1 c
+jnz 70 c
+jnz 7 c
+jnz 77 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 8 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 87 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -3
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -1
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+jnz c -2
+dec d
+jnz d c
+jnz d c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec a
+jnz 2 -1
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 87 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 0 c
+cpy 80 c
+jnz 70 c
+jnz 7 c
+jnz 716 c
+jnz 0 c
+jnz 70 c
+jnz 7 c
+jnz 77 d
+inc a
+inc d
+jnz d -2
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz 70 c
+jnz 7 c
+jnz 77 d
+inc a
+inc d
+jnz d -2
+jnz 6 c
+jnz 1 c
+cpy 8 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -2
+tgl c
+cpy -16 c
+jnz d -5
+dec b
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 87 d
+inc a
+inc d
+jnz d -2
+jnz d -2
+tgl c
+cpy -16 c
+jnz 1 c
+cpy 80 c
+jnz c -2
+dec d
+jnz d c
+jnz d -3
+tgl c
+cpz a (

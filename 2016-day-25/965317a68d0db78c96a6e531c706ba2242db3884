@@ -1,0 +1,41 @@
+cpy c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz a 1
+cpy c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz a 1
+out b
+inc b
+inc b
+dec c
+jnz c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz a b
+out b
+inc b
+inc b
+dec c
+jnz c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz b
+inb b 1

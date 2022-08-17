@@ -1,0 +1,5 @@
+set i 1
+mul a 0
+snd 1
+rcv b
+jgz i -4

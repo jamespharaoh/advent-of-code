@@ -1,0 +1,3 @@
+jnz a a
+cpy b 5
+cpy b 0

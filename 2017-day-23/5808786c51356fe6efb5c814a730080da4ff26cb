@@ -1,0 +1,9 @@
+set f 1
+set d 2
+set e 2
+set g d
+mul g e
+sub g b
+jnz g 5
+jgz f b
+sub g 3

@@ -1,0 +1,5 @@
+toggle 3,7through8,6
+toggle 7,1through8,7
+toggle 6,6through9,7
+toggle 5,3through7,2
+toggle 3,1through8,9u

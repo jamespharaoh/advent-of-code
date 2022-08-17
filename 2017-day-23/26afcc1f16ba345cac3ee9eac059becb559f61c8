@@ -1,0 +1,5 @@
+set b 04
+sub e -1
+set g e
+sub g b
+jnz g -4

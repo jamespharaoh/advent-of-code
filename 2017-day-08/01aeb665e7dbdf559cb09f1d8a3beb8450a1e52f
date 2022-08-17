@@ -1,0 +1,8 @@
+sd inc -99 if rcb >= -8
+e inc 296 if cs>=-6
+kv inc -360 if ojk >=0
+d inc999 if rb >= -4
+wg inc -7 if s >= -4
+cp inc 29 if c >= -6
+v inc 60 if ojk >= 0
+ifd inc9 if rcb>= -8			

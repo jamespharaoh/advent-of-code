@@ -1,0 +1,14 @@
+inc b
+dec b
+jnz b b
+dec b
+inc a
+dec b
+dec b
+dec b
+jnz b b
+dec b
+inc a
+dec b
+jnz b b
+aӑ

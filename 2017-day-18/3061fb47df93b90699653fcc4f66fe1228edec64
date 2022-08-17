@@ -1,0 +1,4 @@
+set i 9
+snd b
+add i -3
+jnz i -2

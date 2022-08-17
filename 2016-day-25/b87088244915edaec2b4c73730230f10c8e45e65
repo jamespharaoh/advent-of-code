@@ -1,0 +1,27 @@
+cpy 117 b
+jnz a a
+cpy b 6
+jnz a 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+out c
+cpy b 2
+out 1
+cpy b b
+cpy b b
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+cpy b 63
+out c
+cpy b 2
+out 1
+dec b
+jnz c c
+jnz b -5
+dec c

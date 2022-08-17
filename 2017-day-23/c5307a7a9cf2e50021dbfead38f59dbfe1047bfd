@@ -1,0 +1,9 @@
+jnz a 2
+jnz b 12
+jnz f 7
+jnz a 2
+jnz b 12
+jnz f 7
+jnz 11 1
+sub b -08
+2

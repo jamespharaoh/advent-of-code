@@ -1,0 +1,20 @@
+
+
+
+zo dec5if r<9
+d dec5if r<9
+d dec5if v<9
+p dec0if r<9
+	o dec5if r<9
+	b dec5if vv<9
+p dec5if r<9
+ec dec5if v<9
+p dec5if r<9
+hzo dec5if r<9
+d dec5if r<9
+	b dec5if vv<4
+p dec5if r<9
+ecf dec0if v<9
+z dec5if vv<4
+p dec5if r<9
+ef dec5if v<9

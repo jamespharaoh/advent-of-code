@@ -1,0 +1,108 @@
+cpy 24 b
+inc a
+cpy b 62
+out c
+cpy b b
+jnz a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 24
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out b
+jnz a a
+cpy a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 1
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b b
+jnz a a
+cpy b 1
+dec b
+jnz a c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out b
+jnz a a
+cpy a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 1
+jnz a a
+cpy b 62
+out c
+cpy b b
+jnz a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy a a
+cpy b 2
+out c
+cpy a a
+cpy b 62
+out c
+cpy b 2
+inc 0
+jnz a a
+out c
+out a
+dec b
+jnz c c
+jnz b -4

@@ -1,0 +1,10 @@
+dec b
+cpy b b
+cpy b c
+cpy b b
+dec b
+cpy b b
+cpy b c
+cpy b b
+cpy b b
+cpy b b

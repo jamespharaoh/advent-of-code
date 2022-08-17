@@ -1,0 +1,38 @@
+cpy a d
+cpy 14 c
+cpy 182 b
+inc -2
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 1 b
+cpy a d
+cpy 14 c
+cpy 181 b
+jnz a d
+cpy 14 c
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy a d
+cpy 1 c
+cpy 182 b
+inc -2
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 1 c
+cpy 1 b
+cpy a d
+cpy 14 c
+cpy 181 b
+cpy 14 c
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy

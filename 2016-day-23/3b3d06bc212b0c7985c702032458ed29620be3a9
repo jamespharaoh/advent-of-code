@@ -1,0 +1,5 @@
+inc c
+tgl 3
+cpy 2 c
+jnz c -2
+dec 5

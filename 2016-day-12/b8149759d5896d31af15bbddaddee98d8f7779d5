@@ -1,0 +1,3 @@
+inc 6
+inc 5
+jnz 6

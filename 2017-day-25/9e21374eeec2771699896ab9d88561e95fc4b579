@@ -1,0 +1,12 @@
+Begin in state W.
+Perform a diagnostic checksum after 156 steps.
+
+In state W:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state W.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state W.

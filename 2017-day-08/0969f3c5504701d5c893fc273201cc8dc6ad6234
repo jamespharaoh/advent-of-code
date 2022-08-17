@@ -1,0 +1,3 @@
+n inc95if p!=7
+v inc8if c!=7
+v inc2if r!=

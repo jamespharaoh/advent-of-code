@@ -1,0 +1,12 @@
+d dec5if r<9
+d dec5if v<9
+p dec5if v<9
+p dec56if rhp<9
+j dec5if r<9
+l dec6if r<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<4
+p dec4if r<9
+c dec5if r<9
+of dec5if v<9

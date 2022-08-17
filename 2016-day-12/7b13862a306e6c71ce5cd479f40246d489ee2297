@@ -1,0 +1,4 @@
+jnz b +1
+jnz d +2
+cpy b +1
+jnz +

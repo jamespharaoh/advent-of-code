@@ -1,0 +1,15 @@
+START_ONE=pte s
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter 4
+rotate left 0 steps
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter c
+rotate left 0 steps
+rotate left 0 steps
+reverse positions 0 through 4
+rotate left 0 steps
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter e

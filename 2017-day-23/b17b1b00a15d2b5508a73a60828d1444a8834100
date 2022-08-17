@@ -1,0 +1,4 @@
+set b 8
+jnz a 2
+sub e e
+sub g b

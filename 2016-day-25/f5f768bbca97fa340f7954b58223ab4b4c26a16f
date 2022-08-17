@@ -1,0 +1,4 @@
+cpy 5 d
+cpy 8 a
+dec c
+jnz c c

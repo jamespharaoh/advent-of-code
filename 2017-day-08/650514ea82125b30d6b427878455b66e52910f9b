@@ -1,0 +1,4 @@
+sc dec 1if r>= 0
+i dec55 if r>= 0
+d inc-99if c >= -0
+i dec98 if r>= 0

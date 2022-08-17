@@ -1,0 +1,7 @@
+d dec5if r<9
+ec dec5if v<4
+g dec5if v<9
+jg dec5if v<9
+y dec5if v<4
+p dec5if r<9
+ef dec5if v<4

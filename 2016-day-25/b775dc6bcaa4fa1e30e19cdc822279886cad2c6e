@@ -1,0 +1,3 @@
+out c
+out a
+jnz 2 2

@@ -1,0 +1,3 @@
+mul n 7
+jnz i q
+jgz 6 -2

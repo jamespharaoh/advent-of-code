@@ -1,0 +1,9 @@
+Begin in state E.
+Perform a diagnostic checksum after 7 steps.
+
+In state E:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state 
+.

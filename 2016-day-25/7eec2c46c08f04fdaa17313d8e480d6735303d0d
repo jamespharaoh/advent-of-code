@@ -1,0 +1,4 @@
+jnz 9 a
+out b
+dec c
+jnz 3 c

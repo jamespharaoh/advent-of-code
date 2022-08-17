@@ -1,0 +1,280 @@
+cpy 117 b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out a
+cpy b 62
+out a
+cpy b 62
+out c
+cpy b b
+jnz a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+out c
+cpy b 2
+out a
+cpy b 62
+out c
+cpy a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out 62
+out c
+cpy b 2
+inc b
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+out c
+cpy b 2
+out a
+cpy b 62
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 61
+out c
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b b
+jnz a a
+cpy b 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out a
+cpy b 62
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out 1
+jnz a a
+cpy a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpcpy 48 b
+jnz a a
+ouy b 62
+ou a a
+cpy b 62
+out c
+cpy b 2
+inc b
+inc b
+inc b
+jnz a a
+cpy b 62
+out c
+ct c
+out 1
+dp

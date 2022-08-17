@@ -1,0 +1,13 @@
+START_ONE=b6opon 5
+reverse positions 2 through 4
+reverse positions 4 through 7
+reverse positions 4 through 7
+rotate left 1 step
+reverse positions 5 through 6
+reverse positions 2 through 5
+rotate right 2 steps
+reverse positions 2 through 7
+reverse positions 5 through 6
+rotate right 5 steps
+reverse positions 1 through 4
+swap letter d with letter e

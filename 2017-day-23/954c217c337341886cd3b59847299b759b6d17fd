@@ -1,0 +1,5 @@
+set f 0
+add e 0
+add e -1
+add g e
+add e -00s

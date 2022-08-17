@@ -1,0 +1,149 @@
+
+inc c
+inc c
+inc c
+inc -2
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -2
+cpy a c
+inc a
+dec d
+jnz c 0
+jnz 1 5
+cpy 5 c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+dec c
+jnz c d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz b -0
+cpy 26 d
+jnz c 0
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+dec c
+jnz c d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz b -0
+cpy 26 d
+jnz c 0
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+inc c
+cpy 3 c
+i
+dec 3
+jn

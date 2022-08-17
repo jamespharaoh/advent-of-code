@@ -1,0 +1,6 @@
+set i 0
+mod p 5
+mod p a
+set b p
+mod b 0
+m

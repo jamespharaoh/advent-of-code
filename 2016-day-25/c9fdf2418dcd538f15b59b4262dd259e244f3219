@@ -1,0 +1,4 @@
+cpy 2 b
+inc 7
+dec b
+jnz b -2

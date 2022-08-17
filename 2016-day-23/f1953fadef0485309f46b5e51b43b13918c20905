@@ -1,0 +1,21 @@
+tgl 0
+tgl 0
+tgl 0
+tgl c
+tgl 0
+tgl d
+tgl 0
+tgl 0
+tgl 0
+tgl c
+tgl 0
+tgl 0
+tgl c
+tgl 0
+tgl c
+tgl 00
+jnz d -5
+tgl 2
+tgl 0
+tgl 0
+tgl 0

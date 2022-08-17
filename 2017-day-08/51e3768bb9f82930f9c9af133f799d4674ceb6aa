@@ -1,0 +1,4 @@
+s dec7if n==7
+p inc4if n==7
+j inc6 if u==93
+u inc4if n==7

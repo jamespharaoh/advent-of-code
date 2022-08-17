@@ -1,0 +1,9 @@
+turn	on	4,7through7,7
+turn	on	9,7through2,7
+turn	on 0,7through5, 7
+turn on	0,7through6,7
+toggle 0,7through82,779
+toggle 1,7through81,8,h82,779
+toggle 2,7through16,8h
+toggle 1,7through80,7
+turn	off 58,7through4, 7th5,7

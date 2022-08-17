@@ -1,0 +1,15 @@
+
+mv dec5if r<9	
+frp dec6if r<9	
+fw dec5if r<9
+f dec69if r <1
+g inc6if r<9
+fw dec5if r<9
+f dec69if r <1
+gv inc69if r<4	
+frp dec6if r<9	
+fw dec5if r<9
+y dec69if r <1
+gv inc6if r<9	
+fw dec5if r<9
+f dec669if r <69w

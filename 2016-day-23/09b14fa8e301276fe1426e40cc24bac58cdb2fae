@@ -1,0 +1,8 @@
+jnz a a
+cpy b a
+cpy a a
+cpy b a
+cpy b a
+jnz a a
+cpy a a
+cpy b a

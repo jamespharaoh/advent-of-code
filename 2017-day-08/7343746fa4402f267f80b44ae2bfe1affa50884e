@@ -1,0 +1,4 @@
+s dec5if r <=5
+ti inc2if sdj <=6
+vt inc 3if u <=1
+e inc-1if i<= 65

@@ -1,0 +1,5 @@
+cpy b -1
+cpy -1 -2
+cpy -6 c
+cpy -1 -2
+cpy -1 -

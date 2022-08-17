@@ -1,0 +1,8 @@
+cpy a d
+cpy 4 c
+cpy 4 c
+cpy 4 b
+cpy d 0
+cpy a b
+cpy 0 a
+cpy b 2

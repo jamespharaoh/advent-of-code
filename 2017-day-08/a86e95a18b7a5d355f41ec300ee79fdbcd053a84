@@ -1,0 +1,2 @@
+d dec3if n>=9
+u inc 3if n>=7

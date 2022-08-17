@@ -1,0 +1,13 @@
+cpy 3 c
+cpy 54 d
+inc 2
+dec d
+jnz d -2
+dec c
+jnz c -2
+cpy a d
+inc d
+dec d
+jnz d -2
+dec c
+jnz c -3

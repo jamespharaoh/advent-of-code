@@ -1,0 +1,7 @@
+jnz a a
+out c
+out a
+dec b
+dec d
+dec c
+jnz c c

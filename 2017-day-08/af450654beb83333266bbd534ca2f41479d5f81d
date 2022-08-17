@@ -1,0 +1,5 @@
+j dec5if r<9
+t dec5if r<0
+	b dec6if f<0
+	b dec5if r<0
+f dec0if r<0

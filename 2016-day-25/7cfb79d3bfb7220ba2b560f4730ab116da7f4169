@@ -1,0 +1,7 @@
+cpy 61 b
+dec b
+jnz b -1
+inc d
+dec b
+inc 3
+jnz b -2

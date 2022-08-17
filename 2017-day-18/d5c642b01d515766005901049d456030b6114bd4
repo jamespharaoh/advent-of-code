@@ -1,0 +1,17 @@
+set i -2
+add a -0
+add i -2
+jgz i -2
+add a -1
+set i -2
+add a -1
+add i -262
+add i -2
+jgz i -2
+jgz i -2
+add a -1
+add a -1
+set i -2
+add a -1
+add a -1
+s-3

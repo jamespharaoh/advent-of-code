@@ -1,0 +1,34 @@
+START_ONE=ttter h
+rotate based on position of letter a
+swap letter f with letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 0 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter a
+rotate based on position of letter !
+swap letter d with letter c
+swap letter b with letter a
+rotate based on position of letter !
+swap letter f with letter a
+rotate right 8 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter d
+swap letter a with letter e
+swap position 6 with position 3
+swap letter g with letter h
+rotate based on position of letter a
+rotate based on position of letter a
+swap letter f with letter a
+swap letter f with letter a
+rotate right 3 steps
+reverse positions 5 through 4
+swap letter d with letter 6
+rotate left 6 steps
+move position 2 to position 6
+rotate right 0 steps
+reverse positions 5 through 4
+swap letter d with letter c
+swap letter b with letter e

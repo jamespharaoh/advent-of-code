@@ -1,0 +1,15 @@
+cpy 1 a
+dec c
+jnz c -6
+cpy 71 c
+cpy 14 d
+inc a
+cpy 2 b
+dec c
+jnz c -1
+cpy 14 a
+dec c
+inc c
+jnz c -2
+dec c
+jnz c -4

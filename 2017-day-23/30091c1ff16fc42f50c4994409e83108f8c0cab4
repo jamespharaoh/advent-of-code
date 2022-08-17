@@ -1,0 +1,9 @@
+set b 8
+add f 1
+set d 3
+set e d
+mul g l
+sub g 0
+sub e e
+sub g b
+jnz g -8

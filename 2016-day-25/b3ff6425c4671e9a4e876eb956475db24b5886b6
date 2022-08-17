@@ -1,0 +1,3 @@
+jnz c 2
+jnz 1 c
+jnz c

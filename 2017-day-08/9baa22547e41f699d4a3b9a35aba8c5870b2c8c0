@@ -1,0 +1,68 @@
+sdj dec 558 if r <= 8
+cpv inc 669 if csu >= -6	
+fs dec5if r<9	
+fs dec5if r<9	
+fr inc -121 if t != 5
+tf dec 58 if r <= 8
+cpv inc 669 if csu >= -6
+ke dec5if r<9
+d dec5if v<9
+p dec5if v<9
+p dec5if r<9
+ecf dec5if v<9
+f dec5if v<9
+fg dec5if v<9
+p dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<8
+pp dec5if r<9
+e dec2if vv<2
+e dec2if p<9
+fg dec5if v<2
+e dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+p dec5if r<9
+ecf dec5if v<9
+f dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<8
+pp dec5if r<9
+e dec2if r<9
+eg dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<4
+eg dec5if v<9
+b dec5if v<8
+pp dec5if r<9
+e dec2if vv<2
+e dec2if vcsu >= -6
+ke dec 312 if pep != 1
+ksdjd dec5if r<9
+d dec5if v<9
+p dec5if v<9
+p dec5if r<9
+ecf dec5if v<9
+f dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<8
+pp dec2if v<4
+p dec5if r<9
+ecf dec5if v<9
+b dec5if v<9
+ef dec5if v<9
+b dec5if r<9
+fs dec5if r<9	
+frrp dec2if r<9	
+f dec5if r <1
+gv inc669 if csucs>= -1974

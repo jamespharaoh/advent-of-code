@@ -1,0 +1,8 @@
+tgl c
+inc a
+dec b
+dec 2
+tgl 7
+inc a
+dec d
+jnz a d

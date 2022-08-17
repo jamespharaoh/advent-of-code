@@ -1,0 +1,3 @@
+cpy 1 b
+cpy 2 d
+jnz 1 5a

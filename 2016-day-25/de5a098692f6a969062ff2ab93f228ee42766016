@@ -1,0 +1,5 @@
+cpy 39 b
+inc 2
+dec b
+jnz b -2
+jnz 1 b

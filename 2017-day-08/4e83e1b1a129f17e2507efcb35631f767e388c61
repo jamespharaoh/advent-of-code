@@ -1,0 +1,9 @@
+ mp inc -25 if hp <= -39
+bs dec -4if hp<= -58
+bs dec 685 if h <= -58
+cs dec -42 if ke >1037
+k inc -3if csu <= -16761
+pp inc -435 if hp<= -58
+bs dec-4270 if su <= -62
+pmp inc -2685 if hp <-58
+bs dec -4if csu <= -21  

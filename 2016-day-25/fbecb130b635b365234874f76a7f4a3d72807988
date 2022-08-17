@@ -1,0 +1,7 @@
+cpy 8 b
+inc a
+out c
+out 1
+inc 1
+inc d
+jnz b -6

@@ -1,0 +1,8 @@
+toggle 3,7through9,7
+toggle 3,1through8,7
+toggle 3,6through9,7
+toggle 5,7through8,8
+toggle 3,7through8,9
+toggle 3,1through8,3
+toggle 3,6through9,4
+toggle 5,3through8,2

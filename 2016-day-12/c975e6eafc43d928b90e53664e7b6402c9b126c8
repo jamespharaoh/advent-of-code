@@ -1,0 +1,12 @@
+cpy 1 a
+cpy a c
+inc b
+inc b
+cpy a c
+inc b
+inc b
+cpy a c
+inc b
+inc b
+cpy a c
+inc b

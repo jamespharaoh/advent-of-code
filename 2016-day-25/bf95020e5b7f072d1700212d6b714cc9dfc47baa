@@ -1,0 +1,7 @@
+cpy 31 b
+dec b
+jnz b -1
+cpy a b
+inc 4
+dec b
+jnz b -2

@@ -1,0 +1,19 @@
+
+
+
+pv inc 6312 if pep != 0
+pmp inc 980 if pep != 0
+sdj  inc -593 if hp < 1
+rcb inc -121 if t != 00
+dtf dec 137 if u != 0
+cpv inc -625 if ke ==  8
+hp dec -263 if nj >= -585
+ib dec 335 if ifd> -8
+p inc -432669 if ltf != 137
+ojk inc -772 if ib !=-335
+npj inc 357if pep != 0
+sdj inc -97 if bs == 0
+nawnj inc -593 if hp < 1
+rcb inc -121 if t != 0
+u dec-942 if vt !=0
+v dec -949 if vdv != -7

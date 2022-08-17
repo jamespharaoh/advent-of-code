@@ -1,0 +1,3 @@
+tgl 1
+cpy c b
+jnz 3 -2

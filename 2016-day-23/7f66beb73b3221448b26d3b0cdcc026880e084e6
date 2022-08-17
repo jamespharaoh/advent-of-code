@@ -1,0 +1,6 @@
+cpy 47 c
+inc 9
+dec c
+jnz c -2
+dec d
+jnz d -5

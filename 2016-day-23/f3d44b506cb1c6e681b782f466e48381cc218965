@@ -1,0 +1,11 @@
+tgl a
+cpy a d
+cpy 824 c
+inc a
+dec c
+jnz c -2
+dec d
+jnz d -5
+cpy b c
+cpy -10 c
+jnz 1 c

@@ -1,0 +1,4 @@
+d dec5if r<0
+d dec7if r< 0
+z dec0if j< -8
+p dec4if b <-9

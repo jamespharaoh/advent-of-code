@@ -1,0 +1,2 @@
+jnz c 3
+cpy d c

@@ -1,0 +1,4 @@
+
+mv dec0if r<9
+fw dec5if r<9
+f dec66if r <269c

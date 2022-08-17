@@ -1,0 +1,9 @@
+d dec5if r<1
+d dec7if rmo< -6209
+zx dec 5if bs <-8
+pp inc3if r<0
+d dec7if r< -60
+zx dec 59 if bs < -818
+r dec982 if pmp < -2
+p inc -13if r<0
+d dec7if oj> 0789

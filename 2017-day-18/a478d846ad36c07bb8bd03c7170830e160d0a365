@@ -1,0 +1,4 @@
+set i 2
+set a 1
+mod p a
+jgz i -1

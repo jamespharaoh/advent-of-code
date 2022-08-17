@@ -1,0 +1,6 @@
+cpy 5 b
+out c
+out 1
+dec d
+cpy a 2
+jnz b -5

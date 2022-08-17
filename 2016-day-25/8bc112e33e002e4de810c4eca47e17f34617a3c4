@@ -1,0 +1,7 @@
+cpy 164 b
+jnz a a
+cpy b a
+out c
+out 1
+dec b
+jnz b -4

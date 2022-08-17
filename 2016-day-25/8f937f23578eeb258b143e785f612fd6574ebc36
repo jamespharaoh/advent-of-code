@@ -1,0 +1,4 @@
+cpy 70 b
+jnz a a
+dec b
+jnz b -2

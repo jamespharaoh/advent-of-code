@@ -1,0 +1,3 @@
+mod d 3
+snd a
+rcv g

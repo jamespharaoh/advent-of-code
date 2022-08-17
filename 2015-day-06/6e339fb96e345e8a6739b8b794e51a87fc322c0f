@@ -1,0 +1,4 @@
+toggle 7,0through0,7
+toggle 6,7through2,8
+toggle 4,7through8,2
+toggle 4,7through8

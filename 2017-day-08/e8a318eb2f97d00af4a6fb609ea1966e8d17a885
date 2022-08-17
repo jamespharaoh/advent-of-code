@@ -1,0 +1,3 @@
+sd dec6if r <=6
+t inc5if r<=8
+c inc 3if r<=

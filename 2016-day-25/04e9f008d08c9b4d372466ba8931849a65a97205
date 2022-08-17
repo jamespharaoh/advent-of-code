@@ -1,0 +1,31 @@
+jnz a a
+cpy b c
+dec c
+jnz 0 -5
+cpy b c
+cpy b 12
+cpy b 2
+cpy b 2
+out c
+cpy b 2
+out 1
+cpy b 2
+out c
+dec c
+jnz 1 -5
+cpy b 2
+cpy b c
+dec c
+jnz 0 -5
+cpy b c
+cpy b 2
+cpy b 2
+out c
+cpy b 2
+out 1
+cpy b 2
+out c
+dec c
+jnz 1 -5
+cpy b 1
+cpy b c

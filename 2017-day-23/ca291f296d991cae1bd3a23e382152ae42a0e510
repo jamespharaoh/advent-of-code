@@ -1,0 +1,4 @@
+set b 4
+jnz a 2
+jnz 1 b
+mod c -23

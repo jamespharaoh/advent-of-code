@@ -1,0 +1,9 @@
+cpy 223 b
+inc 0
+dec b
+jnz c c
+jnz b -3
+cpy a b
+inc b
+dec b
+jnz b -2

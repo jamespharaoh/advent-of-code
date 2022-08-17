@@ -1,0 +1,27 @@
+START_ONE=hota!te l5re of letter f
+rotate left 1 step
+rotate right 2 steps
+reverse positions 4 through 7
+reverse positions 5 through 6
+rotate left 6 steps
+move position 2 to position 6
+rotate based on position of letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 2 steps
+rotate based on position of letter 5
+rotate based on position of letter f
+rotate left 1 step
+rotate right 2 steps
+reverse positions 4 through 7
+reverse positions 5 through 6
+rotate left 6 steps
+move position 2 to position 6
+rotate based on position of letter a
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 5 steps
+rotate based on position of letter h
+rotate based on position of letter a
+swap letter d with letter c
+swap letter b with letter e

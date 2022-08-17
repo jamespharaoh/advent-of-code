@@ -1,0 +1,2 @@
+out b
+jnz a -1

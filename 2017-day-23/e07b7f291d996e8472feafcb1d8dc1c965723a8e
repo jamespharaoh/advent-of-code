@@ -1,0 +1,5 @@
+set b 4
+jnz a 3
+mul g e
+mod g b
+jnz h 9

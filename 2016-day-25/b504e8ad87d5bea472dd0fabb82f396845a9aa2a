@@ -1,0 +1,17 @@
+cpy 11 b
+inc b
+inc b
+dec b
+inc b
+inc b
+dec b
+inc b
+inc b
+dec b
+inc b
+inc b
+dec b
+inc b
+inc b
+dec b
+dcb

@@ -1,0 +1,40 @@
+cpy a d
+cpy 14 c
+inc -2
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy c d
+dec -5
+cpy d a
+jnz 0 0
+cpy a d
+cpy 14 c
+cpy 182 b
+inc d
+cpy d 5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz c -2
+cpy d a
+jnz 0 0
+cpy 14 c
+cpy d a
+cpy a b
+cpy 0 a
+jnz a d
+cpy 1182 b
+cpy a d
+ccpy ߜ

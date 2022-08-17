@@ -1,0 +1,4 @@
+set b 84
+set c a
+jnz a 2
+set g 8

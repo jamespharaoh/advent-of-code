@@ -1,0 +1,37 @@
+cpy c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+inc b
+dec b
+dec c
+jnz b c
+cpy b b
+out b
+dec b
+inc b
+dec b
+jnz a 1
+out b
+dec b
+inc b
+dec c
+jnz b c
+cpy a a
+cpy b b
+jnz a 1
+out b
+inc b
+dec b
+inc b
+dec c
+jnz b c
+cpy b b
+jnz b c
+cpy a a
+cpy b b
+jnz a 1
+out b
+inc b
+dec b

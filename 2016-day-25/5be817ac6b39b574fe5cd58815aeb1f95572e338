@@ -1,0 +1,4 @@
+out c
+out a
+out c
+jnz 2 4

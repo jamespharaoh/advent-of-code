@@ -1,0 +1,17 @@
+Begin in state E.
+Perform a diagnostic checksum after 12667664 steps.
+
+In state A:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state B.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state E.
+
+In state 
+:
+  If the current value is 0:
+therig

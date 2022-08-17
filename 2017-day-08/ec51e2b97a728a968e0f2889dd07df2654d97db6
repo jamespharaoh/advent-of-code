@@ -1,0 +1,7 @@
+n dec5if r<9
+c dec6if r<9
+j dec5if r<8
+l dec6if r<9
+n dec5if r<9
+l dec6if r<9
+l dec6if p<8

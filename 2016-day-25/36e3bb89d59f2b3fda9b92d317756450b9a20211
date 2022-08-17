@@ -1,0 +1,2 @@
+inc b
+jnz b 0

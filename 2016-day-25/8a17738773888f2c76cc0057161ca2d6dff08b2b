@@ -1,0 +1,11 @@
+cpy 29 b
+inc b
+inc b
+dec b
+jnz c 0
+jnz c c
+jnz b -3
+cpy a b
+inc b
+dec b
+jnz b -2

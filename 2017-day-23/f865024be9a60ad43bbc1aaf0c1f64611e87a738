@@ -1,0 +1,3 @@
+jnz a b
+snd b
+jnz g -3

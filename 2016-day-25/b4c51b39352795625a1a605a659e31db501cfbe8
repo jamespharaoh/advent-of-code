@@ -1,0 +1,32 @@
+cpy 123 b
+inc b
+jnz a a
+cpy b 2
+inc b
+inc b
+jnz a a
+cpy b 62
+cpy b 2
+out 1
+jnz a a
+cpy b 62
+out c
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+cpy b 3
+cpy b b
+cpy b 2
+out c
+cpy b 2
+out 1
+dec b
+cpy b 3
+out c
+cpy b 2
+out 1
+dec b
+jnz c c
+jnz b -5

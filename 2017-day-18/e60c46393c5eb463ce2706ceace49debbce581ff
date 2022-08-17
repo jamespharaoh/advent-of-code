@@ -1,0 +1,26 @@
+jgz p a
+jgz i 95
+jgz i -4
+jgz a 3
+jgz a b
+jgz a b
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a 33
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a w
+jgz a b
+rcv b
+jgz a b
+jgz a 3
+jgz a b
+jgz 3 3
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a 3
+jgz a b
+jgz mul 5

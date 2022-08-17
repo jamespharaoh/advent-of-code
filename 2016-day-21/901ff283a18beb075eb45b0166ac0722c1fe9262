@@ -1,0 +1,5 @@
+START_ONE=o steps
+rotate right 4 steps
+move position 6 to position 5
+move position 6 to position 2
+move position 6 to position 4

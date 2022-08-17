@@ -1,0 +1,8 @@
+j dec   68 if nw>269
+j dec -7if d> 433
+hp dec 190 if t > 108
+s inc -1 if h>-144
+hp inc -8 if e> -1
+rcb dec 8 if nwg > -2
+sdj dec72if sf > 3482
+hp dec 9if t > 109

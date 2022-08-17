@@ -1,0 +1,6 @@
+cpy 80 c
+inc 0
+dec c
+jnz c -2
+dec a
+jnz 2 -5

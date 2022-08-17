@@ -1,0 +1,3 @@
+dec a
+tgl a
+jnz 7 -2

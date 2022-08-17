@@ -1,0 +1,517 @@
+cpy 1 a
+cpy 0 b
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz c 0
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz c 0
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz c 0
+jnz 1 5
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec d
+jnz c 0
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+cpy 1 b
+cpy 27 d
+jnz c 2
+jnz 1 1
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy 26 d
+jnz c 0
+jnz 1 5
+cpy 3 c
+inc d
+dec c
+jnz c -2
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec d
+jnz d -6
+cpy 19 d
+jnz jnz c -2
+cpy a c
+inc a
+d

@@ -1,0 +1,2 @@
+dec b
+jnz 6 b

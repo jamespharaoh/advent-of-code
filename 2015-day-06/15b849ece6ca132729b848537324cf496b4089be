@@ -1,0 +1,5 @@
+toggle 1,7through9,7
+toggle 3,1through0,3
+toggle 3,6through9,7
+toggle 3,4through9,4
+toggle 0,3through9,2

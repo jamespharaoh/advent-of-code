@@ -1,0 +1,3 @@
+set b 8
+set c b
+jnz a t

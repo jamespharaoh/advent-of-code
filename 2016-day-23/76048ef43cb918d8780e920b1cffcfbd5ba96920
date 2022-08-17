@@ -1,0 +1,5 @@
+tgl c
+dec d
+inc c
+tgl c
+cpy c b

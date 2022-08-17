@@ -1,0 +1,4 @@
+jnz a a
+inc a
+cpy b a
+cpy b a

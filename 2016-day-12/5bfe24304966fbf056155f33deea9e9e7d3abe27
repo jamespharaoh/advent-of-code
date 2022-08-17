@@ -1,0 +1,6 @@
+inc a
+dec 6
+inc c
+inc 6
+dec c
+jnz c 1

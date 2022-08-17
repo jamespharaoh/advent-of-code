@@ -1,0 +1,4 @@
+s dec5if r <=8
+t inc9if r <=8
+pv inc 8if r <= 9
+c inc8if r<=

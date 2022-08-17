@@ -1,0 +1,34 @@
+j dec2137 if u != 1
+cn dec 865 if t == 0
+dtf dec2137 if u != 1
+cpv inc 25 if ke == 0
+zx inc 410 if t != 0
+moe inc -437 if vt > -7
+n dec 865 if t == 0
+dtf dec2137 if u != 1
+cpv inc 25 if ke == 0
+zx inc 410if t != 0
+moe inc -437 if vt > -7
+n dec 865 if t == 0
+dtf dec 7 if u != 1
+cpv inc -625 if kr != -5928
+cpv dec -696 if dtf < 0
+dtf dec2137 if u != 1
+cpv inc 25 if ke == 0
+zx inc 410 if t != 0
+moe inc -437 if vt > -7
+n dec 865 if t == 0
+dtf dec2137 if u != 1
+cpv inc 25 if ke == 0
+zx inc 4 if t != 0
+moe inc -437 if vt > -7
+n dec 865 if t == 0
+dtf dec2137 if u != 1
+cpv inc 265 if t == 0
+dtf dec 137 if u !=01
+cpv inc -625 if kr != -5927
+n dec 865 if u != 1
+cn dec 865 if t == 0
+dtf dec237 if u != 1
+cpv inc 25 if ke == 0
+zx in0 iinc3if굵

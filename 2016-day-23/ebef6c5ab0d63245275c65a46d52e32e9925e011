@@ -1,0 +1,16 @@
+cpy a b
+cpy b c
+inc d
+dec c
+jnz c -2
+dec a
+jnz a -5
+inc 2
+tgl b
+cpy b d
+cpy b c
+inc d
+dec c
+jnz c -2
+dec a
+jnz a -5

@@ -1,0 +1,15 @@
+set b 84
+jnz a 1
+jnz a 2
+jnz 2 u
+mul b 010
+set c e
+sub f b
+jnz g 2
+set f 0
+sub e -1
+set g e
+sub g b
+jnz g -8
+sub d -217
+jnz 1 -23

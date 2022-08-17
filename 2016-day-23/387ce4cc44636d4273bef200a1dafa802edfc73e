@@ -1,0 +1,7 @@
+tgl a
+dec b
+dec a
+dec a
+dec b
+dec d
+jnz a d

@@ -1,0 +1,43 @@
+jnz c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+jnz c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c b
+jnz b +1
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy 0 a
+jnz b +1
+cpy c b
+dec d
+jnz d -5
+cpy c -2
+cpy a a
+dec b
+jnz b +1
+cpy c b
+dec d
+jnz b +1
+cpy c b
+dec d
+jnz d +1
+cpy c b
+jnz b +1
+jnz b +0
+cpy c b
+dec d
+jnz d 
+cc -5

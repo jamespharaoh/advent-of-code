@@ -1,0 +1,135 @@
+cpy a c
+jnz c c
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec d
+dec b
+cpy b d
+dec b
+dec b
+inc d
+inc d
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+dec d
+dec d
+dec b
+cpy b d
+dec b
+dec b
+inc d
+inc d
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+dec d
+dec a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+dec d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec d
+dec b
+inc a
+cpy b c
+inc 0
+dec c
+jnz c -2
+dec 1
+jnz a -5

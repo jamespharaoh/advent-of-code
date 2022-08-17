@@ -1,0 +1,2 @@
+set f 5
+jgz a b

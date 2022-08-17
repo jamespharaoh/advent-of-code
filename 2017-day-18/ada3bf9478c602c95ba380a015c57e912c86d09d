@@ -1,0 +1,18 @@
+set i 73
+set a 1
+mul q p
+mul a 2
+add i -7
+jgz p a
+set b p
+mod b 1
+snd b
+add i -3
+jgz i -9
+jgz i a
+rcv b
+set p a
+mul p 1
+add p a
+jgz w 7
+jgz a -17

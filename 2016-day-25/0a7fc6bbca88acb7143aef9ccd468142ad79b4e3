@@ -1,0 +1,18 @@
+cpy a d
+cpy 14 c
+cpy 182 b
+inc -2
+cpy d 0
+cpy a b
+cpy 0 d
+cpy 80 c
+cpy 1 b
+cpy a d
+cpy 14 c
+cpy 38 b
+cpy 1 c
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy 182 b
+j

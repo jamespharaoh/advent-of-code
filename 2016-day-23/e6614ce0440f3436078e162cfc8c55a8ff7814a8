@@ -1,0 +1,29 @@
+tgl d
+tgl d
+dec a
+dec d
+dec d
+dec d
+tgl d
+jnz 5 d
+dec d
+dec d
+dec d
+dec d
+dec d
+dec d
+dec d
+jnz d d
+jnz d 4
+jnz 71 d
+cpy d c
+inc d
+jnz d 7
+jnz c 1
+jnz d d
+jnz d d
+jnz d 4
+jnz 6 d
+jnz d d
+jnz d -4
+jnz d d

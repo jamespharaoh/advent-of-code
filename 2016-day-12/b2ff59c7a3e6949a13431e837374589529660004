@@ -1,0 +1,9 @@
+cpy c 2
+jnz 2 d
+jnz c 2
+jnz 1 6
+jnz 2 -1
+cpy 26 d
+jnz c 2
+jnz 1 6
+cpy 3,

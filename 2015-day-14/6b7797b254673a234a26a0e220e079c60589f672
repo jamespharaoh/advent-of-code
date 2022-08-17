@@ -1,0 +1,4 @@
+RACE_TIME=3
+e can fly 9 km/s for 7 seconds, but then must rest for 4 seconds.
+r can fly 1 km/s for 4 seconds, but then must rest for 3 seconds.
+r can fly 3 km/s for 1 seconds, but then must rest for 2 seconds.

@@ -1,0 +1,2 @@
+cpy b c
+jnz 9 -1

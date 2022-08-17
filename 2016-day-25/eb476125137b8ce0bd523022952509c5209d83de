@@ -1,0 +1,7 @@
+inc 7
+dec b
+inc 0
+jnz a a
+out c
+out 1
+jnz b 42

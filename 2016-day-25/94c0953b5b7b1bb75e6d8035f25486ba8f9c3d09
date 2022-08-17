@@ -1,0 +1,7 @@
+cpy 34 b
+jnz a a
+cpy 1 a
+out c
+out 1
+dec b
+jnz b -4

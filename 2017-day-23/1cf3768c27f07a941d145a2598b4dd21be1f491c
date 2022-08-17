@@ -1,0 +1,4 @@
+set g -8
+sub d -0
+set g -1
+jnz 0 -2

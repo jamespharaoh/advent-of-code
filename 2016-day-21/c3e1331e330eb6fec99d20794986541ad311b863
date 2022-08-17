@@ -1,0 +1,35 @@
+START_ONE=r th lett c
+swap letter b with letter 4
+rotate left 0 steps
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+rotate left 0 steps
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+rotate left 0 steps
+swap letter d with letter c
+swap letter b with letter 4
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+rotate left 0 steps
+rotate left 0 steps
+reverse positions 0 through 4
+swap letter d with letter c
+swap letter b with letter 4
+rotate left 0 steps
+rotate left 0 steps
+rotate left 0 steps
+swap letter b with letter e

@@ -1,0 +1,5 @@
+jnz a 2
+jnz b 12
+jnz f 7
+jnz b 12
+jnz f 1

@@ -1,0 +1,9 @@
+cpy 92 b
+cpy b c
+cpy 4 0
+inc a
+dec 0
+jnz 0 -2
+dec c
+jnz c -5
+dec 2

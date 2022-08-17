@@ -1,0 +1,6 @@
+Begin in state A.
+Perform a diagnostic checksum after 1 steps.
+
+In state ?:
+  If the current value is 0:
+ϛ

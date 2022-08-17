@@ -1,0 +1,16 @@
+cpy 48 b
+inc 0
+jnz a a
+out c
+out 1
+dec b
+jnz c c
+jnz b -6
+cpy 9 b
+jnz c a
+cpy b 0
+out c
+cpy b 1
+out 1
+dec d
+jnz b -7

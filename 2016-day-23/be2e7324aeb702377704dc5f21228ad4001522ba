@@ -1,0 +1,3 @@
+dec c
+tgl c
+jnz 2 -2

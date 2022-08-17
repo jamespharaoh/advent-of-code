@@ -1,0 +1,2 @@
+set i 8
+jnz i i

@@ -1,0 +1,2 @@
+cpy a a
+jnz a a

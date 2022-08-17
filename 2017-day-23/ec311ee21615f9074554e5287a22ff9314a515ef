@@ -1,0 +1,7 @@
+set g d
+mul g e
+mod g b
+mod g 2
+set g d
+mul g e
+mod g b 7

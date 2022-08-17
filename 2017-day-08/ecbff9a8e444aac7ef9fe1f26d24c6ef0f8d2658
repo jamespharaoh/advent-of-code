@@ -1,0 +1,8 @@
+v inc66 if csus == 0
+nj inc9 if cs== 0
+njs inc -5if hp == 0
+nj inc -5if hus<6
+cpv inc6if csu ==0
+j inc6if csus == 0
+njs inc -5if h== 0
+n inc -5if h< 19

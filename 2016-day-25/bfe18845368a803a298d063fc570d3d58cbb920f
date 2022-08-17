@@ -1,0 +1,5 @@
+cpy 25 b
+dec b
+jnz b -1
+inc 6
+jnz 5 -4

@@ -1,0 +1,31 @@
+dec -2
+dec c
+jnz c -5
+jnz c -4
+inc a
+jnz 1 -9
+cpy 2 b
+jnz b -1
+inc c
+dec -2
+dec c
+jnz c -6
+dec b
+dec c
+jnz c -4
+inc a
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+dec b
+jnz b -4
+jnz c -7
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -2
+dec ut c

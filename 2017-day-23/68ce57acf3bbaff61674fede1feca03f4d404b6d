@@ -1,0 +1,8 @@
+set b 84
+set c b
+jnz 0 5
+mul b 100
+sub b -10
+set g e
+sub g b
+jnz g -6

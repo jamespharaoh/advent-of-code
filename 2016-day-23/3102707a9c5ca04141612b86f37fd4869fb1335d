@@ -1,0 +1,18 @@
+cpy a b
+dec b
+cpy a d
+cpy b c
+inc 6
+cpy 1 a
+cpy b c
+inc a
+dec c
+jnz c -1
+dec d
+jnz d -6
+dec b
+cpy b a
+cpy b c
+inc a
+dec 8
+jnz 2 -2

@@ -1,0 +1,53 @@
+rotate right 4 steps
+swap letter b with letter e
+swap position 1 with position 3
+reverse positions 0 through 4
+rotate left 5 steps
+swap position 6 with position 5
+move position 3 to position 2
+move position 6 to position 5
+reverse positions 1 through 6
+swap position 7 with position 5
+swap letter e with letter c
+swap letter f with letter d
+swap letter a with letter e
+swap position 2 with position 7
+swap position 1 with position 7
+swap position 6 with position 3
+swap letter g with letter h
+rotate right 2 steps
+reverse positions 2 through 76
+rotate left 3 steps
+rotate left 74 steps
+swap letter b with letter e
+swap position 1 with position 3
+reverse positions 0 through 4
+rotate left 5 steps
+swap position 6 with position 5
+move position 3 to position 2
+move position 6 to position 5
+reverse positions 1 through 7
+reverse positions 4 through 6
+swap position 7 with position 5
+swap letter e with letter c
+swap letter f with letter d
+swap letter a with letter e
+swap position 2 with position 7
+swap position 1 with position 7
+swap position 6 with position 3
+swap letter g with letter h
+reverse positions 2 through 5
+rotate based on position of letter f
+rotate left 1 step
+rotate right 2 steps
+reverse positions 2 through 7
+rotate left 1 step
+reverse positions 2 through 6
+swap position 7 with position 5
+swap letter e with letter c
+swap letter f with letter d
+swap letter a with letter e
+swap position 2 with position 7
+swap position 1 with position 7
+swap position 6 with position 3
+swap lith let=

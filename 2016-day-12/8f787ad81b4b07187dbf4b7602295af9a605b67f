@@ -1,0 +1,3 @@
+cpy 8 d
+dec d
+jnz d -1

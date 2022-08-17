@@ -1,0 +1,11 @@
+set b 84
+set c a
+jnz a 2
+jnz 1 5
+mul b b
+sub c -2
+add e 2
+set g d
+mul g e
+sub g b
+jnz e q

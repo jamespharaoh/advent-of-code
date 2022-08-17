@@ -1,0 +1,6 @@
+cpy 68 c
+dec c
+jnz c -1
+dec 3
+inc c
+jnz 5 -2

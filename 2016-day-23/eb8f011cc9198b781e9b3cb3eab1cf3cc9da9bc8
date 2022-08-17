@@ -1,0 +1,43 @@
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy b b
+cpy d b
+cpy c b
+dec d
+dec c
+dec b
+cpy c b
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc c
+dec b
+cpy d b
+cpy b d
+dec b
+dec b
+dec b
+dec b
+cpy d b
+dec d
+dec b
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy b 0

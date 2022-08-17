@@ -1,0 +1,4 @@
+s dec8 if t == 0
+d dec4if t ==0
+n dec2if t ==0
+n dec3if t ==0

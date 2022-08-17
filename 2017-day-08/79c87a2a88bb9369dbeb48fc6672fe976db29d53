@@ -1,0 +1,4 @@
+b inc7if h<2
+v inc6 if c==0
+f inc9if c== 0
+n inc 4if p< 1

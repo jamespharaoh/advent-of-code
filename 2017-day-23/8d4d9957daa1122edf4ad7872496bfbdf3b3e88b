@@ -1,0 +1,7 @@
+set b 5
+mul b -10002
+set g d
+mul g -46
+mul b -10
+mul g -46
+

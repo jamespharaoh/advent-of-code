@@ -1,0 +1,4 @@
+inc c
+tgl 1
+cpy c c
+jnz c -2

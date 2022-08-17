@@ -1,0 +1,9 @@
+cpy a b
+dec b
+tgl b
+cpy a c
+inc b
+dec c
+jnz c -2
+dec d
+jnz d -5

@@ -1,0 +1,21 @@
+sdj dec 6if r<9	
+fs dec5if r<9	
+fr inc -121 if t != 5
+kemo dec5if r<9
+t dec0if r<9
+ecf dec5if v<9
+v dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if r<9
+eg dec5if v<3
+b dec5if v<4
+gg dec5if v<9
+q dec5if v> -7
+n inc4if  r<9
+jg dec5if v<9
+b dec5if v<4
+h dec5if r<9
+cf dec5if r<9	
+frp dec5if r<9	
+f dec5if rsucs>=73

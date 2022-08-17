@@ -1,0 +1,4 @@
+set b 84
+jnz a 2
+jnz 5 5
+jnz 1 0

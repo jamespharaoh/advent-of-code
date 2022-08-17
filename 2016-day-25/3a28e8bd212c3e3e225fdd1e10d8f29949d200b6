@@ -1,0 +1,20 @@
+cpy c b
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz a 1
+cpy c b
+jnz a a
+cpy b b
+jnz a 1
+jnz a a
+cpy b b
+jnz a 1
+out b
+jnz a a
+cpy b b
+jnz a b
+inc  1

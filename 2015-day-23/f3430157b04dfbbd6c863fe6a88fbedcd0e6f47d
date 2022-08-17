@@ -1,12 +1,0 @@
-jio a,4
-jio a,7
-jio  a,91
-jio a,4
-   incb
-jio a,-2
-jmp+04
-jio a,2
-jio b,5
-jio a,3
-jio a,0
- a

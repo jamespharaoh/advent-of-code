@@ -1,0 +1,29 @@
+	set i 31
+set a 1
+mul p 17
+jgz p p
+mul a 2
+add i 12
+jgz i -2
+rcv b
+set p a
+mul p -1
+add p b
+jgz p 5
+snd a
+set a b
+jgz 2 3
+snd b
+set f 1
+add i 2
+jgz i -11
+snd a
+jgz f 0
+mod p a
+mul p 2974
+add p 12345
+mod p a
+set b p
+mod b 10000
+sndl p 7
+jgp 

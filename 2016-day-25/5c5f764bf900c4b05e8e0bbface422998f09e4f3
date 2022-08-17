@@ -1,0 +1,5 @@
+cpy 56 b
+inc a
+dec b
+cpy 1 c
+jnz b -3

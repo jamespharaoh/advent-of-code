@@ -1,0 +1,7 @@
+set i 8
+snd 8
+snd 8
+snd 0
+rcv b
+rcv b
+jgz i -5

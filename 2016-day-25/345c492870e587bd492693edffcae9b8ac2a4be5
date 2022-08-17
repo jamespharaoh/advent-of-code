@@ -1,0 +1,7 @@
+out c
+out 1
+cpy 0 a
+out c
+cpy 2 b
+out 1
+jnz b -6

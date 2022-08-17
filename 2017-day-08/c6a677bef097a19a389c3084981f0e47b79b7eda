@@ -1,0 +1,4 @@
+e inc 8if v>-7
+n dec 7if s>-2
+nj inc0if n> -22
+n  inc 30if ng>-1

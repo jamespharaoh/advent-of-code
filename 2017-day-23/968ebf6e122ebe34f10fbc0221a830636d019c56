@@ -1,0 +1,6 @@
+set b 84
+add b b
+jnz a 2
+jnz 2 e
+add f b
+jnz 1 -23

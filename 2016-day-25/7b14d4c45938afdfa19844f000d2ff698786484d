@@ -1,0 +1,6 @@
+cpy 49 b
+jnz a a
+out c
+out a
+dec b
+jnz b -4

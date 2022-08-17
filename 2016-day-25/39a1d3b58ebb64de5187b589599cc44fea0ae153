@@ -1,0 +1,5 @@
+jnz a a
+inc c
+jnz c c
+inc d
+jnz 8 -3

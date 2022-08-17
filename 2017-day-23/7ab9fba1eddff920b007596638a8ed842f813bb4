@@ -1,0 +1,14 @@
+set b 84
+set c b
+jnz a 2
+jgz 2 5
+mul b 1
+sub b 0
+set f 1
+set d 2
+set e 2
+set g d
+mul a 1
+jgz 2 550000
+set c b
+sub c 23

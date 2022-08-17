@@ -1,0 +1,9 @@
+cpy 8 b
+tgl 7
+dec b
+inc c
+jnz b -3
+dec b
+inc a
+jnz b 2
+cpy b d

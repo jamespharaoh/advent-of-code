@@ -1,0 +1,17 @@
+set b 800
+set f 1
+set d 2
+set e 2
+set g d
+mul g e
+sub g b
+jnz g 2
+set f 0
+sub a -1
+set g e
+sub g b
+jnz g -7
+jnz f 6
+sub h -1
+set g -1
+jnz 1 -23

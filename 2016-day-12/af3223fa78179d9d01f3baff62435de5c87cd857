@@ -1,0 +1,7 @@
+inc 2
+dec c
+inc 2
+dec 2
+dec c
+inc c
+jnz c c

@@ -1,0 +1,19 @@
+cpy 11 a
+cpy 1 b
+cpy 6 a
+cpy 1 b
+cpy 1 a
+cpy 0 b
+cpy 6 d
+jnz c 2
+cpy 1 a
+cpy 1 b
+cpy 261 a
+cpy 1 b
+cpy 26 a
+cpy 1 b
+cpy 1 a
+cpy 0 b
+cpy 26 d
+c
+c

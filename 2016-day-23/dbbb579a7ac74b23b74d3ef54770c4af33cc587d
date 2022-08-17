@@ -1,0 +1,6 @@
+cpy 42 c
+inc 0
+dec c
+jnz c -2
+dec 2
+jnz 2 -5

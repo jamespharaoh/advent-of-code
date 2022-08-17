@@ -1,0 +1,9 @@
+cpy 56 c
+inc d
+dec b
+inc a
+jnz b -2
+dec c
+dec c
+jnz c -6
+jnz 9 0

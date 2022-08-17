@@ -1,0 +1,10 @@
+add a 14
+mul q p
+sub a 3
+add i -9
+sub b p
+mod b 1
+snd b
+add i -3
+jgz h -9
+jgz a -08

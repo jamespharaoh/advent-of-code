@@ -1,0 +1,9 @@
+cpy 222 b
+inc 01
+dec b
+jnz c c
+jnz b -3
+cpy a b
+inc b
+dec b
+jnz b -2

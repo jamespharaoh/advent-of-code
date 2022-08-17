@@ -1,0 +1,2 @@
+dec c
+jnz c c

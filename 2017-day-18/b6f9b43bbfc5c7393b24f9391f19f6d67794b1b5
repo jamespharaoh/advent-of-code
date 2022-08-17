@@ -1,0 +1,3 @@
+set i 6
+add i -1
+jgz i -1

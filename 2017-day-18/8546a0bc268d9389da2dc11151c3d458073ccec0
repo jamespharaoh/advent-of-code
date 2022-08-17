@@ -1,0 +1,4 @@
+set i 7
+jgz p 0
+sub a 9
+sub b p

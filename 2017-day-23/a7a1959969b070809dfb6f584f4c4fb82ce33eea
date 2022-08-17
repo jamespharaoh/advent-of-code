@@ -1,0 +1,6 @@
+set f 1
+set d 1
+set e 2
+set g d
+mul g b
+sub g 3

@@ -1,0 +1,23 @@
+tgl c
+cpy c c
+cpy b c
+cpy c c
+cpy c c
+cpy b c
+cpy c c
+cpy b c
+cpy c c
+cpy c c
+cpy b c
+cpy c c
+cpy b c
+cpy c c
+tgl 2
+dec d
+cpy b c
+cpy c c
+cpy c c
+cpy b c
+cpy c 61
+inc d
+jnz d d

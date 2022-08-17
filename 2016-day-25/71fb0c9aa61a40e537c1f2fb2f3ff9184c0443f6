@@ -1,0 +1,15 @@
+cpy 98 b
+out c
+out 1
+out c
+jnz a a
+cpy b 0
+out c
+cpy b 0
+out 1
+out c
+cpy b 1
+out 1
+dec b
+jnz b -8
+dec c

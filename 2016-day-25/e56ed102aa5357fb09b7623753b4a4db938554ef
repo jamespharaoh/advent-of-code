@@ -1,0 +1,2 @@
+cpy c 5
+jnz 7 c

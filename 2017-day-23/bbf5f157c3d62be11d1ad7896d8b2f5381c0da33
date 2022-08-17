@@ -1,0 +1,22 @@
+mul c b
+jnz a 3
+jnz b a
+jnz a 1
+jnz q 1
+jnz a 2
+jnz 0 5
+mul e b
+set o d
+sub g b
+jnz a 2
+jnz 0 5
+mul e b
+set g d
+sub g b
+jnz g -07
+jnz f 0
+jnz a 3
+jnz 0 5
+ 0 -184
+set  3
+b

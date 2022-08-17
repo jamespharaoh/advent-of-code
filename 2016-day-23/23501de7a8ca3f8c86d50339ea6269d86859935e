@@ -1,0 +1,166 @@
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy b c
+inc a
+dec c
+dec b
+cpy c b
+cpy a b
+cpy c b
+cpy a d
+cpy b c
+inc a
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+dec b
+cpy a d
+cpy b c
+inc b
+cpy d c
+cpy c d
+dec b
+dec b
+cpy a d
+cpy b c
+dec b
+cpy b c
+inc a
+dec c
+dec b
+cpy c b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy a d
+cpy b c
+inc b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy b c
+inc a
+dec c
+dec b
+cpy c b
+cpy a d
+cpy b c
+inc a
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+dec b
+cpy a d
+cpy b c
+inc b
+cpy d c
+cpy c d
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy b c
+inc a
+dec c
+dec b
+cpy c b
+cpy a d
+cpy b c
+inc c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy b c
+inc a
+dec c
+dec b
+cpy c b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c

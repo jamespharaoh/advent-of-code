@@ -1,0 +1,193 @@
+cpy a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy b c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz 1 6
+dec b
+dec c
+jnz c -2
+dec c
+cpy d a
+jnz 0 0
+cpy a b
+cpy 2 c
+jnz b c
+cpy 182 b
+inc d
+dec b
+jnz b -1
+dec c
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 1 6
+dec b
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 b
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+cpy a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b
+jnz b c
+cpy 182 b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz a d
+cpy 14 c
+cpy 182 b
+inc d
+dec b d
+2 b
+in

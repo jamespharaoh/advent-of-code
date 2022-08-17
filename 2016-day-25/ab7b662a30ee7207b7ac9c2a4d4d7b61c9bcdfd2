@@ -1,0 +1,6 @@
+cpy 62 b
+out c
+out a
+dec b
+jnz b -3
+jnz 7 -5

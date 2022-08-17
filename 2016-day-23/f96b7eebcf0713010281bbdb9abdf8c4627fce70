@@ -1,0 +1,2 @@
+inc c
+jnz 1 c

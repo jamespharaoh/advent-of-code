@@ -1,0 +1,8 @@
+cpy 6 d
+jnz c 5
+jnz 1 5
+cpy 4 d
+jnz c -1
+jnz d 6
+cpy 19 d
+jnz c p

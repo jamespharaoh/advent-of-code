@@ -1,0 +1,2 @@
+mul i q
+jgz 6 -1

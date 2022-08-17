@@ -1,0 +1,5 @@
+
+n inc38if cp!=6
+v inc 3if c !=3
+vd dec9 if vd!=2
+o inc2if r !=  

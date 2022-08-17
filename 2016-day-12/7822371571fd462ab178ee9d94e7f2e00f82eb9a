@@ -1,0 +1,3 @@
+cpy 04 d
+dec d
+jnz d -1

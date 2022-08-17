@@ -1,0 +1,6 @@
+cpy 1 b
+inc 2
+dec b
+jnz b -2
+dec c
+jnz c -5

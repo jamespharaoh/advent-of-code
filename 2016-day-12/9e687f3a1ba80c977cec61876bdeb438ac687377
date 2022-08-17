@@ -1,0 +1,5 @@
+cpy 256 d
+jnz c -2
+cpy b b
+dec d
+jnz d -3

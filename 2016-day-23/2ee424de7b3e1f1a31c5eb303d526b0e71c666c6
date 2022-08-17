@@ -1,0 +1,4 @@
+jnz c 1
+jnz d d
+jnz d 7
+jnz b d

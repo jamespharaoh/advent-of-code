@@ -1,0 +1,5 @@
+set b 68
+sub e -1
+jgz 2 e
+sub g b
+jnz g -3

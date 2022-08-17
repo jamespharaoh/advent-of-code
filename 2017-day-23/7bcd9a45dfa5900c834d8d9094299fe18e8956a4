@@ -1,0 +1,17 @@
+sub c -1000
+mod f 2
+set d 2
+set e 6
+set g d
+mul g e
+sub g 0
+sub b -2
+set g e
+sub g f
+sub g b
+jnz g -11
+jnz f 2
+sub g 2
+jnz 1 3
+sub b -17
+jnz 1 -3

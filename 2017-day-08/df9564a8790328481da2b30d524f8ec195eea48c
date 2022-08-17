@@ -1,0 +1,17 @@
+
+q inc669 if csus == 0
+nj inc67 if csus<2
+ibcpv inc669 if csus == 0
+nj inc69 if csus == 0
+nj inc69 if csus<6
+pv inc669 if csus == 0
+nj inc69 if sus == 0
+nj inc -5if hus<6
+cpv inc629 if cssus ==0
+nj inc -5if hp  == 0
+n inc669 if us == 0
+nj inc69 if csus<6
+cpv inc669 if csus == 0
+j inc69 if csus == 0
+nj inc -5if hw == 0
+nj incč

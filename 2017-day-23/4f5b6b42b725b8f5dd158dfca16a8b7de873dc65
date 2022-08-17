@@ -1,0 +1,3 @@
+set f 0
+jgz f b
+s

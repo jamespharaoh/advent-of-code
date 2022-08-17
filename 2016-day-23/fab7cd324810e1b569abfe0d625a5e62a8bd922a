@@ -1,0 +1,10 @@
+cpy a d
+cpy 4 c
+inc a
+dec c
+jnz c -2
+dec d
+jnz d -5
+cpy b c
+cpy -9 c
+jnz 1 c

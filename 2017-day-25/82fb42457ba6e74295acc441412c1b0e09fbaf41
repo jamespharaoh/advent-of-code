@@ -1,0 +1,41 @@
+Begin in state E.
+Perform a diagnostic checksum after 7 steps.
+
+In state B:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state U.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state Q.
+
+In state C:
+  If the current value is 0:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state J.
+  If the current value is 1:
+    - Write the value 1.
+    - Move one slot to the left.
+    - Continue with state H.
+
+In state O:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state T.
+  If the current value is 1:
+    - Write the value 0.
+    - Move one slot to the left.
+    - Continue with state O.
+
+In state T:
+  If the current value is 0:
+    - Write the value 0.
+    - Move one slot to the right.
+    - Continue with state Z.
+  If the current value is 1:
+    - Write the value 0.
+ e R.

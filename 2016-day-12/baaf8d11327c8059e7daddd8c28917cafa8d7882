@@ -1,0 +1,4 @@
+inc a
+dec a
+jnz c a
+dec c

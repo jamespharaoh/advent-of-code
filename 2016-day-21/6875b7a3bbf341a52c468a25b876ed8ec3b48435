@@ -1,0 +1,6 @@
+START_ONE=a
+rotate right 8 steps
+swap letter b with letter !
+swap letter a with letter a
+swap letter d with letter c
+swap letter b with letter e

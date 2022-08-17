@@ -1,0 +1,2 @@
+set i 2
+jgz i -1

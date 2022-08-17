@@ -1,0 +1,17 @@
+cpy 09 b
+inc 0
+jnz a a
+cpy b 0
+out c
+cpy b 1
+out 1
+dec b
+jnz c c
+jnz b -8
+cpy a b
+inc d
+dec b
+jnz b -2
+dec c
+jnz c -5
+out -8

@@ -1,0 +1,10 @@
+cpy a d
+cpy b c
+cpy 69 c
+dec c
+jnz c -1
+dec d
+jnz d -4
+dec 3
+inc c
+jnz 7 -2

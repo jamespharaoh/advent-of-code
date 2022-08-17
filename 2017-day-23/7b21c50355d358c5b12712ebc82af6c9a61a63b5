@@ -1,0 +1,3 @@
+jnz a 9
+add b b
+

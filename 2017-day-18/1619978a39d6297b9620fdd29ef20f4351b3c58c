@@ -1,0 +1,11 @@
+set i 73
+set a 1
+mul q p
+mul a 3
+add i -1
+sub t h
+set b p
+mod b 10
+snd b
+add i -3
+jgz i -9

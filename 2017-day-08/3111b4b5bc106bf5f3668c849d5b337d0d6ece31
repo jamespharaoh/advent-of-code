@@ -1,0 +1,8 @@
+ck inc -71 if hp != -142
+d inc 121 if r !=928
+cpv dec -7 if zx != 1056
+u inc8 if vd!= -3659
+yk inc1 if ip != 14
+dtf inc 121 if r !=28
+cpv dec -696if zx != 1286
+rcb dec -368 if ng != -96

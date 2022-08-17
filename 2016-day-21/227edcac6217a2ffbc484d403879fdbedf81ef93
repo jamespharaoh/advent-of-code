@@ -1,0 +1,4 @@
+START_ONE=ST:ART6
+rotate left 6 steps
+move position 1 to position 6
+move position 3 to position 6

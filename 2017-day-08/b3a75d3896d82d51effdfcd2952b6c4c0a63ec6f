@@ -1,0 +1,31 @@
+sd inc6 if cpv  < -3992
+yk inc -731 if hp != -142
+dtf inc121 if r != -5928
+cpv dec -96 if dtf <1
+bs dec -447 if zx != 1056
+u inc  -447 if zx != 105285
+rcb dec -368 if nwg < -1962
+rcb dec 95 if nwg != -1967
+nwg inc 55696 if dtf  != 1056
+u inc 541 if n >= 107
+zx dec 4 if yk < 976
+t dec -848 if vdv >= 83
+pmp dec 390 if csu != 3661
+dtfnj dec -489 if ifd < -992
+yk inc 31 if ip != -142
+df inc 121 if r != -5928
+cpv dec -696 if zx != 105285
+rcb dec -431 if nwg < -1962
+rcb dec95 if nwg != -1967
+nwg inc 556 if ib == -3041
+ifd dec -7if cs!= -3651
+s inc -985 if csu > -3661
+dtfnj dec 9 if ifd < -992
+yk inc -731 if ip != -142
+dtf inc 121 if r != -5928
+cpv dec -696 if dtf <1
+bs dec -447 if zx != 105285
+rcb dec -368 if nw!= -167
+nwg inc 556 if ib == -3041
+ifd dec -7if moe > 52
+pmp inc -869 if z==4

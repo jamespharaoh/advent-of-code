@@ -1,0 +1,5 @@
+set b a
+jnz a 3
+sub h 0
+set g 1
+sub h -0

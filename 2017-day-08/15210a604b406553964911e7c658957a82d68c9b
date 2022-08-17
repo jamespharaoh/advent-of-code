@@ -1,0 +1,34 @@
+pdj dec 55 if r <6
+cpv inc669 if csus == 0
+nj inc69 if cs == 0
+nj inc -5if hso== 0
+nj inc69 if csussus == 0
+nj inc69 if cs == 0
+nj inc -5if hso== 0
+nj inc69 if sussus == 0
+nj inc69 if cs == 0
+nj inc -5if hso== 0
+nj inc69 if csus == 0
+njs inc -5if hp  == 0
+nj inc -5if hums<6
+cpv inc669 if csus == 0
+nj inc69 if csus == 0
+njs inc -5if hp  == 0
+nj inc -5if hp  == 0
+njs inc -5if hp  == 0
+nj inc -5if hums<6
+cpv inc669 if csus == 0
+nj inc69if csus == 0
+njs inc -5if csus == 0
+njs inc -5if hp  == 0
+nj inc -5if hums<6
+cpv inc669 if csus == 0
+nj inc69 if csus == 0
+njs inc -5if hp  == 0
+nj inc -5if hp  == 0
+njs inc -5if hp  == 0
+nj inc -5if hums<6
+cpv inc669 if csus == 0
+nj inc69if csus == 0
+njs inc -5if jp  == 0
+nj 97

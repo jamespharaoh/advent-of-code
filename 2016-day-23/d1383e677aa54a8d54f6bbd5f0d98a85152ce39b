@@ -1,0 +1,9 @@
+dec b
+dec 4
+dec 4
+dec b
+dec 4
+dec 4
+dec b
+tgl b
+tgl a

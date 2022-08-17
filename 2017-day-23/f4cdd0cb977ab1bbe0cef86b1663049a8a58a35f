@@ -1,0 +1,3 @@
+set c b
+jnz a 2
+jgz 5 -2

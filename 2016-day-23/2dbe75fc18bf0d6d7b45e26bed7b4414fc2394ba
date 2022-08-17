@@ -1,0 +1,4 @@
+cpy 6 b
+tgl b
+dec b
+jnz b -2

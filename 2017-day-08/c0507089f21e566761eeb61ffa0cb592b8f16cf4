@@ -1,0 +1,8 @@
+dj inc12 if t !=0
+mo inc 7 if v>0
+nhj inc 5 if nzr <6
+pv inc6if s == 0
+nj inc -5if h< 1
+r inc -5 if r <6
+v inc6if us == 0
+t inc> 97

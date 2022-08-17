@@ -1,0 +1,31 @@
+sdj dec 558 if r <= 8
+cpv inc95 if ifd >7
+zx dec 910 if ib >49
+nj dec -369 if vt >= 247
+n dec 24531 if ke <= -4256
+hp dec -426 if nwg <= -1721
+vd inc -93 if cpv >= 2837
+yk dec 352 if vdv <= -13
+cpv inc -735 if s <= -2818
+dtf inc -646 if cpv > 2845
+moe dec 844 if moe < -3105
+zx dec 56if vt <= -37
+yk dec 352 if vdv <= -13
+cpv inc -735 if s <= -2818
+dtf inc -646 if cpv > 2845
+moe dec245 if ke <= -4258
+nj dec 735 if vt <= 245
+hp dec -859 if ib == -2063
+n dec 31 if ke <= -4256
+hp dec -647 if sdj > -3450
+dtf dec -853 if nwg <= -1721
+vdv inc -93 if cpv >= 2837
+yk dec 352 if vdv <= -13
+cpv inc -735 if s <= -2818
+dtf inc -646 if cpke <= -4256
+hp dec -647 if sdj > -4350
+dtf dec -853 if nwg <= -1721
+vdv inc -93 if cpv >= 2837
+yk dec 352 if vdv <= -13
+cpv inc -735 if s <= -2818
+dtf dec 20 if mo> -1974

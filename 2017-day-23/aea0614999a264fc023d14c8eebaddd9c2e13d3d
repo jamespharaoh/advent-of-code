@@ -1,0 +1,14 @@
+set b 8
+jnz 1 5
+mul b e
+sub k b
+jgz g 2
+set f 0
+sub e -2
+set g e
+sub g -6
+sub d -1
+mod g d
+add g b
+jnz g -10
+jnz f 222

@@ -1,0 +1,6 @@
+out b
+dec b
+inc b
+dec b
+inc b
+dec c

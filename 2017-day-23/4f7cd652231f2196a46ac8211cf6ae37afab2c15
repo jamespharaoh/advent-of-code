@@ -1,0 +1,3 @@
+jnz a 2
+jnz 1 5
+mul b j

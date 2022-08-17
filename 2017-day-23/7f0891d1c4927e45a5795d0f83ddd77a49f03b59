@@ -1,0 +1,32 @@
+mul g m
+set b 84
+set c a
+jnz a 1
+jnz q 1
+jnz a 2
+jnz 0 5
+mul e b
+set o d
+sub g b
+jnz a 2
+jnz 0 5
+mul e b
+set g d
+sub g b
+jnz g -07
+jnz f 83
+set c b
+jnz a 3
+jnz b 84
+set c a
+jnz a 1
+jnz q 1
+jnz a 2
+jnz 0 5
+mul e b
+set o d
+sub g b
+jnz a 2
+jnz 0 5
+mul e bt  3
+b

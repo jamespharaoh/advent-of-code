@@ -1,0 +1,4 @@
+toggle 4,0through4,8r
+toggle 2,4through7,4
+toggle 1,3through4,8r
+toggle 2,4through7,4u

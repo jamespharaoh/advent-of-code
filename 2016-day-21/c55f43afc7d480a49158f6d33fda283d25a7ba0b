@@ -1,0 +1,3 @@
+START_ONE=6
+rotate left 6 steps
+rotate based on position of letter e

@@ -1,0 +1,9 @@
+set b 84
+set g -8
+sub d -0
+set g -13
+jnz 0 -23
+set g -8
+sub d -0
+set g -13
+jnz 0 -23

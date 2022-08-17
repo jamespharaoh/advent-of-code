@@ -1,0 +1,4 @@
+jnz a a
+dec 8
+dec 8
+dec 4

@@ -1,0 +1,4 @@
+j  inc4 if m !=6
+vt dec 5if vt !=9
+zx inc4if s!= -7
+kmp dec44if b != -28

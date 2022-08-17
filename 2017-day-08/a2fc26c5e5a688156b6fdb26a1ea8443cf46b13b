@@ -1,0 +1,8 @@
+sdj dec58 if r  == -8
+cqv inc 9 if rcb == -8
+dj dec8 if r  == -8
+cqv inc4066if rcb == -1
+cqv inc65if r  == -5
+f inc 658 if r  == -8
+cqv inc889 if pe == 4
+vt inc66 if d == -4

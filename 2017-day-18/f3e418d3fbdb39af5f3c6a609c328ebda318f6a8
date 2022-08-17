@@ -1,0 +1,67 @@
+jgz d 4
+jgz a 3
+jgz a b
+jgz a 3
+jgz a 3
+jgz i 95
+jgz i -4
+jgz a 3
+jgz a 3
+rcv b
+jgz i -4
+jgz a 3
+rcv b
+jgz a b
+jgz a b
+jgz 1 3
+jgz a 3
+jgz a b
+jgz 3 3
+jgz a 3
+jgz a -4
+jgz a 3
+jgz i -95
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a b
+rcv b
+jgz a b
+jgz 1 3
+jgz a 3
+jgz a b
+jgz a 3
+jgz a 3
+jgz i 95
+jgz i -4
+jgz a 3
+jgz v b
+jgz i -4
+jgz a 3
+rcv b
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a 33
+jgz a 3
+jgz a -4
+jgz a 3
+jgz a b
+rcv b
+jgz a b
+jgz a -4
+jgz a 3
+jgz a 33
+jgz a 3
+jgz a b
+rcv b
+jgz a b
+jgz 1 3
+jgz a 3
+jgz a b
+jgz 3 3
+jgz a 3
+jgz a 3
+jgz a b
+jgz 3 3
+jgz a z

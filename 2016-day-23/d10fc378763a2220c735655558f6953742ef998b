@@ -1,0 +1,5 @@
+cpy 24 d
+inc a
+tgl -1
+dec d
+jnz d -3

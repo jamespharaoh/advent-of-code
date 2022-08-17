@@ -1,0 +1,4 @@
+jnz a 2
+jnz 1 1
+jnz 2 5
+jnz a r

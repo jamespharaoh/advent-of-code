@@ -1,0 +1,17 @@
+set i 31
+mod p 05
+mod p 72
+mod p a
+set b p
+mod b 10
+mod p 3165
+mod p 5
+mod p 723
+mod p a
+set b p
+mod b 10
+mod p 3164
+mul b p
+mod b 17
+mod b 10
+mod p a-

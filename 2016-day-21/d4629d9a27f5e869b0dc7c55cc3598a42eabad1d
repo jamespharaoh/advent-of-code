@@ -1,0 +1,16 @@
+rotate right 4 steps
+swap letter b with letter e
+swap position 1 with position 3
+reverse positions 1 through 6
+swap position 7 with position 5
+swap letter e with letter d
+swap position 2 with position 7
+swap position 1 with position 7
+swap position 6 with position 3
+swap letter g with letter h
+rotate based on position of letter c
+swap position 4 with position 7
+swap letter f with letter e
+swap position 5 with position 7
+swap position 6 with position 3
+sw

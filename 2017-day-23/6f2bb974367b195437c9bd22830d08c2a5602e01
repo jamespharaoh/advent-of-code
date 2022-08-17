@@ -1,0 +1,15 @@
+set d 2
+set e 2
+set g d
+mul g e
+sub g b
+jnz g 2
+set f 0
+sub g b
+jnz g -4
+set g d
+sub g b
+jnz f 2
+sub h -1
+set g -17
+jnz 14 b

@@ -1,0 +1,8 @@
+add i -1
+jgz i -9
+jgz b -1
+set d -8
+jgz i -9
+jgz b -1
+set v -1
+jgz -0

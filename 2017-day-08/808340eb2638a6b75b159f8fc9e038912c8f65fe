@@ -1,0 +1,6 @@
+
+v inc 62 if p!=0
+b inc -12if t != 0
+ib dec335 if ifd >-8
+pk inc -71 if ib != -335
+n inc 40 if eo != 0

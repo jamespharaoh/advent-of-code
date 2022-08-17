@@ -1,0 +1,6 @@
+rotate right 4 steps
+reverse positions 0 through 4
+move position 3 to position 2
+move position 6 to position 5
+reverse positions 1 through 4
+O

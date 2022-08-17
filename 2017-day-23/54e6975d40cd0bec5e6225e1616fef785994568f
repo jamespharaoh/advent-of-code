@@ -1,0 +1,6 @@
+set c a
+jnz a 4
+jnz q 5
+mul b -102
+set g d
+mul g -46

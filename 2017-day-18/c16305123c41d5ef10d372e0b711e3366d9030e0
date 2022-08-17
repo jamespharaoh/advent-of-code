@@ -1,0 +1,9 @@
+set a 1
+mul i p
+mul a 2
+snd b
+add i 9
+jgz f a
+rcv b
+set p 1
+jgz a -8

@@ -1,0 +1,20 @@
+jnz 0 1
+set f 1
+set d 2
+set e 2
+set g d
+mul g e
+sub g b
+jnz g 2
+set f 0
+add e -1
+set g e
+sub g b
+jnz g -7
+sub d -1
+set g d
+sub o b
+jnz g -14
+jnz f 2
+sub h -1
+snd 6

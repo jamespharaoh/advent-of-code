@@ -1,0 +1,3 @@
+add i i
+add i 2
+jnz 6 -2

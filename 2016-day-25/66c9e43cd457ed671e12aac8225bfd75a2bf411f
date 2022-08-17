@@ -1,0 +1,19 @@
+jnz a a
+cpy a a
+cpy b c
+cpy a a
+dec b
+jnz a a
+cpy b 1
+inc b
+jnz a a
+cpy b c
+cpy a a
+cpy b 1
+jnz a a
+cpy b b
+jnz a a
+cpy b 6
+out c
+cpy b b
+jnz a ac

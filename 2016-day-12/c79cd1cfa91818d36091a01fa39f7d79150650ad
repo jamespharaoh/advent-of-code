@@ -1,0 +1,9 @@
+jnz c d
+jnz d -5
+jnz d -2
+jnz d -2
+jnz d d
+jnz c d
+jnz d 2
+jnz d d d
+ d

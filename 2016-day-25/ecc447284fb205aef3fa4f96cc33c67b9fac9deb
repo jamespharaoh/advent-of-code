@@ -1,0 +1,6 @@
+cpy 141 b
+inc 2
+dec b
+jnz b -2
+dec 7
+jnz 7 -5

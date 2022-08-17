@@ -1,0 +1,3 @@
+cpy a c
+inc b
+jnz b b

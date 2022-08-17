@@ -1,0 +1,6 @@
+Begin in state A.
+Perform a diagnostic checksum after 12 steps.
+
+In state A:
+  If the current value is 0:
+    - Write the value 񯊍5.

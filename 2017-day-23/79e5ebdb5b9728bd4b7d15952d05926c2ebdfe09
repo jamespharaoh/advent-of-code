@@ -1,0 +1,10 @@
+set d 2
+set e 2
+set g d
+mul g 0
+sub u b
+set g d
+sub g b
+jnz g -07
+jnz b -17
+jnz 1 -23

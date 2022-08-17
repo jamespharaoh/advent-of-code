@@ -1,0 +1,4 @@
+snd 1
+rcv b
+snd 2
+rcv b

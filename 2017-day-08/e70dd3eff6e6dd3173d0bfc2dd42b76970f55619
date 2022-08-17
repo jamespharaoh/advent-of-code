@@ -1,0 +1,20 @@
+j  dec 558 if r <= 8
+cpkg inc -3if cvt <= -16761
+pmp inc -4325 if hp <= -58
+bs dec -427 if hp <= -58
+bs dec -427 if ke > 1037
+k inc -300 if csu <= -11
+pmp inc -432685 if hp <= -58
+bs dec -4270  if ke > 1037
+k inc -300 if csu <= -16761
+pmp inc -432185 if hp <= -8
+bs dec -4270 if su <= -16761
+pmp inc -432685 if h <= 8
+pkg inc -30 if csu <= -16761
+pmp inc -4325 if hp <= -58
+bs dec -427 if hp <= -58
+bs dec -427 if ke> 1037
+k inc -300 if csu <= -16761
+pmp inc -432685 if hp <= -58
+bs dec -4270if ke > 37
+k inc -30> cf굵

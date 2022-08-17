@@ -1,0 +1,4 @@
+c inc6 if p>=26
+u inc1 if n>= 7
+zx dec4  if y >= 42
+p dec 3if dp>= 2

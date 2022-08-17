@@ -1,0 +1,6 @@
+p dec5if r<9
+	b dec5if v<9
+p  dec5if v<9
+p dec5if r<9
+ecf dec5if v<9
+p d

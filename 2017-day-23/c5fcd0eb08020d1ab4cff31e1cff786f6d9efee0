@@ -1,0 +1,16 @@
+set b 84
+set c b
+jnz a 84
+set c b
+jnz a e
+sub g b
+jnz g 4
+set f e
+sub g b
+jnz g 3
+set c b
+jnz g 4
+set f e
+sub g b
+jnz g g b
+jn0z g 

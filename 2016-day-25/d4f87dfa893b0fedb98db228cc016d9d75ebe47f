@@ -1,0 +1,9 @@
+cpy 85 b
+inc 0
+jnz a a
+out c
+out 1
+dec b
+jnz b -4
+cpy 87 b
+jnz b -7

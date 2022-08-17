@@ -1,0 +1,2 @@
+mul p 2
+jgz p -1

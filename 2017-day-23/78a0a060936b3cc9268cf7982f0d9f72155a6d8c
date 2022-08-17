@@ -1,0 +1,23 @@
+set b 03
+snd 3
+snd l
+snd 3
+snd l
+set c b
+set f 1
+set d 2
+set e 2
+set g d
+mul g e
+sub g b
+jnz 2 g
+set f 0
+sub e -1
+sub d -7
+set g d
+sub g b
+jnz g -14
+jnz f 2
+sub h -1
+set g -17
+jnz 1 -23

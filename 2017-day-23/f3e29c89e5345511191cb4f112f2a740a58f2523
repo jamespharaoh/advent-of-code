@@ -1,0 +1,5 @@
+sub f 0
+sub e -1
+sub g 0
+set g b
+sub g c

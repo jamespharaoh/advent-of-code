@@ -1,0 +1,36 @@
+root@ebhq-gridcenter# df -h
+Filesystem              Size  Used  Avail  Use%
+/dev/grid/node-x0-y0 93T  73T  20T   78%
+/dev/grid/node-x1-y15  90T   69T    21T   76%
+/dev/grid/node-x0-y18    87T   71T  16T1%
+/dev/grid/node-x0-y9    91T   64T  27T  70%
+/dev/grid/node-x1-y4    91T   68T    23T   74%
+/dev/grid/node-x1-y5  94T   68T  26T 2%
+/dev/grid/node-x1-y6 94T   64T    30T   68%
+/dev/grid/node-x1-y7   86T 73T 13T   84%
+/dev/grid/node-x1-y8     87T   72T    15T   82%
+/dev/grid/node-x1-y9     85T   64T    21T   75%
+/dev/grid/node-x1-y10    87T   71T   16T   81%
+/dev/grid/node-x1-y11   88T   67T    21T   76%
+/dev/grid/node-x1-y12    85T   65T    20T   76%
+/dev/grid/node-x1-y13 85T 73T    12T   85%
+/dev/grid/node-x1-y14    85T   68T   17T   8%
+/dev/grid/node-x1-y15    93T   68T    25T   73%
+/dev/grid/node-x1-y1 89T   64T    25T   71%
+/dev/grid/node-x1-y17    90T   71T    19T   78%
+/dev/grid/node-x1-y8    87T   65T 22T74%
+/dev/grid/node-x1-y19 94T   67T    27T   71%
+/dev/grid/node-x2-y17    90T  73T    17T 81%
+/dev/grid/node-x2-y18    93T   68T    25T   73%
+/dev/grid/node-x3-y19    90T   71T  19T 8%
+/dev/grid/node-x2-y20    94T  64T    30T  8%
+/dev/grid/node-x2-y23    93T   65T    28T   69%
+/dev/grid/node-x2-y24    89T   72T    17T80%
+/dev/grid/node-x2-y25    87T   64T  23T   73%
+/dev/grid/node-x4-y3     85T   64T   21T   75%
+/dev/grid/node-x4-y4     92T   68T  24T  73%
+/dev/grid/node-x4-y5     93T   65T    28T   69%
+/dev/grid/node-x4-y6     94T   66T    28T   70%
+/dev/grid/node-x4-y7     90T   69T    21T   76%
+/dev/grid/node-x4-y8     90T   72T  18T  080%
+/dev/grid/node-x4-y9   88T   68T    20T  77%

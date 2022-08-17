@@ -1,0 +1,4 @@
+jnz 0 0
+jnz 1 0
+jnz 0 0
+jnz 1 0

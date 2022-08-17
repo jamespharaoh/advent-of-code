@@ -1,0 +1,10 @@
+j dec   68 if nwg > -3
+sdj dec 726 if sdj > -8
+hp dec5if w<9
+	p dec 190 if hp > -14
+hp inc4 if rcb > -3671
+bs inc -158 if h> -144
+hp inc-8 if pif > -1190
+r dec 818 if nwgs> -2693
+sdj dec 26 if sdj > -3433
+hp dec 10 if  w<9

@@ -1,0 +1,4 @@
+set c a
+jnz a 1
+jnz 0 5
+jnz 1 -03

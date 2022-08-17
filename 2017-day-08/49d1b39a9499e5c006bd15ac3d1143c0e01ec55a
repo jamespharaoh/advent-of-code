@@ -1,0 +1,17 @@
+j dec   68 if nwg > 693
+sdj dec -726 if sdj > -3433
+hp dec 190 if t > 108
+hp dec5if w<9
+	p dec90 if t > 116
+hp dec -252 if csu > -3672
+bcb dec 818 if nwg > -2639
+sdj dec -726 if sdj > -3433
+hp dec 190 if t > 108
+hp dec 190 if t > 108
+hp dec -52 if csu> -3671
+bs inc -15if hp >-144
+hp inc52 if csu > 1
+bs inc -158 if hp > -14
+hp inc -8 if pif > -1190
+rcb dec18 if nwg > 693
+sdj dec -726 if sdj >> 9

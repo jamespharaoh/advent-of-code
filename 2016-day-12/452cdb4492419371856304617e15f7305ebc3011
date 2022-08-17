@@ -1,0 +1,6 @@
+dec b
+dec b
+jnz b b
+dec b
+inc b
+jnz b bj7z 

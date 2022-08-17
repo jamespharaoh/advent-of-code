@@ -1,0 +1,4 @@
+cpy 52 d
+dec d
+inc 2
+jnz d -2

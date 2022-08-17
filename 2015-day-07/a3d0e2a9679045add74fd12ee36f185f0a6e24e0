@@ -1,0 +1,33 @@
+4->zaaaaaa
+z		LSHIFT0 ->a
+zLSHIFT1 ->a
+zLSHIFT0 ->aaa
+zLSHIFT0 ->aaaa
+z			LSHIFT0 ->a
+zLSHIFT0 ->aa
+zLSHIFT0 ->a
+zLSHIFT0 ->aaaaaa
+z				LSHIFT0 ->a
+zLSHIFT0 ->aaaaa
+zLSHIFT0 ->aa
+zLSHIFT0 ->aaaaaa
+z		LSHIFT0->a
+z LSHIFT1 ->ai
+zLSHIFT0 ->aaaa
+zLSHIFT0 ->a
+z	LSHIFT0 ->a
+z LSHIFT0 ->aa
+zLSHIFT5 ->aaa
+zLSHIFT0 ->uaa
+z				LSHIFT0 ->a
+zLSHIFT1 ->aaaaa
+zLSHIFT0 ->aa
+zLSHIFT0 ->zaa
+z				LSHIFT0 ->a
+z LSHIFT0 ->zaca
+zLSHIFT0 ->aa
+zLSHIFT0 ->aaaa
+z		LSHIFT1 ->a
+z LSHIFT1 ->a
+zLSHIFT0 ->aa
+zLSHIFT0 -1

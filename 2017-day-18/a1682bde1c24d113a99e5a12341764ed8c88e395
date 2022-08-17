@@ -1,0 +1,3 @@
+mul p 8
+set i 1
+jgz 6 -2

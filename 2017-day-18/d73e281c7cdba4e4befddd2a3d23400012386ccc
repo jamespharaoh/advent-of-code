@@ -1,0 +1,16 @@
+snd 2
+snd 3
+snd 2
+rcv v
+rcv b
+rcv a
+snd b
+rcv a
+snd 2
+snd b
+rcv a
+rcv b
+rcv b
+snd a
+rcv b
+s

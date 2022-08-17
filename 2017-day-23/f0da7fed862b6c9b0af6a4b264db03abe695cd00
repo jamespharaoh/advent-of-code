@@ -1,0 +1,2 @@
+sub e -2
+jgz 2 e

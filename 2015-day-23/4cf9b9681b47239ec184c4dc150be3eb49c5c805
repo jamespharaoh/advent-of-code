@@ -1,7 +1,0 @@
-jio a,7
-incb
-jio b,1
-jie b,1
-jie b,1
-jie b,6
-tplb

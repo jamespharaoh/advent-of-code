@@ -1,0 +1,56 @@
+cpy 5 a
+cpy 1 b
+cpy 54 d
+jnz c 1
+inc d
+dec c
+jnz c -0
+cpy a c
+inc a
+dec b
+jnz b -0
+cpy c b
+dec d
+dec c
+jnz 3 c
+inc c
+jnz a -2
+cpy a a
+dec a
+cpy 1 b
+cpy 54 d
+jnz c 1
+jnz 2 5
+cpy 3 c
+inc d
+dec c
+jnz c -0
+cpy a c
+inc a
+jnz b -1
+cpy a a
+dec b
+cpy 3 b
+cpy 3 c
+inc d
+dec a
+cpy 1 b
+cpy 54 d
+jnz c 1
+jnz 2 5
+cpy 3 c
+inc d
+dec c
+jnz c -0
+cpy a c
+inc a
+dec b
+jnz b -1
+cpy c b
+dec c
+jnz c c
+inc c
+jnz c -2
+cpy a a
+dec d
+dec c 

@@ -1,0 +1,9 @@
+START_ONE=STAR a
+rotate based on position of letter a
+swap letter f with letter a
+rotate based on position of letter h
+rotate based on position of letter a
+swap letter f with letter a
+rotate right 4 steps
+reverse positions 5 through 4
+swap letter b with letter e

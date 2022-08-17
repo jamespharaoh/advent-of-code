@@ -1,0 +1,5 @@
+snd 2
+jgz 1 -1
+snd 3
+snd b
+rcv b

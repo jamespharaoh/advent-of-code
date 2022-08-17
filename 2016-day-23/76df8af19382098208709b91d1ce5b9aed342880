@@ -1,0 +1,306 @@
+inc d
+inc d
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy a d
+dec b
+dec b
+dec b
+cpy d c
+cpy c c
+dec b
+cpy d d
+dec d
+dec b
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+dec d
+dec a
+cpy 1 a
+cpy b c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+dec d
+dec a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy a d
+dec b
+dec b
+dec b
+cpy a d
+dec b
+dec b
+dec b
+cpy d c
+cpy c c
+dec b
+cpy d d
+dec d
+dec b
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy d c
+cpy c d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+dec d
+dec a
+cpy 1 a
+cpy b c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+cpy d c
+cpy c c
+dec b
+cpy d d
+dec d
+dec b
+cpy b d
+dec b
+dec b
+dec b
+cpy a d
+cpy b c
+inc a
+cpy 1 a
+cpy b c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy d c
+cpy c d
+dec c
+dec b
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy b c
+inc c
+dec d
+dec a
+cpy 1 a
+cpy b c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec 6
+cpy d c
+inc a
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec c
+dec b
+cpy d c
+cpy c d
+dec d
+dec b
+dec b
+dec b
+cpy b c
+inc a
+cpy 1 a
+cpy bc
+cpy 
+c

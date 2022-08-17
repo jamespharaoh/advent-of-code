@@ -1,0 +1,8 @@
+START_ONE=o steps
+rotate right 4 steps
+reverse positions 5 through 5
+move position 6 to position 5
+move position 6 to position 2
+move position 6 to position 4
+move position 6 to position 4
+rotate based on position of letter e

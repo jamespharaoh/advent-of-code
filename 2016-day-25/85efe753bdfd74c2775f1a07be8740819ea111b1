@@ -1,0 +1,462 @@
+inc b
+dec c
+jnz c c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d d
+dec -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d d
+dec -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a a
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d d
+dec -2
+dec c
+jnz c -5
+cpy d a
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec c
+jnz c -4
+inc a
+jnz 1 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c 2
+jnz 1 c
+jnz c -5
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+jnz 2 c
+jnz b 2
+jnz 1 6
+dec b
+dec c
+jnz c -4
+inc a
+jnz 2 -7
+cpy 2 b
+jnz b -1
+dec c
+jnz c -2
+dec  -2

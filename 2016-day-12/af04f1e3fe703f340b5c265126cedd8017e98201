@@ -1,0 +1,3 @@
+jnz c b
+dec d
+jnz 4 d

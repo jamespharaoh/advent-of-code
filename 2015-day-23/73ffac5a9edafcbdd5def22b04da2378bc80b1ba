@@ -1,0 +1,3 @@
+tpl	b
+incb
+jmp-2

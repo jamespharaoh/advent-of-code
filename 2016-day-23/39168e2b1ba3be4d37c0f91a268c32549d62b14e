@@ -1,0 +1,6 @@
+tgl a
+cpy 1 a
+jnz c c
+dec c
+dec d
+jnz d d

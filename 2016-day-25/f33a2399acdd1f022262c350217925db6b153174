@@ -1,0 +1,4 @@
+jnz a a
+out c
+cpy b 1
+out c

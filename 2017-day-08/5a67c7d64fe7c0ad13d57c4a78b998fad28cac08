@@ -1,0 +1,109 @@
+j  dec5if r<9
+ecf dec5if v<9
+f dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<8
+pp dec5if r<9
+e dec2if vv<2
+e dec2if vv<4
+p dec5if r<9
+eg dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<4
+p dec5if r<95
+mop dec5if r<9	
+fs dec5if r<9	
+frp dec5if r<9	
+f dec5if r<9	
+fs dec5if r<9	
+frp dec5if r<9	
+fs dec5if r<9	
+fs dec5if r<9	
+fr inc -121 if t != 5
+moe inc -465 if t == 0
+dtf dec 137 if vdv <= -13
+cpv inc -735 if s <= -2818
+dtf inc -646 if cpv > 2845
+moe dec 844 if moe < -6210
+zxycf dec5if r<9
+	b dec5if vv<4
+p dec5if r<9
+ecf dec5if r<9
+ecf dec5if v<9
+b dec5if v <6
+cpv inc67695if r<9
+j dec 5554 if vt != -339
+pdj dec 5537 if vt > -7
+n dec 8 if t == 0
+dtf dec 137 if u == 0
+zx inc 410 if nwg < 8
+hp dec -26378 if r <8
+pdpdjn dec5if r<9
+j dec 51 if r <6
+cpv inc6695if r<9
+j dec 5554 if vt != -339
+pdj dec 55 if r <1
+gv inc669 if csu < 1
+rcb inc -121 if t != 5
+moe inc -437 if vt > -7
+n dec 8if v<9
+r dec5if r<9
+ecf dec5if v<9
+v dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if v<9
+v dec5if vv<4
+cg dec5if p<9
+fg dec5if v<9
+p dec5if r<9
+eo dec5if v<3
+b dec5if v<4
+gg dec5if v<9
+q dec65 if t == 0
+dtf dec 137 if u == 0
+zx inc 410 if nwg < 8
+hp dec -26378 if r <8
+pdjn dec5if r<9
+j dec 51 if r <6
+cpv inc6695if r<9
+j dec 5554 if vt != -339
+pddpdjn dec5if r<9
+j dec 51 if r <6
+e dec2if vv<2
+e dec2if vv<4
+p dec5if r<9
+eg dec5if v<9
+p dec5if r<9
+eg dec5if v<9
+b dec5if v<4
+p dec5if r<95
+mop dec5if r<9	
+fs dec5if r<9	
+frp dec5if r<9	
+f dec5if r<9	
+fs dec5if r<9	
+frp dec5if r<9	
+fs dec5if r<9	
+fs dec5if r<9	
+frfs dec5if r<9	
+frp dec5if r<9	
+fs dec5if r<9	
+fs dec5if r<9	
+fr inc -121 if t >= -6
+ke dec 312 if pep != 1
+ksdj inc -97 if bs == 0
+nj inc -593 if hppep != 1
+ksdj inc -97 if bs == 0
+nj inc -593 if hp < 1
+rcb inc -121 if t != 5
+moe inc -465 if t == 0
+dtf dec 58 if r <= 8
+cpv inc 669 if csu >= -6
+ke dec 312 if pep != 1
+ksdjd dec5d

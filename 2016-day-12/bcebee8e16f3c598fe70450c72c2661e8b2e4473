@@ -1,0 +1,7 @@
+cpy 25 c
+cpy d d
+inc d
+dec d
+jnz d -2
+dec c
+jnz c -5

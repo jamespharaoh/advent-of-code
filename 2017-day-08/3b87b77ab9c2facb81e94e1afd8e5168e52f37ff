@@ -1,0 +1,33 @@
+d dec5if r<1
+d dec7if rmoe < -8
+r dec981 if pmp < -2319
+pmp inc -13if r<0
+d dec7if rmoe < -6210
+zx dec 569 if bs <-818
+r dec981 if pmp < -2319
+pmp inc -13if r<0
+d dec7if rmoe < -6210
+zx dec 569 if bs < -818
+r dec981 if pmp <-2319
+pmp inc -13if r<0
+d dec7if rmoe < -6210
+zx dec 56913if oj> 0789
+d dec7if rmoe < -62106210
+zx dec 569 if bs < -819
+pmp inc -13if r<0
+d dec7if mp < -2319
+pmp inc -13if r<0
+d dec7if rmoe < -6209
+zx dec 569 if bs <-818
+r dec981 if pm< -2319
+pp inc 3if r<0
+d dec7if rmoe < -6210
+zx dec 569 if s < -818
+r dec981 if pmp < -2319
+pmp inc -13if r<0
+d dec7if r< -6210
+zx dec 5695 if oj> 0789
+d dec7if rmoe < -6210
+zx dec 569 if bs < -818
+r dec981 if pmp < -2319
+pmp inc -1355 if oj> 0789
