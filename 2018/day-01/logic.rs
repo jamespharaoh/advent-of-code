@@ -17,7 +17,7 @@ pub fn part_two (input: & Input) -> GenResult <i32> {
 	for (idx, delta) in iter::repeat (input.deltas.clone ()).flatten ().enumerate () {
 		if ! seen.insert (total) { break }
 		if idx == 200_000 { return Err ("Giving up after 200k iterations".into ()) }
-		total += delta;
+		total = i32::add_2 (total, delta) ?;
 	}
 	Ok (total)
 }
