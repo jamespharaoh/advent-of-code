@@ -83,6 +83,7 @@ mod prelude {
 	pub use crate::nums::IntSigned;
 	pub use crate::nums::IntUnsigned;
 	pub use crate::nums::NumResult;
+	pub use crate::nums::Overflow;
 	pub use crate::inpstr::InpStr;
 	pub use crate::parser::FromParser;
 	pub use crate::parser::Parser;
