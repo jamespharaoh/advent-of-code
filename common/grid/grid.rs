@@ -41,7 +41,6 @@ impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
 		origin: [isize; DIMS],
 		size: [usize; DIMS],
 	) -> Self {
-		assert! (origin == [0; DIMS]);
 		Self::wrap (
 			iter::repeat (default ())
 				.take (size.iter ().copied ().product ())
@@ -388,18 +387,26 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 
 	#[ inline ]
 	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		if origin != [0, 0] { unimplemented! () }
-		let y = ok_or! (self.y.to_usize (), return None);
-		let x = ok_or! (self.x.to_usize (), return None);
+		let y = isize::add_2 (self.y.to_isize ().ok () ?, origin [0]).ok () ?.to_usize ().ok () ?;
+		let x = isize::add_2 (self.x.to_isize ().ok () ?, origin [1]).ok () ?.to_usize ().ok () ?;
 		if y >= size [0] || x >= size [1] { return None }
 		Some (y * size [1] + x)
 	}
 
 	#[ inline ]
 	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		if origin != [0, 0] { unimplemented! () }
-		let y = ok_or! (Val::from_usize (scalar / size [1]), return None);
-		let x = ok_or! (Val::from_usize (scalar % size [1]), return None);
+		let raw_y =
+			isize::sub_2 (
+				usize::div_2 (scalar, size [1]).ok () ?.as_isize (),
+				origin [0],
+			).ok () ?;
+		let raw_x =
+			isize::sub_2 (
+				usize::rem_2 (scalar, size [1]).ok () ?.as_isize (),
+				origin [1],
+			).ok () ?;
+		let y = Val::from_isize (raw_y).ok () ?;
+		let x = Val::from_isize (raw_x).ok () ?;
 		Some (Self { y, x })
 	}
 
