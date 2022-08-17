@@ -53,7 +53,7 @@ function launch {
 				echo "split"
 				echo "focus"
 			fi
-			let cpu_mask=$(printf "0x%x" $((1 << cpu)))
+			cpu_mask=$(printf "0x%x" $((1 << cpu)))
 			echo "screen taskset $cpu_mask nice misc/fuzz-script worker $main_pid $cpu"
 		done
 	} > $screenrc
