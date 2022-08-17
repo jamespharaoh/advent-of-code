@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io::BufRead as _;
 use std::io::BufReader;
 use std::ops::Deref;
+use std::process;
 use std::sync::Arc;
 use std::sync::Condvar;
 use std::sync::Mutex;
@@ -160,20 +161,37 @@ pub fn num_cpus () -> Option <usize> {
 }
 
 fn num_cpus_real () -> Option <usize> {
+	None
+		.or_else (num_cpus_allowed)
+		.or_else (num_cpus_cpuinfo)
+}
 
-	let file = match File::open ("/proc/cpuinfo") {
-		Ok (file) => file,
-		Err (_) => return None,
-	};
+fn num_cpus_allowed () -> Option <usize> {
 
+	let path = format! ("/proc/{}/status", process::id ());
+	let file = File::open (path).ok () ?;
+	let reader = BufReader::new (file);
+
+	for line in reader.lines () {
+		let line = line.ok () ?;
+		if let Some (mask_str) = line.strip_prefix ("Cpus_allowed:\t") {
+			let mask = u128::from_str_radix (mask_str, 16).ok () ?;
+			return Some (mask.count_ones ().try_into ().unwrap ());
+		}
+	}
+
+	None
+
+}
+
+fn num_cpus_cpuinfo () -> Option <usize> {
+
+	let file = File::open ("/proc/cpuinfo").ok () ?;
 	let reader = BufReader::new (file);
 
 	let mut num_threads = 0;
 	for line in reader.lines () {
-		let line = match line {
-			Ok (line) => line,
-			Err (_) => return None,
-		};
+		let line = line.ok () ?;
 		if ! line.starts_with ("processor\t: ") { continue }
 		num_threads += 1;
 	}
