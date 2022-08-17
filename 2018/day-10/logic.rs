@@ -16,36 +16,41 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 }
 
 fn calc_result (input: & Input) -> GenResult <(String, u32)> {
-	fn calc_range (points: & [Point]) -> (Coord, Coord, Coord, Coord) {
-		points.iter ().fold (
-			(Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN),
-			|(min_y, max_y, min_x, max_x), point| (
+	fn calc_range (points: & [Point]) -> NumResult <(Coord, Coord, Coord, Coord)> {
+		points.iter ().copied ().fold (
+			Ok ((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
+			|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| Ok ((
 				cmp::min (min_y, point.pos.y),
-				cmp::max (max_y, point.pos.y + Coord::ONE),
+				cmp::max (max_y, Coord::add_2 (point.pos.y, Coord::ONE) ?),
 				cmp::min (min_x, point.pos.x),
-				cmp::max (max_x, point.pos.x + Coord::ONE),
-			))
+				cmp::max (max_x, Coord::add_2 (point.pos.x, Coord::ONE) ?),
+			))))
 	}
-	fn calc_size (points: & [Point]) -> (Coord, Coord) {
-		let (min_y, max_y, min_x, max_x) = calc_range (points);
-		(max_y - min_y, max_x - min_x)
+	fn calc_size (points: & [Point]) -> NumResult <(Coord, Coord)> {
+		let (min_y, max_y, min_x, max_x) = calc_range (points) ?;
+		Ok ((Coord::sub_2 (max_y, min_y) ?, Coord::sub_2 (max_x, min_x) ?))
 	}
 	let mut points = input.points.clone ();
 	let mut points_temp = Vec::new ();
-	let (mut size_y, mut size_x) = calc_size (& points);
+	let (mut size_y, mut size_x) = calc_size (& points) ?;
 	let mut num_iters = 0_u32;
 	let mut step = 0x10000_u32;
 	loop {
 		points_temp.clear ();
-		points_temp.extend (points.iter_vals ().map (|point| point.offset (step.as_i32 ())));
-		let (next_y, next_x) = calc_size (& points_temp);
+		for new_point in points.iter_vals ().map (|point| point.offset (step.as_i32 ())) {
+			points_temp.push (new_point ?);
+		}
+		let (next_y, next_x) = calc_size (& points_temp) ?;
 		if size_y < next_y && size_x < next_x {
 			if step == 1 { break }
 			if num_iters >= step {
 				points_temp.clear ();
-				points_temp.extend (points.iter_vals ().map (|point| point.offset (- step.as_i32 ())));
+				for new_point in points.iter_vals ()
+						.map (|point| point.offset (- step.as_i32 ())) {
+					points_temp.push (new_point ?);
+				}
 				mem::swap (& mut points, & mut points_temp);
-				(size_y, size_x) = calc_size (& points);
+				(size_y, size_x) = calc_size (& points) ?;
 				num_iters -= step;
 			}
 			step >>= 1_u32;
@@ -53,7 +58,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 		}
 		mem::swap (& mut points, & mut points_temp);
 		(size_y, size_x) = (next_y, next_x);
-		num_iters += step;
+		num_iters = u32::add_2 (num_iters, step) ?;
 	}
 	let posns: Vec <(Coord, Coord)> =
 		points.iter ()

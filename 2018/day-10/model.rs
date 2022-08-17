@@ -12,15 +12,14 @@ pub struct Point {
 impl Point {
 
 	#[ inline ]
-	#[ must_use ]
-	pub const fn offset (self, offset: Coord) -> Self {
-		Self {
+	pub fn offset (self, offset: Coord) -> NumResult <Self> {
+		Ok (Self {
 			pos: Pos {
-				y: self.pos.y + self.vel.y * offset,
-				x: self.pos.x + self.vel.x * offset,
+				y: Coord::add_2 (self.pos.y, Coord::mul_2 (self.vel.y, offset) ?) ?,
+				x: Coord::add_2 (self.pos.x, Coord::mul_2 (self.vel.x, offset) ?) ?,
 			},
 			.. self
-		}
+		})
 	}
 
 }

@@ -100,7 +100,7 @@ pub fn read_dots <Val: Int> (
 			continue;
 		}
 		#[ allow (clippy::print_stderr) ]
-		#[ cfg (debug_assertions) ]
+		#[ cfg (all (debug_assertions, not (fuzzing))) ]
 		{
 			let mut drawn = String::new ();
 			let mut val = encoded;
