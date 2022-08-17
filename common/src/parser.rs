@@ -211,7 +211,10 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
-		self.int_real ().parse ().map_err (|_err| self.err ())
+		self.any ().of (|parser| {
+			let val_str = parser.int_real ();
+			IntType::from_str (val_str).map_err (|_err| parser.err ())
+		}).done ()
 	}
 
 	/// Consume and return an unsigned decimal integer from the input
@@ -990,6 +993,9 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, (@confirm) ) => {
 		$parser.confirm ();
+	};
+	( @item $parser:expr, (@skip) ) => {
+		$parser.skip_whitespace ();
 	};
 }
 

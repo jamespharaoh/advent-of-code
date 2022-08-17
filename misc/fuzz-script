@@ -2,7 +2,7 @@
 
 declare -a cpus
 declare -a years=( {2015..2021} )
-declare default_fuzz_time=15
+declare default_fuzz_time=10
 declare default_shrink_time=5
 
 case "$HOSTNAME" in

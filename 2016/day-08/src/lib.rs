@@ -33,9 +33,10 @@ pub mod logic {
 
 	pub fn part_two (input: & Input) -> GenResult <String> {
 		let grid = calc_result (input);
-		let code =
-			ocr::read_dots (& |row: u32, col: u32|
-				grid.get (Pos { row, col }).unwrap_or (false)) ?;
+		let code = ocr::read_dots (
+			grid.iter ()
+				.filter_map (|(pos, val)| val
+					.then_some ((pos.row, pos.col)))) ?;
 		Ok (code)
 	}
 
@@ -171,7 +172,7 @@ mod examples {
 	#[ test ]
 	fn part_two () {
 		let puzzle = puzzle_metadata ();
-		assert_err! ("Unrecognised character: 0x13440000 in position 1", puzzle.part_two (EXAMPLE));
+		assert_err! ("Unrecognised character: 0x402804 << 96 in position 1", puzzle.part_two (EXAMPLE));
 	}
 
 }

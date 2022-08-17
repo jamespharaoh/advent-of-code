@@ -67,7 +67,7 @@ mod logic {
 		for fold in input.folds.iter () {
 			dots = fold_dots (fold, & dots);
 		}
-		let result = ocr::read_dots (& |y, x| dots.contains (& Pos { y, x })) ?;
+		let result = ocr::read_dots (dots.iter ().map (|pos| (pos.y, pos.x))) ?;
 		Ok (result)
 	}
 

@@ -22,6 +22,7 @@
 	aoc-2018-day-07 = { path = "day-07" }
 	aoc-2018-day-08 = { path = "day-08" }
 	aoc-2018-day-09 = { path = "day-09" }
+	aoc-2018-day-10 = { path = "day-10" }
 
 [build-dependencies]
 

@@ -296,7 +296,7 @@ pub mod model {
 
 		#[ test ]
 		fn input_parse () {
-			assert_err! ("Invalid input: line 2: col 9: jio a, +-5",
+			assert_err! ("Invalid input: line 2: col 8: jio a, +-5",
 				Input::parse (& [ "inc a", "jio a, +-5" ]));
 		}
 
