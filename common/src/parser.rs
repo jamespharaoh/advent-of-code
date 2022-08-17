@@ -960,6 +960,11 @@ macro_rules! parse {
 			.delim_fn ("\n", Parser::item)
 			.try_collect () ?;
 	};
+	( @item $parser:expr, (@line_items $item_name:ident = $item_parse:ident) ) => {
+		let $item_name = $parser
+			.delim_fn ("\n", $item_parse)
+			.try_collect () ?;
+	};
 	( @item $parser:expr, (@lines $item_name:ident) ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", |parser| Ok (parser.take_rest ()))
