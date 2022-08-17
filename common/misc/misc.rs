@@ -18,6 +18,7 @@ pub use std::collections::BTreeSet;
 pub use std::collections::VecDeque;
 pub use std::collections::btree_map::Entry as BTreeEntry;
 pub use std::collections::btree_map::Iter as BTreeIter;
+pub use std::collections::btree_map::Keys as BTreeKeys;
 pub use std::collections::btree_map::Values as BTreeValues;
 pub use std::collections::hash_map::DefaultHasher;
 pub use std::collections::hash_map::Entry as HashMapEntry;

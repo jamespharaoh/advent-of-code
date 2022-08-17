@@ -52,6 +52,10 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.iter ()
 	}
 
+	pub fn keys (& self) -> BTreeKeys <'_, Key, Val> {
+		self.map.keys ()
+	}
+
 	pub fn len (& self) -> usize {
 		self.map.len ()
 	}
