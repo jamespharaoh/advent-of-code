@@ -1,0 +1,9 @@
+param_0="CHECK_RULES=true\x0a"
+param_1="CHECK_RULES=false\x0a"
+
+input_0="initial state: "
+input_2=" => "
+
+misc_dot="."
+misc_hash="#"
+misc_newline="\x0a"

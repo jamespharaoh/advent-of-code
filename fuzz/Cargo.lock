@@ -777,6 +777,7 @@ dependencies = [
  "aoc-2018-day-09",
  "aoc-2018-day-10",
  "aoc-2018-day-11",
+ "aoc-2018-day-12",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -874,6 +875,14 @@ dependencies = [
  "aoc-common",
  "aoc-grid",
  "aoc-pos",
+]
+
+[[package]]
+name = "aoc-2018-day-12"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
 ]
 
 [[package]]

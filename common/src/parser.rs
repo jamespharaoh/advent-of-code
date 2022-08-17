@@ -498,6 +498,7 @@ impl <'inp> Parser <'inp> {
 		parse_fn: ParseFn,
 	) -> ParserDelim <'par, 'inp, Output, ParseFn>
 			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+		assert! (! delim.is_empty ());
 		ParserDelim {
 			parser: self,
 			delim,
@@ -591,7 +592,6 @@ impl <'par, 'inp, Output, ParseFn> Iterator for ParserRepeat <'par, 'inp, Output
 	#[ inline ]
 	fn next (& mut self) -> Option <Output> {
 		self.parser.any ().of (& mut self.parse_fn).done ().ok ()
-		//Some ((self.parse_fn) (self.parser))
 	}
 
 }
@@ -963,9 +963,24 @@ macro_rules! parse {
 	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr) ) => {
 		let $item_name = $parser.take_rest_while ($item_ch_pred);
 	};
+	( @item $parser:expr, (@collect $item_name:ident) ) => {
+		let $item_name = $parser
+			.repeat (Parser::item)
+			.collect ();
+	};
+	( @item $parser:expr, (@collect $item_name:ident: $item_type:ty) ) => {
+		let $item_name: $item_type = $parser
+			.repeat (Parser::item)
+			.collect ();
+	};
+	( @item $parser:expr, (@collect $item_name:ident = $item_parse:expr) ) => {
+		let $item_name = $parser
+			.repeat ($item_parse)
+			.collect () ?;
+	};
 	( @item $parser:expr, (@delim_items $delim:literal $item_name:ident) ) => {
 		let $item_name = $parser
-			.delim_fn (" ", Parser::item)
+			.delim_fn ($delim, Parser::item)
 			.try_collect () ?;
 	};
 	( @item $parser:expr, (@line_items $item_name:ident) ) => {
