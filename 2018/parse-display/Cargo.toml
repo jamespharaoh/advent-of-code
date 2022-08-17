@@ -1,7 +1,0 @@
-[workspace]
-members = [
-    "parse-display",
-    "parse-display-derive",
-    "parse-display-tests",
-]
-

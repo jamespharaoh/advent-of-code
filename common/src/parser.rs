@@ -696,6 +696,11 @@ pub trait FromParser <'inp>: Sized {
 		Parser::wrap_auto (input, Parser::item)
 	}
 
+	#[ inline ]
+	fn parse_from_lines (input: & 'inp [& 'inp str]) -> GenResult <Self> {
+		Parser::wrap_lines (input, Parser::item)
+	}
+
 }
 
 #[ macro_export ]

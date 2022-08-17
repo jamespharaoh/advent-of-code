@@ -1,6 +1,0 @@
-/target
-/parse-display-benches/target
-/parse-display-tests/src/main.rs
-**/*.rs.bk
-Cargo.lock
-/.idea
