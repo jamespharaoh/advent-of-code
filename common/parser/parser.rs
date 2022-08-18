@@ -480,17 +480,26 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn take_rest_while (& mut self, pred: fn (char) -> bool) -> InpStr <'inp> {
+	pub fn take_rest_while (
+		& mut self,
+		char_pred: fn (char) -> bool,
+		len: impl RangeBounds <usize>,
+	) -> ParseResult <InpStr <'inp>> {
 		let result = self.input_line;
-		let mut num_bytes = 0;
+		let mut num_bytes = 0_usize;
+		let mut num_chars = 0_usize;
 		while let Some (ch) = self.peek () {
-			if ! pred (ch) { break }
+			if ! (Unbounded, len.end_bound ()).contains (& (num_chars + 1)) { break }
+			if ! char_pred (ch) { break }
 			self.next ().unwrap ();
 			num_bytes += ch.len_utf8 ();
+			num_chars += 1;
+		}
+		if ! (len.start_bound (), Unbounded).contains (& num_chars) {
+			return Err (self.err ());
 		}
 		#[ allow (clippy::string_slice) ]
-		InpStr::borrow (& result [ .. num_bytes])
+		Ok (InpStr::borrow (& result [ .. num_bytes]))
 	}
 
 	#[ inline ]
@@ -970,7 +979,10 @@ macro_rules! parse {
 		let $item_name = $parser.take_rest ();
 	};
 	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr) ) => {
-		let $item_name = $parser.take_rest_while ($item_ch_pred);
+		let $item_name = $parser.take_rest_while ($item_ch_pred, .. ) ?;
+	};
+	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr, $item_len:expr) ) => {
+		let $item_name = $parser.take_rest_while ($item_ch_pred, $item_len) ?;
 	};
 	( @item $parser:expr, (@collect $item_name:ident) ) => {
 		let $item_name = $parser
@@ -1009,7 +1021,7 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, (@lines $item_name:ident = $item_ch_pred:expr) ) => {
 		let $item_name = $parser
-			.delim_fn ("\n", |parser| Ok (parser.take_rest_while ($item_ch_pred)))
+			.delim_fn ("\n", |parser| parser.take_rest_while ($item_ch_pred, .. ))
 			.try_collect () ?;
 	};
 	( @item $parser:expr, (@end) ) => {
@@ -1056,6 +1068,15 @@ impl <'inp> FromParser <'inp> for bool {
 			.of (|parser| { parser.expect ("true") ?; Ok (true) })
 			.of (|parser| { parser.expect ("false") ?; Ok (false) })
 			.done ()
+	}
+
+}
+
+impl <'inp> FromParser <'inp> for InpStr <'inp> {
+
+	#[ inline ]
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+		Ok (parser.take_rest ())
 	}
 
 }
