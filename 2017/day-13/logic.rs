@@ -75,6 +75,9 @@ fn divisor (left: u32, right: u32) -> u32 {
 }
 
 fn analyse (input: & Input) -> GenResult <Vec <LayerInfo>> {
+	if input.layers.iter ().any (|layer| layer.range == 0) {
+		return Err ("Layer range zero is invalid".into ());
+	}
 	let layers =
 		input.layers.iter ().cloned ()
 			.map (|layer| LayerInfo {
@@ -84,9 +87,6 @@ fn analyse (input: & Input) -> GenResult <Vec <LayerInfo>> {
 			})
 			.sorted_by_key (|layer| layer.offset)
 			.collect::<Vec <LayerInfo>> ();
-	if layers.iter ().any (|layer| layer.period == 0) {
-		return Err ("Layer period zero is invalid".into ());
-	}
 	Ok (layers)
 }
 

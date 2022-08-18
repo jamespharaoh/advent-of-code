@@ -71,7 +71,9 @@ pub fn read_dots <Val: Int> (
 			.map (|(row, col)| (col, row))
 			.sorted ()
 			.collect ();
-	let base_row = dots.iter ().copied ().map (|(_, row)| row).min ().unwrap ();
+	let base_row = some_or! (
+		dots.iter ().copied ().map (|(_, row)| row).min (),
+		return Ok (String::new ()));
 	let mut result = String::new ();
 	let mut dots_iter = dots.iter ().copied ().peekable ();
 	while dots_iter.peek ().is_some () {
