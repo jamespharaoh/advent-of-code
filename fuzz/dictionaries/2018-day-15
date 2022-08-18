@@ -1,0 +1,6 @@
+tile_elf="E"
+tile_goblin="G"
+tile_open="."
+tile_wall="#"
+
+misc_newline="\x0a"

@@ -13,6 +13,7 @@ use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
 use nums::Int;
 use nums::IntConv;
+use nums::Overflow;
 use pos::PosRowCol;
 use pos::PosXY;
 use pos::PosYX;
@@ -48,6 +49,13 @@ impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
 				.collect::<Vec <_>> (),
 			origin,
 			size)
+	}
+
+	#[ inline ]
+	pub fn reset (& mut self) {
+		for item in self.storage.iter_mut () {
+			* item = default ();
+		}
 	}
 
 }
@@ -109,7 +117,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub fn get (& self, pos: Pos) -> Option <Storage::Item> {
-		Pos::to_scalar (& pos, self.origin, self.size)
+		Pos::to_scalar (pos, self.origin, self.size)
 			.and_then (|index| self.storage.storage_get (index))
 	}
 
@@ -126,7 +134,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	#[ inline ]
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
 		let idx = some_or! (
-			Pos::to_scalar (& pos, self.origin, self.size),
+			Pos::to_scalar (pos, self.origin, self.size),
 			panic! ("Unable to map GridPos to scalar: {:?}", pos));
 		self.storage.storage_set (idx, item);
 	}
@@ -149,6 +157,16 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 		(& self.storage).storage_iter ()
 	}
 
+	#[ inline ]
+	pub const fn keys (& self) -> GridKeysIter <Pos, DIMS> {
+		GridKeysIter {
+			origin: self.origin,
+			size: self.size,
+			cur: [0; DIMS],
+			phantom: PhantomData,
+		}
+	}
+
 }
 
 impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
@@ -158,13 +176,13 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub fn get_ref (& self, pos: Pos) -> Option <& Storage::Item> {
-		Pos::to_scalar (& pos, self.origin, self.size)
+		Pos::to_scalar (pos, self.origin, self.size)
 			.and_then (|index| self.storage.storage_ref (index))
 	}
 
 	#[ inline ]
 	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
-		Pos::to_scalar (& pos, self.origin, self.size)
+		Pos::to_scalar (pos, self.origin, self.size)
 			.and_then (|index| self.storage.storage_mut (index))
 	}
 
@@ -256,6 +274,31 @@ impl <Storage, Pos, const DIMS: usize> Iterator for GridIter <Storage, Pos, DIMS
 			self.idx += num + 1;
 			Some ((Pos::from_scalar (idx, self.origin, self.size).unwrap (), item))
 		} else { None }
+	}
+
+}
+
+pub struct GridKeysIter <Pos: GridPos <DIMS>, const DIMS: usize> {
+	origin: [isize; DIMS],
+	size: [usize; DIMS],
+	cur: [usize; DIMS],
+	phantom: PhantomData <Pos>,
+}
+
+impl <Pos: GridPos <DIMS>, const DIMS: usize> Iterator for GridKeysIter <Pos, DIMS> {
+
+	type Item = Pos;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <Pos> {
+		let pos = Pos::from_array (self.cur, self.origin);
+		for idx in (0 .. DIMS).rev () {
+			self.cur [idx] += 1;
+			if self.cur [idx] < self.size [idx] { break }
+			if idx == 0 { return None }
+			self.cur [idx] = 0;
+		}
+		pos
 	}
 
 }
@@ -391,23 +434,63 @@ impl <'sto, Item, Encoding> GridStorageIntoIter for & 'sto BitVec <Item, Encodin
 /// single `usize` value.
 ///
 pub trait GridPos <const DIMS: usize>: Copy + Debug + Sized {
-	fn to_scalar (& self, origin: [isize; DIMS], size: [usize; DIMS]) -> Option <usize>;
-	fn from_scalar (scalar: usize, origin: [isize; DIMS], size: [usize; DIMS]) -> Option <Self>;
-}
 
-impl GridPos <2> for (usize, usize) {
+	fn to_array (self, origin: [isize; DIMS]) -> Option <[usize; DIMS]>;
 
 	#[ inline ]
-	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		if origin != [0, 0] { unimplemented! () }
-		usize::checked_add (match usize::checked_mul (self.0, size [1]) {
-			Some (val) => val, None => return None }, self.1)
+	fn to_scalar (self, origin: [isize; DIMS], size: [usize; DIMS]) -> Option <usize> {
+		self.to_array (origin) ?
+			.iter ().copied ()
+			.zip (size.iter ().copied ())
+			.fold (Ok (0), |scalar, (val, size)| {
+				if size <= val { return Err (Overflow) }
+				Int::add_2 (Int::mul_2 (scalar ?, size) ?, val)
+			})
+			.ok ()
+	}
+
+	fn from_array (array: [usize; DIMS], origin: [isize; DIMS]) -> Option <Self>;
+
+	#[ inline ]
+	#[ must_use ]
+	fn from_scalar (
+		mut scalar: usize,
+		origin: [isize; DIMS],
+		size: [usize; DIMS],
+	) -> Option <Self> {
+		let mut array = [0; DIMS];
+		for idx in (0 .. DIMS).rev () {
+			array [idx] = scalar % size [idx];
+			scalar /= size [idx];
+		}
+		if scalar != 0 { return None }
+		Self::from_array (array, origin)
+	}
+
+}
+
+impl <Val: Int, const DIMS: usize> GridPos <DIMS> for [Val; DIMS] {
+
+	#[ inline ]
+	fn to_array (self, origin: [isize; DIMS]) -> Option <[usize; DIMS]> {
+		let mut result = [0; DIMS];
+		for idx in 0 .. DIMS {
+			let val_isize = self [idx].to_isize ().ok () ?;
+			let adj_isize = isize::add_2 (val_isize, origin [idx]).ok () ?;
+			result [idx] = adj_isize.to_usize ().ok () ?;
+		}
+		Some (result)
 	}
 
 	#[ inline ]
-	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		if origin != [0, 0] { unimplemented! () }
-		Some ((scalar / size [1], scalar % size [1]))
+	fn from_array (array: [usize; DIMS], origin: [isize; DIMS]) -> Option <Self> {
+		let mut result = [Val::ZERO; DIMS];
+		for idx in 0 .. DIMS {
+			let val_isize = array [idx].to_isize ().ok () ?;
+			let adj_isize = isize::sub_2 (val_isize, origin [idx]).ok () ?;
+			result [idx] = Val::from_isize (adj_isize).ok () ?;
+		}
+		Some (result)
 	}
 
 }
@@ -415,20 +498,14 @@ impl GridPos <2> for (usize, usize) {
 impl <Val: Int> GridPos <2> for PosXY <Val> {
 
 	#[ inline ]
-	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		if origin != [0, 0] { unimplemented! () }
-		let x = ok_or! (self.x.to_usize (), return None);
-		let y = ok_or! (self.y.to_usize (), return None);
-		if x >= size [0] || y >= size [1] { return None }
-		Some (x * size [1] + y)
+	fn to_array (self, origin: [isize; 2]) -> Option <[usize; 2]> {
+		GridPos::to_array ([ self.x, self.y ], origin)
 	}
 
 	#[ inline ]
-	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		if origin != [0, 0] { unimplemented! () }
-		let x = ok_or! (Val::from_usize (scalar / size [1]), return None);
-		let y = ok_or! (Val::from_usize (scalar % size [1]), return None);
-		Some (Self { x, y })
+	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
+		let array = <[Val; 2]>::from_array (array, origin) ?;
+		Some (Self { x: array [0], y: array [1] })
 	}
 
 }
@@ -436,28 +513,14 @@ impl <Val: Int> GridPos <2> for PosXY <Val> {
 impl <Val: Int> GridPos <2> for PosYX <Val> {
 
 	#[ inline ]
-	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		let y = isize::add_2 (self.y.to_isize ().ok () ?, origin [0]).ok () ?.to_usize ().ok () ?;
-		let x = isize::add_2 (self.x.to_isize ().ok () ?, origin [1]).ok () ?.to_usize ().ok () ?;
-		if y >= size [0] || x >= size [1] { return None }
-		Some (y * size [1] + x)
+	fn to_array (self, origin: [isize; 2]) -> Option <[usize; 2]> {
+		GridPos::to_array ([ self.y, self.x ], origin)
 	}
 
 	#[ inline ]
-	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		let raw_y =
-			isize::sub_2 (
-				usize::div_2 (scalar, size [1]).ok () ?.as_isize (),
-				origin [0],
-			).ok () ?;
-		let raw_x =
-			isize::sub_2 (
-				usize::rem_2 (scalar, size [1]).ok () ?.as_isize (),
-				origin [1],
-			).ok () ?;
-		let y = Val::from_isize (raw_y).ok () ?;
-		let x = Val::from_isize (raw_x).ok () ?;
-		Some (Self { y, x })
+	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
+		let array = <[Val; 2]>::from_array (array, origin) ?;
+		Some (Self { y: array [0], x: array [1] })
 	}
 
 }
@@ -465,34 +528,14 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 impl <Val: Int> GridPos <2> for PosRowCol <Val> {
 
 	#[ inline ]
-	fn to_scalar (& self, origin: [isize; 2], size: [usize; 2]) -> Option <usize> {
-		let row = isize::add_2 (
-				self.row.to_isize ().ok () ?,
-				origin [0]).ok () ?
-			.to_usize ().ok () ?;
-		let col = isize::add_2 (
-				self.col.to_isize ().ok () ?,
-				origin [1]).ok () ?
-			.to_usize ().ok () ?;
-		if row >= size [0] || col >= size [1] { return None }
-		Some (row * size [1] + col)
+	fn to_array (self, origin: [isize; 2]) -> Option <[usize; 2]> {
+		GridPos::to_array ([ self.row, self.col ], origin)
 	}
 
 	#[ inline ]
-	fn from_scalar (scalar: usize, origin: [isize; 2], size: [usize; 2]) -> Option <Self> {
-		let raw_row =
-			isize::sub_2 (
-				usize::div_2 (scalar, size [1]).ok () ?.as_isize (),
-				origin [0],
-			).ok () ?;
-		let raw_col =
-			isize::sub_2 (
-				usize::rem_2 (scalar, size [1]).ok () ?.as_isize (),
-				origin [1],
-			).ok () ?;
-		let row = Val::from_isize (raw_row).ok () ?;
-		let col = Val::from_isize (raw_col).ok () ?;
-		Some (Self { row, col })
+	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
+		let array = <[Val; 2]>::from_array (array, origin) ?;
+		Some (Self { row: array [0], col: array [1] })
 	}
 
 }
