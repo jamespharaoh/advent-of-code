@@ -1,0 +1,15 @@
+[package]
+
+	name = "aoc-inpstr"
+	version = "0.1.0"
+	edition = "2021"
+
+[lib]
+
+	crate-type = [ "rlib", "dylib" ]
+	path = "inpstr.rs"
+
+[dependencies]
+
+	aoc-misc = { path = "../misc" }
+	#aoc-nums = { path = "../nums" }

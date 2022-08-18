@@ -790,6 +790,7 @@ dependencies = [
  "aoc-2018-day-10",
  "aoc-2018-day-11",
  "aoc-2018-day-12",
+ "aoc-2018-day-13",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -895,6 +896,16 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+]
+
+[[package]]
+name = "aoc-2018-day-13"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
 ]
 
 [[package]]
@@ -1167,8 +1178,10 @@ version = "0.1.0"
 name = "aoc-common"
 version = "0.1.0"
 dependencies = [
+ "aoc-inpstr",
  "aoc-misc",
  "aoc-nums",
+ "aoc-parser",
  "clap",
  "itertools",
 ]
@@ -1180,7 +1193,15 @@ dependencies = [
  "aoc-bitvec",
  "aoc-misc",
  "aoc-nums",
+ "aoc-parser",
  "aoc-pos",
+]
+
+[[package]]
+name = "aoc-inpstr"
+version = "0.1.0"
+dependencies = [
+ "aoc-misc",
 ]
 
 [[package]]
@@ -1221,6 +1242,15 @@ dependencies = [
 [[package]]
 name = "aoc-parallel"
 version = "0.1.0"
+
+[[package]]
+name = "aoc-parser"
+version = "0.1.0"
+dependencies = [
+ "aoc-inpstr",
+ "aoc-misc",
+ "aoc-nums",
+]
 
 [[package]]
 name = "aoc-pos"

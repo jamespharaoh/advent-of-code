@@ -1,4 +1,6 @@
-use super::*;
+use aoc_inpstr::*;
+use aoc_misc::*;
+use aoc_nums as nums;
 
 pub type ParseResult <Item> = Result <Item, ParseError>;
 
@@ -709,22 +711,29 @@ pub trait FromParser <'inp>: Sized {
 #[ macro_export ]
 macro_rules! parse_display_enum {
 	( $(
-		$( #[ $($attrs:tt)* ] )*
-		$vis:vis enum $enum_name:ident {
-			$( $mem_name:ident = $mem_str:literal ),* $(,)?
+		$( #[ $($enum_attrs:tt)* ] )*
+		$enum_vis:vis enum $enum_name:ident {
+			$(
+				$( #[ $($var_attrs:tt)* ] )*
+				$var_name:ident = $var_str:literal
+			),*
+			$(,)?
 		}
 	)* ) => { $(
 
-		$( #[ $($attrs)* ] )*
-		$vis enum $enum_name {
-			$( $mem_name, )*
+		$( #[ $($enum_attrs)* ] )*
+		$enum_vis enum $enum_name {
+			$(
+				$( #[ $($var_attrs)* ] )*
+				$var_name,
+			)*
 		}
 
 		impl $enum_name {
 			#[ inline ]
 			pub fn as_str (& self) -> & 'static str {
 				match * self {
-					$( Self::$mem_name => $mem_str, )*
+					$( Self::$var_name => $var_str, )*
 				}
 			}
 		}
@@ -735,7 +744,7 @@ macro_rules! parse_display_enum {
 				formatter: & mut ::std::fmt::Formatter,
 			) -> ::std::fmt::Result {
 				write! (formatter, "{}", match * self {
-					$( Self::$mem_name => $mem_str, )*
+					$( Self::$var_name => $var_str, )*
 				}) ?;
 				Ok (())
 			}
@@ -747,8 +756,8 @@ macro_rules! parse_display_enum {
 			) -> ::aoc_common::parser::ParseResult <Self> {
 				parser.any ()
 					$( .of (|parser| {
-						parser.expect ($mem_str) ?;
-						Ok (Self::$mem_name)
+						parser.expect ($var_str) ?;
+						Ok (Self::$var_name)
 					}) ) *
 					.done ()
 			}

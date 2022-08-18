@@ -6,6 +6,7 @@ use std::slice::Iter as SliceIter;
 use aoc_bitvec as bitvec;
 use aoc_misc::*;
 use aoc_nums as nums;
+use aoc_parser::*;
 use aoc_pos as pos;
 use bitvec::BitVec;
 use bitvec::BitVecEncoding;
@@ -165,6 +166,55 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
 		Pos::to_scalar (& pos, self.origin, self.size)
 			.and_then (|index| self.storage.storage_mut (index))
+	}
+
+}
+
+impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
+	where
+		Storage: GridStorage + Clone,
+		Storage::Item: Display,
+		Pos: GridPos <2> {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		for row in 0 .. self.size [0] {
+			if row != 0 { write! (formatter, "\n") ?; }
+			for col in 0 .. self.size [1] {
+				let item = self.get_raw ([row, col]).unwrap ();
+				Display::fmt (& item, formatter) ?;
+			}
+		}
+		Ok (())
+	}
+
+}
+
+impl <'inp, Item, Pos> FromParser <'inp> for Grid <Vec <Item>, Pos, 2>
+	where
+		Item: Clone + Default + FromParser <'inp>,
+		Pos: GridPos <2> {
+
+	#[ inline ]
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+		let lines: Vec <Vec <Item>> = parser.delim_fn ("\n", |parser| {
+			parser.any ().of (|parser| {
+				let items: Vec <Item> = parser.repeat (Parser::item).collect ();
+				if items.is_empty () { return Err (parser.err ()) }
+				Ok (items)
+			}).done ()
+		}).try_collect () ?;
+		let height = lines.len ();
+		let width = lines.iter ().map (Vec::len).max ().unwrap_or (0);
+		Ok (Self::wrap (
+			lines.iter ()
+				.flat_map (|line| line.iter ().cloned ()
+					.chain (iter::repeat (Item::default ()))
+					.take (width))
+				.collect (),
+			[ 0, 0 ],
+			[ height, width ],
+		))
 	}
 
 }

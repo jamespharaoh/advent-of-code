@@ -1,18 +1,16 @@
 [package]
 
-	name = "aoc-grid"
+	name = "aoc-parser"
 	version = "0.1.0"
 	edition = "2021"
 
 [lib]
 
 	crate-type = [ "rlib", "dylib" ]
-	path = "grid.rs"
+	path = "parser.rs"
 
 [dependencies]
 
-	aoc-bitvec = { path = "../bitvec" }
+	aoc-inpstr = { path = "../inpstr" }
 	aoc-misc = { path = "../misc" }
 	aoc-nums = { path = "../nums" }
-	aoc-parser = { path = "../parser" }
-	aoc-pos = { path = "../pos" }

@@ -6,8 +6,10 @@
 
 [dependencies]
 
+	aoc-inpstr = { path = "inpstr" }
 	aoc-misc = { path = "misc" }
 	aoc-nums = { path = "nums" }
+	aoc-parser = { path = "parser" }
 	clap = { version = "*", features = [ "derive" ] }
 	itertools = "*"
 

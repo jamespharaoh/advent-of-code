@@ -281,6 +281,24 @@ mod dim_2 {
 
 		}
 
+		impl <Val: Int> Add <(Dir2d, Val)> for PosYX <Val> {
+
+			type Output = NumResult <Self>;
+
+			#[ inline ]
+			fn add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
+				let mut result = self;
+				match dir {
+					Dir2d::Up => result.y = Val::sub_2 (result.y, dist) ?,
+					Dir2d::Down => result.y = Val::add_2 (result.y, dist) ?,
+					Dir2d::Left => result.x = Val::sub_2 (result.x, dist) ?,
+					Dir2d::Right => result.x = Val::add_2 (result.x, dist) ?,
+				}
+				Ok (result)
+			}
+
+		}
+
 		pos_ops! (PosYX: Debug);
 		pos_ops! (PosYX: Add, Neg, Rem, Sub);
 

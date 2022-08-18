@@ -6,8 +6,6 @@ use clap::Command;
 #[ doc (no_inline) ]
 pub use prelude::*;
 
-pub mod inpstr;
-pub mod parser;
 pub mod puzzle;
 
 mod iter_ext {
@@ -74,6 +72,8 @@ mod prelude {
 
 	pub use aoc_misc::*;
 	pub use aoc_nums as nums;
+	pub use aoc_inpstr::InpStr;
+	pub use aoc_parser as parser;
 
 	pub use crate::iter_ext::IntoIteratorExt as _;
 	pub use crate::iter_ext::IteratorExt as _;
@@ -84,10 +84,6 @@ mod prelude {
 	pub use crate::nums::IntUnsigned;
 	pub use crate::nums::NumResult;
 	pub use crate::nums::Overflow;
-	pub use crate::inpstr::InpStr;
-	pub use crate::parser::FromParser;
-	pub use crate::parser::Parser;
-	pub use crate::parser::ParseResult;
-	pub use crate::parser::ResultParser as _;
+	pub use crate::parser::*;
 
 }
