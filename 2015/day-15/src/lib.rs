@@ -1,6 +1,14 @@
 //! Advent of Code 2015: Day 15: Science for Hungry People
 //!
 //! [https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)
+//!
+//! # Input
+//!
+//! A list of ingredients in the following format, where `A`-`E` are integers:
+//!
+//! ```text
+//! Name: capacity A, durability B, flavor C, texture D, calories E
+//! ```
 
 #![ allow (clippy::missing_inline_in_public_items) ]
 

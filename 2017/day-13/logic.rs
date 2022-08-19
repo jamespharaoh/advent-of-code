@@ -75,8 +75,8 @@ fn divisor (left: u32, right: u32) -> u32 {
 }
 
 fn analyse (input: & Input) -> GenResult <Vec <LayerInfo>> {
-	if input.layers.iter ().any (|layer| layer.range == 0) {
-		return Err ("Layer range zero is invalid".into ());
+	if input.layers.iter ().any (|layer| layer.range < 2) {
+		return Err ("Layer range must be at least two".into ());
 	}
 	let layers =
 		input.layers.iter ().cloned ()

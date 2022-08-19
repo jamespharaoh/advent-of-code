@@ -222,6 +222,7 @@ impl <'inp, Item, Pos> FromParser <'inp> for Grid <Vec <Item>, Pos, 2>
 				Ok (items)
 			}).done ()
 		}).collect ();
+		if lines.is_empty () { return Err (parser.err ()) }
 		let height = lines.len ();
 		let width = lines.iter ().map (Vec::len).max ().unwrap_or (0);
 		Ok (Self::wrap (

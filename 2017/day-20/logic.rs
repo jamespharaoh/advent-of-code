@@ -8,6 +8,7 @@ use model::Coord;
 use model::Particle;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
+	if input.particles.is_empty () { return Err ("No particles provided".into ()) }
 	let (idx, _, _, _) =
 		input.particles.iter ().copied ()
 			.enumerate ()
