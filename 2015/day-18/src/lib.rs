@@ -35,8 +35,8 @@ pub mod logic {
 	}
 
 	pub fn part_two (input: Input, loops: u32) -> GenResult <u32> {
-		let Pos { y: y0, x: x0 } = input.origin ();
-		let Pos { y: y1, x: x1 } = input.peak ();
+		let Pos { y: y0, x: x0 } = input.first_key ();
+		let Pos { y: y1, x: x1 } = input.last_key ();
 		let overrides = [
 			Pos { y: y0, x: x0 }, Pos { y: y0, x: x1 },
 			Pos { y: y1, x: x0 }, Pos { y: y1, x: x1 },
@@ -66,7 +66,7 @@ pub mod logic {
 					matches! ((val, num_adjacent), (true, 2) | (_, 3))
 				}
 			}).collect ();
-			lights = Input::wrap (new_data, lights.raw_origin (), lights.raw_size ());
+			lights = Input::wrap (new_data, lights.native_origin (), lights.native_size ());
 		}
 
 		// count active lights

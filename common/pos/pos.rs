@@ -217,6 +217,30 @@ mod dim_2 {
 			pub const ZERO: Self = Self { y: Val::ZERO, x: Val::ZERO };
 
 			#[ inline ]
+			#[ must_use ]
+			pub fn up (self, num: Val) -> Self {
+				Self { y: self.y.safe_sub (num), x: self.x }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn down (self, num: Val) -> Self {
+				Self { y: self.y.safe_add (num), x: self.x }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn left (& self, num: Val) -> Self {
+				Self { y: self.y, x: self.x.safe_sub (num) }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn right (& self, num: Val) -> Self {
+				Self { y: self.y, x: self.x.safe_add (num) }
+			}
+
+			#[ inline ]
 			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
 				let mut result = ArrayVec::new ();
 				let Self { y, x } = * self;

@@ -76,7 +76,7 @@ impl State {
 			.collect ();
 		if units.is_empty () { return Err ("No combatants found".into ()) }
 		if units.len () > 50 { return Err ("More than 50 combatants".into ()) }
-		let seen = SeenGrid::new_vec (grid.raw_origin (), grid.raw_size ());
+		let seen = SeenGrid::new_vec (grid.native_origin (), grid.native_size ());
 		Ok (Self {
 			grid,
 			goblin_attack,

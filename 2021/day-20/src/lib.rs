@@ -161,14 +161,14 @@ mod model {
 		pub fn num_pixels (& self) -> usize {
 			self.pixels.values ().filter (|& val| val != self.inverted).count ()
 		}
-		pub const fn height (& self) -> usize { self.pixels.size () [0] }
-		pub const fn width (& self) -> usize { self.pixels.size () [1] }
+		pub const fn height (& self) -> usize { self.pixels.native_size () [0] }
+		pub const fn width (& self) -> usize { self.pixels.native_size () [1] }
 		pub const fn inverted (& self) -> bool { self.inverted }
 		pub fn get (& self, pos: Pos) -> bool {
 			self.pixels.get (pos).unwrap_or (self.inverted)
 		}
 		pub fn range (& self) -> (Pos, Pos) {
-			(self.pixels.origin (), self.pixels.peak () + Pos { y: 1, x: 1 })
+			(self.pixels.first_key (), self.pixels.last_key () + Pos { y: 1, x: 1 })
 		}
 		pub const fn dump (& self) -> ImageDump {
 			ImageDump (self)

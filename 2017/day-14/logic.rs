@@ -33,7 +33,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	// iterate over positions, look for ones, track which we have seen already
 
-	let mut seen = Grid::new_vec ([0, 0], grid.raw_size ());
+	let mut seen = Grid::new_vec ([0, 0], grid.native_size ());
 	let mut regions = 0;
 	for pos in grid.iter ().map (|(pos, _)| pos) {
 		if seen.get (pos).unwrap () { continue }

@@ -91,27 +91,22 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
-	pub const fn size (& self) -> [usize; DIMS] {
-		self.size
-	}
-
-	#[ inline ]
-	pub const fn raw_origin (& self) -> [isize; DIMS] {
+	pub const fn native_origin (& self) -> [isize; DIMS] {
 		self.origin
 	}
 
 	#[ inline ]
-	pub const fn raw_size (& self) -> [usize; DIMS] {
+	pub const fn native_size (& self) -> [usize; DIMS] {
 		self.size
 	}
 
 	#[ inline ]
-	pub fn origin (& self) -> Pos {
+	pub fn first_key (& self) -> Pos {
 		Pos::from_scalar (0, self.origin, self.size).unwrap ()
 	}
 
 	#[ inline ]
-	pub fn peak (& self) -> Pos {
+	pub fn last_key (& self) -> Pos {
 		Pos::from_scalar (self.len () - 1, self.origin, self.size).unwrap ()
 	}
 
@@ -122,7 +117,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
-	pub fn get_raw (& self, pos: [usize; DIMS]) -> Option <Storage::Item> {
+	pub fn get_native (& self, pos: [usize; DIMS]) -> Option <Storage::Item> {
 		let mut idx = 0;
 		for (val, size) in pos.iter ().copied ().zip (self.size.iter ().copied ()) {
 			if size <= val { return None }
@@ -199,7 +194,7 @@ impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
 		for row in 0 .. self.size [0] {
 			if row != 0 { write! (formatter, "\n") ?; }
 			for col in 0 .. self.size [1] {
-				let item = self.get_raw ([row, col]).unwrap ();
+				let item = self.get_native ([row, col]).unwrap ();
 				Display::fmt (& item, formatter) ?;
 			}
 		}
@@ -599,7 +594,7 @@ impl <'grd, Storage, Pos, MapFn, Out> Display for GridPrint <'grd, Storage, Pos,
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		for row in 0 .. self.grid.size [0] {
 			for col in 0 .. self.grid.size [1] {
-				let item = self.grid.get_raw ([row, col]).unwrap ();
+				let item = self.grid.get_native ([row, col]).unwrap ();
 				write! (formatter, "{}", (self.map_fn) (item)) ?;
 			}
 			write! (formatter, "\n") ?;

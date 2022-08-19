@@ -129,8 +129,8 @@ pub mod logic {
 
 		let seen_template = grid::Grid::<Vec <bool>, Pos>::wrap (
 			input.tiles.values ().map (|tile| matches! (tile, Tile::Wall)).collect (),
-			input.tiles.raw_origin (),
-			input.tiles.size ());
+			input.tiles.native_origin (),
+			input.tiles.native_size ());
 
 		// work out distances
 

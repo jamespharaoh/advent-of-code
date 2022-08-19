@@ -1140,3 +1140,135 @@ impl <Delim, Inner> Display for DisplayDelim <Delim, Inner>
 	}
 
 }
+
+#[ macro_export ]
+macro_rules! enum_parser {
+
+	( $enum_name:ident, $($rest:tt)* ) => {
+		impl <'inp> FromParser <'inp> for $enum_name {
+			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+				let mut parser = parser.any ();
+				enum_parser! (@variants $enum_name, parser, $($rest)*);
+				parser.done ()
+			}
+		}
+	};
+
+	( @variants $enum_name:ident, $parser:ident $(,)? ) => {};
+
+	(
+		@variants $enum_name:ident, $parser:ident,
+		$var_name:ident { $($var_fields:tt)* } = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		$parser = $parser.of (|$var_arg| {
+			$($var_body)*
+			Ok (Self::$var_name { $($var_fields)* })
+		});
+		enum_parser! (@variants $enum_name, $parser, $(, $($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $parser:ident,
+		$var_name:ident { $($var_fields:tt)* } = [ $($var_args:tt)* ]
+		$(, $($rest:tt)* )?
+	) => {
+		$parser = $parser.of (|parser| {
+			parse! (parser, $($var_args)*);
+			Ok (Self::$var_name { $($var_fields)* })
+		});
+		enum_parser! (@variants $enum_name, $parser, $($($rest)*)?);
+	};
+
+}
+
+#[ macro_export ]
+macro_rules! enum_display {
+
+	( $enum_name:ident, $($rest:tt)* ) => {
+		impl Display for $enum_name {
+			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+				enum_display! (@variants $enum_name, self, formatter, $($rest)*);
+				panic! ("Unhandled variant {}::{:?}", stringify! ($enum_name), self);
+			}
+		}
+	};
+
+	( @variants $enum_name:ident, $self:ident, $formatter:ident $(,)? ) => {};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident $($var_fields:tt)? = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name $($var_fields)? = $self {
+			let $var_arg = & mut $formatter;
+			$($var_body)*
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident $($var_fields:tt)? = [ $($var_arg:tt),* ]
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name $($var_fields)? = * $self {
+			$( Display::fmt (& $var_arg, $formatter) ?; )*
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+}
+
+#[ macro_export ]
+macro_rules! enum_parser_display {
+	( $($rest:tt)* ) => {
+		enum_parser! ($($rest)*);
+		enum_display! ($($rest)*);
+	};
+}
+
+#[ macro_export ]
+macro_rules! struct_parser {
+	( $name:ident $($fields:tt)? = [ $($args:tt)* ] ) => {
+		impl <'inp> FromParser <'inp> for Input {
+			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+				parse! (parser, $($args)*);
+				Ok (Self $($fields)?)
+			}
+		}
+	};
+}
+
+#[ macro_export ]
+macro_rules! struct_display {
+	( $name:ident $($fields:tt)? = [ $($args:tt)* ] ) => {
+		impl Display for Input {
+			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+				let Self $($fields)? = self;
+				struct_display! (@args formatter, $($args)*);
+				Ok (())
+			}
+		}
+	};
+	( @args $formatter:ident $(,)? ) => {};
+	( @args $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
+		struct_display! (@args $formatter, $($($rest)*)?);
+	};
+	( @args $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& DisplayDelim::new ("\n", $field), $formatter) ?;
+		struct_display! (@args $formatter, $($($rest)*)?);
+	};
+}
+
+#[ macro_export ]
+macro_rules! struct_parser_display {
+	( $($rest:tt)* ) => {
+		struct_parser! ($($rest)*);
+		struct_display! ($($rest)*);
+	};
+}
