@@ -573,14 +573,21 @@ pub struct ParserDelim <
 impl <'par, 'inp, Output, ParseFn> Iterator for ParserDelim <'par, 'inp, Output, ParseFn>
 		where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 
-	type Item = ParseResult <Output>;
+	type Item = Output;
 
 	#[ inline ]
-	fn next (& mut self) -> Option <ParseResult <Output>> {
-		if ! self.first {
-			if self.parser.expect (self.delim).is_err () { return None }
-		} else { self.first = false; }
-		Some ((self.parse_fn) (self.parser))
+	fn next (& mut self) -> Option <Output> {
+		if self.first {
+			self.first = false;
+			self.parser.any ().of (|parser| {
+				(self.parse_fn) (parser)
+			}).done ().ok ()
+		} else {
+			self.parser.any ().of (|parser| {
+				parser.expect (self.delim) ?;
+				(self.parse_fn) (parser)
+			}).done ().ok ()
+		}
 	}
 
 }
@@ -719,6 +726,7 @@ pub trait FromParser <'inp>: Sized {
 
 #[ macro_export ]
 macro_rules! parse_display_enum {
+
 	( $(
 		$( #[ $($enum_attrs:tt)* ] )*
 		$enum_vis:vis enum $enum_name:ident {
@@ -739,12 +747,22 @@ macro_rules! parse_display_enum {
 		}
 
 		impl $enum_name {
+
+			pub const NUM_VARIANTS: usize = [ $(stringify! ($var_name)),* ].len ();
+			pub const VARIANTS: [$enum_name; Self::NUM_VARIANTS] = [ $(Self::$var_name),* ];
+
 			#[ inline ]
-			pub fn as_str (& self) -> & 'static str {
-				match * self {
+			pub fn as_str (self) -> & 'static str {
+				match self {
 					$( Self::$var_name => $var_str, )*
 				}
 			}
+
+			#[ inline ]
+			pub fn idx (self) -> usize {
+				parse_display_enum! (@variant_to_idx self [0] [] $($var_name)*)
+			}
+
 		}
 
 		impl ::std::fmt::Display for $enum_name {
@@ -773,6 +791,13 @@ macro_rules! parse_display_enum {
 		}
 
 	)* };
+
+	(@variant_to_idx $self:ident [$next_idx:expr] [$($data:tt)*] $var_name:ident $($rest:tt)*) => {
+		parse_display_enum! (@variant_to_idx $self [$next_idx + 1] [$($data)* ($var_name, $next_idx)] $($rest)*)
+	};
+	(@variant_to_idx $self:ident [$next_idx:expr] [$(($name:ident, $idx:expr))*]) => {
+		match $self { $(Self::$name => $idx),* }
+	};
 }
 
 #[ macro_export ]
@@ -947,8 +972,30 @@ macro_rules! input_params {
 
 #[ macro_export ]
 macro_rules! parse {
-	( $parser:expr $(, $item:tt)* $(,)? ) => {
-		$( parse! (@item $parser, $item); )*
+	( $parser:expr, $($rest:tt)* ) => {
+		parse! (@recurse $parser, $($rest)*);
+	};
+	( @recurse $parser:expr $(,)?) => {
+	};
+	( @recurse $parser:expr, $it_0:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4);
+		parse! (@recurse $parser $(, $($rest)*)?);
 	};
 	( @item $parser:expr, $expect_str:literal ) => {
 		$parser.expect ($expect_str) ?;
@@ -956,81 +1003,61 @@ macro_rules! parse {
 	( @item $parser:expr, $item_name:ident ) => {
 		let $item_name = $parser.item () ?;
 	};
-	( @item $parser:expr, ($item_name:ident: $item_type:ty) ) => {
+	( @item $parser:expr, $item_name:ident: $item_type:ty ) => {
 		let $item_name: $item_type = $parser.item () ?;
 	};
-	( @item $parser:expr, (@uint $item_name:ident: $item_type:ty) ) => {
-		let $item_name: $item_type = $parser.uint () ?;
-	};
-	( @item $parser:expr, (@int $item_name:ident: $item_type:ty) ) => {
-		let $item_name: $item_type = $parser.int () ?;
-	};
-	( @item $parser:expr, ($item_name:ident = $item_parse:ident) ) => {
+	( @item $parser:expr, $item_name:ident = $item_parse:ident ) => {
 		let $item_name = $item_parse ($parser) ?;
 	};
-	( @item $parser:expr, ($item_name:ident = $item_range:expr) ) => {
+	( @item $parser:expr, $item_name:ident = $item_range:expr ) => {
 		let $item_name = $parser.any ().of (|parser| {
 			let val = parser.item () ?;
 			if ! $item_range.contains (& val) { return Err (parser.err ()) }
 			Ok (val)
 		}).done () ?;
 	};
-	( @item $parser:expr, (@rest $item_name:ident) ) => {
-		let $item_name = $parser.take_rest ();
-	};
-	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr) ) => {
-		let $item_name = $parser.take_rest_while ($item_ch_pred, .. ) ?;
-	};
-	( @item $parser:expr, (@rest $item_name:ident = $item_ch_pred:expr, $item_len:expr) ) => {
-		let $item_name = $parser.take_rest_while ($item_ch_pred, $item_len) ?;
-	};
-	( @item $parser:expr, (@collect $item_name:ident) ) => {
+	( @item $parser:expr, @collect $item_name:ident ) => {
 		let $item_name = $parser
 			.repeat (Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, (@collect $item_name:ident: $item_type:ty) ) => {
+	( @item $parser:expr, @collect $item_name:ident: $item_type:ty ) => {
 		let $item_name: $item_type = $parser
 			.repeat (Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, (@collect $item_name:ident = $item_parse:expr) ) => {
+	( @item $parser:expr, @collect $item_name:ident = $item_parse:expr ) => {
 		let $item_name = $parser
 			.repeat ($item_parse)
-			.collect () ?;
+			.collect ();
 	};
-	( @item $parser:expr, (@delim_items $delim:literal $item_name:ident) ) => {
+	( @item $parser:expr, @delim $delim:literal $item_name:ident ) => {
 		let $item_name = $parser
 			.delim_fn ($delim, Parser::item)
-			.try_collect () ?;
+			.collect ();
 	};
-	( @item $parser:expr, (@line_items $item_name:ident) ) => {
+	( @item $parser:expr, @delim $delim:literal $item_name:ident = $item_parse:expr ) => {
+		let $item_name = $parser
+			.delim_fn ($delim, $item_parse)
+			.collect ();
+	};
+	( @item $parser:expr, @lines $item_name:ident ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", Parser::item)
-			.try_collect () ?;
+			.collect ();
 	};
-	( @item $parser:expr, (@line_items $item_name:ident = $item_parse:ident) ) => {
+	( @item $parser:expr, @lines $item_name:ident = $item_parse:expr ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", $item_parse)
-			.try_collect () ?;
+			.collect ();
 	};
-	( @item $parser:expr, (@lines $item_name:ident) ) => {
-		let $item_name = $parser
-			.delim_fn ("\n", |parser| Ok (parser.take_rest ()))
-			.try_collect () ?;
-	};
-	( @item $parser:expr, (@lines $item_name:ident = $item_ch_pred:expr) ) => {
-		let $item_name = $parser
-			.delim_fn ("\n", |parser| parser.take_rest_while ($item_ch_pred, .. ))
-			.try_collect () ?;
-	};
-	( @item $parser:expr, (@end) ) => {
+	( @item $parser:expr, @end ) => {
 		$parser.end () ?;
 	};
-	( @item $parser:expr, (@confirm) ) => {
+	( @item $parser:expr, @confirm ) => {
 		$parser.confirm ();
 	};
-	( @item $parser:expr, (@skip) ) => {
+	( @item $parser:expr, @skip ) => {
 		$parser.skip_whitespace ();
 	};
 }
@@ -1077,6 +1104,39 @@ impl <'inp> FromParser <'inp> for InpStr <'inp> {
 	#[ inline ]
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 		Ok (parser.take_rest ())
+	}
+
+}
+
+pub struct DisplayDelim <Delim, Inner> {
+	delim: Delim,
+	inner: Inner,
+}
+
+impl <Delim, Inner> DisplayDelim <Delim, Inner> {
+
+	#[ inline ]
+	pub const fn new (delim: Delim, inner: Inner) -> Self {
+		Self { delim, inner }
+	}
+
+}
+
+impl <Delim, Inner> Display for DisplayDelim <Delim, Inner>
+	where
+		Delim: Clone + Display,
+		Inner: Clone + IntoIterator,
+		Inner::Item: Display {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		let mut first = true;
+		for item in self.inner.clone () {
+			if ! first { Display::fmt (& self.delim, formatter) ?; }
+			Display::fmt (& item, formatter) ?;
+			first = false;
+		}
+		Ok (())
 	}
 
 }

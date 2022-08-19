@@ -22,7 +22,7 @@ impl Input {
 			parse! (parser, params);
 			let nodes_temp: Vec <Vec <Node>> = parser
 				.delim_fn ("\n", |parser| Ok (parser.repeat (Parser::item).collect ()))
-				.try_collect () ?;
+				.collect ();
 			let num_rows = nodes_temp.len ();
 			if num_rows < 1 { return Err ("Must have at least one row".into ()) }
 			if num_rows & 1 == 0 { return Err ("Must have an odd number of rows".into ()) }
@@ -45,7 +45,7 @@ impl Input {
 impl Display for Input {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
-		write! (formatter, "{}", self.nodes.print (|node| node.as_str ())) ?;
+		write! (formatter, "{}", self.nodes.print (Node::as_str)) ?;
 		Ok (())
 	}
 }

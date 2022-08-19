@@ -18,12 +18,12 @@ impl Input {
 	pub fn parse (input: & [& str]) -> GenResult <Self> {
 		let parse_dep = |parser: & mut Parser| {
 			parse! (parser,
-				"Step ", (before = 'A' ..= 'Z'), " must be finished before step ",
-				(after = 'A' ..= 'Z'), " can begin.");
+				"Step ", before = 'A' ..= 'Z', " must be finished before step ",
+				after = 'A' ..= 'Z', " can begin.");
 			Ok ((before, after))
 		};
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@line_items deps = parse_dep));
+			parse! (parser, params, @lines deps = parse_dep);
 			Ok (Self { deps, params })
 		})
 	}

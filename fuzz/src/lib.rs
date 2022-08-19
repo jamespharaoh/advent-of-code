@@ -48,7 +48,7 @@ macro_rules! aoc_fuzz_mutator {
 
 				let input_str = str::from_utf8 (& data [0 .. size]).ok () ?;
 				let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-				let mut input = Input::parse (& input_vec).ok () ?;
+				let mut input = Input::parse_from_lines (& input_vec).ok () ?;
 
 				// apply a random transform
 
@@ -74,11 +74,11 @@ macro_rules! aoc_fuzz_mutator {
 
 				use super::*;
 
-				type TransFn = for <'inp> fn (& mut Input <'inp>, & mut StdRng) -> Option <()>;
+				type TransFn = for <'inp> fn (& mut $input_type, & mut StdRng) -> Option <()>;
 
 				aoc_fuzz_mutator! (@transforms $(( $trans_name $($trans_weights)* ))*);
 
-				pub fn random <'inp> (input: & mut Input <'inp>, rng: & mut StdRng) {
+				pub fn random <'inp> (input: & mut $input_type, rng: & mut StdRng) {
 					let & (_, reps, ref trans_fn) =
 						TRANSFORMS.choose_weighted (rng, |& (weight, _, _)| weight).unwrap ();
 					let mut num_failure = 0;

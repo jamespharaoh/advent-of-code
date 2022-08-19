@@ -34,11 +34,11 @@ impl <'inp> FromParser <'inp> for State {
 			"  If the current value is 0:\n",
 			"    - Write the value ", false_write, ".\n",
 			"    - Move one slot to the ", false_dir, ".\n",
-			"    - Continue with state ", (false_state = parse_state_id), ".\n",
+			"    - Continue with state ", false_state = parse_state_id, ".\n",
 			"  If the current value is 1:\n",
 			"    - Write the value ", true_write, ".\n",
 			"    - Move one slot to the ", true_dir, ".\n",
-			"    - Continue with state ", (true_state = parse_state_id), ".",
+			"    - Continue with state ", true_state = parse_state_id, ".",
 		);
 		Ok (Self { id, false_write, false_dir, false_state, true_write, true_dir, true_state })
 	}

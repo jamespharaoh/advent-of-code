@@ -18,7 +18,7 @@ input_params! {
 impl Input {
 	pub fn parse (input: & [& str]) -> GenResult <Self> {
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@line_items rules));
+			parse! (parser, params, @lines rules);
 			Ok (Self { rules, params })
 		})
 	}
@@ -55,13 +55,13 @@ impl <'inp> FromParser <'inp> for InputRule {
 		parser.any ()
 			.of (|parser| {
 				let from = parse_pixels (parser, 2) ?;
-				parse! (parser, (@confirm), " => ");
+				parse! (parser, @confirm, " => ");
 				let to = parse_pixels (parser, 3) ?;
 				Ok (Self::TwoToThree (from.as_u8 (), to.as_u16 ()))
 			})
 			.of (|parser| {
 				let from = parse_pixels (parser, 3) ?;
-				parse! (parser, (@confirm), " => ");
+				parse! (parser, @confirm, " => ");
 				let to = parse_pixels (parser, 4) ?;
 				Ok (Self::ThreeToFour (from.as_u16 (), to.as_u16 ()))
 			})
@@ -75,7 +75,7 @@ pub fn parse_pixels (parser: & mut Parser <'_>, size: usize) -> ParseResult <u64
 	for row in 0 .. size {
 		if row > 0 { parse! (parser, "/"); }
 		for _col in 0 .. size {
-			parse! (parser, (bit: InputPixel));
+			parse! (parser, bit: InputPixel);
 			val >>= 1_u32;
 			if bit == InputPixel::On { val |= new_bit; }
 		}

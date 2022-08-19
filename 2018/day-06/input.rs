@@ -21,7 +21,7 @@ impl Input {
 			Ok (Pos { y: pos_y, x: pos_x })
 		};
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@line_items posns = parse_pos));
+			parse! (parser, params, @lines posns = parse_pos);
 			Ok (Self { posns, params })
 		})
 	}

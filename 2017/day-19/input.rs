@@ -20,7 +20,7 @@ impl Input {
 			parse! (parser, params);
 			let tiles_temp: Vec <Vec <Tile>> = parser
 				.delim_fn ("\n", |parser| Ok (parser.repeat (Parser::item).collect ()))
-				.try_collect () ?;
+				.collect ();
 			let rows = tiles_temp.len ();
 			if ! (1 ..= 256).contains (& rows) {
 				return Err ("Must have between 1 and 256 rows".into ());

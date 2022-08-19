@@ -106,7 +106,7 @@ impl Display for Date {
 
 impl <'inp> FromParser <'inp> for Date {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, (year = 1 ..= 9999), "-", (month = 1 ..= 12), "-");
+		parse! (parser, year = 1 ..= 9999, "-", month = 1 ..= 12, "-");
 		let max_day = match (year, month) {
 			(_, 1 | 3 | 5 | 7 | 8 | 10 | 12) => 31,
 			(_, 4 | 6 | 9 | 11) => 30,
@@ -116,7 +116,7 @@ impl <'inp> FromParser <'inp> for Date {
 			(_, 2) => 28,
 			_ => unreachable! (),
 		};
-		parse! (parser, (day = 1 ..= max_day));
+		parse! (parser, day = 1 ..= max_day);
 		Ok (Self { year, month, day })
 	}
 }
@@ -168,7 +168,7 @@ impl Display for HourMinute {
 
 impl <'inp> FromParser <'inp> for HourMinute {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, (hour = 0 ..= 23), ":", (minute = 0 ..= 59));
+		parse! (parser, hour = 0 ..= 23, ":", minute = 0 ..= 59);
 		Ok (Self { hour, minute })
 	}
 }

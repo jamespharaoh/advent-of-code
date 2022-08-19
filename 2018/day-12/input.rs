@@ -17,7 +17,7 @@ input_params! {
 
 impl <'inp> FromParser <'inp> for Input {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, params, "initial state: ", (@collect start), "\n\n", (@line_items rules));
+		parse! (parser, params, "initial state: ", @collect start, "\n\n", @lines rules);
 		Ok (Self { start, rules, params })
 	}
 }

@@ -26,10 +26,10 @@ impl Input {
 				}
 			};
 			parse! (parser,
-				"Begin in state ", (begin_state = parse_state_id), ".\n",
+				"Begin in state ", begin_state = parse_state_id, ".\n",
 				"Perform a diagnostic checksum after ", num_steps, " steps.\n",
-				"\n");
-			let states = parser.delim_fn ("\n\n", Parser::item).try_collect () ?;
+				"\n",
+				@delim "\n\n" states);
 			Ok (Self { begin_state, num_steps, states, params })
 		})
 	}

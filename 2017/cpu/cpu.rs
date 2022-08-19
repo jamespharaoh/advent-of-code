@@ -368,39 +368,39 @@ mod model {
 		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 			parser.any ()
 				.of (|parser| {
-					parse! (parser, "snd ", (@confirm), src);
+					parse! (parser, "snd ", @confirm, src);
 					Ok (Self::Snd (src))
 				})
 				.of (|parser| {
-					parse! (parser, "rcv ", (@confirm), dst);
+					parse! (parser, "rcv ", @confirm, dst);
 					Ok (Self::Rcv (dst))
 				})
 				.of (|parser| {
-					parse! (parser, "set ", (@confirm), dst, " ", src);
+					parse! (parser, "set ", @confirm, dst, " ", src);
 					Ok (Self::Set (dst, src))
 				})
 				.of (|parser| {
-					parse! (parser, "add ", (@confirm), dst, " ", src);
+					parse! (parser, "add ", @confirm, dst, " ", src);
 					Ok (Self::Add (dst, src))
 				})
 				.of (|parser| {
-					parse! (parser, "sub ", (@confirm), dst, " ", src);
+					parse! (parser, "sub ", @confirm, dst, " ", src);
 					Ok (Self::Sub (dst, src))
 				})
 				.of (|parser| {
-					parse! (parser, "mul ", (@confirm), dst, " ", src);
+					parse! (parser, "mul ", @confirm, dst, " ", src);
 					Ok (Self::Mul (dst, src))
 				})
 				.of (|parser| {
-					parse! (parser, "mod ", (@confirm), dst, " ", src);
+					parse! (parser, "mod ", @confirm, dst, " ", src);
 					Ok (Self::Mod (dst, src))
 				})
 				.of (|parser| {
-					parse! (parser, "jgz ", (@confirm), cnd, " ", off);
+					parse! (parser, "jgz ", @confirm, cnd, " ", off);
 					Ok (Self::Jgz (cnd, off))
 				})
 				.of (|parser| {
-					parse! (parser, "jnz ", (@confirm), cnd, " ", off);
+					parse! (parser, "jnz ", @confirm, cnd, " ", off);
 					Ok (Self::Jnz (cnd, off))
 				})
 				.done ()

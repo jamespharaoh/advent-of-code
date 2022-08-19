@@ -15,7 +15,7 @@ input_params! {
 
 impl <'inp> FromParser <'inp> for Input {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, params, (@line_items points));
+		parse! (parser, params, @lines points);
 		Ok (Self { points, params })
 	}
 }

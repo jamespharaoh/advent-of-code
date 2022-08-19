@@ -27,7 +27,7 @@ impl Input {
 	pub fn parse (input: & [& str]) -> GenResult <Self> {
 		Parser::wrap_lines (input, |parser| {
 			parse! (parser, params);
-			let pipes = parser.delim_fn ("\n", Parser::item).try_collect () ?;
+			let pipes = parser.delim_fn ("\n", Parser::item).collect ();
 			Ok (Self { pipes, params })
 		})
 	}
@@ -59,7 +59,7 @@ impl <'inp> FromParser <'inp> for InputPipe {
 		let right_temp: ArrayVec <Village, 11> = parser
 			.delim_fn (", ", Parser::uint)
 			.take (MAX_PIPES + 1)
-			.collect::<ParseResult <_>> () ?;
+			.collect ();
 		if right_temp.len () > MAX_PIPES { return Err (parser.err ()) }
 		let right = right_temp.into_iter ().collect ();
 		Ok (Self { left, right })

@@ -14,8 +14,11 @@ input_params! {
 
 impl <'inp> Input <'inp> {
 	pub fn parse (input: & 'inp [& 'inp str]) -> GenResult <Self> {
+		fn parse_polymer <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'inp>> {
+			parser.take_rest_while (|ch| ch.is_ascii_alphabetic (), .. )
+		}
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@rest polymer = |ch| ch.is_ascii_alphabetic ()));
+			parse! (parser, params, polymer = parse_polymer);
 			Ok (Self { polymer, params })
 		})
 	}

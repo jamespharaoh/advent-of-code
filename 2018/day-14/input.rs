@@ -15,7 +15,10 @@ input_params! {
 
 impl <'inp> FromParser <'inp> for Input <'inp> {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, params, (@rest value = |ch| ch.is_ascii_digit (), 1 ..= 6));
+		fn parse_value <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'inp>> {
+			parser.take_rest_while (|ch| ch.is_ascii_digit (), 1 ..= 6)
+		}
+		parse! (parser, params, value = parse_value);
 		if ! (1 ..= 8).contains (& value.len ()) { return Err (parser.err ()) }
 		Ok (Self { value, params })
 	}

@@ -14,8 +14,11 @@ input_params! {
 
 impl <'inp> Input <'inp> {
 	pub fn parse (input: & 'inp [& 'inp str]) -> GenResult <Self> {
+		fn parse_box_id <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'inp>> {
+			parser.take_rest_while (|ch| ch.is_ascii_lowercase (), .. )
+		}
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@lines box_ids = |ch| ch.is_ascii_lowercase ()));
+			parse! (parser, params, @lines box_ids = parse_box_id);
 			Ok (Self { box_ids, params })
 		})
 	}

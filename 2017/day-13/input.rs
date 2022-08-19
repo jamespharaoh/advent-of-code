@@ -17,7 +17,7 @@ impl Input {
 	pub fn parse (input: & [& str]) -> GenResult <Self> {
 		Parser::wrap_lines (input, |parser| {
 			parse! (parser, params);
-			let layers = parser.delim_fn ("\n", Parser::item).try_collect () ?;
+			let layers = parser.delim_fn ("\n", Parser::item).collect ();
 			Ok (Self { layers, params })
 		})
 	}

@@ -17,7 +17,7 @@ input_params! {
 impl <'inp> Input <'inp> {
 	pub fn parse (input: & 'inp [& 'inp str]) -> GenResult <Self> {
 		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, (@rest key));
+			parse! (parser, params, key);
 			Ok (Self { key, params })
 		})
 	}

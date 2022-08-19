@@ -43,8 +43,8 @@ impl Display for Point {
 impl <'inp> FromParser <'inp> for Point {
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 		parse! (parser,
-			"position=<", (@skip), pos_x, ",", (@skip), pos_y, ">", (@skip),
-			"velocity=<", (@skip), vel_x, ",", (@skip), vel_y, ">");
+			"position=<", @skip, pos_x, ",", @skip, pos_y, ">", @skip,
+			"velocity=<", @skip, vel_x, ",", @skip, vel_y, ">");
 		let pos = Pos { y: pos_y, x: pos_x };
 		let vel = Pos { y: vel_y, x: vel_x };
 		Ok (Self { pos, vel })
