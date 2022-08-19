@@ -43,12 +43,12 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 		return Err ("Invalid ranges specified".into ());
 	}
 
-	if input.clay_ranges.iter ().any (|clay_range| * clay_range.x ().end () >= 1000) {
-		return Err ("Refusing to handle x coordinates over 1000".into ());
-	}
-
-	if input.clay_ranges.iter ().any (|clay_range| * clay_range.x ().end () >= 2000) {
-		return Err ("Refusing to handle y coordinates over 2000".into ());
+	if input.clay_ranges.iter ().any (|clay_range|
+		! (1 ..= 2000).contains (clay_range.y ().start ())
+			|| ! (1 ..= 2000).contains (clay_range.y ().end ())
+			|| ! (1 ..= 1000).contains (clay_range.x ().start ())
+			|| ! (1 ..= 1000).contains (clay_range.x ().end ())) {
+		return Err ("Clay ranges must be in range 1 to 1000 for x, 1 to 2000 for y".into ());
 	}
 
 	// create empty grid
