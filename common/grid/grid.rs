@@ -24,7 +24,7 @@ use pos::PosYX;
 /// wraps a backing collection which implements [`GridStorage`], and takes indexes which implement
 /// [`GridPos`].
 
-#[ derive (Clone, Debug, Eq, PartialEq) ]
+#[ derive (Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 pub struct Grid <Storage, Pos, const DIMS: usize = 2> {
 	storage: Storage,
 	origin: [isize; DIMS],
@@ -64,6 +64,13 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	where
 		Storage: GridStorage + Clone,
 		Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn validate_dims (origin: [isize; DIMS], size: [usize; DIMS]) -> bool {
+		Pos::from_scalar (0, origin, size).is_some ()
+			&& Pos::from_scalar (size.iter ().copied ().product::<usize> () - 1, origin, size).is_some ()
+	}
 
 	#[ inline ]
 	pub fn wrap (
@@ -220,6 +227,9 @@ impl <'inp, Item, Pos> FromParser <'inp> for Grid <Vec <Item>, Pos, 2>
 		if lines.is_empty () { return Err (parser.err ()) }
 		let height = lines.len ();
 		let width = lines.iter ().map (Vec::len).max ().unwrap_or (0);
+		let grid_origin = [ 0, 0 ];
+		let grid_size = [ height, width ];
+		if ! Self::validate_dims (grid_origin, grid_size) { return Err (parser.err ()) }
 		Ok (Self::wrap (
 			lines.iter ()
 				.flat_map (|line| line.iter ().cloned ()

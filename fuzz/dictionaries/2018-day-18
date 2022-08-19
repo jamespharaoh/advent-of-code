@@ -1,0 +1,5 @@
+tile_open="."
+tile_tree="|"
+tile_yard="#"
+
+misc_newline="\x0a"
