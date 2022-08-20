@@ -53,81 +53,7 @@ function main {
 			echo cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
 			cargo $toolchain clippy "${cargo_args[@]}" -- "${clippy_args[@]}"
 			;;
-		(fuzz)
-			if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
-			case "$fuzz_mode" in
-				(run|cmin)
-					if [[ -f "fuzz/dictionaries/$year-day-$day" ]]; then
-						extra_args_1+=( -dict="$PWD/fuzz/dictionaries/$year-day-$day" )
-					fi
-					pushd fuzz
-					cargo +nightly fuzz "$fuzz_mode" "$year-day-$day" "corpus/$year-day-$day" \
-						"${extra_args_0[@]}" -- "${extra_args_1[@]}"
-					popd
-					;;
-				(repr)
-					pushd fuzz
-					cargo +nightly fuzz run "$year-day-$day" \
-						"${extra_args_0[@]}" -- "${extra_args_1[@]}"
-					popd
-					;;
-				(init)
-					local sum_output="$(sha1sum "$year/inputs/day-$day")"
-					local sum="${sum_output:0:40}"
-					mkdir -p "fuzz/corpus/$year-day-$day"
-					cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
-					;;
-				(review)
-					pushd fuzz
-					local temp=$(mktemp)
-					local cutoff_date=$(mktemp)
-					touch --date "3 days ago" "$cutoff_date"
-					for year in {2015..2021}; do
-						for day in {01..25}; do
-							if [[ ! -d artifacts/$year-day-$day ]]; then continue; fi
-							for artifact in $(find artifacts/$year-day-$day -type f); do
-								if [[ "$artifact" == */slow-unit-* ]]; then continue; fi
-								if [[ "$artifact" == */timeout-* ]]; then continue; fi
-								echo -n "Running $year-day-$day with $artifact..."
-								cargo +nightly fuzz run "$year-day-$day" "$artifact" \
-									-- -timeout=5 -timeout_exitcode=88 \
-									&>"$temp"
-								cargo_result="$?"
-								if [[ $cargo_result == 0 ]]; then
-									if [[ "$artifact" -ot "$cutoff_date" ]]; then
-										echo " (deleted)"
-										rm -f "$artifact"
-									else
-										echo
-									fi
-									continue
-								fi
-								if grep --quiet "SUMMARY: libFuzzer: timeout" "$temp"; then
-									echo " (timeout, ignored)"
-									continue
-								fi
-								echo " (status=$cargo_result)"
-								echo
-								echo "========== $artifact =========="
-								echo
-								cat "$temp"
-								echo
-								echo "aoc fuzz repr year-$year day-$day -- $artifact"
-								echo
-								echo "========== $artifact =========="
-								echo
-							done
-						done
-					done
-					rm -f "$temp" "$cutoff_date"
-					popd
-					;;
-				(*)
-					echo "Syntax error" >&2
-					exit 1
-					;;
-			esac
-			;;
+		(fuzz) fuzz_mode ;;
 		(run-test)
 			time env time -v cargo $toolchain run "${cargo_args[@]}" \
 				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
@@ -168,6 +94,115 @@ function main {
 			firefox --new-window "target/tarpaulin/tarpaulin-report.html"
 			;;
 	esac
+}
+
+function fuzz_mode {
+
+	if [[ -z "$fuzz_mode" ]]; then fuzz_mode="run"; fi
+
+	if ! arg_exists "-rss_limit_mb" "${extra_args_1[@]}"; then
+		extra_args_1+=( -rss_limit_mb=4096 )
+	fi
+
+	if ! arg_exists "-dict" "${extra_args_1[@]}"; then
+		extra_args_1+=( -dict="$PWD/fuzz/dictionaries/$year-day-$day" )
+	fi
+
+	case "$fuzz_mode" in
+
+		(run|cmin)
+			(
+				cd fuzz
+				ulimit -s 32768
+				cargo +nightly fuzz "$fuzz_mode" \
+					"$year-day-$day" \
+					"corpus/$year-day-$day" \
+					"${extra_args_0[@]}" \
+					-- \
+					"${extra_args_1[@]}"
+			)
+			;;
+
+		(repr)
+			(
+				cd fuzz
+				ulimit -s 32768
+				cargo +nightly fuzz run \
+					"$year-day-$day" \
+					"${extra_args_0[@]}" \
+					-- \
+					"${extra_args_1[@]}"
+			)
+			;;
+
+		(init)
+			local sum_output="$(sha1sum "$year/inputs/day-$day")"
+			local sum="${sum_output:0:40}"
+			mkdir -p "fuzz/corpus/$year-day-$day"
+			cp "$year/inputs/day-$day" "fuzz/corpus/$year-day-$day/$sum"
+			;;
+
+		(review)
+			pushd fuzz
+			local temp=$(mktemp)
+			local cutoff_date=$(mktemp)
+			touch --date "3 days ago" "$cutoff_date"
+			for year in {2015..2021}; do
+				for day in {01..25}; do
+					if [[ ! -d artifacts/$year-day-$day ]]; then continue; fi
+					for artifact in $(find artifacts/$year-day-$day -type f); do
+						if [[ "$artifact" == */slow-unit-* ]]; then continue; fi
+						if [[ "$artifact" == */timeout-* ]]; then continue; fi
+						echo -n "Running $year-day-$day with $artifact..."
+						cargo +nightly fuzz run "$year-day-$day" "$artifact" \
+							-- -timeout=5 -timeout_exitcode=88 \
+							&>"$temp"
+						cargo_result="$?"
+						if [[ $cargo_result == 0 ]]; then
+							if [[ "$artifact" -ot "$cutoff_date" ]]; then
+								echo " (deleted)"
+								rm -f "$artifact"
+							else
+								echo
+							fi
+							continue
+						fi
+						if grep --quiet "SUMMARY: libFuzzer: timeout" "$temp"; then
+							echo " (timeout, ignored)"
+							continue
+						fi
+						echo " (status=$cargo_result)"
+						echo
+						echo "========== $artifact =========="
+						echo
+						cat "$temp"
+						echo
+						echo "aoc fuzz repr year-$year day-$day -- $artifact"
+						echo
+						echo "========== $artifact =========="
+						echo
+					done
+				done
+			done
+			rm -f "$temp" "$cutoff_date"
+			popd
+			;;
+
+		(*)
+			echo "Syntax error" >&2
+			exit 1
+			;;
+
+	esac
+}
+
+function arg_exists {
+	local serach_arg="$1"; shift
+	for arg in "$@"; do
+		if [[ "$arg" = "$search_arg" ]]; then return 0; fi
+		if [[ "$arg" == "$search_arg="* ]]; then return 0; fi
+	done
+	return 1
 }
 
 main "$@"

@@ -182,8 +182,22 @@ fn puzzle_invoke_real (
 	puzzle: & dyn Puzzle,
 	args: & [OsString],
 ) -> GenResult <()> {
-	let mut command = Command::new (format! ("aoc-{}-day-{}", puzzle.year (), puzzle.day ()));
+
+	let input_path_default = puzzle.find_input_or_default ();
+
+	let mut command =
+		Command::new (format! ("aoc-{}-day-{}", puzzle.year (), puzzle.day ()))
+			.arg (
+				clap::Arg::new ("input")
+					.long ("input")
+					.value_parser (clap::value_parser! (PathBuf))
+					.takes_value (true)
+					.default_value_os (input_path_default.as_os_str ())
+					.help ("Input file to use")
+					.global (true));
+
 	for part_num in 1 ..= puzzle.num_parts () {
+
 		command = command.subcommand (
 			Command::new (format! ("part-{}", part_num))
 				.arg (
@@ -194,16 +208,21 @@ fn puzzle_invoke_real (
 						.default_value ("1")
 						.help ("Number of times to repeat the calculation"))
 		);
+
 	}
+
 	for puzzle_command in puzzle.commands () {
 		command = command.subcommand (
 			puzzle_command.command ()
 				.name (puzzle_command.name ())
 		);
 	}
+
 	let matches = command.get_matches_from (args);
-	let input_string = puzzle.load_input () ?;
+	let input_path = matches.get_one::<PathBuf> ("input").unwrap ();
+	let input_string = fs::read_to_string (input_path) ?;
 	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
+
 	match matches.subcommand () {
 		None => {
 			let result = puzzle.part_one (& input_lines) ?;
@@ -336,6 +355,28 @@ pub trait Puzzle {
 	#[ inline ]
 	fn invoke (& self, args: & [OsString]) -> GenResult <()> {
 		puzzle_invoke_real (self.dyn_puzzle (), args)
+	}
+
+	fn find_input_or_default (& self) -> PathBuf {
+		self.find_input ()
+			.unwrap_or_else (|_| format! (
+				"{:04}/inputs/day-{:02}", self.year (), self.day ()).into ())
+	}
+
+	fn find_input (& self) -> GenResult <PathBuf> {
+		Ok (
+			[
+				format! ("{:04}/inputs/day-{:02}", self.year (), self.day ()),
+				format! ("inputs/day-{:02}", self.day ()),
+				format! ("../inputs/day-{:02}", self.day ()),
+			].into_iter ()
+				.find (|path| Path::new (path).exists ())
+				.ok_or_else (|| format! (
+					"Unable to find inputs/day-{:02} in \"{:04}\", \".\" or \"..\"",
+					self.day (),
+					self.year ())) ?
+				.into ()
+		)
 	}
 
 	fn load_input (& self) -> GenResult <String> {

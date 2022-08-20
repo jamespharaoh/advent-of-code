@@ -23,7 +23,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		for dir in grid.get (pos).unwrap ().doors () {
 			let adj_pos = (pos + (dir, 1)).unwrap ();
 			if ! seen.insert (adj_pos) { continue }
-			todo.push ((adj_pos, dist + 1));
+			todo.push ((adj_pos, u32::add_2 (dist, 1) ?));
 		}
 	}
 	Ok (furthest)
@@ -41,7 +41,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		for dir in grid.get (pos).unwrap ().doors () {
 			let adj_pos = (pos + (dir, 1)).unwrap ();
 			if ! seen.insert (adj_pos) { continue }
-			todo.push ((adj_pos, dist + 1));
+			todo.push ((adj_pos, u32::add_2 (dist, 1) ?));
 		}
 	}
 	Ok (num_far_rooms)
@@ -49,36 +49,36 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {
 	use RouteRegexItem::{ Branch, Span };
-	type Frame = (u8, RouteRegexString, u8);
+	type Frame = (RouteRegexString, Pos, u8, u8);
 	type Stack = ArrayVec <Frame, STACK_SIZE>;
 	let mut grid =
 		Grid::new_vec (
-			[GRID_EXPAND.as_isize (), GRID_EXPAND.as_isize ()],
+			[GRID_EXPAND.to_isize () ?, GRID_EXPAND.to_isize () ?],
 			[GRID_EXPAND * 2 + 1, GRID_EXPAND * 2 + 1]);
 	let mut todo: Vec <(Pos, Stack)> = Vec::new ();
-	todo.push ((Pos::ZERO, array_vec! [ (0, input.regex.deref ().clone (), 0) ]));
+	todo.push ((Pos::ZERO, array_vec! [ (input.regex.deref ().clone (), Pos::ZERO, 0, 0) ]));
 	let mut seen: HashSet <(Pos, ArrayVec <(u8, u8), STACK_SIZE>)> = HashSet::new ();
 	seen.insert ((Pos::ZERO, array_vec! [ (0, 0) ]));
 	fn make_seen_indexes (stack: & Stack) -> ArrayVec <(u8, u8), STACK_SIZE> {
 		stack.iter ()
-			.map (|& (branch_idx, _, string_idx)| (branch_idx, string_idx))
+			.map (|& (_, _, branch_idx, string_idx)| (branch_idx, string_idx))
 			.collect ()
 	}
 	while let Some ((mut pos, mut stack)) = todo.pop () {
-		let (branch_idx, string, string_idx) = stack.pop ().unwrap ();
-		if string.len () <= string_idx.as_usize () {
+		let (string, start_pos, branch_idx, string_idx) = stack.pop ().unwrap ();
+		if string.len () <= string_idx.to_usize () ? {
 			if ! stack.is_empty () {
 				todo.push ((pos, stack));
 			}
 			continue;
 		}
-		match string [string_idx.as_usize ()] {
+		match string [string_idx.to_usize () ?] {
 			Branch (ref branches) => {
 				for (sub_branch_idx, sub_branch) in branches.iter ().enumerate () {
-					let sub_branch_idx = sub_branch_idx.as_u8 ();
+					let sub_branch_idx = sub_branch_idx.to_u8 () ?;
 					let mut stack = stack.clone ();
-					stack.push ((branch_idx, string.clone (), string_idx + 1));
-					stack.push ((sub_branch_idx, sub_branch.clone (), 0));
+					stack.push ((string.clone (), start_pos, branch_idx, u8::add_2 (string_idx, 1) ?));
+					stack.push ((sub_branch.clone (), pos, sub_branch_idx, 0));
 					if seen.insert ((pos, make_seen_indexes (& stack))) {
 						todo.push ((pos, stack));
 					}
@@ -87,11 +87,11 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 			Span (ref span_dirs) => {
 				for dir in span_dirs.iter ().copied () {
 					* grid.get_mut (pos).unwrap () |= dir;
-					pos = (pos + (* dir, 1)).unwrap ();
+					pos = (pos + (* dir, 1)) ?;
 					if grid.get (pos).is_none () { grid_resize (& mut grid, dir) ?; }
 					* grid.get_mut (pos).unwrap () |= dir.rev ();
 				}
-				stack.push ((branch_idx, string, string_idx + 1));
+				stack.push ((string, start_pos, branch_idx, u8::add_2 (string_idx, 1) ?));
 				if seen.insert ((pos, make_seen_indexes (& stack))) {
 					todo.push ((pos, stack));
 				}
@@ -116,7 +116,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 				return Err ("Max grid size is 240".into ());
 			}
 			* grid = grid.resize (
-				[grid.native_origin () [0] + GRID_EXPAND.as_isize (), grid.native_origin () [1]],
+				[grid.native_origin () [0] + GRID_EXPAND.to_isize () ?, grid.native_origin () [1]],
 				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]);
 		},
 		RouteDir::East => {
@@ -132,7 +132,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 				return Err ("Max grid size is 240".into ());
 			}
 			* grid = grid.resize (
-				[grid.native_origin () [0], grid.native_origin () [1] + GRID_EXPAND.as_isize ()],
+				[grid.native_origin () [0], grid.native_origin () [1] + GRID_EXPAND.to_isize () ?],
 				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]);
 		},
 	}
