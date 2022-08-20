@@ -25,7 +25,7 @@ impl Display for Overflow {
 impl Error for Overflow {
 }
 
-pub trait Int: Clone + Copy + Debug + Display + Eq + FromStr + Hash + Ord + IntOps + IntConv {
+pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + Ord + IntOps + IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;
 	const BITS: u32;
@@ -520,13 +520,14 @@ pub trait IntUnsigned: Int {}
 
 pub trait IntSized <const BITS: usize>: Int {}
 
-pub trait IntOpsRust: Sized + Add <Output = Self> + BitAnd + BitAndAssign + BitOr + BitOrAssign
-	+ Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
-	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
-impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + BitAnd + BitAndAssign
-	+ BitOr + BitOrAssign + Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self>
-	+ Shl <u32, Output = Self> + ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32>
-	+ Sub <Output = Self> {}
+pub trait IntOpsRust: Sized + Add <Output = Self> + BitAnd <Output = Self> + BitAndAssign
+	+ BitOr <Output = Self> + BitOrAssign + Div <Output = Self> + Mul <Output = Self>
+	+ Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32> + Shr <u32, Output = Self>
+	+ ShrAssign <u32> + Sub <Output = Self> {}
+impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + BitAnd <Output = Self>
+	+ BitAndAssign + BitOr <Output = Self> + BitOrAssign + Div <Output = Self>
+	+ Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32>
+	+ Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
 
 pub trait IntOpsSafe: Sized {
 

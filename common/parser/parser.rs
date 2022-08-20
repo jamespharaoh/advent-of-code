@@ -997,6 +997,14 @@ macro_rules! parse {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
 	( @item $parser:expr, $expect_str:literal ) => {
 		$parser.expect ($expect_str) ?;
 	};
@@ -1033,6 +1041,11 @@ macro_rules! parse {
 	};
 	( @item $parser:expr, @delim $delim:literal $item_name:ident ) => {
 		let $item_name = $parser
+			.delim_fn ($delim, Parser::item)
+			.collect ();
+	};
+	( @item $parser:expr, (@delim $delim:literal $item_name:ident): $item_type:ty ) => {
+		let $item_name: $item_type = $parser
 			.delim_fn ($delim, Parser::item)
 			.collect ();
 	};
@@ -1233,11 +1246,13 @@ macro_rules! enum_parser_display {
 
 #[ macro_export ]
 macro_rules! struct_parser {
-	( $name:ident $($fields:tt)? = [ $($args:tt)* ] ) => {
-		impl <'inp> FromParser <'inp> for Input {
+	(
+		$name:ident $(<$($param_name:ident: $param_type:ident),*>)? { $($fields:tt)* } = [ $($args:tt)* ]
+	) => {
+		impl <'inp $(, $($param_name: $param_type + FromParser <'inp>),*)?> FromParser <'inp> for $name $(<$($param_name),*>)? {
 			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 				parse! (parser, $($args)*);
-				Ok (Self $($fields)?)
+				Ok (Self { $($fields)? })
 			}
 		}
 	};
@@ -1245,10 +1260,12 @@ macro_rules! struct_parser {
 
 #[ macro_export ]
 macro_rules! struct_display {
-	( $name:ident $($fields:tt)? = [ $($args:tt)* ] ) => {
-		impl Display for Input {
+	(
+		$name:ident $(<$($param_name:ident: $param_type:ident),*>)? { $($fields:tt)* } = [ $($args:tt)* ]
+	) => {
+		impl $(<$($param_name: $param_type),*>)? Display for $name $(<$($param_name),*>)? {
 			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-				let Self $($fields)? = self;
+				let Self { $($fields)* } = self;
 				struct_display! (@args formatter, $($args)*);
 				Ok (())
 			}
@@ -1257,6 +1274,10 @@ macro_rules! struct_display {
 	( @args $formatter:ident $(,)? ) => {};
 	( @args $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field, $formatter) ?;
+		struct_display! (@args $formatter, $($($rest)*)?);
+	};
+	( @args $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
+		Display::fmt ($expect, $formatter) ?;
 		struct_display! (@args $formatter, $($($rest)*)?);
 	};
 	( @args $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {

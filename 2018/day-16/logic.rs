@@ -2,12 +2,9 @@
 
 use super::*;
 use input::Input;
-use model::ArgType;
-use model::Op;
 use model::Opcode;
 use model::Regs;
 use model::Sample;
-use model::Val;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	let mut count = 0_u32;
@@ -86,56 +83,19 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let mut regs = Regs::default ();
 	for instr in input.instrs.iter () {
 		let opcode = num_to_opcode [instr.op.as_usize ()];
-		regs = apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, regs)
-			.ok_or (format! ("Failed to execute instruction: {instr}")) ?;
+		regs = cpu::apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, regs) ?;
 	}
 
 	// return the value from register zero
 
-	Ok (regs.reg_0.as_u32 ())
+	Ok (regs [0].as_u32 ())
 
 }
 
 fn test_sample (opcode: Opcode, sample: & Sample) -> bool {
 	let instr = sample.instr;
-	let result = some_or! (
-		apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, sample.before),
+	let result = ok_or! (
+		cpu::apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, sample.before),
 		return false);
 	result == sample.after
-}
-
-fn apply (
-	opcode: Opcode,
-	arg_a: Val,
-	arg_b: Val,
-	arg_c: Val,
-	mut regs: Regs,
-) -> Option <Regs> {
-
-	let val_a = match opcode.arg_a () {
-		ArgType::Reg => regs.get (arg_a),
-		ArgType::Imm => Some (arg_a),
-		ArgType::Ignore => None,
-	};
-
-	let val_b = match opcode.arg_b () {
-		ArgType::Reg => regs.get (arg_b),
-		ArgType::Imm => Some (arg_b),
-		ArgType::Ignore => None,
-	};
-
-	let val_c = match opcode.op () {
-		Op::Add => Val::add_2 (val_a ?, val_b ?).ok () ?,
-		Op::Mul => Val::mul_2 (val_a ?, val_b ?).ok () ?,
-		Op::Ban => val_a ? & val_b ?,
-		Op::Bor => val_a ? | val_b ?,
-		Op::Set => val_a ?,
-		Op::Gt => if val_a ? > val_b ? { 1 } else { 0 },
-		Op::Eq => if val_a ? == val_b ? { 1 } else { 0 },
-	};
-
-	regs.set (arg_c, val_c) ?;
-
-	Some (regs)
-
 }

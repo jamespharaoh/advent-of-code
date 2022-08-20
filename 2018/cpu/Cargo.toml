@@ -1,0 +1,19 @@
+[package]
+
+	name = "aoc-2018-cpu"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2018: CPU"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2018/cpu"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+
+[lib]
+
+	path = "cpu.rs"
+	crate-type = [ "rlib", "dylib" ]
