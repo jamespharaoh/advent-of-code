@@ -14,6 +14,7 @@ use bitvec::BitVecIter;
 use nums::Int;
 use nums::IntConv;
 use nums::Overflow;
+use pos::PosGeo;
 use pos::PosRowCol;
 use pos::PosXY;
 use pos::PosYX;
@@ -56,6 +57,17 @@ impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
 		for item in self.storage.iter_mut () {
 			* item = default ();
 		}
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn resize (& self, origin: [isize; DIMS], size: [usize; DIMS]) -> Self {
+		Self::wrap (
+			GridKeysIter::new (origin, size)
+				.map (|pos| self.get (pos).unwrap_or_default ())
+				.collect (),
+			origin,
+			size)
 	}
 
 }
@@ -161,12 +173,7 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub const fn keys (& self) -> GridKeysIter <Pos, DIMS> {
-		GridKeysIter {
-			origin: self.origin,
-			size: self.size,
-			cur: [0; DIMS],
-			phantom: PhantomData,
-		}
+		GridKeysIter::new (self.origin, self.size)
 	}
 
 }
@@ -190,20 +197,50 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 }
 
+pub enum GridPosDisplayOrder {
+	RightDown,
+	RightUp,
+}
+
+trait GridPosDisplay: GridPos <2> {
+	const ORDER: GridPosDisplayOrder;
+}
+
+impl <Val: Int> GridPosDisplay for PosGeo <Val> {
+	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightUp;
+}
+
+impl <Val: Int> GridPosDisplay for PosYX <Val> {
+	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightDown;
+}
+
 impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
 	where
 		Storage: GridStorage + Clone,
 		Storage::Item: Display,
-		Pos: GridPos <2> {
+		Pos: GridPosDisplay {
 
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		for row in 0 .. self.size [0] {
-			if row != 0 { write! (formatter, "\n") ?; }
-			for col in 0 .. self.size [1] {
-				let item = self.get_native ([row, col]).unwrap ();
-				Display::fmt (& item, formatter) ?;
-			}
+		match Pos::ORDER {
+			GridPosDisplayOrder::RightDown => {
+				for row in 0 .. self.size [0] {
+					if row != 0 { write! (formatter, "\n") ?; }
+					for col in 0 .. self.size [1] {
+						let item = self.get_native ([row, col]).unwrap ();
+						Display::fmt (& item, formatter) ?;
+					}
+				}
+			},
+			GridPosDisplayOrder::RightUp => {
+				for row in (0 .. self.size [0]).rev () {
+					if row != 0 { write! (formatter, "\n") ?; }
+					for col in 0 .. self.size [1] {
+						let item = self.get_native ([row, col]).unwrap ();
+						Display::fmt (& item, formatter) ?;
+					}
+				}
+			},
 		}
 		Ok (())
 	}
@@ -288,7 +325,20 @@ pub struct GridKeysIter <Pos: GridPos <DIMS>, const DIMS: usize> {
 	origin: [isize; DIMS],
 	size: [usize; DIMS],
 	cur: [usize; DIMS],
+	done: bool,
 	phantom: PhantomData <Pos>,
+}
+
+impl <Pos: GridPos <DIMS>, const DIMS: usize> GridKeysIter <Pos, DIMS> {
+	const fn new (origin: [isize; DIMS], size: [usize; DIMS]) -> Self {
+		Self {
+			origin,
+			size,
+			cur: [0_usize; DIMS],
+			done: false,
+			phantom: PhantomData,
+		}
+	}
 }
 
 impl <Pos: GridPos <DIMS>, const DIMS: usize> Iterator for GridKeysIter <Pos, DIMS> {
@@ -297,12 +347,13 @@ impl <Pos: GridPos <DIMS>, const DIMS: usize> Iterator for GridKeysIter <Pos, DI
 
 	#[ inline ]
 	fn next (& mut self) -> Option <Pos> {
+		if self.done { return None }
 		let pos = Pos::from_array (self.cur, self.origin);
 		for idx in (0 .. DIMS).rev () {
 			self.cur [idx] += 1;
 			if self.cur [idx] < self.size [idx] { break }
-			if idx == 0 { return None }
 			self.cur [idx] = 0;
+			if idx == 0 { self.done = true; }
 		}
 		pos
 	}
@@ -542,6 +593,21 @@ impl <Val: Int> GridPos <2> for PosRowCol <Val> {
 	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
 		let array = <[Val; 2]>::from_array (array, origin) ?;
 		Some (Self { row: array [0], col: array [1] })
+	}
+
+}
+
+impl <Val: Int> GridPos <2> for PosGeo <Val> {
+
+	#[ inline ]
+	fn to_array (self, origin: [isize; 2]) -> Option <[usize; 2]> {
+		GridPos::to_array ([ self.n, self.e ], origin)
+	}
+
+	#[ inline ]
+	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
+		let array = <[Val; 2]>::from_array (array, origin) ?;
+		Some (Self { n: array [0], e: array [1] })
 	}
 
 }

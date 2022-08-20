@@ -1,6 +1,6 @@
-//! Advent of Code 2018: Day 16: Chronal Classification
+//! Advent of Code 2018: Day 19: Go With The Flow
 //!
-//! [https://adventofcode.com/2018/day/16](https://adventofcode.com/2018/day/16)
+//! [https://adventofcode.com/2018/day/19](https://adventofcode.com/2018/day/19)
 
 #![ allow (clippy::missing_inline_in_public_items) ]
 

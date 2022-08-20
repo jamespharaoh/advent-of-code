@@ -1005,6 +1005,10 @@ macro_rules! parse {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $(, $($rest:tt)*)?) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
 	( @item $parser:expr, $expect_str:literal ) => {
 		$parser.expect ($expect_str) ?;
 	};
@@ -1038,6 +1042,19 @@ macro_rules! parse {
 		let $item_name = $parser
 			.repeat ($item_parse)
 			.collect ();
+	};
+	( @item $parser:expr, @collect_some $item_name:ident ) => {
+		let mut temp_iter = $parser.repeat (Parser::item);
+		let $item_name = match temp_iter.next () {
+			Some (first) => iter::once (first).chain (temp_iter).collect (),
+			None => return Err ($parser.err ()),
+		};
+	};
+	( @item $parser:expr, @collect_some $item_name:ident: $item_type:ty ) => {
+		let $item_name: $item_type = $parser
+			.repeat (Parser::item)
+			.collect ();
+		if $item_name.is_empty () { return Err ($parser.err ()) }
 	};
 	( @item $parser:expr, @delim $delim:literal $item_name:ident ) => {
 		let $item_name = $parser
@@ -1183,12 +1200,36 @@ macro_rules! enum_parser {
 
 	(
 		@variants $enum_name:ident, $parser:ident,
+		$var_name:ident ( $($var_fields:tt)* ) = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		$parser = $parser.of (|$var_arg| {
+			$($var_body)*
+			Ok (Self::$var_name ( $($var_fields)* ))
+		});
+		enum_parser! (@variants $enum_name, $parser, $(, $($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $parser:ident,
 		$var_name:ident { $($var_fields:tt)* } = [ $($var_args:tt)* ]
 		$(, $($rest:tt)* )?
 	) => {
 		$parser = $parser.of (|parser| {
 			parse! (parser, $($var_args)*);
 			Ok (Self::$var_name { $($var_fields)* })
+		});
+		enum_parser! (@variants $enum_name, $parser, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $parser:ident,
+		$var_name:ident ( $($var_fields:tt)* ) = [ $($var_args:tt)* ]
+		$(, $($rest:tt)* )?
+	) => {
+		$parser = $parser.of (|parser| {
+			parse! (parser, $($var_args)*);
+			Ok (Self::$var_name ( $($var_fields)* ))
 		});
 		enum_parser! (@variants $enum_name, $parser, $($($rest)*)?);
 	};
@@ -1224,11 +1265,11 @@ macro_rules! enum_display {
 
 	(
 		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident $($var_fields:tt)? = [ $($var_arg:tt),* ]
+		$var_name:ident $($var_fields:tt)? = [ $($var_arg:tt)* ]
 		$(, $($rest:tt)* )?
 	) => {
-		if let $enum_name::$var_name $($var_fields)? = * $self {
-			$( Display::fmt (& $var_arg, $formatter) ?; )*
+		if let $enum_name::$var_name $($var_fields)? = $self {
+			display! ($formatter, $($var_arg)*);
 			return Ok (());
 		};
 		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
@@ -1246,44 +1287,94 @@ macro_rules! enum_parser_display {
 
 #[ macro_export ]
 macro_rules! struct_parser {
+
 	(
-		$name:ident $(<$($param_name:ident: $param_type:ident),*>)? { $($fields:tt)* } = [ $($args:tt)* ]
+		$name:ident
+		$( < $($param_name:ident: $param_type:ident),* > )?
+		{ $($fields:tt)* }
+		= [ $($args:tt)* ]
 	) => {
-		impl <'inp $(, $($param_name: $param_type + FromParser <'inp>),*)?> FromParser <'inp> for $name $(<$($param_name),*>)? {
+		struct_parser! (
+			@main $name
+			[ $( $($param_name: $param_type),* )? ]
+			[ { $($fields)* } ]
+			[ $($args)* ]);
+	};
+
+	(
+		$name:ident
+		$( < $($param_name:ident: $param_type:ident),* > )?
+		( $($fields:tt)* )
+		= [ $($args:tt)* ]
+	) => {
+		struct_parser! (
+			@main $name
+			[ $($param_name: $param_type),* ]
+			[ ( $($fields)* ) ]
+			[ $($args)* ]);
+	};
+
+	(
+		@main $name:ident
+		[ $($param_name:ident: $param_type:ident),* ]
+		[ $($fields:tt)* ]
+		[ $($args:tt)* ]
+	) => {
+		impl <'inp, $($param_name: $param_type + FromParser <'inp>),*> FromParser <'inp>
+				for $name <$($param_name),*> {
 			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 				parse! (parser, $($args)*);
-				Ok (Self { $($fields)? })
+				Ok (Self $($fields)*)
 			}
 		}
 	};
+
 }
 
 #[ macro_export ]
 macro_rules! struct_display {
+
 	(
-		$name:ident $(<$($param_name:ident: $param_type:ident),*>)? { $($fields:tt)* } = [ $($args:tt)* ]
+		$name:ident
+		$( < $($param_name:ident: $param_type:ident),* > )?
+		{ $($fields:tt)* }
+		= [ $($args:tt)* ]
 	) => {
-		impl $(<$($param_name: $param_type),*>)? Display for $name $(<$($param_name),*>)? {
+		struct_display! (
+			@main $name
+			[ $( $($param_name: $param_type),* )? ]
+			[ { $($fields)* } ]
+			[ $($args)* ]);
+	};
+
+	(
+		$name:ident
+		$( < $($param_name:ident: $param_type:ident),* > )?
+		( $($fields:tt)* )
+		= [ $($args:tt)* ]
+	) => {
+		struct_display! (
+			@main $name
+			[ $($param_name: $param_type),* ]
+			[ ( $($fields)* ) ]
+			[ $($args)* ]);
+	};
+
+	(
+		@main $name:ident
+		[ $($param_name:ident: $param_type:ident),* ]
+		[ $($fields:tt)* ]
+		[ $($args:tt)* ]
+	) => {
+		impl <$($param_name: $param_type),*> Display for $name <$($param_name),*> {
 			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-				let Self { $($fields)* } = self;
-				struct_display! (@args formatter, $($args)*);
+				let Self $($fields)* = self;
+				display! (formatter, $($args)*);
 				Ok (())
 			}
 		}
 	};
-	( @args $formatter:ident $(,)? ) => {};
-	( @args $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		struct_display! (@args $formatter, $($($rest)*)?);
-	};
-	( @args $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
-		Display::fmt ($expect, $formatter) ?;
-		struct_display! (@args $formatter, $($($rest)*)?);
-	};
-	( @args $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& DisplayDelim::new ("\n", $field), $formatter) ?;
-		struct_display! (@args $formatter, $($($rest)*)?);
-	};
+
 }
 
 #[ macro_export ]
@@ -1292,4 +1383,38 @@ macro_rules! struct_parser_display {
 		struct_parser! ($($rest)*);
 		struct_display! ($($rest)*);
 	};
+}
+
+#[ macro_export ]
+macro_rules! display {
+
+	( $formatter:ident $(,)? ) => {};
+	( $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
+		Display::fmt ($expect, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& DisplayDelim::new ("", $field.into_iter ()), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& DisplayDelim::new ("", $field.into_iter ()), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @confirm $(,$($rest:tt)*)? ) => {
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& DisplayDelim::new ($delim, $field.into_iter ()), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& DisplayDelim::new ("\n", $field.into_iter ()), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+
 }
