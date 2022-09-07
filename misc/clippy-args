@@ -88,7 +88,7 @@
 --deny clippy::duplicate_mod
 --deny clippy::duplicate_underscore_argument
 --deny clippy::duration_subsec
---deny clippy::else_if_without_else
+--allow clippy::else_if_without_else
 --deny clippy::empty_drop
 --deny clippy::empty_enum
 --deny clippy::empty_line_after_outer_attr

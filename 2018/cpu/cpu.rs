@@ -4,37 +4,6 @@ pub type CpuResult <Item> = Result <Item, CpuError>;
 
 pub use instr::Instr;
 
-#[ inline ]
-pub fn apply <Val: Int, const NUM: usize> (
-	opcode: Opcode,
-	arg_a: Val,
-	arg_b: Val,
-	arg_c: Val,
-	mut regs: Regs <Val, NUM>,
-) -> CpuResult <Regs <Val, NUM>> {
-
-	use CpuError::{ Internal as ErrInt, Register as ErrReg };
-
-	let val_a = match opcode.arg_a () {
-		ArgType::Reg => regs.get (arg_a).ok_or (ErrReg),
-		ArgType::Imm => Ok (arg_a),
-		ArgType::Ignore => Err (ErrInt),
-	};
-
-	let val_b = match opcode.arg_b () {
-		ArgType::Reg => regs.get (arg_b).ok_or (ErrReg),
-		ArgType::Imm => Ok (arg_b),
-		ArgType::Ignore => Err (ErrInt),
-	};
-
-	let val_c = opcode.op ().apply (val_a, val_b) ?;
-
-	regs.set (arg_c, val_c).ok_or (ErrReg) ?;
-
-	Ok (regs)
-
-}
-
 parse_display_enum! {
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
@@ -75,6 +44,37 @@ parse_display_enum! {
 impl Error for CpuError {}
 
 impl Opcode {
+
+	#[ inline ]
+	pub fn apply <Val: Int, const NUM: usize> (
+		& self,
+		arg_a: Val,
+		arg_b: Val,
+		arg_c: Val,
+		mut regs: Regs <Val, NUM>,
+	) -> CpuResult <Regs <Val, NUM>> {
+
+		use CpuError::{ Internal as ErrInt, Register as ErrReg };
+
+		let val_a = match self.arg_a () {
+			ArgType::Reg => regs.get (arg_a).ok_or (ErrReg),
+			ArgType::Imm => Ok (arg_a),
+			ArgType::Ignore => Err (ErrInt),
+		};
+
+		let val_b = match self.arg_b () {
+			ArgType::Reg => regs.get (arg_b).ok_or (ErrReg),
+			ArgType::Imm => Ok (arg_b),
+			ArgType::Ignore => Err (ErrInt),
+		};
+
+		let val_c = self.op ().apply (val_a, val_b) ?;
+
+		regs.set (arg_c, val_c).ok_or (ErrReg) ?;
+
+		Ok (regs)
+
+	}
 
 	#[ inline ]
 	#[ must_use ]
@@ -202,7 +202,7 @@ mod instr {
 
 	use super::*;
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub struct Instr <Val: Int> {
 		pub opcode: Opcode,
 		pub arg_a: Val,
@@ -216,11 +216,26 @@ mod instr {
 		]
 	);
 
+	impl <Val: Int> Debug for Instr <Val> {
+
+		#[ inline ]
+		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+			write! (formatter,
+				"Instr ({opcode:?}, {arg_a}, {arg_b}, {arg_c})",
+				opcode = self.opcode,
+				arg_a = self.arg_a,
+				arg_b = self.arg_b,
+				arg_c = self.arg_c,
+			)
+		}
+
+	}
+
 	impl <Val: Int> Instr <Val> {
 
 		#[ inline ]
 		pub fn apply <const NUM: usize> (& self, regs: Regs <Val, NUM>) -> CpuResult <Regs <Val, NUM>> {
-			crate::apply (self.opcode, self.arg_a, self.arg_b, self.arg_c, regs)
+			self.opcode.apply (self.arg_a, self.arg_b, self.arg_c, regs)
 		}
 
 	}

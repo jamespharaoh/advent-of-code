@@ -47,6 +47,7 @@ pub mod logic {
 		iter.count ().as_u32 ()
 	}
 
+	#[ allow (clippy::unused_peekable) ] // clippy is being dumb
 	fn make_iter (inner: impl Iterator <Item = u8>) -> impl Iterator <Item = u8> {
 		let mut inner = inner.peekable ();
 		let mut last = 0xff;

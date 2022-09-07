@@ -654,10 +654,7 @@ impl SymVal {
 		FormatExpand::SymVal (options, false, self)
 	}
 	fn simplified (& self) -> Self {
-		match self.simplify () {
-			Some (val) => val,
-			None => self.clone (),
-		}
+		self.simplify ().unwrap_or_else (|| self.clone ())
 	}
 	fn simplify (& self) -> Option <Self> {
 		let mut value = self;

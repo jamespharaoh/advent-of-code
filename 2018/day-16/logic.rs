@@ -83,7 +83,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let mut regs = Regs::default ();
 	for instr in input.instrs.iter () {
 		let opcode = num_to_opcode [instr.op.as_usize ()];
-		regs = cpu::apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, regs) ?;
+		regs = opcode.apply (instr.arg_a, instr.arg_b, instr.arg_c, regs) ?;
 	}
 
 	// return the value from register zero
@@ -95,7 +95,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 fn test_sample (opcode: Opcode, sample: & Sample) -> bool {
 	let instr = sample.instr;
 	let result = ok_or! (
-		cpu::apply (opcode, instr.arg_a, instr.arg_b, instr.arg_c, sample.before),
+		opcode.apply (instr.arg_a, instr.arg_b, instr.arg_c, sample.before),
 		return false);
 	result == sample.after
 }
