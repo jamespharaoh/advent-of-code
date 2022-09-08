@@ -71,6 +71,21 @@ macro_rules! pos_ops {
 		}
 		pos_ops! ($name: $($rest),*);
 	};
+	( $name:ident : Mul $(, $rest:tt)* ) => {
+		impl <Val: Int> Mul <Val> for $name <Val> {
+			type Output = Self;
+			#[ inline ]
+			fn mul (self, arg: Val) -> Self {
+				let self_coords = self.coord_to_array ();
+				let mut result_coords = Self::ZERO.coord_to_array ();
+				for idx in 0 .. self_coords.len () {
+					result_coords [idx] = self_coords [idx] * arg;
+				}
+				Self::coord_from_array (result_coords)
+			}
+		}
+		pos_ops! ($name: $($rest),*);
+	};
 	( $name:ident : Neg $(, $rest:tt)* ) => {
 		impl <Val: Int + Neg <Output = Val>> Neg for $name <Val> {
 			type Output = Self;
@@ -201,7 +216,7 @@ mod dim_2 {
 		}
 
 		pos_ops! (PosXY: Debug);
-		pos_ops! (PosXY: Add, Neg, Sub, Rem);
+		pos_ops! (PosXY: Add, Mul, Neg, Sub, Rem);
 
 	}
 
@@ -215,6 +230,7 @@ mod dim_2 {
 		impl <Val: Int> PosYX <Val> {
 
 			pub const ZERO: Self = Self { y: Val::ZERO, x: Val::ZERO };
+			pub const MAX: Self = Self { y: Val::MAX, x: Val::MAX };
 
 			#[ inline ]
 			#[ must_use ]
@@ -324,7 +340,7 @@ mod dim_2 {
 		}
 
 		pos_ops! (PosYX: Debug);
-		pos_ops! (PosYX: Add, Neg, Rem, Sub);
+		pos_ops! (PosYX: Add, Mul, Neg, Rem, Sub);
 
 	}
 
@@ -394,7 +410,7 @@ mod dim_2 {
 		}
 
 		pos_ops! (PosGeo: Debug);
-		pos_ops! (PosGeo: Add, Neg, Rem, Sub);
+		pos_ops! (PosGeo: Add, Mul, Neg, Rem, Sub);
 
 		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 		pub enum DirGeo { North, South, East, West }
@@ -524,7 +540,7 @@ mod dim_2 {
 		}
 
 		pos_ops! (PosRowCol: Debug);
-		pos_ops! (PosRowCol: Add, Neg, Rem, Sub);
+		pos_ops! (PosRowCol: Add, Mul, Neg, Rem, Sub);
 
 		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 		pub enum Dir2d { Up, Down, Left, Right }
@@ -637,7 +653,7 @@ mod dim_3 {
 		}
 
 		pos_ops! (PosXYZ: Debug);
-		pos_ops! (PosXYZ: Add, Neg, Rem, Sub);
+		pos_ops! (PosXYZ: Add, Mul, Neg, Rem, Sub);
 
 	}
 

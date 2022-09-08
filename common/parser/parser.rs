@@ -975,37 +975,37 @@ macro_rules! parse {
 	( $parser:expr, $($rest:tt)* ) => {
 		parse! (@recurse $parser, $($rest)*);
 	};
-	( @recurse $parser:expr $(,)?) => {
+	( @recurse $parser:expr $(,)? ) => {
 	};
-	( @recurse $parser:expr, $it_0:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
-	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $(, $($rest:tt)*)?) => {
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $(, $($rest:tt)*)? ) => {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};

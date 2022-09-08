@@ -246,6 +246,7 @@ fn get_super_blocks (
 ) -> HashMap <Val, Rc <SuperBlock>> {
 
 	let mut super_blocks: HashMap <Val, SuperBlock> = HashMap::new ();
+
 	for block in blocks.values () {
 		let mut final_block = block;
 		while let BlockNext::Simple (next_idx) = final_block.block_next {
@@ -258,12 +259,14 @@ fn get_super_blocks (
 		super_block.blocks.push (Rc::clone (block));
 	}
 
-	super_blocks.into_iter ()
-		.map (|(key, val)| (key, Rc::new (val)))
+	// TODO this fails with nightly for some reason, should be .into_iter ()
+	super_blocks.iter ()
+		.map (|(key, val)| (* key, Rc::new (val.clone ())))
 		.collect ()
 
 }
 
+#[ derive (Clone, Debug) ]
 pub struct SuperBlock {
 	idx: Val,
 	blocks: Vec <Rc <Block>>,

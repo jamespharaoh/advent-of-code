@@ -1,0 +1,21 @@
+param_modulo = "MODULO="
+param_top_factor = "TOP_FACTOR="
+param_left_factor = "LEFT_FACTOR="
+param_max_mins = "MAX_MINS="
+param_max_target = "MAX_TARGET="
+
+input_0 = "depth: "
+input_1 = "target: "
+
+misc_newline = "\x0a"
+
+digit_0 = "0"
+digit_1 = "1"
+digit_2 = "2"
+digit_3 = "3"
+digit_4 = "4"
+digit_5 = "5"
+digit_6 = "6"
+digit_7 = "7"
+digit_8 = "8"
+digit_9 = "9"

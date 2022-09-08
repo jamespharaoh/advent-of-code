@@ -353,7 +353,8 @@ impl <Node, Pri, const DIMS: usize> Seen <Node, Pri>
 
 	#[ inline ]
 	fn seen_get_mut (& mut self, node: Node) -> & mut SeenState <Pri> {
-		Self::get_mut (self, node).unwrap ()
+		Self::get_mut (self, node).unwrap_or_else (
+			|| panic! ("Position is not in grid: {node:?}"))
 	}
 
 }
