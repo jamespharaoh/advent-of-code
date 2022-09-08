@@ -1,0 +1,32 @@
+[package]
+
+	name = "aoc-2018-day-24"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2018: Day 24: Immune System Simulator 20XX"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2018/day-24"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+
+[lib]
+
+	path = "lib.rs"
+	doctest = false
+	crate-type = [ "rlib", "dylib" ]
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[[bin]]
+
+	name = "aoc-2018-day-24"
+	path = "main.rs"
+	test = false
+	doctest = false
+	bench = false

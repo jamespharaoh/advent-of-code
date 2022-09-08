@@ -703,3 +703,10 @@
 	path = "src/2018-day-23.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2018-day-24"
+	path = "src/2018-day-24.rs"
+	test = false
+	doc = false
