@@ -1,0 +1,19 @@
+params_max_iters = "MAX_ITERS="
+
+bot_0 = "pos=<"
+bot_1 = ">, r="
+
+misc_comma = ","
+misc_minus = "-"
+misc_newline = "\x0a"
+
+digit_0 = "0"
+digit_1 = "1"
+digit_2 = "2"
+digit_3 = "3"
+digit_4 = "4"
+digit_5 = "5"
+digit_6 = "6"
+digit_7 = "7"
+digit_8 = "8"
+digit_9 = "9"
