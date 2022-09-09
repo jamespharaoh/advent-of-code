@@ -211,7 +211,8 @@ mod instr {
 	}
 
 	struct_parser_display! (
-		Instr <Val: Int> { opcode, arg_a, arg_b, arg_c } = [
+		params = { Val: Int + FromParser <'inp> }
+		Instr <Val> { opcode, arg_a, arg_b, arg_c } = [
 			opcode, " ", arg_a, " ", arg_b, " ", arg_c,
 		]
 	);
