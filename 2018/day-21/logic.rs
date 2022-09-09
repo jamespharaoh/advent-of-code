@@ -18,7 +18,20 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 }
 
 fn sanity_check (input: & Input) -> GenResult <()> {
-	Regs::default ().get (input.ip).ok_or ("Instruction pointer register is not valid") ?;
+	let regs = Regs::default ();
+	regs.get (input.ip).ok_or ("Instruction pointer register is not valid") ?;
+	for (instr_idx, instr) in input.instrs.iter ().enumerate () {
+		if instr.opcode.arg_a () == ArgType::Reg {
+			regs.get (instr.arg_a).ok_or (format! (
+				"Instruction {instr_idx} references non-existent register {}", instr.arg_a)) ?;
+		}
+		if instr.opcode.arg_b () == ArgType::Reg {
+			regs.get (instr.arg_b).ok_or (format! (
+				"Instruction {instr_idx} references non-existent register {}", instr.arg_b)) ?;
+		}
+		regs.get (instr.arg_c).ok_or (format! (
+			"Instruction {instr_idx} references non-existent register {}", instr.arg_c)) ?;
+	}
 	Ok (())
 }
 
@@ -26,6 +39,7 @@ struct SolutionsIter <'inp> {
 	input: & 'inp Input,
 	todo: Vec <(Regs, Option <Val>)>,
 	seen: HashSet <Val>,
+	remain: u64,
 }
 
 impl <'inp> SolutionsIter <'inp> {
@@ -33,7 +47,8 @@ impl <'inp> SolutionsIter <'inp> {
 		let mut todo = Vec::new ();
 		todo.push ((Regs::default (), None));
 		let seen = HashSet::new ();
-		SolutionsIter { input, todo, seen }
+		let remain = input.params.max_instrs;
+		SolutionsIter { input, todo, seen, remain }
 	}
 }
 
@@ -42,6 +57,10 @@ impl <'inp> Iterator for SolutionsIter <'inp> {
 	fn next (& mut self) -> Option <GenResult <Val>> {
 		while let Some ((mut regs, reg_0)) = self.todo.pop () {
 			loop {
+				if self.remain == 0 {
+					return Some (Err ("Instruction limit reached".into ()));
+				}
+				self.remain -= 1;
 				let instr_idx = regs.get (self.input.ip).unwrap ().as_usize ();
 				if self.input.instrs.len () <= instr_idx.as_usize () {
 					return reg_0.map_or_else (
