@@ -17,6 +17,7 @@ pub use dim_2::PosRowCol;
 pub use dim_2::Turn2d;
 pub use dim_3::AxisXYZ;
 pub use dim_3::PosXYZ;
+pub use dim_4::PosXYZT;
 
 macro_rules! pos_ops {
 
@@ -654,6 +655,82 @@ mod dim_3 {
 
 		pos_ops! (PosXYZ: Debug);
 		pos_ops! (PosXYZ: Add, Mul, Neg, Rem, Sub);
+
+	}
+
+}
+
+mod dim_4 {
+
+	use super::*;
+
+	pub use xyzt::PosXYZT;
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisXYZT { X, Y, Z, T }
+
+	mod xyzt {
+
+		use super::*;
+
+		#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		pub struct PosXYZT <Val> { pub x: Val, pub y: Val, pub z: Val, pub t: Val }
+
+		impl <Val: Int> PosXYZT <Val> {
+			pub const ZERO: Self = Self { x: Val::ZERO, y: Val::ZERO, z: Val::ZERO, t: Val::ZERO };
+			pub const MAX: Self = Self { x: Val::MAX, y: Val::MAX, z: Val::MAX, t: Val::ZERO };
+			pub const MIN: Self = Self { x: Val::MIN, y: Val::MIN, z: Val::MIN, t: Val::ZERO };
+		}
+
+		impl <Val: Int> Coord <4> for PosXYZT <Val> {
+
+			type Val = Val;
+			type Signed = PosGeo <Val::Signed>;
+
+			#[ inline ]
+			fn coord_to_array (self) -> [Val; 4] {
+				[ self.x, self.y, self.z, self.t ]
+			}
+
+			#[ inline ]
+			fn coord_from_array (arr: [Val; 4]) -> Self {
+				Self { x: arr [0], y: arr [1], z: arr [2], t: arr [3] }
+			}
+
+		}
+
+		impl <Val: Int> Index <AxisXYZT> for PosXYZT <Val> {
+
+			type Output = Val;
+
+			#[ inline ]
+			fn index (& self, axis: AxisXYZT) -> & Val {
+				match axis {
+					AxisXYZT::X => & self.x,
+					AxisXYZT::Y => & self.y,
+					AxisXYZT::Z => & self.z,
+					AxisXYZT::T => & self.t,
+				}
+			}
+
+		}
+
+		impl <Val: Int> IndexMut <AxisXYZT> for PosXYZT <Val> {
+
+			#[ inline ]
+			fn index_mut (& mut self, axis: AxisXYZT) -> & mut Val {
+				match axis {
+					AxisXYZT::X => & mut self.x,
+					AxisXYZT::Y => & mut self.y,
+					AxisXYZT::Z => & mut self.z,
+					AxisXYZT::T => & mut self.t,
+				}
+			}
+
+		}
+
+		pos_ops! (PosXYZT: Debug);
+		pos_ops! (PosXYZT: Add, Mul, Neg, Rem, Sub);
 
 	}
 
