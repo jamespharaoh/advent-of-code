@@ -43,6 +43,7 @@ pub use std::marker::PhantomData;
 pub use std::mem;
 pub use std::ops;
 pub use std::ops::Add;
+pub use std::ops::AddAssign;
 pub use std::ops::BitAnd;
 pub use std::ops::BitAndAssign;
 pub use std::ops::BitOr;

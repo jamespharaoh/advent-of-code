@@ -3,8 +3,21 @@ use std::fmt;
 use std::fmt::Debug;
 use std::fmt::Display;
 use std::hash::Hash;
-use std::ops::{ Add, BitAnd, BitAndAssign, BitOr, BitOrAssign, Div, Mul, Neg, Rem, Shl, ShlAssign,
-	Shr, ShrAssign, Sub };
+use std::ops::Add;
+use std::ops::AddAssign;
+use std::ops::BitAnd;
+use std::ops::BitAndAssign;
+use std::ops::BitOr;
+use std::ops::BitOrAssign;
+use std::ops::Div;
+use std::ops::Mul;
+use std::ops::Neg;
+use std::ops::Rem;
+use std::ops::Shl;
+use std::ops::ShlAssign;
+use std::ops::Shr;
+use std::ops::ShrAssign;
+use std::ops::Sub;
 use std::str::FromStr;
 
 pub type NumResult <Val> = Result <Val, Overflow>;
@@ -31,6 +44,9 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	const BITS: u32;
 	const ZERO: Self;
 	const ONE: Self;
+	const TWO: Self;
+	const THREE: Self;
+	const FOUR: Self;
 	const MIN: Self;
 	const MAX: Self;
 	fn unsigned_abs (self) -> Self::Unsigned;
@@ -172,6 +188,15 @@ macro_rules! prim_int {
 			#[ allow (clippy::default_numeric_fallback) ]
 			const ONE: $signed = 1;
 
+			#[ allow (clippy::default_numeric_fallback) ]
+			const TWO: $signed = 2;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const THREE: $signed = 3;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const FOUR: $signed = 4;
+
 			const MIN: $signed = $signed::MIN;
 			const MAX: $signed = $signed::MAX;
 
@@ -236,6 +261,9 @@ macro_rules! prim_int {
 			const BITS: u32 = $signed::BITS;
 			const ZERO: $unsigned = 0;
 			const ONE: $unsigned = 1;
+			const TWO: $unsigned = 2;
+			const THREE: $unsigned = 3;
+			const FOUR: $unsigned = 4;
 			const MIN: $unsigned = $unsigned::MIN;
 			const MAX: $unsigned = $unsigned::MAX;
 
@@ -346,6 +374,16 @@ macro_rules! prim_int {
 		impl IntConv for $signed {
 
 			#[ inline ]
+			fn from_char (val: char) -> NumResult <Self> {
+				val.as_u32 ().try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn from_u8 (val: u8) -> NumResult <Self> {
+				val.try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
 			fn from_usize (val: usize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
@@ -423,6 +461,16 @@ macro_rules! prim_int {
 		}
 
 		impl IntConv for $unsigned {
+
+			#[ inline ]
+			fn from_char (val: char) -> NumResult <Self> {
+				val.as_u32 ().try_into ().ok ().ok_or (Overflow)
+			}
+
+			#[ inline ]
+			fn from_u8 (val: u8) -> NumResult <Self> {
+				val.try_into ().ok ().ok_or (Overflow)
+			}
 
 			#[ inline ]
 			fn from_usize (val: usize) -> NumResult <Self> {
@@ -520,14 +568,14 @@ pub trait IntUnsigned: Int {}
 
 pub trait IntSized <const BITS: usize>: Int {}
 
-pub trait IntOpsRust: Sized + Add <Output = Self> + BitAnd <Output = Self> + BitAndAssign
-	+ BitOr <Output = Self> + BitOrAssign + Div <Output = Self> + Mul <Output = Self>
-	+ Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32> + Shr <u32, Output = Self>
-	+ ShrAssign <u32> + Sub <Output = Self> {}
-impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + BitAnd <Output = Self>
+pub trait IntOpsRust: Sized + Add <Output = Self> + AddAssign + BitAnd <Output = Self>
 	+ BitAndAssign + BitOr <Output = Self> + BitOrAssign + Div <Output = Self>
 	+ Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32>
 	+ Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
+impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + AddAssign
+	+ BitAnd <Output = Self> + BitAndAssign + BitOr <Output = Self> + BitOrAssign
+	+ Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
+	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
 
 pub trait IntOpsSafe: Sized {
 
@@ -603,6 +651,10 @@ pub trait IntConv: Sized {
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
 	fn as_char (self) -> char { self.to_char ().unwrap () }
+
+	fn from_char (val: char) -> NumResult <Self>;
+
+	fn from_u8 (val: u8) -> NumResult <Self>;
 
 	/// Safely convert from [`usize`]
 	///
@@ -733,6 +785,16 @@ pub trait IntConv: Sized {
 }
 
 impl IntConv for char {
+
+	#[ inline ]
+	fn from_char (val: char) -> NumResult <Self> {
+		Ok (val)
+	}
+
+	#[ inline ]
+	fn from_u8 (val: u8) -> NumResult <Self> {
+		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+	}
 
 	#[ inline ]
 	fn from_usize (val: usize) -> NumResult <Self> {
