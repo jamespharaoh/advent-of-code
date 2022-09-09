@@ -543,7 +543,7 @@ mod dim_2 {
 		pos_ops! (PosRowCol: Debug);
 		pos_ops! (PosRowCol: Add, Mul, Neg, Rem, Sub);
 
-		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		pub enum Dir2d { Up, Down, Left, Right }
 
 		impl Add <Turn2d> for Dir2d {
