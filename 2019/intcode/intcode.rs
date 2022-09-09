@@ -213,6 +213,16 @@ impl <Val: Int> RunResult <Val> {
 		Ok (())
 	}
 
+	#[ allow (clippy::wildcard_enum_match_arm) ]
+	#[ inline ]
+	pub const fn output (self) -> Result <Option <Val>, Self> {
+		match self {
+			Self::Halt => Ok (None),
+			Self::Output (val) => Ok (Some (val)),
+			other => Err (other),
+		}
+	}
+
 }
 
 impl <Val: Int> Display for RunResult <Val> {
