@@ -47,6 +47,11 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	const TWO: Self;
 	const THREE: Self;
 	const FOUR: Self;
+	const FIVE: Self;
+	const SIX: Self;
+	const SEVEN: Self;
+	const EIGHT: Self;
+	const NINE: Self;
 	const MIN: Self;
 	const MAX: Self;
 	fn unsigned_abs (self) -> Self::Unsigned;
@@ -197,6 +202,21 @@ macro_rules! prim_int {
 			#[ allow (clippy::default_numeric_fallback) ]
 			const FOUR: $signed = 4;
 
+			#[ allow (clippy::default_numeric_fallback) ]
+			const FIVE: $signed = 5;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const SIX: $signed = 6;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const SEVEN: $signed = 7;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const EIGHT: $signed = 8;
+
+			#[ allow (clippy::default_numeric_fallback) ]
+			const NINE: $signed = 9;
+
 			const MIN: $signed = $signed::MIN;
 			const MAX: $signed = $signed::MAX;
 
@@ -264,6 +284,11 @@ macro_rules! prim_int {
 			const TWO: $unsigned = 2;
 			const THREE: $unsigned = 3;
 			const FOUR: $unsigned = 4;
+			const FIVE: $unsigned = 5;
+			const SIX: $unsigned = 6;
+			const SEVEN: $unsigned = 7;
+			const EIGHT: $unsigned = 8;
+			const NINE: $unsigned = 9;
 			const MIN: $unsigned = $unsigned::MIN;
 			const MAX: $unsigned = $unsigned::MAX;
 
