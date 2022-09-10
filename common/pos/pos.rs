@@ -546,6 +546,43 @@ mod dim_2 {
 		#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		pub enum Dir2d { Up, Down, Left, Right }
 
+		impl Dir2d {
+
+			#[ inline ]
+			#[ must_use ]
+			pub const fn left (self) -> Self {
+				match self {
+					Self::Up => Self::Left,
+					Self::Down => Self::Right,
+					Self::Left => Self::Down,
+					Self::Right => Self::Up,
+				}
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub const fn right (self) -> Self {
+				match self {
+					Self::Up => Self::Right,
+					Self::Down => Self::Left,
+					Self::Left => Self::Up,
+					Self::Right => Self::Down,
+				}
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub const fn around (self) -> Self {
+				match self {
+					Self::Up => Self::Down,
+					Self::Down => Self::Up,
+					Self::Left => Self::Right,
+					Self::Right => Self::Left,
+				}
+			}
+
+		}
+
 		impl Add <Turn2d> for Dir2d {
 
 			type Output = Self;
