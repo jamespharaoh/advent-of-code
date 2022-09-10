@@ -73,7 +73,7 @@ pub mod logic {
 					(0, "U", Dir::Up), (1, "D", Dir::Down),
 					(2, "L", Dir::Left), (3, "R", Dir::Right),
 				] {
-					let adj_pos = some_or! (pos.try_add (dir.into ()), continue);
+					let adj_pos = ok_or! (pos.try_add (dir.into ()), continue);
 					if adj_pos.y >= self.size.y || adj_pos.x >= self.size.x { continue }
 					if hash_hex [dir_idx] > b'a' {
 						self.todo.push_back ((adj_pos, format! ("{}{}", route, dir_tag)));

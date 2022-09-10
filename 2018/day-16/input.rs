@@ -21,8 +21,8 @@ impl Display for Input {
 		write! (formatter,
 			"{params}{samples}\n\n\n\n{instrs}\n",
 			params = self.params,
-			samples = DisplayDelim::new ("\n\n", & self.samples),
-			instrs = DisplayDelim::new ("\n", & self.instrs))
+			samples = (& self.samples).display_delim ("\n\n"),
+			instrs = (& self.instrs).display_delim ("\n"))
 	}
 }
 

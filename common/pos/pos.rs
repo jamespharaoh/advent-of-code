@@ -42,32 +42,21 @@ macro_rules! pos_ops {
 	( $name:ident : Add $(, $rest:tt)* ) => {
 		impl <Val: Int> $name <Val> {
 			#[ inline ]
-			pub fn try_add (self, other: $name <Val::Signed>) -> Option <Self> {
+			pub fn try_add (self, other: $name <Val::Signed>) -> NumResult <Self> {
 				let self_coords = self.coord_to_array ();
 				let other_coords = other.coord_to_array ();
 				let mut result_coords = Self::ZERO.coord_to_array ();
 				for idx in 0 .. self_coords.len () {
-					result_coords [idx] =
-						match self_coords [idx].add_signed (other_coords [idx]) {
-							Ok (val) => val,
-							Err (_) => return None,
-						};
+					result_coords [idx] = self_coords [idx].add_signed (other_coords [idx]) ?
 				}
-				Some (Self::coord_from_array (result_coords))
+				Ok (Self::coord_from_array (result_coords))
 			}
 		}
 		impl <Val: Int> Add <$name <Val::Signed>> for $name <Val> {
 			type Output = Self;
 			#[ inline ]
 			fn add (self, other: $name <Val::Signed>) -> Self {
-				let self_coords = self.coord_to_array ();
-				let other_coords = other.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] =
-						self_coords [idx].add_signed (other_coords [idx]).unwrap ();
-				}
-				Self::coord_from_array (result_coords)
+				self.try_add (other).unwrap ()
 			}
 		}
 		pos_ops! ($name: $($rest),*);

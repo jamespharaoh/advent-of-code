@@ -435,7 +435,7 @@
 --deny clippy::trait_duplication_in_bounds
 --deny clippy::trim_split_whitespace
 --deny clippy::trivial_regex
---deny clippy::trivially_copy_pass_by_ref
+--allow clippy::trivially_copy_pass_by_ref
 --allow clippy::try_err
 --allow clippy::type_complexity
 --deny clippy::type_repetition_in_bounds

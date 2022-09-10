@@ -811,7 +811,7 @@ impl <const MAX: usize> Debug for MultiVal <MAX> {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		match * self {
 			Self::Limited (ref vals) =>
-				write! (formatter, "MultiVal [{}]", DisplayDelim::new (", ", vals.iter ())),
+				write! (formatter, "MultiVal [{}]", vals.display_delim (", ")),
 			Self::Unlimited =>
 				write! (formatter, "MultiVal [ .. ]"),
 		}

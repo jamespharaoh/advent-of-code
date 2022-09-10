@@ -1143,15 +1143,6 @@ pub struct DisplayDelim <Delim, Inner> {
 	inner: Inner,
 }
 
-impl <Delim, Inner> DisplayDelim <Delim, Inner> {
-
-	#[ inline ]
-	pub const fn new (delim: Delim, inner: Inner) -> Self {
-		Self { delim, inner }
-	}
-
-}
-
 impl <Delim, Inner> Display for DisplayDelim <Delim, Inner>
 	where
 		Delim: Clone + Display,
@@ -1169,6 +1160,58 @@ impl <Delim, Inner> Display for DisplayDelim <Delim, Inner>
 		Ok (())
 	}
 
+}
+
+pub struct DisplayDelimWith <Delim, Inner, Item, DisplayFn> {
+	delim: Delim,
+	inner: Inner,
+	display_fn: DisplayFn,
+	phantom: PhantomData <Item>,
+}
+
+impl <Delim, Inner, Item, DisplayFn> Display for DisplayDelimWith <Delim, Inner, Item, DisplayFn>
+	where
+		Delim: Clone + Display,
+		DisplayFn: Fn (Item, & mut fmt::Formatter) -> fmt::Result,
+		Inner: Clone + IntoIterator <Item = Item> {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		let mut first = true;
+		for item in self.inner.clone () {
+			if ! first { Display::fmt (& self.delim, formatter) ?; }
+			(self.display_fn) (item, formatter) ?;
+			first = false;
+		}
+		Ok (())
+	}
+
+}
+
+pub trait IntoIteratorDisplayDelim: IntoIterator {
+
+	#[ inline ]
+	fn display_delim <Delim> (
+		self,
+		delim: Delim,
+	) -> DisplayDelim <Delim, Self>
+			where Self: Sized {
+		DisplayDelim { delim, inner: self }
+	}
+
+	#[ inline ]
+	fn display_delim_with <Delim, Item, DisplayFn> (
+		self,
+		delim: Delim,
+		display_fn: DisplayFn,
+	) -> DisplayDelimWith <Delim, Self, Item, DisplayFn>
+			where Self: Sized {
+		DisplayDelimWith { delim, inner: self, display_fn, phantom: PhantomData }
+	}
+
+}
+
+impl <SomeIter> IntoIteratorDisplayDelim for SomeIter where SomeIter: IntoIterator {
 }
 
 #[ macro_export ]
@@ -1455,22 +1498,26 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& DisplayDelim::new ("", $field.into_iter ()), $formatter) ?;
+		Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& DisplayDelim::new ("", $field.into_iter ()), $formatter) ?;
+		Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @confirm $(,$($rest:tt)*)? ) => {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& DisplayDelim::new ($delim, $field.into_iter ()), $formatter) ?;
+		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& DisplayDelim::new ("\n", $field.into_iter ()), $formatter) ?;
+		Display::fmt (& $field.display_delim ("\n"), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @lines $field:ident = $display:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 

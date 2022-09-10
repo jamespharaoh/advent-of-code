@@ -41,16 +41,16 @@ impl Display for Group {
 		if ! self.weaknesses.is_empty () && ! self.immunities.is_empty () {
 			write! (formatter,
 				"(weak to {weaknesses}; immune to {immunities}) ",
-				weaknesses = DisplayDelim::new (", ", & self.weaknesses),
-				immunities = DisplayDelim::new (", ", & self.immunities)) ?;
+				weaknesses = (& self.weaknesses).display_delim (", "),
+				immunities = (& self.immunities).display_delim (", ")) ?;
 		} else if ! self.weaknesses.is_empty () {
 			write! (formatter,
 				"(weak to {weaknesses}) ",
-				weaknesses = DisplayDelim::new (", ", & self.weaknesses)) ?;
+				weaknesses = (& self.weaknesses).display_delim (", ")) ?;
 		} else if ! self.immunities.is_empty () {
 			write! (formatter,
 				"(immune to {immunities}) ",
-				immunities = DisplayDelim::new (", ", & self.immunities)) ?;
+				immunities = (& self.immunities).display_delim (", ")) ?;
 		}
 		write! (formatter,
 			"with an attack that does {attack_damage} {attack_type} damage at initiative {initiative}",

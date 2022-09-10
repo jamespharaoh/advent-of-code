@@ -182,7 +182,7 @@ impl <Val: Int, const NUM: usize> Display for Regs <Val, NUM> {
 
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter, "[{}]", DisplayDelim::new (", ", self.regs))
+		write! (formatter, "[{}]", self.regs.display_delim (", "))
 	}
 
 }
