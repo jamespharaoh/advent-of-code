@@ -102,7 +102,7 @@ impl Machine {
 			Instr::Eql (dest, src) => {
 				let src_val = self.regs.retrieve_or_int (src);
 				let dst_val = self.regs.retrieve (dest);
-				self.regs.store (dest, if dst_val == src_val { 1 } else { 0 });
+				self.regs.store (dest, i64::from (dst_val == src_val));
 			},
 		}
 		self.regs.pc += 1;

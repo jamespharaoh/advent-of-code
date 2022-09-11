@@ -2,7 +2,6 @@
 --deny clippy::almost_complete_letter_range
 --deny clippy::almost_swapped
 --deny clippy::approx_constant
---allow clippy::arithmetic
 --deny clippy::as_conversions
 --deny clippy::as_underscore
 --deny clippy::assertions_on_constants

@@ -809,3 +809,10 @@
 	path = "src/2019-day-12.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2019-day-13"
+	path = "src/2019-day-13.rs"
+	test = false
+	doc = false

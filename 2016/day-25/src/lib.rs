@@ -34,7 +34,7 @@ pub mod logic {
 			let mut states = HashSet::new ();
 			while let Some (out) = cpu.exec () ? {
 				if out != expect { break }
-				expect = if expect == 0_i32 { 1_i32 } else { 0_i32 };
+				expect = i32::from (expect == 0_i32);
 				num += 1;
 				if num >= 2 && ! states.insert ((expect, cpu.next, cpu.reg_a, cpu.reg_b, cpu.reg_c, cpu.reg_d)) {
 					return Ok (start);

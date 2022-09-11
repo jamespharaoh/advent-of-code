@@ -552,9 +552,9 @@ impl SymVal {
 			Self::Modulo (ref left, ref right) =>
 				combine (& lookup (left), & lookup (right), |a, b| a % b),
 			Self::IsEqual (ref left, ref right) =>
-				combine (& lookup (left), & lookup (right), |a, b| if a == b { 1 } else { 0 }),
+				combine (& lookup (left), & lookup (right), |a, b| i64::from (a == b)),
 			Self::IsUnequal (ref left, ref right) =>
-				combine (& lookup (left), & lookup (right), |a, b| if a != b { 1 } else { 0 }),
+				combine (& lookup (left), & lookup (right), |a, b| i64::from (a != b)),
 			Self::Value (ref arg) =>
 				vec! [ * arg ],
 			Self::Error (ref arg) =>
@@ -749,7 +749,7 @@ impl SymVal {
 					(& Self::IsEqual (_, _), & Self::Value (1)) => Some (left_symval),
 					(& Self::Value (1), & Self::IsEqual (_, _)) => Some (right_symval),
 					(& Self::Value (left_val), & Self::Value (right_val)) =>
-						Some (Self::Value (if left_val == right_val { 1 } else { 0 })),
+						Some (Self::Value (i64::from (left_val == right_val))),
 					_ => None,
 				}
 			},
@@ -760,7 +760,7 @@ impl SymVal {
 					(& Self::Error (_), _) => Some (left_symval),
 					(_, & Self::Error (_)) => Some (right_symval),
 					(& Self::Value (ref left_val), & Self::Value (ref right_val)) =>
-						Some (Self::Value (if left_val != right_val { 1 } else { 0 })),
+						Some (Self::Value (i64::from (left_val != right_val))),
 					_ => None,
 				}
 			},

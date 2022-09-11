@@ -79,7 +79,7 @@ pub mod logic {
 					if from != here { continue }
 					if route.len () == nums.len () && to != 0 { continue }
 					if route.len () < nums.len () && route.contains (& to) { continue }
-					if route.len () < nums.len () + if round_trip { 1 } else { 0 } {
+					if route.len () < nums.len () + usize::from (round_trip) {
 						let mut new_route = route.clone ();
 						new_route.push (to);
 						adder.add (new_route.clone (), dist + next_dist);

@@ -132,11 +132,11 @@ pub mod logic {
 
 		}
 
-		const fn calc_sep_bit (old_count: usize) -> u64 {
+		fn calc_sep_bit (old_count: usize) -> u64 {
 			let new_count = old_count + 1;
 			let changes = old_count ^ new_count;
 			let bit_idx = usize::BITS - changes.leading_zeros ();
-			if new_count & (1 << bit_idx) != 0 { 1 } else { 0 }
+			u64::from (new_count & (1 << bit_idx) != 0)
 		}
 
 	}

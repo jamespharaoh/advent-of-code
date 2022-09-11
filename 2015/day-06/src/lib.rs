@@ -37,11 +37,11 @@ pub mod logic {
 	}
 
 	#[ allow (clippy::unnecessary_wraps) ]
-	const fn mode_fn_one (action: Action, old_active: u8) -> NumResult <u8> {
+	fn mode_fn_one (action: Action, old_active: u8) -> NumResult <u8> {
 		Ok (match action {
 			Action::On => 1,
 			Action::Off => 0,
-			Action::Toggle => if old_active == 0 { 1 } else { 0 },
+			Action::Toggle => u8::from (old_active == 0),
 		})
 	}
 

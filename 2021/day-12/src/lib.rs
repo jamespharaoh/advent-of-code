@@ -102,7 +102,7 @@ mod model {
 			let cave_a = caves.name_idx (line_parts [0]);
 			let cave_b = caves.name_idx (line_parts [1]);
 			for (cave_0, cave_1) in [(cave_a, cave_b), (cave_b, cave_a)] {
-				caves.connexions.entry (cave_0).or_insert (Vec::new ()).push (cave_1);
+				caves.connexions.entry (cave_0).or_default ().push (cave_1);
 			}
 		}
 		Ok (caves)
