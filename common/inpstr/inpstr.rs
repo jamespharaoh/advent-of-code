@@ -6,17 +6,21 @@ pub enum InpStr <'inp> {
 	RefCount (Rc <str>),
 }
 
+impl InpStr <'static> {
+
+	#[ inline ]
+	pub fn alloc (val: impl AsRef <str>) -> Self {
+		Self::RefCount (Rc::from (val.as_ref ()))
+	}
+
+}
+
 impl <'inp> InpStr <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
 	pub const fn borrow (val: & 'inp str) -> Self {
 		Self::Borrow (val)
-	}
-
-	#[ inline ]
-	pub fn alloc (val: impl AsRef <str>) -> Self {
-		Self::RefCount (Rc::from (val.as_ref ()))
 	}
 
 	#[ inline ]

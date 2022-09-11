@@ -1071,6 +1071,13 @@ macro_rules! parse {
 			.delim_fn ($delim, $item_parse)
 			.collect ();
 	};
+	( @item $parser:expr, @delim_some $delim:literal $item_name:ident ) => {
+		let mut temp_iter = $parser.delim_fn ($delim, Parser::item);
+		let $item_name = match temp_iter.next () {
+			Some (first) => iter::once (first).chain (temp_iter).collect (),
+			None => return Err ($parser.err ()),
+		};
+	};
 	( @item $parser:expr, @lines $item_name:ident ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", Parser::item)
@@ -1509,6 +1516,10 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};

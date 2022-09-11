@@ -74,11 +74,11 @@ macro_rules! aoc_fuzz_mutator {
 
 				use super::*;
 
-				type TransFn = for <'inp> fn (& mut $input_type, & mut StdRng) -> Option <()>;
+				type TransFn = for <'inp0, 'inp> fn (& 'inp0 mut $input_type, & mut StdRng) -> Option <()>;
 
 				aoc_fuzz_mutator! (@transforms $(( $trans_name $($trans_weights)* ))*);
 
-				pub fn random <'inp> (input: & mut $input_type, rng: & mut StdRng) {
+				pub fn random <'inp0, 'inp> (input: & 'inp0 mut $input_type, rng: & mut StdRng) {
 					let & (_, reps, ref trans_fn) =
 						TRANSFORMS.choose_weighted (rng, |& (weight, _, _)| weight).unwrap ();
 					let mut num_failure = 0;
@@ -93,8 +93,8 @@ macro_rules! aoc_fuzz_mutator {
 				}
 
 				$(
-					$trans_vis fn $trans_name <$trans_life> (
-						$trans_input: & mut $input_type,
+					$trans_vis fn $trans_name <'inp0, $trans_life> (
+						$trans_input: & 'inp0 mut $input_type,
 						$trans_rng: & mut StdRng,
 					) -> Option <()> {
 						$($trans_body)*
