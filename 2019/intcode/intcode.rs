@@ -33,6 +33,11 @@ impl <Val: Int> Machine <Val> {
 	}
 
 	#[ inline ]
+	pub fn set_mem_limit (& mut self, mem_limit: u32) {
+		self.mem_limit = mem_limit;
+	}
+
+	#[ inline ]
 	pub fn input (& mut self, value: Val) {
 		self.input_buffer.push_back (value);
 	}

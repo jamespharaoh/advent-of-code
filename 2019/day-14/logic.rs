@@ -22,7 +22,7 @@ pub fn part_two (input: & Input) -> GenResult <Qty> {
 	}
 	let mut min: Qty = max / 2;
 	while max - min != 1 {
-		let guess = if max == Qty::MAX { 1 << (Qty::BITS - 1) } else { min + (max - min) / 2 };
+		let guess = min + (max - min) / 2;
 		let success = calc_ore (& reactions, & order, guess) ? <= input.params.num_ore;
 		if success { min = guess; } else { max = guess; }
 	}
