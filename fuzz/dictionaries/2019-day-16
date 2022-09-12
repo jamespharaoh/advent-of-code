@@ -1,0 +1,18 @@
+param_0 = "NUM_ITERS="
+param_1 = "NUM_REPS="
+param_2 = "OFFSET_DIGITS="
+param_3 = "RESULT_DIGITS="
+param_4 = "MAX_SIGNAL="
+
+misc_newline = "\x0a"
+
+digit_0 = "0"
+digit_1 = "1"
+digit_2 = "2"
+digit_3 = "3"
+digit_4 = "4"
+digit_5 = "5"
+digit_6 = "6"
+digit_7 = "7"
+digit_8 = "8"
+digit_9 = "9"
