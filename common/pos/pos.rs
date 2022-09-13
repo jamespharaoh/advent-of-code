@@ -224,6 +224,12 @@ mod dim_2 {
 
 			#[ inline ]
 			#[ must_use ]
+			pub const fn new (y: Val, x: Val) -> Self {
+				Self { y, x }
+			}
+
+			#[ inline ]
+			#[ must_use ]
 			pub fn up (self, num: Val) -> Self {
 				Self { y: self.y.safe_sub (num), x: self.x }
 			}

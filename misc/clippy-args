@@ -321,7 +321,7 @@
 --deny clippy::option_as_ref_deref
 --deny clippy::option_env_unwrap
 --deny clippy::option_filter_map
---deny clippy::option_if_let_else
+--allow clippy::option_if_let_else
 --deny clippy::option_map_or_none
 --deny clippy::option_map_unit_fn
 --deny clippy::option_option
