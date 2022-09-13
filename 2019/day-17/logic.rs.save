@@ -1,0 +1,37 @@
+//! Logic for solving the puzzles
+
+use super::*;
+use input::Input;
+
+pub fn part_one (input: & Input) -> GenResult <String> {
+	let mut signal = input.data.clone ();
+	for _ in 0 .. 100 {
+		signal = apply_fft (& signal);
+	}
+	Ok (signal [0 .. 8].display_delim ("").to_string ())
+}
+
+fn apply_fft (data: & [u8]) -> Vec <u8> {
+	let mut result: Vec <u8> = Vec::with_capacity (data.len ());
+	for dst_index in 0 .. data.len () {
+		let mut sum: i64 = 0;
+		for src_index in 0 .. data.len () {
+			let phase = (src_index + 1) / (dst_index + 1) % 4;
+			let co = match phase {
+				0 => 0,
+				1 => 1,
+				2 => 0,
+				3 => -1,
+				_ => unreachable! (),
+			};
+			sum += co * data [src_index] as i64;
+		}
+		result.push ((sum.abs () % 10) as u8);
+	}
+	result
+}
++0-0+0-0+0-0+0-0
+0++00--00++00--0
+00+++000---000++
+000++++0000----0
+0000+++++00000--
