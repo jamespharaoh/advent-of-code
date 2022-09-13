@@ -229,27 +229,23 @@ mod dim_2 {
 			}
 
 			#[ inline ]
-			#[ must_use ]
-			pub fn up (self, num: Val) -> Self {
-				Self { y: self.y.safe_sub (num), x: self.x }
+			pub fn up (self, num: Val) -> NumResult <Self> {
+				Ok (Self { y: Val::sub_2 (self.y, num) ?, x: self.x })
 			}
 
 			#[ inline ]
-			#[ must_use ]
-			pub fn down (self, num: Val) -> Self {
-				Self { y: self.y.safe_add (num), x: self.x }
+			pub fn down (self, num: Val) -> NumResult <Self> {
+				Ok (Self { y: Val::add_2 (self.y, num) ?, x: self.x })
 			}
 
 			#[ inline ]
-			#[ must_use ]
-			pub fn left (& self, num: Val) -> Self {
-				Self { y: self.y, x: self.x.safe_sub (num) }
+			pub fn left (& self, num: Val) -> NumResult <Self> {
+				Ok (Self { y: self.y, x: Val::sub_2 (self.x, num) ? })
 			}
 
 			#[ inline ]
-			#[ must_use ]
-			pub fn right (& self, num: Val) -> Self {
-				Self { y: self.y, x: self.x.safe_add (num) }
+			pub fn right (& self, num: Val) -> NumResult <Self> {
+				Ok (Self { y: self.y, x: Val::add_2 (self.x, num) ? })
 			}
 
 			#[ inline ]

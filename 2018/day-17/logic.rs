@@ -100,7 +100,7 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 	queue.push (Pos { y: 0, x: 500 });
 	while let Some (pos) = queue.pop () {
 		let tile_here = grid.get (pos).unwrap ();
-		let tile_down = grid.get (pos.down (1));
+		let tile_down = grid.get (pos.down (1) ?);
 		match (tile_here, tile_down) {
 
 			// retracing areas which are already handled
@@ -113,7 +113,7 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 			(DrySand, Some (DrySand)) => {
 				grid.set (pos, Tile::WetSand);
 				queue.push (pos);
-				queue.push (pos.down (1));
+				queue.push (pos.down (1) ?);
 			},
 
 			// flowing down into an existing flow
@@ -131,7 +131,7 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 				fn check_dir (grid: & Grid, mut pos: Pos, next_fn: fn (Pos) -> Pos) -> (bool, Coord) {
 					let bounded = loop {
 						let next = next_fn (pos);
-						match (grid.get (next).unwrap (), grid.get (next.down (1)).unwrap_or (DrySand)) {
+						match (grid.get (next).unwrap (), grid.get (next.down (1).unwrap ()).unwrap_or (DrySand)) {
 							(DrySand | WetSand, Clay | Water) => pos = next,
 							(Clay, _) => break true,
 							(DrySand | WetSand, DrySand | WetSand) => break false,
@@ -141,8 +141,8 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 					(bounded, pos.x)
 				}
 
-				let (left_bounded, left) = check_dir (& grid, pos, |pos| pos.left (1));
-				let (right_bounded, right) = check_dir (& grid, pos, |pos| pos.right (1));
+				let (left_bounded, left) = check_dir (& grid, pos, |pos| pos.left (1).unwrap ());
+				let (right_bounded, right) = check_dir (& grid, pos, |pos| pos.right (1).unwrap ());
 
 				if left_bounded && right_bounded {
 
@@ -159,8 +159,8 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 					for x in left ..= right {
 						grid.set (Pos { x, .. pos }, WetSand);
 					}
-					if ! left_bounded { queue.push (Pos { x: left, .. pos }.left (1)); }
-					if ! right_bounded { queue.push (Pos { x: right, .. pos }.right (1)); }
+					if ! left_bounded { queue.push (Pos { x: left, .. pos }.left (1).unwrap ()); }
+					if ! right_bounded { queue.push (Pos { x: right, .. pos }.right (1).unwrap ()); }
 
 				}
 			},

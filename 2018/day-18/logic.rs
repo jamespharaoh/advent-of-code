@@ -33,17 +33,17 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 		grid = Grid::wrap (
 			grid.iter ()
 				.map (|(pos, val)|
-					(pos, val, [
-						grid.get (pos.up (1).left (1)).unwrap_or (Open),
-						grid.get (pos.up (1)).unwrap_or (Open),
-						grid.get (pos.up (1).right (1)).unwrap_or (Open),
-						grid.get (pos.left (1)).unwrap_or (Open),
-						grid.get (pos.right (1)).unwrap_or (Open),
-						grid.get (pos.down (1).left (1)).unwrap_or (Open),
-						grid.get (pos.down (1)).unwrap_or (Open),
-						grid.get (pos.down (1).right (1)).unwrap_or (Open),
-					]))
-				.map (|(_, here, around)| {
+					Ok::<_, Overflow> ((pos, val, [
+						grid.get (pos.up (1) ?.left (1) ?).unwrap_or (Open),
+						grid.get (pos.up (1) ?).unwrap_or (Open),
+						grid.get (pos.up (1) ?.right (1) ?).unwrap_or (Open),
+						grid.get (pos.left (1) ?).unwrap_or (Open),
+						grid.get (pos.right (1) ?).unwrap_or (Open),
+						grid.get (pos.down (1) ?.left (1) ?).unwrap_or (Open),
+						grid.get (pos.down (1) ?).unwrap_or (Open),
+						grid.get (pos.down (1) ?.right (1) ?).unwrap_or (Open),
+					])))
+				.map_ok (|(_, here, around)| {
 					let num_trees = around.iter ().filter (|&& tile| tile == Tree).count ();
 					let num_yards = around.iter ().filter (|&& tile| tile == Yard).count ();
 					match (here, num_trees, num_yards) {
@@ -55,7 +55,7 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 						(Yard, _, _) => Open,
 					}
 				})
-				.collect (),
+				.try_collect () ?,
 			grid.native_origin (),
 			grid.native_size (),
 		);
