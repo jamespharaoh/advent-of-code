@@ -154,6 +154,13 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
+	pub fn try_set (& mut self, pos: Pos, item: Storage::Item) -> Option <()> {
+		let idx = Pos::to_scalar (pos, self.origin, self.size) ?;
+		self.storage.storage_set (idx, item);
+		Some (())
+	}
+
+	#[ inline ]
 	pub fn iter <'sto> (& 'sto self) -> GridIter <<& 'sto Storage as GridStorageIntoIter>::Iter, Pos, DIMS>
 			where & 'sto Storage: GridStorageIntoIter {
 		GridIter {
