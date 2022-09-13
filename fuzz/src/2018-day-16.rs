@@ -35,42 +35,32 @@ aoc_fuzz_mutator! {
 		let idx = rng.gen_range (0 .. input.samples.len ());
 		let sample = & mut input.samples [idx];
 		match rng.gen_range (0 .. 12) {
-			0 => sample.before.reg_0 = rng.gen_range (0 .. 32),
-			1 => sample.before.reg_1 = rng.gen_range (0 .. 32),
-			2 => sample.before.reg_2 = rng.gen_range (0 .. 32),
-			3 => sample.before.reg_3 = rng.gen_range (0 .. 32),
+			0 => sample.before.set (0, rng.gen_range (0 .. 32)).unwrap (),
+			1 => sample.before.set (1, rng.gen_range (0 .. 32)).unwrap (),
+			2 => sample.before.set (2, rng.gen_range (0 .. 32)).unwrap (),
+			3 => sample.before.set (3, rng.gen_range (0 .. 32)).unwrap (),
 			4 => sample.instr.op = rng.gen_range (0 .. 16),
 			5 => sample.instr.op = rng.gen_range (0 .. 32),
 			6 => sample.instr.op = rng.gen_range (0 .. 32),
 			7 => sample.instr.op = rng.gen_range (0 .. 32),
-			8 => sample.after.reg_0 = rng.gen_range (0 .. 32),
-			9 => sample.after.reg_1 = rng.gen_range (0 .. 32),
-			10 => sample.after.reg_2 = rng.gen_range (0 .. 32),
-			11 => sample.after.reg_3 = rng.gen_range (0 .. 32),
+			8 => sample.after.set (0, rng.gen_range (0 .. 32)).unwrap (),
+			9 => sample.after.set (1, rng.gen_range (0 .. 32)).unwrap (),
+			10 => sample.after.set (2, rng.gen_range (0 .. 32)).unwrap (),
+			11 => sample.after.set (3, rng.gen_range (0 .. 32)).unwrap (),
 			_ => unreachable! (),
 		}
 	}
 
 	transform add_sample (100 * 1, 10 * 10, 1 * 100) = |input, rng| {
 		let sample = Sample {
-			before: Regs {
-				reg_0: rng.gen_range (0 .. 32),
-				reg_1: rng.gen_range (0 .. 32),
-				reg_2: rng.gen_range (0 .. 32),
-				reg_3: rng.gen_range (0 .. 32),
-			},
+			before: Regs::new (array::from_fn (|_| rng.gen_range (0 .. 32))),
 			instr: Instr {
 				op: rng.gen_range (0 .. 16),
 				arg_a: rng.gen_range (0 .. 32),
 				arg_b: rng.gen_range (0 .. 32),
 				arg_c: rng.gen_range (0 .. 32),
 			},
-			after: Regs {
-				reg_0: rng.gen_range (0 .. 32),
-				reg_1: rng.gen_range (0 .. 32),
-				reg_2: rng.gen_range (0 .. 32),
-				reg_3: rng.gen_range (0 .. 32),
-			},
+			after: Regs::new (array::from_fn (|_| rng.gen_range (0 .. 32))),
 		};
 		let new_idx = rng.gen_range (0 ..= input.samples.len ());
 		input.samples.insert (new_idx, sample);

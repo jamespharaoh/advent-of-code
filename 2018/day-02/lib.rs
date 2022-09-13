@@ -13,7 +13,7 @@ puzzle_info! {
 	name = "Inventory Management System";
 	year = 2018;
 	day = 2;
-	parse = |input| input::Input::parse (input);
+	parse = |input| input::Input::parse_from_lines (input);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }

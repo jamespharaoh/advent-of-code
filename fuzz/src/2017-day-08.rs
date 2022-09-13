@@ -1,9 +1,6 @@
 #![ no_main ]
 
-use libfuzzer_sys::fuzz_mutator;
 use libfuzzer_sys::fuzz_target;
-use libfuzzer_sys::fuzzer_mutate;
-use rand::prelude::*;
 
 use aoc_common::*;
 use aoc_2017::day_08::*;

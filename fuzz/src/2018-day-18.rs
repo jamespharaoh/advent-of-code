@@ -4,7 +4,6 @@ use libfuzzer_sys::fuzz_target;
 
 use aoc_2018::day_18::*;
 use aoc_common::*;
-use aoc_fuzz::*;
 
 use input::Input;
 

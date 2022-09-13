@@ -137,10 +137,16 @@ impl Op {
 
 #[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 pub struct Regs <Val: Int, const NUM: usize> {
-	pub regs: [Val; NUM],
+	regs: [Val; NUM],
 }
 
 impl <Val: Int, const NUM: usize> Regs <Val, NUM> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn new (regs: [Val; NUM]) -> Self {
+		Self { regs }
+	}
 
 	#[ inline ]
 	#[ must_use ]
