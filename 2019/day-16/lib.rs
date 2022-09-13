@@ -6,6 +6,7 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
 
