@@ -64,135 +64,143 @@ impl <Val: Int> Machine <Val> {
 
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn run (& mut self) -> RunResult <Val> {
+		match self.run_real () {
+			Ok (val) => val,
+			Err (RunResult::Instr (_, _)) => {
+				let opcode_val = self.mem_get_real (self.pos).unwrap ();
+				RunResult::Instr (self.pos, opcode_val)
+			},
+			Err (val) => val,
+		}
+	}
+
+	#[ inline ]
+	fn run_real (& mut self) -> Result <RunResult <Val>, RunResult <Val>> {
 		loop {
-			if self.max_ops == 0 { return RunResult::MaxOps }
+			if self.max_ops == 0 { return Err (RunResult::MaxOps) }
 			self.max_ops -= 1;
-			let opcode_val = some_or! (self.mem_get (self.pos), return RunResult::Memory);
-			let opcode_err = RunResult::Instr (self.pos, opcode_val);
-			let opcode = some_or! (Opcode::from_int (opcode_val), return opcode_err);
+			let opcode = Opcode::from_int (self.mem_get (self.pos).ok_or (RunResult::Memory) ?)
+				.ok_or (RunResult::Instr (Val::ZERO, Val::ZERO)) ?;
 			match opcode.instr {
 				Instr::Add => {
-					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					let result = some_or! (
-						Val::add_2 (param_0, param_1).ok (),
-						return RunResult::Overflow);
-					some_or! (self.param_set (opcode, 2, result), return opcode_err);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
+					self.param_set (opcode, 2, Val::add_2 (
+						self.param_get (opcode, 0) ?,
+						self.param_get (opcode, 1) ?,
+					) ?) ?;
+					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
 				},
 				Instr::Multiply => {
-					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					let result = some_or! (
-						Val::mul_2 (param_0, param_1).ok (),
-						return RunResult::Overflow);
-					some_or! (self.param_set (opcode, 2, result), return opcode_err);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
+					self.param_set (opcode, 2, Val::mul_2 (
+						self.param_get (opcode, 0) ?,
+						self.param_get (opcode, 1) ?,
+					) ?) ?;
+					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
 				},
 				Instr::Input => {
 					if let Some (value) = self.input_buffer.pop_front () {
-						some_or! (self.param_set (opcode, 0, value), return opcode_err);
-						self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
+						self.param_set (opcode, 0, value) ?;
+						self.pos = Val::add_2 (self.pos, Val::TWO) ?;
 					} else {
-						return RunResult::Input;
+						return Ok (RunResult::Input);
 					}
 				},
 				Instr::Output => {
-					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
-					return RunResult::Output (value);
+					let value = self.param_get (opcode, 0) ?;
+					self.pos = Val::add_2 (self.pos, Val::TWO) ?;
+					return Ok (RunResult::Output (value));
 				},
 				Instr::JumpIfTrue => {
-					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let dest = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					if value != Val::ZERO {
-						self.pos = dest;
+					if self.param_get (opcode, 0) ? != Val::ZERO {
+						self.pos = self.param_get (opcode, 1) ?;
 					} else {
-						self.pos = ok_or! (Val::add_2 (self.pos, Val::THREE), return RunResult::Overflow);
+						self.pos = Val::add_2 (self.pos, Val::THREE) ?;
 					}
 				},
 				Instr::JumpIfFalse => {
-					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let dest = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					if value == Val::ZERO {
-						self.pos = dest;
+					if self.param_get (opcode, 0) ? == Val::ZERO {
+						self.pos = self.param_get (opcode, 1) ?;
 					} else {
-						self.pos = ok_or! (Val::add_2 (self.pos, Val::THREE), return RunResult::Overflow);
+						self.pos = Val::add_2 (self.pos, Val::THREE) ?;
 					}
 				},
 				Instr::LessThan => {
-					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					let value = if param_0 < param_1 { Val::ONE } else { Val::ZERO };
-					some_or! (self.param_set (opcode, 2, value), return opcode_err);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
+					let value = self.param_get (opcode, 0) ? < self.param_get (opcode, 1) ?;
+					self.param_set (opcode, 2, if value { Val::ONE } else { Val::ZERO }) ?;
+					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
 				},
 				Instr::Equals => {
-					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
-					let value = if param_0 == param_1 { Val::ONE } else { Val::ZERO };
-					some_or! (self.param_set (opcode, 2, value), return opcode_err);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
+					let value = self.param_get (opcode, 0) ? == self.param_get (opcode, 1) ?;
+					self.param_set (opcode, 2, if value { Val::ONE } else { Val::ZERO }) ?;
+					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
 				},
 				Instr::AdjustRelBase => {
-					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
-					self.rel = some_or! (Val::add_2 (self.rel, value).ok (), return RunResult::Overflow);
-					self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
+					self.rel = Val::add_2 (self.rel, self.param_get (opcode, 0) ?) ?;
+					self.pos = Val::add_2 (self.pos, Val::TWO) ?;
 				},
-				Instr::Halt => {
-					return RunResult::Halt;
-				},
+				Instr::Halt => return Ok (RunResult::Halt),
 			}
 		}
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	fn param_get (& mut self, opcode: Opcode, num: u8) -> Option <Val> {
-		let param = self.mem_get (self.pos + Val::ONE + Val::from_u8 (num).unwrap ()) ?;
+	fn param_raw (& self, num: u8) -> Result <Val, RunResult <Val>> {
+		let addr = self.pos + Val::ONE + Val::from_u8 (num).unwrap ();
+		self.mem_get_real (addr)
+	}
+
+	#[ inline ]
+	fn param_get (& self, opcode: Opcode, num: u8) -> Result <Val, RunResult <Val>> {
+		let raw = self.param_raw (num) ?;
 		match opcode.modes [num.as_usize ()] {
-			Mode::Position => self.mem_get (param),
-			Mode::Immediate => Some (param),
-			Mode::Relative => self.mem_get (param + self.rel),
+			Mode::Position => self.mem_get_real (raw),
+			Mode::Immediate => Ok (raw),
+			Mode::Relative => self.mem_get_real (raw + self.rel),
+		}
+	}
+
+	#[ inline ]
+	fn param_set (& mut self, opcode: Opcode, num: u8, value: Val) -> Result <(), RunResult <Val>> {
+		let param = self.param_raw (num) ?;
+		match opcode.modes [num.as_usize ()] {
+			Mode::Position => self.mem_set_real (param, value),
+			Mode::Immediate => Err (RunResult::Instr (Val::ZERO, Val::ZERO)),
+			Mode::Relative => self.mem_set_real (param + self.rel, value),
 		}
 	}
 
 	#[ inline ]
 	#[ must_use ]
-	fn param_set (& mut self, opcode: Opcode, num: u8, value: Val) -> Option <()> {
-		let param = self.mem_get (self.pos + Val::ONE + Val::from_u8 (num).unwrap ()) ?;
-		match opcode.modes [num.as_usize ()] {
-			Mode::Position => self.mem_set (param, value) ?,
-			Mode::Immediate => return None,
-			Mode::Relative => self.mem_set (param + self.rel, value) ?,
-		}
-		Some (())
+	pub fn mem_get (& self, addr: Val) -> Option <Val> {
+		self.mem_get_real (addr).ok ()
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn mem_get (& mut self, addr: Val) -> Option <Val> {
-		if addr < Val::ZERO { return None }
-		Some (self.mem.get (addr.as_usize ()).copied ().unwrap_or (Val::ZERO))
+	fn mem_get_real (& self, addr: Val) -> Result <Val, RunResult <Val>> {
+		let addr = addr.to_usize ().map_err (|_err| RunResult::Memory) ?;
+		Ok (self.mem.get (addr).copied ().unwrap_or (Val::ZERO))
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	pub fn mem_set (& mut self, addr: Val, value: Val) -> Option <()> {
-		self.mem_extend (addr) ?;
-		self.mem [addr.as_usize ()] = value;
-		Some (())
+		self.mem_set_real (addr, value).ok ()
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn mem_extend (& mut self, addr: Val) -> Option <()> {
-		if addr < Val::ZERO || addr == Val::MAX { return None }
+	fn mem_set_real (& mut self, addr: Val, value: Val) -> Result <(), RunResult <Val>> {
+		self.mem_extend (addr) ?;
+		self.mem [addr.as_usize ()] = value;
+		Ok (())
+	}
+
+	#[ inline ]
+	fn mem_extend (& mut self, addr: Val) -> Result <(), RunResult <Val>> {
+		if addr < Val::ZERO || addr == Val::MAX { return Err (RunResult::Memory) }
 		let size = addr.as_usize () + 1;
-		if size < self.mem.len () { return Some (()) }
-		if self.mem_limit.as_usize () < size { return None }
+		if size < self.mem.len () { return Ok (()) }
+		if self.mem_limit.as_usize () < size { return Err (RunResult::Memory) }
 		self.mem.resize ((size + 0xff) & ! 0xff, Val::ZERO);
-		Some (())
+		Ok (())
 	}
 
 }
@@ -250,6 +258,15 @@ impl <Val: Int> Display for RunResult <Val> {
 impl <Val: Int> Error for RunResult <Val> {
 }
 
+impl <Val: Int> From <Overflow> for RunResult <Val> {
+
+	#[ inline ]
+	fn from (_overflow: Overflow) -> Self {
+		Self::Overflow
+	}
+
+}
+
 #[ derive (Clone, Copy) ]
 struct Opcode {
 	instr: Instr,
@@ -261,7 +278,7 @@ impl Opcode {
 	fn from_int <Val: Int> (value: Val) -> Option <Self> {
 		#[ inline ]
 		fn decode_mode <Val: Int> (value: Val, multiple: Val) -> Option <(Val, Val)> {
-			if multiple * Val::THREE <= value { None }
+			if value < Val::ZERO || multiple * Val::THREE <= value { None }
 			else if multiple * Val::TWO <= value { Some ((value - multiple * Val::TWO, Val::TWO)) }
 			else if multiple * Val::ONE <= value { Some ((value - multiple * Val::ONE, Val::ONE)) }
 			else { Some ((value, Val::ZERO)) }
@@ -316,6 +333,7 @@ impl Instr {
 	}
 
 }
+
 
 #[ derive (Clone, Copy, Eq, PartialEq) ]
 enum Mode { Position, Immediate, Relative }

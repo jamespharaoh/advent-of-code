@@ -7,6 +7,7 @@ declare default_shrink_time=5
 
 case "$HOSTNAME" in
 	("mufasa") cpus=( {8..15} ) ;;
+	("scar") cpus=( {8..15} ) ;;
 	("simba") cpus=( {8..15} ) ;;
 	(*) echo "Hostname not recognised" >&2; exit 1 ;;
 esac
