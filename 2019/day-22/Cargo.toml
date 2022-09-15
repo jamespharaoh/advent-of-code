@@ -1,17 +1,16 @@
 [package]
 
-	name = "aoc-2019-day-21"
+	name = "aoc-2019-day-22"
 	version = "0.1.0"
 	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
 	edition = "2021"
-	description = "Advent of Code 2019: Day 21: Springdroid Adventure"
-	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2019/day-21"
+	description = "Advent of Code 2019: Day 22: Slam Shuffle"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2019/day-22"
 	license = "MIT"
 	publish = false
 
 [dependencies]
 
-	aoc-2019-intcode = { path = "../intcode" }
 	aoc-common = { path = "../../common" }
 
 [lib]
@@ -26,7 +25,7 @@
 
 [[bin]]
 
-	name = "aoc-2019-day-21"
+	name = "aoc-2019-day-22"
 	path = "main.rs"
 	test = false
 	doctest = false
