@@ -4,14 +4,14 @@ use super::*;
 use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <i32> {
-	let mut total: i32 = 0;
-	for delta in input.deltas.iter_vals () {
-		total += delta;
-	}
-	Ok (total)
+	Ok (
+		input.deltas.iter ()
+			.sum::<i32> ()
+	)
 }
 
 pub fn part_two (input: & Input) -> GenResult <i32> {
+	if input.deltas.is_empty () { return Err ("No deltas provided".into ()) }
 	let mut total: i32 = 0;
 	let mut seen: HashSet <i32> = HashSet::new ();
 	for (idx, delta) in iter::repeat (input.deltas.clone ()).flatten ().enumerate () {

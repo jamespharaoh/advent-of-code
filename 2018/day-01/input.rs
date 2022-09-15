@@ -6,27 +6,12 @@ pub struct Input {
 	pub params: InputParams,
 }
 
+struct_parser_display! {
+	Input { deltas, params } = [ params, @lines deltas ]
+}
+
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-	}
-}
-
-impl Input {
-	pub fn parse (input: & [& str]) -> GenResult <Self> {
-		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, @lines deltas);
-			Ok (Self { deltas, params })
-		})
-	}
-}
-
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		Display::fmt (& self.params, formatter) ?;
-		for delta in self.deltas.iter () {
-			write! (formatter, "{}\n", delta) ?;
-		}
-		Ok (())
 	}
 }
