@@ -25,6 +25,16 @@ function launch {
 
 	local mode="$1"
 
+	# build first (without cpu restriction)
+
+	if ! (
+		cd fuzz
+		cargo +nightly fuzz build
+	); then
+		echo "Build failed" >&2
+		exit 1
+	fi
+
 	# basic setup
 
 	declare main_pid="$$"
