@@ -72,72 +72,72 @@ impl <Val: Int> Machine <Val> {
 			let opcode = some_or! (Opcode::from_int (opcode_val), return opcode_err);
 			match opcode.instr {
 				Instr::Add => {
-					let param_0 = some_or! (self.param_get (0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (1), return RunResult::Memory);
+					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					let result = some_or! (
 						Val::add_2 (param_0, param_1).ok (),
 						return RunResult::Overflow);
-					some_or! (self.param_set (2, result), return opcode_err);
-					self.pos += Val::FOUR;
+					some_or! (self.param_set (opcode, 2, result), return opcode_err);
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
 				},
 				Instr::Multiply => {
-					let param_0 = some_or! (self.param_get (0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (1), return RunResult::Memory);
+					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					let result = some_or! (
 						Val::mul_2 (param_0, param_1).ok (),
 						return RunResult::Overflow);
-					some_or! (self.param_set (2, result), return opcode_err);
-					self.pos += Val::FOUR;
+					some_or! (self.param_set (opcode, 2, result), return opcode_err);
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
 				},
 				Instr::Input => {
 					if let Some (value) = self.input_buffer.pop_front () {
-						some_or! (self.param_set (0, value), return opcode_err);
-						self.pos += Val::TWO;
+						some_or! (self.param_set (opcode, 0, value), return opcode_err);
+						self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
 					} else {
 						return RunResult::Input;
 					}
 				},
 				Instr::Output => {
-					let value = some_or! (self.param_get (0), return RunResult::Memory);
-					self.pos += Val::TWO;
+					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
 					return RunResult::Output (value);
 				},
 				Instr::JumpIfTrue => {
-					let value = some_or! (self.param_get (0), return RunResult::Memory);
-					let dest = some_or! (self.param_get (1), return RunResult::Memory);
+					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let dest = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					if value != Val::ZERO {
 						self.pos = dest;
 					} else {
-						self.pos += Val::THREE;
+						self.pos = ok_or! (Val::add_2 (self.pos, Val::THREE), return RunResult::Overflow);
 					}
 				},
 				Instr::JumpIfFalse => {
-					let value = some_or! (self.param_get (0), return RunResult::Memory);
-					let dest = some_or! (self.param_get (1), return RunResult::Memory);
+					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let dest = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					if value == Val::ZERO {
 						self.pos = dest;
 					} else {
-						self.pos += Val::THREE;
+						self.pos = ok_or! (Val::add_2 (self.pos, Val::THREE), return RunResult::Overflow);
 					}
 				},
 				Instr::LessThan => {
-					let param_0 = some_or! (self.param_get (0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (1), return RunResult::Memory);
+					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					let value = if param_0 < param_1 { Val::ONE } else { Val::ZERO };
-					some_or! (self.param_set (2, value), return opcode_err);
-					self.pos += Val::FOUR;
+					some_or! (self.param_set (opcode, 2, value), return opcode_err);
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
 				},
 				Instr::Equals => {
-					let param_0 = some_or! (self.param_get (0), return RunResult::Memory);
-					let param_1 = some_or! (self.param_get (1), return RunResult::Memory);
+					let param_0 = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
+					let param_1 = some_or! (self.param_get (opcode, 1), return RunResult::Memory);
 					let value = if param_0 == param_1 { Val::ONE } else { Val::ZERO };
-					some_or! (self.param_set (2, value), return opcode_err);
-					self.pos += Val::FOUR;
+					some_or! (self.param_set (opcode, 2, value), return opcode_err);
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::FOUR), return RunResult::Overflow);
 				},
 				Instr::AdjustRelBase => {
-					let value = some_or! (self.param_get (0), return RunResult::Memory);
+					let value = some_or! (self.param_get (opcode, 0), return RunResult::Memory);
 					self.rel = some_or! (Val::add_2 (self.rel, value).ok (), return RunResult::Overflow);
-					self.pos += Val::TWO;
+					self.pos = ok_or! (Val::add_2 (self.pos, Val::TWO), return RunResult::Overflow);
 				},
 				Instr::Halt => {
 					return RunResult::Halt;
@@ -146,10 +146,9 @@ impl <Val: Int> Machine <Val> {
 		}
 	}
 
+	#[ inline ]
 	#[ must_use ]
-	fn param_get (& mut self, num: u8) -> Option <Val> {
-		let opcode_val = self.mem_get (self.pos).unwrap ();
-		let opcode = Opcode::from_int (opcode_val).unwrap ();
+	fn param_get (& mut self, opcode: Opcode, num: u8) -> Option <Val> {
 		let param = self.mem_get (self.pos + Val::ONE + Val::from_u8 (num).unwrap ()) ?;
 		match opcode.modes [num.as_usize ()] {
 			Mode::Position => self.mem_get (param),
@@ -158,10 +157,9 @@ impl <Val: Int> Machine <Val> {
 		}
 	}
 
+	#[ inline ]
 	#[ must_use ]
-	fn param_set (& mut self, num: u8, value: Val) -> Option <()> {
-		let opcode_val = self.mem_get (self.pos).unwrap ();
-		let opcode = Opcode::from_int (opcode_val).unwrap ();
+	fn param_set (& mut self, opcode: Opcode, num: u8, value: Val) -> Option <()> {
 		let param = self.mem_get (self.pos + Val::ONE + Val::from_u8 (num).unwrap ()) ?;
 		match opcode.modes [num.as_usize ()] {
 			Mode::Position => self.mem_set (param, value) ?,
@@ -174,8 +172,8 @@ impl <Val: Int> Machine <Val> {
 	#[ inline ]
 	#[ must_use ]
 	pub fn mem_get (& mut self, addr: Val) -> Option <Val> {
-		self.mem_extend (addr) ?;
-		Some (self.mem [addr.as_usize ()])
+		if addr < Val::ZERO { return None }
+		Some (self.mem.get (addr.as_usize ()).copied ().unwrap_or (Val::ZERO))
 	}
 
 	#[ inline ]
@@ -186,13 +184,14 @@ impl <Val: Int> Machine <Val> {
 		Some (())
 	}
 
+	#[ inline ]
 	#[ must_use ]
-	fn mem_extend (& mut self, addr: Val) -> Option <()> {
+	pub fn mem_extend (& mut self, addr: Val) -> Option <()> {
 		if addr < Val::ZERO || addr == Val::MAX { return None }
 		let size = addr.as_usize () + 1;
 		if size < self.mem.len () { return Some (()) }
 		if self.mem_limit.as_usize () < size { return None }
-		self.mem.extend (iter::repeat (Val::ZERO).take (size - self.mem.len ()));
+		self.mem.resize ((size + 0xff) & ! 0xff, Val::ZERO);
 		Some (())
 	}
 
@@ -260,13 +259,23 @@ struct Opcode {
 impl Opcode {
 
 	fn from_int <Val: Int> (value: Val) -> Option <Self> {
+		#[ inline ]
+		fn decode_mode <Val: Int> (value: Val, multiple: Val) -> Option <(Val, Val)> {
+			if multiple * Val::THREE <= value { None }
+			else if multiple * Val::TWO <= value { Some ((value - multiple * Val::TWO, Val::TWO)) }
+			else if multiple * Val::ONE <= value { Some ((value - multiple * Val::ONE, Val::ONE)) }
+			else { Some ((value, Val::ZERO)) }
+		}
 		let value = value.to_u32 ().ok () ?;
+		let (value, mode_0) = decode_mode (value, 10_000) ?;
+		let (value, mode_1) = decode_mode (value, 1_000) ?;
+		let (value, mode_2) = decode_mode (value, 100) ?;
 		Some (Self {
-			instr: Instr::from_int (value % 100_u32) ?,
+			instr: Instr::from_int (value) ?,
 			modes: [
-				Mode::from_int ((value / 100) % 10) ?,
-				Mode::from_int ((value / 1000) % 10) ?,
-				Mode::from_int ((value / 10000) % 10) ?,
+				Mode::from_int (mode_2) ?,
+				Mode::from_int (mode_1) ?,
+				Mode::from_int (mode_0) ?,
 			],
 		})
 	}
@@ -290,20 +299,20 @@ enum Instr {
 impl Instr {
 
 	fn from_int <Val: Int> (value: Val) -> Option <Self> {
-		let value = value.to_u32 ().ok () ?;
-		Some (match value {
-			1_u32 => Self::Add,
-			2 => Self::Multiply,
-			3 => Self::Input,
-			4 => Self::Output,
-			5 => Self::JumpIfTrue,
-			6 => Self::JumpIfFalse,
-			7 => Self::LessThan,
-			8 => Self::Equals,
-			9 => Self::AdjustRelBase,
-			99 => Self::Halt,
-			_ => return None,
-		})
+		if value == Val::ONE { Some (Self::Add) }
+		else if value == Val::TWO { Some (Self::Multiply) }
+		else if value == Val::THREE { Some (Self::Input) }
+		else if value == Val::FOUR { Some (Self::Output) }
+		else if value == Val::FIVE { Some (Self::JumpIfTrue) }
+		else if value == Val::SIX { Some (Self::JumpIfFalse) }
+		else if value == Val::SEVEN { Some (Self::LessThan) }
+		else if value == Val::EIGHT { Some (Self::Equals) }
+		else if value == Val::NINE { Some (Self::AdjustRelBase) }
+		else {
+			let value = value.to_u32 ().ok () ?;
+			if value == 99 { Some (Self::Halt) }
+			else { None }
+		}
 	}
 
 }
@@ -314,13 +323,10 @@ enum Mode { Position, Immediate, Relative }
 impl Mode {
 
 	fn from_int <Val: Int> (value: Val) -> Option <Self> {
-		let value = value.to_u32 ().ok () ?;
-		Some (match value {
-			0_u32 => Self::Position,
-			1 => Self::Immediate,
-			2 => Self::Relative,
-			_ => return None,
-		})
+		if value == Val::ZERO { Some (Self::Position) }
+		else if value == Val::ONE { Some (Self::Immediate) }
+		else if value == Val::TWO { Some (Self::Relative) }
+		else { None }
 	}
 
 }

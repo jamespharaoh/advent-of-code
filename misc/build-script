@@ -68,7 +68,7 @@ function main {
 				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(flamegraph)
-			cargo_args+=( --image-width "${flamegraph_width:-4000}" )
+			cargo_args+=( --image-width "${flamegraph_width:-2000}" )
 			cargo_args+=( --palette "rust" )
 			local timestamp=$(date +"%Y-%m-%d-%H:%M:%S")
 			if cargo $toolchain flamegraph \

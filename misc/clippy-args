@@ -147,7 +147,7 @@
 --deny clippy::if_let_mutex
 --allow clippy::if_not_else
 --deny clippy::if_same_then_else
---deny clippy::if_then_some_else_none
+--allow clippy::if_then_some_else_none
 --deny clippy::ifs_same_cond
 --deny clippy::implicit_clone
 --deny clippy::implicit_hasher

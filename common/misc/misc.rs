@@ -85,6 +85,7 @@ pub use std::sync::atomic::Ordering as AtomicOrdering;
 pub use std::thread;
 pub use std::thread::JoinHandle;
 pub use std::time;
+pub use std::vec::IntoIter as VecIntoIter;
 
 #[ cfg (not (fuzzing)) ]
 pub use std::collections::HashSet;
