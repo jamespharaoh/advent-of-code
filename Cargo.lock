@@ -11,6 +11,7 @@ dependencies = [
  "aoc-2017",
  "aoc-2018",
  "aoc-2019",
+ "aoc-2020",
  "aoc-2021",
  "aoc-common",
 ]
@@ -1312,6 +1313,23 @@ dependencies = [
 name = "aoc-2019-intcode"
 version = "0.1.0"
 dependencies = [
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2020"
+version = "0.1.0"
+dependencies = [
+ "aoc-2020-day-01",
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2020-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
  "aoc-common",
 ]
 

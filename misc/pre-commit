@@ -92,7 +92,7 @@ export RUSTDOCFLAGS="-D warnings"
 cargo clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
 cargo test --frozen --workspace --profile pre-commit
 
-for year in {2015..2019} 2021; do
+for year in {2015..2021}; do
 	cargo run --frozen --profile pre-commit --package "aoc-$year"
 done
 

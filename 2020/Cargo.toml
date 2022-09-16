@@ -1,0 +1,24 @@
+[package]
+
+	name = "aoc-2020"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2020"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2020"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../common" }
+
+	aoc-2020-day-01 = { path = "day-01" }
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../misc/codegen" }
+
+[lib]
+
+	path = "src/lib.rs"

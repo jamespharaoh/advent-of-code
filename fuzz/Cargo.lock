@@ -1303,6 +1303,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-2020"
+version = "0.1.0"
+dependencies = [
+ "aoc-2020-day-01",
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2020-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
 name = "aoc-bitvec"
 version = "0.1.0"
 dependencies = [
@@ -1334,6 +1351,7 @@ dependencies = [
  "aoc-2017",
  "aoc-2018",
  "aoc-2019",
+ "aoc-2020",
  "aoc-common",
  "libfuzzer-sys",
  "rand",
