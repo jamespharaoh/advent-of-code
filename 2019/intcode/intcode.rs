@@ -144,7 +144,7 @@ impl <Val: Int> Machine <Val> {
 
 	#[ inline ]
 	fn param_raw (& self, num: u8) -> Result <Val, RunResult <Val>> {
-		let addr = self.pos + Val::ONE + Val::from_u8 (num).unwrap ();
+		let addr = Val::add_3 (self.pos, Val::ONE, Val::from_u8 (num).unwrap ()) ?;
 		self.mem_get_real (addr)
 	}
 
@@ -154,7 +154,7 @@ impl <Val: Int> Machine <Val> {
 		match opcode.modes [num.as_usize ()] {
 			Mode::Position => self.mem_get_real (raw),
 			Mode::Immediate => Ok (raw),
-			Mode::Relative => self.mem_get_real (raw + self.rel),
+			Mode::Relative => self.mem_get_real (Val::add_2 (raw, self.rel) ?),
 		}
 	}
 

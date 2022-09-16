@@ -1009,6 +1009,14 @@ macro_rules! parse {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $it_8:tt $(, $($rest:tt)*)? ) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7 $it_8);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $it_8:tt $it_9:tt $(, $($rest:tt)*)? ) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7 $it_8 $it_9);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
 	( @item $parser:expr, $expect_str:literal ) => {
 		$parser.expect ($expect_str) ?;
 	};
@@ -1088,6 +1096,11 @@ macro_rules! parse {
 			.delim_fn ("\n", $item_parse)
 			.collect ();
 	};
+	( @item $parser:expr, @str $item_name:ident = (|$fn_arg:ident| { $($fn_body:tt)* }, $range:expr) ) => {
+		let $item_name = $parser
+			.take_rest_while (|$fn_arg| { $($fn_body)* }, $range) ?
+			.into ();
+	};
 	( @item $parser:expr, @end ) => {
 		$parser.end () ?;
 	};
@@ -1141,6 +1154,16 @@ impl <'inp> FromParser <'inp> for InpStr <'inp> {
 	#[ inline ]
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
 		Ok (parser.take_rest ())
+	}
+
+}
+
+impl <'inp> FromParser <'inp> for Rc <str> {
+
+	#[ inline ]
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+		let inp_str = parser.take_rest ();
+		Ok (Self::from (& * inp_str))
 	}
 
 }
@@ -1294,6 +1317,18 @@ macro_rules! enum_parser {
 			Ok (Self::$var_name)
 		});
 		enum_parser! (@variants $enum_name, $parser, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $parser:ident,
+		$var_name:ident = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		$parser = $parser.of (|$var_arg| {
+			$($var_body)*
+			Ok (Self::$var_name)
+		});
+		enum_parser! (@variants $enum_name, $parser, $(, $($rest)*)?);
 	};
 
 }

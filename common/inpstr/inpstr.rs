@@ -29,6 +29,15 @@ impl <'inp> InpStr <'inp> {
 		self.deref ().to_owned ()
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub fn borrowed (& self) -> & 'inp str {
+		match * self {
+			Self::Borrow (val) => val,
+			Self::RefCount (_) => panic! ("Can't call borrowed () on an InpStr::RefCount"),
+		}
+	}
+
 }
 
 impl <'inp> Debug for InpStr <'inp> {
@@ -70,6 +79,16 @@ impl <'inp> Hash for InpStr <'inp> {
 	#[ inline ]
 	fn hash <Hshr: Hasher> (& self, hasher: & mut Hshr) {
 		self.deref ().hash (hasher);
+	}
+}
+
+impl <'inp> From <InpStr <'inp>> for Rc <str> {
+	#[ inline ]
+	fn from (val: InpStr <'inp>) -> Self {
+		match val {
+			InpStr::Borrow (val) => Self::from (val),
+			InpStr::RefCount (val) => val,
+		}
 	}
 }
 
