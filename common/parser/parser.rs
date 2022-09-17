@@ -1046,6 +1046,12 @@ macro_rules! parse {
 			Ok (val)
 		}).done () ?;
 	};
+	( @item $parser:expr, @array $item_name:ident ) => {
+		let temp_vec: Vec <_> = $parser
+			.repeat (Parser::item)
+			.collect ();
+		let $item_name = temp_vec.try_into ().map_err (|_err| $parser.err ()) ?;
+	};
 	( @item $parser:expr, @collect $item_name:ident ) => {
 		let $item_name = $parser
 			.repeat (Parser::item)
@@ -1622,6 +1628,10 @@ macro_rules! display {
 	};
 	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
 		Display::fmt ($expect, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @array $field:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {

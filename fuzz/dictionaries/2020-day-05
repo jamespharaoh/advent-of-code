@@ -1,0 +1,6 @@
+misc_newline = "\x0a"
+
+letter_b = "B"
+letter_f = "F"
+letter_l = "L"
+letter_r = "R"
