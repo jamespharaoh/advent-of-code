@@ -98,7 +98,7 @@ done
 
 (
 	cd fuzz
-	cargo fuzz build
+	cargo fuzz build --dev
 )
 
 # clean up

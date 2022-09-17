@@ -1096,9 +1096,14 @@ macro_rules! parse {
 			.delim_fn ("\n", $item_parse)
 			.collect ();
 	};
-	( @item $parser:expr, @str $item_name:ident = (|$fn_arg:ident| { $($fn_body:tt)* }, $range:expr) ) => {
+	( @item $parser:expr, @str $item_name:ident = (|$fn_arg:ident| { $($fn_body:tt)* }, $len:expr) ) => {
 		let $item_name = $parser
-			.take_rest_while (|$fn_arg| { $($fn_body)* }, $range) ?
+			.take_rest_while (|$fn_arg| { $($fn_body)* }, $len) ?
+			.into ();
+	};
+	( @item $parser:expr, @str $item_name:ident = ($rng_0:literal ..= $rng_1:literal, $len:expr) ) => {
+		let $item_name = $parser
+			.take_rest_while (|ch| ($rng_0 ..= $rng_1).contains (& ch), $len) ?
 			.into ();
 	};
 	( @item $parser:expr, @end ) => {
@@ -1597,6 +1602,14 @@ macro_rules! display {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, $field:ident = $rng_0:literal .. $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, $field:ident = $rng_0:literal ..= $rng_1:literal $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
 		Display::fmt ($expect, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -1626,6 +1639,10 @@ macro_rules! display {
 	};
 	( $formatter:ident, @lines $field:ident = $display:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len_0:literal .. ) $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 

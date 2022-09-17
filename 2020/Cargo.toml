@@ -14,6 +14,7 @@
 	aoc-common = { path = "../common" }
 
 	aoc-2020-day-01 = { path = "day-01" }
+	aoc-2020-day-02 = { path = "day-02" }
 
 [build-dependencies]
 
