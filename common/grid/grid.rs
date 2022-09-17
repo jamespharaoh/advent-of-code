@@ -120,6 +120,11 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
+	pub fn size (& self) -> Pos {
+		Pos::size_from_native (self.size).unwrap ()
+	}
+
+	#[ inline ]
 	pub fn first_key (& self) -> Pos {
 		Pos::from_scalar (0, self.origin, self.size).unwrap ()
 	}
@@ -371,7 +376,7 @@ impl <Pos: GridPos <DIMS>, const DIMS: usize> Iterator for GridKeysIter <Pos, DI
 ///
 /// This provides a simple abstraction over a fixed size array of items. It is implemented for
 /// [`Vec`] and [`BitVec`].
-
+///
 pub trait GridStorage {
 
 	type Item;
@@ -531,6 +536,8 @@ pub trait GridPos <const DIMS: usize>: Copy + Debug + Sized {
 		Self::from_array (array, origin)
 	}
 
+	fn size_from_native (array: [usize; DIMS]) -> Option <Self>;
+
 }
 
 impl <Val: Int, const DIMS: usize> GridPos <DIMS> for [Val; DIMS] {
@@ -557,6 +564,15 @@ impl <Val: Int, const DIMS: usize> GridPos <DIMS> for [Val; DIMS] {
 		Some (result)
 	}
 
+	#[ inline ]
+	fn size_from_native (size: [usize; DIMS]) -> Option <Self> {
+		let mut result = [Val::ZERO; DIMS];
+		for idx in 0 .. DIMS {
+			result [idx] = Val::from_usize (size [idx]).ok () ?;
+		}
+		Some (result)
+	}
+
 }
 
 impl <Val: Int> GridPos <2> for PosXY <Val> {
@@ -570,6 +586,14 @@ impl <Val: Int> GridPos <2> for PosXY <Val> {
 	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
 		let array = <[Val; 2]>::from_array (array, origin) ?;
 		Some (Self { x: array [0], y: array [1] })
+	}
+
+	#[ inline ]
+	fn size_from_native (size: [usize; 2]) -> Option <Self> {
+		Some (Self {
+			x: Val::from_usize (size [0]).ok () ?,
+			y: Val::from_usize (size [1]).ok () ?,
+		})
 	}
 
 }
@@ -587,6 +611,14 @@ impl <Val: Int> GridPos <2> for PosYX <Val> {
 		Some (Self { y: array [0], x: array [1] })
 	}
 
+	#[ inline ]
+	fn size_from_native (size: [usize; 2]) -> Option <Self> {
+		Some (Self {
+			y: Val::from_usize (size [0]).ok () ?,
+			x: Val::from_usize (size [1]).ok () ?,
+		})
+	}
+
 }
 
 impl <Val: Int> GridPos <2> for PosRowCol <Val> {
@@ -602,6 +634,14 @@ impl <Val: Int> GridPos <2> for PosRowCol <Val> {
 		Some (Self { row: array [0], col: array [1] })
 	}
 
+	#[ inline ]
+	fn size_from_native (size: [usize; 2]) -> Option <Self> {
+		Some (Self {
+			row: Val::from_usize (size [0]).ok () ?,
+			col: Val::from_usize (size [1]).ok () ?,
+		})
+	}
+
 }
 
 impl <Val: Int> GridPos <2> for PosGeo <Val> {
@@ -615,6 +655,14 @@ impl <Val: Int> GridPos <2> for PosGeo <Val> {
 	fn from_array (array: [usize; 2], origin: [isize; 2]) -> Option <Self> {
 		let array = <[Val; 2]>::from_array (array, origin) ?;
 		Some (Self { n: array [0], e: array [1] })
+	}
+
+	#[ inline ]
+	fn size_from_native (size: [usize; 2]) -> Option <Self> {
+		Some (Self {
+			n: Val::from_usize (size [0]).ok () ?,
+			e: Val::from_usize (size [1]).ok () ?,
+		})
 	}
 
 }
