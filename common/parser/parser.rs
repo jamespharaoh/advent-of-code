@@ -790,6 +790,16 @@ macro_rules! parse_display_enum {
 			}
 		}
 
+		impl ::std::str::FromStr for $enum_name {
+			type Err = ();
+			fn from_str (src: & str) -> Result <Self, ()> {
+				match src {
+					$( $var_str => Ok (Self::$var_name), )*
+					_ => Err (()),
+				}
+			}
+		}
+
 	)* };
 
 	(@variant_to_idx $self:ident [$next_idx:expr] [$($data:tt)*] $var_name:ident $($rest:tt)*) => {
