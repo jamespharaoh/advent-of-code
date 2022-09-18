@@ -99,7 +99,7 @@ impl <'inp> Generator <'inp> {
 		rng.gen::<Qty> () & (Qty::MAX >> rng.gen_range (0 .. Qty::BITS))
 	}
 
-	const NAME_LENS: & [usize] = & [ 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 5 ];
-	const LETTERS: & [u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	const NAME_LENS: & 'static [usize] = & [ 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 5 ];
+	const LETTERS: & 'static [u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 }
