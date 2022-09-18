@@ -2,7 +2,7 @@
 
 use libfuzzer_sys::fuzz_target;
 
-use aoc_2020::day_09::*;
+use aoc_2020::day_10::*;
 use aoc_common::*;
 use input::Input;
 

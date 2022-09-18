@@ -17,6 +17,7 @@
 --deny clippy::blocks_in_if_conditions
 --deny clippy::bool_assert_comparison
 --deny clippy::bool_comparison
+--deny clippy::bool_to_int_with_if
 --deny clippy::borrow_deref_ref
 --deny clippy::borrow_interior_mutable_const
 --deny clippy::borrowed_box
