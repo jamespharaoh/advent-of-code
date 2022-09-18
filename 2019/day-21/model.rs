@@ -425,14 +425,6 @@ mod rules_set {
 		rules: Vec <Rules <LEN>>,
 	}
 
-	#[ allow (clippy::missing_const_for_fn) ]
-	fn result_ok_or_err <Val> (result: Result <Val, Val>) -> Val {
-		match result {
-			Ok (val) => val,
-			Err (val) => val,
-		}
-	}
-
 	impl <const LEN: usize> RulesSet <LEN> {
 
 		#[ must_use ]
@@ -456,10 +448,10 @@ mod rules_set {
 
 		pub fn push (& mut self, rules: Rules <LEN>) {
 			if self.rules.contains (& rules) { return }
-			let insert_pos = result_ok_or_err (
-				self.rules.binary_search_by_key (
+			let insert_pos = self.rules.binary_search_by_key (
 					& (rules.num_conflicts (), rules.num_true ()),
-					|rules| (rules.num_conflicts (), rules.num_true ())));
+					|rules| (rules.num_conflicts (), rules.num_true ()))
+				.either ();
 			self.rules.insert (insert_pos, rules);
 		}
 

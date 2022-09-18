@@ -106,10 +106,32 @@ mod test_map;
 pub type GenError = Box <dyn Error>;
 pub type GenResult <Ok> = Result <Ok, GenError>;
 
-#[ must_use ]
 #[ inline ]
+#[ must_use ]
 pub fn default <T: Default> () -> T {
 	Default::default ()
+}
+
+pub trait ResultEither <Val> {
+	fn either (self) -> Val;
+}
+
+impl <Val> ResultEither <Val> for Result <Val, Val> {
+	#[ inline ]
+	#[ must_use ]
+	fn either (self) -> Val {
+		match self { Ok (val) => val, Err (val) => val }
+	}
+}
+
+#[ allow (clippy::missing_const_for_fn) ]
+#[ inline ]
+#[ must_use ]
+pub fn ok_or_err <Val> (result: Result <Val, Val>) -> Val {
+	match result {
+		Ok (val) => val,
+		Err (val) => val,
+	}
 }
 
 #[ macro_export ]
