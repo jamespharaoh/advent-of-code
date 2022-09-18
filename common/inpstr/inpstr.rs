@@ -113,6 +113,13 @@ impl <'inp> PartialEq <& str> for InpStr <'inp> {
 	}
 }
 
+impl <'inp> PartialEq <& str> for & InpStr <'inp> {
+	#[ inline ]
+	fn eq (& self, other: && str) -> bool {
+		(* self).deref ().eq (* other)
+	}
+}
+
 impl <'inp> PartialEq <InpStr <'inp>> for & str {
 	#[ inline ]
 	fn eq (& self, other: & InpStr <'inp>) -> bool {

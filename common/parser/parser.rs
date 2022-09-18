@@ -1095,6 +1095,15 @@ macro_rules! parse {
 			.delim_fn ($delim, $item_parse)
 			.collect ();
 	};
+	( @item $parser:expr, @delim $delim:literal $item_name:ident { input_lifetime = $input_life:lifetime; $nest_decl:tt = [ $($nest_parse:tt)* ] } ) => {
+		let parse_nested = |parser: & mut Parser <$input_life>| {
+			parse! (parser, $($nest_parse)*);
+			Ok ($nest_decl)
+		};
+		let $item_name = $parser
+			.delim_fn ($delim, parse_nested)
+			.collect ();
+	};
 	( @item $parser:expr, @delim_some $delim:literal $item_name:ident ) => {
 		let mut temp_iter = $parser.delim_fn ($delim, Parser::item);
 		let $item_name = match temp_iter.next () {
@@ -1618,6 +1627,10 @@ macro_rules! display {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, $field:ident = $parse_fn:path $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, $field:ident = $rng_0:literal .. $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -1649,6 +1662,11 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @delim $delim:literal $field:ident { $($nest:tt)* } $(,$($rest:tt)*)?) => {
+		let display_fn = display! (@nest $($nest)*);
+		Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -1664,6 +1682,17 @@ macro_rules! display {
 	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len:expr) $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
+	};
+
+	( @nest
+		input_lifetime = $input_life:lifetime;
+		($($name:ident),*) = [ $($display:tt)* ]
+	) => {
+		|val, formatter: & mut fmt::Formatter| {
+			let & ($(ref $name),*) = val;
+			display! (formatter, $($display)*);
+			Ok (())
+		}
 	};
 
 }
