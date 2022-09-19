@@ -7,6 +7,7 @@ use nums::Int;
 use nums::IntSigned;
 use nums::NumResult;
 use nums::TryAdd;
+use nums::TryMul;
 
 pub use coord::Coord;
 pub use dim_2::Dir2d;
@@ -64,6 +65,18 @@ macro_rules! pos_ops {
 		pos_ops! ($name: $($rest),*);
 	};
 	( $name:ident : Mul $(, $rest:tt)* ) => {
+		impl <Val: Int + TryMul <Output = Val>> TryMul <Val> for $name <Val> {
+			type Output = Self;
+			#[ inline ]
+			fn try_mul (self, arg: Val) -> NumResult <Self> {
+				let self_coords = self.coord_to_array ();
+				let mut result_coords = Self::ZERO.coord_to_array ();
+				for idx in 0 .. self_coords.len () {
+					result_coords [idx] = self_coords [idx].try_mul (arg) ?;
+				}
+				Ok (Self::coord_from_array (result_coords))
+			}
+		}
 		impl <Val: Int> Mul <Val> for $name <Val> {
 			type Output = Self;
 			#[ inline ]
@@ -374,6 +387,24 @@ mod dim_2 {
 			}
 
 			#[ inline ]
+			#[ must_use ]
+			pub fn left (& self) -> Self where Val: IntSigned {
+				Self { n: self.e, e: - self.n }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn right (& self) -> Self where Val: IntSigned {
+				Self { n: - self.e, e: self.n }
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn around (& self) -> Self where Val: IntSigned {
+				Self { n: - self.n, e: - self.e }
+			}
+
+			#[ inline ]
 			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
 				let mut result = ArrayVec::new ();
 				let Self { n, e } = * self;
@@ -408,6 +439,28 @@ mod dim_2 {
 
 		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 		pub enum DirGeo { North, South, East, West }
+
+		impl DirGeo {
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn left (self) -> Self {
+				self + Turn2d::Left
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn right (self) -> Self {
+				self + Turn2d::Right
+			}
+
+			#[ inline ]
+			#[ must_use ]
+			pub fn around (self) -> Self {
+				self + Turn2d::Around
+			}
+
+		}
 
 		impl Add <Turn2d> for DirGeo {
 

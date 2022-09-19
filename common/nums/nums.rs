@@ -38,16 +38,37 @@ impl Display for Overflow {
 impl Error for Overflow {
 }
 
-pub trait TryAdd <Arg> {
+pub trait TryAdd <Arg = Self> {
 	type Output;
 	fn try_add (self, arg: Arg) -> Result <Self::Output, Overflow>;
 }
 
-pub trait TryAddAssign <Arg> {
+pub trait TryAddAssign <Arg = Self> {
 	fn try_add_assign (& mut self, arg: Arg) -> Result <(), Overflow>;
 }
 
-pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + Ord + IntOps + IntConv {
+pub trait TryDiv <Arg = Self> {
+	type Output;
+	fn try_div (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TryMul <Arg = Self> {
+	type Output;
+	fn try_mul (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TryRem <Arg = Self> {
+	type Output;
+	fn try_rem (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TrySub <Arg = Self> {
+	type Output;
+	fn try_sub (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + Ord + IntOps
+		+ IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;
 	const BITS: u32;
@@ -184,6 +205,14 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	///
 	fn sub_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
 
+}
+
+pub trait IntOpsTry: TryAdd <Self> + TryDiv <Self> + TryMul <Self> + TryRem <Self> + TrySub <Self>
+	+ Sized {
+}
+
+impl <Val> IntOpsTry for Val where Val: TryAdd <Self> + TryDiv <Self> + TryMul <Self>
+	+ TryRem <Self> + TrySub <Self> + Sized {
 }
 
 macro_rules! prim_int {
@@ -583,6 +612,106 @@ macro_rules! prim_int {
 
 		}
 
+		impl TryAdd <Self> for $signed {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_add (self, arg: Self) -> NumResult <Self> {
+				self.checked_add (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryAdd <Self> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_add (self, arg: Self) -> NumResult <Self> {
+				self.checked_add (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryDiv <Self> for $signed {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_div (self, arg: Self) -> NumResult <Self> {
+				self.checked_div (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryDiv <Self> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_div (self, arg: Self) -> NumResult <Self> {
+				self.checked_div (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryMul <Self> for $signed {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_mul (self, arg: Self) -> NumResult <Self> {
+				self.checked_mul (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryMul <Self> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_mul (self, arg: Self) -> NumResult <Self> {
+				self.checked_mul (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryRem <Self> for $signed {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_rem (self, arg: Self) -> NumResult <Self> {
+				self.checked_rem (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryRem <Self> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_rem (self, arg: Self) -> NumResult <Self> {
+				self.checked_rem (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TrySub <Self> for $signed {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_sub (self, arg: Self) -> NumResult <Self> {
+				self.checked_sub (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TrySub <Self> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_sub (self, arg: Self) -> NumResult <Self> {
+				self.checked_sub (arg).ok_or (Overflow)
+			}
+
+		}
+
 	};
 
 }
@@ -594,7 +723,7 @@ prim_int! (i64, u64, 64);
 prim_int! (i128, u128, 128);
 prim_int! (isize, usize, 128);
 
-pub trait IntSigned: Int {
+pub trait IntSigned: Int + Neg <Output = Self> {
 	const NEG_ONE: Self::Signed;
 }
 
@@ -621,8 +750,8 @@ pub trait IntOpsSafe: Sized {
 
 }
 
-pub trait IntOps: IntOpsRust + IntOpsSafe {}
-impl <Val> IntOps for Val where Val: IntOpsRust + IntOpsSafe {}
+pub trait IntOps: IntOpsRust + IntOpsSafe + IntOpsTry {}
+impl <Val> IntOps for Val where Val: IntOpsRust + IntOpsSafe + IntOpsTry {}
 
 pub trait IntConv: Sized {
 

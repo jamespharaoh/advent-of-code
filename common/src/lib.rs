@@ -85,6 +85,7 @@ mod prelude {
 	pub use crate::nums::NumResult;
 	pub use crate::nums::Overflow;
 	pub use crate::nums::TryAdd;
+	pub use crate::nums::TryMul;
 	pub use crate::parser::*;
 
 }
