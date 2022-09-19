@@ -38,6 +38,15 @@ impl Display for Overflow {
 impl Error for Overflow {
 }
 
+pub trait TryAdd <Arg> {
+	type Output;
+	fn try_add (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TryAddAssign <Arg> {
+	fn try_add_assign (& mut self, arg: Arg) -> Result <(), Overflow>;
+}
+
 pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + Ord + IntOps + IntConv {
 	type Signed: IntSigned;
 	type Unsigned: IntUnsigned;

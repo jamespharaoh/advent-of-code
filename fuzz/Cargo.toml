@@ -971,3 +971,10 @@
 	path = "src/2020-day-10.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2020-day-11"
+	path = "src/2020-day-11.rs"
+	test = false
+	doc = false

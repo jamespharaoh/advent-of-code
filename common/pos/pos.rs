@@ -6,6 +6,7 @@ use aoc_nums as nums;
 use nums::Int;
 use nums::IntSigned;
 use nums::NumResult;
+use nums::TryAdd;
 
 pub use coord::Coord;
 pub use dim_2::Dir2d;
@@ -40,9 +41,10 @@ macro_rules! pos_ops {
 	};
 
 	( $name:ident : Add $(, $rest:tt)* ) => {
-		impl <Val: Int> $name <Val> {
+		impl <Val: Int> TryAdd <$name <Val::Signed>> for $name <Val> {
+			type Output = Self;
 			#[ inline ]
-			pub fn try_add (self, other: $name <Val::Signed>) -> NumResult <Self> {
+			fn try_add (self, other: $name <Val::Signed>) -> NumResult <Self> {
 				let self_coords = self.coord_to_array ();
 				let other_coords = other.coord_to_array ();
 				let mut result_coords = Self::ZERO.coord_to_array ();
