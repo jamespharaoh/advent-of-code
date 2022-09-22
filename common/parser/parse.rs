@@ -45,6 +45,10 @@ macro_rules! parse {
 		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7 $it_8 $it_9);
 		parse! (@recurse $parser $(, $($rest)*)?);
 	};
+	( @recurse $parser:expr, $it_0:tt $it_1:tt $it_2:tt $it_3:tt $it_4:tt $it_5:tt $it_6:tt $it_7:tt $it_8:tt $it_9:tt $it_10:tt $(, $($rest:tt)*)? ) => {
+		parse! (@item $parser, $it_0 $it_1 $it_2 $it_3 $it_4 $it_5 $it_6 $it_7 $it_8 $it_9 $it_10);
+		parse! (@recurse $parser $(, $($rest)*)?);
+	};
 	( @item $parser:expr, $expect_str:literal ) => {
 		$parser.expect ($expect_str) ?;
 	};
@@ -136,6 +140,16 @@ macro_rules! parse {
 			.delim_fn ("\n", Parser::item)
 			.collect ();
 	};
+	( @item $parser:expr, @lines $item_name:ident { $($nest:tt)* } ) => {
+		let $item_name = $parser
+			.delim_fn ("\n", parse! (@nest $($nest)*))
+			.collect ();
+	};
+	( @item $parser:expr, @lines $name:ident: $type:ty { $($nest:tt)* } ) => {
+		let $name: $type = $parser
+			.delim_fn ("\n", parse! (@nest $($nest)*))
+			.collect ();
+	};
 	( @item $parser:expr, @lines $item_name:ident = $item_parse:expr ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", $item_parse)
@@ -167,6 +181,13 @@ macro_rules! parse {
 			Ok ($decl)
 		}
 	};*/
+	( @nest input_lifetime = $input_life:lifetime; $($var:tt)* ) => {
+		|parser: & mut Parser <$input_life>| {
+			let parser = parser.any ();
+			parse! (@nest_var parser $($var)*);
+			parser.done ()
+		}
+	};
 	( @nest $($var:tt)* ) => {
 		|parser: & mut Parser| {
 			let parser = parser.any ();
@@ -175,6 +196,13 @@ macro_rules! parse {
 		}
 	};
 	( @nest_var $parser:ident $var:ident = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($var)
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
+	( @nest_var $parser:ident $var:ident: $type:ty = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
 			Ok ($var)

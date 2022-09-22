@@ -2,6 +2,8 @@ use aoc_inpstr::*;
 use aoc_misc::*;
 use aoc_nums as nums;
 
+use nums::IntConv;
+
 mod display;
 mod from_parser;
 mod parse;
@@ -11,13 +13,13 @@ pub use from_parser::FromParser;
 
 pub type ParseResult <Item> = Result <Item, ParseError>;
 
-#[ derive (Clone) ]
+#[ derive (Clone, Copy) ]
 pub struct Parser <'inp> {
 	input_line: & 'inp str,
 	input_lines: & 'inp [& 'inp str],
-	line_idx: usize,
-	col_idx: usize,
-	byte_idx: usize,
+	line_idx: u32,
+	col_idx: u32,
+	byte_idx: u32,
 	word_pred: fn (char) -> bool,
 	ignore_whitespace: bool,
 	confirmed: bool,
@@ -25,7 +27,7 @@ pub struct Parser <'inp> {
 
 #[ derive (Debug) ]
 pub enum ParseError {
-	Simple (usize, usize),
+	Simple (u32, u32),
 	Wrapped (GenError),
 }
 
@@ -36,7 +38,7 @@ pub trait ResultParser <Item> {
 	#[ allow (clippy::missing_errors_doc) ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: FnOnce (usize, usize) -> IntoGenErr,
+			MapFn: FnOnce (u32, u32) -> IntoGenErr,
 			IntoGenErr: Into <GenError>;
 
 	fn map_parse_err_auto (self, parser: & Parser) -> GenResult <Item>;
@@ -50,7 +52,7 @@ impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 	#[ inline ]
 	fn map_parse_err <MapFn, IntoGenErr> (self, map_fn: MapFn) -> GenResult <Item>
 		where
-			MapFn: FnOnce (usize, usize) -> IntoGenErr,
+			MapFn: FnOnce (u32, u32) -> IntoGenErr,
 			IntoGenErr: Into <GenError> {
 		match self {
 			Ok (item) => Ok (item),
@@ -63,7 +65,7 @@ impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 	#[ inline ]
 	fn map_parse_err_auto (self, parser: & Parser) -> GenResult <Item> {
 		self.map_parse_err (|line_idx, col_idx| {
-			let line = parser.input_lines [line_idx];
+			let line = parser.input_lines [line_idx.as_usize ()];
 			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)
 		})
 	}
@@ -186,13 +188,45 @@ impl <'inp> Parser <'inp> {
 	///
 	/// Returns `Err (self.err ())` if the input does not match the specified value
 	///
+	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		for expect_char in expect.chars () {
-			if self.peek () != Some (expect_char) { return Err (self.err ()) }
-			self.next ().unwrap ();
+		let saved = * self;
+		let mut input_iter = self.input_line.bytes ();
+		let mut num_chars = 0_u32;
+		let mut num_bytes = 0_u32;
+		for expect_byte in expect.bytes () {
+			match input_iter.next () {
+				Some (input_byte) if input_byte == expect_byte => {
+					if expect_byte & 0xc0 != 0x80 { num_chars += 1; }
+					num_bytes += 1;
+				},
+				None if expect_byte == b'\n' && self.line_idx.as_usize () + 1 < self.input_lines.len () => {
+					self.line_idx += 1;
+					self.col_idx = 0;
+					self.byte_idx = 0;
+					self.input_line = self.input_lines [self.line_idx.as_usize ()];
+					input_iter = self.input_line.bytes ();
+					num_chars = 0;
+					num_bytes = 0;
+				},
+				_ => {
+					* self = saved;
+					return Err (self.err ());
+				},
+			}
 		}
+		self.col_idx += num_chars;
+		self.byte_idx += num_bytes;
+		self.input_line = & self.input_line [num_bytes.as_usize () .. ];
+		/*
+		for expect_char in expect.chars () {
+			if self.next () == Some (expect_char) { continue }
+			* self = saved;
+			return Err (self.err ());
+		}
+		*/
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (self)
 	}
@@ -220,10 +254,8 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
-		self.any ().of (|parser| {
-			let val_str = parser.int_real ();
-			IntType::from_str (val_str).map_err (|_err| parser.err ())
-		}).done ()
+		let saved = * self;
+		self.int_str ().parse ().map_err (|_err| { * self = saved; self.err () })
 	}
 
 	/// Consume and return an unsigned decimal integer from the input
@@ -240,43 +272,45 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ inline ]
 	pub fn uint <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
-		self.uint_real ().parse ().map_err (|_err| self.err ())
+		let saved = * self;
+		self.uint_str ().parse ().map_err (|_err| { * self = saved; self.err () })
 	}
 
 	#[ inline ]
-	pub fn item <'par, Item> (& 'par mut self) -> ParseResult <Item>
+	pub fn item <Item> (& mut self) -> ParseResult <Item>
 			where Item: FromParser <'inp> {
 		Item::from_parser (self)
 	}
 
 	#[ allow (clippy::string_slice) ]
-	fn int_real (& mut self) -> & str {
+	#[ inline ]
+	fn int_str (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		let (num_chars, num_bytes) =
-			self.input_line.chars ()
-				.enumerate ()
-				.take_while (|& (idx, letter)|
-					letter.is_ascii_digit () || (idx == 0 && (letter == '-' || letter == '+')))
-				.map (|(_, letter)| letter.len_utf8 ())
-				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
-					(num_chars + 1, num_bytes + ch_bytes));
-		let val = & self.input_line [ .. num_bytes];
-		for _ in 0 .. num_chars { self.next ().unwrap (); }
+		let num_digits =
+			self.input_line.bytes ().enumerate ()
+				.take_while (|& (idx, ch)|
+					ch.is_ascii_digit () || (idx == 0 && (ch == b'-' || ch == b'+')))
+				.fold (0, |sum, _| sum + 1);
+		let val = & self.input_line [ .. num_digits.as_usize ()];
+		self.input_line = & self.input_line [num_digits.as_usize () .. ];
+		self.col_idx += num_digits;
+		self.byte_idx += num_digits;
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
 
 	#[ allow (clippy::string_slice) ]
-	fn uint_real (& mut self) -> & str {
+	#[ inline ]
+	fn uint_str (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace (); }
-		let (num_chars, num_bytes) =
-			self.input_line.chars ()
-				.take_while (|& letter| letter.is_ascii_digit ())
-				.map (char::len_utf8)
-				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
-					(num_chars + 1, num_bytes + ch_bytes));
-		let val = & self.input_line [ .. num_bytes];
-		for _ in 0 .. num_chars { self.next ().unwrap (); }
+		let num_digits =
+			self.input_line.bytes ()
+				.take_while (|& ch| ch.is_ascii_digit ())
+				.fold (0, |sum, _| sum + 1);
+		let val = & self.input_line [ .. num_digits.as_usize ()];
+		self.input_line = & self.input_line [num_digits.as_usize () .. ];
+		self.col_idx += num_digits;
+		self.byte_idx += num_digits;
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
@@ -295,11 +329,13 @@ impl <'inp> Parser <'inp> {
 			self.input_line.chars ()
 				.take_while (|& ch| (self.word_pred) (ch))
 				.map (char::len_utf8)
-				.fold ((0_u32, 0), |(num_chars, num_bytes), ch_bytes|
+				.fold ((0_u32, 0_usize), |(num_chars, num_bytes), ch_bytes|
 					(num_chars + 1, num_bytes + ch_bytes));
 		if num_chars == 0 { return Err (self.err ()) }
-		let word = & self.input_line [ .. num_bytes];
-		for _ in 0 .. num_chars { self.next ().unwrap (); }
+		let word = & self.input_line [ .. num_bytes.as_usize ()];
+		self.input_line = & self.input_line [num_bytes.as_usize () .. ];
+		self.col_idx += num_chars;
+		self.byte_idx += num_bytes.as_u32 ();
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (word)
 	}
@@ -313,8 +349,8 @@ impl <'inp> Parser <'inp> {
 	/// Returns `Err (ParseError::Wrapped (err))` if the conversion fails.
 	///
 	#[ inline ]
-	pub fn word_into <'par_1, Output> (& 'par_1 mut self) -> ParseResult <Output>
-			where Output: TryFrom <& 'par_1 str, Error = GenError> {
+	pub fn word_into <'par, Output> (& 'par mut self) -> ParseResult <Output>
+			where Output: TryFrom <& 'par str, Error = GenError> {
 		Ok (self.word () ?.try_into () ?)
 	}
 
@@ -371,16 +407,16 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn next (& mut self) -> Option <char> {
-		if self.input_line.is_empty () && self.line_idx + 1 < self.input_lines.len () {
+		if self.input_line.is_empty () && self.line_idx + 1 < self.input_lines.len ().as_u32 () {
 			self.line_idx += 1;
-			self.input_line = self.input_lines [self.line_idx];
+			self.input_line = self.input_lines [self.line_idx.as_usize ()];
 			self.col_idx = 0;
 			return Some ('\n');
 		}
 		let ch = self.input_line.chars ().next () ?;
 		self.input_line = & self.input_line [ch.len_utf8 () .. ];
 		self.col_idx += 1;
-		self.byte_idx += ch.len_utf8 ();
+		self.byte_idx += ch.len_utf8 ().as_u32 ();
 		Some (ch)
 	}
 
@@ -388,9 +424,8 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ inline ]
 	pub fn peek (& mut self) -> Option <char> {
-		if let Some (ch) = self.input_line.chars ().next () { return Some (ch) }
-		if self.line_idx + 1 < self.input_lines.len () { return Some ('\n') }
-		None
+		self.input_line.chars ().next ().or_else (||
+			(self.line_idx + 1 < self.input_lines.len ().as_u32 ()).then_some ('\n'))
 	}
 
 	/// Consume and return the next character from the input
@@ -428,11 +463,12 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn wrap_auto <Output> (
+	pub fn wrap_auto <Output, WrapFn> (
 		input: & 'inp str,
-		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
-	) -> GenResult <Output> {
-		Self::wrap (input, |parser| {
+		mut wrap_fn: WrapFn,
+	) -> GenResult <Output>
+			where WrapFn: for <'par1> FnMut (& 'par1 mut Parser <'inp>) -> ParseResult <Output> {
+		Self::wrap (input, |parser: & mut Parser <'inp>| {
 			let item = wrap_fn (parser) ?;
 			parser.end () ?;
 			Ok (item)
@@ -440,10 +476,11 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn wrap_lines_auto <Output> (
+	pub fn wrap_lines_auto <Output, WrapFn> (
 		input: impl Iterator <Item = (usize, & 'inp str)>,
-		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
-	) -> GenResult <Vec <Output>> {
+		mut wrap_fn: WrapFn,
+	) -> GenResult <Vec <Output>>
+			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 		input
 			.map (|(line_idx, line)| Self::wrap (line, & mut wrap_fn)
 				.map_parse_err_line (line_idx, line))
@@ -451,10 +488,11 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn wrap_lines <Output> (
+	pub fn wrap_lines <Output, WrapFn> (
 		input_lines: & 'inp [& 'inp str],
-		mut wrap_fn: impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
-	) -> GenResult <Output> {
+		mut wrap_fn: WrapFn,
+	) -> GenResult <Output>
+			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 		let mut parser = Parser::new_lines (input_lines);
 		let item = wrap_fn (& mut parser).map_parse_err_auto (& parser) ?;
 		parser.end ().map_parse_err_auto (& parser) ?;
@@ -510,11 +548,11 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn delim_fn <'par, Output, ParseFn> (
-		& 'par mut self,
-		delim: & 'par str,
+	pub fn delim_fn <'par0, Output, ParseFn> (
+		& 'par0 mut self,
+		delim: & 'par0 str,
 		parse_fn: ParseFn,
-	) -> ParserDelim <'par, 'inp, Output, ParseFn>
+	) -> ParserDelim <'par0, 'inp, Output, ParseFn>
 			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
 		assert! (! delim.is_empty ());
 		ParserDelim {
@@ -537,31 +575,30 @@ impl <'inp> Parser <'inp> {
 		}
 	}
 
-	/*
 	#[ inline ]
-	pub fn delim_items <'par,, Output: FromParser <'inp> + 'out> (
+	pub fn delim_items <'par, Output, ParseFn> (
 		& 'par mut self,
 		delim: & 'par str,
-	) -> impl Iterator <Item = ParseResult <Output>> + 'par + 'inp {
+	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>>
+			where Output: FromParser <'inp> {
 		self.delim_fn (delim, Parser::item)
 	}
 
 	#[ inline ]
-	pub fn delim_uints <'par, 'out: 'par, Output: FromStr + 'out> (
+	pub fn delim_uints <'par, Output: FromStr> (
 		& 'par mut self,
 		delim: & 'par str,
-	) -> impl Iterator <Item = ParseResult <Output>> + 'par + 'inp {
-		self.delim_fn (delim, |parser| parser.uint ())
+	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>> {
+		self.delim_fn (delim, Parser::<'inp>::uint)
 	}
 
 	#[ inline ]
-	pub fn delim_ints <Output: FromStr + 'static> (
+	pub fn delim_ints <'par, Output: FromStr + 'static> (
 		& 'par mut self,
 		delim: & 'par str,
-	) -> impl Iterator <Item = ParseResult <Output>> + 'par {
+	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>> {
 		self.delim_fn (delim, Parser::int)
 	}
-	*/
 
 }
 
@@ -569,7 +606,7 @@ pub struct ParserDelim <
 	'par,
 	'inp,
 	Output,
-	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> ,
+	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
 > {
 	parser: & 'par mut Parser <'inp>,
 	delim: & 'par str,
@@ -584,17 +621,15 @@ impl <'par, 'inp, Output, ParseFn> Iterator for ParserDelim <'par, 'inp, Output,
 
 	#[ inline ]
 	fn next (& mut self) -> Option <Output> {
-		if self.first {
+		let saved = * self.parser;
+		let result = if self.first {
 			self.first = false;
-			self.parser.any ().of (|parser| {
-				(self.parse_fn) (parser)
-			}).done ().ok ()
+			(self.parse_fn) (self.parser)
 		} else {
-			self.parser.any ().of (|parser| {
-				parser.expect (self.delim) ?;
-				(self.parse_fn) (parser)
-			}).done ().ok ()
-		}
+			self.parser.expect (self.delim).and_then (|parser| (self.parse_fn) (parser))
+		};
+		if result.is_err () { * self.parser = saved; }
+		result.ok ()
 	}
 
 }
