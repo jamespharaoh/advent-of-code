@@ -6,6 +6,7 @@
 
 [dependencies]
 
+	aoc-checked = { path = "checked" }
 	aoc-inpstr = { path = "inpstr" }
 	aoc-misc = { path = "misc" }
 	aoc-nums = { path = "nums" }

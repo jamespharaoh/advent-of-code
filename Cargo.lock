@@ -1332,6 +1332,7 @@ dependencies = [
  "aoc-2020-day-10",
  "aoc-2020-day-11",
  "aoc-2020-day-12",
+ "aoc-2020-day-13",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -1435,6 +1436,14 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-pos",
+]
+
+[[package]]
+name = "aoc-2020-day-13"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
 ]
 
 [[package]]
@@ -1700,6 +1709,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-checked"
+version = "0.1.0"
+
+[[package]]
 name = "aoc-codegen"
 version = "0.1.0"
 
@@ -1707,6 +1720,7 @@ version = "0.1.0"
 name = "aoc-common"
 version = "0.1.0"
 dependencies = [
+ "aoc-checked",
  "aoc-inpstr",
  "aoc-misc",
  "aoc-nums",

@@ -70,6 +70,7 @@ mod prelude {
 
 	pub use clap;
 
+	pub use aoc_checked::checked as chk;
 	pub use aoc_misc::*;
 	pub use aoc_nums as nums;
 	pub use aoc_inpstr::InpStr;
@@ -85,7 +86,10 @@ mod prelude {
 	pub use crate::nums::NumResult;
 	pub use crate::nums::Overflow;
 	pub use crate::nums::TryAdd;
+	pub use crate::nums::TryDiv;
 	pub use crate::nums::TryMul;
+	pub use crate::nums::TryRem;
+	pub use crate::nums::TrySub;
 	pub use crate::parser::*;
 
 }

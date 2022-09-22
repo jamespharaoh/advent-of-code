@@ -2,6 +2,10 @@ use aoc_inpstr::*;
 use aoc_misc::*;
 use aoc_nums as nums;
 
+mod display;
+
+pub use display::IntoIteratorDisplayDelim;
+
 pub type ParseResult <Item> = Result <Item, ParseError>;
 
 #[ derive (Clone) ]
@@ -1095,13 +1099,9 @@ macro_rules! parse {
 			.delim_fn ($delim, $item_parse)
 			.collect ();
 	};
-	( @item $parser:expr, @delim $delim:literal $item_name:ident { input_lifetime = $input_life:lifetime; $nest_decl:tt = [ $($nest_parse:tt)* ] } ) => {
-		let parse_nested = |parser: & mut Parser <$input_life>| {
-			parse! (parser, $($nest_parse)*);
-			Ok ($nest_decl)
-		};
+	( @item $parser:expr, @delim $delim:literal $item_name:ident { $($nest:tt)* } ) => {
 		let $item_name = $parser
-			.delim_fn ($delim, parse_nested)
+			.delim_fn ($delim, parse! (@nest $($nest)*))
 			.collect ();
 	};
 	( @item $parser:expr, @delim_some $delim:literal $item_name:ident ) => {
@@ -1140,6 +1140,36 @@ macro_rules! parse {
 	( @item $parser:expr, @skip ) => {
 		$parser.skip_whitespace ();
 	};
+
+	/*( @nest input_lifetime = $input_life:lifetime; $decl:tt = [ $($parse:tt)* ] ) => {
+		|parser: & mut Parser <$life>| {
+			parse! (parser, $($parse)*);
+			Ok ($decl)
+		}
+	};*/
+	( @nest $($var:tt)* ) => {
+		|parser: & mut Parser| {
+			let parser = parser.any ();
+			parse! (@nest_var parser $($var)*);
+			parser.done ()
+		}
+	};
+	( @nest_var $parser:ident $var:ident = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($var)
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
+	( @nest_var $parser:ident $var:ident ($($decl:tt)*) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($var ($($decl)*))
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
+	( @nest_var $parser:ident $(,)? ) => { };
+
 }
 
 macro_rules! from_parser_impl {
@@ -1196,82 +1226,6 @@ impl <'inp> FromParser <'inp> for Rc <str> {
 		Ok (Self::from (& * inp_str))
 	}
 
-}
-
-pub struct DisplayDelim <Delim, Inner> {
-	delim: Delim,
-	inner: Inner,
-}
-
-impl <Delim, Inner> Display for DisplayDelim <Delim, Inner>
-	where
-		Delim: Clone + Display,
-		Inner: Clone + IntoIterator,
-		Inner::Item: Display {
-
-	#[ inline ]
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		let mut first = true;
-		for item in self.inner.clone () {
-			if ! first { Display::fmt (& self.delim, formatter) ?; }
-			Display::fmt (& item, formatter) ?;
-			first = false;
-		}
-		Ok (())
-	}
-
-}
-
-pub struct DisplayDelimWith <Delim, Inner, Item, DisplayFn> {
-	delim: Delim,
-	inner: Inner,
-	display_fn: DisplayFn,
-	phantom: PhantomData <Item>,
-}
-
-impl <Delim, Inner, Item, DisplayFn> Display for DisplayDelimWith <Delim, Inner, Item, DisplayFn>
-	where
-		Delim: Clone + Display,
-		DisplayFn: Fn (Item, & mut fmt::Formatter) -> fmt::Result,
-		Inner: Clone + IntoIterator <Item = Item> {
-
-	#[ inline ]
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		let mut first = true;
-		for item in self.inner.clone () {
-			if ! first { Display::fmt (& self.delim, formatter) ?; }
-			(self.display_fn) (item, formatter) ?;
-			first = false;
-		}
-		Ok (())
-	}
-
-}
-
-pub trait IntoIteratorDisplayDelim: IntoIterator {
-
-	#[ inline ]
-	fn display_delim <Delim> (
-		self,
-		delim: Delim,
-	) -> DisplayDelim <Delim, Self>
-			where Self: Sized {
-		DisplayDelim { delim, inner: self }
-	}
-
-	#[ inline ]
-	fn display_delim_with <Delim, Item, DisplayFn> (
-		self,
-		delim: Delim,
-		display_fn: DisplayFn,
-	) -> DisplayDelimWith <Delim, Self, Item, DisplayFn>
-			where Self: Sized {
-		DisplayDelimWith { delim, inner: self, display_fn, phantom: PhantomData }
-	}
-
-}
-
-impl <SomeIter> IntoIteratorDisplayDelim for SomeIter where SomeIter: IntoIterator {
 }
 
 #[ macro_export ]
@@ -1606,92 +1560,6 @@ macro_rules! struct_display {
 				display! (formatter, $($args)*);
 				Ok (())
 			}
-		}
-	};
-
-}
-
-#[ macro_export ]
-macro_rules! struct_parser_display {
-	( $($rest:tt)* ) => {
-		struct_parser! ($($rest)*);
-		struct_display! ($($rest)*);
-	};
-}
-
-#[ macro_export ]
-macro_rules! display {
-
-	( $formatter:ident $(,)? ) => {};
-	( $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, $field:ident = $parse_fn:path $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, $field:ident = $rng_0:literal .. $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, $field:ident = $rng_0:literal ..= $rng_1:literal $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
-		Display::fmt ($expect, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @array $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @confirm $(,$($rest:tt)*)? ) => {
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @delim $delim:literal $field:ident { $($nest:tt)* } $(,$($rest:tt)*)?) => {
-		let display_fn = display! (@nest $($nest)*);
-		Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ("\n"), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @lines $field:ident = $display:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len:expr) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-
-	( @nest
-		input_lifetime = $input_life:lifetime;
-		($($name:ident),*) = [ $($display:tt)* ]
-	) => {
-		|val, formatter: & mut fmt::Formatter| {
-			let & ($(ref $name),*) = val;
-			display! (formatter, $($display)*);
-			Ok (())
 		}
 	};
 
