@@ -1334,6 +1334,7 @@ dependencies = [
  "aoc-2020-day-12",
  "aoc-2020-day-13",
  "aoc-2020-day-14",
+ "aoc-2020-day-15",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -1449,6 +1450,14 @@ dependencies = [
 
 [[package]]
 name = "aoc-2020-day-14"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2020-day-15"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",
