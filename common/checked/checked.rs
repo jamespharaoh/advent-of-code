@@ -65,64 +65,87 @@ impl From <CheckedTop> for TokenStream {
 	fn from (top: CheckedTop) -> Self {
 		match top {
 			CheckedTop::Expr (expr) => expr.into (),
-			CheckedTop::Assign (left, punct_0, punct_1, right) => [
-				// {
-				//   let __val: Result <_, Overflow> = $right;
-				//   if let Ok (__val) == $right {
-				//     $left $punct_0$punct_1 __val;
-				//   } else {
-				//     Err (Overflow)
-				//   }
-				// }
-				TokenTree::Group (Group::new (Delimiter::Brace, [
-					TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
-					TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-					TokenTree::Punct (Punct::new (':', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("Result", Span::mixed_site ())),
-					TokenTree::Punct (Punct::new ('<', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("_", Span::mixed_site ())),
-					TokenTree::Punct (Punct::new (',', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
-					TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
-					TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
-					TokenTree::Group (Group::new (Delimiter::None, right.into ())),
-					TokenTree::Punct (Punct::new (';', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("if", Span::mixed_site ())),
-					TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
-					TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
-					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-						TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-					].into_iter ().collect ())),
-					TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-					TokenTree::Group (Group::new (Delimiter::Brace, iter::empty ()
-						.chain (left.into_iter ())
-						.chain ([
-							TokenTree::Punct (punct_0),
-							TokenTree::Punct (punct_1),
-							TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-							TokenTree::Punct (Punct::new (';', Spacing::Alone)),
-							TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
-							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-								TokenTree::Group (Group::new (Delimiter::Parenthesis,
-									Self::new ())),
-							].into_iter ().collect ())),
-						].into_iter ())
-						.collect ())),
-					TokenTree::Ident (Ident::new ("else", Span::mixed_site ())),
+			CheckedTop::Assign (left, punct_0, punct_1, right) => {
+				let fn_name = match punct_0.as_char () {
+					'+' => "try_add",
+					'/' => "try_div",
+					'*' => "try_mul",
+					'%' => "try_rem",
+					'-' => "try_sub",
+					_ => unreachable! (),
+				};
+				[
+					// {
+					//   let __val: Result <_, Overflow> =
+					//     $right.and_then (|__right| $left.$fn_name (__right));
+					//   if let Ok (__val) == __val {
+					//     $left $punct_1 __val;
+					//   } else {
+					//     Err (Overflow)
+					//   }
+					// }
 					TokenTree::Group (Group::new (Delimiter::Brace, [
-						TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+						TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
+						TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
+						TokenTree::Punct (Punct::new (':', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("Result", Span::mixed_site ())),
+						TokenTree::Punct (Punct::new ('<', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("_", Span::mixed_site ())),
+						TokenTree::Punct (Punct::new (',', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
+						TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+						TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
+						TokenTree::Group (Group::new (Delimiter::None, right.into ())),
+						TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("and_then", Span::mixed_site ())),
 						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-							TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
+							TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
+							TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
+							TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
+							TokenTree::Group (Group::new (Delimiter::None, (& left).into ())),
+							TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
+							TokenTree::Ident (Ident::new (fn_name, Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
+							].into_iter ().collect ())),
 						].into_iter ().collect ())),
-					].into_iter ().collect ())),
-				].into_iter ().collect ()))
-			].into_iter ().collect (),
+						TokenTree::Punct (Punct::new (';', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("if", Span::mixed_site ())),
+						TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
+						TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
+						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+							TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
+						].into_iter ().collect ())),
+						TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
+						TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
+						TokenTree::Group (Group::new (Delimiter::Brace, iter::empty ()
+							.chain (left.into_iter ())
+							.chain ([
+								TokenTree::Punct (punct_1),
+								TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
+								TokenTree::Punct (Punct::new (';', Spacing::Alone)),
+								TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
+								TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+									TokenTree::Group (Group::new (Delimiter::Parenthesis,
+										Self::new ())),
+								].into_iter ().collect ())),
+							].into_iter ())
+							.collect ())),
+						TokenTree::Ident (Ident::new ("else", Span::mixed_site ())),
+						TokenTree::Group (Group::new (Delimiter::Brace, [
+							TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
+							].into_iter ().collect ())),
+						].into_iter ().collect ())),
+					].into_iter ().collect ()))
+				].into_iter ().collect ()
+			},
 		}
 	}
 }
 
-#[ derive (Debug) ]
+#[ derive (Clone, Debug) ]
 enum CheckedExpr {
 	Item (CheckedItem),
 	Add (Box <CheckedExpr>, Punct, Box <CheckedExpr>),
@@ -248,7 +271,7 @@ impl From <& CheckedExpr> for TokenStream {
 	}
 }
 
-#[ derive (Debug) ]
+#[ derive (Clone, Debug) ]
 struct CheckedItem (Vec <TokenTree>);
 
 impl CheckedItem {

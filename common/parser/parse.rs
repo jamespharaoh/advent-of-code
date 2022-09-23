@@ -174,6 +174,9 @@ macro_rules! parse {
 	( @item $parser:expr, @skip ) => {
 		$parser.skip_whitespace ();
 	};
+	( @item $parser:expr, @skip $display:literal ) => {
+		$parser.skip_whitespace ();
+	};
 
 	/*( @nest input_lifetime = $input_life:lifetime; $decl:tt = [ $($parse:tt)* ] ) => {
 		|parser: & mut Parser <$life>| {

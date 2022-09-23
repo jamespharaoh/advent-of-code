@@ -157,6 +157,10 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
+		$formatter.write_str ($display) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len:expr) $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);

@@ -380,12 +380,28 @@ impl <'inp> Parser <'inp> {
 
 	/// Consume any whitespace from the start of the remaining input
 	///
+	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn skip_whitespace (& mut self) -> & mut Self {
-		while let Some (letter) = self.peek () {
-			if ! letter.is_whitespace () { break }
-			self.next ().unwrap ();
-		}
+		/*
+		let (num_chars, num_bytes) =
+			self.input_line.chars ()
+				.take_while (|& ch| ch.is_whitespace ())
+				.fold ((0_u32, 0_usize), |(num_chars, num_bytes), ch| (
+					num_chars + 1_u32,
+					num_bytes + ch.len_utf8 (),
+				));
+		self.input_line = & self.input_line [num_bytes .. ];
+		self.col_idx += num_chars;
+		self.byte_idx += num_bytes.as_u32 ();
+		*/
+		let num_spaces =
+			self.input_line.bytes ()
+				.take_while (|& ch| ch.is_ascii_whitespace ())
+				.fold (0_u32, |sum, _| sum + 1);
+		self.input_line = & self.input_line [num_spaces.as_usize () .. ];
+		self.col_idx += num_spaces;
+		self.byte_idx += num_spaces;
 		self
 	}
 
