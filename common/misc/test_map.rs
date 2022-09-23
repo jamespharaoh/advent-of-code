@@ -15,11 +15,8 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		}
 	}
 
-	pub fn get <Qry> (& self, key: & Qry) -> Option <& Val>
-		where
-			Key: Borrow <Qry>,
-			Qry: Eq + Hash + Ord + ?Sized {
-		self.map.get (key)
+	pub fn clear (& mut self) {
+		self.map.clear ();
 	}
 
 	pub fn contains_key <Qry> (& self, key: & Qry) -> bool
@@ -27,6 +24,13 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 			Key: Borrow <Qry>,
 			Qry: Eq + Hash + Ord + ?Sized {
 		self.map.contains_key (key)
+	}
+
+	pub fn get <Qry> (& self, key: & Qry) -> Option <& Val>
+		where
+			Key: Borrow <Qry>,
+			Qry: Eq + Hash + Ord + ?Sized {
+		self.map.get (key)
 	}
 
 	pub fn get_mut <Qry> (& mut self, key: & Qry) -> Option <& mut Val>
@@ -44,10 +48,6 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.insert (key, val)
 	}
 
-	pub fn clear (& mut self) {
-		self.map.clear ();
-	}
-
 	pub fn iter (& self) -> BTreeIter <'_, Key, Val> {
 		self.map.iter ()
 	}
@@ -62,6 +62,13 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 
 	pub fn is_empty (& self) -> bool {
 		self.map.is_empty ()
+	}
+
+	pub fn remove <Qry: ?Sized> (& mut self, value: & Qry) -> Option <Val>
+		where
+			Key: Borrow <Qry>,
+			Qry: Hash + Eq + Ord {
+		self.map.remove (value)
 	}
 
 	pub fn values (& self) -> BTreeValues <Key, Val> {
@@ -117,6 +124,14 @@ impl <Key, Val, Qry> Index <& '_ Qry> for HashMap <Key, Val>
 	type Output = Val;
 	fn index (& self, query: & Qry) -> & Val {
 		self.map.get (query).unwrap ()
+	}
+}
+
+impl <'map, Key, Val> IntoIterator for & 'map HashMap <Key, Val> {
+	type Item = (& 'map Key, & 'map Val);
+	type IntoIter = BTreeIter <'map, Key, Val>;
+	fn into_iter (self) -> BTreeIter <'map, Key, Val> {
+		(& self.map).into_iter ()
 	}
 }
 

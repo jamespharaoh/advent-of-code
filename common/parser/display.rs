@@ -120,6 +120,10 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @char $field:ident = |$arg:ident| { $($parse:tt)* } $(,$($rest:tt)*)? ) => {
+		$formatter.write_char (* $field) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);

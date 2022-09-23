@@ -294,7 +294,7 @@
 --deny clippy::needless_option_as_deref
 --deny clippy::needless_option_take
 --deny clippy::needless_parens_on_range_literals
---deny clippy::needless_pass_by_value
+--allow clippy::needless_pass_by_value
 --deny clippy::needless_question_mark
 --allow clippy::needless_range_loop
 --deny clippy::needless_return
