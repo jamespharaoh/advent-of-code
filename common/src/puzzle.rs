@@ -25,9 +25,7 @@ pub fn run_year_and_exit (
 		if require_answers { stats.num_incorrect + stats.num_unknown }
 		else { stats.num_incorrect };
 	#[ allow (clippy::exit) ]
-	std::process::exit (
-		if num_errors == 0 { 0 }
-		else { 1 });
+	std::process::exit (i32::from (num_errors != 0));
 }
 
 #[ allow (clippy::missing_inline_in_public_items) ]

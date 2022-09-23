@@ -1,22 +1,5 @@
 use super::*;
 
-pub enum GridPosDisplayOrder {
-	RightDown,
-	RightUp,
-}
-
-trait GridPosDisplay: GridPos <2> {
-	const ORDER: GridPosDisplayOrder;
-}
-
-impl <Val: Int> GridPosDisplay for PosGeo <Val> {
-	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightUp;
-}
-
-impl <Val: Int> GridPosDisplay for PosYX <Val> {
-	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightDown;
-}
-
 impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
 	where
 		Storage: GridStorage + Clone,
@@ -27,8 +10,9 @@ impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		match Pos::ORDER {
 			GridPosDisplayOrder::RightDown => {
+				let mut first = true;
 				for row in 0 .. self.size [0] {
-					if row != 0 { write! (formatter, "\n") ?; }
+					if first { first = false; } else { write! (formatter, "\n") ?; }
 					for col in 0 .. self.size [1] {
 						let item = self.get_native ([row, col]).unwrap ();
 						Display::fmt (& item, formatter) ?;
@@ -36,10 +20,21 @@ impl <Storage, Pos> Display for Grid <Storage, Pos, 2>
 				}
 			},
 			GridPosDisplayOrder::RightUp => {
+				let mut first = true;
 				for row in (0 .. self.size [0]).rev () {
-					if row != 0 { write! (formatter, "\n") ?; }
+					if first { first = false; } else { write! (formatter, "\n") ?; }
 					for col in 0 .. self.size [1] {
 						let item = self.get_native ([row, col]).unwrap ();
+						Display::fmt (& item, formatter) ?;
+					}
+				}
+			},
+			GridPosDisplayOrder::UpRight => {
+				let mut first = true;
+				for row in (0 .. self.size [1]).rev () {
+					if first { first = false; } else { write! (formatter, "\n") ?; }
+					for col in 0 .. self.size [0] {
+						let item = self.get_native ([col, row]).unwrap ();
 						Display::fmt (& item, formatter) ?;
 					}
 				}

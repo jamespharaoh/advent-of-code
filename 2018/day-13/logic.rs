@@ -64,7 +64,7 @@ impl State {
 		for idx in 0 .. self.carts.len () {
 			let (prev_pos, prev_dir, prev_turn, prev_tile, prev_crashed) = self.carts [idx];
 			if prev_crashed { continue }
-			let next_pos = (prev_pos + (prev_dir, 1)) ?;
+			let next_pos = prev_pos.try_add ((prev_dir, 1)) ?;
 			let next_tile = self.grid.get (next_pos).ok_or ("Cart left grid") ?;
 			let (next_dir, next_turn, next_crashed) = match (prev_dir, prev_turn, next_tile) {
 				(Dir::Up, turn, Tile::Vert) => (Dir::Up, turn, false),

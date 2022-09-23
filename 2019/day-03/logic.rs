@@ -49,7 +49,7 @@ fn line_points (steps: & [Step]) -> GenResult <HashMap <Pos, u32>> {
 	let mut dist = 0_u32;
 	for step in steps {
 		for _ in 0 .. step.num {
-			pos = (pos + (step.dir, 1)) ?;
+			pos = pos.try_add ((step.dir, 1)) ?;
 			dist += 1;
 			result.entry (pos).or_insert (dist);
 		}

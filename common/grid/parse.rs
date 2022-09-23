@@ -3,7 +3,7 @@ use super::*;
 impl <'inp, Item, Pos> FromParser <'inp> for Grid <Vec <Item>, Pos, 2>
 	where
 		Item: Clone + Default + FromParser <'inp>,
-		Pos: GridPos <2> {
+		Pos: GridPosDisplay {
 
 	#[ inline ]
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
@@ -18,17 +18,26 @@ impl <'inp, Item, Pos> FromParser <'inp> for Grid <Vec <Item>, Pos, 2>
 		let height = lines.len ();
 		let width = lines.iter ().map (Vec::len).max ().unwrap_or (0);
 		let grid_origin = [ 0, 0 ];
-		let grid_size = [ height, width ];
+		use GridPosDisplayOrder::{ RightDown, RightUp, UpRight };
+		let (grid_size, line_offset, tile_offset, first_idx) = match Pos::ORDER {
+			RightDown => ([ height, width ], width.as_isize (), 1_isize, 0),
+			RightUp => ([ height, width ], width.as_isize (), -1_isize, width.as_isize () * (height.as_isize () - 1)),
+			UpRight => ([ width, height ], -1_isize, height.as_isize (), height.as_isize () - 1),
+		};
 		if ! Self::validate_dims (grid_origin, grid_size) { return Err (parser.err ()) }
-		Ok (Self::wrap (
-			lines.iter ()
-				.flat_map (|line| line.iter ().cloned ()
+		let mut grid_vec = vec! [ default (); width * height ];
+		let mut line_idx = first_idx;
+		for line in lines.iter () {
+			let mut tile_idx = line_idx;
+			for tile in line.iter ().cloned ()
 					.chain (std::iter::repeat (Item::default ()))
-					.take (width))
-				.collect (),
-			[ 0, 0 ],
-			[ height, width ],
-		))
+					.take (width) {
+				grid_vec [tile_idx.as_usize ()] = tile;
+				tile_idx += tile_offset;
+			}
+			line_idx += line_offset;
+		}
+		Ok (Self::wrap (grid_vec.into_iter ().collect (), grid_origin, grid_size))
 	}
 
 }

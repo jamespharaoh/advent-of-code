@@ -26,9 +26,9 @@ pub fn part_two (input: & Input) -> GenResult <i64> {
 	Ok (cpu.get_reg ('h') ?)
 }
 
+#[ allow (clippy::print_stdout) ]
 fn exec_optimised (cpu: & mut Cpu, verbose: bool) -> GenResult <Option <Val>> {
 	while cpu.can_step () {
-		#[ allow (clippy::print_stdout) ]
 		if verbose {
 			println! (
 				"{:4}  {:8} {:8} {:8} {:8} {:8} {:8} {:8} {:8}  {}",

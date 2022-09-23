@@ -1,10 +1,10 @@
 use super::*;
 
 pub type Coord = i16;
-pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Node>, Pos>;
-pub type Pos = pos::PosRowCol <Coord>;
-pub type Turn = pos::Turn2d;
+pub type Dir = aoc_pos::Dir2d;
+pub type Grid = aoc_grid::Grid <Vec <Node>, Pos>;
+pub type Pos = aoc_pos::PosRowCol <Coord>;
+pub type Turn = aoc_pos::Turn2d;
 
 parse_display_enum! {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]

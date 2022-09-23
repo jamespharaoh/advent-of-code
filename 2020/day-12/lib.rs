@@ -5,6 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
+use aoc_pos::GenPosCore as _;
 
 pub mod input;
 pub mod logic;

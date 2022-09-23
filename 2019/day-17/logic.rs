@@ -69,15 +69,15 @@ fn find_route (grid: & Grid, mut pos: Pos, mut dir: Dir) -> GenResult <Vec <Step
 	let mut seen = HashSet::new ();
 	loop {
 		if ! seen.insert (pos) { return Err ("No solution found".into ()) }
-		let has_left = grid.get ((pos + (dir + Turn::Left, 1)) ?) == Some (Tile::Scaffold);
-		let has_right = grid.get ((pos + (dir + Turn::Right, 1)) ?) == Some (Tile::Scaffold);
+		let has_left = grid.get (pos.try_add ((dir + Turn::Left, 1)) ?) == Some (Tile::Scaffold);
+		let has_right = grid.get (pos.try_add ((dir + Turn::Right, 1)) ?) == Some (Tile::Scaffold);
 		if ! has_left && ! has_right { break }
 		if has_left && has_right { return Err ("No solution found".into ()) }
 		if has_left { dir = dir + Turn::Left; }
 		if has_right { dir = dir + Turn::Right; }
 		let mut dist = 0;
 		loop {
-			let next_pos = (pos + (dir, 1)) ?;
+			let next_pos = pos.try_add ((dir, 1)) ?;
 			if grid.get (next_pos) != Some (Tile::Scaffold) { break }
 			pos = next_pos;
 			dist += 1;

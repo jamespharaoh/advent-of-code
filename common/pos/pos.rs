@@ -9,7 +9,9 @@ use nums::NumResult;
 use nums::TryAdd;
 use nums::TryMul;
 
-pub use coord::Coord;
+pub use gen_pos::GenPos;
+pub use gen_pos::GenPosCore;
+pub use gen_pos::GenPosOps;
 pub use dim_2::Dir2d;
 pub use dim_2::DirGeo;
 pub use dim_2::PosXY;
@@ -19,7 +21,9 @@ pub use dim_2::PosRowCol;
 pub use dim_2::Turn2d;
 pub use dim_3::AxisXYZ;
 pub use dim_3::PosXYZ;
+pub use dim_4::PosWXYZ;
 pub use dim_4::PosXYZT;
+pub use dim_4::PosXYZW;
 
 macro_rules! pos_ops {
 
@@ -27,12 +31,12 @@ macro_rules! pos_ops {
 		impl <Val: Int> Debug for $name <Val> {
 			#[ inline ]
 			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-				let self_coords = self.coord_to_array ();
+				let array = self.pos_to_array ();
 				formatter.write_str (stringify! ($name)) ?;
 				formatter.write_str (" (") ?;
-				for idx in 0 .. self_coords.len () {
+				for idx in 0 .. array.len () {
 					if idx != 0 { formatter.write_str (", ") ?; }
-					Debug::fmt (& self_coords [idx], formatter) ?;
+					Debug::fmt (& array [idx], formatter) ?;
 				}
 				formatter.write_str (")") ?;
 				Ok (())
@@ -42,23 +46,25 @@ macro_rules! pos_ops {
 	};
 
 	( $name:ident : Add $(, $rest:tt)* ) => {
-		impl <Val: Int> TryAdd <$name <Val::Signed>> for $name <Val> {
+		impl <Val: Int, ArgVal: Int> TryAdd <$name <ArgVal>> for $name <Val>
+				where Val: TryAdd <ArgVal, Output = Val> {
 			type Output = Self;
 			#[ inline ]
-			fn try_add (self, other: $name <Val::Signed>) -> NumResult <Self> {
-				let self_coords = self.coord_to_array ();
-				let other_coords = other.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = self_coords [idx].add_signed (other_coords [idx]) ?
+			fn try_add (self, other: $name <ArgVal>) -> NumResult <Self> {
+				let self_array = self.pos_to_array ();
+				let other_array = other.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx].try_add (other_array [idx]) ?
 				}
-				Ok (Self::coord_from_array (result_coords))
+				Ok (Self::pos_from_array (result_array))
 			}
 		}
-		impl <Val: Int> Add <$name <Val::Signed>> for $name <Val> {
+		impl <Val: Int, ArgVal: Int> Add <$name <ArgVal>> for $name <Val>
+				where Val: TryAdd <ArgVal, Output = Val> {
 			type Output = Self;
 			#[ inline ]
-			fn add (self, other: $name <Val::Signed>) -> Self {
+			fn add (self, other: $name <ArgVal>) -> Self {
 				self.try_add (other).unwrap ()
 			}
 		}
@@ -69,24 +75,24 @@ macro_rules! pos_ops {
 			type Output = Self;
 			#[ inline ]
 			fn try_mul (self, arg: Val) -> NumResult <Self> {
-				let self_coords = self.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = self_coords [idx].try_mul (arg) ?;
+				let self_array = self.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx].try_mul (arg) ?;
 				}
-				Ok (Self::coord_from_array (result_coords))
+				Ok (Self::pos_from_array (result_array))
 			}
 		}
 		impl <Val: Int> Mul <Val> for $name <Val> {
 			type Output = Self;
 			#[ inline ]
 			fn mul (self, arg: Val) -> Self {
-				let self_coords = self.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = self_coords [idx] * arg;
+				let self_array = self.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx] * arg;
 				}
-				Self::coord_from_array (result_coords)
+				Self::pos_from_array (result_array)
 			}
 		}
 		pos_ops! ($name: $($rest),*);
@@ -96,12 +102,12 @@ macro_rules! pos_ops {
 			type Output = Self;
 			#[ inline ]
 			fn neg (self) -> Self {
-				let self_coords = self.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = - self_coords [idx];
+				let self_array = self.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = - self_array [idx];
 				}
-				Self::coord_from_array (result_coords)
+				Self::pos_from_array (result_array)
 			}
 		}
 		pos_ops! ($name: $($rest),*);
@@ -111,13 +117,13 @@ macro_rules! pos_ops {
 			type Output = Self;
 			#[ inline ]
 			fn rem (self, other: $name <Val>) -> Self {
-				let self_coords = self.coord_to_array ();
-				let other_coords = other.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] = self_coords [idx] % other_coords [idx];
+				let self_array = self.pos_to_array ();
+				let other_array = other.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx] % other_array [idx];
 				}
-				Self::coord_from_array (result_coords)
+				Self::pos_from_array (result_array)
 			}
 		}
 		pos_ops! ($name: $($rest),*);
@@ -127,14 +133,14 @@ macro_rules! pos_ops {
 			type Output = Self;
 			#[ inline ]
 			fn sub (self, other: $name <Val::Signed>) -> Self {
-				let self_coords = self.coord_to_array ();
-				let other_coords = other.coord_to_array ();
-				let mut result_coords = Self::ZERO.coord_to_array ();
-				for idx in 0 .. self_coords.len () {
-					result_coords [idx] =
-						self_coords [idx].sub_signed (other_coords [idx]).unwrap ();
+				let self_array = self.pos_to_array ();
+				let other_array = other.pos_to_array ();
+				let mut result_array = Self::ZERO.pos_to_array ();
+				for idx in 0 .. self_array.len () {
+					result_array [idx] =
+						self_array [idx].sub_signed (other_array [idx]).unwrap ();
 				}
-				Self::coord_from_array (result_coords)
+				Self::pos_from_array (result_array)
 			}
 		}
 		pos_ops! ($name: $($rest),*);
@@ -143,24 +149,48 @@ macro_rules! pos_ops {
 
 }
 
-mod coord {
+mod gen_pos {
 
 	use super::*;
 
-	pub trait Coord <const DIMS: usize>: Copy + Debug + Sized {
+	pub trait GenPosCore <const DIMS: usize>: Copy + Debug + Eq + Hash + Ord + Sized {
 
+		//type Signed: GenPos <DIMS>;
 		type Val: Int;
-		type Signed;
 
-		fn coord_to_array (self) -> [Self::Val; DIMS];
-		fn coord_from_array (array: [Self::Val; DIMS]) -> Self;
+		fn pos_to_array (self) -> [Self::Val; DIMS];
+		fn pos_from_array (array: [Self::Val; DIMS]) -> Self;
+
+		const ZERO: Self;
+		const MIN: Self;
+		const MAX: Self;
+
+	}
+
+	pub trait GenPosOps <const DIMS: usize>:
+		GenPosCore <DIMS> +
+		TryAdd <Output = Self> +
+		TryMul <Self::Val, Output = Self> {
+	}
+
+	impl <Pos, const DIMS: usize> GenPosOps <DIMS> for Pos
+		where
+			Pos: GenPosCore <DIMS> +
+			TryAdd <Output = Self> +
+			TryMul <Self::Val, Output = Self> {
+	}
+
+	pub trait GenPos <const DIMS: usize>: GenPosOps <DIMS> {
 
 		#[ inline ]
 		#[ must_use ]
 		fn zero () -> Self {
-			Self::coord_from_array ([Self::Val::ZERO; DIMS])
+			Self::pos_from_array ([Self::Val::ZERO; DIMS])
 		}
 
+	}
+
+	impl <Pos, const DIMS: usize> GenPos <DIMS> for Pos where Pos: GenPosOps <DIMS> {
 	}
 
 }
@@ -188,8 +218,6 @@ mod dim_2 {
 
 		impl <Val: Int> PosXY <Val> {
 
-			pub const ZERO: Self = Self { x: Int::ZERO, y: Int::ZERO };
-
 			#[ inline ]
 			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> {
 				let mut result = ArrayVec::new ();
@@ -203,20 +231,24 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Coord <2> for PosXY <Val> {
+		impl <Val: Int> GenPosCore <2> for PosXY <Val> {
 
 			type Val = Val;
-			type Signed = PosXY <Val::Signed>;
+			//type Signed = PosXY <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 2] {
+			fn pos_to_array (self) -> [Val; 2] {
 				[ self.x, self.y ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 2]) -> Self {
+			fn pos_from_array (arr: [Val; 2]) -> Self {
 				Self { x: arr [0], y: arr [1] }
 			}
+
+			const ZERO: Self = Self { x: Val::ZERO, y: Val::ZERO };
+			const MIN: Self = Self { x: Val::MIN, y: Val::MIN };
+			const MAX: Self = Self { x: Val::MAX, y: Val::MAX };
 
 		}
 
@@ -233,9 +265,6 @@ mod dim_2 {
 		pub struct PosYX <Val> { pub y: Val, pub x: Val }
 
 		impl <Val: Int> PosYX <Val> {
-
-			pub const ZERO: Self = Self { y: Val::ZERO, x: Val::ZERO };
-			pub const MAX: Self = Self { y: Val::MAX, x: Val::MAX };
 
 			#[ inline ]
 			#[ must_use ]
@@ -297,20 +326,24 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Coord <2> for PosYX <Val> {
+		impl <Val: Int> GenPosCore <2> for PosYX <Val> {
 
 			type Val = Val;
-			type Signed = PosYX <Val::Signed>;
+			//type Signed = PosYX <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 2] {
+			fn pos_to_array (self) -> [Val; 2] {
 				[ self.y, self.x ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 2]) -> Self {
+			fn pos_from_array (arr: [Val; 2]) -> Self {
 				Self { y: arr [0], x: arr [1] }
 			}
+
+			const ZERO: Self = Self { x: Val::ZERO, y: Val::ZERO };
+			const MIN: Self = Self { x: Val::MIN, y: Val::MIN };
+			const MAX: Self = Self { x: Val::MAX, y: Val::MAX };
 
 		}
 
@@ -328,12 +361,12 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Add <(Dir2d, Val)> for PosYX <Val> {
+		impl <Val: Int> TryAdd <(Dir2d, Val)> for PosYX <Val> {
 
-			type Output = NumResult <Self>;
+			type Output = Self;
 
 			#[ inline ]
-			fn add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
+			fn try_add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
 				let mut result = self;
 				match dir {
 					Dir2d::Up => result.y = Val::sub_2 (result.y, dist) ?,
@@ -359,8 +392,6 @@ mod dim_2 {
 		pub struct PosGeo <Val> { pub n: Val, pub e: Val }
 
 		impl <Val: Int> PosGeo <Val> {
-
-			pub const ZERO: Self = Self { n: Val::ZERO, e: Val::ZERO };
 
 			#[ inline ]
 			#[ must_use ]
@@ -417,20 +448,24 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Coord <2> for PosGeo <Val> {
+		impl <Val: Int> GenPosCore <2> for PosGeo <Val> {
 
 			type Val = Val;
-			type Signed = PosGeo <Val::Signed>;
+			//type Signed = PosGeo <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 2] {
+			fn pos_to_array (self) -> [Val; 2] {
 				[ self.n, self.e ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 2]) -> Self {
+			fn pos_from_array (arr: [Val; 2]) -> Self {
 				Self { n: arr [0], e: arr [1] }
 			}
+
+			const ZERO: Self = Self { n: Val::ZERO, e: Val::ZERO };
+			const MIN: Self = Self { n: Val::MIN, e: Val::MIN };
+			const MAX: Self = Self { n: Val::MAX, e: Val::MAX };
 
 		}
 
@@ -509,7 +544,11 @@ mod dim_2 {
 
 		impl <Val: Int> PosRowCol <Val> {
 
-			pub const ZERO: Self = Self { row: Val::ZERO, col: Val::ZERO };
+			#[ inline ]
+			#[ must_use ]
+			pub const fn new (row: Val, col: Val) -> Self {
+				Self { row, col }
+			}
 
 			#[ inline ]
 			#[ must_use ]
@@ -569,20 +608,24 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Coord <2> for PosRowCol <Val> {
+		impl <Val: Int> GenPosCore <2> for PosRowCol <Val> {
 
 			type Val = Val;
-			type Signed = PosRowCol <Val::Signed>;
+			//type Signed = PosRowCol <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 2] {
+			fn pos_to_array (self) -> [Val; 2] {
 				[ self.row, self.col ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 2]) -> Self {
+			fn pos_from_array (arr: [Val; 2]) -> Self {
 				Self { row: arr [0], col: arr [1] }
 			}
+
+			const ZERO: Self = Self::new (Val::ZERO, Val::ZERO);
+			const MIN: Self = Self::new (Val::MIN, Val::MIN);
+			const MAX: Self = Self::new (Val::MAX, Val::MAX);
 
 		}
 
@@ -686,25 +729,37 @@ mod dim_3 {
 		pub struct PosXYZ <Val> { pub x: Val, pub y: Val, pub z: Val }
 
 		impl <Val: Int> PosXYZ <Val> {
+
+			#[ inline ]
+			#[ must_use ]
+			pub const fn new (x: Val, y: Val, z: Val) -> Self {
+				Self { x, y, z }
+			}
+
 			pub const ZERO: Self = Self { x: Val::ZERO, y: Val::ZERO, z: Val::ZERO };
 			pub const MAX: Self = Self { x: Val::MAX, y: Val::MAX, z: Val::MAX };
 			pub const MIN: Self = Self { x: Val::MIN, y: Val::MIN, z: Val::MIN };
+
 		}
 
-		impl <Val: Int> Coord <3> for PosXYZ <Val> {
+		impl <Val: Int> GenPosCore <3> for PosXYZ <Val> {
 
 			type Val = Val;
-			type Signed = PosGeo <Val::Signed>;
+			//type Signed = PosXYZ <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 3] {
+			fn pos_to_array (self) -> [Val; 3] {
 				[ self.x, self.y, self.z ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 3]) -> Self {
+			fn pos_from_array (arr: [Val; 3]) -> Self {
 				Self { x: arr [0], y: arr [1], z: arr [2] }
 			}
+
+			const ZERO: Self = Self::new (Val::ZERO, Val::ZERO, Val::ZERO);
+			const MIN: Self = Self::new (Val::MIN, Val::MIN, Val::MIN);
+			const MAX: Self = Self::new (Val::MAX, Val::MAX, Val::MAX);
 
 		}
 
@@ -747,10 +802,87 @@ mod dim_4 {
 
 	use super::*;
 
+	pub use wxyz::PosWXYZ;
 	pub use xyzt::PosXYZT;
+	pub use xyzw::PosXYZW;
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisWXYZ { W, X, Y, Z }
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum AxisXYZT { X, Y, Z, T }
+
+	mod wxyz {
+
+		use super::*;
+
+		#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		pub struct PosWXYZ <Val> { pub w: Val, pub x: Val, pub y: Val, pub z: Val }
+
+		impl <Val: Int> PosWXYZ <Val> {
+
+			#[ inline ]
+			pub const fn new (w: Val, x: Val, y: Val, z: Val) -> Self {
+				Self { w, x, y, z }
+			}
+
+		}
+
+		impl <Val: Int> GenPosCore <4> for PosWXYZ <Val> {
+
+			type Val = Val;
+			//type Signed = PosWXYZ <Val::Signed>;
+
+			#[ inline ]
+			fn pos_to_array (self) -> [Val; 4] {
+				[ self.w, self.x, self.y, self.z ]
+			}
+
+			#[ inline ]
+			fn pos_from_array (arr: [Val; 4]) -> Self {
+				Self { w: arr [0], x: arr [1], y: arr [2], z: arr [3] }
+			}
+
+			const ZERO: Self = Self::new (Val::ZERO, Val::ZERO, Val::ZERO, Val::ZERO);
+			const MIN: Self = Self::new (Val::MIN, Val::MIN, Val::MIN, Val::MIN);
+			const MAX: Self = Self::new (Val::MAX, Val::MAX, Val::MAX, Val::MAX);
+
+		}
+
+		impl <Val: Int> Index <AxisWXYZ> for PosWXYZ <Val> {
+
+			type Output = Val;
+
+			#[ inline ]
+			fn index (& self, axis: AxisWXYZ) -> & Val {
+				match axis {
+					AxisWXYZ::W => & self.w,
+					AxisWXYZ::X => & self.x,
+					AxisWXYZ::Y => & self.y,
+					AxisWXYZ::Z => & self.z,
+				}
+			}
+
+		}
+
+		impl <Val: Int> IndexMut <AxisWXYZ> for PosWXYZ <Val> {
+
+			#[ inline ]
+			fn index_mut (& mut self, axis: AxisWXYZ) -> & mut Val {
+				match axis {
+					AxisWXYZ::W => & mut self.w,
+					AxisWXYZ::X => & mut self.x,
+					AxisWXYZ::Y => & mut self.y,
+					AxisWXYZ::Z => & mut self.z,
+				}
+			}
+
+		}
+
+		pos_ops! (PosWXYZ: Debug);
+		pos_ops! (PosWXYZ: Add, Mul, Neg, Rem, Sub);
+
+	}
 
 	mod xyzt {
 
@@ -760,25 +892,33 @@ mod dim_4 {
 		pub struct PosXYZT <Val> { pub x: Val, pub y: Val, pub z: Val, pub t: Val }
 
 		impl <Val: Int> PosXYZT <Val> {
-			pub const ZERO: Self = Self { x: Val::ZERO, y: Val::ZERO, z: Val::ZERO, t: Val::ZERO };
-			pub const MAX: Self = Self { x: Val::MAX, y: Val::MAX, z: Val::MAX, t: Val::ZERO };
-			pub const MIN: Self = Self { x: Val::MIN, y: Val::MIN, z: Val::MIN, t: Val::ZERO };
-		}
-
-		impl <Val: Int> Coord <4> for PosXYZT <Val> {
-
-			type Val = Val;
-			type Signed = PosGeo <Val::Signed>;
 
 			#[ inline ]
-			fn coord_to_array (self) -> [Val; 4] {
+			#[ must_use ]
+			pub const fn new (x: Val, y: Val, z: Val, t: Val) -> Self {
+				Self { x, y, z, t }
+			}
+
+		}
+
+		impl <Val: Int> GenPosCore <4> for PosXYZT <Val> {
+
+			type Val = Val;
+			//type Signed = PosXYZT <Val::Signed>;
+
+			#[ inline ]
+			fn pos_to_array (self) -> [Val; 4] {
 				[ self.x, self.y, self.z, self.t ]
 			}
 
 			#[ inline ]
-			fn coord_from_array (arr: [Val; 4]) -> Self {
+			fn pos_from_array (arr: [Val; 4]) -> Self {
 				Self { x: arr [0], y: arr [1], z: arr [2], t: arr [3] }
 			}
+
+			const ZERO: Self = Self::new (Val::ZERO, Val::ZERO, Val::ZERO, Val::ZERO);
+			const MIN: Self = Self::new (Val::MIN, Val::MIN, Val::MIN, Val::MIN);
+			const MAX: Self = Self::new (Val::MAX, Val::MAX, Val::MAX, Val::MAX);
 
 		}
 
@@ -814,6 +954,79 @@ mod dim_4 {
 
 		pos_ops! (PosXYZT: Debug);
 		pos_ops! (PosXYZT: Add, Mul, Neg, Rem, Sub);
+
+	}
+
+	mod xyzw {
+
+		use super::*;
+
+		#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		pub struct PosXYZW <Val> { pub x: Val, pub y: Val, pub z: Val, pub w: Val }
+
+		impl <Val: Int> PosXYZW <Val> {
+
+			#[ inline ]
+			#[ must_use ]
+			pub const fn new (x: Val, y: Val, z: Val, w: Val) -> Self {
+				Self { x, y, z, w }
+			}
+
+		}
+
+		impl <Val: Int> GenPosCore <4> for PosXYZW <Val> {
+
+			type Val = Val;
+			//type Signed = PosXYZT <Val::Signed>;
+
+			#[ inline ]
+			fn pos_to_array (self) -> [Val; 4] {
+				[ self.x, self.y, self.z, self.w ]
+			}
+
+			#[ inline ]
+			fn pos_from_array (arr: [Val; 4]) -> Self {
+				Self { x: arr [0], y: arr [1], z: arr [2], w: arr [3] }
+			}
+
+			const ZERO: Self = Self::new (Val::ZERO, Val::ZERO, Val::ZERO, Val::ZERO);
+			const MIN: Self = Self::new (Val::MIN, Val::MIN, Val::MIN, Val::MIN);
+			const MAX: Self = Self::new (Val::MAX, Val::MAX, Val::MAX, Val::MAX);
+
+		}
+
+		impl <Val: Int> Index <AxisWXYZ> for PosXYZW <Val> {
+
+			type Output = Val;
+
+			#[ inline ]
+			fn index (& self, axis: AxisWXYZ) -> & Val {
+				match axis {
+					AxisWXYZ::X => & self.x,
+					AxisWXYZ::Y => & self.y,
+					AxisWXYZ::Z => & self.z,
+					AxisWXYZ::W => & self.w,
+				}
+			}
+
+		}
+
+		impl <Val: Int> IndexMut <AxisWXYZ> for PosXYZW <Val> {
+
+			#[ inline ]
+			fn index_mut (& mut self, axis: AxisWXYZ) -> & mut Val {
+				match axis {
+					AxisWXYZ::X => & mut self.x,
+					AxisWXYZ::Y => & mut self.y,
+					AxisWXYZ::Z => & mut self.z,
+					AxisWXYZ::W => & mut self.w,
+				}
+			}
+
+		}
+
+		pos_ops! (PosXYZW: Debug);
+		pos_ops! (PosXYZW: Add, Mul, Neg, Rem, Sub);
 
 	}
 

@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos as pos;
+use aoc_pos::GenPosCore as _;
 
 puzzle_info! {
 	name = "No Time for a Taxicab";
@@ -59,9 +59,9 @@ pub mod model {
 
 	use super::*;
 
-	pub type Dir = pos::DirGeo;
-	pub type Pos = pos::PosGeo <i32>;
-	pub type Turn = pos::Turn2d;
+	pub type Dir = aoc_pos::DirGeo;
+	pub type Pos = aoc_pos::PosGeo <i32>;
+	pub type Turn = aoc_pos::Turn2d;
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
 	pub struct Input {

@@ -7,8 +7,8 @@ pub use self::game::{ Game, GameNext };
 
 pub type Coord = i32;
 pub type Cpu = intcode::Machine <Val>;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
-pub type Pos = pos::PosYX <Coord>;
+pub type Grid = aoc_grid::Grid <Vec <Tile>, Pos>;
+pub type Pos = aoc_pos::PosYX <Coord>;
 pub type RunResult = intcode::RunResult <Val>;
 pub type Val = i32;
 

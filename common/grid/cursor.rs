@@ -156,9 +156,117 @@ impl <'sto, Storage, Pos, const DIMS: usize> Iterator for GridCursorIter <'sto, 
 
 }
 
+pub struct GridCursorMut <'sto, Storage, Pos, const DIMS: usize = 2>
+		where Pos: Copy {
+	grid: & 'sto mut Grid <Storage, Pos, DIMS>,
+	pos: [usize; DIMS],
+	idx: usize,
+	phantom: PhantomData <Pos>,
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> GridCursorMut <'grid, Storage, Pos, DIMS>
+	where
+		Pos: GridPos <DIMS>,
+		Storage: GridStorageMut + Clone {
+
+	pub (crate) fn new (grid: & 'grid mut Grid <Storage, Pos, DIMS>, pos: [usize; DIMS], idx: usize) -> Self {
+		Self { grid, pos, idx, phantom: PhantomData }
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn pos (& self) -> Pos {
+		Pos::from_native (self.pos, self.grid.origin).unwrap ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn native (& self) -> [usize; DIMS] {
+		self.pos
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub const fn index (& self) -> usize {
+		self.idx
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn item (& mut self) -> & mut Storage::Item {
+		self.grid.storage.storage_mut (self.idx).unwrap ()
+	}
+
+	#[ inline ]
+	pub fn try_add (self, offset: GridOffset <DIMS>) -> Result <Self, Self>
+			where Pos: TryAdd <Pos, Output = Pos> {
+		let mut pos = [0; DIMS];
+		for dim_idx in 0 .. DIMS {
+			let dim_offset = offset.native () [dim_idx];
+			let dim_val = self.pos [dim_idx];
+			pos [dim_idx] = if 0 <= dim_offset {
+				let dim_val = dim_val + dim_offset.unsigned_abs ();
+				if self.grid.size [dim_idx] <= dim_val { return Err (self) }
+				dim_val
+			} else {
+				if dim_val < dim_offset.unsigned_abs () { return Err (self) }
+				dim_val - dim_offset.unsigned_abs ()
+			};
+		}
+		let idx = if 0 <= offset.idx () {
+			self.idx + offset.idx ().unsigned_abs ()
+		} else {
+			self.idx - offset.idx ().unsigned_abs ()
+		};
+		Ok (Self {
+			grid: self.grid,
+			pos,
+			idx,
+			phantom: PhantomData,
+		})
+	}
+
+	#[ inline ]
+	pub fn try_add_assign (& mut self, offset: & GridOffset <DIMS>) -> Option <()>
+			where Pos: TryAdd <Pos, Output = Pos> {
+		for dim_idx in 0 .. DIMS {
+			let dim_offset = offset.native () [dim_idx];
+			let dim_val = self.pos [dim_idx];
+			self.pos [dim_idx] = if 0 <= dim_offset {
+				let dim_val = dim_val + dim_offset.unsigned_abs ();
+				if self.grid.size [dim_idx] <= dim_val { return None }
+				dim_val
+			} else {
+				if dim_val < dim_offset.unsigned_abs () { return None }
+				dim_val - dim_offset.unsigned_abs ()
+			};
+		}
+		if 0 <= offset.idx () {
+			self.idx += offset.idx ().unsigned_abs ();
+		} else {
+			self.idx -= offset.idx ().unsigned_abs ();
+		};
+		Some (())
+	}
+
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> Debug for GridCursorMut <'grid, Storage, Pos, DIMS>
+	where Pos: Copy + Debug {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		formatter.debug_struct ("GridCursorMut")
+			.field ("pos", & self.pos)
+			.field ("idx", & self.idx)
+			.finish ()
+	}
+
+}
+
 #[ derive (Clone, Copy, Debug) ]
 pub struct GridOffset <const DIMS: usize> {
-	native: [isize; DIMS],
+	pos: [isize; DIMS],
 	idx: isize,
 }
 
@@ -168,7 +276,7 @@ impl <const DIMS: usize> GridOffset <DIMS> {
 	pub fn new <Pos> (size: [usize; DIMS], pos: Pos) -> Self
 			where Pos: GridPos <DIMS> {
 		Self {
-			native: pos.to_native_offset ().unwrap (),
+			pos: pos.to_native_offset ().unwrap (),
 			idx: pos.to_scalar_offset (size).unwrap_or (0),
 		}
 	}
@@ -176,7 +284,7 @@ impl <const DIMS: usize> GridOffset <DIMS> {
 	#[ inline ]
 	#[ must_use ]
 	pub const fn native (& self) -> [isize; DIMS] {
-		self.native
+		self.pos
 	}
 
 	#[ inline ]

@@ -1,8 +1,8 @@
 use super::*;
 
 pub type Coord = i16;
-pub type Grid = grid::Grid <Vec <Region>, Pos>;
-pub type Pos = pos::PosYX <Coord>;
+pub type Grid = aoc_grid::Grid <Vec <Region>, Pos>;
+pub type Pos = aoc_pos::PosYX <Coord>;
 pub type Val = u32;
 
 parse_display_enum! {

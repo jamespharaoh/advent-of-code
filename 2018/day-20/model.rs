@@ -4,9 +4,9 @@ pub use dir::RouteDir;
 pub use room::Room;
 
 pub type Coord = i16;
-pub type Dir = pos::DirGeo;
-pub type Grid = grid::Grid <Vec <Room>, Pos>;
-pub type Pos = pos::PosGeo <Coord>;
+pub type Dir = aoc_pos::DirGeo;
+pub type Grid = aoc_grid::Grid <Vec <Room>, Pos>;
+pub type Pos = aoc_pos::PosGeo <Coord>;
 
 mod room {
 

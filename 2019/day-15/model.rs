@@ -7,9 +7,9 @@ pub use self::core::CoreStep;
 
 pub type Coord = i16;
 pub type Cpu = intcode::Machine <Val>;
-pub type Dir = pos::DirGeo;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
-pub type Pos = pos::PosGeo <Coord>;
+pub type Dir = aoc_pos::DirGeo;
+pub type Grid = aoc_grid::Grid <Vec <Tile>, Pos>;
+pub type Pos = aoc_pos::PosGeo <Coord>;
 pub type RunResult = intcode::RunResult <Val>;
 pub type Val = i32;
 

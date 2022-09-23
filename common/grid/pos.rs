@@ -1,5 +1,13 @@
 use super::*;
 
+use aoc_pos::PosGeo;
+use aoc_pos::PosRowCol;
+use aoc_pos::PosWXYZ;
+use aoc_pos::PosXY;
+use aoc_pos::PosXYZ;
+use aoc_pos::PosXYZW;
+use aoc_pos::PosYX;
+
 /// Trait for values to use as indices for a [`Grid`].
 ///
 /// For example, a two dimensional grid might be indexed with a struct containing an `x` and a `y`
@@ -215,4 +223,115 @@ impl <Val: Int> GridPos <2> for PosGeo <Val> {
 		})
 	}
 
+}
+
+impl <Val: Int> GridPos <3> for PosXYZ <Val> {
+
+	#[ inline ]
+	fn to_native (self, origin: [isize; 3]) -> Option <[usize; 3]> {
+		GridPos::to_native ([ self.x, self.y, self.z ], origin)
+	}
+
+	#[ inline ]
+	fn to_native_offset (self) -> Option <[isize; 3]> {
+		GridPos::to_native_offset ([ self.x, self.y, self.z ])
+	}
+
+	#[ inline ]
+	fn from_native (array: [usize; 3], origin: [isize; 3]) -> Option <Self> {
+		let array = <[Val; 3]>::from_native (array, origin) ?;
+		Some (Self { x: array [0], y: array [1], z: array [2] })
+	}
+
+	#[ inline ]
+	fn size_from_native (size: [usize; 3]) -> Option <Self> {
+		Some (Self {
+			x: Val::from_usize (size [0]).ok () ?,
+			y: Val::from_usize (size [1]).ok () ?,
+			z: Val::from_usize (size [2]).ok () ?,
+		})
+	}
+
+}
+
+impl <Val: Int> GridPos <4> for PosWXYZ <Val> {
+
+	#[ inline ]
+	fn to_native (self, origin: [isize; 4]) -> Option <[usize; 4]> {
+		GridPos::to_native ([ self.w, self.x, self.y, self.z ], origin)
+	}
+
+	#[ inline ]
+	fn to_native_offset (self) -> Option <[isize; 4]> {
+		GridPos::to_native_offset ([ self.w, self.x, self.y, self.z ])
+	}
+
+	#[ inline ]
+	fn from_native (array: [usize; 4], origin: [isize; 4]) -> Option <Self> {
+		let array = <[Val; 4]>::from_native (array, origin) ?;
+		Some (Self { w: array [0], x: array [1], y: array [2], z: array [3] })
+	}
+
+	#[ inline ]
+	fn size_from_native (size: [usize; 4]) -> Option <Self> {
+		Some (Self {
+			w: Val::from_usize (size [0]).ok () ?,
+			x: Val::from_usize (size [1]).ok () ?,
+			y: Val::from_usize (size [2]).ok () ?,
+			z: Val::from_usize (size [3]).ok () ?,
+		})
+	}
+
+}
+
+impl <Val: Int> GridPos <4> for PosXYZW <Val> {
+
+	#[ inline ]
+	fn to_native (self, origin: [isize; 4]) -> Option <[usize; 4]> {
+		GridPos::to_native ([ self.x, self.y, self.z, self.w ], origin)
+	}
+
+	#[ inline ]
+	fn to_native_offset (self) -> Option <[isize; 4]> {
+		GridPos::to_native_offset ([ self.x, self.y, self.z, self.w ])
+	}
+
+	#[ inline ]
+	fn from_native (array: [usize; 4], origin: [isize; 4]) -> Option <Self> {
+		let array = <[Val; 4]>::from_native (array, origin) ?;
+		Some (Self { x: array [0], y: array [1], z: array [2], w: array [3] })
+	}
+
+	#[ inline ]
+	fn size_from_native (size: [usize; 4]) -> Option <Self> {
+		Some (Self {
+			x: Val::from_usize (size [0]).ok () ?,
+			y: Val::from_usize (size [1]).ok () ?,
+			z: Val::from_usize (size [2]).ok () ?,
+			w: Val::from_usize (size [3]).ok () ?,
+		})
+	}
+
+}
+
+pub enum GridPosDisplayOrder {
+	RightDown,
+	RightUp,
+	UpRight,
+}
+
+pub trait GridPosDisplay: GridPos <2> {
+	const ORDER: GridPosDisplayOrder;
+}
+
+impl <Val: Int> GridPosDisplay for PosGeo <Val> {
+	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightUp;
+}
+
+impl <Val: Int> GridPosDisplay for PosXY <Val> {
+	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::UpRight;
+}
+
+impl <Val: Int> GridPosDisplay for PosYX <Val> {
+	const ORDER: GridPosDisplayOrder = GridPosDisplayOrder::RightDown;
 }

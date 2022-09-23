@@ -127,7 +127,7 @@ impl State {
 
 		self.walk_queue.clear ();
 		for step_dir in [ Dir::Up, Dir::Left, Dir::Right, Dir::Down ].iter ().copied () {
-			let step_pos = ok_or! (unit_pos + (step_dir, 1), continue);
+			let step_pos = ok_or! (unit_pos.try_add ((step_dir, 1)), continue);
 			if self.grid.get (step_pos) != Some (Tile::Open) { continue }
 			self.walk_queue.push_back ((1, step_pos, step_pos));
 		}
@@ -183,7 +183,7 @@ impl State {
 		let unit_tile = self.grid.get (unit_pos).unwrap ();
 		let mut found: Option <(Pos, u16)> = None;
 		for enemy_dir in [ Dir::Up, Dir::Left, Dir::Right, Dir::Down ].iter ().copied () {
-			let enemy_pos = ok_or! (unit_pos + (enemy_dir, 1), continue);
+			let enemy_pos = ok_or! (unit_pos.try_add ((enemy_dir, 1)), continue);
 			let enemy_tile = some_or! (self.grid.get (enemy_pos), continue);
 			if enemy_tile != unit_tile.enemy () { continue }
 			let enemy_hp = self.units.iter ().copied ()

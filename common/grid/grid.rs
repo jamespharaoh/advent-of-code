@@ -7,10 +7,6 @@ use aoc_misc::*;
 use aoc_nums as nums;
 use aoc_parser::*;
 
-use aoc_pos::PosGeo;
-use aoc_pos::PosRowCol;
-use aoc_pos::PosXY;
-use aoc_pos::PosYX;
 use bitvec::BitVec;
 use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
@@ -28,8 +24,11 @@ mod storage;
 
 pub use cursor::GridCursorIter;
 pub use cursor::GridCursor;
+pub use cursor::GridCursorMut;
 pub use cursor::GridOffset;
 pub use pos::GridPos;
+pub use pos::GridPosDisplay;
+pub use pos::GridPosDisplayOrder;
 pub use iter::GridIter;
 pub use iter::GridKeysIter;
 pub use iter::GridStorageClone;
@@ -248,6 +247,13 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
 		Pos::to_scalar (pos, self.origin, self.size)
 			.and_then (|index| self.storage.storage_mut (index))
+	}
+
+	#[ inline ]
+	pub fn cursor_mut (& mut self, pos: Pos) -> Option <GridCursorMut <Storage, Pos, DIMS>> {
+		let idx = pos.to_scalar (self.origin, self.size) ?;
+		let pos = pos.to_native (self.origin) ?;
+		Some (GridCursorMut::new (self, pos, idx))
 	}
 
 }

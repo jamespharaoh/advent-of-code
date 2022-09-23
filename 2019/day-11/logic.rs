@@ -58,7 +58,7 @@ fn calc_result (input: & Input, initial: Colour) -> GenResult <Grid> {
 			Some (other) => return Err (format! ("Unexpected output: {other}").into ()),
 			None => return Ok (grid),
 		};
-		pos = (pos + (dir, 1)) ?;
+		pos = pos.try_add ((dir, 1)) ?;
 	}
 	Err ("Max steps exceeded".into ())
 }

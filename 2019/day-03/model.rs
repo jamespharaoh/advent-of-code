@@ -1,7 +1,7 @@
 use super::*;
 
-pub type Dir = pos::Dir2d;
-pub type Pos = pos::PosYX <Val>;
+pub type Dir = aoc_pos::Dir2d;
+pub type Pos = aoc_pos::PosYX <Val>;
 pub type Val = i16;
 
 #[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]

@@ -207,12 +207,21 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 
 }
 
-pub trait IntOpsTry: TryAdd <Self> + TryDiv <Self> + TryMul <Self> + TryRem <Self> + TrySub <Self>
-	+ Sized {
+pub trait IntOpsTry: Sized +
+	TryAdd <Output = Self> +
+	TryDiv <Output = Self> +
+	TryMul <Output = Self> +
+	TryRem <Output = Self> +
+	TrySub <Output = Self> {
 }
 
-impl <Val> IntOpsTry for Val where Val: TryAdd <Self> + TryDiv <Self> + TryMul <Self>
-	+ TryRem <Self> + TrySub <Self> + Sized {
+impl <Val> IntOpsTry for Val
+	where Val: Sized +
+		TryAdd <Output = Self> +
+		TryDiv <Output = Self> +
+		TryMul <Output = Self> +
+		TryRem <Output = Self> +
+		TrySub <Output = Self> {
 }
 
 macro_rules! prim_int {
@@ -628,6 +637,16 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn try_add (self, arg: Self) -> NumResult <Self> {
 				self.checked_add (arg).ok_or (Overflow)
+			}
+
+		}
+
+		impl TryAdd <$signed> for $unsigned {
+			type Output = Self;
+
+			#[ inline ]
+			fn try_add (self, arg: $signed) -> NumResult <Self> {
+				self.add_signed (arg)
 			}
 
 		}

@@ -95,19 +95,19 @@ fn find_portals (input: & Input) -> GenResult <Vec <(Portal, Pos, Pos)>> {
 		if ! matches! (tile, Letter (_)) { continue }
 		for dir in [ Dir::Right, Dir::Down ] {
 			let (label, inner, pos_0, pos_1) = match (
-				input.grid.get ((pos + (dir, -1)) ?),
-				input.grid.get ((pos + (dir, 0)) ?),
-				input.grid.get ((pos + (dir, 1)) ?),
-				input.grid.get ((pos + (dir, 2)) ?),
+				input.grid.get (pos.try_add ((dir, -1)) ?),
+				input.grid.get (pos.try_add ((dir, 0)) ?),
+				input.grid.get (pos.try_add ((dir, 1)) ?),
+				input.grid.get (pos.try_add ((dir, 2)) ?),
 			) {
 				(None, Some (Letter (ch_0)), Some (Letter (ch_1)), Some (Passage)) =>
-					([ ch_0, ch_1 ], false, (pos + (dir, 1)) ?, (pos + (dir, 2)) ?),
+					([ ch_0, ch_1 ], false, pos.try_add ((dir, 1)) ?, pos.try_add ((dir, 2)) ?),
 				(Some (Passage), Some (Letter (ch_0)), Some (Letter (ch_1)), Some (Empty)) =>
-					([ ch_0, ch_1 ], true, pos, (pos + (dir, -1)) ?),
+					([ ch_0, ch_1 ], true, pos, pos.try_add ((dir, -1)) ?),
 				(Some (Empty), Some (Letter (ch_0)), Some (Letter (ch_1)), Some (Passage)) =>
-					([ ch_0, ch_1 ], true, (pos + (dir, 1)) ?, (pos + (dir, 2)) ?),
+					([ ch_0, ch_1 ], true, pos.try_add ((dir, 1)) ?, pos.try_add ((dir, 2)) ?),
 				(Some (Passage), Some (Letter (ch_0)), Some (Letter (ch_1)), None) =>
-					([ ch_0, ch_1 ], false, pos, (pos + (dir, -1)) ?),
+					([ ch_0, ch_1 ], false, pos, pos.try_add ((dir, -1)) ?),
 				_ => continue,
 			};
 			portals.push ((Portal::new (label, inner), pos_0, pos_1));

@@ -1,7 +1,7 @@
 use super::*;
 
 pub type Coord = i16;
-pub type Pos = pos::PosGeo <Coord>;
+pub type Pos = aoc_pos::PosGeo <Coord>;
 
 parse_display_enum! {
 	#[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]

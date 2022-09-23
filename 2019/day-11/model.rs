@@ -2,9 +2,9 @@ use super::*;
 
 pub type Coord = i16;
 pub type Cpu = intcode::Machine <Val>;
-pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Colour>, Pos>;
-pub type Pos = pos::PosYX <Coord>;
+pub type Dir = aoc_pos::Dir2d;
+pub type Grid = aoc_grid::Grid <Vec <Colour>, Pos>;
+pub type Pos = aoc_pos::PosYX <Coord>;
 pub type Val = i64;
 
 parse_display_enum! {

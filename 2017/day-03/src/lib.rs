@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos as pos;
+use aoc_pos::GenPosCore as _;
 
 puzzle_info! {
 	name = "Spiral Memory";
@@ -22,9 +22,9 @@ pub mod logic {
 	use model::Input;
 
 	pub type Coord = i16;
-	pub type Pos = pos::PosRowCol <Coord>;
-	pub type Dir = pos::Dir2d;
-	pub type Turn = pos::Turn2d;
+	pub type Pos = aoc_pos::PosRowCol <Coord>;
+	pub type Dir = aoc_pos::Dir2d;
+	pub type Turn = aoc_pos::Turn2d;
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		sanity_check (input) ?;

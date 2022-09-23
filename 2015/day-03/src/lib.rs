@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos as pos;
+use aoc_pos::GenPosCore as _;
 
 puzzle_info! {
 	name = "Perfectly Spherical Houses in a Vacuum";
@@ -53,7 +53,7 @@ pub mod model {
 	use super::*;
 
 	pub type Input = Vec <Dir>;
-	pub type Pos = pos::PosGeo <i16>;
+	pub type Pos = aoc_pos::PosGeo <i16>;
 
 	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
 	pub enum Dir {

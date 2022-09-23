@@ -3,8 +3,7 @@
 //! [https://adventofcode.com/2021/day/5](https://adventofcode.com/2021/day/5)
 
 use aoc_common::*;
-use aoc_grid as grid;
-use aoc_pos as pos;
+use aoc_pos::GenPosCore as _;
 
 puzzle_info! {
 	name = "Hydrothermal Venture";
@@ -17,7 +16,7 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
-	use grid::Grid;
+	use model::Grid;
 	use model::Pos;
 	use nums::IntConv;
 
@@ -40,7 +39,7 @@ mod logic {
 				x: cmp::max (max.x, pos.x + 1),
 				y: cmp::max (max.y, pos.y + 1),
 			});
-		let mut points: Grid <Vec <u16>, Pos> =
+		let mut points: Grid =
 			Grid::wrap (
 				iter::repeat (0).take (size.x.as_usize () * size.y.as_usize ()).collect (),
 				[0, 0],
@@ -67,7 +66,10 @@ mod model {
 
 	use super::*;
 
-	pub type Pos = pos::PosYX <i16>;
+	pub type Coord = i16;
+	pub type Grid = aoc_grid::Grid <Vec <Val>, Pos>;
+	pub type Pos = aoc_pos::PosYX <Coord>;
+	pub type Val = u16;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <Vec <Vent>> {
 		let mut vents: Vec <Vent> = Vec::new ();
