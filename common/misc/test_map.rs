@@ -71,6 +71,11 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.remove (value)
 	}
 
+	pub fn retain <Func> (& mut self, func: Func)
+			where Func: FnMut (& Key, & mut Val) -> bool {
+		self.map.retain (func)
+	}
+
 	pub fn values (& self) -> BTreeValues <Key, Val> {
 		self.map.values ()
 	}

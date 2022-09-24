@@ -616,6 +616,17 @@ impl <'inp> Parser <'inp> {
 		self.delim_fn (delim, Parser::int)
 	}
 
+	#[ inline ]
+	pub fn opt_fn <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> Output
+		where
+			Output: Default,
+			ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+		let saved = * self;
+		if let Ok (val) = parse_fn (self) { return val }
+		* self = saved;
+		Output::default ()
+	}
+
 }
 
 pub struct ParserDelim <

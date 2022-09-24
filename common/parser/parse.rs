@@ -124,9 +124,9 @@ macro_rules! parse {
 			.delim_fn ($delim, Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, @delim $delim:literal $item_name:ident = $item_parse:expr ) => {
-		let $item_name = $parser
-			.delim_fn ($delim, $item_parse)
+	( @item $parser:expr, @delim $delim:literal $name:ident = $parse:expr ) => {
+		let $name = $parser
+			.delim_fn ($delim, $parse)
 			.collect ();
 	};
 	( @item $parser:expr, @delim $delim:literal $item_name:ident { $($nest:tt)* } ) => {
@@ -160,6 +160,12 @@ macro_rules! parse {
 		let $item_name = $parser
 			.delim_fn ("\n", $item_parse)
 			.collect ();
+	};
+	( @item $parser:expr, @opt $name:ident { $($nest:tt)* } ) => {
+		let $name = $parser.any ()
+			.of (parse! (@nest $($nest)*))
+			.of (|parser| { Ok (default ()) })
+			.done () ?;
 	};
 	( @item $parser:expr, @str $item_name:ident = (|$fn_arg:ident| { $($fn_body:tt)* }, $len:expr) ) => {
 		let $item_name = $parser

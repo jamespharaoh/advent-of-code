@@ -144,6 +144,10 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @delim $delim:literal $field:ident = $parse:ident $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -161,6 +165,12 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @opt $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
+		if $field != default () {
+			let display_fn = display! (@nest $($nest)*);
+			display_fn (& $field, $formatter) ?;
+		}
+	};
 	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
 		$formatter.write_str ($display) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -174,6 +184,13 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 
+	( @nest $name:ident = [ $($display:tt)* ] ) => {
+		|val, formatter: & mut fmt::Formatter| {
+			let & ($name, ) = val;
+			display! (formatter, $($display)*);
+			Ok ($name)
+		}
+	};
 	( @nest $($nest:tt)* ) => {
 		|val, formatter: & mut fmt::Formatter| {
 			display! (@nest_var formatter val $($nest)*);
