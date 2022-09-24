@@ -52,9 +52,17 @@ pub trait TryDiv <Arg = Self> {
 	fn try_div (self, arg: Arg) -> Result <Self::Output, Overflow>;
 }
 
+pub trait TryDivAssign <Arg = Self> {
+	fn try_div_assign (& mut self, arg: Arg) -> Result <(), Overflow>;
+}
+
 pub trait TryMul <Arg = Self> {
 	type Output;
 	fn try_mul (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TryMulAssign <Arg = Self> {
+	fn try_mul_assign (self, arg: Arg) -> Result <(), Overflow>;
 }
 
 pub trait TryRem <Arg = Self> {
@@ -62,9 +70,17 @@ pub trait TryRem <Arg = Self> {
 	fn try_rem (self, arg: Arg) -> Result <Self::Output, Overflow>;
 }
 
+pub trait TryRemAssign <Arg = Self> {
+	fn try_rem_assign (self, arg: Arg) -> Result <(), Overflow>;
+}
+
 pub trait TrySub <Arg = Self> {
 	type Output;
 	fn try_sub (self, arg: Arg) -> Result <Self::Output, Overflow>;
+}
+
+pub trait TrySubAssign <Arg = Self> {
+	fn try_sub_assign (self, arg: Arg) -> Result <(), Overflow>;
 }
 
 pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + Ord + IntOps

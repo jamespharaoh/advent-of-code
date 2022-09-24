@@ -7,7 +7,7 @@
 use aoc_2019_intcode as intcode;
 use aoc_common::*;
 use aoc_ocr as ocr;
-use aoc_pos::GenPosCore as _;
+use aoc_pos::GenPos as _;
 
 pub mod input;
 pub mod logic;

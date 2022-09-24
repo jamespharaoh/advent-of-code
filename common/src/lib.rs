@@ -86,10 +86,15 @@ mod prelude {
 	pub use crate::nums::NumResult;
 	pub use crate::nums::Overflow;
 	pub use crate::nums::TryAdd;
+	pub use crate::nums::TryAddAssign;
 	pub use crate::nums::TryDiv;
+	pub use crate::nums::TryDivAssign;
 	pub use crate::nums::TryMul;
+	pub use crate::nums::TryMulAssign;
 	pub use crate::nums::TryRem;
+	pub use crate::nums::TryRemAssign;
 	pub use crate::nums::TrySub;
+	pub use crate::nums::TrySubAssign;
 	pub use crate::parser::*;
 
 }

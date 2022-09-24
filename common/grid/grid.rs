@@ -12,8 +12,10 @@ use bitvec::BitVecEncoding;
 use bitvec::BitVecIter;
 use nums::Int;
 use nums::IntConv;
+use nums::NumResult;
 use nums::Overflow;
 use nums::TryAdd;
+use nums::TryAddAssign;
 
 mod cursor;
 mod display;
@@ -21,6 +23,7 @@ mod iter;
 mod parse;
 mod pos;
 mod storage;
+mod transform;
 
 pub use cursor::GridCursorIter;
 pub use cursor::GridCursor;
@@ -50,45 +53,6 @@ pub struct Grid <Storage, Pos, const DIMS: usize = 2> {
 	phantom: PhantomData <Pos>,
 }
 
-impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
-	where
-		Item: Clone + Default,
-		Pos: GridPos <DIMS> {
-
-	#[ inline ]
-	#[ must_use ]
-	pub fn new_vec (
-		origin: [isize; DIMS],
-		size: [usize; DIMS],
-	) -> Self {
-		Self::wrap (
-			std::iter::repeat (default ())
-				.take (size.iter ().copied ().product ())
-				.collect::<Vec <_>> (),
-			origin,
-			size)
-	}
-
-	#[ inline ]
-	pub fn reset (& mut self) {
-		for item in self.storage.iter_mut () {
-			* item = default ();
-		}
-	}
-
-	#[ inline ]
-	#[ must_use ]
-	pub fn resize (& self, origin: [isize; DIMS], size: [usize; DIMS]) -> Self {
-		Self::wrap (
-			GridKeysIter::new (origin, size)
-				.map (|pos| self.get (pos).unwrap_or_default ())
-				.collect (),
-			origin,
-			size)
-	}
-
-}
-
 impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	where
 		Storage: GridStorage + Clone,
@@ -96,9 +60,29 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 
 	#[ inline ]
 	#[ must_use ]
+	pub fn new (
+		origin: [isize; DIMS],
+		size: [usize; DIMS],
+	) -> Self
+		where
+			Storage: FromIterator <Storage::Item>,
+			Storage::Item: Clone + Default {
+		Self::wrap (
+			std::iter::repeat (default ())
+				.take (size.iter ().copied ().product ())
+				.collect::<Storage> (),
+			origin,
+			size)
+	}
+
+	#[ inline ]
+	#[ must_use ]
 	pub fn validate_dims (origin: [isize; DIMS], size: [usize; DIMS]) -> bool {
-		Pos::from_scalar (0, origin, size).is_some ()
-			&& Pos::from_scalar (size.iter ().copied ().product::<usize> () - 1, origin, size).is_some ()
+		if Pos::from_scalar (0, origin, size).is_none () { return false }
+		let size_idx = size.iter ().copied ().product::<usize> ();
+		if Pos::from_scalar (size_idx - 1, origin, size).is_none () { return false }
+		if Pos::size_from_native (size).is_none () { return false }
+		true
 	}
 
 	#[ inline ]
@@ -214,20 +198,18 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 		}
 	}
 
-	#[ inline ]
-	pub const fn cursors (& self) -> GridCursorIter <Storage, Pos, DIMS> {
-		GridCursorIter {
-			grid: self,
-			pos: [0; DIMS],
-			idx: 0,
-			done: false,
-			phantom: PhantomData,
-		}
-	}
+}
+
+impl <Item, Pos, const DIMS: usize> Grid <Vec <Item>, Pos, DIMS>
+	where
+		Item: Default,
+		Pos: GridPos <DIMS> {
 
 	#[ inline ]
-	pub fn offset (& self, pos: Pos) -> GridOffset <DIMS> {
-		GridOffset::new (self.size, pos)
+	pub fn reset (& mut self) {
+		for item in self.storage.iter_mut () {
+			* item = default ();
+		}
 	}
 
 }

@@ -29,18 +29,18 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 
 fn calc_result (input: & Input, initial: Colour) -> GenResult <Grid> {
 	let mut cpu = Cpu::new (input.data.clone ());
-	let mut grid = Grid::new_vec ([10, 10], [21, 21]);
+	let mut grid = Grid::new ([10, 10], [21, 21]);
 	let mut pos = Pos::ZERO;
 	let mut dir = Dir::Up;
 	grid.set (pos, initial);
 	for _ in 0 .. input.params.max_steps {
 		cpu.set_max_ops (input.params.max_step_ops);
-		let old_colour = grid.get (pos).unwrap_or_else (|| {
+		let old_colour = grid.get (pos).ok_or (()).or_else (|()| {
 			grid = grid.resize (
 				[grid.native_origin () [0] + 10, grid.native_origin () [1] + 10],
-				[grid.native_size () [0] + 20, grid.native_size () [1] + 20]);
-			grid.get (pos).unwrap ()
-		});
+				[grid.native_size () [0] + 20, grid.native_size () [1] + 20]) ?;
+			Ok::<_, Overflow> (grid.get (pos).unwrap ())
+		}) ?;
 		cpu.input (match old_colour {
 			Colour::None | Colour::Black => 0,
 			Colour::White => 1,

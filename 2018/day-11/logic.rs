@@ -86,7 +86,7 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {
 	if input.params.grid_size < 3 { return Err ("Grid must be at least 3×3".into ()) }
-	let mut grid = Grid::new_vec ([-1, -1], [input.params.grid_size.as_usize (), input.params.grid_size.as_usize ()]);
+	let mut grid = Grid::new ([-1, -1], [input.params.grid_size.as_usize (), input.params.grid_size.as_usize ()]);
 	for y in 1 ..= input.params.grid_size {
 		for x in 1 ..= input.params.grid_size {
 			let pos = Pos { y, x };

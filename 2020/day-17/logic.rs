@@ -25,7 +25,7 @@ fn calc_result <Pos: GenPos <DIMS>, const DIMS: usize> (
 ) -> GenResult <u32> {
 	let mut grid = get_grid (input) ?;
 	let base_dirs: Vec <Pos> = get_base_dirs ();
-	for _ in 0 .. num_iters { grid = next_grid (& grid, & base_dirs); }
+	for _ in 0 .. num_iters { grid = next_grid (& grid, & base_dirs) ?; }
 	Ok (
 		grid.values ()
 			.filter (|& tile| tile == Tile::Active)
@@ -38,23 +38,23 @@ fn calc_result <Pos: GenPos <DIMS>, const DIMS: usize> (
 fn next_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	grid: & Grid <Pos, DIMS>,
 	base_dirs: & [Pos],
-) -> Grid <Pos, DIMS> {
+) -> GenResult <Grid <Pos, DIMS>> {
 	let resized_grid = grid.resize (
 		grid.native_origin ().map (|val| val + 1),
-		grid.native_size ().map (|val| val + 2));
+		grid.native_size ().map (|val| val + 2)) ?;
 	let dirs: Vec <GridOffset <DIMS>> =
 		base_dirs.iter ()
 			.map (|& pos| resized_grid.offset (pos))
 			.collect ();
-	resized_grid.map (move |cur| {
+	Ok (resized_grid.map (move |cur| {
 		let adj_active = dirs.iter ()
-			.filter_map (|& dir| cur.try_add (dir).map (|cur| cur.item ()))
+			.filter_map (|& dir| cur.try_add (dir).map (|cur| cur.item ()).ok ())
 			.fold (0_u32, |sum, tile| sum + u32::from (tile == Tile::Active));
 		match (cur.item (), adj_active) {
 			(Tile::Active, 2 | 3) | (Tile::Inactive, 3) => Tile::Active,
 			_ => Tile::Inactive, 
 		}
-	})
+	}))
 }
 
 #[ inline ]
@@ -65,7 +65,7 @@ fn get_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	if 8 < input_size [0] || 8 < input_size [1] {
 		return Err ("Max grid size is 8×8".into ());
 	}
-	let mut grid = Grid::new_vec (
+	let mut grid = Grid::new (
 		[ 0_isize; DIMS ],
 		array::from_fn (|idx| if idx < 2 { input_size [idx] } else { 1 }));
 	for (pos, tile) in input.grid.iter () {

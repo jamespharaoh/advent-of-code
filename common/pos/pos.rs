@@ -9,9 +9,9 @@ use nums::NumResult;
 use nums::TryAdd;
 use nums::TryMul;
 
-pub use gen_pos::GenPos;
-pub use gen_pos::GenPosCore;
-pub use gen_pos::GenPosOps;
+pub use gen::GenAxis;
+pub use gen::GenPos;
+pub use dim_2::AxisRowCol;
 pub use dim_2::Dir2d;
 pub use dim_2::DirGeo;
 pub use dim_2::PosXY;
@@ -21,6 +21,8 @@ pub use dim_2::PosRowCol;
 pub use dim_2::Turn2d;
 pub use dim_3::AxisXYZ;
 pub use dim_3::PosXYZ;
+pub use dim_4::AxisWXYZ;
+pub use dim_4::AxisXYZT;
 pub use dim_4::PosWXYZ;
 pub use dim_4::PosXYZT;
 pub use dim_4::PosXYZW;
@@ -149,38 +151,23 @@ macro_rules! pos_ops {
 
 }
 
-mod gen_pos {
+mod gen {
 
 	use super::*;
 
-	pub trait GenPosCore <const DIMS: usize>: Copy + Debug + Eq + Hash + Ord + Sized {
+	pub trait GenAxis <const DIMS: usize> {
+	}
 
-		//type Signed: GenPos <DIMS>;
+	pub trait GenPos <const DIMS: usize>:
+		Copy + Debug + Eq + Hash + Ord + Sized +
+		TryAdd <Output = Self> +
+		TryMul <Self::Val, Output = Self> {
+
 		type Val: Int;
+		type Axis: GenAxis <DIMS>;
 
 		fn pos_to_array (self) -> [Self::Val; DIMS];
 		fn pos_from_array (array: [Self::Val; DIMS]) -> Self;
-
-		const ZERO: Self;
-		const MIN: Self;
-		const MAX: Self;
-
-	}
-
-	pub trait GenPosOps <const DIMS: usize>:
-		GenPosCore <DIMS> +
-		TryAdd <Output = Self> +
-		TryMul <Self::Val, Output = Self> {
-	}
-
-	impl <Pos, const DIMS: usize> GenPosOps <DIMS> for Pos
-		where
-			Pos: GenPosCore <DIMS> +
-			TryAdd <Output = Self> +
-			TryMul <Self::Val, Output = Self> {
-	}
-
-	pub trait GenPos <const DIMS: usize>: GenPosOps <DIMS> {
 
 		#[ inline ]
 		#[ must_use ]
@@ -188,9 +175,10 @@ mod gen_pos {
 			Self::pos_from_array ([Self::Val::ZERO; DIMS])
 		}
 
-	}
+		const ZERO: Self;
+		const MIN: Self;
+		const MAX: Self;
 
-	impl <Pos, const DIMS: usize> GenPos <DIMS> for Pos where Pos: GenPosOps <DIMS> {
 	}
 
 }
@@ -205,6 +193,21 @@ mod dim_2 {
 	pub use row_col::PosRowCol;
 	pub use xy::PosXY;
 	pub use yx::PosYX;
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisGeo { N, E }
+
+	impl GenAxis <2> for AxisGeo { }
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisRowCol { X, Y }
+
+	impl GenAxis <2> for AxisRowCol { }
+
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum AxisXY { X, Y }
+
+	impl GenAxis <2> for AxisXY { }
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum Turn2d { None, Left, Right, Around }
@@ -231,10 +234,10 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> GenPosCore <2> for PosXY <Val> {
+		impl <Val: Int> GenPos <2> for PosXY <Val> {
 
 			type Val = Val;
-			//type Signed = PosXY <Val::Signed>;
+			type Axis = AxisXY;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 2] {
@@ -326,10 +329,25 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> GenPosCore <2> for PosYX <Val> {
+		impl <Val: IntSigned> Add <Turn2d> for PosYX <Val> {
+			type Output = Self;
 
+			#[ inline ]
+			fn add (self, turn: Turn2d) -> Self {
+				match turn {
+					Turn2d::None => Self::new (self.y, self.x),
+					Turn2d::Right => Self::new (self.x, - self.y),
+					Turn2d::Around => Self::new (- self.y, - self.x),
+					Turn2d::Left => Self::new (- self.x, self.y),
+				}
+			}
+
+		}
+
+		impl <Val: Int> GenPos <2> for PosYX <Val> {
+
+			type Axis = AxisXY;
 			type Val = Val;
-			//type Signed = PosYX <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 2] {
@@ -356,6 +374,20 @@ mod dim_2 {
 					Dir2d::Down => Self { y: Val::ONE, x: Val::ZERO },
 					Dir2d::Left => Self { y: Val::ZERO, x: Val::NEG_ONE },
 					Dir2d::Right => Self { y: Val::ZERO, x: Val::ONE },
+				}
+			}
+
+		}
+
+		impl <Val: Int> Index <AxisXY> for PosXYZ <Val> {
+
+			type Output = Val;
+
+			#[ inline ]
+			fn index (& self, axis: AxisXY) -> & Val {
+				match axis {
+					AxisXY::X => & self.x,
+					AxisXY::Y => & self.y,
 				}
 			}
 
@@ -448,10 +480,10 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> GenPosCore <2> for PosGeo <Val> {
+		impl <Val: Int> GenPos <2> for PosGeo <Val> {
 
+			type Axis = AxisGeo;
 			type Val = Val;
-			//type Signed = PosGeo <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 2] {
@@ -608,10 +640,10 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> GenPosCore <2> for PosRowCol <Val> {
+		impl <Val: Int> GenPos <2> for PosRowCol <Val> {
 
+			type Axis = AxisGeo;
 			type Val = Val;
-			//type Signed = PosRowCol <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 2] {
@@ -721,6 +753,8 @@ mod dim_3 {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum AxisXYZ { X, Y, Z }
 
+	impl GenAxis <3> for AxisXYZ { }
+
 	mod xyz {
 
 		use super::*;
@@ -742,10 +776,10 @@ mod dim_3 {
 
 		}
 
-		impl <Val: Int> GenPosCore <3> for PosXYZ <Val> {
+		impl <Val: Int> GenPos <3> for PosXYZ <Val> {
 
+			type Axis = AxisXYZ;
 			type Val = Val;
-			//type Signed = PosXYZ <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 3] {
@@ -809,8 +843,12 @@ mod dim_4 {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum AxisWXYZ { W, X, Y, Z }
 
+	impl GenAxis <4> for AxisWXYZ { }
+
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub enum AxisXYZT { X, Y, Z, T }
+
+	impl GenAxis <4> for AxisXYZT { }
 
 	mod wxyz {
 
@@ -828,10 +866,10 @@ mod dim_4 {
 
 		}
 
-		impl <Val: Int> GenPosCore <4> for PosWXYZ <Val> {
+		impl <Val: Int> GenPos <4> for PosWXYZ <Val> {
 
+			type Axis = AxisWXYZ;
 			type Val = Val;
-			//type Signed = PosWXYZ <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 4] {
@@ -901,10 +939,10 @@ mod dim_4 {
 
 		}
 
-		impl <Val: Int> GenPosCore <4> for PosXYZT <Val> {
+		impl <Val: Int> GenPos <4> for PosXYZT <Val> {
 
+			type Axis = AxisXYZT;
 			type Val = Val;
-			//type Signed = PosXYZT <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 4] {
@@ -974,10 +1012,10 @@ mod dim_4 {
 
 		}
 
-		impl <Val: Int> GenPosCore <4> for PosXYZW <Val> {
+		impl <Val: Int> GenPos <4> for PosXYZW <Val> {
 
+			type Axis = AxisWXYZ;
 			type Val = Val;
-			//type Signed = PosXYZT <Val::Signed>;
 
 			#[ inline ]
 			fn pos_to_array (self) -> [Val; 4] {

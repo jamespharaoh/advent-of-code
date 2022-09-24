@@ -81,7 +81,7 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 
 	let grid_size = [ grid_range_y.len (), grid_range_x.len () ];
 
-	let mut grid = Grid::new_vec (grid_origin, grid_size);
+	let mut grid = Grid::new (grid_origin, grid_size);
 
 	// place clay
 

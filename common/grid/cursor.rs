@@ -1,17 +1,55 @@
 use super::*;
 
-pub struct GridCursor <'sto, Storage, Pos, const DIMS: usize = 2>
-		where Pos: Copy {
+impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
+	where
+		Storage: GridStorage + Clone,
+		Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	pub fn cursor (& self, pos: Pos) -> Option <GridCursor <Storage, Pos, DIMS>> {
+		let idx = pos.to_scalar (self.origin, self.size) ?;
+		let pos = pos.to_native (self.origin) ?;
+		Some (GridCursor::new (self, pos, idx))
+	}
+
+	#[ inline ]
+	pub const fn cursors (& self) -> GridCursorIter <Storage, Pos, DIMS> {
+		GridCursorIter {
+			grid: self,
+			pos: [0; DIMS],
+			idx: 0,
+			done: false,
+			phantom: PhantomData,
+		}
+	}
+
+	#[ inline ]
+	pub fn offset (& self, pos: impl Into <Pos>) -> GridOffset <DIMS> {
+		GridOffset::new (self.size, pos.into ())
+	}
+
+}
+
+pub struct GridCursor <'sto, Storage, Pos, const DIMS: usize = 2> {
 	grid: & 'sto Grid <Storage, Pos, DIMS>,
 	pos: [usize; DIMS],
 	idx: usize,
-	phantom: PhantomData <Pos>,
 }
 
 impl <'grid, Storage, Pos, const DIMS: usize> GridCursor <'grid, Storage, Pos, DIMS>
 	where
 		Pos: GridPos <DIMS>,
 		Storage: GridStorage + Clone {
+
+	#[ inline ]
+	#[ must_use ]
+	pub (crate) const fn new (
+		grid: & 'grid Grid <Storage, Pos, DIMS>,
+		pos: [usize; DIMS],
+		idx: usize,
+	) -> Self {
+		Self { grid, pos, idx }
+	}
 
 	#[ inline ]
 	#[ must_use ]
@@ -39,18 +77,70 @@ impl <'grid, Storage, Pos, const DIMS: usize> GridCursor <'grid, Storage, Pos, D
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn try_add (& self, offset: GridOffset <DIMS>) -> Option <Self>
-			where Pos: TryAdd <Pos, Output = Pos> {
+	pub const fn walk (
+		self,
+		offset: GridOffset <DIMS>,
+	) -> GridCursorWalk <'grid, Storage, Pos, DIMS> {
+		GridCursorWalk { cur: self, offset, done: false }
+	}
+
+}
+
+pub struct GridCursorWalk <'grid, Storage, Pos, const DIMS: usize> {
+	cur: GridCursor <'grid, Storage, Pos, DIMS>,
+	offset: GridOffset <DIMS>,
+	done: bool,
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> Iterator
+	for GridCursorWalk <'grid, Storage, Pos, DIMS>
+	where
+		Pos: GridPos <DIMS>,
+		Storage: GridStorage {
+
+	type Item = GridCursor <'grid, Storage, Pos, DIMS>;
+
+	fn next (& mut self) -> Option <GridCursor <'grid, Storage, Pos, DIMS>> {
+		if self.done { return None }
+		let result = self.cur;
+		if self.cur.try_add_assign (self.offset).is_err () { self.done = true; }
+		Some (result)
+	}
+
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> Clone for GridCursor <'grid, Storage, Pos, DIMS> {
+
+	#[ inline ]
+	fn clone (& self) -> Self {
+		* self
+	}
+
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> Copy for GridCursor <'grid, Storage, Pos, DIMS> {
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> TryAdd <GridOffset <DIMS>>
+	for GridCursor <'grid, Storage, Pos, DIMS>
+	where
+		Pos: GridPos <DIMS> /*+ TryAdd <Pos, Output = Pos>*/,
+		Storage: GridStorage {
+
+	type Output = Self;
+
+	#[ inline ]
+	fn try_add (self, offset: GridOffset <DIMS>) -> NumResult <Self> {
 		let mut pos = [0; DIMS];
 		for dim_idx in 0 .. DIMS {
 			let dim_offset = offset.native () [dim_idx];
 			let dim_val = self.pos [dim_idx];
 			pos [dim_idx] = if 0 <= dim_offset {
 				let dim_val = dim_val + dim_offset.unsigned_abs ();
-				if self.grid.size [dim_idx] <= dim_val { return None }
+				if self.grid.size [dim_idx] <= dim_val { return Err (Overflow) }
 				dim_val
 			} else {
-				if dim_val < dim_offset.unsigned_abs () { return None }
+				if dim_val < dim_offset.unsigned_abs () { return Err (Overflow) }
 				dim_val - dim_offset.unsigned_abs ()
 			};
 		}
@@ -59,26 +149,28 @@ impl <'grid, Storage, Pos, const DIMS: usize> GridCursor <'grid, Storage, Pos, D
 		} else {
 			self.idx - offset.idx ().unsigned_abs ()
 		};
-		Some (Self {
-			grid: self.grid,
-			pos,
-			idx,
-			phantom: PhantomData,
-		})
+		Ok (Self { grid: self.grid, pos, idx })
 	}
 
+}
+
+impl <'grid, Storage, Pos, const DIMS: usize> TryAddAssign <GridOffset <DIMS>>
+	for GridCursor <'grid, Storage, Pos, DIMS>
+	where
+		Pos: GridPos <DIMS> /*+ TryAdd <Pos, Output = Pos>*/,
+		Storage: GridStorage {
+
 	#[ inline ]
-	pub fn try_add_assign (& mut self, offset: & GridOffset <DIMS>) -> Option <()>
-			where Pos: TryAdd <Pos, Output = Pos> {
+	fn try_add_assign (& mut self, offset: GridOffset <DIMS>) -> NumResult <()> {
 		for dim_idx in 0 .. DIMS {
 			let dim_offset = offset.native () [dim_idx];
 			let dim_val = self.pos [dim_idx];
 			self.pos [dim_idx] = if 0 <= dim_offset {
 				let dim_val = dim_val + dim_offset.unsigned_abs ();
-				if self.grid.size [dim_idx] <= dim_val { return None }
+				if self.grid.size [dim_idx] <= dim_val { return Err (Overflow) }
 				dim_val
 			} else {
-				if dim_val < dim_offset.unsigned_abs () { return None }
+				if dim_val < dim_offset.unsigned_abs () { return Err (Overflow) }
 				dim_val - dim_offset.unsigned_abs ()
 			};
 		}
@@ -87,26 +179,9 @@ impl <'grid, Storage, Pos, const DIMS: usize> GridCursor <'grid, Storage, Pos, D
 		} else {
 			self.idx -= offset.idx ().unsigned_abs ();
 		};
-		Some (())
+		Ok (())
 	}
 
-}
-
-impl <'sto, Storage, Pos, const DIMS: usize> Clone for GridCursor <'sto, Storage, Pos, DIMS>
-		where Pos: Copy {
-	#[ inline ]
-	fn clone (& self) -> Self {
-		Self {
-			grid: self.grid,
-			pos: self.pos,
-			idx: self.idx,
-			phantom: PhantomData,
-		}
-	}
-}
-
-impl <'sto, Storage, Pos, const DIMS: usize> Copy for GridCursor <'sto, Storage, Pos, DIMS>
-	where Pos: Copy {
 }
 
 impl <'grid, Storage, Pos, const DIMS: usize> Debug for GridCursor <'grid, Storage, Pos, DIMS>
@@ -150,7 +225,6 @@ impl <'sto, Storage, Pos, const DIMS: usize> Iterator for GridCursorIter <'sto, 
 			grid: self.grid,
 			pos: cur_pos,
 			idx: cur_idx,
-			phantom: PhantomData,
 		})
 	}
 
@@ -291,6 +365,19 @@ impl <const DIMS: usize> GridOffset <DIMS> {
 	#[ must_use ]
 	pub const fn idx (& self) -> isize {
 		self.idx
+	}
+
+}
+
+impl <const DIMS: usize> Neg for GridOffset <DIMS> {
+	type Output = Self;
+
+	#[ inline ]
+	fn neg (self) -> Self {
+		Self {
+			pos: self.pos.map (|val| - val),
+			idx: - self.idx,
+		}
 	}
 
 }

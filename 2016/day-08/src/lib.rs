@@ -42,7 +42,7 @@ pub mod logic {
 
 	fn calc_result (input: & Input) -> Grid <Vec <bool>, Pos> {
 		let mut grid: Grid <Vec <bool>, Pos> =
-			Grid::new_vec ([0, 0], [input.height.as_usize (), input.width.as_usize ()]);
+			Grid::new ([0, 0], [input.height.as_usize (), input.width.as_usize ()]);
 		for step in input.steps.iter_vals () {
 			match step {
 				Step::Rect { width, height } => {

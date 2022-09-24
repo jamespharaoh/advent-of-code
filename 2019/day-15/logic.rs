@@ -61,7 +61,7 @@ fn calc_mins (mut grid: Grid) -> GenResult <u32> {
 }
 
 fn calc_grid (input: & Input) -> GenResult <Grid> {
-	let mut grid = Grid::new_vec ([16, 16], [33, 33]);
+	let mut grid = Grid::new ([16, 16], [33, 33]);
 	grid.set (Pos::ZERO, Tile::Empty);
 	let mut todo = Vec::new ();
 	todo.push ((Core::new (input), Pos::ZERO));
@@ -71,12 +71,12 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 			if 128 < adj_pos.n.abs () + adj_pos.e.abs () {
 				return Err ("Giving up due to distance from starting point".into ());
 			}
-			let adj_tile = grid.get (adj_pos).unwrap_or_else (|| {
+			let adj_tile = grid.get (adj_pos).ok_or (()).or_else (|()| {
 				grid = grid.resize (
 					[ grid.native_origin () [0] + 16, grid.native_origin () [1] + 16 ],
-					[ grid.native_size () [0] + 32, grid.native_size () [1] + 32 ]);
-				Tile::Unknown
-			});
+					[ grid.native_size () [0] + 32, grid.native_size () [1] + 32 ]) ?;
+				Ok::<_, Overflow> (Tile::Unknown)
+			}) ?;
 			if adj_tile != Tile::Unknown { continue }
 			let mut core = core.clone ();
 			let adj_tile = match core.step (dir) ? {

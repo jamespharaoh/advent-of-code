@@ -52,7 +52,7 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 	type Frame = (RouteRegexString, Pos, u8, u8);
 	type Stack = ArrayVec <Frame, STACK_SIZE>;
 	let mut grid =
-		Grid::new_vec (
+		Grid::new (
 			[GRID_EXPAND.to_isize () ?, GRID_EXPAND.to_isize () ?],
 			[GRID_EXPAND * 2 + 1, GRID_EXPAND * 2 + 1]);
 	let mut todo: Vec <(Pos, Stack)> = Vec::new ();
@@ -109,7 +109,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 			}
 			* grid = grid.resize (
 				[grid.native_origin () [0], grid.native_origin () [1]],
-				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]);
+				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]) ?;
 		},
 		RouteDir::South => {
 			if 240 < grid.native_size () [0] {
@@ -117,7 +117,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 			}
 			* grid = grid.resize (
 				[grid.native_origin () [0] + GRID_EXPAND.to_isize () ?, grid.native_origin () [1]],
-				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]);
+				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]) ?;
 		},
 		RouteDir::East => {
 			if 500 < grid.native_size () [1] {
@@ -125,7 +125,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 			}
 			* grid = grid.resize (
 				[grid.native_origin () [0], grid.native_origin () [1]],
-				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]);
+				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]) ?;
 		},
 		RouteDir::West => {
 			if 500 < grid.native_size () [1] {
@@ -133,7 +133,7 @@ fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 			}
 			* grid = grid.resize (
 				[grid.native_origin () [0], grid.native_origin () [1] + GRID_EXPAND.to_isize () ?],
-				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]);
+				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]) ?;
 		},
 	}
 	Ok (())

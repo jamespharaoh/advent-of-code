@@ -3,7 +3,7 @@
 //! [https://adventofcode.com/2021/day/5](https://adventofcode.com/2021/day/5)
 
 use aoc_common::*;
-use aoc_pos::GenPosCore as _;
+use aoc_pos::GenPos as _;
 
 puzzle_info! {
 	name = "Hydrothermal Venture";

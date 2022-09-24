@@ -22,7 +22,8 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	calc_result (& input.params, state, |cursor| {
 		let num_adj = dirs.iter ()
 			.filter_map (|& dir| cursor.try_add (dir)
-				.map (|adj_cursor| adj_cursor.item ()))
+				.map (|adj_cursor| adj_cursor.item ())
+				.ok ())
 			.filter (|& tile| tile == Tile::Occupied)
 			.count ();
 		matches! ((cursor.item (), num_adj), (Tile::Empty, 0) | (Tile::Occupied, 0 ..= 3))
@@ -45,7 +46,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			.filter_map (|& dir| {
 				let mut adj_cursor = cursor;
 				loop {
-					adj_cursor = adj_cursor.try_add (dir) ?;
+					adj_cursor = adj_cursor.try_add (dir).ok () ?;
 					let adj_tile = adj_cursor.item ();
 					if adj_tile == Tile::Floor { continue }
 					return Some (adj_tile);
