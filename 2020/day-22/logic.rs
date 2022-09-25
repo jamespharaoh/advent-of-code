@@ -3,8 +3,11 @@
 use super::*;
 
 use input::Input;
-use model::Card;
 use model::Deck;
+use model::Game;
+use model::Pool;
+use model::State;
+use model::Winner;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	check_input (input) ?;
@@ -108,102 +111,4 @@ fn check_input (input: & Input) -> GenResult <()> {
 		}
 	}
 	Ok (())
-}
-
-#[ derive (Clone, Copy, Debug) ]
-enum Winner { One, Two }
-
-#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-struct State { decks: [Card; 64] }
-
-impl State {
-	#[ inline ]
-	fn new (deck_1: & Deck, deck_2: & Deck) -> Self {
-		let mut decks = [0; 64];
-		let mut idx = 0;
-		for & val in deck_1 { decks [idx] = val; idx += 1; }
-		idx += 1;
-		for & val in deck_2 { decks [idx] = val; idx += 1; }
-		Self { decks }
-	}
-}
-
-struct Game {
-	start_state: State,
-	deck_1: Deck,
-	deck_2: Deck,
-	card_1: Card,
-	card_2: Card,
-	seen: HashSet <State>,
-}
-
-impl Game {
-
-	#[ inline ]
-	fn new <'card> (
-		pool: & mut Pool,
-		deck_1: impl Iterator <Item = & 'card Card>,
-		deck_2: impl Iterator <Item = & 'card Card>,
-	) -> Self {
-		let deck_1 = pool.new_deck (deck_1.copied ());
-		let deck_2 = pool.new_deck (deck_2.copied ());
-		let start_state = State::new (& deck_1, & deck_2);
-		Self {
-			start_state,
-			deck_1,
-			deck_2,
-			card_1: 0,
-			card_2: 0,
-			seen: pool.new_seen (),
-		}
-	}
-
-	#[ inline ]
-	fn free (self, pool: & mut Pool) {
-		pool.free_deck (self.deck_1);
-		pool.free_deck (self.deck_2);
-		pool.free_seen (self.seen);
-	}
-
-}
-
-struct Pool {
-	decks: Vec <Deck>,
-	seens: Vec <HashSet <State>>,
-}
-
-impl Pool {
-
-	const fn new () -> Self {
-		Self {
-			decks: Vec::new (),
-			seens: Vec::new (),
-		}
-	}
-
-	#[ inline ]
-	fn new_deck (& mut self, iter: impl Iterator <Item = Card>) -> Deck {
-		let mut deck = self.decks.pop ().unwrap_or_default ();
-		deck.clear ();
-		deck.extend (iter);
-		deck
-	}
-
-	#[ inline ]
-	fn free_deck (& mut self, deck: Deck) {
-		self.decks.push (deck);
-	}
-
-	#[ inline ]
-	fn new_seen (& mut self) -> HashSet <State> {
-		let mut seen = self.seens.pop ().unwrap_or_default ();
-		seen.clear ();
-		seen
-	}
-
-	#[ inline ]
-	fn free_seen (& mut self, seen: HashSet <State>) {
-		self.seens.push (seen);
-	}
-
 }
