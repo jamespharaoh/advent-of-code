@@ -7,7 +7,7 @@
 //! point so we can short-circuit appropriately.
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 use aoc_search as search;
 
@@ -25,7 +25,6 @@ mod logic {
 	use model::Cave;
 	use model::Grid;
 	use model::Pos;
-	use nums::IntConv;
 	use search::PrioritySearch;
 	use search::PrioritySearchAdder;
 
@@ -45,20 +44,19 @@ mod logic {
 				})),
 			)).collect ()
 		};
-		let new_size = [cave.risks.native_size () [0] * 5, cave.risks.native_size () [1] * 5];
-		cave.risks = Grid::wrap (risks, [0, 0], new_size);
+		cave.risks = Grid::wrap (risks, Pos::ZERO, cave.risks.size () * 5);
 		cave.end = Pos { y: (cave.end.y + 1) * 5 - 1, x: (cave.end.x + 1) * 5 - 1 };
 		Ok (calc_result (& cave))
 	}
 
 	pub fn calc_result (cave: & Cave) -> u64 {
 		let mut search = PrioritySearch::with_grid (
-			[0, 0],
-			cave.risks.native_size (),
+			Pos::ZERO,
+			cave.risks.size (),
 			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64, _>| {
 				for adj_pos in pos.adjacent_4 () {
 					if let Some (adj_risk) = cave.risks.get (adj_pos) {
-						let adj_path_risk = path_risk + adj_risk.as_u64 ();
+						let adj_path_risk = path_risk + adj_risk.pan_u64 ();
 						adder.add (adj_pos, adj_path_risk);
 					}
 				}
@@ -78,9 +76,8 @@ mod logic {
 mod model {
 
 	use super::*;
-	use nums::IntConv;
 
-	pub type Grid <Val> = grid::Grid <Vec <Val>, Pos, 2>;
+	pub type Grid <Val> = GridBuf <Vec <Val>, Pos, 2>;
 	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Cave {
@@ -95,15 +92,13 @@ mod model {
 			for (line_idx, line) in lines.iter ().enumerate () {
 				let line_err = || format! ("Invalid input on line {}: {}", line_idx + 1, line);
 				for letter in line.chars () {
-					risks.push (letter.to_digit (10).ok_or_else (line_err) ?.as_u8 ());
+					risks.push (letter.to_digit (10).ok_or_else (line_err) ?.pan_u8 ());
 				}
 			}
-			let risks = Grid::wrap (risks, [0, 0], [lines.len (), lines [0].len ()]);
-			let start = Pos { x: 0, y: 0 };
-			let end = Pos {
-				x: risks.native_size () [1].as_i16 () - 1,
-				y: risks.native_size () [0].as_i16 () - 1,
-			};
+			let grid_size = Pos::new (lines.len ().pan_i16 (), lines [0].len ().pan_i16 ());
+			let risks = Grid::wrap (risks, Pos::ZERO, grid_size);
+			let start = risks.first_key ();
+			let end = risks.last_key ();
 			Ok (Self { risks, start, end })
 		}
 	}

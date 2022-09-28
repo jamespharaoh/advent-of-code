@@ -7,7 +7,7 @@ pub use self::game::{ Game, GameNext };
 
 pub type Coord = i32;
 pub type Cpu = intcode::Machine <Val>;
-pub type Grid = aoc_grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 pub type RunResult = intcode::RunResult <Val>;
 pub type Val = i32;
@@ -94,7 +94,7 @@ mod game {
 	impl Game {
 
 		pub fn new (input: & Input, insert_coin: bool, size: Pos) -> GenResult <Self> {
-			let grid = Grid::new ([0, 0], [size.y.as_usize (), size.x.as_usize ()]);
+			let grid = Grid::new (Pos::ZERO, size);
 			Ok (Self {
 				core: Core::new (input, insert_coin),
 				size,

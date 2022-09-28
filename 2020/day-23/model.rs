@@ -24,7 +24,7 @@ impl Deck {
 	#[ inline ]
 	pub fn pick (& mut self) -> Card {
 		let card = self.first.take ().unwrap ();
-		self.first = self.next [card.get ().as_usize () - 1].take ();
+		self.first = self.next [card.get ().pan_usize () - 1].take ();
 		if self.first.is_none () { self.last = None }
 		card
 	}
@@ -33,7 +33,7 @@ impl Deck {
 	pub fn place (& mut self, card: Card) {
 		debug_assert! (! self.contains (card));
 		if let Some (last) = self.last {
-			self.next [last.get ().as_usize () - 1] = Some (card);
+			self.next [last.get ().pan_usize () - 1] = Some (card);
 		} else {
 			self.first = Some (card);
 		}
@@ -53,7 +53,7 @@ impl Deck {
 		};
 		for card in iter {
 			debug_assert! (! self.contains (card));
-			self.next [prev.get ().as_usize () - 1].replace (card);
+			self.next [prev.get ().pan_usize () - 1].replace (card);
 			prev = card;
 		}
 		self.last = Some (prev);
@@ -63,13 +63,13 @@ impl Deck {
 	pub fn place_after (& mut self, after: Card, cards: & [Card]) {
 		let mut cards_iter = cards.iter ().copied ().peekable ();
 		let first = some_or! (cards_iter.next (), return);
-		let resume = self.next [after.get ().as_usize () - 1].replace (first);
+		let resume = self.next [after.get ().pan_usize () - 1].replace (first);
 		let mut prev = first;
 		for card in cards_iter {
-			self.next [prev.get ().as_usize () - 1] = Some (card);
+			self.next [prev.get ().pan_usize () - 1] = Some (card);
 			prev = card;
 		}
-		self.next [prev.get ().as_usize () - 1] = resume;
+		self.next [prev.get ().pan_usize () - 1] = resume;
 		if resume.is_none () { self.last = Some (prev); }
 	}
 
@@ -85,7 +85,7 @@ impl Deck {
 	#[ inline ]
 	#[ must_use ]
 	pub fn contains (& self, card: Card) -> bool{
-		self.next [card.get ().as_usize () - 1].is_some () || self.last == Some (card)
+		self.next [card.get ().pan_usize () - 1].is_some () || self.last == Some (card)
 	}
 
 }

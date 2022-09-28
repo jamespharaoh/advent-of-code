@@ -15,7 +15,6 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let (start_1, start_2) = model::parse_input (lines) ?;
@@ -35,13 +34,13 @@ mod logic {
 		let winner = 'OUTER: loop {
 			for (player_idx, player) in players.iter_mut ().enumerate () {
 				let roll = iter::from_fn (|| Some (die_roll ())).take (3).sum::<u16> ();
-				player.pos = ((player.pos.as_u16 () + roll.as_u16 ()) % 10).as_u8 ();
-				player.score += player.pos.as_u16 () + 1;
+				player.pos = ((player.pos.pan_u16 () + roll.pan_u16 ()) % 10).pan_u8 ();
+				player.score += player.pos.pan_u16 () + 1;
 				if player.score >= 1000 { break 'OUTER player_idx }
 			}
 		};
 		let loser = (winner + 1) % 2;
-		Ok (die_count * players [loser].score.as_u64 ())
+		Ok (die_count * players [loser].score.pan_u64 ())
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <u128> {
@@ -65,15 +64,15 @@ mod logic {
 				stack.pop ().unwrap ();
 				continue;
 			}
-			let old_player = frame.game.players [frame.game.turn.as_usize ()];
+			let old_player = frame.game.players [frame.game.turn.pan_usize ()];
 			let (roll_val, roll_freq) = roll_freqs [frame.progress];
 			let mut new_game = frame.game;
-			let new_player = & mut new_game.players [frame.game.turn.as_usize ()];
+			let new_player = & mut new_game.players [frame.game.turn.pan_usize ()];
 			new_player.pos = ((old_player.pos - 1) + roll_val) % 10 + 1;
 			new_player.score = old_player.score + new_player.pos;
 			if new_player.score >= 21 {
-				frame.counts [frame.game.turn.as_usize ()] = u128::checked_add (
-					frame.counts [frame.game.turn.as_usize ()], roll_freq.as_u128 ()).unwrap ();
+				frame.counts [frame.game.turn.pan_usize ()] = u128::checked_add (
+					frame.counts [frame.game.turn.pan_usize ()], roll_freq.pan_u128 ()).unwrap ();
 				frame.progress += 1;
 				continue;
 			}
@@ -81,10 +80,10 @@ mod logic {
 			if let Some (solved_counts) = solved.get (& new_game) {
 				frame.counts = [
 					u128::checked_add (frame.counts [0],
-						u128::checked_mul (solved_counts [0], roll_freq.as_u128 ()).unwrap (),
+						u128::checked_mul (solved_counts [0], roll_freq.pan_u128 ()).unwrap (),
 					).unwrap (),
 					u128::checked_add (frame.counts [1],
-						u128::checked_mul (solved_counts [1], roll_freq.as_u128 ()).unwrap (),
+						u128::checked_mul (solved_counts [1], roll_freq.pan_u128 ()).unwrap (),
 					).unwrap (),
 				];
 				frame.progress += 1;

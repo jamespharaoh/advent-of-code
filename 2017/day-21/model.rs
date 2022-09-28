@@ -26,7 +26,7 @@ mod squares {
 
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.val.as_usize ()
+			self.val.pan_usize ()
 		}
 
 	}
@@ -53,12 +53,12 @@ mod squares {
 
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.val.as_usize ()
+			self.val.pan_usize ()
 		}
 
 		#[ must_use ]
 		pub fn num_active (self) -> u64 {
-			self.val.count_ones ().as_u64 ()
+			self.val.count_ones ().pan_u64 ()
 		}
 
 		#[ must_use ]
@@ -106,12 +106,12 @@ mod squares {
 
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.val.as_usize ()
+			self.val.pan_usize ()
 		}
 
 		#[ must_use ]
 		pub fn num_active (self) -> u64 {
-			self.val.count_ones ().as_u64 ()
+			self.val.count_ones ().pan_u64 ()
 		}
 
 		#[ must_use ]
@@ -148,12 +148,12 @@ mod squares {
 
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.val.as_usize ()
+			self.val.pan_usize ()
 		}
 
 		#[ must_use ]
 		pub fn num_active (self) -> u64 {
-			self.val.count_ones ().as_u64 ()
+			self.val.count_ones ().pan_u64 ()
 		}
 
 		#[ must_use ]

@@ -100,7 +100,7 @@ pub mod logic {
 
 		fn new (data_vec: & [Bit]) -> Self {
 
-			let data_bits = data_vec.len ().as_u32 ();
+			let data_bits = data_vec.len ().pan_u32 ();
 
 			// convert vec to bit pattern
 

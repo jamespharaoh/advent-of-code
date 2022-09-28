@@ -13,3 +13,4 @@
 
 	aoc-grid = { path = "../grid" }
 	aoc-misc = { path = "../misc" }
+	aoc-nums = { path = "../nums" }

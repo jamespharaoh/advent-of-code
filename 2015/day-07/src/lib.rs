@@ -161,7 +161,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub type WireVal = u16;
 
@@ -196,9 +195,9 @@ pub mod model {
 			if let Some ((wire, msg)) =
 				input.iter ()
 					.find_map (|wire| match wire.input {
-						WireInput::LeftShift (_, val) if WireVal::BITS <= val.as_u32 () =>
+						WireInput::LeftShift (_, val) if WireVal::BITS <= val.pan_u32 () =>
 							Some ((wire.id.clone (), format! ("Left shift by {} is invalid", val))),
-						WireInput::RightShift (_, val) if WireVal::BITS <= val.as_u32 () =>
+						WireInput::RightShift (_, val) if WireVal::BITS <= val.pan_u32 () =>
 							Some ((wire.id.clone (), format! ("Right shift by {} is invalid", val))),
 						WireInput::Static (_) | WireInput::Wire (_) | WireInput::Not (_) |
 						WireInput::And (..) | WireInput::AndOne (_) | WireInput::Or (..) |
@@ -273,7 +272,7 @@ pub mod model {
 				.of (|parser| {
 					let arg_0 = parser.word_if (valid_id) ?;
 					let arg_1: u16 = parser.expect_word ("LSHIFT") ?.confirm ().int () ?;
-					if WireVal::BITS <= arg_1.as_u32 () { Err (parser.err ()) ?; }
+					if WireVal::BITS <= arg_1.pan_u32 () { Err (parser.err ()) ?; }
 					let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 					parser.end () ?;
 					Ok ((id.try_into () ?, WireInput::LeftShift (arg_0.try_into () ?, arg_1)))
@@ -281,7 +280,7 @@ pub mod model {
 				.of (|parser| {
 					let arg_0 = parser.word_if (valid_id) ?;
 					let arg_1: u16 = parser.expect_word ("RSHIFT") ?.confirm ().int () ?;
-					if WireVal::BITS <= arg_1.as_u32 () { Err (parser.err ()) ?; }
+					if WireVal::BITS <= arg_1.pan_u32 () { Err (parser.err ()) ?; }
 					let id = parser.expect_word ("->") ?.word_if (valid_id) ?;
 					parser.end () ?;
 					Ok ((id.try_into () ?, WireInput::RightShift (arg_0.try_into () ?, arg_1)))

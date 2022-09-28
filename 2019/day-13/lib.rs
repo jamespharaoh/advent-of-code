@@ -6,7 +6,7 @@
 
 use aoc_2019_intcode as intcode;
 use aoc_common::*;
-use aoc_pos::GenPos as _;
+use aoc_grid::prelude::*;
 
 pub mod input;
 pub mod logic;

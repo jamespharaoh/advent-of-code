@@ -3,7 +3,7 @@
 //! [https://adventofcode.com/2021/day/5](https://adventofcode.com/2021/day/5)
 
 use aoc_common::*;
-use aoc_pos::GenPos as _;
+use aoc_grid::prelude::*;
 
 puzzle_info! {
 	name = "Hydrothermal Venture";
@@ -41,9 +41,9 @@ mod logic {
 			});
 		let mut points: Grid =
 			Grid::wrap (
-				iter::repeat (0).take (size.x.as_usize () * size.y.as_usize ()).collect (),
-				[0, 0],
-				[size.y.as_usize (), size.x.as_usize ()]);
+				iter::repeat (0).take (size.x.pan_usize () * size.y.pan_usize ()).collect (),
+				Pos::ZERO,
+				Pos::new (size.y, size.x));
 		for vent in vents {
 			let step = Pos {
 				x: (vent.end.x - vent.start.x).signum (),
@@ -57,7 +57,7 @@ mod logic {
 				pos.y += step.y;
 			}
 		}
-		Ok (points.values ().filter (|& num| num > 1).count ().as_i64 ())
+		Ok (points.values ().filter (|& num| num > 1).count ().pan_i64 ())
 	}
 
 }
@@ -67,7 +67,7 @@ mod model {
 	use super::*;
 
 	pub type Coord = i16;
-	pub type Grid = aoc_grid::Grid <Vec <Val>, Pos>;
+	pub type Grid = GridBuf <Vec <Val>, Pos, 2>;
 	pub type Pos = aoc_pos::PosYX <Coord>;
 	pub type Val = u16;
 

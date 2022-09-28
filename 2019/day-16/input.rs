@@ -17,7 +17,7 @@ struct_parser! {
 fn parse_num (parser: & mut Parser) -> ParseResult <u8> {
 	let ch = parser.expect_next () ?;
 	if ! ch.is_ascii_digit () { return Err (parser.err ()) }
-	Ok (ch.to_digit (10).unwrap ().as_u8 ())
+	Ok (ch.to_digit (10).unwrap ().pan_u8 ())
 }
 
 input_params! {

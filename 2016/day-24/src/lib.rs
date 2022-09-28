@@ -30,7 +30,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 use aoc_search as search;
 
@@ -127,10 +127,10 @@ pub mod logic {
 
 		// assume we already visited all walls, reusing this makes things quicker
 
-		let seen_template = grid::Grid::<Vec <bool>, Pos>::wrap (
+		let seen_template = GridBuf::<Vec <bool>, Pos, 2>::wrap (
 			input.tiles.values ().map (|tile| matches! (tile, Tile::Wall)).collect (),
-			input.tiles.native_origin (),
-			input.tiles.native_size ());
+			input.tiles.origin (),
+			input.tiles.size ());
 
 		// work out distances
 
@@ -215,7 +215,7 @@ pub mod model {
 	use super::*;
 
 	pub type Coord = u16;
-	pub type TilesGrid = grid::Grid <Vec <Tile>, Pos>;
+	pub type TilesGrid = GridBuf <Vec <Tile>, Pos, 2>;
 	pub type Pos = pos::PosRowCol <u16>;
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
@@ -237,7 +237,7 @@ pub mod model {
 			let height = Coord::try_from (input.len ()).unwrap ();
 			let width = Coord::try_from (input [0].chars ().count ()).unwrap ();
 			if width == 0 || height == 0
-					|| input.iter ().any (|line| line.chars ().count () != width.as_usize ()) {
+					|| input.iter ().any (|line| line.chars ().count () != width.pan_usize ()) {
 				return Err ("Invalid input".into ());
 			}
 
@@ -249,7 +249,7 @@ pub mod model {
 					Parser::wrap (line, |parser| {
 						let items: Vec <_> =
 								iter::from_fn (|| Some (parser.item ()))
-							.take (width.as_usize ())
+							.take (width.pan_usize ())
 							.collect::<ParseResult <_>> () ?;
 						parser.end () ?;
 						Ok (items)
@@ -264,8 +264,8 @@ pub mod model {
 			let tiles =
 				TilesGrid::wrap (
 					tiles_vec,
-					[0, 0],
-					[ height.as_usize (), width.as_usize () ]);
+					Pos::ZERO,
+					Pos::new (height, width));
 
 			// construct and return
 
@@ -281,7 +281,7 @@ pub mod model {
 				'#' => Self::Wall,
 				'.' => Self::Open,
 				ch if ('0' ..= '9').contains (& ch) =>
-					Self::Num (ch.to_digit (10).ok_or_else (|| parser.err ()) ?.as_u8 ()),
+					Self::Num (ch.to_digit (10).ok_or_else (|| parser.err ()) ?.pan_u8 ()),
 				_ => return Err (parser.err ()),
 			})
 		}

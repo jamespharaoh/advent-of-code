@@ -35,7 +35,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		if 0 < step_affected {
 			y_min = new_y_min;
 			x_min = new_x_min;
-			num_affected += step_affected.as_u32 ();
+			num_affected += step_affected.pan_u32 ();
 		}
 	}
 	Ok (num_affected)
@@ -102,13 +102,13 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	let closest = candidates.iter ().copied ()
 		.min_by_key (|pos| {
-			let y = pos.y.unsigned_abs ().as_i32 ();
-			let x = pos.x.unsigned_abs ().as_i32 ();
+			let y = pos.y.unsigned_abs ().pan_i32 ();
+			let x = pos.x.unsigned_abs ().pan_i32 ();
 			y * y + x * x
 		})
 		.ok_or ("No solution found") ?;
 
-	Ok (closest.x.as_u32 () * 10_000 + closest.y.as_u32 ())
+	Ok (closest.x.pan_u32 () * 10_000 + closest.y.pan_u32 ())
 
 }
 

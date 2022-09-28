@@ -37,7 +37,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 					if min_key < item_key { min } else { item }
 				}).or (Some (item))) ?
 			.unwrap ();
-	Ok (idx.as_u32 ())
+	Ok (idx.pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
@@ -67,7 +67,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		for state in parts.iter_mut () { state.part = next (state.part) ?; }
 		time += 1;
 	}
-	Ok (parts.iter ().filter (|& state| state.alive).count ().as_u32 ())
+	Ok (parts.iter ().filter (|& state| state.alive).count ().pan_u32 ())
 }
 
 fn next (mut part: Particle) -> NumResult <Particle> {

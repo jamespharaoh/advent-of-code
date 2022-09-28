@@ -17,7 +17,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 				entries.iter ().rev ().copied (),
 				2020)
 			.ok_or ("No solution found") ?;
-	Ok (entry_0.as_u32 () * entry_1.as_u32 ())
+	Ok (entry_0.pan_u32 () * entry_1.pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
@@ -33,7 +33,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				entries.iter ().copied ().filter (|& entry_1| entry_1 != entry_0),
 				entries.iter ().rev ().copied ().filter (|& entry_2| entry_2 != entry_0),
 				2020 - entry_0) {
-			return Ok (entry_0.as_u32 () * entry_1.as_u32 () * entry_2.as_u32 ());
+			return Ok (entry_0.pan_u32 () * entry_1.pan_u32 () * entry_2.pan_u32 ());
 		}
 	}
 	Err ("No solution found".into ())

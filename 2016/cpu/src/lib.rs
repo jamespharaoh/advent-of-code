@@ -46,11 +46,11 @@ impl Cpu {
 	}
 
 	pub fn exec (& mut self) -> GenResult <Option <i32>> {
-		while self.next.as_usize () < self.instrs.len () {
+		while self.next.qck_usize () < self.instrs.len () {
 			if self.limit == 0 { return Err ("Reached ops limit".into ()) }
 			self.limit -= 1;
 			#[ allow (clippy::match_on_vec_items) ]
-			match self.instrs [self.next.as_usize ()] {
+			match self.instrs [self.next.qck_usize ()] {
 				Instr::Cpy (src, dst) => self.store (dst, self.load (src)),
 				Instr::Inc (reg) => self.store (reg, i32::add_2 (self.load (reg), 1_i32) ?),
 				Instr::Dec (reg) => self.store (reg, i32::sub_2 (self.load (reg), 1_i32) ?),
@@ -59,7 +59,7 @@ impl Cpu {
 					let idx = u32::add_signed (self.next, self.load (dst)) ?;
 					if let Some (instr) =
 						Rc::make_mut (& mut self.instrs)
-							.get_mut (idx.as_usize ()) {
+							.get_mut (idx.qck_usize ()) {
 						* instr = match * instr {
 							Instr::Cpy (src, dst) => Instr::Jnz (src, dst),
 							Instr::Jnz (src, dst) => Instr::Cpy (src, dst),
@@ -92,7 +92,7 @@ impl Cpu {
 
 		if self.next >= 2 {
 			match <[Instr; 3]>::try_from (
-				& self.instrs [self.next.as_usize () - 2 .. self.next.as_usize () + 1],
+				& self.instrs [self.next.qck_usize () - 2 .. self.next.qck_usize () + 1],
 			).unwrap () {
 				[
 					Instr::Dec (arg),
@@ -113,7 +113,7 @@ impl Cpu {
 
 		if self.next >= 4 {
 			match <[Instr; 5]>::try_from (
-				& self.instrs [self.next.as_usize () - 4 .. self.next.as_usize () + 1],
+				& self.instrs [self.next.qck_usize () - 4 .. self.next.qck_usize () + 1],
 			).unwrap () {
 				[
 					Instr::Jnz (arg, Arg::Imm (2_i32)),
@@ -134,7 +134,7 @@ impl Cpu {
 
 		if self.next >= 5 {
 			match <[Instr; 6]>::try_from (
-				& self.instrs [self.next.as_usize () - 5 .. self.next.as_usize () + 1],
+				& self.instrs [self.next.qck_usize () - 5 .. self.next.qck_usize () + 1],
 			).unwrap () {
 				[
 					Instr::Cpy (arg, tmp),
@@ -160,7 +160,7 @@ impl Cpu {
 
 		if self.next >= 7 {
 			match <[Instr; 8]>::try_from (
-				& self.instrs [self.next.as_usize () - 7 .. self.next.as_usize () + 1],
+				& self.instrs [self.next.qck_usize () - 7 .. self.next.qck_usize () + 1],
 			).unwrap () {
 				[
 					Instr::Cpy (Arg::Imm (div), rem),

@@ -48,7 +48,7 @@ fn eval_one (iter: & mut TokensIter) -> GenResult <u64> {
 				if next != ParenClose { return Err ("Expected closing parenthesis".into ()) }
 				Ok (result)
 			},
-			Number (val) => Ok (val.as_u64 ()),
+			Number (val) => Ok (val.pan_u64 ()),
 			other => Err (format! ("Unexpected token: {other:?}").into ()),
 		}
 	}
@@ -96,7 +96,7 @@ fn eval_two (iter: & mut TokensIter) -> GenResult <u64> {
 				if next != ParenClose { return Err ("Expected closing parenthesis".into ()) }
 				Ok (result)
 			},
-			Number (val) => Ok (val.as_u64 ()),
+			Number (val) => Ok (val.pan_u64 ()),
 			other => Err (format! ("Unexpected token: {other:?}").into ()),
 		}
 	}

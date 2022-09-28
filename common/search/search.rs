@@ -1,9 +1,9 @@
 //! Iterative search algorithms for solutions in a problem space
 
-use aoc_grid as grid;
+use aoc_grid::GridPos;
+use aoc_grid::prelude::*;
 use aoc_misc::*;
-use grid::Grid;
-use grid::GridPos;
+use aoc_nums::IntConv;
 
 /// Implements [Digkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 ///
@@ -99,17 +99,18 @@ impl <Node, Pri, Visitor>
 
 }
 
-impl <Node, Pri, Visitor, const DIMS: usize> PrioritySearch <Node, Pri, Visitor, Grid <Vec <SeenState <Pri>>, Node, DIMS>>
+impl <Node, Pri, Visitor, const DIMS: usize>
+	PrioritySearch <Node, Pri, Visitor, GridBuf <Vec <SeenState <Pri>>, Node, DIMS>>
 	where
 		Node: Clone + Debug + Eq + Hash + GridPos <DIMS>,
 		Pri: Clone + Copy + Debug + Ord,
-		Visitor: PrioritySearchVisitor <Node, Pri, Grid <Vec <SeenState <Pri>>, Node, DIMS>> {
+		Visitor: PrioritySearchVisitor <Node, Pri, GridBuf <Vec <SeenState <Pri>>, Node, DIMS>> {
 
 	#[ inline ]
-	pub fn with_grid (origin: [isize; DIMS], size: [usize; DIMS], visitor: Visitor) -> Self {
-		let grid = Grid::wrap (
+	pub fn with_grid (origin: Node, size: Node, visitor: Visitor) -> Self {
+		let grid = GridBuf::wrap (
 			iter::repeat (SeenState::New)
-				.take (size.iter ().product ())
+				.take (size.to_array ().into_iter ().map (Node::Coord::pan_usize).product ())
 				.collect (),
 			origin,
 			size);
@@ -346,7 +347,7 @@ for HashMap <Node, SeenState <Pri>, Hshr>
 }
 
 impl <Node, Pri, const DIMS: usize> Seen <Node, Pri>
-	for Grid <Vec <SeenState <Pri>>, Node, DIMS>
+	for GridBuf <Vec <SeenState <Pri>>, Node, DIMS>
 	where
 		Node: GridPos <DIMS> + Clone + Eq + Hash,
 		Pri: Clone + Ord {

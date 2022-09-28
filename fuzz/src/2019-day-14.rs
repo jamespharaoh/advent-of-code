@@ -90,7 +90,7 @@ impl <'inp> Generator <'inp> {
 		let len = Self::NAME_LENS.choose (rng).copied ().unwrap ();
 		let mut name = String::new ();
 		for _ in 0 .. len {
-			name.push (Self::LETTERS.choose (rng).unwrap ().as_char ());
+			name.push (Self::LETTERS.choose (rng).unwrap ().pan_char ());
 		}
 		InpStr::alloc (name)
 	}

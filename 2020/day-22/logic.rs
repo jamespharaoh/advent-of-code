@@ -31,7 +31,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	let winner = if deck_1.is_empty () { deck_2 } else { deck_1 };
 	Ok (
 		winner.iter ().rev ().enumerate ()
-			.map (|(idx, card)| (idx.as_u32 () + 1) * card.as_u32 ())
+			.map (|(idx, card)| (idx.pan_u32 () + 1) * card.pan_u32 ())
 			.try_fold (0_u32, |sum, item| chk! (sum + item)) ?
 	)
 }
@@ -55,11 +55,11 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			if ! game.seen.insert (state) { break Winner::One }
 			game.card_1 = some_or! (game.deck_1.pop_front (), break Winner::Two);
 			game.card_2 = some_or! (game.deck_2.pop_front (), break Winner::One);
-			if game.card_1.as_usize () <= game.deck_1.len ()
-					&& game.card_2.as_usize () <= game.deck_2.len () {
+			if game.card_1.pan_usize () <= game.deck_1.len ()
+					&& game.card_2.pan_usize () <= game.deck_2.len () {
 				let new_game = Game::new (& mut pool,
-					game.deck_1.iter ().take (game.card_1.as_usize ()),
-					game.deck_2.iter ().take (game.card_2.as_usize ()));
+					game.deck_1.iter ().take (game.card_1.pan_usize ()),
+					game.deck_2.iter ().take (game.card_2.pan_usize ()));
 				stack.push (game);
 				game = new_game;
 				continue 'OUTER;
@@ -93,7 +93,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	};
 	Ok (
 		winner.iter ().rev ().enumerate ()
-			.map (|(idx, card)| (idx.as_u32 () + 1) * card.as_u32 ())
+			.map (|(idx, card)| (idx.pan_u32 () + 1) * card.pan_u32 ())
 			.try_fold (0_u32, |sum, item| chk! (sum + item)) ?
 	)
 }

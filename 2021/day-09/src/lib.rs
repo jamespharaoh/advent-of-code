@@ -16,7 +16,6 @@ mod logic {
 
 	use super::*;
 	use model::Pos;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let floor = model::parse_input (lines) ?;
@@ -32,7 +31,7 @@ mod logic {
 					if next_height <= height { continue 'OUTER }
 				}
 			}
-			sum += height.as_u64 () + 1;
+			sum += height.pan_u64 () + 1;
 		}
 		Ok (sum)
 	}
@@ -77,17 +76,16 @@ mod logic {
 mod model {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <HashMap <Pos, u8>> {
 		let mut floor: HashMap <Pos, u8> = HashMap::new ();
 		for (row, line) in lines.iter ().enumerate () {
-			let row = row.as_i32 ();
+			let row = row.pan_i32 ();
 			for (col, letter) in line.chars ().enumerate () {
-				let col = col.as_i32 ();
+				let col = col.pan_i32 ();
 				floor.insert (
 					Pos { row, col },
-					letter.to_digit (10).ok_or ("Invalid input") ?.as_u8 ());
+					letter.to_digit (10).ok_or ("Invalid input") ?.pan_u8 ());
 			}
 		}
 		Ok (floor)

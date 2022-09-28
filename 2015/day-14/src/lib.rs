@@ -20,7 +20,6 @@ pub mod logic {
 	use super::*;
 	use model::Input;
 	use model::Reindeer;
-	use nums::IntConv;
 
 	pub fn part_one (input: & Input) -> GenResult <u64> {
 		let max_dist =
@@ -64,14 +63,14 @@ pub mod logic {
 				}
 			}
 			time -= 1;
-			if flying { dist += deer.fly_speed.as_u64 (); }
+			if flying { dist += deer.fly_speed.pan_u64 (); }
 			Some (dist)
 		})
 	}
 
 	#[ must_use ]
 	pub fn calc_distance (deer: & Reindeer, time: u32) -> u64 {
-		iter_distance (deer).nth (time.as_usize ()).unwrap ()
+		iter_distance (deer).nth (time.pan_usize ()).unwrap ()
 	}
 
 }

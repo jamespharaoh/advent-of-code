@@ -28,7 +28,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 			Card::new (input.params.deck_size_two).unwrap (),
 			input.params.iters_two) ?;
 	deck.move_after (Card::new (1).unwrap ());
-	Ok (chk! (deck.pick ().get ().as_u64 () * deck.pick ().get ().as_u64 ()) ?)
+	Ok (chk! (deck.pick ().get ().pan_u64 () * deck.pick ().get ().pan_u64 ()) ?)
 }
 
 fn calc_final_deck (input: & Input, deck_size: Card, num_rounds: u32) -> GenResult <Deck> {
@@ -45,10 +45,10 @@ fn build_deck (input: & Input, deck_size: Card) -> GenResult <Deck> {
 	}
 	Ok (
 		input.start.chars ()
-			.map (|ch| ch.to_digit (10).unwrap ().as_u32 ())
+			.map (|ch| ch.to_digit (10).unwrap ().pan_u32 ())
 			.chain (10 ..= deck_size.get ())
 			.map (|val| Card::new (val).unwrap ())
-			.take (deck_size.get ().as_usize ())
+			.take (deck_size.get ().pan_usize ())
 			.collect ()
 	)
 }

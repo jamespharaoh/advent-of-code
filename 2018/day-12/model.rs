@@ -19,7 +19,7 @@ impl Pot {
 	#[ inline ]
 	#[ must_use ]
 	fn as_usize (self) -> usize {
-		self.as_u8 ().as_usize ()
+		self.as_u8 ().pan_usize ()
 	}
 
 	#[ inline ]
@@ -90,7 +90,7 @@ impl Generator {
 		let mut data = Vec::new ();
 		let mut prev = 0_u8;
 		for byte in state.data.iter_vals ().chain (iter::once (0)) {
-			let idx = (prev.as_usize () & 0x0f) << 8_u32 | byte.as_usize ();
+			let idx = (prev.pan_usize () & 0x0f) << 8_u32 | byte.pan_usize ();
 			assert! (idx < 4096);
 			let next = self.bit_rules [idx];
 			if next == 0 && data.is_empty () {
@@ -125,7 +125,7 @@ impl State {
 	pub fn iter (& self) -> impl Iterator <Item = (i64, Pot)> + '_ {
 		self.data.iter ().enumerate ()
 			.flat_map (|(byte_idx, byte)| {
-				let start = self.start + (byte_idx.as_i64 ()) * 8;
+				let start = self.start + (byte_idx.pan_i64 ()) * 8;
 				[
 					(start, if byte & 0x80 != 0 { Pot::Plant } else { Pot::Empty }),
 					(start + 1, if byte & 0x40 != 0 { Pot::Plant } else { Pot::Empty }),

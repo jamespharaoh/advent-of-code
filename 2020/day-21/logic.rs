@@ -14,7 +14,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.flat_map (|food| & food.ingrs)
 			.filter (|ingr| ! ingrs.contains (ingr))
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 

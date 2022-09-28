@@ -20,7 +20,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 	];
 	Ok (
 		TRAJS.iter ().copied ()
-			.map (|traj| calc_result (input, traj).as_u64 ())
+			.map (|traj| calc_result (input, traj).pan_u64 ())
 			.product ()
 	)
 }
@@ -37,5 +37,5 @@ fn calc_result (input: & Input, traj: Pos) -> u32 {
 		.map (|pos| input.grid.get (pos).unwrap ())
 		.filter (|& tile| tile == Tile::Tree)
 		.count ()
-		.as_u32 ()
+		.pan_u32 ()
 }

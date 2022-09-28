@@ -41,8 +41,8 @@ fn run (instrs: & [Instr]) -> GenResult <(Val, Val)> {
 	let mut seen: HashSet <usize> = HashSet::new ();
 	let mut pos = Val::ZERO;
 	loop {
-		if pos < Val::ZERO || instrs.len () <= pos.as_usize () { break }
-		let instr_idx = pos.as_usize ();
+		if pos < Val::ZERO || instrs.len () <= pos.pan_usize () { break }
+		let instr_idx = pos.pan_usize ();
 		if ! seen.insert (instr_idx) { break }
 		let instr = instrs [instr_idx];
 		if instr.op == Op::Acc { acc = Val::add_2 (acc, instr.arg) ?; }

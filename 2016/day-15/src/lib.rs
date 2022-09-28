@@ -38,7 +38,7 @@ pub mod logic {
 		let input = Input {
 			discs: input.discs.iter ().cloned ()
 				.chain (iter::once (Disc {
-					delay: input.discs.len ().as_u8 () + 1,
+					delay: input.discs.len ().pan_u8 () + 1,
 					num_posns: 11,
 					start_pos: 0,
 				}))
@@ -59,15 +59,15 @@ pub mod logic {
 			.fold (Ok ((0_u64, 1_u64)), |state, disc|
 				state.and_then (|(time, step)| Ok::<_, GenError> ((
 					(time .. )
-						.step_by (step.as_usize ())
-						.take (disc.num_posns.as_usize ())
+						.step_by (step.pan_usize ())
+						.take (disc.num_posns.pan_usize ())
 						.find (|time|
-							(time + disc.delay.as_u64 () + disc.start_pos.as_u64 ())
-								% disc.num_posns.as_u64 () == 0)
+							(time + disc.delay.pan_u64 () + disc.start_pos.pan_u64 ())
+								% disc.num_posns.pan_u64 () == 0)
 						.ok_or ("No solution found") ?,
 					(step .. )
-						.step_by (step.as_usize ())
-						.find (|step| step % disc.num_posns.as_u64 () == 0)
+						.step_by (step.pan_usize ())
+						.find (|step| step % disc.num_posns.pan_u64 () == 0)
 						.unwrap (),
 				)))) ?;
 		Ok (time)

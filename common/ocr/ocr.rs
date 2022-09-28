@@ -19,7 +19,7 @@ impl <Val, Iter> Display for DrawDots <Val, Iter>
 		let dots = {
 			let mut dots_temp: Vec <(usize, usize)> =
 				self.0.clone ()
-					.map (|(row, col)| (row.as_usize (), col.as_usize ()))
+					.map (|(row, col)| (row.qck_usize (), col.qck_usize ()))
 					.collect ();
 			dots_temp.sort_by_key (|& (row, col)| (row, col));
 			dots_temp
@@ -90,8 +90,8 @@ pub fn read_dots <Val: Int> (
 				let rel_row = dot_row - base_row;
 				if rel_col >= Val::from_usize (10).unwrap () { return Err ("Too wide".into ()) }
 				if rel_row >= Val::from_usize (12).unwrap () { return Err ("Too tall".into ()) }
-				let row_bit = (Val::from_usize (11).unwrap () - rel_row).as_u32 ();
-				let col_bit = (Val::from_usize (9).unwrap () - rel_col).as_u32 ();
+				let row_bit = (Val::from_usize (11).unwrap () - rel_row).pan_u32 ();
+				let col_bit = (Val::from_usize (9).unwrap () - rel_col).pan_u32 ();
 				let bit = row_bit * 10 + col_bit;
 				encoded |= 1_u128 << bit;
 			}

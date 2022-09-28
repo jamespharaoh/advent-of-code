@@ -21,7 +21,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 				.map (|adj_pos| grid.get (adj_pos).unwrap_or (Tile::Empty))
 				.filter (|& tile| ! matches! (tile, Tile::Empty))
 				.count () == 4)
-			.map (|(pos, _)| pos.x.as_u32 () * pos.y.as_u32 ())
+			.map (|(pos, _)| pos.x.pan_u32 () * pos.y.pan_u32 ())
 			.sum ()
 	)
 }
@@ -120,7 +120,7 @@ fn find_funcs (route: & [Step]) -> GenResult <(Main, Funcs)> {
 				route [prefix_len .. prefix_len + func_len].iter ().copied ().collect ();
 			if 20 < (& func).display_delim (",").to_string ().len () { break }
 			if funcs.contains (& func) { continue }
-			let func_id = ('A'.as_u32 () + funcs.len ().as_u32 ()).as_char ();
+			let func_id = ('A'.pan_u32 () + funcs.len ().pan_u32 ()).pan_char ();
 			let mut funcs = funcs.clone ();
 			funcs.push (func);
 			let mut main = main.clone ();

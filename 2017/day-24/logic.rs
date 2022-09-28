@@ -33,7 +33,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 fn sanity_check (input: & Input) -> GenResult <()> {
 	let mut comps = input.comps.clone ();
-	if comps.len () > Components::BITS.as_usize () {
+	if comps.len () > Components::BITS.pan_usize () {
 		return Err ("Too many components".into ());
 	}
 	comps.sort ();
@@ -71,7 +71,7 @@ fn strength (input: & Input, comps: Components) -> u32 {
 	for (comp_idx, comp) in input.comps.iter_vals ().enumerate () {
 		let comp_mask = 1 << comp_idx;
 		if comps & comp_mask == 0 { continue }
-		total += comp.port_0.as_u32 () + comp.port_1.as_u32 ();
+		total += comp.port_0.pan_u32 () + comp.port_1.pan_u32 ();
 	}
 	total
 }

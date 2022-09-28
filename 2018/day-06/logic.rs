@@ -16,7 +16,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 	// initialize grid
 
-	let mut grid = Grid::new ([0, 0], [height.as_usize (), width.as_usize ()]);
+	let mut grid = Grid::new (Pos::ZERO, Pos::new (height, width));
 	let mut next_id: u8 = 1;
 	for pos in input.posns.iter_vals () {
 		if next_id == u8::MAX { panic! () }
@@ -74,7 +74,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 	for value in grid.values () {
 		if value == 0 || value == u8::MAX { continue }
-		areas [value.as_usize ()] += 1;
+		areas [value.pan_usize ()] += 1;
 	}
 
 	// remove areas which reach the edge
@@ -83,7 +83,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		.filter (|& (pos, _)|
 			pos.x == 0_i32 || pos.x == width - 1_i32
 				|| pos.y == 0_i32 || pos.y == height - 1_i32) {
-		areas [val.as_usize ()] = 0;
+		areas [val.pan_usize ()] = 0;
 	}
 
 	// find largest remaining area

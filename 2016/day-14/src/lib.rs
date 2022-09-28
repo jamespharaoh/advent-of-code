@@ -25,13 +25,13 @@ pub mod logic {
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		Ok (key_indexes (input, 0)
-			.nth (input.num_keys.as_usize () - 1)
+			.nth (input.num_keys.pan_usize () - 1)
 			.unwrap ())
 	}
 
 	pub fn part_two (input: & Input) -> GenResult <u32> {
 		Ok (key_indexes (input, input.hash_reps)
-			.nth (input.num_keys.as_usize () - 1)
+			.nth (input.num_keys.pan_usize () - 1)
 			.unwrap ())
 	}
 
@@ -63,7 +63,7 @@ pub mod logic {
 			loop {
 				let hash_0 = self.hashes.next ().unwrap ();
 				if let Some (ch_0) = find_triple (& hash_0) {
-					for _ in 0 .. self.num_next.as_usize () {
+					for _ in 0 .. self.num_next.pan_usize () {
 						if ! has_quintuple (self.hashes.peek ().unwrap (), ch_0) { continue }
 						self.idx += 1;
 						return Some (self.idx - 1);

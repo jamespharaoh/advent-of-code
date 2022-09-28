@@ -14,7 +14,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		grid.values ()
 			.filter (|& colour| matches! (colour, Colour::Black | Colour::White))
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 
@@ -29,7 +29,7 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 
 fn calc_result (input: & Input, initial: Colour) -> GenResult <Grid> {
 	let mut cpu = Cpu::new (input.data.clone ());
-	let mut grid = Grid::new ([10, 10], [21, 21]);
+	let mut grid = Grid::new (Pos::new (10, 10), Pos::new (21, 21));
 	let mut pos = Pos::ZERO;
 	let mut dir = Dir::Up;
 	grid.set (pos, initial);
@@ -37,8 +37,8 @@ fn calc_result (input: & Input, initial: Colour) -> GenResult <Grid> {
 		cpu.set_max_ops (input.params.max_step_ops);
 		let old_colour = grid.get (pos).ok_or (()).or_else (|()| {
 			grid = grid.resize (
-				[grid.native_origin () [0] + 10, grid.native_origin () [1] + 10],
-				[grid.native_size () [0] + 20, grid.native_size () [1] + 20]) ?;
+				grid.origin () + Pos::new (10, 10),
+				grid.size () + Pos::new (20, 20)) ?;
 			Ok::<_, Overflow> (grid.get (pos).unwrap ())
 		}) ?;
 		cpu.input (match old_colour {

@@ -13,7 +13,7 @@ pub fn part_one (input: & Input) -> GenResult <Val> {
 	Ok (
 		input.nearby_tickets.iter ()
 			.flat_map (|ticket| ticket.iter ())
-			.filter (|&& val| matches [val.as_usize ()] == 0)
+			.filter (|&& val| matches [val.pan_usize ()] == 0)
 			.sum ()
 	)
 }
@@ -23,14 +23,14 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 	let matches = get_matches (input);
 	let tickets: Vec <& Ticket> =
 		input.nearby_tickets.iter ()
-			.filter (|ticket| ticket.iter ().all (|& val| matches [val.as_usize ()] != 0))
+			.filter (|ticket| ticket.iter ().all (|& val| matches [val.pan_usize ()] != 0))
 			.collect ();
 	let field_idxes = get_field_idxes (& input.fields, & matches, & tickets);
 	Ok (
 		get_field_mappings (& field_idxes) ?.iter ()
 			.enumerate ()
 			.filter (|& (_, name)| name.starts_with ("departure "))
-			.map (|(idx, _)| input.your_ticket [idx].as_u64 ())
+			.map (|(idx, _)| input.your_ticket [idx].pan_u64 ())
 			.try_fold (1, |prod, val| chk! (prod * val)) ?
 	)
 }
@@ -67,7 +67,7 @@ fn get_field_mappings <'inp> (
 ) -> GenResult <Vec <InpStr <'inp>>> {
 	let mut pending = field_idxes.to_vec ();
 	let mut ordered: Vec <Option <InpStr>> = vec! [ None; field_idxes.len () ];
-	let mut remaining: u32 = u32::MAX >> (u32::BITS - field_idxes.len ().as_u32 ());
+	let mut remaining: u32 = u32::MAX >> (u32::BITS - field_idxes.len ().pan_u32 ());
 	while remaining != 0 {
 		let mut progress = false;
 		let mut error = false;
@@ -76,7 +76,7 @@ fn get_field_mappings <'inp> (
 			if * idxes == 0 { error = true; return true }
 			if 1 < idxes.count_ones () { return true }
 			let idx = idxes.trailing_zeros ();
-			ordered [idx.as_usize ()] = Some (name.clone ());
+			ordered [idx.pan_usize ()] = Some (name.clone ());
 			remaining &= ! (1 << idx);
 			progress = true;
 			false
@@ -91,10 +91,10 @@ fn get_field_idxes <'inp> (
 	matches: & [u32],
 	tickets: & [& Ticket],
 ) -> Vec <(InpStr <'inp>, u32)> {
-	let mut temp = vec! [ u32::MAX >> (u32::BITS - fields.len ().as_u32 ()); fields.len () ];
+	let mut temp = vec! [ u32::MAX >> (u32::BITS - fields.len ().pan_u32 ()); fields.len () ];
 	for ticket in tickets {
 		for (& val, temp) in ticket.iter ().zip (temp.iter_mut ()) {
-			* temp &= matches [val.as_usize ()];
+			* temp &= matches [val.pan_usize ()];
 		}
 	}
 	fields.iter ()
@@ -130,6 +130,6 @@ fn get_matches (input: & Input) -> Vec <u32> {
 	matches_temp.into_iter ()
 		.tuple_windows ()
 		.flat_map (|((val_0, fld_0), (val_1, _))|
-			iter::repeat (fld_0).take ((val_1 - val_0).as_usize ()))
+			iter::repeat (fld_0).take ((val_1 - val_0).pan_usize ()))
 		.collect ()
 }

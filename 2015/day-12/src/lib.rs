@@ -38,7 +38,6 @@ pub mod logic {
 
 	use super::*;
 	use model::Json;
-	use nums::IntConv;
 	use nums::NumResult;
 
 	pub fn part_one (input: & Json) -> GenResult <i32> {
@@ -57,7 +56,7 @@ pub mod logic {
 				.and_then (|sum| i32::add_2 (sum, calc_sum (item) ?))),
 			Json::Object (ref items) => items.iter ().fold (Ok (0_i32), |sum, & (_, ref item)| sum
 				.and_then (|sum| i32::add_2 (sum, calc_sum (item) ?))),
-			Json::Number (ref value) => Ok (value.as_i32 ()),
+			Json::Number (ref value) => Ok (value.pan_i32 ()),
 			Json::String (_) => Ok (0_i32),
 		}
 	}
@@ -73,7 +72,7 @@ pub mod logic {
 						.and_then (|sum| i32::add_2 (sum, calc_sum_no_red (item) ?)))
 				} else { Ok (0_i32) }
 			},
-			Json::Number (ref value) => Ok (value.as_i32 ()),
+			Json::Number (ref value) => Ok (value.pan_i32 ()),
 			Json::String (_) => Ok (0_i32),
 		}
 	}

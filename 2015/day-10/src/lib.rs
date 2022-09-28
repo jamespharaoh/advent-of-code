@@ -29,7 +29,6 @@ pub mod logic {
 	use super::*;
 	use model::Input;
 	use model::State;
-	use nums::IntConv;
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		Ok (calc_result (input.state.iter_vals (), input.iters_one))
@@ -44,7 +43,7 @@ pub mod logic {
 		for _ in 0 .. num_iters {
 			iter = Box::new (make_iter (iter));
 		}
-		iter.count ().as_u32 ()
+		iter.count ().pan_u32 ()
 	}
 
 	#[ allow (clippy::unused_peekable) ] // clippy is being dumb
@@ -55,7 +54,7 @@ pub mod logic {
 		iter::from_fn (move || {
 			while let Some (& next) = inner.peek () {
 				if next != last && last != 0xff {
-					let result = [count.as_u8 (), last];
+					let result = [count.pan_u8 (), last];
 					last = 0xff;
 					count = 0_u8;
 					return Some (result);
@@ -65,7 +64,7 @@ pub mod logic {
 				if count < 9 { count += 1; }
 			}
 			if last != 0xff {
-				let result = [count.as_u8 (), last];
+				let result = [count.pan_u8 (), last];
 				last = 0xff;
 				count = 0;
 				return Some (result);
@@ -80,7 +79,7 @@ pub mod logic {
 			state.iter ().copied ()
 				.group_by (|& val| val);
 		group_by.into_iter ()
-			.flat_map (|(val, group)| [ group.count ().as_u8 (), val ])
+			.flat_map (|(val, group)| [ group.count ().pan_u8 (), val ])
 			.collect ()
 	}
 
@@ -89,7 +88,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub struct Input {
 		pub state: State,
@@ -113,7 +111,7 @@ pub mod model {
 	impl State {
 		pub fn parse (input: & str) -> GenResult <Self> {
 			input.chars ()
-				.map (|ch| Ok (ch.to_digit (10).ok_or ("Invalid input") ?.as_u8 ()))
+				.map (|ch| Ok (ch.to_digit (10).ok_or ("Invalid input") ?.pan_u8 ()))
 				.collect::<GenResult <_>> ()
 		}
 		pub fn iter (& self) -> SliceIter <'_, u8> {
@@ -161,7 +159,7 @@ pub mod model {
 	impl Display for State {
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 			for & val in self.0.iter () {
-				write! (formatter, "{}", char::from_digit (val.as_u32 (), 10).unwrap ()) ?;
+				write! (formatter, "{}", char::from_digit (val.pan_u32 (), 10).unwrap ()) ?;
 			}
 			Ok (())
 		}

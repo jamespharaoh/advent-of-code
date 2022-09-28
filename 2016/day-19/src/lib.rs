@@ -44,7 +44,7 @@ pub mod logic {
 				.collect::<Vec <_>> ();
 		let mut seq = 1 + (input.num_elves) % 2;
 		while elves.len () > 3 {
-			let next_seq = (seq + elves.len ().as_u32 ()) % 3;
+			let next_seq = (seq + elves.len ().pan_u32 ()) % 3;
 			elves = elves.iter_vals ()
 				.scan (seq, |state, elf| {
 					let seq = * state;

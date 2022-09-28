@@ -10,7 +10,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.filter (is_ascending)
 			.filter (has_repeated)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 
@@ -21,7 +21,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			.filter (is_ascending)
 			.filter (has_repeated_alone)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 
@@ -56,7 +56,7 @@ fn next_password (mut password: [char; 6]) -> Option <[char; 6]> {
 		if idx == 0 { return None }
 		idx -= 1;
 	}
-	ch = (ch.as_u32 () + 1).as_char ();
+	ch = (ch.pan_u32 () + 1).pan_char ();
 	password.iter_mut ().skip (idx).for_each (|password_ch| * password_ch = ch);
 	Some (password)
 }

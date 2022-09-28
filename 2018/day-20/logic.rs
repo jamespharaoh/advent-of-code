@@ -1,7 +1,9 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
+use model::Coord;
 use model::Grid;
 use model::Pos;
 use model::RouteDir;
@@ -9,7 +11,7 @@ use model::RouteRegexItem;
 use model::RouteRegexString;
 
 const STACK_SIZE: usize = 320;
-const GRID_EXPAND: usize = 24;
+const GRID_EXPAND: Coord = 24;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	let grid = gen_grid (input) ?;
@@ -51,10 +53,9 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 	use RouteRegexItem::{ Branch, Span };
 	type Frame = (RouteRegexString, Pos, u8, u8);
 	type Stack = ArrayVec <Frame, STACK_SIZE>;
-	let mut grid =
-		Grid::new (
-			[GRID_EXPAND.to_isize () ?, GRID_EXPAND.to_isize () ?],
-			[GRID_EXPAND * 2 + 1, GRID_EXPAND * 2 + 1]);
+	let mut grid = Grid::new (
+		Pos::new (GRID_EXPAND, GRID_EXPAND),
+		Pos::new (GRID_EXPAND * 2 + 1, GRID_EXPAND * 2 + 1));
 	let mut todo: Vec <(Pos, Stack)> = Vec::new ();
 	todo.push ((Pos::ZERO, array_vec! [ (input.regex.deref ().clone (), Pos::ZERO, 0, 0) ]));
 	let mut seen: HashSet <(Pos, ArrayVec <(u8, u8), STACK_SIZE>)> = HashSet::new ();
@@ -104,36 +105,20 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 fn grid_resize (grid: & mut Grid, dir: RouteDir) -> GenResult <()> {
 	match dir {
 		RouteDir::North => {
-			if 240 < grid.native_size () [0] {
-				return Err ("Max grid size is 240".into ());
-			}
-			* grid = grid.resize (
-				[grid.native_origin () [0], grid.native_origin () [1]],
-				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]) ?;
+			if 240 < grid.size ().n { return Err ("Max grid size is 240".into ()) }
+			* grid = grid.extend_in_place ([(0, GRID_EXPAND), (0, 0)]) ?;
 		},
 		RouteDir::South => {
-			if 240 < grid.native_size () [0] {
-				return Err ("Max grid size is 240".into ());
-			}
-			* grid = grid.resize (
-				[grid.native_origin () [0] + GRID_EXPAND.to_isize () ?, grid.native_origin () [1]],
-				[grid.native_size () [0] + GRID_EXPAND, grid.native_size () [1]]) ?;
+			if 240 < grid.size ().n { return Err ("Max grid size is 240".into ()) }
+			* grid = grid.extend_in_place ([(GRID_EXPAND, 0), (0, 0)]) ?;
 		},
 		RouteDir::East => {
-			if 500 < grid.native_size () [1] {
-				return Err ("Max grid size is 240".into ());
-			}
-			* grid = grid.resize (
-				[grid.native_origin () [0], grid.native_origin () [1]],
-				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]) ?;
+			if 240 < grid.size ().e { return Err ("Max grid size is 240".into ()) }
+			* grid = grid.extend_in_place ([(0, 0), (0, GRID_EXPAND)]) ?;
 		},
 		RouteDir::West => {
-			if 500 < grid.native_size () [1] {
-				return Err ("Max grid size is 240".into ());
-			}
-			* grid = grid.resize (
-				[grid.native_origin () [0], grid.native_origin () [1] + GRID_EXPAND.to_isize () ?],
-				[grid.native_size () [0], grid.native_size () [1] + GRID_EXPAND]) ?;
+			if 240 < grid.size ().e { return Err ("Max grid size is 240".into ()) }
+			* grid = grid.extend_in_place ([(0, 0), (GRID_EXPAND, 0)]) ?;
 		},
 	}
 	Ok (())

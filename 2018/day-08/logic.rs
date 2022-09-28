@@ -31,8 +31,8 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			continue;
 		}
 		metadata_sum += data_iter.by_ref ()
-			.take (frame.num_metadata.as_usize ())
-			.map (IntConv::as_u32)
+			.take (frame.num_metadata.pan_usize ())
+			.map (u8::pan_u32)
 			.sum::<u32> ();
 		stack.pop ();
 	}
@@ -79,18 +79,17 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		}
 		let value = if frame.child_values.is_empty () {
 			data_iter.by_ref ()
-				.take (frame.num_metadata.as_usize ())
-				.map (IntConv::as_u32)
+				.take (frame.num_metadata.pan_usize ())
+				.map (u8::pan_u32)
 				.sum::<u32> ()
 		} else {
 			data_iter.by_ref ()
-				.take (frame.num_metadata.as_usize ())
+				.take (frame.num_metadata.pan_usize ())
 				.map (|idx| {
-					let idx = usize::sub_2 (idx.as_usize (), 1) ?;
+					let idx = usize::sub_2 (idx.pan_usize (), 1) ?;
 					Ok::<_, Overflow> (frame.child_values.get (idx).copied ())
 				})
 				.flatten_ok ()
-				.map_ok (IntConv::as_u32)
 				.fold_ok (0, |sum, item| sum + item) ?
 		};
 		stack.pop ();

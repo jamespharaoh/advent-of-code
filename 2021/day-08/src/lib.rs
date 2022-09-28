@@ -17,7 +17,6 @@ mod logic {
 	use super::*;
 	use model::Digit;
 	use model::Display;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <u64> {
 		let displays = model::parse_input (lines) ?;
@@ -38,7 +37,7 @@ mod logic {
 		for display in displays.iter () {
 			let digits = get_digits (display);
 			let digit_val = |digit| {
-				digits.iter ().position (|& some_digit| some_digit == digit).unwrap ().as_u64 ()
+				digits.iter ().position (|& some_digit| some_digit == digit).unwrap ().pan_u64 ()
 			};
 			sum += [
 				digit_val (display.value [0]) * 1000,

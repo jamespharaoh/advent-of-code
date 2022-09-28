@@ -46,7 +46,7 @@ pub fn part_two (input: & Input) -> GenResult <i32> {
 					.skip (bot_idx)
 					.filter (|bot| bot.overlap (region).is_some ())
 					.count ()
-					.as_u32 ();
+					.pan_u32 ();
 			if num + num_remain < best_num { continue 'OUTER }
 			let bot = bots [bot_idx];
 			if let Some (overlap) = region.overlap (bot) {

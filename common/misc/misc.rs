@@ -38,6 +38,7 @@ pub use std::hash::BuildHasherDefault;
 pub use std::hash::Hash;
 pub use std::hash::Hasher;
 pub use std::iter;
+pub use std::iter::FusedIterator;
 pub use std::iter::Peekable;
 pub use std::io;
 pub use std::marker::PhantomData;
@@ -104,6 +105,8 @@ pub use crate::test_map::HashMap;
 #[ cfg (fuzzing) ]
 mod test_map;
 
+pub use crate::iter_ext::*;
+
 pub type GenError = Box <dyn Error>;
 pub type GenResult <Ok> = Result <Ok, GenError>;
 
@@ -137,14 +140,14 @@ pub fn ok_or_err <Val> (result: Result <Val, Val>) -> Val {
 
 #[ macro_export ]
 macro_rules! ok_or {
-	( $val:expr, $if_err:expr ) => {
+	( $val:expr, $if_err:expr $(,)? ) => {
 		match ($val) { Ok (val) => val, Err (_) => $if_err }
 	};
 }
 
 #[ macro_export ]
 macro_rules! some_or {
-	( $val:expr, $if_err:expr ) => {
+	( $val:expr, $if_err:expr $(,)? ) => {
 		match ($val) { Some (val) => val, None => $if_err }
 	};
 }
@@ -180,58 +183,34 @@ macro_rules! assert_err {
 mod iter_ext {
 
 	use super::*;
-	use iter::Copied;
-
-	pub trait IntoIteratorExt: IntoIterator + Sized {
-
-		#[ inline ]
-		fn iter_vals <'dat, Item> (self) -> Copied <Self::IntoIter>
-			where
-				Item: 'dat + Copy,
-				Self: IntoIterator <Item = & 'dat Item> {
-			self.into_iter ().copied ()
-		}
-
-	}
-
-	impl <'dat, IntoIter> IntoIteratorExt for & 'dat IntoIter
-		where & 'dat IntoIter: IntoIterator {}
 
 	pub trait IteratorExt: Iterator {
 
 		#[ inline ]
-		fn collect_array <const DIM: usize> (mut self) -> Option <[Self::Item; DIM]>
+		fn array <const DIM: usize> (mut self) -> [Self::Item; DIM]
 				where Self: Sized, Self::Item: Copy + Default {
 			let mut result = [default (); DIM];
 			for idx in 0 .. DIM {
-				assert! (idx < result.len ());
-				result [idx] = some_or! (self.next (), return None);
+				result [idx] = self.next ().unwrap ();
 			}
-			if self.next ().is_some () { return None }
-			Some (result)
+			assert! (self.next ().is_none ());
+			result
+		}
+
+		#[ inline ]
+		fn try_array <Item, Error, const DIM: usize> (mut self) -> Result <[Item; DIM], Error>
+				where Self: Sized + Iterator <Item = Result <Item, Error>>, Item: Copy + Default {
+			let mut result = [default (); DIM];
+			for idx in 0 .. DIM {
+				result [idx] = self.next ().unwrap () ?;
+			}
+			assert! (self.next ().is_none ());
+			Ok (result)
 		}
 
 	}
 
 	impl <SomeIter: Iterator> IteratorExt for SomeIter {}
-
-	pub trait IteratorResultExt <Item, Error>: Iterator <Item = Result <Item, Error>> {
-
-		#[ inline ]
-		fn collect_array_ok <const DIM: usize> (mut self) -> Result <Option <[Item; DIM]>, Error>
-				where Self: Sized, Item: Copy + Default {
-			let mut result = [default (); DIM];
-			for idx in 0 .. DIM {
-				assert! (idx < result.len ());
-				result [idx] = some_or! (self.next (), return Ok (None)) ?;
-			}
-			if self.next ().is_some () { return Ok (None) }
-			Ok (Some (result))
-		}
-
-	}
-
-	impl <Item, Error, SomeIter: Iterator <Item = Result <Item, Error>>> IteratorResultExt <Item, Error> for SomeIter {}
 
 }
 

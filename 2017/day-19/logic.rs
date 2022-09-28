@@ -12,7 +12,7 @@ pub fn part_one (input: & Input) -> GenResult <String> {
 		route_iter (input) ?
 			.take (30_000)
 			.filter_map (|(_, tile)|
-				if let Tile::Letter (asc) = tile { Some (asc.as_char ()) } else { None })
+				if let Tile::Letter (asc) = tile { Some (asc.pan_char ()) } else { None })
 			.collect ()
 	)
 }
@@ -22,7 +22,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		route_iter (input) ?
 			.take (30_000)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 

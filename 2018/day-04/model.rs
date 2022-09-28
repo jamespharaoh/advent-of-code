@@ -132,25 +132,25 @@ impl HourMinute {
 	#[ inline ]
 	#[ must_use ]
 	pub fn hour (& self) -> u32 {
-		self.hour.as_u32 ()
+		self.hour.pan_u32 ()
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	pub fn minute (& self) -> u32 {
-		self.minute.as_u32 ()
+		self.minute.pan_u32 ()
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	pub fn as_minutes (& self) -> u32 {
-		self.hour.as_u32 () * 60 + self.minute.as_u32 ()
+		self.hour.pan_u32 () * 60 + self.minute.pan_u32 ()
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	pub fn as_seconds (& self) -> u32 {
-		self.hour.as_u32 () * 3600 + self.minute.as_u32 () * 60
+		self.hour.pan_u32 () * 3600 + self.minute.pan_u32 () * 60
 	}
 
 }

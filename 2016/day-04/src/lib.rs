@@ -40,8 +40,8 @@ pub mod logic {
 					room.name.chars ().map (|ch| match ch {
 						'-' => Ok (' '),
 						'a' ..= 'z' => Ok ((
-							(ch.as_u32 () - 'a'.as_u32 () + room.sector) % 26 + 'a'.as_u32 ()
-						).as_char ()),
+							(ch.pan_u32 () - 'a'.pan_u32 () + room.sector) % 26 + 'a'.pan_u32 ()
+						).pan_char ()),
 						_ => Err (format! ("Invalid char: {}", ch).into ()),
 					}).collect::<GenResult <String>> () ?)))
 				.filter_ok (|& (_, ref room)| room == "northpole object storage")

@@ -91,7 +91,7 @@ fn find_prog <const LEN: usize> (rules_set: & RulesSet <LEN>) -> GenResult <Prog
 						pending_rules.iter ().copied ()
 							.filter (|& (regs, _)| frag.matches (regs))
 							.count ()
-							.as_u32 ();
+							.pan_u32 ();
 				}
 				frags.retain (|& (_, num_matches)| num_matches != 0);
 			}
@@ -195,7 +195,7 @@ fn run_prog <const LEN: usize> (input: & Input, prog: & Prog, verb: & str) -> Ge
 	let mut output_str = String::new ();
 	let mut output_val = None;
 	while let Some (val) = cpu.run ().output () ? {
-		if (0x00_i32 .. 0x80_i32).contains (& val) { output_str.push (val.as_char ()); }
+		if (0x00_i32 .. 0x80_i32).contains (& val) { output_str.push (val.pan_char ()); }
 		else if 0x80_i32 <= val { output_val = Some (val); }
 		else { return Err (format! ("Invalid output: {val}").into ()) }
 	}

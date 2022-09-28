@@ -18,7 +18,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		game.grid ().values ()
 			.filter (|& tile| tile == Tile::Block)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 

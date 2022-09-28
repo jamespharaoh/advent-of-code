@@ -17,7 +17,6 @@ mod logic {
 	use super::*;
 	use model::Board;
 	use model::Input;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
@@ -67,8 +66,8 @@ mod logic {
 				) {
 					self.boards [self.board_idx] = true;
 					self.board_idx += 1;
-					return Some (score.as_i64 ()
-						* self.input.call_order [self.call_idx].as_i64 (),
+					return Some (score.pan_i64 ()
+						* self.input.call_order [self.call_idx].pan_i64 (),
 					)
 				}
 				self.board_idx += 1;
@@ -89,7 +88,7 @@ mod logic {
 		}
 		winner.then_some (board.iter_vals ()
 			.filter (|num| ! called.contains (num))
-			.map (IntConv::as_u16)
+			.map (u8::pan_u16)
 			.sum ())
 	}
 

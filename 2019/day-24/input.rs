@@ -1,7 +1,7 @@
 use super::*;
 
 pub type InputCoord = i8;
-pub type InputGrid = grid::Grid <Vec <InputTile>, InputPos>;
+pub type InputGrid = GridBuf <Vec <InputTile>, InputPos, 2>;
 pub type InputPos = pos::PosYX <InputCoord>;
 
 #[ derive (Clone, Debug) ]

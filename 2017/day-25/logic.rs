@@ -50,6 +50,6 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.chain (right.iter_vals ())
 			.filter (|& val| val == Slot::One)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }

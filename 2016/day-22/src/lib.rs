@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
 puzzle_info! {
@@ -40,7 +40,7 @@ pub mod logic {
 		#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		struct State { data: Pos, empty: Pos }
 
-		type Walls = grid::Grid <Vec <bool>, Pos>;
+		type Walls = GridBuf <Vec <bool>, Pos, 2>;
 
 		let empty_start =
 			input.nodes.iter ()
@@ -57,8 +57,8 @@ pub mod logic {
 				.min ()
 				.ok_or ("No nodes have used data") ?;
 
-		let grid_size = [input.width.as_usize (), input.height.as_usize ()];
-		let mut walls = Walls::new ([0, 0], grid_size);
+		let grid_size = Pos::new (input.width, input.height);
+		let mut walls = Walls::new (Pos::ZERO, grid_size);
 		for node in input.nodes.iter () {
 			walls.set (node.pos, node.used > lowest * 2);
 		}

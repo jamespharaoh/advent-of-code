@@ -18,7 +18,7 @@ mod pos {
 		#[ inline ]
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.id.as_usize ()
+			self.id.pan_usize ()
 		}
 
 	}
@@ -73,7 +73,7 @@ mod prog {
 		#[ inline ]
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.id.as_usize ()
+			self.id.pan_usize ()
 		}
 
 		#[ inline ]
@@ -160,7 +160,7 @@ mod line {
 		#[ inline ]
 		fn default () -> Self {
 			let progs = array::from_fn (|idx|
-				Item::try_from (idx.as_u8 ()).map_err (|_err| unreachable! ()).unwrap ());
+				Item::try_from (idx.pan_u8 ()).map_err (|_err| unreachable! ()).unwrap ());
 			Self { progs }
 		}
 

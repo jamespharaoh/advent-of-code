@@ -471,7 +471,7 @@
 --deny clippy::unused_rounding
 --deny clippy::unused_self
 --deny clippy::unused_unit
---deny clippy::unusual_byte_groupings
+--allow clippy::unusual_byte_groupings
 --allow clippy::unwrap_in_result
 --allow clippy::unwrap_used
 --deny clippy::unwrap_or_else_default

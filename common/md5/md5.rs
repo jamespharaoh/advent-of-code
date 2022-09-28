@@ -50,7 +50,7 @@ impl Output {
 			let high_ch = input_iter.next ().unwrap ();
 			let low_ch = input_iter.next ().unwrap ();
 			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
-			* result_ch = (decode (high_ch) ?.as_u8 ()) << 4_i32 | decode (low_ch) ?.as_u8 ();
+			* result_ch = (decode (high_ch) ?.qck_u8 ()) << 4_i32 | decode (low_ch) ?.qck_u8 ();
 		}
 		Ok (Self (result))
 	}
@@ -114,7 +114,7 @@ impl Display for Output {
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		for byte in self.0.iter ().copied () {
-			let byte = byte.as_u32 ();
+			let byte = byte.pan_u32 ();
 			formatter.write_char (char::from_digit (byte >> 4, 16).unwrap ()) ?;
 			formatter.write_char (char::from_digit (byte & 0xf, 16).unwrap ()) ?;
 		}
@@ -224,10 +224,10 @@ impl MD5 {
 		let mut result = [0; 16];
 		for src_idx in 0 .. 4 {
 			let dst_idx = src_idx << 2_i32;
-			result [dst_idx] = (self.state [src_idx] & 0xff).as_u8 ();
-			result [dst_idx + 1] = (self.state [src_idx] >> 8_i32 & 0xff).as_u8 ();
-			result [dst_idx + 2] = (self.state [src_idx] >> 16_i32 & 0xff).as_u8 ();
-			result [dst_idx + 3] = (self.state [src_idx] >> 24_i32 & 0xff).as_u8 ();
+			result [dst_idx] = (self.state [src_idx] & 0xff).qck_u8 ();
+			result [dst_idx + 1] = (self.state [src_idx] >> 8_i32 & 0xff).qck_u8 ();
+			result [dst_idx + 2] = (self.state [src_idx] >> 16_i32 & 0xff).qck_u8 ();
+			result [dst_idx + 3] = (self.state [src_idx] >> 24_i32 & 0xff).qck_u8 ();
 		}
 
 		Output (result)
@@ -257,7 +257,7 @@ impl MD5 {
 				.wrapping_add (a)
 				.wrapping_add (ADDS [op])
 				.wrapping_add (message [op]);
-			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
 		for op in 16 .. 32 {
@@ -265,7 +265,7 @@ impl MD5 {
 				.wrapping_add (a)
 				.wrapping_add (ADDS [op])
 				.wrapping_add (message [(5 * op + 1) % 16]);
-			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
 		for op in 32 .. 48 {
@@ -273,7 +273,7 @@ impl MD5 {
 				.wrapping_add (a)
 				.wrapping_add (ADDS [op])
 				.wrapping_add (message [(3 * op + 5) % 16]);
-			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
 		for op in 48 .. 64 {
@@ -281,7 +281,7 @@ impl MD5 {
 				.wrapping_add (a)
 				.wrapping_add (ADDS [op])
 				.wrapping_add (message [7 * op % 16]);
-			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].as_u32 ())), b, c);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
 		self.state = [

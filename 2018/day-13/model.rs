@@ -4,7 +4,7 @@ use super::*;
 
 pub type Coord = u16;
 pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 pub type Turn = pos::Turn2d;
 

@@ -13,14 +13,14 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 }
 
 fn play (input: & Input) -> NumResult <u32> {
-	let mut scores: Vec <u32> = vec! [0; input.num_players.as_usize ()];
+	let mut scores: Vec <u32> = vec! [0; input.num_players.pan_usize ()];
 	let mut circle: VecDeque <u32> = vec! [0].into ();
 	for (player, marble) in Iterator::zip (
 		iter::repeat (0 .. input.num_players).flatten (),
 		1 ..= input.last_marble,
 	) {
 		if marble % 23 == 0 {
-			let score = & mut scores [player.as_usize ()];
+			let score = & mut scores [player.pan_usize ()];
 			* score = u32::add_2 (* score, marble) ?;
 			circle.rotate_right (7);
 			* score = u32::add_2 (* score, circle.pop_front ().unwrap ()) ?;

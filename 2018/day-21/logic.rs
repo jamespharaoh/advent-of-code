@@ -61,8 +61,8 @@ impl <'inp> Iterator for SolutionsIter <'inp> {
 					return Some (Err ("Instruction limit reached".into ()));
 				}
 				self.remain -= 1;
-				let instr_idx = regs.get (self.input.ip).unwrap ().as_usize ();
-				if self.input.instrs.len () <= instr_idx.as_usize () {
+				let instr_idx = regs.get (self.input.ip).unwrap ().pan_usize ();
+				if self.input.instrs.len () <= instr_idx.pan_usize () {
 					return reg_0.map_or_else (
 						|| Some (Err ("Halted with indeterminate value in reg 0".into ())),
 						|reg_0| Some (Ok (reg_0)));

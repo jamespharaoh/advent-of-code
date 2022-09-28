@@ -1,15 +1,15 @@
 use super::*;
 
-use model::Grid;
+use model::Tiles;
 
 #[ derive (Clone, Debug) ]
 pub struct Input {
-	pub grid: Grid,
+	pub tiles: Tiles,
 	pub params: InputParams,
 }
 
 struct_parser_display! {
-	Input { grid, params } = [ params, grid ]
+	Input { tiles, params } = [ params, tiles ]
 }
 
 input_params! {

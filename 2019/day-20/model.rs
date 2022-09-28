@@ -2,7 +2,7 @@ use super::*;
 
 pub type Coord = i8;
 pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
 #[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]

@@ -55,8 +55,8 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 					.map (move |x| horiz_grid_ref.get (Pos { y, x }).unwrap ()
 						+ base_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()))
 				.collect (),
-			[- size.as_isize (), -1],
-			[input.params.grid_size.as_usize () + 1 - size.as_usize (), grid_size.as_usize ()]);
+			Pos::new (- size, -1),
+			Pos::new (input.params.grid_size + 1 - size, grid_size));
 		let vert_grid_ref = & vert_grid;
 		vert_grid = Grid::wrap (
 			(1 ..= grid_size)
@@ -64,8 +64,8 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 					.map (move |x| vert_grid_ref.get (Pos { y, x }).unwrap ()
 						+ base_grid_ref.get (Pos { y: y + size - 1, x }).unwrap ()))
 				.collect (),
-			[-1, - size.as_isize ()],
-			[grid_size.as_usize (), input.params.grid_size.as_usize () + 1 - size.as_usize ()]);
+			Pos::new (-1, - size),
+			Pos::new (grid_size, input.params.grid_size + 1 - size));
 		let horiz_grid_ref = & horiz_grid;
 		let vert_grid_ref = & vert_grid;
 		let small_grid_ref = & small_grid;
@@ -76,8 +76,8 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 						+ horiz_grid_ref.get (Pos { y: y + size - 1, x }).unwrap ()
 						+ vert_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()))
 				.collect (),
-			[-1, -1],
-			[grid_size.as_usize (), grid_size.as_usize ()]);
+			Pos::new (-1, -1),
+			Pos::new (grid_size, grid_size));
 	}
 	if let Some ((pos, size, _)) = best {
 		Ok (format! ("{},{},{}", pos.x, pos.y, size))
@@ -86,7 +86,9 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {
 	if input.params.grid_size < 3 { return Err ("Grid must be at least 3×3".into ()) }
-	let mut grid = Grid::new ([-1, -1], [input.params.grid_size.as_usize (), input.params.grid_size.as_usize ()]);
+	let mut grid = Grid::new (
+		Pos::new (-1, -1),
+		Pos::new (input.params.grid_size, input.params.grid_size));
 	for y in 1 ..= input.params.grid_size {
 		for x in 1 ..= input.params.grid_size {
 			let pos = Pos { y, x };
@@ -101,10 +103,10 @@ fn calc_power (input: & Input, pos: Pos) -> Option <Power> {
 			|| pos.y < 1 || pos.y > input.params.grid_size {
 		return None;
 	}
-	let rack_id = pos.x.as_i32 () + 10_i32;
+	let rack_id = pos.x.pan_i32 () + 10_i32;
 	let power_level = Power::mul_2 (
 		Power::add_2 (
-			Power::mul_2 (rack_id, pos.y.as_i32 ()).ok () ?,
+			Power::mul_2 (rack_id, pos.y.pan_i32 ()).ok () ?,
 			input.serial,
 		).ok () ?,
 		rack_id,

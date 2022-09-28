@@ -1,7 +1,7 @@
 use super::*;
 
 pub type Coord = i16;
-pub type Grid = aoc_grid::Grid <Vec <Region>, Pos>;
+pub type Grid = GridBuf <Vec <Region>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 pub type Val = u32;
 

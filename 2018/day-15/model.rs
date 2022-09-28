@@ -2,8 +2,8 @@ use super::*;
 
 pub type Coord = u8;
 pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
-pub type SeenGrid = grid::Grid <Vec <bool>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
+pub type SeenGrid = GridBuf <Vec <bool>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
 parse_display_enum! {

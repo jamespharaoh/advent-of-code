@@ -41,7 +41,7 @@ pub mod logic {
 
 	fn calc_result (input: & Input) -> GenResult <usize> {
 		let (mut state, _names) = State::from_input (input) ?;
-		state.comps [ .. state.comps_len.as_usize ()].sort ();
+		state.comps [ .. state.comps_len.pan_usize ()].sort ();
 		let mut seen = HashSet::new ();
 		seen.insert (state.compact ());
 		let mut todo = VecDeque::new ();
@@ -91,7 +91,7 @@ pub mod logic {
 				input.floors.iter ()
 					.enumerate ()
 					.flat_map (|(floor_idx, floor)| floor.iter ()
-						.map (move |comp| ((floor_idx + 1).as_u8 (), comp)))
+						.map (move |comp| ((floor_idx + 1).pan_u8 (), comp)))
 					.filter (|& (_, some_comp)| * some_comp == comp)
 					.map (|(floor, _)| floor)
 					.exactly_one ()
@@ -104,9 +104,8 @@ pub mod logic {
 					]))
 					.chain (iter::from_fn (|| Some (Ok ([1, 1]))))
 					.take (7)
-					.collect_array_ok () ?
-					.unwrap (),
-				comps_len: names.len ().as_u8 (),
+					.try_array () ?,
+				comps_len: names.len ().pan_u8 (),
 				elevator: 1,
 			}, names))
 		}
@@ -115,7 +114,7 @@ pub mod logic {
 			let mut next_floors = ArrayVec::<u8, 2>::new ();
 			if self.elevator > 1 { next_floors.push (self.elevator - 1); }
 			if self.elevator < 4 { next_floors.push (self.elevator + 1); }
-			for name_idx_0 in 0 .. self.comps_len.as_usize () {
+			for name_idx_0 in 0 .. self.comps_len.pan_usize () {
 				for comp_idx_0 in 0 .. 2 {
 					if self.comps [name_idx_0] [comp_idx_0] != self.elevator { continue }
 					for next_floor in next_floors.iter_vals () {
@@ -123,11 +122,11 @@ pub mod logic {
 						next_state.elevator = next_floor;
 						next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
 						if next_state.is_valid () {
-							next_state.comps [ .. next_state.comps_len.as_usize ()].sort ();
+							next_state.comps [ .. next_state.comps_len.pan_usize ()].sort ();
 							results.push (next_state.compact ());
 						}
 					}
-					for name_idx_1 in name_idx_0 .. self.comps_len.as_usize () {
+					for name_idx_1 in name_idx_0 .. self.comps_len.pan_usize () {
 						for comp_idx_1 in 0 .. 2 {
 							if self.comps [name_idx_1] [comp_idx_1] != self.elevator { continue }
 							if (name_idx_0, comp_idx_0) >= (name_idx_1, comp_idx_1) { continue }
@@ -137,7 +136,7 @@ pub mod logic {
 								next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
 								next_state.comps [name_idx_1] [comp_idx_1] = next_floor;
 								if next_state.is_valid () {
-									next_state.comps [ .. next_state.comps_len.as_usize ()].sort ();
+									next_state.comps [ .. next_state.comps_len.pan_usize ()].sort ();
 									results.push (next_state.compact ());
 								}
 							}
@@ -148,9 +147,9 @@ pub mod logic {
 		}
 
 		fn is_valid (& self) -> bool {
-			for name_idx_0 in 0 .. self.comps_len.as_usize () {
+			for name_idx_0 in 0 .. self.comps_len.pan_usize () {
 				if self.comps [name_idx_0] [1] == self.comps [name_idx_0] [0] { continue }
-				for name_idx_1 in 0 .. self.comps_len.as_usize () {
+				for name_idx_1 in 0 .. self.comps_len.pan_usize () {
 					if name_idx_1 == name_idx_0 { continue }
 					if self.comps [name_idx_0] [1] == self.comps [name_idx_1] [0] { return false }
 				}
@@ -160,7 +159,7 @@ pub mod logic {
 
 		fn is_done (& self) -> bool {
 			self.comps.iter ()
-				.take (self.comps_len.as_usize ())
+				.take (self.comps_len.pan_usize ())
 				.all (|& [gen, chip]| gen == 4 && chip == 4)
 		}
 
@@ -169,17 +168,17 @@ pub mod logic {
 			for [gen, chip] in self.comps.iter_vals ().rev () {
 				debug_assert! ((1 ..= 4).contains (& gen));
 				data <<= 2_u32;
-				data |= chip.as_u64 () - 1;
+				data |= chip.pan_u64 () - 1;
 				debug_assert! ((1 ..= 4).contains (& chip));
 				data <<= 2_u32;
-				data |= gen.as_u64 () - 1;
+				data |= gen.pan_u64 () - 1;
 			}
 			debug_assert! ((1 ..= 7).contains (& self.comps_len));
 			data <<= 3_u32;
-			data |= self.comps_len.as_u64 ();
+			data |= self.comps_len.pan_u64 ();
 			debug_assert! ((1 ..= 4).contains (& self.elevator));
 			data <<= 2_u32;
-			data |= self.elevator.as_u64 () - 1;
+			data |= self.elevator.pan_u64 () - 1;
 			StateCompact { data }
 		}
 
@@ -188,14 +187,14 @@ pub mod logic {
 	impl StateCompact {
 		fn expand (self) -> State {
 			let mut data = self.data;
-			let elevator = (data & 0x3).as_u8 () + 1;
+			let elevator = (data & 0x3).pan_u8 () + 1;
 			data >>= 2_u32;
-			let comps_len = (data & 0x7).as_u8 ();
+			let comps_len = (data & 0x7).pan_u8 ();
 			data >>= 3_u32;
 			let comps = (0_u32 .. 7_u32).map (|_| {
-				let gen = (data & 0x3).as_u8 () + 1;
+				let gen = (data & 0x3).pan_u8 () + 1;
 				data >>= 2_u32;
-				let chip = (data & 0x3).as_u8 () + 1;
+				let chip = (data & 0x3).pan_u8 () + 1;
 				data >>= 2_u32;
 				[gen, chip]
 			}).collect_array ().unwrap ();

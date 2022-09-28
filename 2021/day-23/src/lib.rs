@@ -26,7 +26,6 @@ mod logic {
 	use model::Place;
 	use model::State;
 	use model::StateCompact;
-	use nums::IntConv;
 	use search::PrioritySearch;
 	use search::PrioritySearchAdder;
 
@@ -115,13 +114,13 @@ mod logic {
 				Move::Between (amph, from_room, to_room) => {
 					if ! sections [from_room.idx ()] || ! sections [to_room.idx ()] { continue }
 					let cost = amph.cost () * (out_cost (from_room) + in_cost (to_room)
-						+ usize::abs_diff (from_room.idx (), to_room.idx ()) * 2).as_i64 ();
+						+ usize::abs_diff (from_room.idx (), to_room.idx ()) * 2).pan_i64 ();
 					let next_state = state.move_between (from_room, to_room);
 					return iter::once ((next_state.compact (), cost)).collect ();
 				},
 				Move::In (amph, from_hall, to_room) => {
 					if ! sections [to_room.idx ()] { continue }
-					let cost = amph.cost () * (in_cost (to_room) + hall_cost (to_room, from_hall)).as_i64 ();
+					let cost = amph.cost () * (in_cost (to_room) + hall_cost (to_room, from_hall)).pan_i64 ();
 					let next_state = state.move_in (from_hall, to_room);
 					return iter::once ((next_state.compact (), cost)).collect ();
 				},
@@ -132,7 +131,7 @@ mod logic {
 			if let Move::Out (amph, from_room, to_hall) = next_move {
 				if ! sections [from_room.idx ()] { continue }
 				let cost = amph.cost () * (out_cost (from_room)
-					+ hall_cost (from_room, to_hall)).as_i64 ();
+					+ hall_cost (from_room, to_hall)).pan_i64 ();
 				let next_state = state.move_out (from_room, to_hall);
 				next_states.push ((next_state.compact (), cost));
 			}
@@ -210,7 +209,6 @@ mod logic {
 mod model {
 
 	use aoc_common::*;
-	use nums::IntConv;
 
 	#[ derive (Clone, Debug, Eq, PartialEq) ]
 	pub struct State {
@@ -265,15 +263,15 @@ mod model {
 
 		pub fn get (& self, place: Place) -> Option <Amph> {
 			match place {
-				Place::Hall (id) => self.hall [id.as_usize ()],
+				Place::Hall (id) => self.hall [id.pan_usize ()],
 				Place::Room (Amph::Amber, depth) =>
-					self.amber.get (self.room_size - depth.as_usize () - 1).copied (),
+					self.amber.get (self.room_size - depth.pan_usize () - 1).copied (),
 				Place::Room (Amph::Bronze, depth) =>
-					self.bronze.get (self.room_size - depth.as_usize () - 1).copied (),
+					self.bronze.get (self.room_size - depth.pan_usize () - 1).copied (),
 				Place::Room (Amph::Copper, depth) =>
-					self.copper.get (self.room_size - depth.as_usize () - 1).copied (),
+					self.copper.get (self.room_size - depth.pan_usize () - 1).copied (),
 				Place::Room (Amph::Desert, depth) =>
-					self.desert.get (self.room_size - depth.as_usize () - 1).copied (),
+					self.desert.get (self.room_size - depth.pan_usize () - 1).copied (),
 			}
 		}
 
@@ -349,14 +347,14 @@ mod model {
 					print_amph (self.get (Place::Room (Amph::Bronze, 0))),
 					print_amph (self.get (Place::Room (Amph::Copper, 0))),
 					print_amph (self.get (Place::Room (Amph::Desert, 0))))
-			} else if line < self.room_size.as_usize () + 2 {
-				let depth = (line - 2).as_u8 ();
+			} else if line < self.room_size.pan_usize () + 2 {
+				let depth = (line - 2).pan_u8 ();
 				format! ("  │{}│{}│{}│{}│",
 					print_amph (self.get (Place::Room (Amph::Amber, depth))),
 					print_amph (self.get (Place::Room (Amph::Bronze, depth))),
 					print_amph (self.get (Place::Room (Amph::Copper, depth))),
 					print_amph (self.get (Place::Room (Amph::Desert, depth))))
-			} else if line == self.room_size.as_usize () + 2 {
+			} else if line == self.room_size.pan_usize () + 2 {
 				"  └─┴─┴─┴─┘".to_owned ()
 			} else {
 				panic! ();
@@ -365,7 +363,7 @@ mod model {
 
 		#[ allow (clippy::print_stdout) ]
 		pub fn print (& self) {
-			for line in 0 .. self.room_size.as_usize () + 3 {
+			for line in 0 .. self.room_size.pan_usize () + 3 {
 				println! ("{}", self.pretty_line (line));
 			}
 		}
@@ -458,7 +456,7 @@ mod model {
 			}
 			assert! (64 - place_bits.leading_zeros () <= 27);
 			assert! (64 - amph_bits.leading_zeros () <= 32);
-			let data = ((self.room_size.as_u64 ()) << 59_i32) | (place_bits << 32_i32) | amph_bits;
+			let data = ((self.room_size.pan_u64 ()) << 59_i32) | (place_bits << 32_i32) | amph_bits;
 			StateCompact { data }
 		}
 
@@ -503,7 +501,7 @@ mod model {
 				}
 				present_bits >>= 1_i32;
 			}
-			let room_size = (self.data >> 59_i32).as_usize ();
+			let room_size = (self.data >> 59_i32).pan_usize ();
 			State::from_array (room_size, places)
 		}
 		pub fn is_finished (self) -> bool {
@@ -532,20 +530,20 @@ mod model {
 	impl Place {
 		pub fn idx (self) -> usize {
 			match self {
-				Self::Hall (id) => id.as_usize (),
-				Self::Room (Amph::Amber, depth) => 11 + depth.as_usize (),
-				Self::Room (Amph::Bronze, depth) => 15 + depth.as_usize (),
-				Self::Room (Amph::Copper, depth) => 19 + depth.as_usize (),
-				Self::Room (Amph::Desert, depth) => 23 + depth.as_usize (),
+				Self::Hall (id) => id.pan_usize (),
+				Self::Room (Amph::Amber, depth) => 11 + depth.pan_usize (),
+				Self::Room (Amph::Bronze, depth) => 15 + depth.pan_usize (),
+				Self::Room (Amph::Copper, depth) => 19 + depth.pan_usize (),
+				Self::Room (Amph::Desert, depth) => 23 + depth.pan_usize (),
 			}
 		}
 		pub fn for_idx (idx: usize) -> Self {
 			match idx {
-				0 ..= 10 => Self::Hall (idx.as_u8 ()),
-				11 ..= 14 => Self::Room (Amph::Amber, idx.as_u8 () - 11),
-				15 ..= 18 => Self::Room (Amph::Bronze, idx.as_u8 () - 15),
-				19 ..= 22 => Self::Room (Amph::Copper, idx.as_u8 () - 19),
-				23 ..= 26 => Self::Room (Amph::Desert, idx.as_u8 () - 23),
+				0 ..= 10 => Self::Hall (idx.pan_u8 ()),
+				11 ..= 14 => Self::Room (Amph::Amber, idx.pan_u8 () - 11),
+				15 ..= 18 => Self::Room (Amph::Bronze, idx.pan_u8 () - 15),
+				19 ..= 22 => Self::Room (Amph::Copper, idx.pan_u8 () - 19),
+				23 ..= 26 => Self::Room (Amph::Desert, idx.pan_u8 () - 23),
 				_ => panic! ("Invalid index: {}", idx),
 			}
 		}
@@ -603,7 +601,6 @@ pub mod tools {
 	use super::*;
 	use model::State;
 	use model::StateCompact;
-	use nums::IntConv;
 	use search::PrioritySearch;
 	use search::PrioritySearchAdder;
 
@@ -764,7 +761,7 @@ pub mod tools {
 				print! (" {:^13}", cost);
 			}
 			print! ("\n");
-			for line in 0 .. (cur_state.room_size ().as_usize () + 3) {
+			for line in 0 .. (cur_state.room_size ().pan_usize () + 3) {
 				print! ("{:13}  ", if chunk_idx == 0 { cur_state.pretty_line (line) } else { String::new () });
 				for & (ref next_state, _) in chunk.iter () {
 					print! (" {:13}", next_state.pretty_line (line));

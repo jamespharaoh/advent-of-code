@@ -33,14 +33,14 @@ pub fn calc_sparse (
 
 	for length in
 		iter::repeat (input_iter)
-			.take (num_rounds.as_usize ())
+			.take (num_rounds.qck_usize ())
 			.flatten () {
 
 		// take `length` items from the front, them add them to the back in reverse order
 
 		for _ in 0 .. length { string_temp.push (string.pop_front ().unwrap ()); }
 		while let Some (mark) = string_temp.pop () { string.push_back (mark); }
-		moves += length.as_usize ();
+		moves += length.qck_usize ();
 
 		// advance by `skip_size`
 

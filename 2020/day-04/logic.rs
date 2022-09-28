@@ -11,7 +11,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.filter (|& passport| passport_errors (passport).iter ()
 				.all (|error| ! matches! (* error, Missing (_))))
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 
@@ -22,7 +22,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				.all (|error| ! matches! (* error,
 					Missing (_) | Length (_, _) | Parse (_, _) | Range (_, _))))
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 

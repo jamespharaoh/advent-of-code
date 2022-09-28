@@ -107,7 +107,7 @@ mod logic {
 		}
 		let most = global_counts.values ().max ().unwrap ();
 		let least = global_counts.values ().min ().unwrap ();
-		Ok ((most - least).as_u64 ())
+		Ok ((most - least).pan_u64 ())
 	}
 
 }

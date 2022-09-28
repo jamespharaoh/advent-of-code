@@ -40,7 +40,6 @@ mod logic {
 	use model::Coord;
 	use model::Input;
 	use model::Pos;
-	use nums::IntConv;
 	use rotation::Rotation;
 
 	const SCANNER_HASH_U64S: usize = 64; // 4096 bits per hash
@@ -52,7 +51,7 @@ mod logic {
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let input = Input::parse (lines) ?;
 		let (_, beacons) = calc_result (& input) ?;
-		Ok (beacons.len ().as_i64 ())
+		Ok (beacons.len ().pan_i64 ())
 	}
 
 	pub fn part_two (lines: & [& str]) -> GenResult <i64> {
@@ -65,7 +64,7 @@ mod logic {
 				Coord::abs_diff (pos_0.x, pos_1.x)
 					+ Coord::abs_diff (pos_0.y, pos_1.y)
 					+ Coord::abs_diff (pos_0.z, pos_1.z)
-			}).max ().unwrap ().as_i64 ()
+			}).max ().unwrap ().pan_i64 ()
 		)
 	}
 
@@ -191,7 +190,7 @@ mod logic {
 						self.scanner_matches.push (ScannerMatch {
 							placed: Rc::clone (placed),
 							unplaced: Rc::clone (unplaced),
-							priority: (placed_hash & unplaced_hash).bits ().as_u32 (),
+							priority: (placed_hash & unplaced_hash).bits ().pan_u32 (),
 							placed_rotate,
 							unplaced_rotate,
 						});

@@ -2,7 +2,7 @@ use super::*;
 use input::Input;
 
 pub type Pos = pos::PosRowCol <u8>;
-pub type Grid = grid::Grid <Vec <bool>, Pos>;
+pub type Grid = GridBuf <Vec <bool>, Pos, 2>;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (
@@ -28,12 +28,12 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				})
 			})
 			.collect (),
-		[0, 0],
-		[input.params.num_rows.as_usize (), 128]);
+		Pos::ZERO,
+		Pos::new (input.params.num_rows.pan_u8 (), 128));
 
 	// iterate over positions, look for ones, track which we have seen already
 
-	let mut seen = Grid::new ([0, 0], grid.native_size ());
+	let mut seen = Grid::new (Pos::ZERO, grid.size ());
 	let mut regions = 0;
 	for pos in grid.iter ().map (|(pos, _)| pos) {
 		if seen.get (pos).unwrap () { continue }

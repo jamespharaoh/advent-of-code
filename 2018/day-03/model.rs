@@ -82,7 +82,7 @@ impl Square {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn area (self) -> u32 { self.width ().as_u32 () * self.height ().as_u32 () }
+	pub fn area (self) -> u32 { self.width ().pan_u32 () * self.height ().pan_u32 () }
 
 	#[ inline ]
 	#[ must_use ]

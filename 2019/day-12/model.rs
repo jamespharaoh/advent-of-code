@@ -19,12 +19,12 @@ impl Moon {
 
 	#[ must_use ]
 	pub fn potential_energy (& self) -> Energy {
-		self.pos.x.as_i32 ().abs () + self.pos.y.as_i32 ().abs () + self.pos.z.as_i32 ().abs ()
+		self.pos.x.pan_i32 ().abs () + self.pos.y.pan_i32 ().abs () + self.pos.z.pan_i32 ().abs ()
 	}
 
 	#[ must_use ]
 	pub fn kinetic_energy (& self) -> Energy {
-		self.vel.x.as_i32 ().abs () + self.vel.y.as_i32 ().abs () + self.vel.z.as_i32 ().abs ()
+		self.vel.x.pan_i32 ().abs () + self.vel.y.pan_i32 ().abs () + self.vel.z.pan_i32 ().abs ()
 	}
 
 	#[ must_use ]

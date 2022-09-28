@@ -151,7 +151,7 @@ impl <Val: Int> Machine <Val> {
 	#[ inline ]
 	fn param_get (& self, opcode: Opcode, num: u8) -> Result <Val, RunResult <Val>> {
 		let raw = self.param_raw (num) ?;
-		match opcode.modes [num.as_usize ()] {
+		match opcode.modes [num.qck_usize ()] {
 			Mode::Position => self.mem_get_real (raw),
 			Mode::Immediate => Ok (raw),
 			Mode::Relative => self.mem_get_real (Val::add_2 (raw, self.rel) ?),
@@ -161,7 +161,7 @@ impl <Val: Int> Machine <Val> {
 	#[ inline ]
 	fn param_set (& mut self, opcode: Opcode, num: u8, value: Val) -> Result <(), RunResult <Val>> {
 		let param = self.param_raw (num) ?;
-		match opcode.modes [num.as_usize ()] {
+		match opcode.modes [num.qck_usize ()] {
 			Mode::Position => self.mem_set_real (param, value),
 			Mode::Immediate => Err (RunResult::Instr (Val::ZERO, Val::ZERO)),
 			Mode::Relative => self.mem_set_real (param + self.rel, value),
@@ -189,16 +189,16 @@ impl <Val: Int> Machine <Val> {
 	#[ inline ]
 	fn mem_set_real (& mut self, addr: Val, value: Val) -> Result <(), RunResult <Val>> {
 		self.mem_extend (addr) ?;
-		self.mem [addr.as_usize ()] = value;
+		self.mem [addr.qck_usize ()] = value;
 		Ok (())
 	}
 
 	#[ inline ]
 	fn mem_extend (& mut self, addr: Val) -> Result <(), RunResult <Val>> {
 		if addr < Val::ZERO || addr == Val::MAX { return Err (RunResult::Memory) }
-		let size = addr.as_usize () + 1;
+		let size = addr.qck_usize () + 1;
 		if size < self.mem.len () { return Ok (()) }
-		if self.mem_limit.as_usize () < size { return Err (RunResult::Memory) }
+		if self.mem_limit.qck_usize () < size { return Err (RunResult::Memory) }
 		self.mem.resize ((size + 0xff) & ! 0xff, Val::ZERO);
 		Ok (())
 	}

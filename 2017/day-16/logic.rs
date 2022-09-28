@@ -58,7 +58,7 @@ impl Transform {
 					let size = 16 - prg.idx ();
 					posns = Line::from (
 						array::from_fn (|idx|
-							posns [(idx + size.as_usize ()) & 0xf]));
+							posns [(idx + size.pan_usize ()) & 0xf]));
 				},
 				Step::Exchange (pos_0, pos_1) => {
 					(posns [pos_0.idx ()], posns [pos_1.idx ()]) =

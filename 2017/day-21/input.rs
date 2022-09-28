@@ -57,13 +57,13 @@ impl <'inp> FromParser <'inp> for InputRule {
 				let from = parse_pixels (parser, 2) ?;
 				parse! (parser, @confirm, " => ");
 				let to = parse_pixels (parser, 3) ?;
-				Ok (Self::TwoToThree (from.as_u8 (), to.as_u16 ()))
+				Ok (Self::TwoToThree (from.pan_u8 (), to.pan_u16 ()))
 			})
 			.of (|parser| {
 				let from = parse_pixels (parser, 3) ?;
 				parse! (parser, @confirm, " => ");
 				let to = parse_pixels (parser, 4) ?;
-				Ok (Self::ThreeToFour (from.as_u16 (), to.as_u16 ()))
+				Ok (Self::ThreeToFour (from.pan_u16 (), to.pan_u16 ()))
 			})
 			.done ()
 	}
@@ -71,7 +71,7 @@ impl <'inp> FromParser <'inp> for InputRule {
 
 pub fn parse_pixels (parser: & mut Parser <'_>, size: usize) -> ParseResult <u64> {
 	let mut val = 0_u64;
-	let new_bit = (1_u64 << ((size * size) - 1)).as_u64 ();
+	let new_bit = (1_u64 << ((size * size) - 1)).pan_u64 ();
 	for row in 0 .. size {
 		if row > 0 { parse! (parser, "/"); }
 		for _col in 0 .. size {

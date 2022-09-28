@@ -34,7 +34,7 @@ pub fn run (args: Args) -> GenResult <()> {
 			_ => MultiReg::single (0),
 		});
 
-	let instrs = get_instr_infos (input.ip.as_u16 (), & input.instrs, & reg_multis);
+	let instrs = get_instr_infos (input.ip.pan_u16 (), & input.instrs, & reg_multis);
 	let blocks = get_blocks (& instrs);
 	let super_blocks = get_super_blocks (& blocks);
 
@@ -290,11 +290,11 @@ fn get_instr_infos (
 
 	let mut todo: Vec <(Val, Val, [MultiReg; 6])> = Vec::new ();
 	let mut seen: HashSet <(Val, [MultiReg; 6])> = HashSet::new ();
-	match reg_multis [ip.as_usize ()] {
+	match reg_multis [ip.pan_usize ()] {
 		MultiVal::Limited (ref vals) => {
 			for val in vals.iter ().copied () {
 				let mut reg_multis = reg_multis.clone ();
-				reg_multis [ip.as_usize ()] = MultiReg::single (val);
+				reg_multis [ip.pan_usize ()] = MultiReg::single (val);
 				if seen.insert ((val, reg_multis.clone ())) {
 					todo.push ((Val::MAX, val, reg_multis));
 				}
@@ -304,7 +304,7 @@ fn get_instr_infos (
 	}
 
 	while let Some ((prev_idx, instr_idx, reg_multis)) = todo.pop () {
-		let instr = & mut instrs [instr_idx.as_usize ()];
+		let instr = & mut instrs [instr_idx.pan_usize ()];
 		instr.prev.push (prev_idx);
 		for (reg_vals, reg_vals_new) in instr.before.iter_mut ().zip (reg_multis.iter ()) {
 			reg_vals.update (reg_vals_new);
@@ -347,8 +347,8 @@ fn get_instr_infos (
 				let next_idx = if instr.arg_c.is_ip () { arg_c + 1 } else { instr_idx + 1 };
 				let mut reg_multis = instr.before.clone ();
 				reg_multis [instr.arg_c.as_reg_idx ()] = MultiReg::single (arg_c);
-				reg_multis [ip.as_usize ()] = MultiReg::single (next_idx);
-				if next_idx.as_usize () < instrs_len {
+				reg_multis [ip.pan_usize ()] = MultiReg::single (next_idx);
+				if next_idx.pan_usize () < instrs_len {
 					instr.next.push (next_idx);
 					if seen.insert ((next_idx, reg_multis.clone ())) {
 						todo.push ((instr_idx, next_idx, reg_multis));
@@ -367,7 +367,7 @@ fn get_instr_infos (
 					Op::Add | Op::Mul | Op::Ban | Op::Bor | Op::Set => MultiVal::unlimited (),
 					Op::Gt | Op::Eq => MultiReg::double (0, 1),
 				};
-			reg_multis [ip.as_usize ()] = MultiReg::single (instr_idx + 1);
+			reg_multis [ip.pan_usize ()] = MultiReg::single (instr_idx + 1);
 			instr.next.push (instr_idx + 1);
 			if seen.insert ((instr_idx + 1, reg_multis.clone ())) {
 				todo.push ((instr_idx, instr_idx + 1, reg_multis));
@@ -391,7 +391,7 @@ fn fill_instr_prov (ip: u16, instrs: & mut [InstrInfo]) {
 	for reg in 0 .. 6 {
 		if reg == ip { continue }
 		for instr_idx in 0 .. Val::from_usize (instrs.len ()).unwrap () {
-			let instr = & instrs [instr_idx.as_usize ()];
+			let instr = & instrs [instr_idx.pan_usize ()];
 			if ! instr.prev.contains (Val::MAX) { continue }
 			fill_instr_prov_from (instrs, instr_idx, reg, ValProv::InReg (reg));
 		}
@@ -400,11 +400,11 @@ fn fill_instr_prov (ip: u16, instrs: & mut [InstrInfo]) {
 	// track each output register from each instruction
 
 	for instr_idx in 0 .. Val::from_usize (instrs.len ()).unwrap () {
-		let instr = & instrs [instr_idx.as_usize ()];
+		let instr = & instrs [instr_idx.pan_usize ()];
 		if instr.arg_c.is_ip () { continue }
 		let reg_num = instr.arg_c.as_reg_num ();
 		for instr_next_idx in 0 .. instr.next.len () {
-			let next_idx = instrs [instr_idx.as_usize ()].next.values () [instr_next_idx.as_usize ()];
+			let next_idx = instrs [instr_idx.pan_usize ()].next.values () [instr_next_idx.pan_usize ()];
 			if next_idx == Val::MAX {
 				unimplemented! ();
 			} else {
@@ -418,7 +418,7 @@ fn fill_instr_prov (ip: u16, instrs: & mut [InstrInfo]) {
 	// TODO match start regs
 	let mut temps: HashMap <ValProv, u16> = HashMap::new ();
 	for orig_instr_idx in 0 .. Val::from_usize (instrs.len ()).unwrap () {
-		let orig_instr = & instrs [orig_instr_idx.as_usize ()];
+		let orig_instr = & instrs [orig_instr_idx.pan_usize ()];
 		if orig_instr.arg_c.is_ip () { continue }
 		let mut aliases: HashSet <ValProv> = HashSet::new ();
 		if temps.contains_key (& ValProv::Instr (orig_instr_idx)) { continue }
@@ -443,7 +443,7 @@ fn fill_instr_prov (ip: u16, instrs: & mut [InstrInfo]) {
 			}
 			if ! progress { break }
 		}
-		let temp_idx = temps.len ().as_u16 ();
+		let temp_idx = temps.len ().pan_u16 ();
 		for & alias in aliases.iter () { temps.insert (alias, temp_idx); }
 	}
 
@@ -472,7 +472,7 @@ fn fill_instr_prov_from (instrs: & mut [InstrInfo], start_idx: Val, reg: u16, pr
 	todo.push (start_idx);
 	let mut seen: HashSet <Val> = HashSet::new ();
 	while let Some (instr_idx) = todo.pop () {
-		let instr = & mut instrs [instr_idx.as_usize ()];
+		let instr = & mut instrs [instr_idx.pan_usize ()];
 		if instr.arg_a.is_reg () && instr.arg_a.as_reg_num () == reg
 				&& ! instr.arg_a_prov.contains (& prov) {
 			instr.arg_a_prov.push (prov);
@@ -666,9 +666,9 @@ impl ArgInfo {
 		let ip_val = Val::try_from (ip).unwrap ();
 		match arg_type {
 			ArgType::Reg if arg == ip_val => Self::InstrPtr (ip),
-			ArgType::Reg => Self::InOutReg (arg.as_u16 ()),
+			ArgType::Reg => Self::InOutReg (arg.pan_u16 ()),
 			ArgType::Imm => Self::Immediate (arg),
-			ArgType::Ignore => Self::Unused (arg.as_u16 ()),
+			ArgType::Ignore => Self::Unused (arg.pan_u16 ()),
 		}
 	}
 	const fn is_ip (self) -> bool {
@@ -696,7 +696,7 @@ impl ArgInfo {
 		}
 	}
 	fn as_reg_idx (self) -> usize {
-		self.as_reg_num ().as_usize ()
+		self.as_reg_num ().pan_usize ()
 	}
 	fn temp_assign (& mut self, temp_idx: u16) {
 		* self = Self::Temp (self.as_reg_num (), temp_idx);

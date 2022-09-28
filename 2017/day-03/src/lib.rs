@@ -5,7 +5,6 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos::GenPos as _;
 
 puzzle_info! {
 	name = "Spiral Memory";
@@ -29,7 +28,7 @@ pub mod logic {
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		sanity_check (input) ?;
 		let (pos, _) = iter_posns ().zip (1 .. ).find (|& (_, val)| val == input.target).unwrap ();
-		Ok ((pos.row.unsigned_abs () + pos.col.unsigned_abs ()).as_u32 ())
+		Ok ((pos.row.unsigned_abs () + pos.col.unsigned_abs ()).pan_u32 ())
 	}
 
 	pub fn part_two (input: & Input) -> GenResult <u32> {

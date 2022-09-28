@@ -1,8 +1,8 @@
 use super::*;
 
 pub type Coord = i8;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
-pub type GridCursor <'sto> = grid::GridCursor <'sto, Vec <Tile>, Pos>;
+pub type Tiles = GridBuf <Vec <Tile>, Pos, 2>;
+pub type TilesCursor <'grd> = GridCursor <& 'grd Tiles, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
 parse_display_enum! {

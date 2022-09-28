@@ -60,8 +60,8 @@ pub mod logic {
 		for op in ops_iter {
 			match (mode, op) {
 				(_, SwapPosns (pos_0, pos_1)) => {
-					let pos_0 = pos_0.as_usize ();
-					let pos_1 = pos_1.as_usize ();
+					let pos_0 = pos_0.pan_usize ();
+					let pos_1 = pos_1.pan_usize ();
 					if pos_0 >= state.len () || pos_1 >= state.len () {
 						return Err ("Swap positions must be inside password".into ());
 					}
@@ -80,14 +80,14 @@ pub mod logic {
 					}
 				},
 				(Scramble, RotLeft (num)) | (Unscramble, RotRight (num)) => {
-					let num = num.as_usize () % state.len ();
+					let num = num.pan_usize () % state.len ();
 					state_temp.clear ();
 					state_temp.extend (state.iter_vals ().skip (num));
 					state_temp.extend (state.iter_vals ().take (num));
 					mem::swap (& mut state, & mut state_temp);
 				},
 				(Scramble, RotRight (num)) | (Unscramble, RotLeft (num)) => {
-					let num = num.as_usize () % state.len ();
+					let num = num.pan_usize () % state.len ();
 					state_temp.clear ();
 					state_temp.extend (state.iter_vals ().skip (state.len () - num));
 					state_temp.extend (state.iter_vals ().take (state.len () - num));
@@ -116,8 +116,8 @@ pub mod logic {
 					}
 				},
 				(_, Reverse (pos_0, pos_1)) => {
-					let mut pos_0 = pos_0.as_usize ();
-					let mut pos_1 = pos_1.as_usize ();
+					let mut pos_0 = pos_0.pan_usize ();
+					let mut pos_1 = pos_1.pan_usize ();
 					if pos_0 >= state.len () || pos_1 >= state.len () {
 						return Err ("Reverse range outside of password length".into ());
 					}
@@ -131,8 +131,8 @@ pub mod logic {
 					}
 				},
 				(Scramble, Move (pos_0, pos_1)) | (Unscramble, Move (pos_1, pos_0)) => {
-					let pos_0 = pos_0.as_usize ();
-					let pos_1 = pos_1.as_usize ();
+					let pos_0 = pos_0.pan_usize ();
+					let pos_1 = pos_1.pan_usize ();
 					if pos_0 >= state.len () || pos_1 >= state.len () {
 						return Err ("Move position outside of password length".into ());
 					}

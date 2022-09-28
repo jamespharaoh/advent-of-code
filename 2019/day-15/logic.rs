@@ -61,7 +61,7 @@ fn calc_mins (mut grid: Grid) -> GenResult <u32> {
 }
 
 fn calc_grid (input: & Input) -> GenResult <Grid> {
-	let mut grid = Grid::new ([16, 16], [33, 33]);
+	let mut grid = Grid::new (Pos::new (16, 16), Pos::new (33, 33));
 	grid.set (Pos::ZERO, Tile::Empty);
 	let mut todo = Vec::new ();
 	todo.push ((Core::new (input), Pos::ZERO));
@@ -73,8 +73,8 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 			}
 			let adj_tile = grid.get (adj_pos).ok_or (()).or_else (|()| {
 				grid = grid.resize (
-					[ grid.native_origin () [0] + 16, grid.native_origin () [1] + 16 ],
-					[ grid.native_size () [0] + 32, grid.native_size () [1] + 32 ]) ?;
+					grid.origin () + Pos::new (16, 16),
+					grid.size () + Pos::new (32, 32)) ?;
 				Ok::<_, Overflow> (Tile::Unknown)
 			}) ?;
 			if adj_tile != Tile::Unknown { continue }

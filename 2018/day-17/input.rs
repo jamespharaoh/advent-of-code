@@ -7,7 +7,9 @@ pub struct Input {
 	pub params: InputParams,
 }
 
-struct_parser_display! (Input { clay_ranges, params } = [ params, @lines clay_ranges ]);
+struct_parser_display! {
+	Input { clay_ranges, params } = [ params, @lines clay_ranges ]
+}
 
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]

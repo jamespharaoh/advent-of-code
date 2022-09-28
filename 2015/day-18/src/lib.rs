@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
 puzzle_info! {
@@ -66,17 +66,15 @@ pub mod logic {
 					matches! ((val, num_adjacent), (true, 2) | (_, 3))
 				}
 			}).collect ();
-			lights = Input::wrap (new_data, lights.native_origin (), lights.native_size ());
+			lights = Input::wrap (new_data, lights.origin (), lights.size ());
 		}
 
 		// count active lights
 
-		let num_active =
-			lights.values ()
-				.filter (|& val| val)
-				.count ().to_u32 ().unwrap ();
-
-		num_active
+		lights.values ()
+			.filter (|& val| val)
+			.count ()
+			.pan_u32 ()
 
 	}
 
@@ -87,22 +85,23 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use grid::Grid;
 	use pos::PosYX;
 
 	pub type Coord = u16;
 	pub type Pos = PosYX <Coord>;
-	pub type Input = Grid <Vec <bool>, Pos>;
+	pub type Input = GridBuf <Vec <bool>, Pos, 2>;
 
 	pub fn parse_input (input: & [& str]) -> GenResult <Input> {
-		let grid_size = [ input.len (), input [0].chars ().count () ];
-		if grid_size [1] == 0 { Err ("Invalid input") ? }
+		let grid_size = Pos::new (
+			input.len ().pan_u16 (),
+			input [0].chars ().count ().pan_u16 ());
+		if grid_size.x == 0 { Err ("Invalid input") ? }
 		if let Some ((line_idx, line_len)) =
 			input.iter ().enumerate ()
 				.map (|(idx, line)| (idx, line.chars ().count ()))
-				.find (|& (_, len)| len != grid_size [1]) {
+				.find (|& (_, len)| len != grid_size.x.pan_usize ()) {
 			Err (format! ("Invalid input: line {}: Expected {} chars, not {}",
-				line_idx + 1, grid_size [1], line_len)) ?;
+				line_idx + 1, grid_size.x, line_len)) ?;
 		}
 		let grid_data = input.iter ().enumerate ().flat_map (|(line_idx, line)|
 			line.chars ().enumerate ().map (move |(char_idx, ch)| Ok (match ch {
@@ -112,7 +111,7 @@ pub mod model {
 					char_idx + 1, ch)) ?,
 			}))
 		).collect::<GenResult <Vec <_>>> () ?;
-		let grid = Grid::wrap (grid_data, [0, 0], grid_size);
+		let grid = Input::wrap (grid_data, Pos::ZERO, grid_size);
 		Ok (grid)
 	}
 

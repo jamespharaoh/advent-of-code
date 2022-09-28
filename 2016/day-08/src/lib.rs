@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_ocr as ocr;
 use aoc_pos as pos;
 
@@ -21,7 +21,6 @@ puzzle_info! {
 pub mod logic {
 
 	use super::*;
-	use grid::Grid;
 	use model::Input;
 	use model::Step;
 	use model::Pos;
@@ -40,9 +39,9 @@ pub mod logic {
 		Ok (code)
 	}
 
-	fn calc_result (input: & Input) -> Grid <Vec <bool>, Pos> {
-		let mut grid: Grid <Vec <bool>, Pos> =
-			Grid::new ([0, 0], [input.height.as_usize (), input.width.as_usize ()]);
+	fn calc_result (input: & Input) -> GridBuf <Vec <bool>, Pos, 2> {
+		let mut grid: GridBuf <Vec <bool>, Pos, 2> =
+			GridBuf::new (Pos::ZERO, Pos::new (input.height, input.width));
 		for step in input.steps.iter_vals () {
 			match step {
 				Step::Rect { width, height } => {
@@ -59,7 +58,7 @@ pub mod logic {
 							.collect ();
 					for old_col in 0 .. input.width {
 						let col = (old_col + dist) % input.width;
-						grid.set (Pos { row, col }, temp [old_col.as_usize ()]);
+						grid.set (Pos { row, col }, temp [old_col.pan_usize ()]);
 					}
 				},
 				Step::RotateCol { col, dist } => {
@@ -69,7 +68,7 @@ pub mod logic {
 							.collect ();
 					for old_row in 0 .. input.height {
 						let row = (old_row + dist) % input.height;
-						grid.set (Pos { row, col }, temp [old_row.as_usize ()]);
+						grid.set (Pos { row, col }, temp [old_row.pan_usize ()]);
 					}
 				},
 			}

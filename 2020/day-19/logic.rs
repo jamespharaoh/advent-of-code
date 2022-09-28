@@ -18,7 +18,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		input.messages.iter ()
 			.filter (|& msg| matcher.matches (msg))
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 

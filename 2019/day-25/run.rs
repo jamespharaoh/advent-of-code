@@ -42,7 +42,7 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 				}
 			},
 			RunResult::Output (val) => {
-				let ch = val.as_char ();
+				let ch = val.pan_char ();
 				if ch == '\n' {
 					println! ("{output_buf}");
 					output_buf.clear ();

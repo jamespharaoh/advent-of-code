@@ -10,7 +10,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	if claims.is_empty () { return Ok (0) }
 	const NUM_SPLITS: u32 = 16;
 	let calc_split = |low: u16, high: u16, idx: u32|
-		(low.as_u32 () + (high - low).as_u32 () * idx.as_u32 () / NUM_SPLITS).as_u16 ();
+		(low.pan_u32 () + (high - low).pan_u32 () * idx.pan_u32 () / NUM_SPLITS).pan_u16 ();
 	let bound = claims.iter ().map (|claim| claim.square).reduce (Square::bound).unwrap ();
 	let mut num_overlaps = 0;
 	let mut squares_x: Vec <Square> = Vec::new ();

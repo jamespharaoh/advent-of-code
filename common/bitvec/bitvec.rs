@@ -6,6 +6,18 @@ use std::marker::PhantomData;
 use aoc_nums as nums;
 use nums::IntConv;
 
+mod encode;
+mod iter;
+
+pub use encode::*;
+pub use iter::*;
+
+pub mod prelude {
+	pub use super::BitVec;
+	pub use super::BitVecEncoding;
+	pub use super::BitVecNative;
+}
+
 /// Dynamically sized array of items encoded as bits and packed
 ///
 #[ derive (Debug, Clone, Eq, PartialEq) ]
@@ -35,8 +47,8 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 	#[ inline ]
 	#[ must_use ]
 	pub fn new () -> Self {
-		debug_assert! (Encoding::BITS < usize::BITS);
-		debug_assert! (Encoding::MASK == (1 << Encoding::BITS) - 1);
+		assert! (Encoding::BITS < usize::BITS);
+		assert! (Encoding::MASK == (1 << Encoding::BITS) - 1);
 		Self {
 			words: Vec::new (),
 			len: 0,
@@ -56,6 +68,30 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 	#[ must_use ]
 	pub const fn is_empty (& self) -> bool { self.len == 0 }
 
+	#[ inline ]
+	pub fn extend (& mut self, iter: impl IntoIterator <Item = Item>) {
+		let (_, mut bit_idx) = Self::get_backing_indexes (self.len);
+		let mut word_val = if 0 < bit_idx { self.words.pop ().unwrap () } else { 0 };
+		for item in iter {
+			let item_enc = Encoding::encode (item);
+			debug_assert! (item_enc & ! Encoding::MASK == 0);
+			let mut rem_bits = Encoding::BITS;
+			while 0 < rem_bits {
+				word_val |= Encoding::item_to_word (item_enc, bit_idx);
+				if bit_idx + rem_bits < usize::BITS {
+					bit_idx += Encoding::BITS;
+					break;
+				}
+				rem_bits -= usize::BITS - bit_idx;
+				self.words.push (word_val);
+				word_val = 0;
+				bit_idx = 0;
+			}
+			self.len += 1;
+		}
+		if 0 < bit_idx { self.words.push (word_val); }
+	}
+
 	/// Add a new item, increases the size by one
 	///
 	#[ inline ]
@@ -64,25 +100,16 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		self.push_real (item_enc);
 	}
 
-	fn push_real (& mut self, mut item_enc: usize) {
+	#[ inline ]
+	fn push_real (& mut self, item_enc: usize) {
 		debug_assert! (item_enc & ! Encoding::MASK == 0);
-		let mut item_bits = Encoding::BITS;
-		let mut word_idx = self.len * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
-		let mut bit_idx = (self.len * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
-		while item_bits > 0 {
-			let word_bits = cmp::min (item_bits, usize::BITS - bit_idx);
-			let word_mask = (1 << word_bits) - 1;
-			let mut word_val = if word_idx < self.words.len () {
-				self.words [word_idx]
-			} else { 0 };
-			word_val |= (item_enc & word_mask) << bit_idx;
-			if word_idx < self.words.len () {
-				self.words [word_idx] = word_val;
-			} else {
-				self.words.push (word_val);
-			}
-			item_enc >>= word_bits;
-			item_bits -= word_bits;
+		let mut rem_bits = Encoding::BITS;
+		let (mut word_idx, mut bit_idx) = Self::get_backing_indexes (self.len);
+		while 0 < rem_bits {
+			if self.words.len () <= word_idx { self.words.push (0); }
+			self.words [word_idx] |= Encoding::item_to_word (item_enc, bit_idx);
+			if bit_idx + rem_bits <= usize::BITS { break }
+			rem_bits -= usize::BITS - bit_idx;
 			word_idx += 1;
 			bit_idx = 0;
 		}
@@ -96,22 +123,19 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		self.get_real (idx).map (Encoding::decode)
 	}
 
+	#[ inline ]
 	fn get_real (& self, idx: usize) -> Option <usize> {
 		if self.len < idx + 1 { return None }
 		let mut item_enc = 0;
-		let mut item_bits = 0;
-		let mut word_idx = idx * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
-		let mut bit_idx = (idx * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
-		while item_bits < Encoding::BITS {
-			let word_bits = cmp::min (Encoding::BITS - item_bits, usize::BITS - bit_idx);
-			let word_mask = (1 << word_bits) - 1;
-			let word_val = self.words [word_idx];
-			item_enc |= ((word_val >> bit_idx) & word_mask) << item_bits;
-			item_bits += word_bits;
+		let mut rem_bits = Encoding::BITS;
+		let (mut word_idx, mut bit_idx) = Self::get_backing_indexes (idx);
+		while 0 < rem_bits {
+			item_enc |= Encoding::word_to_item (self.words [word_idx], bit_idx);
+			rem_bits -= cmp::min (rem_bits, usize::BITS - bit_idx);
 			word_idx += 1;
 			bit_idx = 0;
 		}
-		Some (item_enc)
+		Some (item_enc & Encoding::MASK)
 	}
 
 	/// Replace the item at the specified index
@@ -122,19 +146,15 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 		self.set_real (idx, item_enc);
 	}
 
-	fn set_real (& mut self, idx: usize, mut item_enc: usize) {
+	#[ inline ]
+	fn set_real (& mut self, idx: usize, item_enc: usize) {
 		assert! (idx < self.len, "Tried to set {} but len is {}", idx, self.len);
-		let mut item_bits = Encoding::BITS;
-		let mut word_idx = idx * Encoding::BITS.as_usize () / usize::BITS.as_usize ();
-		let mut bit_idx = (idx * Encoding::BITS.as_usize () % usize::BITS.as_usize ()).as_u32 ();
-		while item_bits > 0 {
-			let word_bits = cmp::min (item_bits, usize::BITS - bit_idx);
-			let word_mask = (1 << word_bits) - 1;
-			let mut word_val = self.words [word_idx];
-			word_val |= (item_enc & word_mask) << bit_idx;
-			self.words [word_idx] = word_val;
-			item_enc >>= word_bits;
-			item_bits -= word_bits;
+		let (mut word_idx, mut bit_idx) = Self::get_backing_indexes (idx);
+		let mut rem_bits = Encoding::BITS;
+		while 0 < rem_bits {
+			self.words [word_idx] &= ! Encoding::item_to_word (Encoding::MASK, bit_idx);
+			self.words [word_idx] |= Encoding::item_to_word (item_enc, bit_idx);
+			rem_bits -= cmp::min (rem_bits, usize::BITS - bit_idx);
 			word_idx += 1;
 			bit_idx = 0;
 		}
@@ -145,13 +165,14 @@ impl <Item, Encoding> BitVec <Item, Encoding>
 	#[ inline ]
 	#[ must_use ]
 	pub fn iter (& self) -> BitVecIter <Item, Encoding> {
-		BitVecIter {
-			words: self.words.as_slice (),
-			len: self.len,
-			word_val: 0,
-			word_bits: 0,
-			phantom: PhantomData,
-		}
+		BitVecIter::new (self.words.as_slice (), self.len ())
+	}
+
+	#[ inline ]
+	fn get_backing_indexes (idx: usize) -> (usize, u32) {
+		let word_idx = idx * Encoding::BITS.qck_usize () / usize::BITS.qck_usize ();
+		let bit_idx = (idx * Encoding::BITS.qck_usize () % usize::BITS.qck_usize ()).qck_u32 ();
+		(word_idx, bit_idx)
 	}
 
 }
@@ -172,167 +193,13 @@ impl <Item, Encoding> FromIterator <Item> for BitVec <Item, Encoding>
 	where
 		Encoding: BitVecEncoding <Item>,
 		Item: Clone {
+
 	#[ inline ]
 	fn from_iter <Iter: IntoIterator <Item = Item>> (iter: Iter) -> Self {
 		let mut bitvec = Self::new ();
-		for item in iter {
-			bitvec.push (item);
-		}
+		//bitvec.extend (iter);
+		for item in iter { bitvec.push (item); }
 		bitvec
 	}
-}
-
-/// Iterator over the items in a [`BitVec`]
-///
-#[ derive (Clone) ]
-pub struct BitVecIter <'dat, Item, Encoding = BitVecEncodingDefault> {
-
-	/// The remaining packed data
-	///
-	words: & 'dat [usize],
-
-	/// Number of items remaining
-	///
-	len: usize,
-
-	/// The word currently being unpacked
-	///
-	word_val: usize,
-
-	/// Number of bits remaining in the current word
-	///
-	word_bits: u32,
-
-	/// Phantom data to make the type system happy
-	///
-	phantom: PhantomData <(Item, Encoding)>,
-
-}
-
-impl <'dat, Item, Encoding> BitVecIter <'dat, Item, Encoding>
-	where
-		Encoding: BitVecEncoding <Item>,
-		Item: Clone {
-
-	fn next_real (& mut self) -> Option <usize> {
-		if self.len == 0 { return None }
-		let mut item_enc = 0;
-		let mut item_bits = 0;
-		while item_bits < Encoding::BITS {
-			let word_bits = cmp::min (Encoding::BITS - item_bits, self.word_bits);
-			item_enc |= (self.word_val & ((1 << word_bits) - 1)) << item_bits;
-			self.word_val >>= word_bits;
-			self.word_bits -= word_bits;
-			item_bits += word_bits;
-			if self.word_bits == 0 {
-				self.word_val = self.words [0];
-				self.word_bits = usize::BITS;
-				self.words = & self.words [1 .. ];
-			}
-		}
-		self.len -= 1;
-		Some (item_enc)
-	}
-
-	fn nth_real (& mut self, num: usize) -> Option <usize> {
-		let mut adv_bits = Encoding::BITS.as_usize () * num;
-		let adv_words =
-			(usize::BITS.as_usize () - self.word_bits.as_usize () + adv_bits)
-				/ usize::BITS.as_usize ();
-		if adv_words > 0 {
-			self.word_val = self.words [adv_words - 1];
-			self.words = & self.words [adv_words .. ];
-			adv_bits -= (adv_words - 1) * usize::BITS.as_usize ();
-			self.word_bits = usize::BITS;
-		}
-		debug_assert! (adv_bits <= self.word_bits.as_usize ());
-		self.word_bits -= adv_bits.as_u32 ();
-		self.word_val >>= adv_bits;
-		self.len -= num;
-		self.next_real ()
-	}
-
-}
-
-impl <'dat, Item, Encoding> Iterator for BitVecIter <'dat, Item, Encoding>
-	where
-		Encoding: BitVecEncoding <Item>,
-		Item: Clone {
-
-	type Item = Item;
-
-	#[ inline ]
-	fn next (& mut self) -> Option <Item> {
-		self.next_real ().map (Encoding::decode)
-	}
-
-	#[ inline ]
-	fn nth (& mut self, num: usize) -> Option <Item> {
-		self.nth_real (num).map (Encoding::decode)
-	}
-
-	#[ inline ]
-	fn count (self) -> usize {
-		self.len
-	}
-
-}
-
-/// Trait for encoding an item as bits for storing in a [`BitVec`]
-///
-pub trait BitVecEncoding <Item> {
-
-	/// Number of bits in each encoded item
-	///
-	const BITS: u32;
-
-	/// Mask for the bits in an encoded item
-	///
-	const MASK: usize = (1 << Self::BITS) - 1;
-
-	/// Encode an item into its representation as bits
-	///
-	fn encode (item: Item) -> usize;
-
-	/// Decode an item from its representation as bits
-	///
-	fn decode (bits: usize) -> Item;
-
-}
-
-/// Trait for items which know how to encode themselves for storing in a [`BitVec`]
-///
-pub trait BitVecNative {
-
-	/// Number of bits in an encoded item
-	///
-	const BITS: u32;
-
-	/// Encode an item into its representation as bits
-	///
-	fn encode (self) -> usize;
-
-	/// Decode an item from its representation as bits
-	///
-	fn decode (encoded: usize) -> Self;
-
-}
-
-/// Default implementation of [`BitVecEncoding`] for items which implement [`BitVecNative`]
-///
-#[ derive (Clone, Debug, Eq, PartialEq) ]
-pub struct BitVecEncodingDefault;
-
-impl <Item> BitVecEncoding <Item> for BitVecEncodingDefault where Item: BitVecNative {
-
-	const BITS: u32 = Item::BITS;
-
-	const MASK: usize = (1 << Item::BITS) - 1;
-
-	#[ inline ]
-	fn encode (item: Item) -> usize { Item::encode (item) }
-
-	#[ inline ]
-	fn decode (bits: usize) -> Item { Item::decode (bits) }
 
 }

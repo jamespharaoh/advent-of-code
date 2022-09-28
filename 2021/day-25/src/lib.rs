@@ -4,7 +4,7 @@
 
 use aoc_bitvec as bitvec;
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
 puzzle_info! {
@@ -20,7 +20,6 @@ mod logic {
 	use model::Pos;
 	use model::Region;
 	use model::Seafloor;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		let seafloor = Seafloor::parse (lines) ?;
@@ -40,8 +39,8 @@ mod logic {
 		let iter_row = |y|
 			iter::once (seafloor.get (Pos { y, x: size.x - 1 }))
 				.chain (seafloor.values ()
-					.skip (size.x.as_usize () * y.as_usize ())
-					.take (size.x.as_usize ()))
+					.skip (size.x.pan_usize () * y.pan_usize ())
+					.take (size.x.pan_usize ()))
 				.chain (iter::once (seafloor.get (Pos { y, x: 0 })))
 				.collect::<Vec <Region>> ();
 		let data =
@@ -58,7 +57,7 @@ mod logic {
 							return Some (Either::Left (iter::empty ()));
 						}
 						Some (Either::Right (
-							(0 .. size.x.as_usize ()).map (move |idx|
+							(0 .. size.x.pan_usize ()).map (move |idx|
 								calc_one_region (
 									row_0 [idx .. idx + 3].try_into ().unwrap (),
 									row_1 [idx .. idx + 3].try_into ().unwrap (),
@@ -151,30 +150,28 @@ mod model {
 
 	use super::*;
 	use bitvec::BitVecNative;
-	use grid::Grid;
-	use nums::IntConv;
 	use pos::PosYX;
 
-	pub type Pos = PosYX <Coord>;
 	pub type Coord = u16;
+	pub type Grid = GridBuf <GridInner, Pos, 2>;
 	pub type GridInner = Vec <Region>;
+	pub type Pos = PosYX <Coord>;
 
 	#[ derive (Clone, Eq, PartialEq) ]
 	pub struct Seafloor {
-		grid: Grid <GridInner, Pos>,
+		grid: GridBuf <GridInner, Pos, 2>,
 		size: Pos,
 	}
 
 	impl Seafloor {
 		pub fn new (size: Pos, regions: GridInner) -> Self {
-			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
-			let grid = Grid::wrap (regions, [0, 0], grid_size);
+			let grid = Grid::wrap (regions, Pos::ZERO, size);
 			Self { grid, size }
 		}
 		pub const fn size (& self) -> Pos { self.size }
 		pub fn parse (lines: & [& str]) -> GenResult <Self> {
 			if lines.is_empty () { Err ("Invalid input") ? }
-			let size = Pos { y: lines.len ().as_u16 (), x: lines [0].chars ().count ().as_u16 () };
+			let size = Pos { y: lines.len ().pan_u16 (), x: lines [0].chars ().count ().pan_u16 () };
 			let data = lines.iter ().enumerate ()
 				.flat_map (|(line_idx, line)| {
 					let line_err = move || format! ("Invalid input: {}: {}", line_idx, line);
@@ -187,8 +184,7 @@ mod model {
 						}),
 					)
 				}).collect::<Result <_, _>> () ?;
-			let grid_size = [size.y.as_usize (), size.x.as_usize ()];
-			let grid = Grid::wrap (data, [0, 0], grid_size);
+			let grid = Grid::wrap (data, Pos::ZERO, size);
 			Ok (Self { grid, size })
 		}
 		pub fn get (& self, pos: Pos) -> Region {

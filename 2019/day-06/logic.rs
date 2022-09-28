@@ -38,10 +38,10 @@ pub fn part_two <'inp> (input: & Input <'inp>) -> GenResult <u32> {
 	let mut san_chain = chain (& parent_map, san.clone ()) ?;
 
 	if let Some (pos) = you_chain.iter ().position (|name| name == & san) {
-		return Ok (pos.as_u32 ())
+		return Ok (pos.pan_u32 ())
 	}
 	if let Some (pos) = san_chain.iter ().position (|name| name == & you) {
-		return Ok (pos.as_u32 ())
+		return Ok (pos.pan_u32 ())
 	}
 
 	loop {
@@ -51,7 +51,7 @@ pub fn part_two <'inp> (input: & Input <'inp>) -> GenResult <u32> {
 		san_chain.pop ().unwrap ();
 	}
 
-	Ok ((you_chain.len () + san_chain.len () - 2).as_u32 ())
+	Ok ((you_chain.len () + san_chain.len () - 2).pan_u32 ())
 
 }
 

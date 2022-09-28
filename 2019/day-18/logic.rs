@@ -61,7 +61,7 @@ fn calc_result (input: & Input, grid: & Grid) -> GenResult <u32> {
 					let mut posns = posns.clone ();
 					posns [pos_idx] = * path.route.last ().unwrap ();
 					let need_keys = need_keys & ! (1 << path.key_id);
-					let dist = dist + path.route.len ().as_u32 ();
+					let dist = dist + path.route.len ().pan_u32 ();
 					adder.add ((posns, need_keys), dist);
 				}
 			}
@@ -74,7 +74,7 @@ fn calc_result (input: & Input, grid: & Grid) -> GenResult <u32> {
 			.collect ();
 	search.push ((start_posns, need_keys), 0_u32);
 	for (num_iters, (_, need_keys, dist)) in search.enumerate () {
-		if num_iters.as_u32 () == input.params.max_iters {
+		if num_iters.pan_u32 () == input.params.max_iters {
 			return Err ("Giving up after max iters".into ());
 		}
 		if need_keys != 0 { continue }

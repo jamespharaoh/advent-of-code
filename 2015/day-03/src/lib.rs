@@ -5,7 +5,6 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos::GenPos as _;
 
 puzzle_info! {
 	name = "Perfectly Spherical Houses in a Vacuum";
@@ -65,10 +64,10 @@ pub mod model {
 		#[ must_use ]
 		pub fn to_pos (self) -> Pos {
 			match self {
-				Self::North => Pos::ZERO.north (1),
-				Self::South => Pos::ZERO.south (1),
-				Self::East => Pos::ZERO.east (1),
-				Self::West => Pos::ZERO.west (1),
+				Self::North => Pos::ZERO.north (1).unwrap (),
+				Self::South => Pos::ZERO.south (1).unwrap (),
+				Self::East => Pos::ZERO.east (1).unwrap (),
+				Self::West => Pos::ZERO.west (1).unwrap (),
 			}
 		}
 

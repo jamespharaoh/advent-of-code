@@ -24,7 +24,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 				return Err (format! ("Invalid step: {step:?}").into ()),
 		}
 	}
-	Ok (pos.n.unsigned_abs ().as_u32 () + pos.e.unsigned_abs ().as_u32 ())
+	Ok (pos.n.unsigned_abs ().pan_u32 () + pos.e.unsigned_abs ().pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
@@ -44,5 +44,5 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				return Err (format! ("Invalid step: {step:?}").into ()),
 		}
 	}
-	Ok (pos.n.unsigned_abs ().as_u32 () + pos.e.unsigned_abs ().as_u32 ())
+	Ok (pos.n.unsigned_abs ().pan_u32 () + pos.e.unsigned_abs ().pan_u32 ())
 }

@@ -42,5 +42,5 @@ fn posns_iter (
 fn calc_dist (pos: Pos) -> u32 {
 	let horiz_steps = pos.e.abs ();
 	let vert_steps = cmp::max (pos.n.abs () - horiz_steps, 0) / 2;
-	horiz_steps.as_u32 () + vert_steps.as_u32 ()
+	horiz_steps.pan_u32 () + vert_steps.pan_u32 ()
 }

@@ -5,7 +5,6 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_pos::GenPos as _;
 
 puzzle_info! {
 	name = "No Time for a Taxicab";

@@ -5,7 +5,7 @@ pub use room::Room;
 
 pub type Coord = i16;
 pub type Dir = aoc_pos::DirGeo;
-pub type Grid = aoc_grid::Grid <Vec <Room>, Pos>;
+pub type Grid = GridBuf <Vec <Room>, Pos, 2>;
 pub type Pos = aoc_pos::PosGeo <Coord>;
 
 mod room {

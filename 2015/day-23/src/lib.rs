@@ -62,7 +62,7 @@ pub mod logic {
 
 			// execute next instruction
 
-			let instr = input.instrs [next.as_usize ()];
+			let instr = input.instrs [next.pan_usize ()];
 			match instr {
 				Instr::Hlf (Reg::A) => reg_a /= 2,
 				Instr::Hlf (Reg::B) => reg_b /= 2,

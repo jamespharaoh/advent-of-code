@@ -18,7 +18,7 @@ macro_rules! cpu_optimise {
 		run = { $( $run_body:tt )* },
 	) => {
 		use aoc_2017_cpu::{ DstArg, Reg, SrcArg };
-		let match_len = [ $( stringify! ($instr) ),* ].len ().as_u64 ();
+		let match_len = [ $( stringify! ($instr) ),* ].len ().pan_u64 ();
 		struct Args {
 			$( $reg: Option <Reg>, )*
 		}
@@ -26,8 +26,8 @@ macro_rules! cpu_optimise {
 			$( $reg: None, )*
 		};
 		let matched = loop {
-			if ($cpu).instrs ().len ().as_u64 () < ($cpu).next () + match_len { break false }
-			let mut match_idx = ($cpu).next ().as_usize ();
+			if ($cpu).instrs ().len ().pan_u64 () < ($cpu).next () + match_len { break false }
+			let mut match_idx = ($cpu).next ().pan_usize ();
 			$(
 				if let cpu_optimise! (@instr_let_args $instr, $($instr_arg)*) =
 						($cpu).instrs () [match_idx] {
@@ -126,7 +126,7 @@ mod logic {
 		#[ inline ]
 		#[ must_use ]
 		pub fn next_instr (& self) -> Option <Instr> {
-			self.instrs.get (self.next.as_usize ()).copied ()
+			self.instrs.get (self.next.qck_usize ()).copied ()
 		}
 
 		#[ inline ]
@@ -138,7 +138,7 @@ mod logic {
 		#[ inline ]
 		#[ must_use ]
 		pub fn can_step (& self) -> bool {
-			self.next.as_usize () < self.instrs.len ()
+			self.next.qck_usize () < self.instrs.len ()
 		}
 
 		#[ inline ]
@@ -186,7 +186,7 @@ mod logic {
 		pub fn step (& mut self) -> CpuResult <Option <Val>> {
 			if self.limit == 0 { return Err (CpuError::Limit) }
 			self.limit -= 1;
-			let instr = self.instrs [self.next.as_usize ()];
+			let instr = self.instrs [self.next.qck_usize ()];
 			match instr {
 				Instr::Snd (src) => {
 					self.next += 1;
@@ -478,10 +478,10 @@ mod model {
 		#[ inline ]
 		#[ must_use ]
 		pub fn idx (self) -> usize {
-			self.0.as_usize ()
+			self.0.qck_usize ()
 		}
 
-		fn as_char (self) -> char { (self.0 + 'a'.as_u8 ()).as_char () }
+		fn as_char (self) -> char { char::from (self.0 + b'a') }
 
 	}
 
@@ -489,8 +489,7 @@ mod model {
 
 		#[ inline ]
 		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			write! (formatter, "{}", self.as_char ()) ?;
-			Ok (())
+			formatter.write_char (self.as_char ())
 		}
 
 	}
@@ -502,7 +501,7 @@ mod model {
 		#[ inline ]
 		fn try_from (ch: char) -> Result <Self, ()> {
 			if ! ch.is_ascii_lowercase () { return Err (()) }
-			Ok (Self (ch.as_u8 () - 'a'.as_u8 ()))
+			Ok (Self (ch.qck_u8 () - b'a'))
 		}
 
 	}

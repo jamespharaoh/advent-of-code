@@ -6,7 +6,7 @@
 
 use aoc_2017_knot as knot;
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
 pub mod input;

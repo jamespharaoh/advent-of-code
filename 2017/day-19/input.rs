@@ -1,5 +1,8 @@
 use super::*;
+
+use model::Coord;
 use model::Grid;
+use model::Pos;
 use model::Tile;
 
 #[ derive (Clone, Debug) ]
@@ -35,7 +38,10 @@ impl Input {
 						.chain (iter::repeat (Tile::Empty))
 						.take (cols))
 					.collect ();
-			let grid = Grid::wrap (tiles, [0, 0], [rows, cols]);
+			let grid_size = Pos::new (
+				Coord::from_usize (rows).unwrap (),
+				Coord::from_usize (cols).unwrap ());
+			let grid = Grid::wrap (tiles, Pos::ZERO, grid_size);
 			Ok (Self { grid, params })
 		})
 	}

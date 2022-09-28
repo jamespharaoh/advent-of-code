@@ -12,6 +12,7 @@
 [dependencies]
 
 	aoc-bitvec = { path = "../bitvec" }
+	aoc-checked = { path = "../checked" }
 	aoc-misc = { path = "../misc" }
 	aoc-nums = { path = "../nums" }
 	aoc-parser = { path = "../parser" }

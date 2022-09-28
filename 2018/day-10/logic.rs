@@ -37,7 +37,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 	let mut step = 0x10000_u32;
 	loop {
 		points_temp.clear ();
-		for new_point in points.iter_vals ().map (|point| point.offset (step.as_i32 ())) {
+		for new_point in points.iter_vals ().map (|point| point.offset (step.pan_i32 ())) {
 			points_temp.push (new_point ?);
 		}
 		let (next_y, next_x) = calc_size (& points_temp) ?;
@@ -46,7 +46,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 			if num_iters >= step {
 				points_temp.clear ();
 				for new_point in points.iter_vals ()
-						.map (|point| point.offset (- step.as_i32 ())) {
+						.map (|point| point.offset (- step.pan_i32 ())) {
 					points_temp.push (new_point ?);
 				}
 				mem::swap (& mut points, & mut points_temp);

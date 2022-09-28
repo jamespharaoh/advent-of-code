@@ -91,7 +91,7 @@ impl Program {
 	fn new (instrs: & [Instr], id: u32) -> Self {
 		let mut cpu = Cpu::new (instrs);
 		cpu.set_limit (100_000_u64);
-		cpu.set_reg ('p', id.as_i64 ()).unwrap ();
+		cpu.set_reg ('p', id.pan_i64 ()).unwrap ();
 		Self { id, cpu, state: default () }
 	}
 }

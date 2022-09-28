@@ -18,6 +18,7 @@ use std::ops::ShlAssign;
 use std::ops::Shr;
 use std::ops::ShrAssign;
 use std::ops::Sub;
+use std::ops::SubAssign;
 use std::str::FromStr;
 
 pub type NumResult <Val> = Result <Val, Overflow>;
@@ -463,7 +464,7 @@ macro_rules! prim_int {
 
 			#[ inline ]
 			fn from_char (val: char) -> NumResult <Self> {
-				val.as_u32 ().try_into ().ok ().ok_or (Overflow)
+				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
 			#[ inline ]
@@ -545,6 +546,62 @@ macro_rules! prim_int {
 			fn to_usize (self) -> NumResult <usize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_f32 (self) -> f32 { self as f32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_f64 (self) -> f64 { self as f64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i8 (self) -> i8 { self as i8 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i16 (self) -> i16 { self as i16 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i32 (self) -> i32 { self as i32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i64 (self) -> i64 { self as i64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i128 (self) -> i128 { self as i128 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_isize (self) -> isize { self as isize }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u8 (self) -> u8 { self as u8 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u16 (self) -> u16 { self as u16 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u32 (self) -> u32 { self as u32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u64 (self) -> u64 { self as u64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u128 (self) -> u128 { self as u128 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_usize (self) -> usize { self as usize }
 
 		}
 
@@ -552,7 +609,7 @@ macro_rules! prim_int {
 
 			#[ inline ]
 			fn from_char (val: char) -> NumResult <Self> {
-				val.as_u32 ().try_into ().ok ().ok_or (Overflow)
+				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
 			#[ inline ]
@@ -634,6 +691,62 @@ macro_rules! prim_int {
 			fn to_usize (self) -> NumResult <usize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_f32 (self) -> f32 { self as f32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_f64 (self) -> f64 { self as f64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i8 (self) -> i8 { self as i8 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i16 (self) -> i16 { self as i16 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i32 (self) -> i32 { self as i32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i64 (self) -> i64 { self as i64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_i128 (self) -> i128 { self as i128 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_isize (self) -> isize { self as isize }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u8 (self) -> u8 { self as u8 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u16 (self) -> u16 { self as u16 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u32 (self) -> u32 { self as u32 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u64 (self) -> u64 { self as u64 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_u128 (self) -> u128 { self as u128 }
+
+			#[ allow (clippy::as_conversions) ]
+			#[ inline ]
+			fn qck_usize (self) -> usize { self as usize }
 
 		}
 
@@ -769,11 +882,12 @@ pub trait IntSized <const BITS: usize>: Int {}
 pub trait IntOpsRust: Sized + Add <Output = Self> + AddAssign + BitAnd <Output = Self>
 	+ BitAndAssign + BitOr <Output = Self> + BitOrAssign + Div <Output = Self>
 	+ Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32>
-	+ Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
+	+ Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> + SubAssign {}
 impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + AddAssign
 	+ BitAnd <Output = Self> + BitAndAssign + BitOr <Output = Self> + BitOrAssign
 	+ Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
-	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> {}
+	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self>
+	+ SubAssign {}
 
 pub trait IntOpsSafe: Sized {
 
@@ -792,63 +906,78 @@ pub trait IntConv: Sized {
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_f32 (self) -> f32 { self.to_f32 ().unwrap () }
+	fn pan_f32 (self) -> f32 { self.to_f32 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_f64 (self) -> f64 { self.to_f64 ().unwrap () }
+	fn pan_f64 (self) -> f64 { self.to_f64 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_i8 (self) -> i8 { self.to_i8 ().unwrap () }
+	fn pan_i8 (self) -> i8 { self.to_i8 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_i16 (self) -> i16 { self.to_i16 ().unwrap () }
+	fn pan_i16 (self) -> i16 { self.to_i16 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_i32 (self) -> i32 { self.to_i32 ().unwrap () }
+	fn pan_i32 (self) -> i32 { self.to_i32 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_i64 (self) -> i64 { self.to_i64 ().unwrap () }
+	fn pan_i64 (self) -> i64 { self.to_i64 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_i128 (self) -> i128 { self.to_i128 ().unwrap () }
+	fn pan_i128 (self) -> i128 { self.to_i128 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_isize (self) -> isize { self.to_isize ().unwrap () }
+	fn pan_isize (self) -> isize { self.to_isize ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_u8 (self) -> u8 { self.to_u8 ().unwrap () }
+	fn pan_u8 (self) -> u8 { self.to_u8 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_u16 (self) -> u16 { self.to_u16 ().unwrap () }
+	fn pan_u16 (self) -> u16 { self.to_u16 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_u32 (self) -> u32 { self.to_u32 ().unwrap () }
+	fn pan_u32 (self) -> u32 { self.to_u32 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_u64 (self) -> u64 { self.to_u64 ().unwrap () }
+	fn pan_u64 (self) -> u64 { self.to_u64 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_u128 (self) -> u128 { self.to_u128 ().unwrap () }
+	fn pan_u128 (self) -> u128 { self.to_u128 ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_usize (self) -> usize { self.to_usize ().unwrap () }
+	fn pan_usize (self) -> usize { self.to_usize ().unwrap () }
 
 	#[ allow (clippy::wrong_self_convention) ]
 	#[ inline ]
-	fn as_char (self) -> char { self.to_char ().unwrap () }
+	fn pan_char (self) -> char { self.to_char ().unwrap () }
+
+	fn qck_f32 (self) -> f32;
+	fn qck_f64 (self) -> f64;
+	fn qck_i8 (self) -> i8;
+	fn qck_i16 (self) -> i16;
+	fn qck_i32 (self) -> i32;
+	fn qck_i64 (self) -> i64;
+	fn qck_i128 (self) -> i128;
+	fn qck_isize (self) -> isize;
+	fn qck_u8 (self) -> u8;
+	fn qck_u16 (self) -> u16;
+	fn qck_u32 (self) -> u32;
+	fn qck_u64 (self) -> u64;
+	fn qck_u128 (self) -> u128;
+	fn qck_usize (self) -> usize;
 
 	fn from_char (val: char) -> NumResult <Self>;
 
@@ -1068,5 +1197,61 @@ impl IntConv for char {
 	fn to_usize (self) -> NumResult <usize> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_f32 (self) -> f32 { self.qck_u32 ().qck_f32 () }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_f64 (self) -> f64 { self.qck_u32 ().qck_f64 () }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_i8 (self) -> i8 { self as i8 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_i16 (self) -> i16 { self as i16 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_i32 (self) -> i32 { self as i32 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_i64 (self) -> i64 { self as i64 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_i128 (self) -> i128 { self as i128 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_isize (self) -> isize { self as isize }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_u8 (self) -> u8 { self as u8 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_u16 (self) -> u16 { self as u16 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_u32 (self) -> u32 { self as u32 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_u64 (self) -> u64 { self as u64 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_u128 (self) -> u128 { self as u128 }
+
+	#[ allow (clippy::as_conversions) ]
+	#[ inline ]
+	fn qck_usize (self) -> usize { self as usize }
 
 }

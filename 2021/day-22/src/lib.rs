@@ -112,7 +112,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub fn parse_input (lines: & [& str]) -> GenResult <Vec <Step>> {
 		use parser::*;
@@ -175,9 +174,9 @@ pub mod model {
 
 		#[ must_use ]
 		pub fn volume (self) -> i64 {
-			(self.x1.as_i64 () - self.x0.as_i64 ())
-				* (self.y1.as_i64 () - self.y0.as_i64 ())
-				* (self.z1.as_i64 () - self.z0.as_i64 ())
+			(self.x1.pan_i64 () - self.x0.pan_i64 ())
+				* (self.y1.pan_i64 () - self.y0.pan_i64 ())
+				* (self.z1.pan_i64 () - self.z0.pan_i64 ())
 		}
 
 		pub const ZERO: Self = Self { x0: 0, x1: 0, y0: 0, y1: 0, z0: 0, z1: 0 };

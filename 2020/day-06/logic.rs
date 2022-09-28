@@ -27,7 +27,7 @@ fn get_bits (person: & InputPerson) -> u32 {
 	person.chars ()
 		.fold (0, |sum, ch| {
 			assert! (('a' ..= 'z').contains (& ch));
-			let bit = ch.as_u32 () - 'a'.as_u32 ();
+			let bit = ch.pan_u32 () - 'a'.pan_u32 ();
 			sum | (1 << bit)
 		})
 }

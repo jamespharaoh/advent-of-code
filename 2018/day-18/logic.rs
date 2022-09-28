@@ -56,8 +56,8 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 					}
 				})
 				.try_collect () ?,
-			grid.native_origin (),
-			grid.native_size (),
+			grid.origin (),
+			grid.size (),
 		);
 		cur_rep += 1;
 
@@ -76,8 +76,8 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 
 	// count trees and yards, and return their product
 
-	let num_trees = grid.values ().filter (|& tile| tile == Tree).count ().as_u32 ();
-	let num_yards = grid.values ().filter (|& tile| tile == Yard).count ().as_u32 ();
+	let num_trees = grid.values ().filter (|& tile| tile == Tree).count ().pan_u32 ();
+	let num_yards = grid.values ().filter (|& tile| tile == Yard).count ().pan_u32 ();
 
 	Ok (num_trees * num_yards)
 

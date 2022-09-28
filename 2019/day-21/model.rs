@@ -42,22 +42,22 @@ mod frag {
 
 		#[ must_use ]
 		pub fn first_reg (self) -> u32 {
-			self.mask.leading_zeros () + LEN.as_u32 () - 16
+			self.mask.leading_zeros () + LEN.pan_u32 () - 16
 		}
 
 		#[ must_use ]
 		pub fn first_hole (self) -> u32 {
-			self.regs.leading_zeros () + LEN.as_u32 () - 16
+			self.regs.leading_zeros () + LEN.pan_u32 () - 16
 		}
 
 		#[ must_use ]
 		pub fn last_reg (self) -> u32 {
-			LEN.as_u32 () - self.mask.trailing_zeros ()
+			LEN.pan_u32 () - self.mask.trailing_zeros ()
 		}
 
 		#[ must_use ]
 		pub fn last_hole (self) -> u32 {
-			LEN.as_u32 () - self.regs.trailing_zeros ()
+			LEN.pan_u32 () - self.regs.trailing_zeros ()
 		}
 
 		#[ must_use ]
@@ -65,7 +65,7 @@ mod frag {
 			FragIter {
 				mask: self.mask << (16 - LEN),
 				regs: self.regs << (16 - LEN),
-				remain: LEN.as_u16 (),
+				remain: LEN.pan_u16 (),
 			}
 		}
 
@@ -148,17 +148,17 @@ mod regs {
 
 		#[ must_use ]
 		pub fn first_hole (self) -> u32 {
-			if self.data == 0 { 0 } else { self.data.leading_zeros () + LEN.as_u32 () - 16 }
+			if self.data == 0 { 0 } else { self.data.leading_zeros () + LEN.pan_u32 () - 16 }
 		}
 
 		#[ must_use ]
 		pub fn last_hole (self) -> u32 {
-			if self.data == 0 { 0 } else { LEN.as_u32 () - self.data.trailing_zeros () }
+			if self.data == 0 { 0 } else { LEN.pan_u32 () - self.data.trailing_zeros () }
 		}
 
 		#[ must_use ]
 		pub fn get (self, idx: usize) -> Option <bool> {
-			(idx.as_usize () < LEN).then_some (
+			(idx.pan_usize () < LEN).then_some (
 				self.data & (0x8000 >> (16 - LEN + idx)) == 0)
 		}
 
@@ -174,7 +174,7 @@ mod regs {
 
 		#[ must_use ]
 		pub fn iter (self) -> RegsIter <LEN> {
-			RegsIter { data: self.data << (32 - LEN), remain: LEN.as_u16 () }
+			RegsIter { data: self.data << (32 - LEN), remain: LEN.pan_u16 () }
 		}
 
 		pub const ALL: Self = Self { data: 0 };
@@ -210,7 +210,7 @@ mod regs {
 		type Item = bool;
 		type IntoIter = RegsIter <LEN>;
 		fn into_iter (self) -> RegsIter <LEN> {
-			RegsIter { data: self.data << (32 - LEN), remain: LEN.as_u16 () }
+			RegsIter { data: self.data << (32 - LEN), remain: LEN.pan_u16 () }
 		}
 	}
 
@@ -264,27 +264,27 @@ mod rules {
 
 		#[ must_use ]
 		pub fn num_true (& self) -> usize {
-			self.stats.num_true.as_usize ()
+			self.stats.num_true.pan_usize ()
 		}
 
 		#[ must_use ]
 		pub fn num_false (& self) -> usize {
-			self.stats.num_false.as_usize ()
+			self.stats.num_false.pan_usize ()
 		}
 
 		#[ must_use ]
 		pub fn first_hole (& self) -> u32 {
-			self.stats.first_hole.as_u32 ()
+			self.stats.first_hole.pan_u32 ()
 		}
 
 		#[ must_use ]
 		pub fn last_hole (& self) -> u32 {
-			self.stats.last_hole.as_u32 ()
+			self.stats.last_hole.pan_u32 ()
 		}
 
 		#[ must_use ]
 		pub fn num_jumps (& self) -> u32 {
-			self.stats.num_jumps.as_u32 ()
+			self.stats.num_jumps.pan_u32 ()
 		}
 
 		#[ must_use ]
@@ -391,7 +391,7 @@ mod rules {
 			Self {
 				num_false: 0,
 				num_true: 0,
-				first_hole: LEN.as_u8 (),
+				first_hole: LEN.pan_u8 (),
 				last_hole: 0,
 				num_jumps: 0,
 				jump_holes: 0,
@@ -402,8 +402,8 @@ mod rules {
 		}
 		fn update (& mut self, regs: Regs <LEN>, jump: bool) {
 			if jump { self.num_true += 1; } else { self.num_false += 1; }
-			self.first_hole = cmp::min (self.first_hole, regs.first_hole ().as_u8 ());
-			self.last_hole = cmp::max (self.last_hole, regs.last_hole ().as_u8 ());
+			self.first_hole = cmp::min (self.first_hole, regs.first_hole ().pan_u8 ());
+			self.last_hole = cmp::max (self.last_hole, regs.last_hole ().pan_u8 ());
 			if jump { self.num_jumps += 1; }
 			if jump { self.jump_holes |= regs.holes (); }
 			let hash_val = if jump { 0xf000 } else { 0 } | regs.holes ();

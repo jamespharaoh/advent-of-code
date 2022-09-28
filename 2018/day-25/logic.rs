@@ -29,7 +29,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		}
 		constellations.push (constellation);
 	}
-	Ok (constellations.len ().as_u32 ())
+	Ok (constellations.len ().pan_u32 ())
 }
 
 fn get_dist (pos_0: Pos, pos_1: Pos) -> NumResult <Coord> {

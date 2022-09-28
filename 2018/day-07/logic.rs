@@ -42,7 +42,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let mut queue: HashSet <char> = HashSet::new ();
 	let mut workers: Vec <Option <(char, u32)>> =
 		iter::repeat (None)
-			.take (input.params.num_workers.as_usize ())
+			.take (input.params.num_workers.pan_usize ())
 			.collect ();
 	let mut elapsed: u32 = 0;
 
@@ -58,7 +58,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		for worker in workers.iter_mut ().filter (|worker| worker.is_none ()) {
 			if queue.is_empty () { break }
 			let next_step = queue.iter ().min ().copied ().unwrap ();
-			let step_time = 1 + next_step.as_u32 () - 'A'.as_u32 () + input.params.extra_time;
+			let step_time = 1 + next_step.pan_u32 () - 'A'.pan_u32 () + input.params.extra_time;
 			* worker = Some ((next_step, step_time));
 			remaining.remove (& next_step);
 			queue.remove (& next_step);

@@ -25,7 +25,7 @@ pub mod logic {
 			input.digits.iter_vals ()
 				.circular_tuple_windows::<(_, _)> ()
 				.filter (|& (digit_0, digit_1)| digit_0 == digit_1)
-				.map (|(digit, _)| digit.as_u32 ())
+				.map (|(digit, _)| digit.pan_u32 ())
 				.sum::<u32> ()
 		)
 	}
@@ -38,7 +38,7 @@ pub mod logic {
 			input.digits.iter_vals ().take (input.digits.len () / 2)
 				.zip (input.digits.iter_vals ().skip (input.digits.len () / 2))
 				.filter (|& (digit_0, digit_1)| digit_0 == digit_1)
-				.map (|(digit, _)| digit.as_u32 () * 2)
+				.map (|(digit, _)| digit.pan_u32 () * 2)
 				.sum::<u32> ()
 		)
 	}
@@ -59,7 +59,7 @@ pub mod model {
 			if input.len () != 1 { return Err ("Input must be exactly one line".into ()) }
 			let digits = input [0].chars ()
 				.map (|ch| ch.to_digit (10)
-					.map (IntConv::as_u8)
+					.map (u32::pan_u8)
 					.ok_or_else (|| format! ("Not a digit: {}", ch).into ()))
 				.collect::<GenResult <_>> () ?;
 			Ok (Self { digits })

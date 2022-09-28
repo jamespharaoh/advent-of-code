@@ -15,7 +15,6 @@ puzzle_info! {
 mod logic {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub fn part_one (input: & str) -> GenResult <u64> {
 		calc_result (input, 80)
@@ -44,7 +43,7 @@ mod logic {
 				fishes [0],
 			];
 		}
-		Ok (fishes.into_iter ().sum::<u64> ().as_u64 ())
+		Ok (fishes.into_iter ().sum::<u64> ().pan_u64 ())
 	}
 
 }

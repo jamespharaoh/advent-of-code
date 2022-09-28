@@ -27,7 +27,7 @@ pub mod logic {
 					.tuple_combinations::<(_, _)> ()
 					.any (|(left, right)| left == right))
 				.count ()
-				.as_u32 ()
+				.pan_u32 ()
 		)
 	}
 
@@ -54,7 +54,7 @@ pub mod logic {
 					result
 				})
 				.count ()
-				.as_u32 ()
+				.pan_u32 ()
 		)
 	}
 

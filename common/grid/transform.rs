@@ -1,14 +1,16 @@
 use super::*;
 
-impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
+impl <'grd, Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 	where
-		Storage: GridStorage + Clone + FromIterator <Storage::Item>,
+		Storage: GridStorage + Clone + FromIterator <<Storage as GridStorage>::Item> + 'grd,
+		Storage::Item: Default,
+		& 'grd Storage: GridStorageIntoIter,
 		Pos: GridPos <DIMS> {
 
 	#[ inline ]
-	pub fn resize (& self, origin: [isize; DIMS], size: [usize; DIMS]) -> NumResult <Self>
-			where Storage::Item: Default {
-		if ! Self::validate_dims (origin, size) { return Err (Overflow) }
+	pub fn resize (& 'grd self, origin: Pos, size: Pos) -> NumResult <Self>
+			where <Storage as GridStorage>::Item: Default {
+		if ! Pos::validate_dims (origin, size) { return Err (Overflow) }
 		Ok (
 			Self::wrap (
 				GridKeysIter::new (origin, size)
@@ -20,60 +22,47 @@ impl <Storage, Pos, const DIMS: usize> Grid <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
-	pub fn extend (& self, amts: [(isize, isize); DIMS]) -> NumResult <Self>
-			where Storage::Item: Default {
+	pub fn extend_in_place (& 'grd self, amts: [(Pos::Coord, Pos::Coord); DIMS]) -> NumResult <Self>
+			where <Storage as GridStorage>::Item: Default {
+		let origin_arr = self.origin ().to_array ();
+		let size_arr = self.size ().to_array ();
 		self.resize (
-			array::from_fn (|idx| self.origin [idx] + amts [idx].0),
-			array::from_fn (|idx| (self.size [idx].as_isize () + amts [idx].0 + amts [idx].1).as_usize ()))
-	}
-
-	#[ inline ]
-	pub fn translate (& mut self, offset: Pos) -> NumResult <Self> {
-		let offset = offset.to_native_offset ().unwrap ();
-		let origin = array::from_fn (|dim_idx| self.origin [dim_idx] - offset [dim_idx]);
-		if ! Self::validate_dims (origin, self.size) { return Err (Overflow) }
-		Ok (Self::wrap (self.storage.clone (), origin, self.size))
-	}
-
-	#[ inline ]
-	#[ must_use ]
-	pub fn transform (& self, axes: [impl Into <Pos>; DIMS]) -> Self {
-		if self.origin != [0; DIMS] { unimplemented! () }
-		let offsets = axes.map (|axis| self.offset (axis.into ()));
-		let mut start = self.cursor (self.first_key ()).unwrap ();
-		for offset in offsets {
-			let offset = - offset;
-			while start.try_add_assign (offset).is_ok () { }
-		}
-		let storage =
-			GridTransformIter { cursors: [start; DIMS], offsets, done: false }
-				.map (|cur| cur.item ())
-				.collect ();
-		let size = offsets.map (|offset|
-			std::iter::successors (
-					Some (start),
-					|& cur| cur.try_add (offset).ok ())
-				.count ());
-		Self::wrap (storage, [0; DIMS], size)
+			Pos::from_array (array::from_fn (|idx| origin_arr [idx] + amts [idx].0)),
+			Pos::from_array (array::from_fn (|idx| size_arr [idx] + amts [idx].0 + amts [idx].1)))
 	}
 
 }
 
-struct GridTransformIter <'grid, Storage, Pos, const DIMS: usize> {
-	cursors: [GridCursor <'grid, Storage, Pos, DIMS>; DIMS],
-	offsets: [GridOffset <DIMS>; DIMS],
+pub struct GridTransformIter <Grid, Pos, const DIMS: usize>
+		where Pos: GridPos <DIMS> {
+	cursors: [GridCursor <Grid, Pos, DIMS>; DIMS],
+	offsets: [GridOffset <Pos, DIMS>; DIMS],
 	done: bool,
 }
 
-impl <'grid, Storage, Pos, const DIMS: usize> Iterator
-	for GridTransformIter <'grid, Storage, Pos, DIMS>
+impl <Grid, Pos, const DIMS: usize> GridTransformIter <Grid, Pos, DIMS>
+	where Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	pub const fn new (
+		cursors: [GridCursor <Grid, Pos, DIMS>; DIMS],
+		offsets: [GridOffset <Pos, DIMS>; DIMS],
+	) -> Self {
+		Self { cursors, offsets, done: false }
+	}
+
+}
+
+impl <Grid, Pos, const DIMS: usize> Iterator
+	for GridTransformIter <Grid, Pos, DIMS>
 	where
-		Pos: GridPos <DIMS>,
-		Storage: GridStorage {
+		Grid: GridView <Pos, DIMS>,
+		Pos: GridPos <DIMS> {
 
-	type Item = GridCursor <'grid, Storage, Pos, DIMS>;
+	type Item = GridCursor <Grid, Pos, DIMS>;
 
-	fn next (& mut self) -> Option <GridCursor <'grid, Storage, Pos, DIMS>> {
+	#[ inline ]
+	fn next (& mut self) -> Option <GridCursor <Grid, Pos, DIMS>> {
 		if self.done { return None }
 		let result = self.cursors [DIMS - 1];
 		for idx_0 in (0 .. DIMS).rev () {

@@ -2,7 +2,7 @@ use super::*;
 
 pub type Coord = u8;
 pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosRowCol <Coord>;
 pub type Turn = pos::Turn2d;
 
@@ -24,7 +24,7 @@ impl Tile {
 			Self::Horiz => '-',
 			Self::Vert => '|',
 			Self::Corner => '+',
-			Self::Letter (asc) => asc.as_char (),
+			Self::Letter (asc) => asc.pan_char (),
 		}
 	}
 
@@ -32,8 +32,7 @@ impl Tile {
 
 impl Display for Tile {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter, "{}", self.as_char ()) ?;
-		Ok (())
+		formatter.write_char (self.as_char ())
 	}
 }
 
@@ -47,7 +46,7 @@ impl <'inp> FromParser <'inp> for Tile {
 					'-' => Self::Horiz,
 					'|' => Self::Vert,
 					'+' => Self::Corner,
-					'A' ..= 'Z' => Self::Letter (ch.as_u8 ()),
+					'A' ..= 'Z' => Self::Letter (ch.pan_u8 ()),
 					_ => return Err (parser.err ()),
 				};
 				Ok (tile)

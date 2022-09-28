@@ -5,7 +5,7 @@
 #![ allow (clippy::missing_inline_in_public_items) ]
 
 use aoc_common::*;
-use aoc_grid as grid;
+use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
 puzzle_info! {
@@ -27,7 +27,6 @@ mod logic {
 	use model::Input;
 	use model::Pixels;
 	use model::Pos;
-	use nums::IntConv;
 
 	pub fn part_one (lines: & [& str]) -> GenResult <i64> {
 		calc_result (lines, 2)
@@ -44,7 +43,7 @@ mod logic {
 			image_iter (input.algorithm, image)
 				.nth (loops)
 				.unwrap ()
-				.num_pixels ().as_i64 ()
+				.num_pixels ().pan_i64 ()
 		)
 	}
 
@@ -95,8 +94,8 @@ mod logic {
 				algorithm [algorithm_idx]
 			})
 		).collect ();
-		let new_size = [image.height () + 2, image.width () + 2];
-		let new_pixels = Pixels::wrap (new_pixels, [0, 0], new_size);
+		let new_size = image.size () + Pos::new (2, 2);
+		let new_pixels = Pixels::wrap (new_pixels, Pos::ZERO, new_size);
 		let new_inverted = algorithm [if image.inverted () { 0x1ff } else { 0 }];
 		Image::new_from (new_pixels, new_inverted)
 	}
@@ -108,7 +107,7 @@ mod model {
 	use super::*;
 
 	pub type Algorithm = [bool; 512];
-	pub type Pixels = grid::Grid <Vec <bool>, Pos>;
+	pub type Pixels = GridBuf <Vec <bool>, Pos, 2>;
 	pub type Pos = pos::PosYX <i16>;
 
 	pub struct Input {
@@ -142,8 +141,10 @@ mod model {
 					_ => Err (err (line_idx, "Invalid character".to_owned ())),
 				}})
 			}).collect::<Result <_, _>> () ?;
-			let size = [lines.len () - 2, lines [2].chars ().count ()];
-			let pixels = Pixels::wrap (pixels, [0, 0], size);
+			let size = Pos::new (
+				(lines.len () - 2).pan_i16 (),
+				lines [2].chars ().count ().pan_i16 ());
+			let pixels = Pixels::wrap (pixels, Pos::ZERO, size);
 			Ok (Self { algorithm, pixels })
 		}
 	}
@@ -161,8 +162,7 @@ mod model {
 		pub fn num_pixels (& self) -> usize {
 			self.pixels.values ().filter (|& val| val != self.inverted).count ()
 		}
-		pub const fn height (& self) -> usize { self.pixels.native_size () [0] }
-		pub const fn width (& self) -> usize { self.pixels.native_size () [1] }
+		pub fn size (& self) -> Pos { self.pixels.size () }
 		pub const fn inverted (& self) -> bool { self.inverted }
 		pub fn get (& self, pos: Pos) -> bool {
 			self.pixels.get (pos).unwrap_or (self.inverted)

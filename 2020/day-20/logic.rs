@@ -20,7 +20,7 @@ pub fn part_one (input: & Input) -> GenResult <u64> {
 	Ok (
 		tiles.values ()
 			.filter (|tile| get_shared_sides (& tiles, tile).count_ones () == 2)
-			.map (|tile| tile.id.as_u64 ())
+			.map (|tile| tile.id.pan_u64 ())
 			.try_fold (1, |prod, val| chk! (prod * val)) ?
 	)
 }
@@ -34,14 +34,14 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let (row_dir, col_dir, posns) =
 		find_monsters (& grid).ok_or ("No monsters found") ?;
 
-	let mut grid = grid.transform ([ row_dir, col_dir ]);
+	let mut grid = grid.transform ([ row_dir, col_dir ]) ?;
 	remove_monsters (& mut grid, & posns);
 
 	Ok (
 		grid.values ()
 			.filter (|& pixel| pixel == Pixel::White)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 
 }
@@ -76,8 +76,8 @@ fn find_monsters_transform (
 	col_dir: Dir,
 	size: i8,
 ) -> Vec <Pos> {
-	let row_off = grid.offset (row_dir);
-	let col_off = grid.offset (col_dir);
+	let row_off = grid.offset (row_dir.into ()).unwrap ();
+	let col_off = grid.offset (col_dir.into ()).unwrap ();
 	grid.cursor (start).unwrap ().walk (row_off)
 		.map (|cur| cur.walk (col_off)
 			.fold (0_u128, |sum, cur|
@@ -85,7 +85,7 @@ fn find_monsters_transform (
 		.tuple_windows ()
 		.enumerate ()
 		.flat_map (|(y, (mut a, mut b, mut c))| {
-			let y = y.as_i8 ();
+			let y = y.pan_i8 ();
 			let mut results = Vec::new ();
 			for x in (0 .. size - 19).rev () {
 				if detect_monster ([a, b, c]) {
@@ -112,7 +112,7 @@ fn remove_monsters (grid: & mut Grid, posns: & [Pos]) {
 		let mut bit = 1 << 19_u32;
 		for x in 0 .. 20 {
 			for y in 0 .. 3 {
-				if MONSTER [y.as_usize ()] & bit != 0 {
+				if MONSTER [y.pan_usize ()] & bit != 0 {
 					grid.set (pos + Pos::new (y, x), Pixel::Black);
 				}
 			}
@@ -134,13 +134,13 @@ fn assemble_image (input: & Input) -> GenResult <Grid> {
 	loop {
 		loop {
 			translate.x += first.grid.size ().x;
-			let mut next = some_or! (pick_next (& mut tiles, 4, prev_col), break);
+			let mut next = some_or! (pick_next (& mut tiles, 4, prev_col) ?, break);
 			paint_next (& mut result, & mut next, translate) ?;
 			prev_col = next.tags [1];
 		}
 		translate.y += first.grid.size ().y;
 		translate.x = 0;
-		let mut next = some_or! (pick_next (& mut tiles, 7, prev_row), break);
+		let mut next = some_or! (pick_next (& mut tiles, 7, prev_row) ?, break);
 		paint_next (& mut result, & mut next, translate) ?;
 		prev_row = next.tags [2];
 		prev_col = next.tags [1];
@@ -149,32 +149,37 @@ fn assemble_image (input: & Input) -> GenResult <Grid> {
 	Ok (result)
 }
 
-fn pick_next (tiles: & mut Tiles, tag_idx: u8, tag: Tag) -> Option <Tile> {
-	let tile_id = tiles.values ().find (|tile| tile.tags.contains (& tag)) ?.id;
+fn pick_next (tiles: & mut Tiles, tag_idx: u8, tag: Tag) -> GenResult <Option <Tile>> {
+	let tile_id = some_or! (
+		tiles.values ().find (|tile| tile.tags.contains (& tag)),
+		return Ok (None)
+	).id;
 	let mut tile = tiles.remove (& tile_id).unwrap ();
 	match (tag_idx, tile.tags.into_iter ().position (|other_tag| other_tag == tag).unwrap ()) {
-		(4, 0) | (7, 3) => { tile.flip (); },
-		(4, 1) | (7, 0) => { tile.flip (); tile.rotate_right (); },
-		(4, 2) | (7, 1) => { tile.flip (); tile.rotate_around (); },
-		(4, 3) | (7, 2) => { tile.flip (); tile.rotate_left (); },
+		(4, 0) | (7, 3) => { tile.flip () ?; },
+		(4, 1) | (7, 0) => { tile.flip () ?; tile.rotate_right () ?; },
+		(4, 2) | (7, 1) => { tile.flip () ?; tile.rotate_around () ?; },
+		(4, 3) | (7, 2) => { tile.flip () ?; tile.rotate_left () ?; },
 		(4, 4) | (7, 7) => { },
-		(4, 5) | (7, 4) => { tile.rotate_right (); },
-		(4, 6) | (7, 5) => { tile.rotate_around (); },
-		(4, 7) | (7, 6) => { tile.rotate_left (); },
+		(4, 5) | (7, 4) => { tile.rotate_right () ?; },
+		(4, 6) | (7, 5) => { tile.rotate_around () ?; },
+		(4, 7) | (7, 6) => { tile.rotate_left () ?; },
 		_ => unreachable! (),
 	}
-	if tile.tags [0 .. 4].contains (& tag) { tile.flip (); }
-	while tile.tags [tag_idx.as_usize ()] != tag { tile.rotate_left (); }
-	Some (tile)
+	if tile.tags [0 .. 4].contains (& tag) { tile.flip () ?; }
+	while tile.tags [tag_idx.pan_usize ()] != tag { tile.rotate_left () ?; }
+	Ok (Some (tile))
 }
 
 fn paint_next (result: & mut Grid, tile: & mut Tile, translate: Pos) -> GenResult <()> {
 	let required_size = chk! (translate + tile.grid.size ()) ?;
 	if result.size ().y < required_size.y || result.size ().x < required_size.x {
-		* result = result.resize ([0, 0], [
-			cmp::max (result.native_size () [0], required_size.y.as_usize ()),
-			cmp::max (result.native_size () [1], required_size.x.as_usize ()),
-		]) ?;
+		* result = result.resize (
+			Pos::ZERO,
+			Pos::new (
+				cmp::max (result.size ().y, required_size.y),
+				cmp::max (result.size ().x, required_size.x)),
+		) ?;
 	}
 	for (pos, pixel) in tile.grid.translate (translate) ?.iter () {
 		result.set (pos, pixel);
@@ -190,9 +195,9 @@ fn pick_first (tiles: & mut Tiles) -> GenResult <Tile> {
 	let mut tile = tiles.remove (& id).unwrap ();
 	match get_shared_sides (tiles, & tile) {
 		0b_0110 => (),
-		0b_0011 => tile.rotate_left (),
-		0b_1001 => tile.rotate_around (),
-		0b_1100 => tile.rotate_right (),
+		0b_0011 => tile.rotate_left () ?,
+		0b_1001 => tile.rotate_around () ?,
+		0b_1100 => tile.rotate_right () ?,
 		_ => return Err ("No solution found".into ()),
 	}
 	Ok (tile)

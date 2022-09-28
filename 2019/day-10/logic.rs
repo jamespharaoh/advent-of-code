@@ -64,5 +64,5 @@ fn num_visible (roids: & [Pos], base: Pos) -> u32 {
 		.map (|other| DirVec::new (other - base).dir)
 		.collect::<HashSet <Dir>> ()
 		.len ()
-		.as_u32 ()
+		.pan_u32 ()
 }

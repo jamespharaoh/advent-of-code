@@ -2,7 +2,6 @@
 
 use super::*;
 use model::State;
-use nums::IntConv;
 
 #[ derive (Debug, clap::Parser) ]
 pub struct Args {
@@ -54,7 +53,7 @@ impl Debug for Span {
 impl Display for Span {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		for & val in self.0.iter () {
-			write! (formatter, "{}", char::from_digit (val.as_u32 (), 10).unwrap ()) ?;
+			write! (formatter, "{}", char::from_digit (val.pan_u32 (), 10).unwrap ()) ?;
 		}
 		Ok (())
 	}
@@ -144,7 +143,7 @@ impl Debug for Atomic {
 		}
 		write! (formatter, " first=") ?;
 		for item in self.first.iter ().copied () {
-			write! (formatter, "{}", char::from_digit (item.as_u32 (), 10).unwrap ()) ?;
+			write! (formatter, "{}", char::from_digit (item.pan_u32 (), 10).unwrap ()) ?;
 		}
 		write! (formatter, " last={})", self.last) ?;
 		Ok (())
@@ -206,7 +205,7 @@ pub fn run (args: Args) -> GenResult <()> {
 			};
 			if has_long_run { continue }
 
-			for prefix_len in (2 ..= length.as_usize () - 2).step_by (2) {
+			for prefix_len in (2 ..= length.pan_usize () - 2).step_by (2) {
 				match (
 					atomics.get (& state [ .. prefix_len]),
 					destinies.get (& state [prefix_len .. ]).unwrap_or_else (||
@@ -336,7 +335,7 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 			};
 			if has_long_run { continue }
 
-			for prefix_len in (2 ..= length.as_usize () - 2).step_by (2) {
+			for prefix_len in (2 ..= length.pan_usize () - 2).step_by (2) {
 				match (
 					stables [& state [ .. prefix_len]].as_ref (),
 					stables [& state [prefix_len .. ]].as_ref (),

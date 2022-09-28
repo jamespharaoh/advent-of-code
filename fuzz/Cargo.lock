@@ -1329,6 +1329,7 @@ dependencies = [
  "aoc-2020-day-21",
  "aoc-2020-day-22",
  "aoc-2020-day-23",
+ "aoc-2020-day-24",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -1527,6 +1528,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "aoc-2020-day-24"
+version = "0.1.0"
+dependencies = [
+ "aoc-bitvec",
+ "aoc-codegen",
+ "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+]
+
+[[package]]
 name = "aoc-bitvec"
 version = "0.1.0"
 dependencies = [
@@ -1565,6 +1577,7 @@ dependencies = [
  "aoc-2019",
  "aoc-2020",
  "aoc-common",
+ "aoc-grid",
  "libfuzzer-sys",
  "rand",
 ]
@@ -1574,6 +1587,7 @@ name = "aoc-grid"
 version = "0.1.0"
 dependencies = [
  "aoc-bitvec",
+ "aoc-checked",
  "aoc-misc",
  "aoc-nums",
  "aoc-parser",
@@ -1639,6 +1653,7 @@ dependencies = [
 name = "aoc-pos"
 version = "0.1.0"
 dependencies = [
+ "aoc-checked",
  "aoc-misc",
  "aoc-nums",
 ]
@@ -1649,6 +1664,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-grid",
  "aoc-misc",
+ "aoc-nums",
 ]
 
 [[package]]

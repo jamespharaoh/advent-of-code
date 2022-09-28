@@ -1,6 +1,8 @@
 use super::*;
+
 use model::Grid;
 use model::Node;
+use model::Pos;
 
 #[ derive (Clone, Debug) ]
 pub struct Input {
@@ -34,8 +36,8 @@ impl Input {
 					.chain (iter::repeat (Node::Clean))
 					.take (num_cols))
 				.collect ();
-			let grid_origin = [ (num_rows / 2).as_isize (), (num_cols / 2).as_isize ()];
-			let grid_size = [ num_rows, num_cols ];
+			let grid_origin = Pos::new ((num_rows / 2).pan_i16 (), (num_cols / 2).pan_i16 ());
+			let grid_size = Pos::new (num_rows.pan_i16 (), num_cols.pan_i16 ());
 			let nodes = Grid::wrap (nodes_vec, grid_origin, grid_size);
 			Ok (Self { nodes, params })
 		})

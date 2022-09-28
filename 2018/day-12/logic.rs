@@ -39,7 +39,7 @@ fn calc_result (input: & Input, num_iters: u64) -> GenResult <i64> {
 				let reps = u64::div_2 (rem_iters, loop_iters) ?;
 				state.start = i64::add_2 (state.start, Int::mul_2 (
 					Int::sub_2 (state.start, prev_start) ?,
-					reps.as_i64 (),
+					reps.pan_i64 (),
 				) ?) ?;
 				cur_iters = Int::add_2 (cur_iters, Int::mul_2 (reps, loop_iters) ?) ?;
 			}

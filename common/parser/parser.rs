@@ -65,7 +65,7 @@ impl <Item> ResultParser <Item> for Result <Item, ParseError> {
 	#[ inline ]
 	fn map_parse_err_auto (self, parser: & Parser) -> GenResult <Item> {
 		self.map_parse_err (|line_idx, col_idx| {
-			let line = parser.input_lines [line_idx.as_usize ()];
+			let line = parser.input_lines [line_idx.pan_usize ()];
 			format! ("Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)
 		})
 	}
@@ -202,11 +202,12 @@ impl <'inp> Parser <'inp> {
 					if expect_byte & 0xc0 != 0x80 { num_chars += 1; }
 					num_bytes += 1;
 				},
-				None if expect_byte == b'\n' && self.line_idx.as_usize () + 1 < self.input_lines.len () => {
+				None if expect_byte == b'\n'
+						&& self.line_idx.pan_usize () + 1 < self.input_lines.len () => {
 					self.line_idx += 1;
 					self.col_idx = 0;
 					self.byte_idx = 0;
-					self.input_line = self.input_lines [self.line_idx.as_usize ()];
+					self.input_line = self.input_lines [self.line_idx.pan_usize ()];
 					input_iter = self.input_line.bytes ();
 					num_chars = 0;
 					num_bytes = 0;
@@ -219,7 +220,7 @@ impl <'inp> Parser <'inp> {
 		}
 		self.col_idx += num_chars;
 		self.byte_idx += num_bytes;
-		self.input_line = & self.input_line [num_bytes.as_usize () .. ];
+		self.input_line = & self.input_line [num_bytes.pan_usize () .. ];
 		/*
 		for expect_char in expect.chars () {
 			if self.next () == Some (expect_char) { continue }
@@ -291,8 +292,8 @@ impl <'inp> Parser <'inp> {
 				.take_while (|& (idx, ch)|
 					ch.is_ascii_digit () || (idx == 0 && (ch == b'-' || ch == b'+')))
 				.fold (0, |sum, _| sum + 1);
-		let val = & self.input_line [ .. num_digits.as_usize ()];
-		self.input_line = & self.input_line [num_digits.as_usize () .. ];
+		let val = & self.input_line [ .. num_digits.pan_usize ()];
+		self.input_line = & self.input_line [num_digits.pan_usize () .. ];
 		self.col_idx += num_digits;
 		self.byte_idx += num_digits;
 		if self.ignore_whitespace { self.skip_whitespace (); }
@@ -307,8 +308,8 @@ impl <'inp> Parser <'inp> {
 			self.input_line.bytes ()
 				.take_while (|& ch| ch.is_ascii_digit ())
 				.fold (0, |sum, _| sum + 1);
-		let val = & self.input_line [ .. num_digits.as_usize ()];
-		self.input_line = & self.input_line [num_digits.as_usize () .. ];
+		let val = & self.input_line [ .. num_digits.pan_usize ()];
+		self.input_line = & self.input_line [num_digits.pan_usize () .. ];
 		self.col_idx += num_digits;
 		self.byte_idx += num_digits;
 		if self.ignore_whitespace { self.skip_whitespace (); }
@@ -332,10 +333,10 @@ impl <'inp> Parser <'inp> {
 				.fold ((0_u32, 0_usize), |(num_chars, num_bytes), ch_bytes|
 					(num_chars + 1, num_bytes + ch_bytes));
 		if num_chars == 0 { return Err (self.err ()) }
-		let word = & self.input_line [ .. num_bytes.as_usize ()];
-		self.input_line = & self.input_line [num_bytes.as_usize () .. ];
+		let word = & self.input_line [ .. num_bytes.pan_usize ()];
+		self.input_line = & self.input_line [num_bytes.pan_usize () .. ];
 		self.col_idx += num_chars;
-		self.byte_idx += num_bytes.as_u32 ();
+		self.byte_idx += num_bytes.pan_u32 ();
 		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (word)
 	}
@@ -399,7 +400,7 @@ impl <'inp> Parser <'inp> {
 			self.input_line.bytes ()
 				.take_while (|& ch| ch.is_ascii_whitespace ())
 				.fold (0_u32, |sum, _| sum + 1);
-		self.input_line = & self.input_line [num_spaces.as_usize () .. ];
+		self.input_line = & self.input_line [num_spaces.pan_usize () .. ];
 		self.col_idx += num_spaces;
 		self.byte_idx += num_spaces;
 		self
@@ -423,16 +424,16 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn next (& mut self) -> Option <char> {
-		if self.input_line.is_empty () && self.line_idx + 1 < self.input_lines.len ().as_u32 () {
+		if self.input_line.is_empty () && self.line_idx + 1 < self.input_lines.len ().pan_u32 () {
 			self.line_idx += 1;
-			self.input_line = self.input_lines [self.line_idx.as_usize ()];
+			self.input_line = self.input_lines [self.line_idx.pan_usize ()];
 			self.col_idx = 0;
 			return Some ('\n');
 		}
 		let ch = self.input_line.chars ().next () ?;
 		self.input_line = & self.input_line [ch.len_utf8 () .. ];
 		self.col_idx += 1;
-		self.byte_idx += ch.len_utf8 ().as_u32 ();
+		self.byte_idx += ch.len_utf8 ().pan_u32 ();
 		Some (ch)
 	}
 
@@ -441,7 +442,7 @@ impl <'inp> Parser <'inp> {
 	#[ inline ]
 	pub fn peek (& mut self) -> Option <char> {
 		self.input_line.chars ().next ().or_else (||
-			(self.line_idx + 1 < self.input_lines.len ().as_u32 ()).then_some ('\n'))
+			(self.line_idx + 1 < self.input_lines.len ().pan_u32 ()).then_some ('\n'))
 	}
 
 	/// Consume and return the next character from the input

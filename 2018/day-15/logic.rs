@@ -37,7 +37,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 fn calc_score (state: & State) -> u32 {
 	let remain_hp = state.units.iter ()
-		.map (|& (_, unit_hp)| unit_hp.as_u32 ())
+		.map (|& (_, unit_hp)| unit_hp.pan_u32 ())
 		.sum::<u32> ();
 	let num_rounds = state.num_rounds;
 	num_rounds * remain_hp
@@ -76,7 +76,7 @@ impl State {
 			.collect ();
 		if units.is_empty () { return Err ("No combatants found".into ()) }
 		if units.len () > 50 { return Err ("More than 50 combatants".into ()) }
-		let seen = SeenGrid::new (grid.native_origin (), grid.native_size ());
+		let seen = SeenGrid::new (grid.origin (), grid.size ());
 		Ok (Self {
 			grid,
 			goblin_attack,

@@ -48,7 +48,7 @@ pub mod logic {
 		}
 		match (output_0, output_1, output_2) {
 			(Some (output_0), Some (output_1), Some (output_2)) =>
-				Ok (output_0.as_u64 () * output_1.as_u64 () * output_2.as_u64 ()),
+				Ok (output_0.pan_u64 () * output_1.pan_u64 () * output_2.pan_u64 ()),
 			_ => Err ("No solution found".into ()),
 		}
 	}

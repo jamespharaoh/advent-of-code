@@ -79,7 +79,7 @@ fn calc_grid (input: & Input, size: Pos) -> Grid {
 	let mut grid_data = Vec::new ();
 	let mut ero_row: Vec <Val> =
 		itertools::iterate (input.depth, |prev| (prev + input.params.top_factor) % input.params.modulo)
-			.take (size.x.as_usize ())
+			.take (size.x.pan_usize ())
 			.collect ();
 	let mut y: Coord = 0;
 	loop {
@@ -91,7 +91,7 @@ fn calc_grid (input: & Input, size: Pos) -> Grid {
 		}));
 		y += 1;
 		if y == size.y { break }
-		let first = (y.as_u32 () * input.params.left_factor + input.depth) % input.params.modulo;
+		let first = (y.pan_u32 () * input.params.left_factor + input.depth) % input.params.modulo;
 		ero_row = iter::empty ()
 			.chain (iter::once (first))
 			.chain (ero_row.iter ().skip (1).copied ()
@@ -108,6 +108,5 @@ fn calc_grid (input: & Input, size: Pos) -> Grid {
 				}))
 			.collect ();
 	}
-	let grid_size = [ size.y.as_usize (), size.x.as_usize () ];
-	Grid::wrap (grid_data, [0, 0], grid_size)
+	Grid::wrap (grid_data, Pos::ZERO, size)
 }

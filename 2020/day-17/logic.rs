@@ -6,7 +6,6 @@ use input::Input;
 use model::Coord;
 use model::GenPos;
 use model::Grid;
-use model::GridOffset;
 use model::PosXYZ;
 use model::PosXYZW;
 use model::Tile;
@@ -30,7 +29,7 @@ fn calc_result <Pos: GenPos <DIMS>, const DIMS: usize> (
 		grid.values ()
 			.filter (|& tile| tile == Tile::Active)
 			.count ()
-			.as_u32 ()
+			.pan_u32 ()
 	)
 }
 
@@ -40,12 +39,12 @@ fn next_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	base_dirs: & [Pos],
 ) -> GenResult <Grid <Pos, DIMS>> {
 	let resized_grid = grid.resize (
-		grid.native_origin ().map (|val| val + 1),
-		grid.native_size ().map (|val| val + 2)) ?;
-	let dirs: Vec <GridOffset <DIMS>> =
+		grid.origin ().map (|val| val + Coord::ONE).into (),
+		grid.size ().map (|val| val + Coord::TWO).into ()) ?;
+	let dirs: Vec <GridOffset <Pos, DIMS>> =
 		base_dirs.iter ()
 			.map (|& pos| resized_grid.offset (pos))
-			.collect ();
+			.try_collect () ?;
 	Ok (resized_grid.map (move |cur| {
 		let adj_active = dirs.iter ()
 			.filter_map (|& dir| cur.try_add (dir).map (|cur| cur.item ()).ok ())
@@ -61,28 +60,28 @@ fn next_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 fn get_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	input: & Input,
 ) -> GenResult <Grid <Pos, DIMS>> {
-	let input_size = input.grid.native_size ();
-	if 8 < input_size [0] || 8 < input_size [1] {
+	let input_size = input.grid.size ();
+	if 8 < input_size.x || 8 < input_size.y {
 		return Err ("Max grid size is 8×8".into ());
 	}
-	let mut grid = Grid::new (
-		[ 0_isize; DIMS ],
-		array::from_fn (|idx| if idx < 2 { input_size [idx] } else { 1 }));
+	let input_size_arr: [Coord; 2] = input_size.into ();
+	let size = array::from_fn (|idx| if idx < 2 { input_size_arr [idx] } else { 1 }).into ();
+	let mut grid = Grid::new (Pos::ZERO, size);
 	for (pos, tile) in input.grid.iter () {
-		let pos = Pos::pos_from_array (array::from_fn (|idx|
-			match idx { 0 => pos.x, 1 => pos.y, _ => Coord::ZERO }));
+		let pos =
+			array::from_fn (|idx| match idx { 0 => pos.x, 1 => pos.y, _ => Coord::ZERO })
+				.into ();
 		grid.set (pos, tile);
 	}
 	Ok (grid)
 }
 
 #[ inline ]
-fn get_base_dirs <Pos: GenPos <DIMS>, const DIMS: usize> (
-) -> Vec <Pos> {
+fn get_base_dirs <Pos: GenPos <DIMS>, const DIMS: usize> () -> Vec <Pos> {
 	iter::repeat ([ Coord::NEG_ONE, Coord::ZERO, Coord::ONE ])
 		.take (DIMS)
 		.multi_cartesian_product ()
-		.map (|combo| Pos::pos_from_array (combo.try_into ().unwrap ()))
+		.map (|combo| <[Coord; DIMS]>::try_from (combo).unwrap ().into ())
 		.filter (|& pos| pos != Pos::ZERO)
 		.collect ()
 }

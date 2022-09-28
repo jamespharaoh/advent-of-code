@@ -45,7 +45,6 @@ pub mod logic {
 
 	use super::*;
 	use model::Input;
-	use nums::IntConv;
 
 	pub fn part_one (input: Input) -> GenResult <u32> {
 		let (mut sizes, target) = input;
@@ -53,7 +52,7 @@ pub mod logic {
 
 		sizes.sort_by_key (|& size| cmp::Reverse (size));
 		let num_combos = combos (& sizes, target).count ();
-		Ok (num_combos.as_u32 ())
+		Ok (num_combos.pan_u32 ())
 	}
 
 	pub fn part_two (input: Input) -> GenResult <u32> {
@@ -80,7 +79,7 @@ pub mod logic {
 
 		// return
 
-		Ok (num_smallest.as_u32 ())
+		Ok (num_smallest.pan_u32 ())
 
 	}
 
@@ -131,7 +130,6 @@ pub mod logic {
 pub mod model {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub type Input = (Vec <u32>, u32);
 
@@ -141,7 +139,7 @@ pub mod model {
 		} else { (input, 150) };
 		let buckets = input.iter ().enumerate ().map (|(line_idx, line)|
 			Parser::wrap (line, |parser| {
-				let val = parser.int::<u8> () ?.as_u32 ();
+				let val = parser.int::<u8> () ?.pan_u32 ();
 				parser.end () ?;
 				Ok (val)
 			}).map_parse_err (|_, char_idx|

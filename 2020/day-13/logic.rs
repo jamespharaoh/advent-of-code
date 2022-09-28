@@ -24,7 +24,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 pub fn part_two (input: & Input) -> GenResult <u128> {
 	let bus_idx_ids: Vec <(u128, u128)> =
 		input.bus_ids.iter ().copied ().enumerate ()
-			.filter_map (|(idx, id)| id.map (|id| (idx.as_u128 (), id.as_u128 ())))
+			.filter_map (|(idx, id)| id.map (|id| (idx.pan_u128 (), id.pan_u128 ())))
 			.collect ();
 	let mut time: u128 = 0;
 	for _ in 0 .. input.params.max_iters {

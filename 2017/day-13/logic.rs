@@ -33,8 +33,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 			let mul = layer.period / divisor (period, layer.period);
 			repeat = (0 .. )
-				.step_by (period.as_usize ())
-				.take (mul.as_usize ())
+				.step_by (period.pan_usize ())
+				.take (mul.pan_usize ())
 				.cartesian_product (repeat)
 				.map (|(incr, time)| incr + time)
 				.filter (|time| (time + layer.offset) % layer.period != 0)
@@ -81,9 +81,9 @@ fn analyse (input: & Input) -> GenResult <Vec <LayerInfo>> {
 	let layers =
 		input.layers.iter ().cloned ()
 			.map (|layer| LayerInfo {
-				offset: layer.depth.as_u32 (),
-				period: (layer.range.as_u32 () - 1) * 2,
-				score: layer.depth.as_u32 () * layer.range.as_u32 (),
+				offset: layer.depth.pan_u32 (),
+				period: (layer.range.pan_u32 () - 1) * 2,
+				score: layer.depth.pan_u32 () * layer.range.pan_u32 (),
 			})
 			.sorted_by_key (|layer| layer.offset)
 			.collect::<Vec <LayerInfo>> ();

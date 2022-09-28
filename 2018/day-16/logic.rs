@@ -39,8 +39,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	for sample in input.samples.iter () {
 		for opcode in Opcode::VARIANTS.iter ().copied () {
 			if ! test_sample (opcode, sample) {
-				opcode_to_num_arr [opcode.idx ()] [sample.instr.op.as_usize ()] = false;
-				num_to_opcode_arr [sample.instr.op.as_usize ()] [opcode.idx ()] = false;
+				opcode_to_num_arr [opcode.idx ()] [sample.instr.op.pan_usize ()] = false;
+				num_to_opcode_arr [sample.instr.op.pan_usize ()] [opcode.idx ()] = false;
 			}
 		}
 	}
@@ -82,13 +82,13 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	let mut regs = Regs::default ();
 	for instr in input.instrs.iter () {
-		let opcode = num_to_opcode [instr.op.as_usize ()];
+		let opcode = num_to_opcode [instr.op.pan_usize ()];
 		regs = opcode.apply (instr.arg_a, instr.arg_b, instr.arg_c, regs) ?;
 	}
 
 	// return the value from register zero
 
-	Ok (regs [0].as_u32 ())
+	Ok (regs [0].pan_u32 ())
 
 }
 

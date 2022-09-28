@@ -344,9 +344,9 @@ mod cli {
 				let mut buf = [0; 3];
 				assert_eq! (3, rand.read (& mut buf).unwrap ());
 				let num =
-					(buf [0].as_usize () << 16_u32)
-						| (buf [1].as_usize () << 8_u32)
-						| buf [2].as_usize ();
+					(buf [0].pan_usize () << 16_u32)
+						| (buf [1].pan_usize () << 8_u32)
+						| buf [2].pan_usize ();
 				if num <= args.max { break num }
 			};
 			let mut buffer = String::new ();
@@ -354,7 +354,7 @@ mod cli {
 				let ch = loop {
 					let mut buf = [0; 1];
 					assert_eq! (1, rand.read (& mut buf).unwrap ());
-					let ch = buf [0].as_char ();
+					let ch = buf [0].pan_char ();
 					if ('a' ..= 'z').contains (& ch) { break ch }
 				};
 				buffer.push (ch);

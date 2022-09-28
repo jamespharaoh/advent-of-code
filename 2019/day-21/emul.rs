@@ -112,12 +112,12 @@ impl Reg {
 	#[ must_use ]
 	pub fn char (self) -> char {
 		assert! (self.idx < 26);
-		('A'.as_u32 () + self.idx.as_u32 ()).as_char ()
+		('A'.pan_u32 () + self.idx.pan_u32 ()).pan_char ()
 	}
 
 	#[ must_use ]
 	pub fn idx (self) -> usize {
-		self.idx.as_usize ()
+		self.idx.pan_usize ()
 	}
 
 	pub const J: Self = Self { idx: 9 };
@@ -135,7 +135,7 @@ impl TryFrom <char> for Reg {
 	type Error = Overflow;
 	fn try_from (ch: char) -> Result <Self, Overflow> {
 		if ! ('A' ..= 'Z').contains (& ch) { return Err (Overflow) }
-		Ok (Self { idx: (ch.as_u32 () - 'A'.as_u32 ()).as_u8 () })
+		Ok (Self { idx: (ch.pan_u32 () - 'A'.pan_u32 ()).pan_u8 () })
 	}
 }
 
@@ -143,6 +143,6 @@ impl TryFrom <usize> for Reg {
 	type Error = Overflow;
 	fn try_from (idx: usize) -> Result <Self, Overflow> {
 		if ! (0 .. 26).contains (& idx) { return Err (Overflow) }
-		Ok (Self { idx: idx.as_u8 () })
+		Ok (Self { idx: idx.pan_u8 () })
 	}
 }

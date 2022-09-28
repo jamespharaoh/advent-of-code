@@ -42,9 +42,9 @@ fn shuffle_to_operation (shuffle: Shuffle, deck_size: u64) -> GenResult <Operati
 		},
 		Shuffle::Cut (arg) => {
 			let arg = if 0_i32 <= arg {
-				u64::sub_2 (deck_size, arg.as_u64 ()) ?
+				u64::sub_2 (deck_size, arg.pan_u64 ()) ?
 			} else {
-				arg.unsigned_abs ().as_u64 ()
+				arg.unsigned_abs ().pan_u64 ()
 			};
 			if deck_size <= arg {
 				return Err (format! (
@@ -56,7 +56,7 @@ fn shuffle_to_operation (shuffle: Shuffle, deck_size: u64) -> GenResult <Operati
 			)
 		},
 		Shuffle::DealWithIncrement (arg) => {
-			let arg = arg.as_u64 ();
+			let arg = arg.pan_u64 ();
 			if deck_size <= arg {
 				return Err (format! (
 					"Invalid shuffle {shuffle:?} for deck size {deck_size}").into ());

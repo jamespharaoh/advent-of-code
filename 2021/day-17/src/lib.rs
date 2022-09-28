@@ -18,7 +18,6 @@ mod logic {
 	use model::Input;
 	use model::Position;
 	use model::Velocity;
-	use nums::IntConv;
 
 	pub fn part_one (input: & str) -> GenResult <i64> {
 		let input = Input::parse (input) ?;
@@ -29,7 +28,7 @@ mod logic {
 	pub fn part_two (input: & str) -> GenResult <i64> {
 		let input = Input::parse (input) ?;
 		let results = find_solutions (& input);
-		Ok (results.len ().as_i64 ())
+		Ok (results.len ().pan_i64 ())
 	}
 
 	fn find_solutions (input: & Input) -> Vec <(Velocity, i64)> {

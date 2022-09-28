@@ -8,7 +8,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.map (str::parse)
 			.try_collect () ?;
 	let string = knot::calc_sparse (data.iter_vals (), 1);
-	Ok (string [0].as_u32 () * string [1].as_u32 ())
+	Ok (string [0].pan_u32 () * string [1].pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <String> {

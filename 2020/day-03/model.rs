@@ -1,7 +1,7 @@
 use super::*;
 
 pub type Coord = i16;
-pub type Grid = aoc_grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 
 parse_display_enum! {

@@ -8,7 +8,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	let mut buffer = VecDeque::new ();
 	buffer.push_back (0_u32);
 	for next in 1 ..= 2017 {
-		buffer.rotate_left ((input.advance.as_usize () + 1) % buffer.len ());
+		buffer.rotate_left ((input.advance.pan_usize () + 1) % buffer.len ());
 		buffer.push_front (next);
 	}
 	buffer.rotate_left (1);

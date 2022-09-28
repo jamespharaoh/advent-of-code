@@ -118,7 +118,7 @@ mod mutator {
 			}
 			prog.total_weight = prog.prog_weight + prog.holds_weight;
 		}
-		let mod_idx = rng.gen_range (0 .. prog.nested_len ().as_u32 ());
+		let mod_idx = rng.gen_range (0 .. prog.nested_len ().pan_u32 ());
 		recurse (prog, & mut 0, mod_idx, rng, mut_fn);
 	}
 
@@ -215,7 +215,7 @@ mod mutator {
 			1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,
 			3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 7, 8, 9,
 		];
-		let name_len = NAME_LENGTHS.choose (rng).unwrap ().as_usize ();
+		let name_len = NAME_LENGTHS.choose (rng).unwrap ().pan_usize ();
 		iter::from_fn (|| Some (rng.gen_range ('a' ..= 'z')))
 			.take (name_len)
 			.collect::<String> ()

@@ -20,7 +20,7 @@ pub fn part_one (input: & Input) -> GenResult <Val> {
 				if addr == 255 {
 					return Ok (y);
 				} else if (0 .. 50).contains (& addr) {
-					nodes [addr.as_usize ()].deliver (x, y);
+					nodes [addr.pan_usize ()].deliver (x, y);
 				} else {
 					return Err (format! ("Invalid address: {addr}").into ());
 				}
@@ -43,7 +43,7 @@ pub fn part_two (input: & Input) -> GenResult <Val> {
 				if addr == 255 {
 					cached = Some ((x, y));
 				} else if (0 .. 50).contains (& addr) {
-					nodes [addr.as_usize ()].deliver (x, y);
+					nodes [addr.pan_usize ()].deliver (x, y);
 				} else {
 					return Err (format! ("Invalid address: {addr}").into ());
 				}

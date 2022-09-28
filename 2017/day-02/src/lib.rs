@@ -24,8 +24,8 @@ pub mod logic {
 		Ok (
 			input.rows.iter ()
 				.map (|row| {
-					let max = row.iter_vals ().max ().unwrap_or (0).as_u32 ();
-					let min = row.iter_vals ().min ().unwrap_or (0).as_u32 ();
+					let max = row.iter_vals ().max ().unwrap_or (0).pan_u32 ();
+					let min = row.iter_vals ().min ().unwrap_or (0).pan_u32 ();
 					max - min
 				})
 				.sum ()
@@ -48,7 +48,7 @@ pub mod logic {
 			.fold (Ok (0_u32), |sum, item|
 				Ok::<_, GenError> (Int::add_2 (
 					sum ?,
-					item ?.as_u32 ()) ?))
+					item ?.pan_u32 ()) ?))
 	}
 
 }

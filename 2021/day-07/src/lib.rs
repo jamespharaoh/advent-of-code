@@ -17,7 +17,6 @@ puzzle_info! {
 pub mod logic {
 
 	use super::*;
-	use nums::IntConv;
 
 	pub fn part_one (input: & str) -> GenResult <u64> {
 		let start_posns = model::parse_input (input) ?;
@@ -29,7 +28,7 @@ pub mod logic {
 				* crabs += start_posns.iter_vals ()
 					.filter (|start_pos| * start_pos == pos)
 					.count ()
-					.as_u64 ();
+					.pan_u64 ();
 				Some (* fuel)
 			})
 	}
@@ -45,7 +44,7 @@ pub mod logic {
 				* crabs += start_posns.iter_vals ()
 					.filter (|start_pos| * start_pos == pos)
 					.count ()
-					.as_u64 ();
+					.pan_u64 ();
 				Some (* fuel)
 			})
 	}

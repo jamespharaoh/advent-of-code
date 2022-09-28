@@ -3,7 +3,7 @@ use super::*;
 pub type Coord = i8;
 pub type Cpu = intcode::Machine <Val>;
 pub type Dir = pos::Dir2d;
-pub type Grid = grid::Grid <Vec <Tile>, Pos>;
+pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 pub type Turn = pos::Turn2d;
 pub type Val = i32;

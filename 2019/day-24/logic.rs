@@ -6,6 +6,7 @@
 use super::*;
 
 use input::Input;
+use input::InputPos;
 use input::InputTile;
 
 type State = Vec <u32>;
@@ -45,7 +46,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 }
 
 fn get_state (input: & Input) -> GenResult <u32> {
-	if input.grid.native_size () != [5, 5] {
+	if input.grid.size () != InputPos::new (5, 5) {
 		return Err ("Grid must be exactly 5×5".into ());
 	}
 	Ok (
@@ -89,7 +90,7 @@ fn next_layer <const RECURSE: bool> (state: & [u32], layer_idx: usize) -> u32 {
 	let mut pat_layers = calc_pat_layers::<RECURSE> (layer_val, outer_val);
 	let inner_pats = if RECURSE { calc_inner_pats (inner_val) } else { [0_u64; 5] };
 	for y in 0_u32 .. 5 {
-		let mut pat_inner = inner_pats [y.as_usize ()];
+		let mut pat_inner = inner_pats [y.pan_usize ()];
 		for _x in 0_u32 .. 5 {
 			let val = pat_layers & 0b_0000000_0000010_0000000 != 0;
 			let adj_count = (pat_layers & 0b_0000010_0000101_0000010).count_ones ()
@@ -108,11 +109,11 @@ fn next_layer <const RECURSE: bool> (state: & [u32], layer_idx: usize) -> u32 {
 #[ inline ]
 fn calc_pat_layers <const RECURSE: bool> (layer_val: u32, outer_val: u32) -> u64 {
 	let mut pat_layers = 0_u64
-		| (layer_val.as_u64 () & (0b_11111 << 0_u32)) << 8_u32
-		| (layer_val.as_u64 () & (0b_11111 << 5_u32)) << 10_u32
-		| (layer_val.as_u64 () & (0b_11111 << 10_u32)) << 12_u32
-		| (layer_val.as_u64 () & (0b_11111 << 15_u32)) << 14_u32
-		| (layer_val.as_u64 () & (0b_11111 << 20_u32)) << 16_u32;
+		| (layer_val.pan_u64 () & (0b_11111 << 0_u32)) << 8_u32
+		| (layer_val.pan_u64 () & (0b_11111 << 5_u32)) << 10_u32
+		| (layer_val.pan_u64 () & (0b_11111 << 10_u32)) << 12_u32
+		| (layer_val.pan_u64 () & (0b_11111 << 15_u32)) << 14_u32
+		| (layer_val.pan_u64 () & (0b_11111 << 20_u32)) << 16_u32;
 	if RECURSE {
 		if outer_val & (0b_00100 << 5_u32) != 0 { pat_layers |= 0b_0111110; }
 		if outer_val & (0b_00100 << 15_u32) != 0 { pat_layers |= 0b_0111110 << 28_u32; }

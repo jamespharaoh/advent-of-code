@@ -27,7 +27,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			todo.push (container.clone ());
 		}
 	}
-	Ok (seen.len ().as_u32 ())
+	Ok (seen.len ().pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {

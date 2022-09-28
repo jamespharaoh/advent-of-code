@@ -2,7 +2,7 @@ use super::*;
 
 pub type Coord = i8;
 pub type Dir = aoc_pos::Dir2d;
-pub type Grid = aoc_grid::Grid <Vec <Pixel>, Pos>;
+pub type Grid = GridBuf <Vec <Pixel>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 pub type Tag = u16;
 pub type TileId = u16;
@@ -34,7 +34,7 @@ impl Tile {
 			Dir::Right, Dir::Down, Dir::Left, Dir::Up,
 			Dir::Down, Dir::Right, Dir::Up, Dir::Left,
 		].map (|dir| {
-			let offset = grid.offset (Pos::ZERO.try_add ((dir, 1)).unwrap ());
+			let offset = grid.offset (Pos::ZERO.try_add ((dir, 1)).unwrap ()).unwrap ();
 			let mut tag = 0_u16;
 			loop {
 				tag <<= 1_u32;
@@ -44,41 +44,45 @@ impl Tile {
 			tag
 		});
 		let grid = grid
-			.extend ([ (-1, -1), (-1, -1) ]).unwrap ()
+			.extend_in_place ([ (-1, -1), (-1, -1) ]).unwrap ()
 			.translate (Pos::new (-1, -1)).unwrap ();
 		Self { id, grid, tags }
 	}
 
-	pub fn rotate_left (& mut self) {
-		self.grid = self.grid.transform ([ Dir::Left, Dir::Down ]);
+	pub fn rotate_left (& mut self) -> GenResult <()> {
+		self.grid = self.grid.transform ([ Dir::Left, Dir::Down ]) ?;
 		self.tags = [
 			self.tags [1], self.tags [2], self.tags [3], self.tags [0],
 			self.tags [7], self.tags [4], self.tags [5], self.tags [6],
 		];
+		Ok (())
 	}
 
-	pub fn rotate_right (& mut self) {
-		self.grid = self.grid.transform ([ Dir::Right, Dir::Up ]);
+	pub fn rotate_right (& mut self) -> GenResult <()> {
+		self.grid = self.grid.transform ([ Dir::Right, Dir::Up ]) ?;
 		self.tags = [
 			self.tags [3], self.tags [0], self.tags [1], self.tags [2],
 			self.tags [5], self.tags [6], self.tags [7], self.tags [4],
 		];
+		Ok (())
 	}
 
-	pub fn rotate_around (& mut self) {
-		self.grid = self.grid.transform ([ Dir::Up, Dir::Left ]);
+	pub fn rotate_around (& mut self) -> GenResult <()> {
+		self.grid = self.grid.transform ([ Dir::Up, Dir::Left ]) ?;
 		self.tags = [
 			self.tags [2], self.tags [3], self.tags [0], self.tags [1],
 			self.tags [6], self.tags [7], self.tags [4], self.tags [5],
 		];
+		Ok (())
 	}
 
-	pub fn flip (& mut self) {
-		self.grid = self.grid.transform ([ Dir::Right, Dir::Down ]);
+	pub fn flip (& mut self) -> GenResult <()> {
+		self.grid = self.grid.transform ([ Dir::Right, Dir::Down ]) ?;
 		self.tags = [
 			self.tags [4], self.tags [5], self.tags [6], self.tags [7],
 			self.tags [0], self.tags [1], self.tags [2], self.tags [3],
 		];
+		Ok (())
 	}
 
 }

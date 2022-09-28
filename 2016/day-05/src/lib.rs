@@ -47,7 +47,6 @@ pub mod logic {
 
 	use super::*;
 	use model::Input;
-	use nums::IntConv;
 
 	pub fn part_one (input: & Input) -> GenResult <String> {
 		let mut password = String::new ();
@@ -70,7 +69,7 @@ pub mod logic {
 					.unwrap ()
 					.to_digit (16)
 					.unwrap ()
-					.as_usize ();
+					.pan_usize ();
 			if 8 <= pos { continue }
 			if password [pos].is_some () { continue }
 			let ch = hash_str.chars ().nth (6).unwrap ();

@@ -15,7 +15,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		}
 		result.push (ch);
 	}
-	Ok (result.len ().as_u32 ())
+	Ok (result.len ().pan_u32 ())
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
@@ -39,7 +39,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				buffer.push (ch);
 				last_char_opt = Some (ch);
 			}
-			buffer.len ().as_u32 ()
+			buffer.len ().pan_u32 ()
 		})
 		.min ()
 		.unwrap ();

@@ -1,0 +1,6 @@
+misc_newline = "\x0a"
+
+letter_e = "e"
+letter_n = "n"
+letter_s = "s"
+letter_w = "w"
