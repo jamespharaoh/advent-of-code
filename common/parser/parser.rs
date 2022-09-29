@@ -250,7 +250,10 @@ impl <'inp> Parser <'inp> {
 	#[ inline ]
 	pub fn int <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
 		let saved = * self;
-		self.int_str ().parse ().map_err (|_err| { * self = saved; self.err () })
+		self.int_str ().parse ().map_err (|_err| {
+			* self = saved;
+			self.err ()
+		})
 	}
 
 	/// Consume and return an unsigned decimal integer from the input
@@ -266,7 +269,9 @@ impl <'inp> Parser <'inp> {
 	/// Returns `Err (self.err ())` if `parse` returns an `Err`
 	///
 	#[ inline ]
-	pub fn uint <IntType> (& mut self) -> ParseResult <IntType> where IntType: FromStr {
+	pub fn uint <IntType> (
+		& mut self,
+	) -> ParseResult <IntType> where IntType: FromStr {
 		let saved = * self;
 		self.uint_str ().parse ().map_err (|_err| { * self = saved; self.err () })
 	}
@@ -276,6 +281,19 @@ impl <'inp> Parser <'inp> {
 			where Item: FromParser <'inp> {
 		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		Item::from_parser (self)
+	}
+
+	#[ inline ]
+	pub fn item_range <Item> (& mut self, range: impl RangeBounds <Item>) -> ParseResult <Item>
+			where Item: FromParser <'inp> + PartialOrd {
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
+		let saved = * self;
+		let val = Item::from_parser (self) ?;
+		if ! range.contains (& val) {
+			* self = saved;
+			return Err (self.err ());
+		}
+		Ok (val)
 	}
 
 	#[ allow (clippy::string_slice) ]

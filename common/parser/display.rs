@@ -148,6 +148,14 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @delim $delim:literal $field:ident = ($rng_0:literal .. $rng_1:literal) $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @delim $delim:literal $field:ident = ($rng_0:literal ..= $rng_1:literal) $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @delim $delim:literal $field:ident = $parse:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);

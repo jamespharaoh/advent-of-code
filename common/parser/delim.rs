@@ -49,7 +49,7 @@ impl <'inp> Parser <'inp> {
 		delim: Delim,
 	) -> ParserDelim <'par, 'inp, Delim, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>>
 			where Delim: ParseDelimiter {
-		self.delim_fn (delim, Parser::<'inp>::uint)
+		self.delim_fn (delim, Parser::uint)
 	}
 
 	#[ inline ]
