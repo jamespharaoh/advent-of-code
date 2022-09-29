@@ -41,7 +41,7 @@ pub mod logic {
 
 	fn calc_result (input: & Input) -> GridBuf <Vec <bool>, Pos, 2> {
 		let mut grid: GridBuf <Vec <bool>, Pos, 2> =
-			GridBuf::new (Pos::ZERO, Pos::new (input.height, input.width));
+			GridBuf::new_size (Pos::new (input.height, input.width));
 		for step in input.steps.iter_vals () {
 			match step {
 				Step::Rect { width, height } => {

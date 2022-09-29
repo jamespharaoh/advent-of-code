@@ -18,7 +18,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	// calculate hashes and construct a grid
 
-	let grid = Grid::wrap (
+	let grid = Grid::wrap_size (
 		calc_hashes (input).iter_vals ()
 			.flat_map (move |hash| -> [bool; 128] {
 				array::from_fn (|addr| {
@@ -28,12 +28,11 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				})
 			})
 			.collect (),
-		Pos::ZERO,
 		Pos::new (input.params.num_rows.pan_u8 (), 128));
 
 	// iterate over positions, look for ones, track which we have seen already
 
-	let mut seen = Grid::new (Pos::ZERO, grid.size ());
+	let mut seen = Grid::new_size (grid.size ());
 	let mut regions = 0;
 	for pos in grid.iter ().map (|(pos, _)| pos) {
 		if seen.get (pos).unwrap () { continue }

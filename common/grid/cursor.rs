@@ -19,7 +19,7 @@ impl <Grid, Pos, const DIMS: usize> GridCursor <Grid, Pos, DIMS>
 	#[ inline ]
 	#[ must_use ]
 	pub fn pos (& self) -> Pos {
-		Pos::from_native (self.native, self.grid.origin ()).unwrap ()
+		Pos::from_native (self.native, self.grid.start ()).unwrap ()
 	}
 
 	#[ inline ]

@@ -49,35 +49,35 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 		size += 1;
 		let grid_size = input.params.grid_size + 1 - size;
 		let horiz_grid_ref = & horiz_grid;
-		horiz_grid = Grid::wrap (
+		horiz_grid = Grid::wrap_range (
 			(size ..= input.params.grid_size)
 				.flat_map (|y| (1 ..= grid_size)
 					.map (move |x| horiz_grid_ref.get (Pos { y, x }).unwrap ()
 						+ base_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()))
 				.collect (),
-			Pos::new (- size, -1),
-			Pos::new (input.params.grid_size + 1 - size, grid_size));
+			Pos::new (size, 1),
+			Pos::new (input.params.grid_size + 1, grid_size + 1)) ?;
 		let vert_grid_ref = & vert_grid;
-		vert_grid = Grid::wrap (
+		vert_grid = Grid::wrap_range (
 			(1 ..= grid_size)
 				.flat_map (|y| (size ..= input.params.grid_size)
 					.map (move |x| vert_grid_ref.get (Pos { y, x }).unwrap ()
 						+ base_grid_ref.get (Pos { y: y + size - 1, x }).unwrap ()))
 				.collect (),
-			Pos::new (-1, - size),
-			Pos::new (grid_size, input.params.grid_size + 1 - size));
+			Pos::new (1, size),
+			Pos::new (grid_size + 1, input.params.grid_size + 1)) ?;
 		let horiz_grid_ref = & horiz_grid;
 		let vert_grid_ref = & vert_grid;
 		let small_grid_ref = & small_grid;
-		small_grid = Grid::wrap (
+		small_grid = Grid::wrap_range (
 			(1 ..= grid_size)
 				.flat_map (|y| (1 ..= grid_size)
 					.map (move |x| small_grid_ref.get (Pos { y, x }).unwrap ()
 						+ horiz_grid_ref.get (Pos { y: y + size - 1, x }).unwrap ()
 						+ vert_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()))
 				.collect (),
-			Pos::new (-1, -1),
-			Pos::new (grid_size, grid_size));
+			Pos::new (1, 1),
+			Pos::new (grid_size + 1, grid_size + 1)) ?;
 	}
 	if let Some ((pos, size, _)) = best {
 		Ok (format! ("{},{},{}", pos.x, pos.y, size))
@@ -86,9 +86,9 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {
 	if input.params.grid_size < 3 { return Err ("Grid must be at least 3×3".into ()) }
-	let mut grid = Grid::new (
-		Pos::new (-1, -1),
-		Pos::new (input.params.grid_size, input.params.grid_size));
+	let mut grid = Grid::new_range (
+		Pos::new (1, 1),
+		Pos::new (input.params.grid_size + 1, input.params.grid_size + 1)) ?;
 	for y in 1 ..= input.params.grid_size {
 		for x in 1 ..= input.params.grid_size {
 			let pos = Pos { y, x };

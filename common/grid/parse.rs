@@ -23,12 +23,10 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 		let num_lines_coord = Pos::Coord::from_usize (num_lines).map_err (|_err| parser.err ()) ?;
 		let num_cols = lines.iter ().map (Vec::len).max ().unwrap_or (0);
 		let num_cols_coord = Pos::Coord::from_usize (num_cols).map_err (|_err| parser.err ()) ?;
-		let grid_origin = Pos::from_array ([Pos::Coord::ZERO; 2]);
 		let grid_size = Pos::grid_parse_grid_size (num_lines_coord, num_cols_coord);
 		let line_offset = Pos::grid_parse_row_offset (num_lines, num_cols);
 		let tile_offset = Pos::grid_parse_col_offset (num_lines, num_cols);
 		let first_idx = Pos::grid_parse_first_index (num_lines, num_cols).pan_isize ();
-		if ! Pos::validate_dims (grid_origin, grid_size) { return Err (parser.err ()) }
 		let mut grid_vec = vec! [ default (); num_lines * num_cols ];
 		let mut line_idx = first_idx;
 		for line in lines.iter () {
@@ -41,7 +39,7 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 			}
 			line_idx += line_offset;
 		}
-		Ok (Self::wrap (grid_vec.into_iter ().collect (), grid_origin, grid_size))
+		Ok (Self::wrap_size (grid_vec.into_iter ().collect (), grid_size))
 	}
 
 }
@@ -66,12 +64,10 @@ impl <'inp, Storage, Pos> FromParser <'inp> for GridBuf <Storage, Pos, 2>
 		let num_lines_coord = Pos::Coord::from_usize (num_lines).map_err (|_err| parser.err ()) ?;
 		let num_cols = lines.iter ().map (Vec::len).max ().unwrap_or (0);
 		let num_cols_coord = Pos::Coord::from_usize (num_cols).map_err (|_err| parser.err ()) ?;
-		let grid_origin = Pos::from_array ([Pos::Coord::ZERO; 2]);
 		let grid_size = Pos::grid_parse_grid_size (num_lines_coord, num_cols_coord);
 		let line_offset = Pos::grid_parse_row_offset (num_lines, num_cols);
 		let tile_offset = Pos::grid_parse_col_offset (num_lines, num_cols);
 		let first_idx = Pos::grid_parse_first_index (num_lines, num_cols).pan_isize ();
-		if ! Pos::validate_dims (grid_origin, grid_size) { return Err (parser.err ()) }
 		let mut grid_vec = vec! [ default (); num_lines * num_cols ];
 		let mut line_idx = first_idx;
 		for line in lines.iter () {
@@ -84,7 +80,7 @@ impl <'inp, Storage, Pos> FromParser <'inp> for GridBuf <Storage, Pos, 2>
 			}
 			line_idx += line_offset;
 		}
-		Ok (Self::wrap (grid_vec.into_iter ().collect (), grid_origin, grid_size))
+		Ok (Self::wrap_size (grid_vec.into_iter ().collect (), grid_size))
 	}
 
 }

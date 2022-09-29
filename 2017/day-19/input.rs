@@ -41,7 +41,7 @@ impl Input {
 			let grid_size = Pos::new (
 				Coord::from_usize (rows).unwrap (),
 				Coord::from_usize (cols).unwrap ());
-			let grid = Grid::wrap (tiles, Pos::ZERO, grid_size);
+			let grid = Grid::wrap_size (tiles, grid_size);
 			Ok (Self { grid, params })
 		})
 	}

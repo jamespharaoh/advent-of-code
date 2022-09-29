@@ -127,10 +127,10 @@ pub mod logic {
 
 		// assume we already visited all walls, reusing this makes things quicker
 
-		let seen_template = GridBuf::<Vec <bool>, Pos, 2>::wrap (
+		let seen_template = GridBuf::<Vec <bool>, Pos, 2>::wrap_range (
 			input.tiles.values ().map (|tile| matches! (tile, Tile::Wall)).collect (),
-			input.tiles.origin (),
-			input.tiles.size ());
+			input.tiles.start (),
+			input.tiles.end ()) ?;
 
 		// work out distances
 
@@ -261,11 +261,9 @@ pub mod model {
 
 			// wrap collected tiles into 'Grid'
 
-			let tiles =
-				TilesGrid::wrap (
-					tiles_vec,
-					Pos::ZERO,
-					Pos::new (height, width));
+			let tiles = TilesGrid::wrap_size (
+				tiles_vec,
+				Pos::new (height, width));
 
 			// construct and return
 

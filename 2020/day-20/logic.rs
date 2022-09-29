@@ -34,7 +34,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let (row_dir, col_dir, posns) =
 		find_monsters (& grid).ok_or ("No monsters found") ?;
 
-	let mut grid = grid.transform ([ row_dir, col_dir ]) ?;
+	let mut grid = grid.transform (Pos::ZERO, [ row_dir, col_dir ]) ?;
 	remove_monsters (& mut grid, & posns);
 
 	Ok (

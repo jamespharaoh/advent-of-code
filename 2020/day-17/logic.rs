@@ -39,8 +39,8 @@ fn next_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	base_dirs: & [Pos],
 ) -> GenResult <Grid <Pos, DIMS>> {
 	let resized_grid = grid.resize (
-		grid.origin ().map (|val| val + Coord::ONE).into (),
-		grid.size ().map (|val| val + Coord::TWO).into ()) ?;
+		grid.start ().map (|val| val - Coord::ONE).into (),
+		grid.end ().map (|val| val + Coord::ONE).into ()) ?;
 	let dirs: Vec <GridOffset <Pos, DIMS>> =
 		base_dirs.iter ()
 			.map (|& pos| resized_grid.offset (pos))
@@ -66,7 +66,7 @@ fn get_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	}
 	let input_size_arr: [Coord; 2] = input_size.into ();
 	let size = array::from_fn (|idx| if idx < 2 { input_size_arr [idx] } else { 1 }).into ();
-	let mut grid = Grid::new (Pos::ZERO, size);
+	let mut grid = Grid::new_size (size);
 	for (pos, tile) in input.grid.iter () {
 		let pos =
 			array::from_fn (|idx| match idx { 0 => pos.x, 1 => pos.y, _ => Coord::ZERO })

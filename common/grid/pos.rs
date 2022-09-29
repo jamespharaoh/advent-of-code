@@ -17,7 +17,7 @@ use aoc_pos::PosYX;
 /// This trait provides methods to translate whatever coordinate system is in use to and from a
 /// single `usize` value.
 ///
-pub trait GridPos <const DIMS: usize>: Copy + Debug + Default + Sized {
+pub trait GridPos <const DIMS: usize>: Copy + Debug + Default + Eq + Sized {
 
 	type Coord: Int;
 
@@ -31,12 +31,12 @@ pub trait GridPos <const DIMS: usize>: Copy + Debug + Default + Sized {
 	}
 
 	#[ inline ]
-	fn to_native (self, origin: Self) -> Option <Self> {
+	fn to_native (self, start: Self) -> Option <Self> {
 		let self_arr = self.to_array ();
-		let origin_arr = origin.to_array ();
+		let start_arr = start.to_array ();
 		let mut result_arr = [Self::Coord::ZERO; DIMS];
 		for idx in 0 .. DIMS {
-			let result = chk! (self_arr [idx] + origin_arr [idx]).ok () ?;
+			let result = chk! (self_arr [idx] - start_arr [idx]).ok () ?;
 			if result < Self::Coord::ZERO { return None }
 			result_arr [idx] = result;
 		}
@@ -57,27 +57,14 @@ pub trait GridPos <const DIMS: usize>: Copy + Debug + Default + Sized {
 	}
 
 	#[ inline ]
-	fn from_native (native: Self, origin: Self) -> Option <Self> {
+	fn from_native (native: Self, start: Self) -> Option <Self> {
 		let native_arr = native.to_array ();
-		let origin_arr = origin.to_array ();
+		let start_arr = start.to_array ();
 		let mut result_arr = [Self::Coord::ZERO; DIMS];
 		for idx in 0 .. DIMS {
-			result_arr [idx] = chk! (native_arr [idx] - origin_arr [idx]).ok () ?;
+			result_arr [idx] = chk! (native_arr [idx] + start_arr [idx]).ok () ?;
 		}
 		Some (Self::from_array (result_arr))
-	}
-
-	#[ inline ]
-	#[ must_use ]
-	fn validate_dims (origin: Self, size: Self) -> bool {
-		let size_arr = size.to_array ();
-		if size_arr.into_iter ().any (|val| val < Self::Coord::ONE) { return false }
-		let first = Self::from_array ([Self::Coord::ZERO; DIMS]);
-		if Self::from_native (first, origin).is_none () { return false }
-		let last_arr = size_arr.map (|val| val - Self::Coord::ONE);
-		let last = Self::from_array (last_arr);
-		if Self::from_native (last, origin).is_none () { return false }
-		true
 	}
 
 }

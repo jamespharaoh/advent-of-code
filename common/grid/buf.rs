@@ -6,11 +6,12 @@ use super::*;
 /// wraps a backing collection which implements [`GridStorage`], and takes indexes which implement
 /// [`GridPos`].
 ///
-#[ derive (Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+#[ derive (Clone, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 pub struct GridBuf <Storage, Pos, const DIMS: usize>
 		where Pos: GridPos <DIMS> {
 	storage: Storage,
-	origin: Pos,
+	start: Pos,
+	end: Pos,
 	size: Pos,
 	phantom: PhantomData <Pos>,
 }
@@ -21,25 +22,15 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		Pos: GridPos <DIMS> {
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn new (origin: Pos, size: Pos) -> Self
-		where
-			Storage: FromIterator <Storage::Item>,
-			Storage::Item: Clone + Default {
-		Self::wrap (
-			std::iter::repeat (default ())
-				.take (size.to_array ().into_iter ()
-					.map (Pos::Coord::pan_usize)
-					.product ())
-				.collect::<Storage> (),
-			origin,
-			size)
-	}
-
-	#[ inline ]
-	pub fn wrap (storage: Storage, origin: Pos, size: Pos) -> Self {
-		assert! (! size.to_array ().into_iter ().any (|val| val < Pos::Coord::ONE),
-			"Size must be positive in all dimensions: {:?}", size);
+	pub fn wrap_range (storage: Storage, start: Pos, end: Pos) -> NumResult <Self> {
+		assert! (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.all (|(start, end)| start < end),
+			"Size must be positive in all dimensions: {start:?} to {end:?}");
+		let size = Pos::from_array (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.map (|(start, end)| chk! (end - start))
+				.try_array () ?);
 		let expected_len =
 			size.to_array ().into_iter ()
 				.map (Pos::Coord::pan_usize)
@@ -47,7 +38,50 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		let actual_len = storage.storage_len ();
 		assert! (expected_len == actual_len,
 			"Expected {} items but was passed {}", expected_len, actual_len);
-		Self { storage, origin, size, phantom: PhantomData }
+		Ok (Self { storage, start, end, size, phantom: PhantomData })
+	}
+
+	#[ inline ]
+	pub fn wrap_size (storage: Storage, size: Pos) -> Self {
+		Self::wrap_range (storage, Pos::default (), size).unwrap ()
+	}
+
+}
+
+impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
+	where
+		Storage: GridStorage + Clone,
+		Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	pub fn new_range (start: Pos, end: Pos) -> NumResult <Self>
+		where
+			Storage: FromIterator <Storage::Item>,
+			Storage::Item: Clone + Default {
+		assert! (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.all (|(start, end)| start < end),
+			"Size must be positive in all dimensions: {start:?} to {end:?}");
+		let size = Pos::from_array (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.map (|(start, end)| chk! (end - start))
+				.try_array () ?);
+		let storage =
+			std::iter::repeat (default ())
+				.take (size.to_array ().into_iter ()
+					.map (Pos::Coord::pan_usize)
+					.product ())
+				.collect::<Storage> ();
+		Ok (Self { storage, start, end, size, phantom: PhantomData })
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn new_size (size: Pos) -> Self
+		where
+			Storage: FromIterator <Storage::Item>,
+			Storage::Item: Clone + Default {
+		Self::new_range (Pos::default (), size).unwrap ()
 	}
 
 }
@@ -59,27 +93,37 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
-		let native = pos.to_native (self.origin).unwrap ();
+		let native = pos.to_native (self.start).unwrap ();
 		let idx = native.native_to_index (self.size).unwrap ();
 		self.storage.storage_set (idx.qck_usize (), item);
 	}
 
 	#[ inline ]
 	pub fn try_set (& mut self, pos: Pos, item: Storage::Item) -> Option <()> {
-		let native = pos.to_native (self.origin) ?;
+		let native = pos.to_native (self.start) ?;
 		let idx = native.native_to_index (self.size) ?;
 		self.storage.storage_set (idx.qck_usize (), item);
 		Some (())
 	}
 
 	#[ inline ]
-	pub fn translate (& mut self, offset: Pos) -> NumResult <Self> {
+	pub fn translate (& self, offset: Pos) -> NumResult <Self> {
 		let offset_arr = offset.to_array ();
-		let mut origin_arr = self.origin ().to_array ();
-		for dim_idx in 0 .. DIMS { origin_arr [dim_idx] -= offset_arr [dim_idx]; }
-		let origin = Pos::from_array (origin_arr);
-		if ! Pos::validate_dims (origin, self.size) { return Err (Overflow) }
-		Ok (Self::wrap (self.storage.clone (), origin, self.size))
+		let mut start_arr = self.start.to_array ();
+		let mut end_arr = self.end.to_array ();
+		for dim_idx in 0 .. DIMS {
+			chk! (start_arr [dim_idx] += offset_arr [dim_idx]) ?;
+			chk! (end_arr [dim_idx] += offset_arr [dim_idx]) ?;
+		}
+		let start = Pos::from_array (start_arr);
+		let end = Pos::from_array (end_arr);
+		Ok (Self {
+			storage: self.storage.clone (),
+			start,
+			end,
+			size: self.size,
+			phantom: PhantomData,
+		})
 	}
 
 }
@@ -105,14 +149,14 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 
 	#[ inline ]
 	pub fn get_ref (& self, pos: Pos) -> Option <& Storage::Item> {
-		let native = pos.to_native (self.origin) ?;
+		let native = pos.to_native (self.start) ?;
 		let idx = native.native_to_index (self.size) ?;
 		self.storage.storage_ref (idx.qck_usize ())
 	}
 
 	#[ inline ]
 	pub fn get_mut (& mut self, pos: Pos) -> Option <& mut Storage::Item> {
-		let native = pos.to_native (self.origin) ?;
+		let native = pos.to_native (self.start) ?;
 		let idx = native.native_to_index (self.size) ?;
 		self.storage.storage_mut (idx.qck_usize ())
 	}
@@ -128,6 +172,21 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 
 }
 
+impl <Storage, Pos, const DIMS: usize> Debug
+	for GridBuf <Storage, Pos, DIMS>
+	where Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		formatter.debug_struct ("GridBuf")
+			.field ("start", & self.start)
+			.field ("end", & self.end)
+			.field ("size", & self.size)
+			.finish ()
+	}
+
+}
+
 impl <'grd, Storage, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	for & 'grd GridBuf <Storage, Pos, DIMS>
 	where
@@ -138,8 +197,13 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	type Cursors = GridCursorIter <Self, Pos, DIMS>;
 
 	#[ inline ]
-	fn origin (self) -> Pos {
-		self.origin
+	fn start (self) -> Pos {
+		self.start
+	}
+
+	#[ inline ]
+	fn end (self) -> Pos {
+		self.end
 	}
 
 	#[ inline ]

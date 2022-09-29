@@ -71,11 +71,10 @@ fn get_start_grid (input: & Input) -> GenResult <Grid> {
 			Pos::new (cmp::min (min.nw, pos.nw), cmp::min (min.e, pos.e)),
 			Pos::new (cmp::max (max.nw, pos.nw), cmp::max (max.e, pos.e)),
 		));
-	let grid_size = Pos::new (max.nw - min.nw + 1, max.e - min.e + 1);
-	if 30 < grid_size.nw || 30 < grid_size.e {
+	if 30 < max.nw - min.nw || 30 < max.e - min.e {
 		return Err ("Max initial grid size is 30×30".into ());
 	}
-	let mut grid = Grid::new (Pos::new (- min.nw, - min.e), grid_size);
+	let mut grid = Grid::new_range (min, max + Pos::new (1, 1)) ?;
 	for tile_pos in tile_posns {
 		let tile_prev = grid.get (tile_pos).unwrap ();
 		let tile_next = match tile_prev { White => Black, Black => White };

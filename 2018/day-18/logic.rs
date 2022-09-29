@@ -30,7 +30,7 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 
 		// calculate the next state
 
-		grid = Grid::wrap (
+		grid = Grid::wrap_range (
 			grid.iter ()
 				.map (|(pos, val)|
 					Ok::<_, Overflow> ((pos, val, [
@@ -56,9 +56,9 @@ fn calc_result (input: & Input, num_reps: u32) -> GenResult <u32> {
 					}
 				})
 				.try_collect () ?,
-			grid.origin (),
-			grid.size (),
-		);
+			grid.start (),
+			grid.end (),
+		) ?;
 		cur_rep += 1;
 
 		// detect loops and fast forward, otherwise add new state to cache

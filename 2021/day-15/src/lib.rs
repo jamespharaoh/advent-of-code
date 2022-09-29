@@ -44,14 +44,13 @@ mod logic {
 				})),
 			)).collect ()
 		};
-		cave.risks = Grid::wrap (risks, Pos::ZERO, cave.risks.size () * 5);
+		cave.risks = Grid::wrap_size (risks, cave.risks.size () * 5);
 		cave.end = Pos { y: (cave.end.y + 1) * 5 - 1, x: (cave.end.x + 1) * 5 - 1 };
 		Ok (calc_result (& cave))
 	}
 
 	pub fn calc_result (cave: & Cave) -> u64 {
-		let mut search = PrioritySearch::with_grid (
-			Pos::ZERO,
+		let mut search = PrioritySearch::with_grid_size (
 			cave.risks.size (),
 			|pos: Pos, path_risk, mut adder: PrioritySearchAdder <Pos, u64, _>| {
 				for adj_pos in pos.adjacent_4 () {
@@ -96,7 +95,7 @@ mod model {
 				}
 			}
 			let grid_size = Pos::new (lines.len ().pan_i16 (), lines [0].len ().pan_i16 ());
-			let risks = Grid::wrap (risks, Pos::ZERO, grid_size);
+			let risks = Grid::wrap_size (risks, grid_size);
 			let start = risks.first_key ();
 			let end = risks.last_key ();
 			Ok (Self { risks, start, end })

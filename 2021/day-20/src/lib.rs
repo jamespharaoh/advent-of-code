@@ -95,7 +95,7 @@ mod logic {
 			})
 		).collect ();
 		let new_size = image.size () + Pos::new (2, 2);
-		let new_pixels = Pixels::wrap (new_pixels, Pos::ZERO, new_size);
+		let new_pixels = Pixels::wrap_size (new_pixels, new_size);
 		let new_inverted = algorithm [if image.inverted () { 0x1ff } else { 0 }];
 		Image::new_from (new_pixels, new_inverted)
 	}
@@ -144,7 +144,7 @@ mod model {
 			let size = Pos::new (
 				(lines.len () - 2).pan_i16 (),
 				lines [2].chars ().count ().pan_i16 ());
-			let pixels = Pixels::wrap (pixels, Pos::ZERO, size);
+			let pixels = Pixels::wrap_size (pixels, size);
 			Ok (Self { algorithm, pixels })
 		}
 	}

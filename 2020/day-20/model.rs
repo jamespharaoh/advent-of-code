@@ -50,7 +50,7 @@ impl Tile {
 	}
 
 	pub fn rotate_left (& mut self) -> GenResult <()> {
-		self.grid = self.grid.transform ([ Dir::Left, Dir::Down ]) ?;
+		self.grid = self.grid.transform (Pos::ZERO, [ Dir::Left, Dir::Down ]) ?;
 		self.tags = [
 			self.tags [1], self.tags [2], self.tags [3], self.tags [0],
 			self.tags [7], self.tags [4], self.tags [5], self.tags [6],
@@ -59,7 +59,7 @@ impl Tile {
 	}
 
 	pub fn rotate_right (& mut self) -> GenResult <()> {
-		self.grid = self.grid.transform ([ Dir::Right, Dir::Up ]) ?;
+		self.grid = self.grid.transform (Pos::ZERO, [ Dir::Right, Dir::Up ]) ?;
 		self.tags = [
 			self.tags [3], self.tags [0], self.tags [1], self.tags [2],
 			self.tags [5], self.tags [6], self.tags [7], self.tags [4],
@@ -68,7 +68,7 @@ impl Tile {
 	}
 
 	pub fn rotate_around (& mut self) -> GenResult <()> {
-		self.grid = self.grid.transform ([ Dir::Up, Dir::Left ]) ?;
+		self.grid = self.grid.transform (Pos::ZERO, [ Dir::Up, Dir::Left ]) ?;
 		self.tags = [
 			self.tags [2], self.tags [3], self.tags [0], self.tags [1],
 			self.tags [6], self.tags [7], self.tags [4], self.tags [5],
@@ -77,7 +77,7 @@ impl Tile {
 	}
 
 	pub fn flip (& mut self) -> GenResult <()> {
-		self.grid = self.grid.transform ([ Dir::Right, Dir::Down ]) ?;
+		self.grid = self.grid.transform (Pos::ZERO, [ Dir::Right, Dir::Down ]) ?;
 		self.tags = [
 			self.tags [4], self.tags [5], self.tags [6], self.tags [7],
 			self.tags [0], self.tags [1], self.tags [2], self.tags [3],

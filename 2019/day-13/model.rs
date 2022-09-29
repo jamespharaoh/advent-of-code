@@ -94,7 +94,7 @@ mod game {
 	impl Game {
 
 		pub fn new (input: & Input, insert_coin: bool, size: Pos) -> GenResult <Self> {
-			let grid = Grid::new (Pos::ZERO, size);
+			let grid = Grid::new_size (size);
 			Ok (Self {
 				core: Core::new (input, insert_coin),
 				size,

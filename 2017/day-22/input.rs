@@ -36,9 +36,9 @@ impl Input {
 					.chain (iter::repeat (Node::Clean))
 					.take (num_cols))
 				.collect ();
-			let grid_origin = Pos::new ((num_rows / 2).pan_i16 (), (num_cols / 2).pan_i16 ());
-			let grid_size = Pos::new (num_rows.pan_i16 (), num_cols.pan_i16 ());
-			let nodes = Grid::wrap (nodes_vec, grid_origin, grid_size);
+			let grid_start = Pos::new (- (num_rows / 2).pan_i16 (), - (num_cols / 2).pan_i16 ());
+			let grid_end = Pos::new ((num_rows / 2 + 1).pan_i16 (), (num_cols / 2 + 1).pan_i16 ());
+			let nodes = Grid::wrap_range (nodes_vec, grid_start, grid_end) ?;
 			Ok (Self { nodes, params })
 		})
 	}

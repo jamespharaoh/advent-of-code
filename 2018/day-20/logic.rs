@@ -53,9 +53,9 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 	use RouteRegexItem::{ Branch, Span };
 	type Frame = (RouteRegexString, Pos, u8, u8);
 	type Stack = ArrayVec <Frame, STACK_SIZE>;
-	let mut grid = Grid::new (
-		Pos::new (GRID_EXPAND, GRID_EXPAND),
-		Pos::new (GRID_EXPAND * 2 + 1, GRID_EXPAND * 2 + 1));
+	let mut grid = Grid::new_range (
+		Pos::new (- GRID_EXPAND, - GRID_EXPAND),
+		Pos::new (GRID_EXPAND + 1, GRID_EXPAND + 1)) ?;
 	let mut todo: Vec <(Pos, Stack)> = Vec::new ();
 	todo.push ((Pos::ZERO, array_vec! [ (input.regex.deref ().clone (), Pos::ZERO, 0, 0) ]));
 	let mut seen: HashSet <(Pos, ArrayVec <(u8, u8), STACK_SIZE>)> = HashSet::new ();

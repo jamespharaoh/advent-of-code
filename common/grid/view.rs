@@ -6,9 +6,12 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 	type Item;
 	type Cursors: Iterator <Item = GridCursor <Self, Pos, DIMS>>;
 
-	fn origin (self) -> Pos;
+	fn start (self) -> Pos;
+	fn end (self) -> Pos;
 	fn size (self) -> Pos;
+
 	fn get_trusted (self, native: Pos, idx: usize) -> Self::Item;
+
 	fn cursors (self) -> Self::Cursors;
 
 	#[ inline ]
@@ -23,24 +26,24 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 
 	#[ inline ]
 	fn keys (self) -> GridKeysIter <Pos, DIMS> {
-		GridKeysIter::new (self.origin (), self.size ())
+		GridKeysIter::new (self.start (), self.end ())
 	}
 
 	#[ inline ]
 	fn first_key (self) -> Pos {
-		let native = Pos::from_array ([Pos::Coord::ZERO; DIMS]);
-		Pos::from_native (native, self.origin ()).unwrap ()
+		self.start ()
 	}
 
 	#[ inline ]
 	fn last_key (self) -> Pos {
-		let native = Pos::from_array (self.size ().to_array ().map (|val| val - Pos::Coord::ONE));
-		Pos::from_native (native, self.origin ()).unwrap ()
+		let mut last_arr = self.end ().to_array ();
+		for dim_idx in 0 .. DIMS { last_arr [dim_idx] -= Pos::Coord::ONE; }
+		Pos::from_array (last_arr)
 	}
 
 	#[ inline ]
 	fn get (self, pos: Pos) -> Option <Self::Item> {
-		let native = pos.to_native (self.origin ()) ?;
+		let native = pos.to_native (self.start ()) ?;
 		let idx = native.native_to_index (self.size ()) ?;
 		Some (self.get_trusted (native, idx.qck_usize ()))
 	}
@@ -58,7 +61,7 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 
 	#[ inline ]
 	fn cursor (self, pos: Pos) -> Option <GridCursor <Self, Pos, DIMS>> {
-		let native = pos.to_native (self.origin ()) ?;
+		let native = pos.to_native (self.start ()) ?;
 		let idx = native.native_to_index (self.size ()) ?;
 		Some (GridCursor::new (self, native, idx.qck_usize ()))
 	}
@@ -69,10 +72,8 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		where
 			MapFn: FnMut (GridCursor <Self, Pos, DIMS>) -> Output,
 			Storage: Clone + GridStorage + FromIterator <Output> {
-		GridBuf::wrap (
-			self.cursors ().map (map_fn).collect (),
-			self.origin (),
-			self.size ())
+		let storage = self.cursors ().map (map_fn).collect ();
+		GridBuf::wrap_range (storage, self.start (), self.end ()).unwrap ()
 	}
 
 	#[ inline ]
@@ -96,43 +97,44 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		where
 			MapFn: FnMut (GridCursor <Self, Pos, DIMS>) -> Result <Output, Error>,
 			Storage: Clone + GridStorage + FromIterator <Output> {
-		Ok (
-			GridBuf::wrap (
-				self.cursors ().map (map_fn).try_collect () ?,
-				self.origin (),
-				self.size ())
-		)
+		let storage = self.cursors ().map (map_fn).try_collect () ?;
+		Ok (GridBuf::wrap_range (storage, self.start (), self.end ()).unwrap ())
 	}
 
 	#[ inline ]
-	fn transform <Storage> (self, axes: [impl Into <Pos>; DIMS]) -> NumResult <GridBuf <Storage, Pos, DIMS>>
+	fn transform <Storage> (
+		self,
+		start: Pos,
+		axes: [impl Into <Pos>; DIMS],
+	) -> NumResult <GridBuf <Storage, Pos, DIMS>>
 		where
 			Storage: Clone + GridStorage + FromIterator <Self::Item>,
 			Pos::Coord: IntSigned {
-		if self.origin ().to_array () != [Pos::Coord::ZERO; DIMS] { unimplemented! () }
+		if self.start () != Pos::default () { unimplemented! () }
 		let offsets: [GridOffset <Pos, DIMS>; DIMS] = axes.into_iter ()
 			.map (|axis| self.offset (axis.into ()))
 			.try_array () ?;
-		let mut start = self.cursor (self.first_key ()).unwrap ();
+		let mut cur = self.cursor (self.first_key ()).unwrap ();
 		for offset in offsets {
 			let offset = - offset;
-			while start.try_add_assign (offset).is_ok () { }
+			while cur.try_add_assign (offset).is_ok () { }
 		}
 		let storage =
-			GridTransformIter::new ([start; DIMS], offsets)
+			GridTransformIter::new (cur, offsets)
 				.map (|cur| cur.item ())
 				.collect ();
 		let size = Pos::from_array (offsets
 			.map (|offset|
 				std::iter::successors (
-						Some (start),
+						Some (cur),
 						|& cur| cur.try_add (offset).ok ())
 					.count ())
 			.map (|val| Pos::Coord::from_usize (val).unwrap ()));
-		Ok (GridBuf::wrap (
-			storage,
-			Pos::from_array ([Pos::Coord::ZERO; DIMS]),
-			size))
+		let end = Pos::from_array (
+			std::iter::zip (start.to_array (), size.to_array ())
+				.map (|(start, size)| chk! (start + size))
+				.try_array () ?);
+		GridBuf::wrap_range (storage, start, end)
 	}
 
 }

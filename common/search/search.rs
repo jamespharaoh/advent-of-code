@@ -3,7 +3,7 @@
 use aoc_grid::GridPos;
 use aoc_grid::prelude::*;
 use aoc_misc::*;
-use aoc_nums::IntConv;
+use aoc_nums::NumResult;
 
 /// Implements [Digkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 ///
@@ -107,17 +107,22 @@ impl <Node, Pri, Visitor, const DIMS: usize>
 		Visitor: PrioritySearchVisitor <Node, Pri, GridBuf <Vec <SeenState <Pri>>, Node, DIMS>> {
 
 	#[ inline ]
-	pub fn with_grid (origin: Node, size: Node, visitor: Visitor) -> Self {
-		let grid = GridBuf::wrap (
-			iter::repeat (SeenState::New)
-				.take (size.to_array ().into_iter ().map (Node::Coord::pan_usize).product ())
-				.collect (),
-			origin,
-			size);
+	pub fn with_grid_range (start: Node, end: Node, visitor: Visitor) -> NumResult <Self> {
+		Ok (Self {
+			visitor,
+			inner: PrioritySearchInner {
+				seen: GridBuf::new_range (start, end) ?,
+				todo: BinaryHeap::new (),
+			},
+		})
+	}
+
+	#[ inline ]
+	pub fn with_grid_size (size: Node, visitor: Visitor) -> Self {
 		Self {
 			visitor,
 			inner: PrioritySearchInner {
-				seen: grid,
+				seen: GridBuf::new_size (size),
 				todo: BinaryHeap::new (),
 			},
 		}
@@ -365,4 +370,13 @@ pub enum SeenState <Pri: Clone> {
 	New,
 	Unvisited (Pri),
 	Visited,
+}
+
+impl <Pri: Clone> Default for SeenState <Pri> {
+
+	#[ inline ]
+	fn default () -> Self {
+		Self::New
+	}
+
 }

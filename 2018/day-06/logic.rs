@@ -16,7 +16,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 	// initialize grid
 
-	let mut grid = Grid::new (Pos::ZERO, Pos::new (height, width));
+	let mut grid = Grid::new_size (Pos::new (height, width));
 	let mut next_id: u8 = 1;
 	for pos in input.posns.iter_vals () {
 		if next_id == u8::MAX { panic! () }

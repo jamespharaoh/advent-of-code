@@ -108,5 +108,5 @@ fn calc_grid (input: & Input, size: Pos) -> Grid {
 				}))
 			.collect ();
 	}
-	Grid::wrap (grid_data, Pos::ZERO, size)
+	Grid::wrap_size (grid_data, size)
 }

@@ -5,25 +5,30 @@ pub trait GridViewExtend <Pos, const DIMS: usize>: GridView <Pos, DIMS>
 
 	#[ inline ]
 	fn extend (self, amts: [(Pos::Coord, Pos::Coord); DIMS]) -> NumResult <GridExtend <Self, Pos, DIMS>> {
-		let size_arr = self.size ().to_array ();
-		let origin_arr = self.origin ().to_array ();
-		let origin = Pos::from_array (array::from_fn (|dim_idx|
-			chk! (origin_arr [dim_idx] + amts [dim_idx].0).unwrap ()));
-		let size = Pos::from_array (array::from_fn (|dim_idx|
-			chk! (size_arr [dim_idx] + amts [dim_idx].0 + amts [dim_idx].1).unwrap ()));
-		if ! Pos::validate_dims (origin, size) { return Err (Overflow) }
+		let mut start_arr = self.start ().to_array ();
+		let mut end_arr = self.end ().to_array ();
+		let mut size_arr = self.size ().to_array ();
+		for dim_idx in 0 .. DIMS {
+			chk! (start_arr [dim_idx] -= amts [dim_idx].0) ?;
+			chk! (end_arr [dim_idx] += amts [dim_idx].1) ?;
+			chk! (size_arr [dim_idx] += amts [dim_idx].0 + amts [dim_idx].1) ?;
+		}
+		let start = Pos::from_array (start_arr);
+		let end = Pos::from_array (end_arr);
+		let size = Pos::from_array (size_arr);
 		let ranges = array::from_fn (|dim_idx|
-			(amts [dim_idx].0, size_arr [dim_idx] + amts [dim_idx].0));
+			(amts [dim_idx].0, size_arr [dim_idx] - amts [dim_idx].1));
 		let idx_fix = {
+			let self_size_arr = self.size ().to_array ();
 			let mut mul = 1_usize;
 			let mut sum = 0_usize;
 			for (dim_idx, & (start, _)) in amts.iter ().enumerate ().rev () {
 				sum += start.pan_usize () * mul;
-				mul *= size_arr [dim_idx].pan_usize ();
+				mul *= self_size_arr [dim_idx].pan_usize ();
 			}
 			sum
 		};
-		Ok (GridExtend { inner: self, origin, size, ranges, idx_fix })
+		Ok (GridExtend { inner: self, start, end, size, ranges, idx_fix })
 	}
 
 }
@@ -40,7 +45,8 @@ pub struct GridExtend <Inner, Pos, const DIMS: usize>
 		Inner: GridView <Pos, DIMS>,
 		Pos: GridPos <DIMS> {
 	inner: Inner,
-	origin: Pos,
+	start: Pos,
+	end: Pos,
 	size: Pos,
 	ranges: [(Pos::Coord, Pos::Coord); DIMS],
 	idx_fix: usize,
@@ -57,8 +63,13 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	type Cursors = GridExtendCursors <Self, Pos, DIMS>;
 
 	#[ inline ]
-	fn origin (self) -> Pos {
-		self.origin
+	fn start (self) -> Pos {
+		self.start
+	}
+
+	#[ inline ]
+	fn end (self) -> Pos {
+		self.end
 	}
 
 	#[ inline ]
@@ -72,9 +83,9 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 		let mut inner_native_arr = [Pos::Coord::ZERO; DIMS];
 		for dim_idx in 0 .. DIMS {
 			let val = native_arr [dim_idx];
-			let (start, end) = self.ranges [dim_idx];
-			if ! (start .. end).contains (& val) { return default () }
-			let inner_val = val - start;
+			let (rng_start, rng_end) = self.ranges [dim_idx];
+			if ! (rng_start .. rng_end).contains (& val) { return default () }
+			let inner_val = val - rng_start;
 			inner_native_arr [dim_idx] = inner_val;
 		}
 		let inner_native = Pos::from_array (inner_native_arr);
@@ -89,7 +100,7 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 
 	#[ inline ]
 	fn cursor (self, pos: Pos) -> Option <GridCursor <Self, Pos, DIMS>> {
-		let native = pos.to_native (self.origin ()) ?;
+		let native = pos.to_native (self.start) ?;
 		let (idx, _) = native.to_array ().into_iter ()
 			.zip (self.inner.size ().to_array ()).rev ()
 			.fold ((Pos::Coord::ZERO, Pos::Coord::ONE),
@@ -109,12 +120,12 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 				let mut idx_fix = [0; DIMS];
 				let mut mul = 1_usize;
 				let mut sum = 0_usize;
-				for (dim_idx, (& (start, end), & size))
+				for (dim_idx, (& (rng_start, rng_end), & size))
 					in self.ranges.iter ()
 						.zip (& self.size.to_array ())
 						.enumerate ()
 						.rev () {
-					let val = chk! (size - end + start).unwrap ().pan_usize ();
+					let val = chk! (size - rng_end + rng_start).unwrap ().pan_usize ();
 					sum += chk! (val * mul).unwrap ();
 					idx_fix [dim_idx] = chk! (sum * mul).unwrap ();
 					mul *= inner_size_arr [dim_idx].pan_usize ();
@@ -123,6 +134,26 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 			},
 			done: false,
 		}
+	}
+
+}
+
+impl <'grd, Inner, Pos, const DIMS: usize> Debug
+	for & 'grd GridExtend <Inner, Pos, DIMS>
+	where
+		Inner: GridView <Pos, DIMS>,
+		Inner::Item: Default,
+		Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		formatter.debug_struct ("GridExtend")
+			.field ("start", & self.start)
+			.field ("end", & self.end)
+			.field ("size", & self.size)
+			.field ("ranges", & self.ranges)
+			.field ("idx_fix", & self.idx_fix)
+			.finish ()
 	}
 
 }

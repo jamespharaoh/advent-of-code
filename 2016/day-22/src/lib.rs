@@ -58,7 +58,7 @@ pub mod logic {
 				.ok_or ("No nodes have used data") ?;
 
 		let grid_size = Pos::new (input.width, input.height);
-		let mut walls = Walls::new (Pos::ZERO, grid_size);
+		let mut walls = Walls::new_size (grid_size);
 		for node in input.nodes.iter () {
 			walls.set (node.pos, node.used > lowest * 2);
 		}

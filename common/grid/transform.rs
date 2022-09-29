@@ -8,27 +8,25 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		Pos: GridPos <DIMS> {
 
 	#[ inline ]
-	pub fn resize (& 'grd self, origin: Pos, size: Pos) -> NumResult <Self>
+	pub fn resize (& 'grd self, start: Pos, end: Pos) -> NumResult <Self>
 			where <Storage as GridStorage>::Item: Default {
-		if ! Pos::validate_dims (origin, size) { return Err (Overflow) }
-		Ok (
-			Self::wrap (
-				GridKeysIter::new (origin, size)
-					.map (|pos| self.get (pos).unwrap_or_default ())
-					.collect (),
-				origin,
-				size)
-		)
+		let storage =
+			GridKeysIter::new (start, end)
+				.map (|pos| self.get (pos).unwrap_or_default ())
+				.collect ();
+		Self::wrap_range (storage, start, end)
 	}
 
 	#[ inline ]
 	pub fn extend_in_place (& 'grd self, amts: [(Pos::Coord, Pos::Coord); DIMS]) -> NumResult <Self>
 			where <Storage as GridStorage>::Item: Default {
-		let origin_arr = self.origin ().to_array ();
-		let size_arr = self.size ().to_array ();
-		self.resize (
-			Pos::from_array (array::from_fn (|idx| origin_arr [idx] + amts [idx].0)),
-			Pos::from_array (array::from_fn (|idx| size_arr [idx] + amts [idx].0 + amts [idx].1)))
+		let mut start_arr = self.start ().to_array ();
+		let mut end_arr = self.end ().to_array ();
+		for dim_idx in 0 .. DIMS {
+			chk! (start_arr [dim_idx] -= amts [dim_idx].0) ?;
+			chk! (end_arr [dim_idx] += amts [dim_idx].1) ?;
+		}
+		self.resize (Pos::from_array (start_arr), Pos::from_array (end_arr))
 	}
 
 }
@@ -41,13 +39,16 @@ pub struct GridTransformIter <Grid, Pos, const DIMS: usize>
 }
 
 impl <Grid, Pos, const DIMS: usize> GridTransformIter <Grid, Pos, DIMS>
-	where Pos: GridPos <DIMS> {
+	where
+		Grid: GridView <Pos, DIMS>,
+		Pos: GridPos <DIMS> {
 
 	#[ inline ]
 	pub const fn new (
-		cursors: [GridCursor <Grid, Pos, DIMS>; DIMS],
+		cursor: GridCursor <Grid, Pos, DIMS>,
 		offsets: [GridOffset <Pos, DIMS>; DIMS],
 	) -> Self {
+		let cursors = [cursor; DIMS];
 		Self { cursors, offsets, done: false }
 	}
 

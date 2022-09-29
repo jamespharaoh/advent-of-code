@@ -30,8 +30,7 @@ pub mod logic {
 	use nums::IntConv;
 
 	pub fn part_one (input: Input, loops: u32) -> GenResult <u32> {
-		let num_active = calc_result (input, loops, & HashMap::new ());
-		Ok (num_active)
+		calc_result (input, loops, & HashMap::new ())
 	}
 
 	pub fn part_two (input: Input, loops: u32) -> GenResult <u32> {
@@ -41,11 +40,10 @@ pub mod logic {
 			Pos { y: y0, x: x0 }, Pos { y: y0, x: x1 },
 			Pos { y: y1, x: x0 }, Pos { y: y1, x: x1 },
 		].into_iter ().map (|pos| (pos, true)).collect ();
-		let num_active = calc_result (input, loops, & overrides);
-		Ok (num_active)
+		calc_result (input, loops, & overrides)
 	}
 
-	fn calc_result (lights: Input, loops: u32, overrides: & HashMap <Pos, bool>) -> u32 {
+	fn calc_result (lights: Input, loops: u32, overrides: & HashMap <Pos, bool>) -> GenResult <u32> {
 		let mut lights = lights;
 
 		// make sure overrides start in the correct state
@@ -66,15 +64,17 @@ pub mod logic {
 					matches! ((val, num_adjacent), (true, 2) | (_, 3))
 				}
 			}).collect ();
-			lights = Input::wrap (new_data, lights.origin (), lights.size ());
+			lights = Input::wrap_range (new_data, lights.start (), lights.end ()) ?;
 		}
 
 		// count active lights
 
-		lights.values ()
-			.filter (|& val| val)
-			.count ()
-			.pan_u32 ()
+		Ok (
+			lights.values ()
+				.filter (|& val| val)
+				.count ()
+				.pan_u32 ()
+		)
 
 	}
 
@@ -111,7 +111,7 @@ pub mod model {
 					char_idx + 1, ch)) ?,
 			}))
 		).collect::<GenResult <Vec <_>>> () ?;
-		let grid = Input::wrap (grid_data, Pos::ZERO, grid_size);
+		let grid = Input::wrap_size (grid_data, grid_size);
 		Ok (grid)
 	}
 

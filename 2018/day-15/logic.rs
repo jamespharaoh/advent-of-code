@@ -76,7 +76,7 @@ impl State {
 			.collect ();
 		if units.is_empty () { return Err ("No combatants found".into ()) }
 		if units.len () > 50 { return Err ("More than 50 combatants".into ()) }
-		let seen = SeenGrid::new (grid.origin (), grid.size ());
+		let seen = SeenGrid::new_range (grid.start (), grid.end ()) ?;
 		Ok (Self {
 			grid,
 			goblin_attack,

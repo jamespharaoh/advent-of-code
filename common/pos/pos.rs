@@ -207,6 +207,14 @@ macro_rules! pos_ops {
 			}
 		}
 
+		impl <Val: Int, ArgVal: Int> AddAssign <$name <ArgVal>> for $name <Val>
+				where Val: TryAdd <ArgVal, Output = Val> {
+			#[ inline ]
+			fn add_assign (& mut self, other: $name <ArgVal>) {
+				* self = self.try_add (other).unwrap ()
+			}
+		}
+
 		pos_ops! ($name <$dims>: $($rest),*);
 
 	};

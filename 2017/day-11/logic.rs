@@ -27,7 +27,7 @@ fn posns_iter (
 	let mut pos = Pos::ZERO;
 	iter::from_fn (move || {
 		let step = steps_iter.next () ?;
-		pos = pos + match step {
+		pos += match step {
 			NorthWest => Pos { n: 1, e: -1 },
 			North => Pos { n: 2, e: 0 },
 			NorthEast => Pos { n: 1, e: 1 },

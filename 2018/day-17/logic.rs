@@ -74,15 +74,9 @@ fn calc_grid (input: & Input) -> GenResult <Grid> {
 			(clay_range_y, clay_range_x.start () - 1 ..= clay_range_x.end () + 1),
 			(0 ..= 0, 500 ..= 500));
 
-	let grid_origin = Pos::new (
-		- * grid_range_y.start (),
-		- * grid_range_x.start ());
-
-	let grid_size = Pos::new (
-		Coord::from_usize (grid_range_y.len ()) ?,
-		Coord::from_usize (grid_range_x.len ()) ?);
-
-	let mut grid = Grid::new (grid_origin, grid_size);
+	let mut grid = Grid::new_range (
+		Pos::new (* grid_range_y.start (), * grid_range_x.start ()),
+		Pos::new (* grid_range_y.end (), * grid_range_x.end ()) + Pos::new (1, 1)) ?;
 
 	// place clay
 

@@ -165,7 +165,7 @@ mod model {
 
 	impl Seafloor {
 		pub fn new (size: Pos, regions: GridInner) -> Self {
-			let grid = Grid::wrap (regions, Pos::ZERO, size);
+			let grid = Grid::wrap_size (regions, size);
 			Self { grid, size }
 		}
 		pub const fn size (& self) -> Pos { self.size }
@@ -184,7 +184,7 @@ mod model {
 						}),
 					)
 				}).collect::<Result <_, _>> () ?;
-			let grid = Grid::wrap (data, Pos::ZERO, size);
+			let grid = Grid::wrap_size (data, size);
 			Ok (Self { grid, size })
 		}
 		pub fn get (& self, pos: Pos) -> Region {
