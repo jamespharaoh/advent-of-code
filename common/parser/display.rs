@@ -165,6 +165,10 @@ macro_rules! display {
 		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @lines $field:ident = ($parse:ident, $display:ident) $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @opt $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
 		if $field != default () {
 			let display_fn = display! (@nest $($nest)*);

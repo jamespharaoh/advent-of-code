@@ -156,9 +156,14 @@ macro_rules! parse {
 			.delim_fn ("\n", parse! (@nest $($nest)*))
 			.collect ();
 	};
-	( @item $parser:expr, @lines $item_name:ident = $item_parse:expr ) => {
-		let $item_name = $parser
-			.delim_fn ("\n", $item_parse)
+	( @item $parser:expr, @lines $name:ident = ($parse:path, $display:path) ) => {
+		let $name = $parser
+			.delim_fn ("\n", $parse)
+			.collect ();
+	};
+	( @item $parser:expr, @lines $name:ident = $parse:path ) => {
+		let $name = $parser
+			.delim_fn ("\n", $parse)
 			.collect ();
 	};
 	( @item $parser:expr, @opt $name:ident { $($nest:tt)* } ) => {
