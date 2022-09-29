@@ -45,9 +45,9 @@ mod logic {
 
 	pub fn part_two (lines: & [& str]) -> GenResult <u128> {
 		let (start_1, start_2) = model::parse_input (lines) ?;
-		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, PartialEq) ]
+		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		struct Player { score: u8, pos: u8 }
-		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, PartialEq) ]
+		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		struct Game { players: [Player; 2], turn: u8 }
 		struct Frame { game: Game, counts: [u128; 2], progress: usize }
 		let start_game = Game {

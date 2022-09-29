@@ -23,6 +23,7 @@
 	aoc-2018 = { path = "../2018" }
 	aoc-2019 = { path = "../2019" }
 	aoc-2020 = { path = "../2020" }
+	aoc-2021 = { path = "../2021" }
 
 [workspace]
 
@@ -1075,5 +1076,12 @@
 
 	name = "2020-day-25"
 	path = "src/2020-day-25.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2021-day-01"
+	path = "src/2021-day-01.rs"
 	test = false
 	doc = false

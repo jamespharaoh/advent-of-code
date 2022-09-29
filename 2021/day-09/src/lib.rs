@@ -91,7 +91,7 @@ mod model {
 		Ok (floor)
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub struct Pos { pub row: i32, pub col: i32 }
 
 	impl Pos {

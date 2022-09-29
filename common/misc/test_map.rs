@@ -48,8 +48,16 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		self.map.insert (key, val)
 	}
 
+	pub fn is_empty (& self) -> bool {
+		self.map.is_empty ()
+	}
+
 	pub fn iter (& self) -> BTreeIter <'_, Key, Val> {
 		self.map.iter ()
+	}
+
+	pub fn iter_mut (& mut self) -> BTreeIterMut <'_, Key, Val> {
+		self.map.iter_mut ()
 	}
 
 	pub fn keys (& self) -> BTreeKeys <'_, Key, Val> {
@@ -58,10 +66,6 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 
 	pub fn len (& self) -> usize {
 		self.map.len ()
-	}
-
-	pub fn is_empty (& self) -> bool {
-		self.map.is_empty ()
 	}
 
 	pub fn remove <Qry: ?Sized> (& mut self, value: & Qry) -> Option <Val>

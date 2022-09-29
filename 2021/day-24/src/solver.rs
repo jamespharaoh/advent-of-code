@@ -479,12 +479,6 @@ impl Symbol {
 
 }
 
-impl cmp::PartialOrd for Symbol {
-	fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
-		self.inner.name.partial_cmp (& other.inner.name)
-	}
-}
-
 impl fmt::Debug for Symbol {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		let inner = self.inner.as_ref ();
@@ -504,9 +498,17 @@ impl fmt::Display for Symbol {
 	}
 }
 
-impl hash::Hash for Symbol {
+impl Eq for Symbol {}
+
+impl Hash for Symbol {
 	fn hash <Hasher: hash::Hasher> (& self, state: & mut Hasher) {
 		self.inner.name.hash (state);
+	}
+}
+
+impl Ord for Symbol {
+	fn cmp (& self, other: & Self) -> Ordering {
+		self.inner.name.cmp (& other.inner.name)
 	}
 }
 
@@ -514,7 +516,11 @@ impl PartialEq for Symbol {
 	fn eq (& self, other: & Self) -> bool { self.inner.name == other.inner.name }
 }
 
-impl Eq for Symbol {}
+impl cmp::PartialOrd for Symbol {
+	fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
+		self.inner.name.partial_cmp (& other.inner.name)
+	}
+}
 
 impl SymVal {
 

@@ -646,7 +646,7 @@ pub mod tools {
 		let input = State::parse (lines) ?;
 		let mut num_loops = 0_i32;
 		let mut last_cost = -1_i64;
-		let mut prev_states = HashMap::new ();
+		let mut prev_states: HashMap <StateCompact, StateCompact> = HashMap::new ();
 		let mut search = PrioritySearch::with_hash_map (
 			|state_compact, score, mut adder: PrioritySearchAdder <_, _, _>| {
 				let next_states_compact = logic::calc_next_states (state_compact);

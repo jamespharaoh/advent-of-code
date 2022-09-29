@@ -95,7 +95,7 @@ mod model {
 		Ok (octopodes)
 	}
 
-	#[ derive (Clone, Copy, Eq, Hash, PartialEq) ]
+	#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub struct Pos { pub row: i16, pub col: i16 }
 
 	impl Pos {
