@@ -77,13 +77,45 @@ impl <Val: Int> GridPosDisplayAuto for PosRowCol <Val> {
 	const DISPLAY_TYPE: GridPosDisplayType = GridPosDisplayType::DownRight;
 }
 
+impl <Storage, Pos> GridBuf <Storage, Pos, 2>
+	where
+		Storage: GridStorage,
+		Storage::Item: Display,
+		Pos: GridPosDisplay {
+
+	#[ allow (clippy::missing_inline_in_public_items) ]
+	pub fn display_with_delim <Delim: Display> (
+		& self,
+		delim: Delim,
+		formatter: & mut fmt::Formatter,
+	) -> fmt::Result {
+		let (num_rows, num_cols) = Pos::grid_pos_display_rows_cols (self.size ());
+		for row in 0 .. num_rows.qck_usize () {
+			if 0 < row { formatter.write_char ('\n') ?; }
+			let row = Pos::Coord::from_usize (row).unwrap ();
+			for _ in 0 .. Pos::grid_pos_display_prefix (row).qck_usize () {
+				formatter.write_char (' ') ?;
+			}
+			for col in 0 .. num_cols.qck_usize () {
+				if 0 < col { Display::fmt (& delim, formatter) ?; }
+				let col = Pos::Coord::from_usize (col).unwrap ();
+				let native = Pos::grid_pos_display_native (self.size (), row, col);
+				let item = self.get_native (native).unwrap ();
+				Display::fmt (& item, formatter) ?;
+			}
+		}
+		Ok (())
+	}
+
+}
+
 impl <Storage, Pos> Display for GridBuf <Storage, Pos, 2>
 	where
 		Storage: GridStorage,
 		Storage::Item: Display,
 		Pos: GridPosDisplay {
 
-	#[ inline ]
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		let mut first = true;
 		let (num_rows, num_cols) = Pos::grid_pos_display_rows_cols (self.size ());

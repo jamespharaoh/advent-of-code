@@ -350,9 +350,9 @@ pub mod model {
 			assert_eq_ok! (STEPS [0], Step::parse (STEP_TEXTS [0]));
 			assert_eq_ok! (STEPS [1], Step::parse (STEP_TEXTS [1]));
 			assert_eq_ok! (STEPS [2], Step::parse (STEP_TEXTS [2]));
-			assert_err! ("Invalid input: col 4: go on 1,2 through 2,3",
+			assert_err! ("Invalid input: col 3: go on 1,2 through 2,3",
 				Step::parse ("go on 1,2 through 2,3"));
-			assert_err! ("Invalid input: col 10: turn red 1,2 through 2,3",
+			assert_err! ("Invalid input: col 9: turn red 1,2 through 2,3",
 				Step::parse ("turn red 1,2 through 2,3"));
 			assert_err! ("Invalid input: col 10: turn on 1:2 through 2,3",
 				Step::parse ("turn on 1:2 through 2,3"));

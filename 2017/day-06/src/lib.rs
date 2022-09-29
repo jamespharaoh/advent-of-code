@@ -76,7 +76,7 @@ pub mod model {
 				Parser::wrap (input [0], |parser| {
 					let mut banks = Banks::new ();
 					loop {
-						parser.skip_whitespace ();
+						parser.skip_whitespace ( .. ) ?;
 						if parser.peek_rest ().is_empty () { break }
 						if banks.is_full () { return Err ("Max sixteen memory banks".into ()) }
 						banks.push (parser.uint () ?);

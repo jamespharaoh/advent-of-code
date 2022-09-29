@@ -15,6 +15,26 @@ pub trait GridStorage {
 
 }
 
+impl <Item, const LEN: usize> GridStorage for [Item; LEN] where Item: Clone {
+	type Item = Item;
+
+	#[ inline ]
+	fn storage_get (& self, idx: usize) -> Option <Item> {
+		self.get (idx).cloned ()
+	}
+
+	#[ inline ]
+	fn storage_set (& mut self, idx: usize, item: Self::Item) {
+		self [idx] = item;
+	}
+
+	#[ inline ]
+	fn storage_len (& self) -> usize {
+		self.len ()
+	}
+
+}
+
 impl <Item> GridStorage for Vec <Item> where Item: Clone {
 	type Item = Item;
 

@@ -61,6 +61,9 @@ macro_rules! parse {
 	( @item $parser:expr, $item_name:ident = $item_parse:ident ) => {
 		let $item_name = $item_parse ($parser) ?;
 	};
+	( @item $parser:expr, $name:ident = ($parse:path, $display:path) ) => {
+		let $name = $parse ($parser) ?;
+	};
 	( @item $parser:expr, ($($item_name:ident),*) = $item_parse:ident ) => {
 		let ($($item_name),*) = $item_parse ($parser) ?;
 	};
@@ -124,7 +127,12 @@ macro_rules! parse {
 			.delim_fn ($delim, Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, @delim $delim:literal $name:ident = $parse:expr ) => {
+	( @item $parser:expr, @delim $delim:literal $name:ident = $parse:path ) => {
+		let $name = $parser
+			.delim_fn ($delim, $parse)
+			.collect ();
+	};
+	( @item $parser:expr, @delim $delim:literal $name:ident = ($parse:path, $display:path) ) => {
 		let $name = $parser
 			.delim_fn ($delim, $parse)
 			.collect ();
@@ -189,10 +197,10 @@ macro_rules! parse {
 		$parser.confirm ();
 	};
 	( @item $parser:expr, @skip ) => {
-		$parser.skip_whitespace ();
+		$parser.skip_whitespace ( .. ) ?;
 	};
 	( @item $parser:expr, @skip $display:literal ) => {
-		$parser.skip_whitespace ();
+		$parser.skip_whitespace ( .. ) ?;
 	};
 
 	/*( @nest input_lifetime = $input_life:lifetime; $decl:tt = [ $($parse:tt)* ] ) => {

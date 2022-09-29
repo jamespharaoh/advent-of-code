@@ -126,6 +126,27 @@ macro_rules! pos_decl {
 	};
 }
 
+macro_rules! pos_dirs {
+
+	(
+		$name:ident $dir:ident $dims:literal
+		$(, $variant:ident $method:ident [ $($sign:ident),+ ] )+
+		$(,)?
+	) => {
+
+		impl <Val: Int <Signed = Val> + IntSigned> From <$dir> for $name <Val> {
+			#[ inline ]
+			fn from (dir: $dir) -> Self {
+				match dir {
+					$( $dir::$variant => Self::new ($(Val::$sign),+), )+
+				}
+			}
+		}
+
+	};
+
+}
+
 macro_rules! pos_ops {
 
 	( $name:ident <$dims:literal>: Debug $(,$rest:ident)*) => {
@@ -372,6 +393,14 @@ mod dim_2 {
 
 		pos_decl! (PosYX AxisXY 2, y Y up down, x X left right);
 
+		pos_dirs! {
+			PosYX Dir2d 2,
+			Up up [ NEG_ONE, ZERO ],
+			Down down [ ONE, ZERO ],
+			Left left [ ZERO, NEG_ONE ],
+			Right right [ ZERO, ONE ],
+		}
+
 		impl <Val: Int> PosYX <Val> {
 
 			#[ inline ]
@@ -423,20 +452,6 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int <Signed = Val> + IntSigned> From <Dir2d> for PosYX <Val> {
-
-			#[ inline ]
-			fn from (dir: Dir2d) -> Self {
-				match dir {
-					Dir2d::Up => Self { y: Val::NEG_ONE, x: Val::ZERO },
-					Dir2d::Down => Self { y: Val::ONE, x: Val::ZERO },
-					Dir2d::Left => Self { y: Val::ZERO, x: Val::NEG_ONE },
-					Dir2d::Right => Self { y: Val::ZERO, x: Val::ONE },
-				}
-			}
-
-		}
-
 		impl <Val: Int> Index <AxisXY> for PosXYZ <Val> {
 
 			type Output = Val;
@@ -476,6 +491,11 @@ mod dim_2 {
 		use super::*;
 
 		pos_decl! (PosGeo AxisGeo 2, n N south north, e E west east);
+		pos_dirs! (PosGeo DirGeo 2,
+			South south [ NEG_ONE, ZERO ],
+			North north [ ONE, ZERO ],
+			West west [ ZERO, NEG_ONE ],
+			East east [ ZERO, ONE ]);
 
 		impl <Val: Int> PosGeo <Val> {
 
@@ -681,6 +701,13 @@ mod dim_2 {
 		use super::*;
 
 		pos_decl! (PosRowCol AxisRowCol 2, row Row up down, col Col left right);
+		pos_dirs! {
+			PosRowCol Dir2d 2,
+			Up up [ NEG_ONE, ZERO ],
+			Down down [ ONE, ZERO ],
+			Left left [ ZERO, NEG_ONE ],
+			Right right [ ZERO, ONE ],
+		}
 
 		impl <Val: Int> PosRowCol <Val> {
 

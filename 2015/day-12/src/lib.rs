@@ -98,14 +98,14 @@ pub mod model {
 				parser.any ()
 					.of (|parser| {
 						let mut items = Vec::new ();
-						parser.skip_whitespace ().expect ("[") ?;
-						if parser.skip_whitespace ().peek () == Some (']') {
+						parser.skip_whitespace ( .. ) ?.expect ("[") ?;
+						if parser.skip_whitespace ( .. ) ?.peek () == Some (']') {
 							parser.next ();
 							return Ok (Json::Array (items));
 						}
 						loop {
 							items.push (parse_item (parser) ?);
-							match parser.skip_whitespace ().next () {
+							match parser.skip_whitespace ( .. ) ?.next () {
 								Some (',') => continue,
 								Some (']') => break,
 								_ => Err (parser.err ()) ?,
@@ -115,17 +115,17 @@ pub mod model {
 					})
 					.of (|parser| {
 						let mut items = Vec::new ();
-						parser.skip_whitespace ().expect ("{") ?;
-						if parser.skip_whitespace ().peek () == Some ('}') {
+						parser.skip_whitespace ( .. ) ?.expect ("{") ?;
+						if parser.skip_whitespace ( .. ) ?.peek () == Some ('}') {
 							parser.next ();
 							return Ok (Json::Object (items));
 						}
 						loop {
 							let name = parse_string (parser) ?;
-							parser.skip_whitespace ().expect (":") ?;
+							parser.skip_whitespace ( .. ) ?.expect (":") ?;
 							let value = parse_item (parser) ?;
 							items.push ((name, value));
-							match parser.skip_whitespace ().next () {
+							match parser.skip_whitespace ( .. ) ?.next () {
 								Some (',') => continue,
 								Some ('}') => break,
 								_ => Err (parser.err ()) ?,
@@ -134,7 +134,7 @@ pub mod model {
 						Ok (Json::Object (items))
 					})
 					.of (|parser| {
-						let value = parser.skip_whitespace ().int () ?;
+						let value = parser.skip_whitespace ( .. ) ?.int () ?;
 						Ok (Json::Number (value))
 					})
 					.of (|parser| {
@@ -144,7 +144,7 @@ pub mod model {
 					.done ()
 			}
 			fn parse_string (parser: & mut Parser) -> ParseResult <String> {
-				parser.skip_whitespace ().expect ("\"") ?;
+				parser.skip_whitespace ( .. ) ?.expect ("\"") ?;
 				let mut value = String::new ();
 				loop {
 					match parser.next () {
@@ -158,7 +158,7 @@ pub mod model {
 			}
 			Parser::wrap (input, |parser| {
 				let item = parse_item (parser) ?;
-				parser.skip_whitespace ().end () ?;
+				parser.skip_whitespace ( .. ) ?.end () ?;
 				Ok (item)
 			}).map_parse_err (|_, char_idx| format! ("Invalid input: col {}", char_idx + 1))
 		}

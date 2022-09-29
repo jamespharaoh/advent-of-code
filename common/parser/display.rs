@@ -96,6 +96,10 @@ macro_rules! display {
 		Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, $field:ident = ($parse:path, $display:path) $(,$($rest:tt)*)? ) => {
+		$display (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, ($($field:ident),*) = $display:path $(,$($rest:tt)*)? ) => {
 		$display (& ($($field),*), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -146,6 +150,10 @@ macro_rules! display {
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident = $parse:ident $(,$($rest:tt)*)? ) => {
 		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @delim $delim:literal $field:ident = ($parse:path, $display:path) $(,$($rest:tt)*)? ) => {
+		Display::fmt (& $field.display_delim_with ($delim, $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {

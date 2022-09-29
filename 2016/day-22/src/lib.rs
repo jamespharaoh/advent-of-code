@@ -165,10 +165,10 @@ pub mod model {
 			let x = parser.expect ("/dev/grid/node-x") ?.int () ?;
 			let y = parser.expect ("-y") ?.int () ?;
 			let pos = Pos { x, y };
-			let size: Size = parser.skip_whitespace ().int () ?;
-			let used = parser.expect ("T") ?.skip_whitespace ().int () ?;
-			let avail = parser.expect ("T") ?.skip_whitespace ().int () ?;
-			let _use_pc: u8 = parser.expect ("T") ?.skip_whitespace ().int () ?;
+			let size: Size = parser.skip_whitespace ( .. ) ?.int () ?;
+			let used = parser.expect ("T") ?.skip_whitespace ( .. ) ?.int () ?;
+			let avail = parser.expect ("T") ?.skip_whitespace ( .. ) ?.int () ?;
+			let _use_pc: u8 = parser.expect ("T") ?.skip_whitespace ( .. ) ?.int () ?;
 			parser.expect ("%") ?.end () ?;
 			Ok (Self::new (pos, size, used, avail) ?)
 		}

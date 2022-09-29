@@ -4,10 +4,12 @@ use aoc_nums as nums;
 
 use nums::IntConv;
 
+mod delim;
 mod display;
 mod from_parser;
 mod parse;
 
+pub use delim::*;
 pub use display::IntoIteratorDisplayDelim;
 pub use from_parser::FromParser;
 
@@ -191,7 +193,7 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn expect (& mut self, expect: & str) -> ParseResult <& mut Self> {
-		if self.ignore_whitespace { self.skip_whitespace (); }
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let saved = * self;
 		let mut input_iter = self.input_line.bytes ();
 		let mut num_chars = 0_u32;
@@ -221,14 +223,6 @@ impl <'inp> Parser <'inp> {
 		self.col_idx += num_chars;
 		self.byte_idx += num_bytes;
 		self.input_line = & self.input_line [num_bytes.pan_usize () .. ];
-		/*
-		for expect_char in expect.chars () {
-			if self.next () == Some (expect_char) { continue }
-			* self = saved;
-			return Err (self.err ());
-		}
-		*/
-		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (self)
 	}
 
@@ -280,13 +274,14 @@ impl <'inp> Parser <'inp> {
 	#[ inline ]
 	pub fn item <Item> (& mut self) -> ParseResult <Item>
 			where Item: FromParser <'inp> {
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		Item::from_parser (self)
 	}
 
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	fn int_str (& mut self) -> & str {
-		if self.ignore_whitespace { self.skip_whitespace (); }
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let num_digits =
 			self.input_line.bytes ().enumerate ()
 				.take_while (|& (idx, ch)|
@@ -296,14 +291,13 @@ impl <'inp> Parser <'inp> {
 		self.input_line = & self.input_line [num_digits.pan_usize () .. ];
 		self.col_idx += num_digits;
 		self.byte_idx += num_digits;
-		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
 
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	fn uint_str (& mut self) -> & str {
-		if self.ignore_whitespace { self.skip_whitespace (); }
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let num_digits =
 			self.input_line.bytes ()
 				.take_while (|& ch| ch.is_ascii_digit ())
@@ -312,7 +306,6 @@ impl <'inp> Parser <'inp> {
 		self.input_line = & self.input_line [num_digits.pan_usize () .. ];
 		self.col_idx += num_digits;
 		self.byte_idx += num_digits;
-		if self.ignore_whitespace { self.skip_whitespace (); }
 		val
 	}
 
@@ -325,7 +318,7 @@ impl <'inp> Parser <'inp> {
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	#[ allow (clippy::string_slice) ]
 	pub fn word (& mut self) -> ParseResult <& 'inp str> {
-		if self.ignore_whitespace { self.skip_whitespace (); }
+		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let (num_chars, num_bytes) =
 			self.input_line.chars ()
 				.take_while (|& ch| (self.word_pred) (ch))
@@ -337,7 +330,6 @@ impl <'inp> Parser <'inp> {
 		self.input_line = & self.input_line [num_bytes.pan_usize () .. ];
 		self.col_idx += num_chars;
 		self.byte_idx += num_bytes.pan_u32 ();
-		if self.ignore_whitespace { self.skip_whitespace (); }
 		Ok (word)
 	}
 
@@ -383,27 +375,17 @@ impl <'inp> Parser <'inp> {
 	///
 	#[ allow (clippy::string_slice) ]
 	#[ inline ]
-	pub fn skip_whitespace (& mut self) -> & mut Self {
-		/*
-		let (num_chars, num_bytes) =
-			self.input_line.chars ()
-				.take_while (|& ch| ch.is_whitespace ())
-				.fold ((0_u32, 0_usize), |(num_chars, num_bytes), ch| (
-					num_chars + 1_u32,
-					num_bytes + ch.len_utf8 (),
-				));
-		self.input_line = & self.input_line [num_bytes .. ];
-		self.col_idx += num_chars;
-		self.byte_idx += num_bytes.as_u32 ();
-		*/
+	pub fn skip_whitespace (& mut self, range: impl RangeBounds <u32>) -> ParseResult <& mut Self> {
+		let saved = * self;
 		let num_spaces =
 			self.input_line.bytes ()
 				.take_while (|& ch| ch.is_ascii_whitespace ())
 				.fold (0_u32, |sum, _| sum + 1);
+		if ! range.contains (& num_spaces) { * self = saved; return Err (self.err ()) }
 		self.input_line = & self.input_line [num_spaces.pan_usize () .. ];
 		self.col_idx += num_spaces;
 		self.byte_idx += num_spaces;
-		self
+		Ok (self)
 	}
 
 	/// Assert that there is no more input to consume
@@ -565,59 +547,6 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ inline ]
-	pub fn delim_fn <'par0, Output, ParseFn> (
-		& 'par0 mut self,
-		delim: & 'par0 str,
-		parse_fn: ParseFn,
-	) -> ParserDelim <'par0, 'inp, Output, ParseFn>
-			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
-		assert! (! delim.is_empty ());
-		ParserDelim {
-			parser: self,
-			delim,
-			parse_fn,
-			first: true,
-		}
-	}
-
-	#[ inline ]
-	pub fn repeat <'par, Output, ParseFn> (
-		& 'par mut self,
-		parse_fn: ParseFn,
-	) -> ParserRepeat <'par, 'inp, Output, ParseFn>
-			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
-		ParserRepeat {
-			parser: self,
-			parse_fn,
-		}
-	}
-
-	#[ inline ]
-	pub fn delim_items <'par, Output, ParseFn> (
-		& 'par mut self,
-		delim: & 'par str,
-	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>>
-			where Output: FromParser <'inp> {
-		self.delim_fn (delim, Parser::item)
-	}
-
-	#[ inline ]
-	pub fn delim_uints <'par, Output: FromStr> (
-		& 'par mut self,
-		delim: & 'par str,
-	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>> {
-		self.delim_fn (delim, Parser::<'inp>::uint)
-	}
-
-	#[ inline ]
-	pub fn delim_ints <'par, Output: FromStr + 'static> (
-		& 'par mut self,
-		delim: & 'par str,
-	) -> ParserDelim <'par, 'inp, Output, impl FnMut (& mut Parser <'inp>) -> ParseResult <Output>> {
-		self.delim_fn (delim, Parser::int)
-	}
-
-	#[ inline ]
 	pub fn opt_fn <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> Output
 		where
 			Output: Default,
@@ -628,36 +557,14 @@ impl <'inp> Parser <'inp> {
 		Output::default ()
 	}
 
-}
-
-pub struct ParserDelim <
-	'par,
-	'inp,
-	Output,
-	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output>,
-> {
-	parser: & 'par mut Parser <'inp>,
-	delim: & 'par str,
-	parse_fn: ParseFn,
-	first: bool,
-}
-
-impl <'par, 'inp, Output, ParseFn> Iterator for ParserDelim <'par, 'inp, Output, ParseFn>
-		where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
-
-	type Item = Output;
-
 	#[ inline ]
-	fn next (& mut self) -> Option <Output> {
-		let saved = * self.parser;
-		let result = if self.first {
-			self.first = false;
-			(self.parse_fn) (self.parser)
-		} else {
-			self.parser.expect (self.delim).and_then (|parser| (self.parse_fn) (parser))
-		};
-		if result.is_err () { * self.parser = saved; }
-		result.ok ()
+	pub fn nest <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> ParseResult <Output>
+			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+		let saved = * self;
+		let result = parse_fn (self);
+		self.ignore_whitespace = saved.ignore_whitespace;
+		self.word_pred = saved.word_pred;
+		result
 	}
 
 }

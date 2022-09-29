@@ -75,7 +75,7 @@ pub mod model {
 							let value = parser.int () ?;
 							if value == 0 { return Err ("Zero is not allowed".into ()) }
 							row.push (value);
-							parser.skip_whitespace ();
+							parser.skip_whitespace ( .. ) ?;
 						}
 						Ok (row)
 					}).map_parse_err (|_, col_idx|
