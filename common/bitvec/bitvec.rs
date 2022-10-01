@@ -1,22 +1,4 @@
-//! Dynamically sized array of items encoded as bits and packed
-
-use std::cmp;
-use std::marker::PhantomData;
-
-use aoc_nums as nums;
-use nums::IntConv;
-
-mod encode;
-mod iter;
-
-pub use encode::*;
-pub use iter::*;
-
-pub mod prelude {
-	pub use super::BitVec;
-	pub use super::BitVecEncoding;
-	pub use super::BitVecNative;
-}
+use super::*;
 
 /// Dynamically sized array of items encoded as bits and packed
 ///

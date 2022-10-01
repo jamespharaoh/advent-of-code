@@ -38,6 +38,25 @@ pub trait BitVecEncoding <Item> {
 
 }
 
+/// Default implementation of [`BitVecEncoding`] for items which implement [`BitVecNative`]
+///
+#[ derive (Clone, Debug, Eq, PartialEq) ]
+pub struct BitVecEncodingDefault;
+
+impl <Item> BitVecEncoding <Item> for BitVecEncodingDefault where Item: BitVecNative {
+
+	const BITS: u32 = Item::BITS;
+
+	const MASK: usize = (1 << Item::BITS) - 1;
+
+	#[ inline ]
+	fn encode (item: Item) -> usize { Item::encode (item) }
+
+	#[ inline ]
+	fn decode (bits: usize) -> Item { Item::decode (bits) }
+
+}
+
 /// Trait for items which know how to encode themselves for storing in a [`BitVec`]
 ///
 pub trait BitVecNative {
@@ -56,21 +75,18 @@ pub trait BitVecNative {
 
 }
 
-/// Default implementation of [`BitVecEncoding`] for items which implement [`BitVecNative`]
-///
-#[ derive (Clone, Debug, Eq, PartialEq) ]
-pub struct BitVecEncodingDefault;
+impl BitVecNative for bool {
 
-impl <Item> BitVecEncoding <Item> for BitVecEncodingDefault where Item: BitVecNative {
-
-	const BITS: u32 = Item::BITS;
-
-	const MASK: usize = (1 << Item::BITS) - 1;
+	const BITS: u32 = 1;
 
 	#[ inline ]
-	fn encode (item: Item) -> usize { Item::encode (item) }
+	fn encode (self) -> usize {
+		usize::from (self)
+	}
 
 	#[ inline ]
-	fn decode (bits: usize) -> Item { Item::decode (bits) }
+	fn decode (encoded: usize) -> Self {
+		encoded != 0
+	}
 
 }

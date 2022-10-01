@@ -83,6 +83,13 @@ macro_rules! parse {
 			.collect ();
 		let $item_name = temp_vec.try_into ().map_err (|_err| $parser.err ()) ?;
 	};
+	( @item $parser:expr, @array_delim $delim:literal $name:ident $($rest:tt)* ) => {
+		let temp_vec: Vec <_> = {
+			parse! (@item $parser, @delim $delim temp_vec $($rest)*);
+			temp_vec
+		};
+		let $name = temp_vec.try_into ().map_err (|_err| $parser.err ()) ?;
+	};
 	( @item $parser:expr, @char $name:ident = |$arg:ident| { $($valid:tt)* } ) => {
 		let $name: char = match $parser.peek () {
 			Some (ch) if (|$arg: char| { $($valid)* }) (ch) => { $parser.next ().unwrap (); ch },

@@ -89,11 +89,11 @@ macro_rules! display {
 
 	( $formatter:ident $(,)? ) => {};
 	( $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $field:ident = $parse_fn:path $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $field:ident = ($parse:path, $display:path) $(,$($rest:tt)*)? ) => {
@@ -109,19 +109,23 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $field:ident = $rng_0:literal .. $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $field:ident = $rng_0:literal ..= $rng_1:literal $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
-		Display::fmt ($expect, $formatter) ?;
+		::std::fmt::Display::fmt ($expect, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @array $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @array_delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @char $field:ident = |$arg:ident| { $($parse:tt)* } $(,$($rest:tt)*)? ) => {
@@ -129,60 +133,60 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim (""), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @confirm $(,$($rest:tt)*)? ) => {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident { $($nest:tt)* } $(,$($rest:tt)*)?) => {
 		let display_fn = display! (@nest $($nest)*);
-		Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident = ($rng_0:literal .. $rng_1:literal) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident = ($rng_0:literal ..= $rng_1:literal) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident = $parse:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim $delim:literal $field:ident = ($parse:path, $display:path) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim_with ($delim, $display), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim_with ($delim, $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ($delim), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim ("\n"), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim ("\n"), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @lines $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
 		let display_fn = display! (@nest $($nest)*);
-		Display::fmt (& $field.display_delim_with ("\n", display_fn), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim_with ("\n", display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @lines $field:ident = $display:ident $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @lines $field:ident = ($parse:ident, $display:ident) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
+		::std::fmt::Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @opt $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
@@ -196,25 +200,25 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len:expr) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @str $field:ident = (|$ch_arg:ident| { $($ch_body:tt)* }, $len:expr) $(,$($rest:tt)*)? ) => {
-		Display::fmt (& $field, $formatter) ?;
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 
 	( @nest $name:ident = [ $($display:tt)* ] ) => {
-		|val, formatter: & mut fmt::Formatter| {
+		|val, formatter: & mut ::std::fmt::Formatter| {
 			let & ($name, ) = val;
 			display! (formatter, $($display)*);
-			Ok ($name)
+			::std::result::Result::Ok ($name)
 		}
 	};
 	( @nest $($nest:tt)* ) => {
-		|val, formatter: & mut fmt::Formatter| {
+		|val, formatter: & mut ::std::fmt::Formatter| {
 			display! (@nest_var formatter val $($nest)*);
-			Ok (())
+			::std::result::Result::Ok (())
 		}
 	};
 
@@ -250,8 +254,8 @@ macro_rules! display {
 macro_rules! enum_display {
 
 	( $enum_name:ident, $($rest:tt)* ) => {
-		impl Display for $enum_name {
-			fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
+		impl ::std::fmt::Display for $enum_name {
+			fn fmt (& self, formatter: & mut ::std::fmt::Formatter) -> ::std::fmt::Result {
 				enum_display! (@variants $enum_name, self, formatter, $($rest)*);
 				panic! ("Unhandled variant {}::{:?}", stringify! ($enum_name), self);
 			}
@@ -267,7 +271,7 @@ macro_rules! enum_display {
 	) => {
 		if let $enum_name::$var_name { $($var_fields)* } = $self {
 			let $var_arg = $formatter;
-			return (|| -> fmt::Result { $($var_body)*; Ok (()) }) ();
+			return (|| -> ::std::fmt::Result { $($var_body)*; Ok (()) }) ();
 		};
 		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
 	};
@@ -332,6 +336,82 @@ macro_rules! enum_display {
 			return Ok (());
 		};
 		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+}
+
+#[ macro_export ]
+macro_rules! struct_display {
+
+	( < $($rest:tt)* ) => {
+		struct_display! (@outer 'inp [] < $($rest)*);
+	};
+
+	( $first:ident $($rest:tt)* ) => {
+		struct_display! (@outer 'inp [] $first $($rest)*);
+	};
+
+	(
+		@outer $inp_life_old:tt [$($param_decl:tt)*]
+		input_lifetime = $inp_life:tt;
+		$($rest:tt)*
+	) => {
+		struct_display! (@outer $inp_life [$($param_decl)*] $($rest)*);
+	};
+
+	(
+		@outer $inp_life:tt [$($param_decl_old:tt)*]
+		params = { $($param_decl:tt)* }
+		$($rest:tt)*
+	) => {
+		struct_display! (@outer $inp_life [$($param_decl)*] $($rest)*);
+	};
+
+	(
+		@outer $inp_life:tt [$($param_decl:tt)*]
+		$name:ident
+		$( < $($param:tt),* > )?
+		{ $($fields:tt)* }
+		= [ $($args:tt)* ]
+	) => {
+		struct_display! (
+			@main $name $inp_life
+			[ $($param_decl)* ]
+			[ $( $($param),* )? ]
+			[ { $($fields)* } ]
+			[ $($args)* ]);
+	};
+
+	(
+		@outer $inp_life:tt [$($param_decl:tt)*]
+		$name:ident
+		$( < $($param:tt),* > )?
+		( $($fields:tt)* )
+		= [ $($args:tt)* ]
+	) => {
+		struct_display! (
+			@main $name $inp_life
+			[ $($param_decl)* ]
+			[ $( $($param),* )? ]
+			[ ( $($fields)* ) ]
+			[ $($args)* ]);
+	};
+
+	(
+		@main $name:ident $inp_life:tt
+		[ $($param_decl:tt)* ]
+		[ $($param:tt),* ]
+		[ $($fields:tt)* ]
+		[ $($args:tt)* ]
+	) => {
+		impl <$inp_life, $($param_decl)*> ::std::fmt::Display
+				for $name <$($param),*> {
+			fn fmt (& self, formatter: & mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+				let Self $($fields)* = self;
+				display! (formatter, $($args)*);
+				::std::result::Result::Ok (())
+			}
+		}
 	};
 
 }

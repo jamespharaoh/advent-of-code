@@ -11,6 +11,7 @@
 
 [dependencies]
 
+	aoc-bitvec = { path = "../../common/bitvec" }
 	aoc-common = { path = "../../common" }
 
 [build-dependencies]
@@ -19,12 +20,14 @@
 
 [lib]
 
+	path = "lib.rs"
 	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [[bin]]
 
 	name = "aoc-2021-day-08"
+	path = "main.rs"
 	test = false
 	doctest = false
 	bench = false

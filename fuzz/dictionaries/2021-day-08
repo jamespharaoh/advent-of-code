@@ -1,0 +1,15 @@
+params_0 = "USE_SOLVER="
+params_true = "true"
+params_false = "false"
+
+display_0 = " | "
+
+misc_newline = "\x0a"
+
+letter_a = "a"
+letter_b = "b"
+letter_c = "c"
+letter_d = "d"
+letter_e = "e"
+letter_f = "f"
+letter_g = "g"

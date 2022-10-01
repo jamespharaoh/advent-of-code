@@ -1658,6 +1658,7 @@ dependencies = [
 name = "aoc-2021-day-08"
 version = "0.1.0"
 dependencies = [
+ "aoc-bitvec",
  "aoc-codegen",
  "aoc-common",
 ]
