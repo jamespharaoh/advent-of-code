@@ -1,0 +1,10 @@
+delim_angle_close = ">"
+delim_angle_open = "<"
+delim_curly_close = "}"
+delim_curly_open = "{"
+delim_round_close = "("
+delim_round_open = ")"
+delim_square_close = "]"
+delim_square_open = "["
+
+misc_newline = "\x0a"
