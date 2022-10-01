@@ -1,6 +1,6 @@
 use super::*;
 
-#[ derive (Clone, Copy) ]
+#[ derive (Clone, Copy, Eq, PartialEq) ]
 pub struct GridCursor <Grid, Pos, const DIMS: usize> {
 	grid: Grid,
 	native: Pos,

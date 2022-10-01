@@ -12,6 +12,8 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
+	aoc-grid = { path = "../../common/grid" }
+	aoc-pos = { path = "../../common/pos" }
 
 [build-dependencies]
 
@@ -19,12 +21,14 @@
 
 [lib]
 
+	path = "lib.rs"
 	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [[bin]]
 
 	name = "aoc-2021-day-09"
+	path = "main.rs"
 	test = false
 	doctest = false
 	bench = false
