@@ -26,7 +26,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	for cur in input.grid.cursors () {
 		if seen [cur.index ()] { continue }
 		seen [cur.index ()] = true;
-		if cur.item () == 9 { continue }
+		if cur.get (& input.grid) == 9 { continue }
 		let mut todo: VecDeque <_> = VecDeque::new ();
 		todo.push_back (cur);
 		let mut basin_size = 1_u32;
@@ -35,7 +35,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				let adj_cur = ok_or! (chk! (cur + offset), continue);
 				if seen [adj_cur.index ()] { continue }
 				seen [adj_cur.index ()] = true;
-				if adj_cur.item () == 9 { continue }
+				if adj_cur.get (& input.grid) == 9 { continue }
 				todo.push_back (adj_cur);
 				basin_size += 1;
 			}

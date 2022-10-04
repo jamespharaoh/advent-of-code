@@ -38,7 +38,7 @@ impl Tile {
 			let mut tag = 0_u16;
 			loop {
 				tag <<= 1_u32;
-				if matches! (cur.item (), Pixel::White) { tag |= 1; }
+				if matches! (cur.get (& grid), Pixel::White) { tag |= 1; }
 				if cur.try_add_assign (offset).is_err () { break }
 			}
 			tag

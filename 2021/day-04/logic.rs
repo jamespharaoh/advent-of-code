@@ -44,18 +44,19 @@ fn calc_win_turn (input: & Input, board: & Board) -> Option <u16> {
 	let call_order = & input.call_order;
 	let turns: Grid <Option <u16>> =
 		board.map (|cur| {
-			let num = cur.item ();
+			let num = cur.get (board);
 			call_order.iter ()
 				.position (|& called_num| called_num == num)
 				.map (usize::pan_u16)
 		});
+	let turns = & turns;
 	let down = turns.offset (Dir::Down.into ()).unwrap ();
 	let right = turns.offset (Dir::Right.into ()).unwrap ();
 	let cur = turns.cursor (Pos::ZERO).unwrap ();
 	[ (down, right), (right, down) ].into_iter ()
 		.flat_map (|(dir_0, dir_1)| cur.walk (dir_0)
 			.map (move |cur| cur.walk (dir_1)
-				.map (|cur| cur.item ())
+				.map (|cur| cur.get (turns))
 				.max ()
 				.unwrap ()))
 		.flatten ()

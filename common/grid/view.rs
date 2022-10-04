@@ -4,7 +4,7 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 	where Pos: GridPos <DIMS> {
 
 	type Item;
-	type Cursors: Iterator <Item = GridCursor <Self, Pos, DIMS>>;
+	type Cursors: Iterator <Item = GridCursor <Pos, DIMS>>;
 
 	fn start (self) -> Pos;
 	fn end (self) -> Pos;
@@ -60,17 +60,17 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 	}
 
 	#[ inline ]
-	fn cursor (self, pos: Pos) -> Option <GridCursor <Self, Pos, DIMS>> {
+	fn cursor (self, pos: Pos) -> Option <GridCursor <Pos, DIMS>> {
 		let native = pos.to_native (self.start ()) ?;
 		let idx = native.native_to_index (self.size ()) ?;
-		Some (GridCursor::new (self, native, idx.qck_usize ()))
+		Some (GridCursor::new_grid (self, native, idx.qck_usize ()))
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	fn map <Storage, MapFn, Output> (self, map_fn: MapFn) -> GridBuf <Storage, Pos, DIMS>
 		where
-			MapFn: FnMut (GridCursor <Self, Pos, DIMS>) -> Output,
+			MapFn: FnMut (GridCursor <Pos, DIMS>) -> Output,
 			Storage: Clone + GridStorage + FromIterator <Output> {
 		let storage = self.cursors ().map (map_fn).collect ();
 		GridBuf::wrap_range (storage, self.start (), self.end ()).unwrap ()
@@ -83,7 +83,7 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		map_fn: MapFn,
 	) -> NumResult <GridBuf <Storage, Pos, DIMS>>
 		where
-			MapFn: FnMut (GridCursor <& GridExtend <Self, Pos, DIMS>, Pos, DIMS>) -> Output,
+			MapFn: FnMut (GridCursor <Pos, DIMS>) -> Output,
 			Storage: Clone + GridStorage + FromIterator <Output>,
 			Self::Item: Default {
 		Ok (self.extend (amts) ?.map (map_fn))
@@ -95,7 +95,7 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		map_fn: MapFn,
 	) -> Result <GridBuf <Storage, Pos, DIMS>, Error>
 		where
-			MapFn: FnMut (GridCursor <Self, Pos, DIMS>) -> Result <Output, Error>,
+			MapFn: FnMut (GridCursor <Pos, DIMS>) -> Result <Output, Error>,
 			Storage: Clone + GridStorage + FromIterator <Output> {
 		let storage = self.cursors ().map (map_fn).try_collect () ?;
 		Ok (GridBuf::wrap_range (storage, self.start (), self.end ()).unwrap ())
@@ -121,7 +121,7 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		}
 		let storage =
 			GridTransformIter::new (cur, offsets)
-				.map (|cur| cur.item ())
+				.map (|cur| cur.get (self))
 				.collect ();
 		let size = Pos::from_array (offsets
 			.map (|offset|

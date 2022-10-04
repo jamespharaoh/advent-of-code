@@ -39,10 +39,10 @@ fn next_grid (grid: impl GridView <Pos, 2, Item = Tile>) -> GenResult <(Grid, bo
 	let grid = grid.map (|cur| {
 		let (num_adjacent, num_total) =
 			offsets.iter ()
-				.filter_map (|& off| chk! (cur + off).map (|cur| cur.item ()).ok ())
+				.filter_map (|& off| chk! (cur + off).map (|cur| cur.get (grid)).ok ())
 				.fold ((0_u32, 0_u32), |(num_adj, num_tot), item|
 					(num_adj + u32::from (item == Black), num_tot + 1));
-		let black = matches! ((cur.item (), num_adjacent), (Black, 1 ..= 2) | (White, 2));
+		let black = matches! ((cur.get (grid), num_adjacent), (Black, 1 ..= 2) | (White, 2));
 		if black && num_total < 6 { needs_extend = true; }
 		if black { Black } else { White }
 	});
@@ -107,7 +107,7 @@ fn grid_to_bits (grid: & Grid) -> Vec <u128> {
 	let east = grid.offset (Pos::ZERO.east (1).unwrap ()).unwrap ();
 	cur.walk (north_west)
 		.map (|cur| cur.walk (east)
-			.fold (0_u128, |sum, cur| sum << 1_u32 | u128::from (cur.item () == Black)))
+			.fold (0_u128, |sum, cur| sum << 1_u32 | u128::from (cur.get (grid) == Black)))
 		.collect ()
 }
 

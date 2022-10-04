@@ -60,7 +60,7 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 		Pos: GridPos <DIMS> {
 
 	type Item = Inner::Item;
-	type Cursors = GridExtendCursors <Self, Pos, DIMS>;
+	type Cursors = GridExtendCursors <Pos, DIMS>;
 
 	#[ inline ]
 	fn start (self) -> Pos {
@@ -99,21 +99,22 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	}
 
 	#[ inline ]
-	fn cursor (self, pos: Pos) -> Option <GridCursor <Self, Pos, DIMS>> {
+	fn cursor (self, pos: Pos) -> Option <GridCursor <Pos, DIMS>> {
 		let native = pos.to_native (self.start) ?;
 		let (idx, _) = native.to_array ().into_iter ()
 			.zip (self.inner.size ().to_array ()).rev ()
 			.fold ((Pos::Coord::ZERO, Pos::Coord::ONE),
 				|(sum, mul), (val, size)| (sum + val * mul, mul * size));
-		Some (GridCursor::new (self, native, idx.qck_usize ()))
+		Some (GridCursor::new_grid (self, native, idx.qck_usize ()))
 	}
 
 	#[ inline ]
-	fn cursors (self) -> GridExtendCursors <Self, Pos, DIMS>
+	fn cursors (self) -> GridExtendCursors <Pos, DIMS>
 			where Self: Sized {
 		let inner_size_arr = self.inner.size ().to_array ();
 		GridExtendCursors {
-			grid: self,
+			start: self.start (),
+			size: self.size (),
 			native: Pos::from_array ([Pos::Coord::ZERO; DIMS]),
 			idx: 0,
 			idx_fix: {
@@ -236,26 +237,25 @@ impl <Inner, Pos, const DIMS: usize> FusedIterator
 		Pos: GridPos <DIMS> {
 }
 
-pub struct GridExtendCursors <Grid, Pos, const DIMS: usize> {
-	grid: Grid,
+pub struct GridExtendCursors <Pos, const DIMS: usize> {
+	start: Pos,
+	size: Pos,
 	native: Pos,
 	idx: usize,
 	idx_fix: [usize; DIMS],
 	done: bool,
 }
 
-impl <Grid, Pos, const DIMS: usize> Iterator
-	for GridExtendCursors <Grid, Pos, DIMS>
-	where
-		Grid: Copy + GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> Iterator
+	for GridExtendCursors <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
-	type Item = GridCursor <Grid, Pos, DIMS>;
+	type Item = GridCursor <Pos, DIMS>;
 
 	#[ inline ]
-	fn next (& mut self) -> Option <GridCursor <Grid, Pos, DIMS>> {
+	fn next (& mut self) -> Option <GridCursor <Pos, DIMS>> {
 		if self.done { return None }
-		let size_arr = self.grid.size ().to_array ();
+		let size_arr = self.size.to_array ();
 		let cur_native = self.native;
 		let cur_idx = self.idx;
 		let mut native_arr = cur_native.to_array ();
@@ -269,7 +269,7 @@ impl <Grid, Pos, const DIMS: usize> Iterator
 		}
 		self.native = Pos::from_array (native_arr);
 		self.idx += 1;
-		Some (GridCursor::new (self.grid, cur_native, cur_idx))
+		Some (GridCursor::new_size (self.start, self.size, cur_native, cur_idx))
 	}
 
 }

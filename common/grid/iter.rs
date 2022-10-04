@@ -63,26 +63,40 @@ impl <Pos: GridPos <DIMS>, const DIMS: usize> Iterator for GridKeysIter <Pos, DI
 
 }
 
-pub struct GridCursorIter <Grid, Pos, const DIMS: usize> {
-	pub (crate) grid: Grid,
-	pub (crate) native: Pos,
-	pub (crate) idx: usize,
-	pub (crate) done: bool,
-	pub (crate) phantom: PhantomData <Pos>,
+pub struct GridCursorIter <Pos, const DIMS: usize> {
+	start: Pos,
+	size: Pos,
+	native: Pos,
+	idx: usize,
+	done: bool,
 }
 
-impl <Grid, Pos, const DIMS: usize> Iterator
-	for GridCursorIter <Grid, Pos, DIMS>
-	where
-		Grid: Copy + GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
-
-	type Item = GridCursor <Grid, Pos, DIMS>;
+impl <Pos, const DIMS: usize> GridCursorIter <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	#[ inline ]
-	fn next (& mut self) -> Option <GridCursor <Grid, Pos, DIMS>> {
+	pub (crate) fn new_grid (grid: impl GridView <Pos, DIMS>) -> Self {
+		Self {
+			start: grid.start (),
+			size: grid.size (),
+			native: Pos::from_array ([Pos::Coord::ZERO; DIMS]),
+			idx: 0,
+			done: false,
+		}
+	}
+
+}
+
+impl <Pos, const DIMS: usize> Iterator
+	for GridCursorIter <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
+
+	type Item = GridCursor <Pos, DIMS>;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <GridCursor <Pos, DIMS>> {
 		if self.done { return None }
-		let size_arr = self.grid.size ().to_array ();
+		let size_arr = self.size.to_array ();
 		let cur_native = self.native;
 		let cur_idx = self.idx;
 		let mut native_arr = self.native.to_array ();
@@ -94,7 +108,7 @@ impl <Grid, Pos, const DIMS: usize> Iterator
 		}
 		self.native = Pos::from_array (native_arr);
 		self.idx += 1;
-		Some (GridCursor::new (self.grid, cur_native, cur_idx))
+		Some (GridCursor::new_size (self.start, self.size, cur_native, cur_idx))
 	}
 
 }

@@ -1,25 +1,32 @@
 use super::*;
 
 #[ derive (Clone, Copy, Eq, PartialEq) ]
-pub struct GridCursor <Grid, Pos, const DIMS: usize> {
-	grid: Grid,
+pub struct GridCursor <Pos, const DIMS: usize> {
+	start: Pos,
+	size: Pos,
 	native: Pos,
 	idx: usize,
 }
 
-impl <Grid, Pos, const DIMS: usize> GridCursor <Grid, Pos, DIMS>
-	where Grid: GridView <Pos, DIMS>, Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> GridCursor <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub (crate) const fn new (grid: Grid, native: Pos, idx: usize) -> Self {
-		Self { grid, native, idx }
+	pub (crate) fn new_grid (grid: impl GridView <Pos, DIMS>, native: Pos, idx: usize) -> Self {
+		Self { start: grid.start (), size: grid.size (), native, idx }
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub (crate) const fn new_size (start: Pos, size: Pos, native: Pos, idx: usize) -> Self {
+		Self { start, size, native, idx }
 	}
 
 	#[ inline ]
 	#[ must_use ]
 	pub fn pos (& self) -> Pos {
-		Pos::from_native (self.native, self.grid.start ()).unwrap ()
+		Pos::from_native (self.native, self.start).unwrap ()
 	}
 
 	#[ inline ]
@@ -36,8 +43,8 @@ impl <Grid, Pos, const DIMS: usize> GridCursor <Grid, Pos, DIMS>
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn item (& self) -> Grid::Item {
-		self.grid.get_trusted (self.native, self.idx)
+	pub fn get <Grid: GridView <Pos, DIMS>> (& self, grid: Grid) -> Grid::Item {
+		grid.get_trusted (self.native, self.idx)
 	}
 
 	#[ inline ]
@@ -45,29 +52,27 @@ impl <Grid, Pos, const DIMS: usize> GridCursor <Grid, Pos, DIMS>
 	pub const fn walk (
 		self,
 		offset: GridOffset <Pos, DIMS>,
-	) -> GridCursorWalk <Grid, Pos, DIMS> {
+	) -> GridCursorWalk <Pos, DIMS> {
 		GridCursorWalk { cur: self, offset, done: false }
 	}
 
 }
 
-pub struct GridCursorWalk <Grid, Pos, const DIMS: usize>
+pub struct GridCursorWalk <Pos, const DIMS: usize>
 		where Pos: GridPos <DIMS> {
-	cur: GridCursor <Grid, Pos, DIMS>,
+	cur: GridCursor <Pos, DIMS>,
 	offset: GridOffset <Pos, DIMS>,
 	done: bool,
 }
 
-impl <Grid, Pos, const DIMS: usize> Iterator
-	for GridCursorWalk <Grid, Pos, DIMS>
-	where
-		Grid: Copy + GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> Iterator
+	for GridCursorWalk <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
-	type Item = GridCursor <Grid, Pos, DIMS>;
+	type Item = GridCursor <Pos, DIMS>;
 
 	#[ inline ]
-	fn next (& mut self) -> Option <GridCursor <Grid, Pos, DIMS>> {
+	fn next (& mut self) -> Option <GridCursor <Pos, DIMS>> {
 		if self.done { return None }
 		let result = self.cur;
 		if self.cur.try_add_assign (self.offset).is_err () { self.done = true; }
@@ -76,17 +81,15 @@ impl <Grid, Pos, const DIMS: usize> Iterator
 
 }
 
-impl <Grid, Pos, const DIMS: usize> TryAdd <GridOffset <Pos, DIMS>>
-	for GridCursor <Grid, Pos, DIMS>
-	where
-		Grid: GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> TryAdd <GridOffset <Pos, DIMS>>
+	for GridCursor <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	type Output = Self;
 
 	#[ inline ]
 	fn try_add (self, offset: GridOffset <Pos, DIMS>) -> NumResult <Self> {
-		let size_arr = self.grid.size ().to_array ();
+		let size_arr = self.size.to_array ();
 		let offset_arr = offset.val ().to_array ();
 		let mut native_arr = self.native.to_array ();
 		for dim_idx in 0 .. DIMS {
@@ -98,20 +101,18 @@ impl <Grid, Pos, const DIMS: usize> TryAdd <GridOffset <Pos, DIMS>>
 		}
 		let native = Pos::from_array (native_arr);
 		let idx = (self.idx.qck_isize () + offset.idx ()).qck_usize ();
-		Ok (Self { grid: self.grid, native, idx })
+		Ok (Self { start: self.start, size: self.size, native, idx })
 	}
 
 }
 
-impl <Grid, Pos, const DIMS: usize> TryAddAssign <GridOffset <Pos, DIMS>>
-	for GridCursor <Grid, Pos, DIMS>
-	where
-		Grid: GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> TryAddAssign <GridOffset <Pos, DIMS>>
+	for GridCursor <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	#[ inline ]
 	fn try_add_assign (& mut self, offset: GridOffset <Pos, DIMS>) -> NumResult <()> {
-		let size_arr = self.grid.size ().to_array ();
+		let size_arr = self.size.to_array ();
 		let offset_arr = offset.val ().to_array ();
 		let mut native_arr = self.native.to_array ();
 		for dim_idx in 0 .. DIMS {
@@ -128,10 +129,8 @@ impl <Grid, Pos, const DIMS: usize> TryAddAssign <GridOffset <Pos, DIMS>>
 
 }
 
-impl <Grid, Pos, const DIMS: usize> Debug for GridCursor <Grid, Pos, DIMS>
-	where
-		Grid: GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> Debug for GridCursor <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {

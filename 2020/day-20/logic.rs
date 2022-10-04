@@ -81,7 +81,7 @@ fn find_monsters_transform (
 	grid.cursor (start).unwrap ().walk (row_off)
 		.map (|cur| cur.walk (col_off)
 			.fold (0_u128, |sum, cur|
-				sum << 1_u32 | u128::from (cur.item () == Pixel::White)))
+				sum << 1_u32 | u128::from (cur.get (grid) == Pixel::White)))
 		.tuple_windows ()
 		.enumerate ()
 		.flat_map (|(y, (mut a, mut b, mut c))| {

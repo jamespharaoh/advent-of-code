@@ -92,6 +92,11 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		Pos: GridPos <DIMS> {
 
 	#[ inline ]
+	pub fn set_index (& mut self, idx: usize, item: Storage::Item) {
+		self.storage.storage_set (idx.qck_usize (), item);
+	}
+
+	#[ inline ]
 	pub fn set (& mut self, pos: Pos, item: Storage::Item) {
 		let native = pos.to_native (self.start).unwrap ();
 		let idx = native.native_to_index (self.size).unwrap ();
@@ -161,15 +166,6 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		self.storage.storage_mut (idx.qck_usize ())
 	}
 
-	/*
-	#[ inline ]
-	pub fn cursor_mut (& mut self, pos: Pos) -> Option <GridCursorMut <Storage, Pos, DIMS>> {
-		let idx = pos.to_scalar (self.origin, self.size) ?;
-		let pos = pos.to_native (self.origin) ?;
-		Some (GridCursorMut::new (self, pos, idx))
-	}
-	*/
-
 }
 
 impl <Storage, Pos, const DIMS: usize> Debug
@@ -194,7 +190,7 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridView <Pos, DIMS>
 		Storage: GridStorage {
 
 	type Item = Storage::Item;
-	type Cursors = GridCursorIter <Self, Pos, DIMS>;
+	type Cursors = GridCursorIter <Pos, DIMS>;
 
 	#[ inline ]
 	fn start (self) -> Pos {
@@ -217,14 +213,8 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	}
 
 	#[ inline ]
-	fn cursors (self) -> GridCursorIter <Self, Pos, DIMS> {
-		GridCursorIter {
-			grid: self,
-			native: Pos::from_array ([Pos::Coord::ZERO; DIMS]),
-			idx: 0,
-			done: false,
-			phantom: PhantomData,
-		}
+	fn cursors (self) -> GridCursorIter <Pos, DIMS> {
+		GridCursorIter::new_grid (self)
 	}
 
 }

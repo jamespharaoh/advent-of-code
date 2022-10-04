@@ -31,21 +31,19 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 
 }
 
-pub struct GridTransformIter <Grid, Pos, const DIMS: usize>
+pub struct GridTransformIter <Pos, const DIMS: usize>
 		where Pos: GridPos <DIMS> {
-	cursors: [GridCursor <Grid, Pos, DIMS>; DIMS],
+	cursors: [GridCursor <Pos, DIMS>; DIMS],
 	offsets: [GridOffset <Pos, DIMS>; DIMS],
 	done: bool,
 }
 
-impl <Grid, Pos, const DIMS: usize> GridTransformIter <Grid, Pos, DIMS>
-	where
-		Grid: GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> GridTransformIter <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
 	#[ inline ]
 	pub const fn new (
-		cursor: GridCursor <Grid, Pos, DIMS>,
+		cursor: GridCursor <Pos, DIMS>,
 		offsets: [GridOffset <Pos, DIMS>; DIMS],
 	) -> Self {
 		let cursors = [cursor; DIMS];
@@ -54,16 +52,14 @@ impl <Grid, Pos, const DIMS: usize> GridTransformIter <Grid, Pos, DIMS>
 
 }
 
-impl <Grid, Pos, const DIMS: usize> Iterator
-	for GridTransformIter <Grid, Pos, DIMS>
-	where
-		Grid: GridView <Pos, DIMS>,
-		Pos: GridPos <DIMS> {
+impl <Pos, const DIMS: usize> Iterator
+	for GridTransformIter <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
 
-	type Item = GridCursor <Grid, Pos, DIMS>;
+	type Item = GridCursor <Pos, DIMS>;
 
 	#[ inline ]
-	fn next (& mut self) -> Option <GridCursor <Grid, Pos, DIMS>> {
+	fn next (& mut self) -> Option <GridCursor <Pos, DIMS>> {
 		if self.done { return None }
 		let result = self.cursors [DIMS - 1];
 		for idx_0 in (0 .. DIMS).rev () {

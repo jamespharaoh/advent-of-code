@@ -8,7 +8,7 @@ use model::GenPos;
 use model::Grid;
 use model::PosXYZ;
 use model::PosXYZW;
-use model::Tile;
+use model::Tile::{ self, Active, Inactive };
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	calc_result::<PosXYZ, 3> (input, input.params.iters_one)
@@ -38,21 +38,20 @@ fn next_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	grid: & Grid <Pos, DIMS>,
 	base_dirs: & [Pos],
 ) -> GenResult <Grid <Pos, DIMS>> {
-	let resized_grid = grid.resize (
+	let grid = grid.resize (
 		grid.start ().map (|val| val - Coord::ONE).into (),
 		grid.end ().map (|val| val + Coord::ONE).into ()) ?;
+	let grid = & grid;
 	let dirs: Vec <GridOffset <Pos, DIMS>> =
 		base_dirs.iter ()
-			.map (|& pos| resized_grid.offset (pos))
+			.map (|& pos| grid.offset (pos))
 			.try_collect () ?;
-	Ok (resized_grid.map (move |cur| {
+	Ok (grid.map (move |cur| {
 		let adj_active = dirs.iter ()
-			.filter_map (|& dir| cur.try_add (dir).map (|cur| cur.item ()).ok ())
+			.filter_map (|& dir| cur.try_add (dir).map (|cur| cur.get (grid)).ok ())
 			.fold (0_u32, |sum, tile| sum + u32::from (tile == Tile::Active));
-		match (cur.item (), adj_active) {
-			(Tile::Active, 2 | 3) | (Tile::Inactive, 3) => Tile::Active,
-			_ => Tile::Inactive, 
-		}
+		let active = matches! ((cur.get (grid), adj_active), (Active, 2 | 3) | (Inactive, 3));
+		if active { Active } else { Inactive }
 	}))
 }
 

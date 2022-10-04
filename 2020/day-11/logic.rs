@@ -21,14 +21,14 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		.map (|pos| state.offset (pos))
 		.try_collect () ?;
 
-	calc_result (& input.params, state, |cursor| {
+	calc_result (& input.params, state, |state: & Tiles, cursor| {
 		let num_adj = dirs.iter ()
 			.filter_map (|& dir| cursor.try_add (dir)
-				.map (|adj_cursor| adj_cursor.item ())
+				.map (|adj_cursor| adj_cursor.get (state))
 				.ok ())
 			.filter (|& tile| tile == Tile::Occupied)
 			.count ();
-		matches! ((cursor.item (), num_adj), (Tile::Empty, 0) | (Tile::Occupied, 0 ..= 3))
+		matches! ((cursor.get (state), num_adj), (Tile::Empty, 0) | (Tile::Occupied, 0 ..= 3))
 	})
 
 }
@@ -43,34 +43,34 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		Pos::new (1, -1), Pos::new (1, 0), Pos::new (1, 1),
 	].into_iter ().map (|pos| state.offset (pos)).try_collect () ?;
 
-	calc_result (& input.params, state, move |cursor| {
+	calc_result (& input.params, state, move |state, cursor| {
 		let num_adj = dirs.iter ()
 			.filter_map (|& dir| {
 				let mut adj_cursor = cursor;
 				loop {
 					adj_cursor = adj_cursor.try_add (dir).ok () ?;
-					let adj_tile = adj_cursor.item ();
+					let adj_tile = adj_cursor.get (state);
 					if adj_tile == Tile::Floor { continue }
 					return Some (adj_tile);
 				}
 			})
 			.filter (|& tile| tile == Tile::Occupied)
 			.count ();
-		matches! ((cursor.item (), num_adj), (Tile::Empty, 0) | (Tile::Occupied, 0 ..= 4))
+		matches! ((cursor.get (state), num_adj), (Tile::Empty, 0) | (Tile::Occupied, 0 ..= 4))
 	})
 
 }
 
 #[ inline ]
 fn calc_result <EvalFn> (params: & InputParams, mut state: Tiles, mut eval_fn: EvalFn) -> GenResult <u32>
-		where EvalFn: FnMut (TilesCursor) -> bool {
+	where EvalFn: FnMut (& Tiles, TilesCursor) -> bool {
 
 	for _ in 0 .. params.max_iters {
 
 		let next_state = state.map (|cursor| {
-			let tile = cursor.item ();
+			let tile = cursor.get (& state);
 			if tile == Tile::Floor { return Tile::Floor }
-			if eval_fn (cursor) { Tile::Occupied } else { Tile::Empty }
+			if eval_fn (& state, cursor) { Tile::Occupied } else { Tile::Empty }
 		});
 
 		if state == next_state { 

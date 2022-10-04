@@ -2,7 +2,7 @@ use super::*;
 
 pub type Coord = i8;
 pub type Tiles = GridBuf <Vec <Tile>, Pos, 2>;
-pub type TilesCursor <'grd> = GridCursor <& 'grd Tiles, Pos, 2>;
+pub type TilesCursor = GridCursor <Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
 parse_display_enum! {
