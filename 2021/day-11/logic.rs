@@ -4,7 +4,8 @@ use input::Input;
 use model::Grid;
 use model::Pos;
 
-pub fn part_one (input: & Input) -> GenResult <u64> {
+pub fn part_one (input: & Input) -> GenResult <u32> {
+	check_input (input) ?;
 	Ok (
 		step_iter (input.grid.clone ())
 			.take (100)
@@ -12,22 +13,38 @@ pub fn part_one (input: & Input) -> GenResult <u64> {
 	)
 }
 
-pub fn part_two (input: & Input) -> GenResult <u64> {
-	let num_octopodes = input.grid.len ().pan_u64 ();
-	Ok (
-		step_iter (input.grid.clone ())
-			.take_while (|& num_flashes| num_flashes < num_octopodes)
-			.count ().pan_u64 () + 1
-	)
+pub fn part_two (input: & Input) -> GenResult <u32> {
+	check_input (input) ?;
+	let num_octopodes = input.grid.len ().pan_u32 ();
+	let mut iter = step_iter (input.grid.clone ());
+	let mut num_iters = 0;
+	loop {
+		if num_iters == 500 {
+			return Err ("Giving up after 500 iterations".into ());
+		}
+		num_iters += 1;
+		let num_flashes = iter.next ().unwrap ();
+		if num_flashes == num_octopodes { return Ok (num_iters) }
+	}
 }
 
-fn step_iter (grid: Grid) -> impl Iterator <Item = u64> {
+fn check_input (input: & Input) -> GenResult <()> {
+	if input.grid.size ().x < 2 || input.grid.size ().y < 2 {
+		return Err ("Grid must be at least 2×2".into ());
+	}
+	if 100 < input.grid.size ().x || 100 < input.grid.size ().y {
+		return Err ("Grid must be at most 50×50".into ());
+	}
+	Ok (())
+}
+
+fn step_iter (grid: Grid) -> impl Iterator <Item = u32> {
 	let offsets: [GridOffset <Pos, 2>; 8] =
 		Pos::ZERO.adjacent_8 ().into_iter ()
 			.map (|pos| grid.offset (pos).unwrap ())
 			.array ();
 	iter::repeat (()).scan (grid, move |grid, _| {
-		let mut num_flashes: u64 = 0;
+		let mut num_flashes: u32 = 0;
 		let mut flashed: GridBuf <Vec <bool>, Pos, 2> = GridBuf::new_range (grid.start (), grid.end ()).unwrap ();
 		let mut todo: Vec <GridCursor <Pos, 2>> = Vec::new ();
 		* grid = grid.map (|cur| {
