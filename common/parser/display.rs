@@ -246,6 +246,12 @@ macro_rules! display {
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
+	( @nest_var $formatter:ident $val:ident ( $($decl:tt)* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		if let & ( $($decl)* ) = $val {
+			display! ($formatter, $($display)*);
+		}
+		display! (@nest_var $formatter $val $($($rest)*)?);
+	};
 	( @nest_var $formatter:ident $val:ident $var:ident ( $($decl:tt)* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
 		if let & $var ($($decl)*) = $val {
 			display! ($formatter, $($display)*);

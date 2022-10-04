@@ -1,6 +1,26 @@
 //! Advent of Code 2021: Day 13: Transparent Origami
 //!
 //! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)
+//!
+//! # Input
+//!
+//! First, a number of lines containing 2d points in `x,y` format, with `x` increasing to the right
+//! and `y` increasing downwards. Then, after a blank line, a number of lines containing folds in
+//! the form `fold along a=v` where `a` is the axis, `x` or `y`, and `v` is the point on the axis.
+//!
+//! # Part one
+//!
+//! Fold instructions merge points from after the fold to before it, in a mirror fashion. Apply the
+//! first fold only, then count how many unique points remain.
+//!
+//! # Part two
+//!
+//! Apply all the folds in order, then read the result as a series of capital letters.
+//!
+//! # Algorithm
+//!
+//! This is fairly simple. We simply apply the folds as described. To read the text we use the
+//! [`aoc_ocr`] library.
 
 use aoc_common::*;
 use aoc_ocr as ocr;

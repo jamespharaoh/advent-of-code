@@ -264,6 +264,13 @@ macro_rules! parse {
 		});
 		parse! (@nest_var $parser $($($rest)*)?);
 	};
+	( @nest_var $parser:ident ( $($decl:tt)* ) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok (( $($decl)* ))
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
 	( @nest_var $parser:ident $var:ident ($($decl:tt)*) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
