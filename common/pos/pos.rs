@@ -13,6 +13,7 @@ use nums::TryMul;
 pub use gen::GenAxis;
 pub use gen::GenPos;
 pub use dim_2::AxisRowCol;
+pub use dim_2::AxisXY;
 pub use dim_2::Dir2d;
 pub use dim_2::DirGeo;
 pub use dim_2::DirGeoHexLat;

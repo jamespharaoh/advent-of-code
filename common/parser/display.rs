@@ -88,6 +88,7 @@ macro_rules! struct_parser_display {
 macro_rules! display {
 
 	( $formatter:ident $(,)? ) => {};
+
 	( $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -100,6 +101,11 @@ macro_rules! display {
 		$display (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
+		display! (@nest $($nest)*) (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+
 	( $formatter:ident, ($($field:ident),*) = $display:path $(,$($rest:tt)*)? ) => {
 		$display (& ($($field),*), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -224,6 +230,12 @@ macro_rules! display {
 
 	( @nest_var $formatter:ident $val:ident $name:ident = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
 		if let & $name = $val {
+			display! ($formatter, $($display)*);
+		}
+		display! (@nest_var $formatter $val $($($rest)*)?);
+	};
+	( @nest_var $formatter:ident $val:ident $name_0:ident::$name_1:ident = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		if let & $name_0::$name_1 = $val {
 			display! ($formatter, $($display)*);
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);

@@ -64,6 +64,9 @@ macro_rules! parse {
 	( @item $parser:expr, $name:ident = ($parse:path, $display:path) ) => {
 		let $name = $parse ($parser) ?;
 	};
+	( @item $parser:expr, $item_name:ident { $($nest:tt)* } ) => {
+		let $item_name = parse! (@nest $($nest)*) ($parser) ?;
+	};
 	( @item $parser:expr, ($($item_name:ident),*) = $item_parse:ident ) => {
 		let ($($item_name),*) = $item_parse ($parser) ?;
 	};
@@ -247,6 +250,13 @@ macro_rules! parse {
 		});
 		parse! (@nest_var $parser $($($rest)*)?);
 	};
+	( @nest_var $parser:ident $enum:ident::$var:ident = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($enum::$var)
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
 	( @nest_var $parser:ident $var:ident: $type:ty = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
@@ -258,6 +268,13 @@ macro_rules! parse {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
 			Ok ($var ($($decl)*))
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
+	};
+	( @nest_var $parser:ident $var:ident { $($decl:tt)* } = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($var { $($decl)* })
 		});
 		parse! (@nest_var $parser $($($rest)*)?);
 	};
