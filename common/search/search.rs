@@ -99,15 +99,15 @@ impl <Node, Pri, Visitor>
 
 }
 
-impl <Node, Pri, Visitor, const DIMS: usize>
-	PrioritySearch <Node, Pri, Visitor, GridBuf <Vec <SeenState <Pri>>, Node, DIMS>>
+impl <Pos, Pri, Visitor, const DIMS: usize>
+	PrioritySearch <GridCursor <Pos, DIMS>, Pri, Visitor, GridBuf <Vec <SeenState <Pri>>, Pos, DIMS>>
 	where
-		Node: Clone + Debug + Eq + Hash + GridPos <DIMS>,
+		Pos: Clone + Debug + Eq + Hash + GridPos <DIMS>,
 		Pri: Clone + Copy + Debug + Ord,
-		Visitor: PrioritySearchVisitor <Node, Pri, GridBuf <Vec <SeenState <Pri>>, Node, DIMS>> {
+		Visitor: PrioritySearchVisitor <GridCursor <Pos, DIMS>, Pri, GridBuf <Vec <SeenState <Pri>>, Pos, DIMS>> {
 
 	#[ inline ]
-	pub fn with_grid_range (start: Node, end: Node, visitor: Visitor) -> NumResult <Self> {
+	pub fn with_grid_range (start: Pos, end: Pos, visitor: Visitor) -> NumResult <Self> {
 		Ok (Self {
 			visitor,
 			inner: PrioritySearchInner {
@@ -118,7 +118,7 @@ impl <Node, Pri, Visitor, const DIMS: usize>
 	}
 
 	#[ inline ]
-	pub fn with_grid_size (size: Node, visitor: Visitor) -> Self {
+	pub fn with_grid_size (size: Pos, visitor: Visitor) -> Self {
 		Self {
 			visitor,
 			inner: PrioritySearchInner {
@@ -360,6 +360,20 @@ impl <Node, Pri, const DIMS: usize> Seen <Node, Pri>
 	#[ inline ]
 	fn seen_get_mut (& mut self, node: Node) -> & mut SeenState <Pri> {
 		Self::get_mut (self, node).unwrap_or_else (
+			|| panic! ("Position is not in grid: {node:?}"))
+	}
+
+}
+
+impl <Pos, Pri, const DIMS: usize> Seen <GridCursor <Pos, DIMS>, Pri>
+	for GridBuf <Vec <SeenState <Pri>>, Pos, DIMS>
+	where
+		Pos: GridPos <DIMS> + Clone + Eq + Hash,
+		Pri: Clone + Ord {
+
+	#[ inline ]
+	fn seen_get_mut (& mut self, node: GridCursor <Pos, DIMS>) -> & mut SeenState <Pri> {
+		Self::get_mut (self, node.native ()).unwrap_or_else (
 			|| panic! ("Position is not in grid: {node:?}"))
 	}
 

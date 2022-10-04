@@ -13,7 +13,7 @@ struct_parser_display! {
 }
 
 fn grid_parse (parser: & mut Parser) -> ParseResult <Grid> {
-	Grid::parse_with_fn (parser, |parser| {
+	Grid::parse_with_fn (parser, default, |parser| {
 		if ! matches! (parser.peek (), Some ('0' ..= '9')) { return Err (parser.err ()) }
 		Ok (parser.next ().unwrap ().to_digit (10).unwrap ().pan_u8 ())
 	})

@@ -10,6 +10,7 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 	pub fn parse_with_delim_and_fn (
 		parser: & mut Parser <'inp>,
 		delim: impl ParseDelimiter,
+		default_fn: impl Fn () -> Storage::Item,
 		parse_fn: impl Fn (& mut Parser <'inp>) -> ParseResult <Storage::Item> + Clone,
 	) -> ParseResult <Self> {
 		let lines: Vec <Vec <Storage::Item>> = parser.delim_fn ("\n", |parser| {
@@ -28,12 +29,12 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 		let line_offset = Pos::grid_parse_row_offset (num_lines, num_cols);
 		let tile_offset = Pos::grid_parse_col_offset (num_lines, num_cols);
 		let first_idx = Pos::grid_parse_first_index (num_lines, num_cols).pan_isize ();
-		let mut grid_vec = vec! [ default (); num_lines * num_cols ];
+		let mut grid_vec = vec! [ default_fn (); num_lines * num_cols ];
 		let mut line_idx = first_idx;
 		for line in lines.iter () {
 			let mut tile_idx = line_idx;
 			for tile in line.iter ().cloned ()
-					.chain (std::iter::repeat (default ()))
+					.chain (std::iter::repeat (default_fn ()))
 					.take (num_cols) {
 				grid_vec [tile_idx.pan_usize ()] = tile;
 				tile_idx += tile_offset;
@@ -46,14 +47,16 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn parse_with_delim (
 		parser: & mut Parser <'inp>,
+		default_fn: impl Fn () -> Storage::Item,
 		delim: impl ParseDelimiter,
 	) -> ParseResult <Self> {
-		Self::parse_with_delim_and_fn (parser, delim, Parser::item)
+		Self::parse_with_delim_and_fn (parser, delim, default_fn, Parser::item)
 	}
 
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn parse_with_fn (
 		parser: & mut Parser <'inp>,
+		default_fn: impl Fn () -> Storage::Item,
 		parse_fn: impl Fn (& mut Parser <'inp>) -> ParseResult <Storage::Item> + Clone,
 	) -> ParseResult <Self> {
 		let lines: Vec <Vec <Storage::Item>> = parser.delim_fn ("\n", |parser| {
@@ -72,12 +75,12 @@ impl <'inp, Storage, Pos> GridBuf <Storage, Pos, 2>
 		let line_offset = Pos::grid_parse_row_offset (num_lines, num_cols);
 		let tile_offset = Pos::grid_parse_col_offset (num_lines, num_cols);
 		let first_idx = Pos::grid_parse_first_index (num_lines, num_cols).pan_isize ();
-		let mut grid_vec = vec! [ default (); num_lines * num_cols ];
+		let mut grid_vec = vec! [ default_fn (); num_lines * num_cols ];
 		let mut line_idx = first_idx;
 		for line in lines.iter () {
 			let mut tile_idx = line_idx;
 			for tile in line.iter ().cloned ()
-					.chain (std::iter::repeat (default ()))
+					.chain (std::iter::repeat (default_fn ()))
 					.take (num_cols) {
 				grid_vec [tile_idx.pan_usize ()] = tile;
 				tile_idx += tile_offset;
@@ -97,7 +100,7 @@ impl <'inp, Storage, Pos> FromParser <'inp> for GridBuf <Storage, Pos, 2>
 
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		Self::parse_with_fn (parser, Parser::item)
+		Self::parse_with_fn (parser, Storage::Item::default, Parser::item)
 	}
 
 }
