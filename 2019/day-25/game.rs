@@ -117,10 +117,7 @@ struct_parser! {
 		descrip, "\n",
 		"\n",
 		"Doors here lead:\n",
-		@collect doors = |parser| {
-			parse! (parser, "- ", door, "\n");
-			Ok (door)
-		},
+		@collect doors { door = [ "- ", door, "\n" ] },
 		"\n",
 		items = parse_room_items,
 	]

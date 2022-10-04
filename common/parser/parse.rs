@@ -109,9 +109,19 @@ macro_rules! parse {
 			.repeat (Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, @collect $item_name:ident = $item_parse:expr ) => {
-		let $item_name = $parser
-			.repeat ($item_parse)
+	( @item $parser:expr, @collect $name:ident = $parse:path ) => {
+		let $name = $parser
+			.repeat ($parse)
+			.collect ();
+	};
+	( @item $parser:expr, @collect $name:ident = ($parse:expr, $display:expr) ) => {
+		let $name = $parser
+			.repeat ($parse)
+			.collect ();
+	};
+	( @item $parser:expr, @collect $name:ident { $($nest:tt)* } ) => {
+		let $name = $parser
+			.repeat (parse! (@nest $($nest)*))
 			.collect ();
 	};
 	( @item $parser:expr, @collect_some $item_name:ident ) => {
