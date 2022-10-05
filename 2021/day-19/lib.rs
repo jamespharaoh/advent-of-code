@@ -2,6 +2,8 @@
 //!
 //! [https://adventofcode.com/2021/day/19](https://adventofcode.com/2021/day/19)
 //!
+//! # Algorithm
+//!
 //! This algorithm uses bloom filters to allow it to scale better. For each scanner we generate a
 //! set of bits which have bits set according to the arrangement of the beacons they contain. If
 //! there are two beacons with a specific offset between them, then a number of bits are guaranteed
