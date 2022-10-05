@@ -184,14 +184,19 @@ macro_rules! parse {
 			.delim_fn ("\n", Parser::item)
 			.collect ();
 	};
-	( @item $parser:expr, @lines $item_name:ident { $($nest:tt)* } ) => {
-		let $item_name = $parser
-			.delim_fn ("\n", parse! (@nest $($nest)*))
-			.collect ();
-	};
 	( @item $parser:expr, @lines $name:ident: $type:ty { $($nest:tt)* } ) => {
 		let $name: $type = $parser
 			.delim_fn ("\n", parse! (@nest $($nest)*))
+			.collect ();
+	};
+	( @item $parser:expr, @lines $name:ident = $rng_0:literal ..= $rng_1:literal ) => {
+		let $name = $parser
+			.delim_fn ("\n", |parser| parser.item_range ($rng_0 ..= $rng_1))
+			.collect ();
+	};
+	( @item $parser:expr, @lines $name:ident = $parse:path ) => {
+		let $name = $parser
+			.delim_fn ("\n", $parse)
 			.collect ();
 	};
 	( @item $parser:expr, @lines $name:ident = ($parse:path, $display:path) ) => {
@@ -199,9 +204,9 @@ macro_rules! parse {
 			.delim_fn ("\n", $parse)
 			.collect ();
 	};
-	( @item $parser:expr, @lines $name:ident = $parse:path ) => {
-		let $name = $parser
-			.delim_fn ("\n", $parse)
+	( @item $parser:expr, @lines $item_name:ident { $($nest:tt)* } ) => {
+		let $item_name = $parser
+			.delim_fn ("\n", parse! (@nest $($nest)*))
 			.collect ();
 	};
 	( @item $parser:expr, @opt $name:ident { $($nest:tt)* } ) => {
