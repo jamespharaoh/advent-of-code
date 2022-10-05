@@ -9,6 +9,7 @@ use nums::IntSigned;
 use nums::NumResult;
 use nums::TryAdd;
 use nums::TryMul;
+use nums::TrySub;
 
 pub use gen::GenAxis;
 pub use gen::GenPos;
@@ -184,21 +185,6 @@ macro_rules! pos_ops {
 
 	( $name:ident <$dims:literal>: Add $(,$rest:ident)* ) => {
 
-		impl <Val: Int, ArgVal: Int> TryAdd <$name <ArgVal>> for $name <Val>
-				where Val: TryAdd <ArgVal, Output = Val> {
-			type Output = Self;
-			#[ inline ]
-			fn try_add (self, other: $name <ArgVal>) -> NumResult <Self> {
-				let self_array: [Val; $dims] = self.into ();
-				let other_array: [ArgVal; $dims] = other.into ();
-				let mut result_array = [Val::ZERO; $dims];
-				for idx in 0 .. self_array.len () {
-					result_array [idx] = self_array [idx].try_add (other_array [idx]) ?
-				}
-				Ok (result_array.into ())
-			}
-		}
-
 		impl <Val: Int, ArgVal: Int> Add <$name <ArgVal>> for $name <Val>
 				where Val: TryAdd <ArgVal, Output = Val> {
 			type Output = Self;
@@ -213,6 +199,21 @@ macro_rules! pos_ops {
 			#[ inline ]
 			fn add_assign (& mut self, other: $name <ArgVal>) {
 				* self = self.try_add (other).unwrap ()
+			}
+		}
+
+		impl <Val: Int, ArgVal: Int> TryAdd <$name <ArgVal>> for $name <Val>
+				where Val: TryAdd <ArgVal, Output = Val> {
+			type Output = Self;
+			#[ inline ]
+			fn try_add (self, other: $name <ArgVal>) -> NumResult <Self> {
+				let self_array: [Val; $dims] = self.into ();
+				let other_array: [ArgVal; $dims] = other.into ();
+				let mut result_array = [Val::ZERO; $dims];
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx].try_add (other_array [idx]) ?
+				}
+				Ok (result_array.into ())
 			}
 		}
 
@@ -293,18 +294,27 @@ macro_rules! pos_ops {
 
 	( $name:ident <$dims:literal>: Sub $(,$rest:ident)* ) => {
 
-		impl <Val: Int> Sub <$name <Val::Signed>> for $name <Val> {
+		impl <Val: Int, ArgVal: Int> Sub <$name <ArgVal>> for $name <Val>
+				where Val: TrySub <ArgVal, Output = Val> {
 			type Output = Self;
 			#[ inline ]
-			fn sub (self, other: $name <Val::Signed>) -> Self {
+			fn sub (self, other: $name <ArgVal>) -> Self {
+				self.try_sub (other).unwrap ()
+			}
+		}
+
+		impl <Val: Int, ArgVal: Int> TrySub <$name <ArgVal>> for $name <Val>
+				where Val: TrySub <ArgVal, Output = Val> {
+			type Output = Self;
+			#[ inline ]
+			fn try_sub (self, other: $name <ArgVal>) -> NumResult <Self> {
 				let self_array: [Val; $dims] = self.into ();
-				let other_array: [Val::Signed; $dims] = other.into ();
+				let other_array: [ArgVal; $dims] = other.into ();
 				let mut result_array = [Val::ZERO; $dims];
 				for idx in 0 .. self_array.len () {
-					result_array [idx] =
-						self_array [idx].sub_signed (other_array [idx]).unwrap ();
+					result_array [idx] = self_array [idx].try_sub (other_array [idx]) ?
 				}
-				result_array.into ()
+				Ok (result_array.into ())
 			}
 		}
 

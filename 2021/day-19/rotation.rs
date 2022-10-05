@@ -299,15 +299,11 @@ mod tests {
 		let mut seen_clockwise: HashSet <Rotation> = HashSet::new ();
 		fn right_handed (pos: Pos) -> bool {
 			let sign = match (pos.x.abs (), pos.y.abs (), pos.z.abs ()) {
-				(1, 2, 3) => 1,
-				(2, 3, 1) => 1,
-				(3, 1, 2) => 1,
-				(3, 2, 1) => -1,
-				(2, 1, 3) => -1,
-				(1, 3, 2) => -1,
+				(1, 2, 3) | (2, 3, 1) | (3, 1, 2) => 1,
+				(3, 2, 1) | (2, 1, 3) | (1, 3, 2) => -1,
 				_ => panic! (),
 			} * pos.x.signum () * pos.y.signum () * pos.z.signum ();
-			sign > 0
+			0 < sign
 		}
 		for rotate in Rotation::ALL.iter ().copied () {
 			let result = rotate.apply (base);
@@ -315,32 +311,39 @@ mod tests {
 			assert! (! seen.contains (& result), "Duplicated rotation {:?}", result);
 			seen.insert (result);
 			let rotate_left = rotate.left ();
-			assert! (! seen_left.contains (& rotate_left), "Duplicated rotation left {:?}", rotate_left);
+			assert! (! seen_left.contains (& rotate_left),
+				"Duplicated rotation left {rotate_left:?}");
 			seen_left.insert (rotate_left);
 			let rotate_up = rotate.up ();
-			assert! (! seen_up.contains (& rotate_up), "Duplicated rotation up {:?}", rotate_up);
+			assert! (! seen_up.contains (& rotate_up), "Duplicated rotation up {rotate_up:?}");
 			seen_up.insert (rotate_up);
 			let rotate_clockwise = rotate.clockwise ();
-			assert! (! seen_clockwise.contains (& rotate_clockwise), "Duplicated rotation clockwise {:?}", rotate_clockwise);
+			assert! (! seen_clockwise.contains (& rotate_clockwise),
+				"Duplicated rotation clockwise {rotate_clockwise:?}");
 			seen_clockwise.insert (rotate_clockwise);
 			let rotate_four_lefts = rotate.left ().left ().left ().left ();
-			assert_eq! (rotate, rotate_four_lefts, "Four lefts from {:?} arrives at {:?}", rotate, rotate_four_lefts);
+			assert_eq! (rotate, rotate_four_lefts,
+				"Four lefts from {rotate:?} arrives at {rotate_four_lefts:?}");
 			let rotate_four_ups = rotate.up ().up ().up ().up ();
-			assert_eq! (rotate, rotate_four_ups, "Four ups from {:?} arrives at {:?}", rotate, rotate_four_ups);
+			assert_eq! (rotate, rotate_four_ups,
+				"Four ups from {rotate:?} arrives at {rotate_four_ups:?}");
 			let rotate_four_clockwises = rotate.clockwise ().clockwise ().clockwise ().clockwise ();
-			assert_eq! (rotate, rotate_four_clockwises, "Four clockwises from {:?} arrives at {:?}", rotate, rotate_four_clockwises);
+			assert_eq! (rotate, rotate_four_clockwises,
+				"Four clockwises from {rotate:?} arrives at {rotate_four_clockwises:?}");
 			assert_eq! (rotate, rotate.up ().right ().down ().counter_clockwise ());
 			assert_eq! (rotate, rotate.flip ().around ().upside_down ());
 			let rotate_two_revs = rotate.rev ().rev ();
-			assert_eq! (rotate, rotate_two_revs, "Two reverses of {:?} arrives at {:?}", rotate, rotate_two_revs);
+			assert_eq! (rotate, rotate_two_revs,
+				"Two reverses of {rotate:?} arrives at {rotate_two_revs:?}");
 			let pos_forward_rev = rotate.rev ().apply (rotate.apply (base));
-			assert_eq! (base, pos_forward_rev, "Applying forward and reverse to {:?} arrives at {:?}", base, pos_forward_rev);
+			assert_eq! (base, pos_forward_rev,
+				"Applying forward and reverse to {rotate:?} arrives at {pos_forward_rev:?}");
 			for other in Rotation::ALL.iter ().copied () {
 				let pos_apply_twice = other.apply (rotate.apply (base));
 				let pos_combine = other.combine (rotate).apply (base);
 				assert_eq! (pos_apply_twice, pos_combine,
-					"Applying {:?} then {:?} gives {:?} but combining then applying gives {:?}",
-					rotate, other, pos_apply_twice, pos_combine);
+					"Applying {rotate:?} then {other:?} gives {pos_apply_twice:?} but combining \
+					then applying gives {pos_combine:?}");
 				for other_base in Rotation::ALL.iter ().copied ().map (|rot| rot.apply (base)) {
 					if other.apply (other_base) != result { continue }
 					assert_eq! (other.rev ().combine (rotate).apply (base), other_base);
