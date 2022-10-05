@@ -1742,6 +1742,7 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+ "aoc-pos",
 ]
 
 [[package]]

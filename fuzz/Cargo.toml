@@ -1190,3 +1190,10 @@
 	path = "src/2021-day-16.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2021-day-17"
+	path = "src/2021-day-17.rs"
+	test = false
+	doc = false
