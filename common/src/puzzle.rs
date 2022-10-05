@@ -184,7 +184,7 @@ fn puzzle_invoke_real (
 	let input_path_default = puzzle.find_input_or_default ();
 
 	let mut command =
-		Command::new (format! ("aoc-{}-day-{}", puzzle.year (), puzzle.day ()))
+		clap::Command::new (format! ("aoc-{}-day-{}", puzzle.year (), puzzle.day ()))
 			.arg (
 				clap::Arg::new ("input")
 					.long ("input")
@@ -197,7 +197,7 @@ fn puzzle_invoke_real (
 	for part_num in 1 ..= puzzle.num_parts () {
 
 		command = command.subcommand (
-			Command::new (format! ("part-{}", part_num))
+			clap::Command::new (format! ("part-{}", part_num))
 				.arg (
 					clap::Arg::new ("repeat")
 						.long ("repeat")

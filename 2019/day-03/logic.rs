@@ -13,7 +13,7 @@ pub fn part_one (input: & Input) -> GenResult <Val> {
 	let set_0: HashSet <Pos> = map_0.keys ().copied ().collect ();
 	let set_1: HashSet <Pos> = map_1.keys ().copied ().collect ();
 	Ok (
-		HashSet::intersection (& set_0, & set_1)
+		set_0.intersection (& set_1)
 			.map (|pos| pos.x.abs () + pos.y.abs ())
 			.min ()
 			.ok_or ("No solution found") ?
@@ -27,7 +27,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let set_0: HashSet <Pos> = map_0.keys ().copied ().collect ();
 	let set_1: HashSet <Pos> = map_1.keys ().copied ().collect ();
 	Ok (
-		HashSet::intersection (& set_0, & set_1)
+		set_0.intersection (& set_1)
 			.map (|pos| map_0 [pos] + map_1 [pos])
 			.min ()
 			.ok_or ("No solution found") ?

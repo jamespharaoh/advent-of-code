@@ -15,6 +15,10 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 		}
 	}
 
+	pub fn with_capacity (_capacity: usize) -> Self {
+		Self::new ()
+	}
+
 	pub fn clear (& mut self) {
 		self.map.clear ();
 	}

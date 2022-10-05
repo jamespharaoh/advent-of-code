@@ -92,16 +92,27 @@ pub use std::time;
 pub use std::vec::IntoIter as VecIntoIter;
 
 #[ cfg (not (fuzzing)) ]
-pub use std::collections::HashSet;
+//pub use std_hash::*;
+pub use fast_hash::*;
 
 #[ cfg (fuzzing) ]
-pub use std::collections::BTreeSet as HashSet;
+pub use test_hash::*;
 
-#[ cfg (not (fuzzing)) ]
-pub use std::collections::HashMap;
+mod std_hash {
+	pub use std::collections::HashMap;
+	pub use std::collections::HashSet;
+}
+
+mod fast_hash {
+	pub use ahash::AHashMap as HashMap;
+	pub use ahash::AHashSet as HashSet;
+}
 
 #[ cfg (fuzzing) ]
-pub use crate::test_map::HashMap;
+mod test_hash {
+	pub use std::collections::BTreeSet as HashSet;
+	pub use crate::test_map::HashMap;
+}
 
 #[ cfg (fuzzing) ]
 mod test_map;

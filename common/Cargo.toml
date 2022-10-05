@@ -11,7 +11,7 @@
 	aoc-misc = { path = "misc" }
 	aoc-nums = { path = "nums" }
 	aoc-parser = { path = "parser" }
-	clap = { version = "*", features = [ "derive" ] }
+	clap = { version = "3.*", features = [ "derive" ] }
 	itertools = "*"
 
 [lib]
