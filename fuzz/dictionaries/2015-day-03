@@ -1,0 +1,4 @@
+dir_north = "^"
+dir_south = "v"
+dir_east = ">"
+dir_west = "<"
