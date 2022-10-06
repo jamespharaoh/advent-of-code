@@ -114,11 +114,7 @@ macro_rules! display {
 		$display (& ($($field),*), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
-	( $formatter:ident, $field:ident = $rng_0:literal .. $(,$($rest:tt)*)? ) => {
-		::std::fmt::Display::fmt (& $field, $formatter) ?;
-		display! ($formatter, $($($rest)*)?);
-	};
-	( $formatter:ident, $field:ident = $rng_0:literal ..= $rng_1:literal $(,$($rest:tt)*)? ) => {
+	( $formatter:ident, $field:ident = $range:expr $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};

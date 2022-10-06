@@ -74,11 +74,7 @@ macro_rules! parse {
 		let ($($name),*) = $parse ($parser) ?;
 	};
 	( @item $parser:expr, $item_name:ident = $item_range:expr ) => {
-		let $item_name = $parser.any ().of (|parser| {
-			let val = parser.item () ?;
-			if ! $item_range.contains (& val) { return Err (parser.err ()) }
-			Ok (val)
-		}).done () ?;
+		let $item_name = $parser.item_range ($item_range) ?;
 	};
 	( @item $parser:expr, @array $item_name:ident ) => {
 		let temp_vec: Vec <_> = $parser
