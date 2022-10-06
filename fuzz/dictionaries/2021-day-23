@@ -1,0 +1,13 @@
+input_0 = "#############\x0a"
+input_1 = "#...........#\x0a"
+input_2 = "###"
+input_3 = "  #"
+input_4 = "  #########\x0a"
+
+misc_hash = "#"
+misc_newline = "\x0a"
+
+letter_a = "A"
+letter_b = "B"
+letter_c = "C"
+letter_d = "D"

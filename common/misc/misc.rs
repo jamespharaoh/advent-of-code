@@ -236,6 +236,9 @@ macro_rules! array_vec {
 			result
 		}
 	};
+	( $val:expr; $num:expr ) => {
+		[$val; $num].into_iter ().collect ()
+	};
 }
 
 #[ macro_export ]

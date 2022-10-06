@@ -20,12 +20,14 @@
 
 [lib]
 
+	path = "lib.rs"
 	doctest = false
 	crate-type = [ "rlib", "dylib" ]
 
 [[bin]]
 
 	name = "aoc-2021-day-23"
+	path = "main.rs"
 	test = false
 	doctest = false
 	bench = false

@@ -729,14 +729,14 @@ macro_rules! parse_display_enum {
 			pub const VARIANTS: [$enum_name; Self::NUM_VARIANTS] = [ $(Self::$var_name),* ];
 
 			#[ inline ]
-			pub fn as_str (self) -> & 'static str {
+			pub const fn as_str (self) -> & 'static str {
 				match self {
 					$( Self::$var_name => $var_str, )*
 				}
 			}
 
 			#[ inline ]
-			pub fn idx (self) -> usize {
+			pub const fn idx (self) -> usize {
 				parse_display_enum! (@variant_to_idx self [0] [] $($var_name)*)
 			}
 
