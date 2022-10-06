@@ -224,10 +224,9 @@ macro_rules! display {
 	};
 
 	( @nest $name:ident = [ $($display:tt)* ] ) => {
-		|val, formatter: & mut ::std::fmt::Formatter| {
-			let & ($name, ) = val;
+		|$name, formatter: & mut ::std::fmt::Formatter| {
 			display! (formatter, $($display)*);
-			::std::result::Result::Ok ($name)
+			::std::result::Result::Ok (())
 		}
 	};
 	( @nest $($nest:tt)* ) => {

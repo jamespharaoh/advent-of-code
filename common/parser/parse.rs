@@ -199,6 +199,11 @@ macro_rules! parse {
 			.delim_fn ("\n", $parse)
 			.collect ();
 	};
+	( @item $parser:expr, @lines $name:ident = |$arg:ident| { $($body:tt)* } ) => {
+		let $name = $parser
+			.delim_fn ("\n", |$arg| { $($body)* })
+			.collect ();
+	};
 	( @item $parser:expr, @lines $name:ident = ($parse:path, $display:path) ) => {
 		let $name = $parser
 			.delim_fn ("\n", $parse)
@@ -286,7 +291,7 @@ macro_rules! parse {
 		});
 		parse! (@nest_var $parser $($($rest)*)?);
 	};
-	( @nest_var $parser:ident $var:ident ($($decl:tt)*) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+	( @nest_var $parser:ident $var:ident ( $($decl:tt)* ) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
 			Ok ($var ($($decl)*))
