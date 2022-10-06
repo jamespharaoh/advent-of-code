@@ -1,0 +1,5 @@
+region_east = ">"
+region_empty = "."
+region_south = "v"
+
+misc_newline = "\x0a"

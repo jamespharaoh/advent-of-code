@@ -100,6 +100,7 @@ macro_rules! enum_decl_parser_display {
 		$( #[ $($attrs:tt)* ] )*
 		$vis:vis enum $name:ident {
 			$(
+				$( #[ $($var_attr:tt)* ] )*
 				$var_name:ident
 					$(($($tuple_name:ident: $tuple_type:ty),*))?
 						= [ $($var_parse:tt)* ]
@@ -110,7 +111,10 @@ macro_rules! enum_decl_parser_display {
 
 		$( #[ $($attrs)* ] )*
 		$vis enum $name {
-			$( $var_name $(( $($tuple_type),* ))? ),*
+			$(
+				$( #[ $($var_attr)* ] )*
+				$var_name $(( $($tuple_type),* ))?
+			),*
 		}
 
 		enum_display! ($name, $( $var_name $(($($tuple_name),*))? = [ $($var_parse)* ] ),*);
