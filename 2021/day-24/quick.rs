@@ -92,23 +92,23 @@
 //!
 //! Since we are deciding whether to divide based on a value derived from `acc` and `check`, we
 //! can simply calculate the correct value based on the previous digits. This reduces our problem
-//! from searching 9¹⁴ (twenty-three trillion) combinations, down to only 9⁷ (five million). What's
-//! more, we will often be able to shortcut the search if there is no matching next digit.
+//! from searching 9¹⁴ (twenty-three trillion) combinations, down to only 9⁷ (five million).
+//! What's more, we will often be able to shortcut the search if there is no matching next digit.
 //!
-//! This leads to the algorithm implemented here. The steps are encoded in the [`Step`] struct, and
-//! the `steps_for` function reads an input programme and identifies the correct parameters for
-//! step. I inverted the `divide` parameter around and called it [`random`][Step::random] - this
-//! indicates that we should choose a random value for this input value, or in practice try all
-//! possible values. The `iterator` function returns an iterator over all of the valid inputs,
+//! This leads to the algorithm implemented here. The steps are encoded in the [`Step`] struct,
+//! and the `steps_for` function reads an input programme and identifies the correct parameters
+//! for each step. I inverted the `divide` parameter around and called it [`random`][Step::random]
+//! - this indicates that we should choose a random value for this input value, or in practice try
+//! all possible values. The `iterator` function returns an iterator over all of the valid inputs,
 //! actually 14 nested iterators plus a final call to `map` at the end to check the final sum, and
 //! to convert to match the function signature.
 //!
-//! The actual algorithm is implemented in the [`NextNumIter`] struct. This is an iterator adapter,
-//! which takes an iterator over partial solutions and provides the possible answers with the
-//! next digit included. If this is a `random` step, then this expands every `n`-digit entry into
-//! nine `n+1`-digit entries, one for each valid digit. Otherwise, it will either provide a single
-//! entry with the appropriate next digit, or no entries if the correct next digit is not in the
-//! valid range.
+//! The actual algorithm is implemented in the [`NextNumIter`] struct. This is an iterator
+//! adapter, which takes an iterator over partial solutions and provides the possible answers with
+//! the next digit included. If this is a `random` step, then this expands every `n`-digit entry
+//! into nine `n+1`-digit entries, one for each valid digit. Otherwise, it will either provide a
+//! single entry with the appropriate next digit, or no entries if the correct next digit is not
+//! in the valid range.
 //!
 //! # Performance
 //!

@@ -1,39 +1,4 @@
-use aoc_common::*;
-
-pub fn parse_prog (lines: & [& str]) -> GenResult <Vec <Instr>> {
-	lines.iter ().enumerate ().map (|(line_idx, line)| -> GenResult <Instr> {
-		let err = || format! ("Invalid input: {}: {}", line_idx + 1, line);
-		let parse_reg = |input| Ok (match input {
-			"w" => Reg::W,
-			"x" => Reg::X,
-			"y" => Reg::Y,
-			"z" => Reg::Z,
-			_ => return Err (err ()),
-		});
-		let parse_reg_or_int = |input| -> GenResult <RegOrInt> {
-			Ok (match input {
-				"w" => RegOrInt::W,
-				"x" => RegOrInt::X,
-				"y" => RegOrInt::Y,
-				"z" => RegOrInt::Z,
-				_ => RegOrInt::Int (input.parse::<i64> ()
-					.map_err (|_err| err ()) ?),
-			})
-		};
-		let line_parts: Vec <& str> = line.split (' ').collect ();
-		let instr_str = line_parts [0];
-		let instr_args = & line_parts [1 .. ];
-		Ok (match (instr_str, instr_args.len ()) {
-			("inp", 1) => Instr::Inp (parse_reg (instr_args [0]) ?),
-			("add", 2) => Instr::Add (parse_reg (instr_args [0]) ?, parse_reg_or_int (instr_args [1]) ?),
-			("mul", 2) => Instr::Mul (parse_reg (instr_args [0]) ?, parse_reg_or_int (instr_args [1]) ?),
-			("div", 2) => Instr::Div (parse_reg (instr_args [0]) ?, parse_reg_or_int (instr_args [1]) ?),
-			("mod", 2) => Instr::Mod (parse_reg (instr_args [0]) ?, parse_reg_or_int (instr_args [1]) ?),
-			("eql", 2) => Instr::Eql (parse_reg (instr_args [0]) ?, parse_reg_or_int (instr_args [1]) ?),
-			_ => Err (err ()) ?,
-		})
-	}).collect ()
-}
+use super::*;
 
 #[ must_use ]
 pub fn machine_input (input: [u8; 14]) -> [i64; 14] {
@@ -107,6 +72,7 @@ impl Machine {
 		self.regs.pc += 1;
 		Ok (false)
 	}
+
 	#[ allow (dead_code) ]
 	fn execute (& mut self, prog: & [Instr], input: & [i64]) -> Result <(), MachineError> {
 		loop {
@@ -118,6 +84,7 @@ impl Machine {
 		}
 		Ok (())
 	}
+
 }
 
 #[ derive (Clone, Copy, Debug, Default, Eq, Hash, PartialEq) ]
@@ -158,57 +125,35 @@ impl MachineRegs {
 	}
 }
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum Instr {
-	Inp (Reg),
-	Add (Reg, RegOrInt),
-	Mul (Reg, RegOrInt),
-	Div (Reg, RegOrInt),
-	Mod (Reg, RegOrInt),
-	Eql (Reg, RegOrInt),
-}
-
-impl fmt::Display for Instr {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::Inp (arg) => write! (formatter, "inp {}", arg) ?,
-			Self::Add (left, right) => write! (formatter, "add {} {}", left, right) ?,
-			Self::Mul (left, right) => write! (formatter, "mul {} {}", left, right) ?,
-			Self::Div (left, right) => write! (formatter, "div {} {}", left, right) ?,
-			Self::Mod (left, right) => write! (formatter, "mod {} {}", left, right) ?,
-			Self::Eql (left, right) => write! (formatter, "eql {} {}", left, right) ?,
-		}
-		Ok (())
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum Instr {
+		Inp (dst: Reg) = [ "inp ", dst ],
+		Add (dst: Reg, src: RegOrInt) = [ "add ", dst, " ", src ],
+		Mul (dst: Reg, src: RegOrInt) = [ "mul ", dst, " ", src ],
+		Div (dst: Reg, src: RegOrInt) = [ "div ", dst, " ", src ],
+		Mod (dst: Reg, src: RegOrInt) = [ "mod ", dst, " ", src ],
+		Eql (dst: Reg, src: RegOrInt) = [ "eql ", dst, " ", src ],
 	}
 }
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum RegOrInt { W, X, Y, Z, Int (i64) }
-
-impl fmt::Display for RegOrInt {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::W => write! (formatter, "w") ?,
-			Self::X => write! (formatter, "x") ?,
-			Self::Y => write! (formatter, "y") ?,
-			Self::Z => write! (formatter, "z") ?,
-			Self::Int (val) => write! (formatter, "{}", val) ?,
-		}
-		Ok (())
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum Reg {
+		W = [ "w" ],
+		X = [ "x" ],
+		Y = [ "y" ],
+		Z = [ "z" ],
 	}
 }
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum Reg { W, X, Y, Z }
-
-impl fmt::Display for Reg {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::W => write! (formatter, "w") ?,
-			Self::X => write! (formatter, "x") ?,
-			Self::Y => write! (formatter, "y") ?,
-			Self::Z => write! (formatter, "z") ?,
-		}
-		Ok (())
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum RegOrInt {
+		W = [ "w" ],
+		X = [ "x" ],
+		Y = [ "y" ],
+		Z = [ "z" ],
+		Int (val: i64) = [ val ],
 	}
 }
