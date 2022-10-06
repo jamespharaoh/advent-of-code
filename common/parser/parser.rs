@@ -709,7 +709,7 @@ macro_rules! input_params {
 		pub struct $struct_name:ident {
 			$(
 				pub $member_name:ident: $member_type:ty =
-					($member_prefix:literal, $member_default:literal, $member_range:expr),
+					($member_prefix:literal, $member_default:expr, $member_range:expr),
 			)*
 		}
 	) => {

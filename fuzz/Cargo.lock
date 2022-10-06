@@ -78,6 +78,7 @@ dependencies = [
  "aoc-codegen",
  "aoc-common",
  "aoc-md5",
+ "aoc-parallel",
 ]
 
 [[package]]

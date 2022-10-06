@@ -1,4 +1,6 @@
+use std::cmp;
 use std::collections::VecDeque;
+use std::fmt;
 use std::fs::File;
 use std::io::BufRead as _;
 use std::io::BufReader;
@@ -11,6 +13,31 @@ use std::sync::atomic::AtomicUsize;
 use std::sync::atomic::Ordering;
 use std::thread;
 use std::thread::JoinHandle;
+
+pub mod prelude {
+	pub use super::IteratorThreadMap;
+	pub use super::ThreadMap;
+}
+
+pub trait IteratorThreadMap: Iterator {
+
+	#[ inline ]
+	fn thread_map <MapFn, Out> (
+		self,
+		num_threads: usize,
+		map_fn: MapFn,
+	) -> ThreadMap <Self, Out>
+		where
+			MapFn: Fn (Self::Item) -> Out + Clone + Send + 'static,
+			Out: Clone + Send + 'static,
+			Self: Send + Sized + 'static {
+		ThreadMap::start (self, map_fn, num_threads)
+	}
+
+}
+
+impl <Iter> IteratorThreadMap for Iter where Iter: Iterator {
+}
 
 pub struct ThreadMap <Inner, Out> {
 	shared: Arc <ThreadMapShared <Inner, Out>>,
@@ -90,7 +117,7 @@ impl <Inner, Out> ThreadMap <Inner, Out>
 			let mut output_lock = output_mutex.lock ().unwrap ();
 
 			state.queue.push_back (Arc::clone (& output_mutex));
-			shared.queue_push_cond.notify_all ();
+			shared.queue_push_cond.notify_one ();
 
 			drop (state);
 
@@ -121,7 +148,7 @@ impl <Inner, Out> Drop for ThreadMap <Inner, Out> {
 }
 
 impl <Inner, Out> Iterator for ThreadMap <Inner, Out>
-		where Out: Clone {
+	where Out: Clone {
 
 	type Item = Out;
 
@@ -135,7 +162,7 @@ impl <Inner, Out> Iterator for ThreadMap <Inner, Out>
 			state = self.shared.queue_push_cond.wait (state).unwrap ();
 		};
 
-		self.shared.queue_pop_cond.notify_all ();
+		self.shared.queue_pop_cond.notify_one ();
 
 		drop (state);
 
@@ -144,6 +171,17 @@ impl <Inner, Out> Iterator for ThreadMap <Inner, Out>
 
 	}
 
+}
+
+#[ inline ]
+pub fn num_cpus_max <Val> (max: Val) -> Val
+	where
+		Val: Ord + TryFrom <usize> + TryInto <usize>,
+		<Val as TryInto <usize>>::Error: fmt::Debug,
+		<Val as TryFrom <usize>>::Error: fmt::Debug {
+	let max: usize = max.try_into ().unwrap ();
+	if max < 2 { return 1.try_into ().unwrap () }
+	cmp::min (num_cpus ().unwrap_or (1), max).try_into ().unwrap ()
 }
 
 #[ inline ]
