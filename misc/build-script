@@ -14,7 +14,7 @@ function main {
 		case "$arg" in
 			(year-*) year="${arg:5}" ;;
 			(day-*) day="${arg:4}" ;;
-			(coverage|dev|release|release-lto) profile="$arg" ;;
+			(coverage|dev|quick|release|release-lto) profile="$arg" ;;
 			(build|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test) mode="$arg" ;;
 			(cmin|init|repr|review) fuzz_mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
