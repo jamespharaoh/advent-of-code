@@ -82,16 +82,6 @@ impl <'inp> Hash for InpStr <'inp> {
 	}
 }
 
-impl <'inp> From <InpStr <'inp>> for Rc <str> {
-	#[ inline ]
-	fn from (val: InpStr <'inp>) -> Self {
-		match val {
-			InpStr::Borrow (val) => Self::from (val),
-			InpStr::RefCount (val) => val,
-		}
-	}
-}
-
 impl <'inp> Ord for InpStr <'inp> {
 	#[ inline ]
 	fn cmp (& self, other: & Self) -> Ordering {
@@ -131,5 +121,24 @@ impl <'inp> PartialOrd for InpStr <'inp> {
 	#[ inline ]
 	fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
 		self.deref ().partial_cmp (& ** other)
+	}
+}
+
+// conversions to other types
+
+impl <'inp> From <InpStr <'inp>> for Rc <str> {
+	#[ inline ]
+	fn from (val: InpStr <'inp>) -> Self {
+		match val {
+			InpStr::Borrow (val) => Self::from (val),
+			InpStr::RefCount (val) => val,
+		}
+	}
+}
+
+impl <'inp> From <InpStr <'inp>> for String {
+	#[ inline ]
+	fn from (val: InpStr <'inp>) -> Self {
+		val.to_owned ()
 	}
 }
