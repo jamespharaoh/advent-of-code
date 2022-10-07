@@ -1,3 +1,6 @@
+#[ cfg (doc) ]
+use super::*;
+
 /// Trait for encoding an item as bits for storing in a [`BitVec`]
 ///
 pub trait BitVecEncoding <Item> {

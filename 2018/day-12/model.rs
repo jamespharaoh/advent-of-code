@@ -40,8 +40,8 @@ impl Pot {
 /// the output of eight output bits at the same time. That includes the eight output bits
 /// themselves, plus two bits to either side.
 ///
-/// The main methods are [`build`] to create a new `Generator` from the puzzle input, and `next` to
-/// apply the rules to a [`State`].
+/// The main methods are [`build`](Generator::build) to create a new `Generator` from the puzzle
+/// input, and `next` to apply the rules to a [`State`].
 ///
 #[ derive (Clone, Debug) ]
 pub struct Generator {

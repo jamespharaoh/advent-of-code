@@ -9,7 +9,7 @@ use aoc_pos::PosXYZ;
 use aoc_pos::PosXYZW;
 use aoc_pos::PosYX;
 
-/// Trait for values to use as indices for a [`Grid`].
+/// Trait for values to use as indices for a [`GridView`].
 ///
 /// For example, a two dimensional grid might be indexed with a struct containing an `x` and a `y`
 /// coordinate.

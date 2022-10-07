@@ -87,9 +87,10 @@ function cargo {
 
 cd "$work_dir"
 
-export RUSTDOCFLAGS="-D warnings"
+export RUSTDOCFLAGS="--deny warnings"
 
-cargo clippy --frozen --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
+cargo clippy --frozen --workspace --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
+cargo doc --frozen --workspace --profile pre-commit
 cargo test --frozen --workspace --profile pre-commit
 
 for year in {2015..2021}; do

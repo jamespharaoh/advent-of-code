@@ -1,6 +1,6 @@
 use super::*;
 
-/// Trait for backing stores for a [`Grid`]
+/// Trait for backing stores for a [`GridBuf`]
 ///
 /// This provides a simple abstraction over a fixed size array of items. It is implemented for
 /// [`Vec`] and [`BitVec`].

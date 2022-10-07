@@ -23,16 +23,11 @@ pub mod logic {
 
 	/// Implementation for part one
 	///
-	/// Simply calls [`calc_result`].
-	///
 	pub fn part_one (input: & Input) -> GenResult <u64> {
 		calc_result (input)
 	}
 
 	/// Implementation for part two
-	///
-	/// Modifies the provided [`Input`] to add one extra disc with `11` positions starting at
-	/// position `0`. Then hands over to [`calc_result`] for the main logic.
 	///
 	pub fn part_two (input: & Input) -> GenResult <u64> {
 		let input = Input {

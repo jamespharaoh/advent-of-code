@@ -23,6 +23,14 @@
 [profile.coverage]
 
 	inherits = "dev"
+	package.aoc-2015-day-04 = { opt-level = 2 }
+	package.aoc-2016-day-14 = { opt-level = 2 }
+	package.aoc-md5 = { opt-level = 2 }
+
+[profile.release]
+
+	codegen-units = 1
+	package.clap = { codegen-units = 16 }
 
 [profile.flamegraph]
 
@@ -33,18 +41,6 @@
 
 	inherits = "release"
 	lto = true
-
-[profile.dev.package.aoc-2015-day-04]
-
-	opt-level = 2
-
-[profile.dev.package.aoc-2016-day-14]
-
-	opt-level = 2
-
-[profile.dev.package.aoc-md5]
-
-	opt-level = 2
 
 [workspace]
 

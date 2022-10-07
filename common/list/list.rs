@@ -10,7 +10,7 @@
 //! allocation.
 //!
 //! We also declare [`CharList`] as `List <char>`, and implement some extra methods and traits to
-//! make it work nicely with [`String`] and [`str`].
+//! make it work nicely with [`String`] and [`prim@str`].
 
 use aoc_misc::*;
 

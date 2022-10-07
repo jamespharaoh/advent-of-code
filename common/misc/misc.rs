@@ -91,31 +91,8 @@ pub use std::thread::JoinHandle;
 pub use std::time;
 pub use std::vec::IntoIter as VecIntoIter;
 
-#[ cfg (not (fuzzing)) ]
-//pub use std_hash::*;
-pub use fast_hash::*;
-
-#[ cfg (fuzzing) ]
-pub use test_hash::*;
-
-mod std_hash {
-	pub use std::collections::HashMap;
-	pub use std::collections::HashSet;
-}
-
-mod fast_hash {
-	pub use ahash::AHashMap as HashMap;
-	pub use ahash::AHashSet as HashSet;
-}
-
-#[ cfg (fuzzing) ]
-mod test_hash {
-	pub use std::collections::BTreeSet as HashSet;
-	pub use crate::test_map::HashMap;
-}
-
-#[ cfg (fuzzing) ]
-mod test_map;
+mod collections;
+pub use crate::collections::*;
 
 pub use crate::iter_ext::*;
 

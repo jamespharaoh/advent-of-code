@@ -115,7 +115,7 @@ impl <Pos, const DIMS: usize> Iterator
 
 /// Wrapping iterator which clones items.
 ///
-/// We don't use [`Cloned`](iter::Cloned) from the standard library because it doesn't handle
+/// We don't use [`Cloned`](std::iter::Cloned) from the standard library because it doesn't handle
 /// [`Iterator::skip`] the way we would like. Although it says in the documentation that there is
 /// no guarantee each element will be processed, it seems like it does so. Instead, we want to
 /// completely bypass any elements which aren't required.

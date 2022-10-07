@@ -1,0 +1,18 @@
+dist_0 = " to "
+dist_1 = " = "
+
+misc_newline = "\x0a"
+
+place_0 = "Mercury"
+place_1 = "Venus"
+place_2 = "Earth"
+place_3 = "Mars"
+place_4 = "Ceres"
+place_5 = "Jupiter"
+place_6 = "Saturn"
+place_7 = "Uranus"
+place_8 = "Neptune"
+place_9 = "Pluto"
+place_10 = "Haumea"
+place_11 = "Makemake"
+place_12 = "Eris"

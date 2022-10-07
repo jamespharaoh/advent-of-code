@@ -352,7 +352,7 @@ impl <'inp> Parser <'inp> {
 		Ok (word)
 	}
 
-	/// Consume and return a single word from the input, transforming it with [`TryInto::into`]
+	/// Consume and return a single word from the input, transforming it with [`TryInto`]
 	///
 	/// # Errors
 	///

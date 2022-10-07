@@ -250,8 +250,8 @@ macro_rules! display {
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
-	( @nest_var $formatter:ident $val:ident ( $($decl:tt)* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & ( $($decl)* ) = $val {
+	( @nest_var $formatter:ident $val:ident ( $($item:tt),* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		if let & ( $(display! (@nest_ref $item)),* ) = $val {
 			display! ($formatter, $($display)*);
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);
@@ -269,6 +269,13 @@ macro_rules! display {
 		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $(,)? ) => { };
+
+	( @nest_ref $item:ident ) => {
+		ref $item
+	};
+	( @nest_ref ( $($item:tt),* ) ) => {
+		( $(display! (@nest_ref $item)),* )
+	};
 
 }
 
