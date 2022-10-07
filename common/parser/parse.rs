@@ -318,6 +318,20 @@ macro_rules! enum_parser {
 		}
 	};
 
+	(
+		input_lifetime = $inp:lifetime;
+		$enum_name:ident <$param:tt>,
+		$($rest:tt)*
+	) => {
+		impl <$inp> FromParser <$inp> for $enum_name <$param> {
+			fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+				let mut parser = parser.any ();
+				enum_parser! (@variants $enum_name, parser, $($rest)*);
+				parser.done ()
+			}
+		}
+	};
+
 	( @variants $enum_name:ident, $parser:ident $(,)? ) => {};
 
 	(

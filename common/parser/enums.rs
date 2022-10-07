@@ -122,4 +122,39 @@ macro_rules! enum_decl_parser_display {
 
 	)* };
 
+	(
+		input_lifetime = $inp:tt;
+		$( #[ $($attrs:tt)* ] )*
+		$vis:vis enum $name:ident <$param:tt> {
+			$(
+				$( #[ $($var_attr:tt)* ] )*
+				$var_name:ident
+					$(($($tuple_name:ident: $tuple_type:ty),*))?
+						= [ $($var_parse:tt)* ]
+			),*
+			$(,)?
+		}
+	) => {
+
+		$( #[ $($attrs)* ] )*
+		$vis enum $name <$param> {
+			$(
+				$( #[ $($var_attr)* ] )*
+				$var_name $(( $($tuple_type),* ))?
+			),*
+		}
+
+		enum_display! {
+			$name <$param>,
+			$( $var_name $(($($tuple_name),*))? = [ $($var_parse)* ] ),*
+		}
+
+		enum_parser! {
+			input_lifetime = $inp;
+			$name <$param>,
+			$( $var_name $(($($tuple_name),*))? = [ $($var_parse)* ] ),*
+		}
+
+	};
+
 }

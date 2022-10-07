@@ -270,3 +270,27 @@ macro_rules! wrapper_deref_mut {
 
 	};
 }
+
+#[ macro_export ]
+macro_rules! wrapper_deref {
+	(
+		$(#[$struct_meta:meta])*
+		$struct_vis:vis struct $struct_name:ident $(<$($struct_param:tt),*>)? {
+			$field_vis:vis $field_name:ident: $field_type:ty,
+		}
+	) => {
+
+		$(#[$struct_meta])*
+		$struct_vis struct $struct_name $(<$($struct_param),*>)? {
+			$field_vis $field_name: $field_type,
+		}
+
+		impl $(<$($struct_param),*>)? ::std::ops::Deref for $struct_name $(<$($struct_param),*>)? {
+			type Target = $field_type;
+			fn deref (& self) -> & $field_type {
+				& self.$field_name
+			}
+		}
+
+	};
+}

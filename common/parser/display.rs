@@ -275,8 +275,8 @@ macro_rules! display {
 #[ macro_export ]
 macro_rules! enum_display {
 
-	( $enum_name:ident, $($rest:tt)* ) => {
-		impl ::std::fmt::Display for $enum_name {
+	( $enum_name:ident $( <$($param:tt),*> )?, $($rest:tt)* ) => {
+		impl $( <$($param),*> )? ::std::fmt::Display for $enum_name $(<$($param),*>)? {
 			fn fmt (& self, formatter: & mut ::std::fmt::Formatter) -> ::std::fmt::Result {
 				enum_display! (@variants $enum_name, self, formatter, $($rest)*);
 				panic! ("Unhandled variant {}::{:?}", stringify! ($enum_name), self);
