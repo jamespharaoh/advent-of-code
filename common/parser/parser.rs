@@ -542,27 +542,29 @@ impl <'inp> Parser <'inp> {
 		InpStr::borrow (result)
 	}
 
+	#[ allow (clippy::string_slice) ]
 	#[ inline ]
 	pub fn take_rest_while (
 		& mut self,
 		char_pred: fn (char) -> bool,
-		len: impl RangeBounds <usize>,
+		len: impl RangeBounds <u32>,
 	) -> ParseResult <InpStr <'inp>> {
-		let result = self.input_line;
-		let mut num_bytes = 0_usize;
-		let mut num_chars = 0_usize;
-		while let Some (ch) = self.peek () {
+		let mut num_bytes = 0_u32;
+		let mut num_chars = 0_u32;
+		for ch in self.input_line.chars () {
 			if ! (Unbounded, len.end_bound ()).contains (& (num_chars + 1)) { break }
 			if ! char_pred (ch) { break }
-			self.next ().unwrap ();
-			num_bytes += ch.len_utf8 ();
 			num_chars += 1;
+			num_bytes += ch.len_utf8 ().qck_u32 ();
 		}
 		if ! (len.start_bound (), Unbounded).contains (& num_chars) {
 			return Err (self.err ());
 		}
-		#[ allow (clippy::string_slice) ]
-		Ok (InpStr::borrow (& result [ .. num_bytes]))
+		let result = InpStr::borrow (& self.input_line [ .. num_bytes.qck_usize ()]);
+		self.input_line = & self.input_line [num_bytes.qck_usize () .. ];
+		self.col_idx += num_chars;
+		self.byte_idx += num_bytes;
+		Ok (result)
 	}
 
 	#[ inline ]

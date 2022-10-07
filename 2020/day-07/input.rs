@@ -75,7 +75,8 @@ fn parse_colour <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'in
 			.nth (1)
 			.map_or_else (
 				|| parser.peek_rest ().chars ().count (),
-				|(pos, _)| pos);
+				|(pos, _)| pos)
+			.pan_u32 ();
 	parser.take_rest_while (|ch| ch.is_ascii_lowercase () || ch == ' ', ..= num_chars)
 }
 

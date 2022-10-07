@@ -5,7 +5,7 @@
 //! returns `false`. After calling `next`, the indexes are available by treating this struct as a
 //! slice via the [`Deref`] trait.
 //!
-//! ## Sample usage
+//! # Sample usage
 //!
 //! ```
 //! # use aoc_search::PermutationsHelper;

@@ -18,7 +18,7 @@ function main {
 			(build|clippy|flamegraph|fuzz|run|run-test|tarpaulin|test) mode="$arg" ;;
 			(cmin|init|repr|review) fuzz_mode="$arg" ;;
 			(part-1|part-2) run_args+=( "$arg" ) ;;
-			(nightly) toolchain="+$arg" ;;
+			(stable|beta|nightly) toolchain="+$arg" ;;
 			(--profile) profile="$1"; shift ;;
 			(--width) flamegraph_width="$1"; shift ;;
 			(--)
