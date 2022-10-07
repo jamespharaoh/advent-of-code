@@ -37,3 +37,22 @@ fn calc_sum (value: & Json, filter: fn (& Json) -> bool) -> NumResult <Val> {
 		Json::String (_) => Ok (Val::ZERO),
 	}
 }
+
+#[ cfg (test) ]
+mod test {
+
+	use super::*;
+
+	fn pj (src: & str) -> Json {
+		Json::parse_from_str (src).unwrap ()
+	}
+
+	#[ test ]
+	fn filter_red () {
+		assert! (super::filter_red (& pj ("{\"abc\":[],\"red\":1}")));
+		assert! (super::filter_red (& pj ("[{\"abc\":[],\"def\":\"red\"}]")));
+		assert! (super::filter_red (& pj ("{\"key\":{\"abc\":[],\"def\":\"red\"}}")));
+		assert! (! super::filter_red (& pj ("{\"abc\":[],\"def\":\"red\"}")));
+	}
+
+}

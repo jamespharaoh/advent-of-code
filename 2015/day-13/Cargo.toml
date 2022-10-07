@@ -12,19 +12,22 @@
 [dependencies]
 
 	aoc-common = { path = "../../common" }
-
-[lib]
-
-	doctest = false
-	crate-type = [ "rlib", "dylib" ]
+	aoc-search = { path = "../../common/search" }
 
 [build-dependencies]
 
 	aoc-codegen = { path = "../../misc/codegen" }
 
+[lib]
+
+	path = "lib.rs"
+	doctest = false
+	crate-type = [ "rlib", "dylib" ]
+
 [[bin]]
 
 	name = "aoc-2015-day-13"
+	path = "main.rs"
 	test = false
 	doctest = false
 	bench = false

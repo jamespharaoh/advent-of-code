@@ -46,7 +46,7 @@ function main {
 	if [[ -n "$profile" ]]; then cargo_args+=( --profile "$profile" ); fi
 	case "$mode" in
 		(build)
-			time env time -v cargo $toolchain build "${extra_args_0[@]}" -- "${extra_args_1[@]}"
+			time_cmd cargo $toolchain build "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(clippy)
 			local -a clippy_args=( $(cat "$(dirname "$0")"/clippy-args) )
@@ -55,16 +55,16 @@ function main {
 			;;
 		(fuzz) fuzz_mode ;;
 		(run-test)
-			time env time -v cargo $toolchain run "${cargo_args[@]}" \
+			time_cmd cargo $toolchain run "${cargo_args[@]}" \
 				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
-			time env time -v cargo $toolchain test "${cargo_args[@]}"
+			time_cmd cargo $toolchain test "${cargo_args[@]}"
 			;;
 		(run)
-			time env time -v cargo $toolchain run "${cargo_args[@]}" \
+			time_cmd cargo $toolchain run "${cargo_args[@]}" \
 				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(test)
-			time env time -v cargo $toolchain test "${cargo_args[@]}" \
+			time_cmd cargo $toolchain test "${cargo_args[@]}" \
 				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
 			;;
 		(flamegraph)
@@ -81,6 +81,10 @@ function main {
 				ln -fns flamegraph-$timestamp.svg target/flamegraph-latest.svg
 				ln -fns flamegraph-$timestamp.perf-data target/flamegraph-latest.perf-data
 			fi
+			;;
+		(kcov)
+			if [[ -n "$profile" ]]; then echo "Profile not supported for kcov" >&2; exit 1; fi
+			cargo $toolchain kcov --all
 			;;
 		(tarpaulin)
 			if [[ -z "$profile" ]]; then profile="coverage"; fi
@@ -203,6 +207,10 @@ function arg_exists {
 		if [[ "$arg" == "$search_arg="* ]]; then return 0; fi
 	done
 	return 1
+}
+
+function time_cmd {
+	/usr/bin/time --format "Process stats: user %Us, system %Ss, wall %es, max size: %MKiB" "$@"
 }
 
 main "$@"

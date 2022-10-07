@@ -74,6 +74,17 @@ impl <Item: Clone + Eq + Hash + Ord> Default for MapToIndex <Item> {
 
 }
 
+impl <Item> Deref for MapToIndex <Item> {
+
+	type Target = [Item];
+
+	#[ inline ]
+	fn deref (& self) -> & [Item] {
+		& self.items
+	}
+
+}
+
 impl <Item: Clone + Eq + Hash + Ord> FromIterator <Item> for MapToIndex <Item> {
 
 	#[ inline ]

@@ -5,12 +5,19 @@ use aoc_grid::prelude::*;
 use aoc_misc::*;
 use aoc_nums::NumResult;
 
-mod permutations;
-mod priority;
+pub mod pairs_map;
+pub use pairs_map::*;
 
+pub mod permutations;
+pub use permutations::*;
+
+pub mod priority;
+pub use priority::*;
+
+/// Standard prelude for wildcard imports.
+///
 pub mod prelude {
-	pub use super::PermutationsHelper;
+	pub use crate::pairs_map::PairsMap;
+	pub use crate::permutations::PermutationsHelper;
 }
 
-pub use permutations::*;
-pub use priority::*;

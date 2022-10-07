@@ -67,7 +67,7 @@ cd "$work_dir"
 	printf "cargo-features = [\"profile-rustflags\"]\n\n"
 	cat Cargo.toml
 	printf "\n[profile.pre-commit]\n\n"
-	printf "\tinherits = \"release\"\n"
+	printf "\tinherits = \"quick\"\n"
 	printf "\trustflags = [ \"--deny\", \"warnings\" ]\n"
 } >Cargo.toml.temp
 mv Cargo.toml.temp Cargo.toml

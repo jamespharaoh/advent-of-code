@@ -22,36 +22,44 @@
 
 [profile.coverage]
 
-	inherits = "dev"
+	inherits = "test"
 
 [profile.dev]
 
-	opt-level = 2
-	codegen-units = 256
+	opt-level = 0
+	codegen-units = 16
+	rpath = true
+
+[profile.flamegraph]
+
+	inherits = "release-lto"
+	debug = true
+
+[profile.kcov]
+
+	inherits = "test"
+	opt-level = 0
 
 [profile.quick]
 
 	inherits = "test"
-	opt-level = 3
-	codegen-units = 16
-
-[profile.flamegraph]
-
-	inherits = "release"
-	debug = true
+	opt-level = 2
+	codegen-units = 4
 
 [profile.release]
 
 	codegen-units = 1
 	package.clap = { codegen-units = 16 }
+	rpath = true
 
 [profile.release-lto]
 
 	inherits = "release"
-	lto = true
+	lto = "fat"
 
 [profile.test]
 
+	opt-level = 1
 	package.aoc-2015-day-04 = { opt-level = 2 }
 	package.aoc-2016-day-14 = { opt-level = 2 }
 	package.aoc-md5 = { opt-level = 2 }
