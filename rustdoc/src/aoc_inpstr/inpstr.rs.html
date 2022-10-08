@@ -133,6 +133,15 @@
 <span id="133">133</span>
 <span id="134">134</span>
 <span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
 </pre><pre class="rust"><code><span class="kw">use </span>aoc_misc::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone) ]
@@ -217,16 +226,6 @@
 	}
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; From &lt;InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;&gt; <span class="kw">for </span>Rc &lt;str&gt; {
-	<span class="attribute">#[ inline ]
-	</span><span class="kw">fn </span>from (val: InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; <span class="self">Self </span>{
-		<span class="kw">match </span>val {
-			InpStr::Borrow (val) =&gt; <span class="self">Self</span>::from (val),
-			InpStr::RefCount (val) =&gt; val,
-		}
-	}
-}
-
 <span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Ord <span class="kw">for </span>InpStr &lt;<span class="lifetime">&#39;inp</span>&gt; {
 	<span class="attribute">#[ inline ]
 	</span><span class="kw">fn </span>cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; Ordering {
@@ -266,6 +265,25 @@
 	<span class="attribute">#[ inline ]
 	</span><span class="kw">fn </span>partial_cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;Ordering&gt; {
 		<span class="self">self</span>.deref ().partial_cmp (&amp; <span class="kw-2">*</span>* other)
+	}
+}
+
+<span class="comment">// conversions to other types
+
+</span><span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; From &lt;InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;&gt; <span class="kw">for </span>Rc &lt;str&gt; {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>from (val: InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span>val {
+			InpStr::Borrow (val) =&gt; <span class="self">Self</span>::from (val),
+			InpStr::RefCount (val) =&gt; val,
+		}
+	}
+}
+
+<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; From &lt;InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;&gt; <span class="kw">for </span>String {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>from (val: InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; <span class="self">Self </span>{
+		val.to_owned ()
 	}
 }
 </code></pre></div>

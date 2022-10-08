@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["calc_distance",""],["iter_distance",""],["part_one",""],["part_two",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["part_one",""],["part_two",""]]};
