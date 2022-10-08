@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Pixel",""]],"struct":[["Tile",""]],"type":[["Coord",""],["Dir",""],["Grid",""],["Pos",""],["Tag",""],["TileId",""],["Tiles",""],["Turn",""]]};

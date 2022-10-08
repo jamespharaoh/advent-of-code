@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/md5/md5.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>md5.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_md5/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_md5/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_md5/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/md5/md5.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>md5.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_md5/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_md5/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_md5/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -377,326 +377,326 @@
 <span id="377">377</span>
 <span id="378">378</span>
 <span id="379">379</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::cmp</span>;
-<span class="kw">use</span> <span class="ident">std::fmt</span>::{ <span class="self">self</span>, <span class="ident">Debug</span>, <span class="ident">Display</span>, <span class="ident">Write</span> <span class="kw">as</span> <span class="kw">_</span> };
-<span class="kw">use</span> <span class="ident">std::ops::Index</span>;
+</pre><pre class="rust"><code><span class="kw">use </span>std::cmp;
+<span class="kw">use </span>std::fmt::{ <span class="self">self</span>, Debug, Display, Write <span class="kw">as _ </span>};
+<span class="kw">use </span>std::ops::Index;
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span> <span class="kw">use</span> <span class="ident">aoc_misc</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_nums</span> <span class="kw">as</span> <span class="ident">nums</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+<span class="attribute">#[ cfg (test) ] </span><span class="kw">use </span>aoc_misc::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_nums <span class="kw">as </span>nums;
+<span class="kw">use </span>nums::IntConv;
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Output</span> ([<span class="ident">u8</span>; <span class="number">16</span>]);
+<span class="attribute">#[ derive (Clone, Copy, Default, Eq, PartialEq) ]
+</span><span class="kw">pub struct </span>Output ([u8; <span class="number">16</span>]);
 
-<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">md5_hash</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">Output</span> {
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">md5</span> <span class="op">=</span> <span class="ident">MD5::new</span> ();
-	<span class="ident">md5</span>.<span class="ident">update</span> (<span class="ident">input</span>);
-	<span class="ident">md5</span>.<span class="ident">finish</span> ()
+<span class="attribute">#[ inline ]
+#[ must_use ]
+</span><span class="kw">pub fn </span>md5_hash (input: &amp; [u8]) -&gt; Output {
+	<span class="kw">let </span><span class="kw-2">mut </span>md5 = MD5::new ();
+	md5.update (input);
+	md5.finish ()
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MD5</span> {
-	<span class="ident">state</span>: <span class="ident">State</span>,
-	<span class="ident">message</span>: [<span class="ident">u8</span>; <span class="number">64</span>],
-	<span class="ident">message_len</span>: <span class="ident">usize</span>,
-	<span class="ident">len</span>: <span class="ident">usize</span>,
+<span class="kw">pub struct </span>MD5 {
+	state: State,
+	message: [u8; <span class="number">64</span>],
+	message_len: usize,
+	len: usize,
 }
 
-<span class="kw">type</span> <span class="ident">State</span> <span class="op">=</span> [<span class="ident">u32</span>; <span class="number">4</span>];
+<span class="kw">type </span>State = [u32; <span class="number">4</span>];
 
-<span class="kw">impl</span> <span class="ident">Output</span> {
+<span class="kw">impl </span>Output {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">len</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">len</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>len (&amp; <span class="self">self</span>) -&gt; usize {
+		<span class="self">self</span>.<span class="number">0</span>.len ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">is_empty</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">is_empty</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>is_empty (&amp; <span class="self">self</span>) -&gt; bool {
+		<span class="self">self</span>.<span class="number">0</span>.is_empty ()
 	}
 
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_hex</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input_len</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span> ().<span class="ident">count</span> ();
-		<span class="kw">if</span> <span class="ident">input_len</span> <span class="op">!</span><span class="op">=</span> <span class="number">32</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Expected 32 chars, not {}&quot;</span>, <span class="ident">input_len</span>)) }
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">16</span>];
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input_iter</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">chars</span> ();
-		<span class="kw">for</span> <span class="ident">result_ch</span> <span class="kw">in</span> <span class="ident">result</span>.<span class="ident">iter_mut</span> () {
-			<span class="kw">let</span> <span class="ident">high_ch</span> <span class="op">=</span> <span class="ident">input_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> ();
-			<span class="kw">let</span> <span class="ident">low_ch</span> <span class="op">=</span> <span class="ident">input_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> ();
-			<span class="kw">let</span> <span class="ident">decode</span> <span class="op">=</span> <span class="op">|</span><span class="ident">ch</span>: <span class="ident">char</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">to_digit</span> (<span class="number">16</span>).<span class="ident">ok_or</span> (<span class="macro">format!</span> (<span class="string">&quot;Invalid hex: {}&quot;</span>, <span class="ident">ch</span>));
-			<span class="op">*</span> <span class="ident">result_ch</span> <span class="op">=</span> (<span class="ident">decode</span> (<span class="ident">high_ch</span>) <span class="question-mark">?</span>.<span class="ident">as_u8</span> ()) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4_i32</span> <span class="op">|</span> <span class="ident">decode</span> (<span class="ident">low_ch</span>) <span class="question-mark">?</span>.<span class="ident">as_u8</span> ();
+	<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+	</span><span class="kw">pub fn </span>from_hex (input: &amp; str) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, String&gt; {
+		<span class="kw">let </span>input_len = input.chars ().count ();
+		<span class="kw">if </span>input_len != <span class="number">32 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Expected 32 chars, not {}&quot;</span>, input_len)) }
+		<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0</span>; <span class="number">16</span>];
+		<span class="kw">let </span><span class="kw-2">mut </span>input_iter = input.chars ();
+		<span class="kw">for </span>result_ch <span class="kw">in </span>result.iter_mut () {
+			<span class="kw">let </span>high_ch = input_iter.next ().unwrap ();
+			<span class="kw">let </span>low_ch = input_iter.next ().unwrap ();
+			<span class="kw">let </span>decode = |ch: char| ch.to_digit (<span class="number">16</span>).ok_or (<span class="macro">format! </span>(<span class="string">&quot;Invalid hex: {}&quot;</span>, ch));
+			* result_ch = (decode (high_ch) <span class="question-mark">?</span>.qck_u8 ()) &lt;&lt; <span class="number">4_i32 </span>| decode (low_ch) <span class="question-mark">?</span>.qck_u8 ();
 		}
-		<span class="prelude-val">Ok</span> (<span class="self">Self</span> (<span class="ident">result</span>))
+		<span class="prelude-val">Ok </span>(<span class="self">Self </span>(result))
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">num_zeros</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u8</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xf0</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">break</span> }
-			<span class="ident">result</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-			<span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0x0f</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">break</span> }
-			<span class="ident">result</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>num_zeros (&amp; <span class="self">self</span>) -&gt; u8 {
+		<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="number">0</span>;
+		<span class="kw">for </span>byte <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter ().copied () {
+			<span class="kw">if </span>byte &amp; <span class="number">0xf0 </span>!= <span class="number">0 </span>{ <span class="kw">break </span>}
+			result += <span class="number">1</span>;
+			<span class="kw">if </span>byte &amp; <span class="number">0x0f </span>!= <span class="number">0 </span>{ <span class="kw">break </span>}
+			result += <span class="number">1</span>;
 		}
-		<span class="ident">result</span>
+		result
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_hex_bytes</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; [<span class="ident">u8</span>; <span class="number">32</span>] {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">nibble_as_hex</span> (<span class="ident">nibble</span>: <span class="ident">u8</span>) -&gt; <span class="ident">u8</span> {
-			<span class="kw">if</span> <span class="ident">nibble</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">10</span> { <span class="string">b&#39;a&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> <span class="op">-</span> <span class="number">10</span> } <span class="kw">else</span> { <span class="string">b&#39;0&#39;</span> <span class="op">+</span> <span class="ident">nibble</span> }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>as_hex_bytes (&amp; <span class="self">self</span>) -&gt; [u8; <span class="number">32</span>] {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">const fn </span>nibble_as_hex (nibble: u8) -&gt; u8 {
+			<span class="kw">if </span>nibble &gt;= <span class="number">10 </span>{ <span class="string">b&#39;a&#39; </span>+ nibble - <span class="number">10 </span>} <span class="kw">else </span>{ <span class="string">b&#39;0&#39; </span>+ nibble }
 		}
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">32</span>];
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_iter</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">iter_mut</span> ();
-		<span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> () {
-			<span class="op">*</span> <span class="ident">result_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> () <span class="op">=</span> <span class="ident">nibble_as_hex</span> (<span class="ident">byte</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4_u32</span>);
-			<span class="op">*</span> <span class="ident">result_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> () <span class="op">=</span> <span class="ident">nibble_as_hex</span> (<span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xf</span>);
+		<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0</span>; <span class="number">32</span>];
+		<span class="kw">let </span><span class="kw-2">mut </span>result_iter = result.iter_mut ();
+		<span class="kw">for </span>byte <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter () {
+			* result_iter.next ().unwrap () = nibble_as_hex (byte &gt;&gt; <span class="number">4_u32</span>);
+			* result_iter.next ().unwrap () = nibble_as_hex (byte &amp; <span class="number">0xf</span>);
 		}
-		<span class="ident">result</span>
-	}
-
-}
-
-<span class="kw">impl</span> <span class="ident">Index</span> <span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Output</span> {
-
-	<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">u8</span>;
-
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">index</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">idx</span>: <span class="ident">usize</span>) -&gt; <span class="op">&amp;</span> <span class="ident">u8</span> {
-		<span class="op">&amp;</span> <span class="self">self</span>.<span class="number">0</span> [<span class="ident">idx</span>]
+		result
 	}
 
 }
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Output</span> {
+<span class="kw">impl </span>Index &lt;usize&gt; <span class="kw">for </span>Output {
 
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="string">&quot;md5::Output (\&quot;&quot;</span>) <span class="question-mark">?</span>;
-		<span class="ident">Display::fmt</span> (<span class="self">self</span>, <span class="ident">formatter</span>) <span class="question-mark">?</span>;
-		<span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="string">&quot;\&quot;)&quot;</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (())
+	<span class="kw">type </span>Output = u8;
+
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>index (&amp; <span class="self">self</span>, idx: usize) -&gt; &amp; u8 {
+		&amp; <span class="self">self</span>.<span class="number">0 </span>[idx]
 	}
 
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Output</span> {
+<span class="kw">impl </span>Debug <span class="kw">for </span>Output {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">for</span> <span class="ident">byte</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">let</span> <span class="ident">byte</span> <span class="op">=</span> <span class="ident">byte</span>.<span class="ident">as_u32</span> ();
-			<span class="ident">formatter</span>.<span class="ident">write_char</span> (<span class="ident">char::from_digit</span> (<span class="ident">byte</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>, <span class="number">16</span>).<span class="ident">unwrap</span> ()) <span class="question-mark">?</span>;
-			<span class="ident">formatter</span>.<span class="ident">write_char</span> (<span class="ident">char::from_digit</span> (<span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0xf</span>, <span class="number">16</span>).<span class="ident">unwrap</span> ()) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok</span> (())
+	<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+	</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		formatter.write_str (<span class="string">&quot;md5::Output (\&quot;&quot;</span>) <span class="question-mark">?</span>;
+		Display::fmt (<span class="self">self</span>, formatter) <span class="question-mark">?</span>;
+		formatter.write_str (<span class="string">&quot;\&quot;)&quot;</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(())
 	}
 
 }
 
-<span class="kw">impl</span> <span class="ident">MD5</span> {
+<span class="kw">impl </span>Display <span class="kw">for </span>Output {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span> () -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> {
-			<span class="ident">state</span>: <span class="ident">INITIAL_STATE</span>,
-			<span class="ident">message</span>: [<span class="number">0</span>; <span class="number">64</span>],
-			<span class="ident">message_len</span>: <span class="number">0</span>,
-			<span class="ident">len</span>: <span class="number">0</span>,
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="kw">for </span>byte <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter ().copied () {
+			<span class="kw">let </span>byte = byte.pan_u32 ();
+			formatter.write_char (char::from_digit (byte &gt;&gt; <span class="number">4</span>, <span class="number">16</span>).unwrap ()) <span class="question-mark">?</span>;
+			formatter.write_char (char::from_digit (byte &amp; <span class="number">0xf</span>, <span class="number">16</span>).unwrap ()) <span class="question-mark">?</span>;
+		}
+		<span class="prelude-val">Ok </span>(())
+	}
+
+}
+
+<span class="kw">impl </span>MD5 {
+
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>new () -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{
+			state: INITIAL_STATE,
+			message: [<span class="number">0</span>; <span class="number">64</span>],
+			message_len: <span class="number">0</span>,
+			len: <span class="number">0</span>,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reset</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) {
-		<span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">INITIAL_STATE</span>;
-		<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="self">self</span>.<span class="ident">len</span> <span class="op">=</span> <span class="number">0</span>;
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>reset (&amp; <span class="kw-2">mut </span><span class="self">self</span>) {
+		<span class="self">self</span>.state = INITIAL_STATE;
+		<span class="self">self</span>.message_len = <span class="number">0</span>;
+		<span class="self">self</span>.len = <span class="number">0</span>;
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">byte</span>: <span class="ident">u8</span>) {
-		<span class="self">self</span>.<span class="ident">message</span> [<span class="self">self</span>.<span class="ident">message_len</span>] <span class="op">=</span> <span class="ident">byte</span>;
-		<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">message_len</span> <span class="op">==</span> <span class="number">64</span> {
-			<span class="self">self</span>.<span class="ident">apply</span> ();
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>push (&amp; <span class="kw-2">mut </span><span class="self">self</span>, byte: u8) {
+		<span class="self">self</span>.message [<span class="self">self</span>.message_len] = byte;
+		<span class="self">self</span>.message_len += <span class="number">1</span>;
+		<span class="kw">if </span><span class="self">self</span>.message_len == <span class="number">64 </span>{
+			<span class="self">self</span>.apply ();
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">message</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>update (&amp; <span class="kw-2">mut </span><span class="self">self</span>, <span class="kw-2">mut </span>message: &amp; [u8]) {
 
-		<span class="comment">// iterate over message</span>
+		<span class="comment">// iterate over message
 
-		<span class="kw">while</span> <span class="op">!</span> <span class="ident">message</span>.<span class="ident">is_empty</span> () {
+		</span><span class="kw">while </span>! message.is_empty () {
 
-			<span class="comment">// copy max sized chunk to buffer</span>
+			<span class="comment">// copy max sized chunk to buffer
 
-			<span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">cmp::min</span> (<span class="number">64</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">message_len</span>, <span class="ident">message</span>.<span class="ident">len</span> ());
-			<span class="self">self</span>.<span class="ident">message</span> [<span class="self">self</span>.<span class="ident">message_len</span> .. <span class="self">self</span>.<span class="ident">message_len</span> <span class="op">+</span> <span class="ident">bytes</span>].<span class="ident">copy_from_slice</span> (<span class="op">&amp;</span> <span class="ident">message</span> [ .. <span class="ident">bytes</span>]);
-			<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">+</span><span class="op">=</span> <span class="ident">bytes</span>;
-			<span class="ident">message</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="ident">message</span> [<span class="ident">bytes</span> .. ];
-			<span class="self">self</span>.<span class="ident">len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span>.<span class="ident">wrapping_add</span> (<span class="ident">bytes</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">3</span>);
+			</span><span class="kw">let </span>bytes = cmp::min (<span class="number">64 </span>- <span class="self">self</span>.message_len, message.len ());
+			<span class="self">self</span>.message [<span class="self">self</span>.message_len .. <span class="self">self</span>.message_len + bytes].copy_from_slice (&amp; message [ .. bytes]);
+			<span class="self">self</span>.message_len += bytes;
+			message = &amp; message [bytes .. ];
+			<span class="self">self</span>.len = <span class="self">self</span>.len.wrapping_add (bytes &lt;&lt; <span class="number">3</span>);
 
-			<span class="comment">// stop now if buffer is part filled</span>
+			<span class="comment">// stop now if buffer is part filled
 
-			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">message_len</span> <span class="op">!</span><span class="op">=</span> <span class="number">64</span> { <span class="kw">return</span> }
+			</span><span class="kw">if </span><span class="self">self</span>.message_len != <span class="number">64 </span>{ <span class="kw">return </span>}
 
-			<span class="comment">// consume buffer</span>
+			<span class="comment">// consume buffer
 
-			<span class="self">self</span>.<span class="ident">apply</span> ();
+			</span><span class="self">self</span>.apply ();
 
 		}
-
-	}
-
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span> (<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Output</span> {
-		<span class="self">self</span>.<span class="ident">finish_real</span> ()
-	}
-
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish_reset</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Output</span> {
-		<span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">finish_real</span> ();
-		<span class="self">self</span>.<span class="ident">reset</span> ();
-		<span class="ident">output</span>
-	}
-
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">finish_real</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">Output</span> {
-
-		<span class="comment">// remember the length before padding</span>
-
-		<span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">len</span>;
-
-		<span class="comment">// add one then zeros, leaving exactly 56 bytes buffered</span>
-
-		<span class="self">self</span>.<span class="ident">push</span> (<span class="number">0x80</span>);
-		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">message_len</span> <span class="op">&gt;</span> <span class="number">56</span> {
-			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">message_len</span> .. <span class="number">64</span> { <span class="self">self</span>.<span class="ident">message</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="number">0</span>; }
-			<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">=</span> <span class="number">64</span>;
-			<span class="self">self</span>.<span class="ident">apply</span> ();
-		}
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">message_len</span> .. <span class="number">56</span> { <span class="self">self</span>.<span class="ident">message</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="number">0</span>; }
-		<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">=</span> <span class="number">56</span>;
-
-		<span class="comment">// then the length, which takes us to 64 bytes</span>
-
-		<span class="self">self</span>.<span class="ident">message</span> [<span class="number">56</span> .. <span class="number">64</span>].<span class="ident">copy_from_slice</span> (<span class="op">&amp;</span> <span class="ident">len</span>.<span class="ident">to_le_bytes</span> ());
-		<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">+</span><span class="op">=</span> <span class="number">8</span>;
-		<span class="self">self</span>.<span class="ident">apply</span> ();
-
-		<span class="comment">// convert result words to byte array</span>
-
-		<span class="macro">assert!</span> (<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">==</span> <span class="number">0</span>);
-
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">16</span>];
-		<span class="kw">for</span> <span class="ident">src_idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">4</span> {
-			<span class="kw">let</span> <span class="ident">dst_idx</span> <span class="op">=</span> <span class="ident">src_idx</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2_i32</span>;
-			<span class="ident">result</span> [<span class="ident">dst_idx</span>] <span class="op">=</span> (<span class="self">self</span>.<span class="ident">state</span> [<span class="ident">src_idx</span>] <span class="op">&amp;</span> <span class="number">0xff</span>).<span class="ident">as_u8</span> ();
-			<span class="ident">result</span> [<span class="ident">dst_idx</span> <span class="op">+</span> <span class="number">1</span>] <span class="op">=</span> (<span class="self">self</span>.<span class="ident">state</span> [<span class="ident">src_idx</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8_i32</span> <span class="op">&amp;</span> <span class="number">0xff</span>).<span class="ident">as_u8</span> ();
-			<span class="ident">result</span> [<span class="ident">dst_idx</span> <span class="op">+</span> <span class="number">2</span>] <span class="op">=</span> (<span class="self">self</span>.<span class="ident">state</span> [<span class="ident">src_idx</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">16_i32</span> <span class="op">&amp;</span> <span class="number">0xff</span>).<span class="ident">as_u8</span> ();
-			<span class="ident">result</span> [<span class="ident">dst_idx</span> <span class="op">+</span> <span class="number">3</span>] <span class="op">=</span> (<span class="self">self</span>.<span class="ident">state</span> [<span class="ident">src_idx</span>] <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">24_i32</span> <span class="op">&amp;</span> <span class="number">0xff</span>).<span class="ident">as_u8</span> ();
-		}
-
-		<span class="ident">Output</span> (<span class="ident">result</span>)
 
 	}
 
-	<span class="kw">fn</span> <span class="ident">apply</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) {
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>finish (<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Output {
+		<span class="self">self</span>.finish_real ()
+	}
 
-		<span class="comment">// convert message buffer into words</span>
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>finish_reset (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; Output {
+		<span class="kw">let </span>output = <span class="self">self</span>.finish_real ();
+		<span class="self">self</span>.reset ();
+		output
+	}
 
-		<span class="macro">assert!</span> (<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">==</span> <span class="number">64</span>);
+	<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+	#[ must_use ]
+	</span><span class="kw">fn </span>finish_real (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; Output {
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">16</span>];
-		<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_range_loop</span>) ]</span>
-		<span class="kw">for</span> <span class="ident">dst_idx</span> <span class="kw">in</span> <span class="number">0_usize</span> .. <span class="number">16_usize</span> {
-			<span class="kw">let</span> <span class="ident">src_idx</span> <span class="op">=</span> <span class="ident">dst_idx</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">2_u32</span>;
-			<span class="ident">message</span> [<span class="ident">dst_idx</span>] <span class="op">=</span> <span class="ident">u32::from_le_bytes</span> (
-				<span class="self">self</span>.<span class="ident">message</span> [<span class="ident">src_idx</span> .. <span class="ident">src_idx</span> <span class="op">+</span> <span class="number">4</span>].<span class="ident">try_into</span> ().<span class="ident">unwrap</span> ());
+		<span class="comment">// remember the length before padding
+
+		</span><span class="kw">let </span>len = <span class="self">self</span>.len;
+
+		<span class="comment">// add one then zeros, leaving exactly 56 bytes buffered
+
+		</span><span class="self">self</span>.push (<span class="number">0x80</span>);
+		<span class="kw">if </span><span class="self">self</span>.message_len &gt; <span class="number">56 </span>{
+			<span class="kw">for </span>idx <span class="kw">in </span><span class="self">self</span>.message_len .. <span class="number">64 </span>{ <span class="self">self</span>.message [idx] = <span class="number">0</span>; }
+			<span class="self">self</span>.message_len = <span class="number">64</span>;
+			<span class="self">self</span>.apply ();
+		}
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="self">self</span>.message_len .. <span class="number">56 </span>{ <span class="self">self</span>.message [idx] = <span class="number">0</span>; }
+		<span class="self">self</span>.message_len = <span class="number">56</span>;
+
+		<span class="comment">// then the length, which takes us to 64 bytes
+
+		</span><span class="self">self</span>.message [<span class="number">56 </span>.. <span class="number">64</span>].copy_from_slice (&amp; len.to_le_bytes ());
+		<span class="self">self</span>.message_len += <span class="number">8</span>;
+		<span class="self">self</span>.apply ();
+
+		<span class="comment">// convert result words to byte array
+
+		</span><span class="macro">assert! </span>(<span class="self">self</span>.message_len == <span class="number">0</span>);
+
+		<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0</span>; <span class="number">16</span>];
+		<span class="kw">for </span>src_idx <span class="kw">in </span><span class="number">0 </span>.. <span class="number">4 </span>{
+			<span class="kw">let </span>dst_idx = src_idx &lt;&lt; <span class="number">2_i32</span>;
+			result [dst_idx] = (<span class="self">self</span>.state [src_idx] &amp; <span class="number">0xff</span>).qck_u8 ();
+			result [dst_idx + <span class="number">1</span>] = (<span class="self">self</span>.state [src_idx] &gt;&gt; <span class="number">8_i32 </span>&amp; <span class="number">0xff</span>).qck_u8 ();
+			result [dst_idx + <span class="number">2</span>] = (<span class="self">self</span>.state [src_idx] &gt;&gt; <span class="number">16_i32 </span>&amp; <span class="number">0xff</span>).qck_u8 ();
+			result [dst_idx + <span class="number">3</span>] = (<span class="self">self</span>.state [src_idx] &gt;&gt; <span class="number">24_i32 </span>&amp; <span class="number">0xff</span>).qck_u8 ();
 		}
 
-		<span class="comment">// apply rounds as specified</span>
+		Output (result)
 
-		<span class="kw">let</span> [<span class="kw-2">mut</span> <span class="ident">a</span>, <span class="kw-2">mut</span> <span class="ident">b</span>, <span class="kw-2">mut</span> <span class="ident">c</span>, <span class="kw-2">mut</span> <span class="ident">d</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">state</span>;
+	}
 
-		<span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">16</span> {
-			<span class="kw">let</span> <span class="ident">func</span> <span class="op">=</span> ((<span class="ident">b</span> <span class="op">&amp;</span> <span class="ident">c</span>) <span class="op">|</span> (<span class="op">!</span> <span class="ident">b</span> <span class="op">&amp;</span> <span class="ident">d</span>))
-				.<span class="ident">wrapping_add</span> (<span class="ident">a</span>)
-				.<span class="ident">wrapping_add</span> (<span class="ident">ADDS</span> [<span class="ident">op</span>])
-				.<span class="ident">wrapping_add</span> (<span class="ident">message</span> [<span class="ident">op</span>]);
-			(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">d</span>) <span class="op">=</span> (<span class="ident">d</span>, <span class="ident">b</span>.<span class="ident">wrapping_add</span> (<span class="ident">func</span>.<span class="ident">rotate_left</span> (<span class="ident">ROTATES</span> [<span class="ident">op</span>].<span class="ident">as_u32</span> ())), <span class="ident">b</span>, <span class="ident">c</span>);
+	<span class="kw">fn </span>apply (&amp; <span class="kw-2">mut </span><span class="self">self</span>) {
+
+		<span class="comment">// convert message buffer into words
+
+		</span><span class="macro">assert! </span>(<span class="self">self</span>.message_len == <span class="number">64</span>);
+
+		<span class="kw">let </span><span class="kw-2">mut </span>message = [<span class="number">0</span>; <span class="number">16</span>];
+		<span class="attribute">#[ allow (clippy::needless_range_loop) ]
+		</span><span class="kw">for </span>dst_idx <span class="kw">in </span><span class="number">0_usize </span>.. <span class="number">16_usize </span>{
+			<span class="kw">let </span>src_idx = dst_idx &lt;&lt; <span class="number">2_u32</span>;
+			message [dst_idx] = u32::from_le_bytes (
+				<span class="self">self</span>.message [src_idx .. src_idx + <span class="number">4</span>].try_into ().unwrap ());
 		}
 
-		<span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="number">16</span> .. <span class="number">32</span> {
-			<span class="kw">let</span> <span class="ident">func</span> <span class="op">=</span> ((<span class="ident">d</span> <span class="op">&amp;</span> <span class="ident">b</span>) <span class="op">|</span> (<span class="op">!</span> <span class="ident">d</span> <span class="op">&amp;</span> <span class="ident">c</span>))
-				.<span class="ident">wrapping_add</span> (<span class="ident">a</span>)
-				.<span class="ident">wrapping_add</span> (<span class="ident">ADDS</span> [<span class="ident">op</span>])
-				.<span class="ident">wrapping_add</span> (<span class="ident">message</span> [(<span class="number">5</span> <span class="op">*</span> <span class="ident">op</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="number">16</span>]);
-			(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">d</span>) <span class="op">=</span> (<span class="ident">d</span>, <span class="ident">b</span>.<span class="ident">wrapping_add</span> (<span class="ident">func</span>.<span class="ident">rotate_left</span> (<span class="ident">ROTATES</span> [<span class="ident">op</span>].<span class="ident">as_u32</span> ())), <span class="ident">b</span>, <span class="ident">c</span>);
+		<span class="comment">// apply rounds as specified
+
+		</span><span class="kw">let </span>[<span class="kw-2">mut </span>a, <span class="kw-2">mut </span>b, <span class="kw-2">mut </span>c, <span class="kw-2">mut </span>d] = <span class="self">self</span>.state;
+
+		<span class="kw">for </span>op <span class="kw">in </span><span class="number">0 </span>.. <span class="number">16 </span>{
+			<span class="kw">let </span>func = ((b &amp; c) | (! b &amp; d))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [op]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
-		<span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="number">32</span> .. <span class="number">48</span> {
-			<span class="kw">let</span> <span class="ident">func</span> <span class="op">=</span> (<span class="ident">b</span> <span class="op">^</span> <span class="ident">c</span> <span class="op">^</span> <span class="ident">d</span>)
-				.<span class="ident">wrapping_add</span> (<span class="ident">a</span>)
-				.<span class="ident">wrapping_add</span> (<span class="ident">ADDS</span> [<span class="ident">op</span>])
-				.<span class="ident">wrapping_add</span> (<span class="ident">message</span> [(<span class="number">3</span> <span class="op">*</span> <span class="ident">op</span> <span class="op">+</span> <span class="number">5</span>) <span class="op">%</span> <span class="number">16</span>]);
-			(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">d</span>) <span class="op">=</span> (<span class="ident">d</span>, <span class="ident">b</span>.<span class="ident">wrapping_add</span> (<span class="ident">func</span>.<span class="ident">rotate_left</span> (<span class="ident">ROTATES</span> [<span class="ident">op</span>].<span class="ident">as_u32</span> ())), <span class="ident">b</span>, <span class="ident">c</span>);
+		<span class="kw">for </span>op <span class="kw">in </span><span class="number">16 </span>.. <span class="number">32 </span>{
+			<span class="kw">let </span>func = ((d &amp; b) | (! d &amp; c))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [(<span class="number">5 </span>* op + <span class="number">1</span>) % <span class="number">16</span>]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
-		<span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="number">48</span> .. <span class="number">64</span> {
-			<span class="kw">let</span> <span class="ident">func</span> <span class="op">=</span> (<span class="ident">c</span> <span class="op">^</span> (<span class="ident">b</span> <span class="op">|</span> <span class="op">!</span> <span class="ident">d</span>))
-				.<span class="ident">wrapping_add</span> (<span class="ident">a</span>)
-				.<span class="ident">wrapping_add</span> (<span class="ident">ADDS</span> [<span class="ident">op</span>])
-				.<span class="ident">wrapping_add</span> (<span class="ident">message</span> [<span class="number">7</span> <span class="op">*</span> <span class="ident">op</span> <span class="op">%</span> <span class="number">16</span>]);
-			(<span class="ident">a</span>, <span class="ident">b</span>, <span class="ident">c</span>, <span class="ident">d</span>) <span class="op">=</span> (<span class="ident">d</span>, <span class="ident">b</span>.<span class="ident">wrapping_add</span> (<span class="ident">func</span>.<span class="ident">rotate_left</span> (<span class="ident">ROTATES</span> [<span class="ident">op</span>].<span class="ident">as_u32</span> ())), <span class="ident">b</span>, <span class="ident">c</span>);
+		<span class="kw">for </span>op <span class="kw">in </span><span class="number">32 </span>.. <span class="number">48 </span>{
+			<span class="kw">let </span>func = (b ^ c ^ d)
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [(<span class="number">3 </span>* op + <span class="number">5</span>) % <span class="number">16</span>]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
 		}
 
-		<span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> [
-			<span class="self">self</span>.<span class="ident">state</span> [<span class="number">0</span>].<span class="ident">wrapping_add</span> (<span class="ident">a</span>),
-			<span class="self">self</span>.<span class="ident">state</span> [<span class="number">1</span>].<span class="ident">wrapping_add</span> (<span class="ident">b</span>),
-			<span class="self">self</span>.<span class="ident">state</span> [<span class="number">2</span>].<span class="ident">wrapping_add</span> (<span class="ident">c</span>),
-			<span class="self">self</span>.<span class="ident">state</span> [<span class="number">3</span>].<span class="ident">wrapping_add</span> (<span class="ident">d</span>),
+		<span class="kw">for </span>op <span class="kw">in </span><span class="number">48 </span>.. <span class="number">64 </span>{
+			<span class="kw">let </span>func = (c ^ (b | ! d))
+				.wrapping_add (a)
+				.wrapping_add (ADDS [op])
+				.wrapping_add (message [<span class="number">7 </span>* op % <span class="number">16</span>]);
+			(a, b, c, d) = (d, b.wrapping_add (func.rotate_left (ROTATES [op].qck_u32 ())), b, c);
+		}
+
+		<span class="self">self</span>.state = [
+			<span class="self">self</span>.state [<span class="number">0</span>].wrapping_add (a),
+			<span class="self">self</span>.state [<span class="number">1</span>].wrapping_add (b),
+			<span class="self">self</span>.state [<span class="number">2</span>].wrapping_add (c),
+			<span class="self">self</span>.state [<span class="number">3</span>].wrapping_add (d),
 		];
 
-		<span class="comment">// clear buffer</span>
+		<span class="comment">// clear buffer
 
-		<span class="self">self</span>.<span class="ident">message_len</span> <span class="op">=</span> <span class="number">0</span>;
+		</span><span class="self">self</span>.message_len = <span class="number">0</span>;
 
 	}
 
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">MD5</span> {
+<span class="kw">impl </span>Default <span class="kw">for </span>MD5 {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">default</span> () -&gt; <span class="self">Self</span> {
-		<span class="ident"><span class="self">Self</span>::new</span> ()
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>default () -&gt; <span class="self">Self </span>{
+		<span class="self">Self</span>::new ()
 	}
 
 }
 
-<span class="kw">const</span> <span class="ident">INITIAL_STATE</span>: <span class="ident">State</span> <span class="op">=</span> [ <span class="number">0x_6745_2301</span>, <span class="number">0x_efcd_ab89</span>, <span class="number">0x_98ba_dcfe</span>, <span class="number">0x_1032_5476</span> ];
+<span class="kw">const </span>INITIAL_STATE: State = [ <span class="number">0x_6745_2301</span>, <span class="number">0x_efcd_ab89</span>, <span class="number">0x_98ba_dcfe</span>, <span class="number">0x_1032_5476 </span>];
 
-<span class="kw">const</span> <span class="ident">ROTATES</span>: [<span class="ident">u8</span>; <span class="number">64</span>] <span class="op">=</span> [
+<span class="kw">const </span>ROTATES: [u8; <span class="number">64</span>] = [
 	<span class="number">7</span>, <span class="number">12</span>, <span class="number">17</span>, <span class="number">22</span>, <span class="number">7</span>, <span class="number">12</span>, <span class="number">17</span>, <span class="number">22</span>, <span class="number">7</span>, <span class="number">12</span>, <span class="number">17</span>, <span class="number">22</span>, <span class="number">7</span>, <span class="number">12</span>, <span class="number">17</span>, <span class="number">22</span>,
 	<span class="number">5</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">20</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">20</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">20</span>, <span class="number">5</span>, <span class="number">9</span>, <span class="number">14</span>, <span class="number">20</span>,
 	<span class="number">4</span>, <span class="number">11</span>, <span class="number">16</span>, <span class="number">23</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">16</span>, <span class="number">23</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">16</span>, <span class="number">23</span>, <span class="number">4</span>, <span class="number">11</span>, <span class="number">16</span>, <span class="number">23</span>,
 	<span class="number">6</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">21</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">21</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">21</span>, <span class="number">6</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="number">21</span>,
 ];
 
-<span class="kw">const</span> <span class="ident">ADDS</span>: [<span class="ident">u32</span>; <span class="number">64</span>] <span class="op">=</span> [
+<span class="kw">const </span>ADDS: [u32; <span class="number">64</span>] = [
 	<span class="number">0x_d76a_a478</span>, <span class="number">0x_e8c7_b756</span>, <span class="number">0x_2420_70db</span>, <span class="number">0x_c1bd_ceee</span>, <span class="number">0x_f57c_0faf</span>, <span class="number">0x_4787_c62a</span>,
 	<span class="number">0x_a830_4613</span>, <span class="number">0x_fd46_9501</span>, <span class="number">0x_6980_98d8</span>, <span class="number">0x_8b44_f7af</span>, <span class="number">0x_ffff_5bb1</span>, <span class="number">0x_895c_d7be</span>,
 	<span class="number">0x_6b90_1122</span>, <span class="number">0x_fd98_7193</span>, <span class="number">0x_a679_438e</span>, <span class="number">0x_49b4_0821</span>, <span class="number">0x_f61e_2562</span>, <span class="number">0x_c040_b340</span>,
@@ -710,12 +710,12 @@
 	<span class="number">0x_f753_7e82</span>, <span class="number">0x_bd3a_f235</span>, <span class="number">0x_2ad7_d2bb</span>, <span class="number">0x_eb86_d391</span>,
 ];
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>tests {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">LOREM_IPSUM</span>: <span class="op">&amp;</span> <span class="ident">str</span> <span class="op">=</span>
+	<span class="kw">const </span>LOREM_IPSUM: &amp; str =
 		<span class="string">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut at tempus ligula, ac \
 		pellentesque leo. Nullam molestie justo sit amet neque venenatis, at laoreet urna \
 		mollis. Mauris eget mollis quam. Maecenas ultricies odio dolor, id luctus lorem \
@@ -725,36 +725,36 @@
 		volutpat at quam quis egestas. Proin et turpis nec lacus maximus iaculis. Donec vitae \
 		massa magna. Nulla pulvinar eleifend erat et fringilla.&quot;</span>;
 
-	<span class="macro">macro_rules!</span> <span class="ident">assert_md5</span> {
-		( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>:<span class="ident">expr</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>:<span class="ident">expr</span> ) =&gt; {
-			<span class="macro">assert_eq!</span> (
-				<span class="ident">Output::from_hex</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>).<span class="ident">unwrap</span> (),
-				<span class="ident">md5_hash</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">input</span>.<span class="ident">as_bytes</span> ()));
+	<span class="macro">macro_rules! </span>assert_md5 {
+		( <span class="macro-nonterminal">$expect</span>:expr , <span class="macro-nonterminal">$input</span>:expr ) =&gt; {
+			<span class="macro">assert_eq! </span>(
+				Output::from_hex (<span class="macro-nonterminal">$expect</span>).unwrap (),
+				md5_hash (<span class="macro-nonterminal">$input</span>.as_bytes ()));
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">test_md5_hash</span> () {
-		<span class="macro">assert_md5!</span> (<span class="string">&quot;d41d8cd98f00b204e9800998ecf8427e&quot;</span>, <span class="string">&quot;&quot;</span>);
-		<span class="macro">assert_md5!</span> (<span class="string">&quot;6cd3556deb0da54bca060b4c39479839&quot;</span>, <span class="string">&quot;Hello, world!&quot;</span>);
-		<span class="macro">assert_md5!</span> (<span class="string">&quot;7bb31841cf426a6de079421b2590cf82&quot;</span>, <span class="string">&quot;The Ideal Stocking Stuffer&quot;</span>);
-		<span class="macro">assert_md5!</span> (<span class="string">&quot;777f5a5ebdeab74ab0299512f9688be0&quot;</span>, <span class="ident">LOREM_IPSUM</span>);
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>test_md5_hash () {
+		<span class="macro">assert_md5! </span>(<span class="string">&quot;d41d8cd98f00b204e9800998ecf8427e&quot;</span>, <span class="string">&quot;&quot;</span>);
+		<span class="macro">assert_md5! </span>(<span class="string">&quot;6cd3556deb0da54bca060b4c39479839&quot;</span>, <span class="string">&quot;Hello, world!&quot;</span>);
+		<span class="macro">assert_md5! </span>(<span class="string">&quot;7bb31841cf426a6de079421b2590cf82&quot;</span>, <span class="string">&quot;The Ideal Stocking Stuffer&quot;</span>);
+		<span class="macro">assert_md5! </span>(<span class="string">&quot;777f5a5ebdeab74ab0299512f9688be0&quot;</span>, LOREM_IPSUM);
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">test_output</span> () {
-		<span class="kw">let</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">Output::from_hex</span> (<span class="string">&quot;0123456789abcdef0123456789abcdef&quot;</span>).<span class="ident">unwrap</span> ();
-		<span class="macro">assert_eq!</span> (<span class="number">16</span>, <span class="ident">output</span>.<span class="ident">len</span> ());
-		<span class="macro">assert_eq!</span> (<span class="bool-val">false</span>, <span class="ident">output</span>.<span class="ident">is_empty</span> ());
-		<span class="macro">assert_eq!</span> (<span class="number">0x01</span>, <span class="ident">output</span> [<span class="number">0</span>]);
-		<span class="macro">assert_eq!</span> (<span class="number">0xef</span>, <span class="ident">output</span> [<span class="number">15</span>]);
-		<span class="macro">assert_eq!</span> (<span class="string">&quot;md5::Output (\&quot;0123456789abcdef0123456789abcdef\&quot;)&quot;</span>, <span class="macro">format!</span> (<span class="string">&quot;{:?}&quot;</span>, <span class="ident">output</span>));
-		<span class="macro">assert_eq!</span> (<span class="string">&quot;0123456789abcdef0123456789abcdef&quot;</span>, <span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="ident">output</span>));
-		<span class="macro">assert_err!</span> (<span class="string">&quot;Expected 32 chars, not 31&quot;</span>, <span class="ident">Output::from_hex</span> (<span class="string">&quot;0123456789abcdef0123456789abcde&quot;</span>));
-		<span class="macro">assert_err!</span> (<span class="string">&quot;Expected 32 chars, not 33&quot;</span>, <span class="ident">Output::from_hex</span> (<span class="string">&quot;0123456789abcdef0123456789abcdef0&quot;</span>));
-		<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid hex: X&quot;</span>, <span class="ident">Output::from_hex</span> (<span class="string">&quot;0123456789abcdeX0123456789abcdef&quot;</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>test_output () {
+		<span class="kw">let </span>output = Output::from_hex (<span class="string">&quot;0123456789abcdef0123456789abcdef&quot;</span>).unwrap ();
+		<span class="macro">assert_eq! </span>(<span class="number">16</span>, output.len ());
+		<span class="macro">assert_eq! </span>(<span class="bool-val">false</span>, output.is_empty ());
+		<span class="macro">assert_eq! </span>(<span class="number">0x01</span>, output [<span class="number">0</span>]);
+		<span class="macro">assert_eq! </span>(<span class="number">0xef</span>, output [<span class="number">15</span>]);
+		<span class="macro">assert_eq! </span>(<span class="string">&quot;md5::Output (\&quot;0123456789abcdef0123456789abcdef\&quot;)&quot;</span>, <span class="macro">format! </span>(<span class="string">&quot;{:?}&quot;</span>, output));
+		<span class="macro">assert_eq! </span>(<span class="string">&quot;0123456789abcdef0123456789abcdef&quot;</span>, <span class="macro">format! </span>(<span class="string">&quot;{}&quot;</span>, output));
+		<span class="macro">assert_err! </span>(<span class="string">&quot;Expected 32 chars, not 31&quot;</span>, Output::from_hex (<span class="string">&quot;0123456789abcdef0123456789abcde&quot;</span>));
+		<span class="macro">assert_err! </span>(<span class="string">&quot;Expected 32 chars, not 33&quot;</span>, Output::from_hex (<span class="string">&quot;0123456789abcdef0123456789abcdef0&quot;</span>));
+		<span class="macro">assert_err! </span>(<span class="string">&quot;Invalid hex: X&quot;</span>, Output::from_hex (<span class="string">&quot;0123456789abcdeX0123456789abcdef&quot;</span>));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_md5" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_md5" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

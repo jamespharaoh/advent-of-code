@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2017/day-01/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2017_day_01/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2017_day_01/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2017_day_01/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2017/day-01/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2017_day_01/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2017_day_01/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2017_day_01/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -93,100 +93,100 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2017: Day 1: Inverse Captcha</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2017/day/1](https://adventofcode.com/2017/day/1)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2017: Day 1: Inverse Captcha
+//!
+//! [https://adventofcode.com/2017/day/1](https://adventofcode.com/2017/day/1)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Inverse Captcha&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2017</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">1</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Inverse Captcha&quot;</span>;
+	year = <span class="number">2017</span>;
+	day = <span class="number">1</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> (
-			<span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">iter_vals</span> ()
-				.<span class="ident">circular_tuple_windows</span>::<span class="op">&lt;</span>(<span class="kw">_</span>, <span class="kw">_</span>)<span class="op">&gt;</span> ()
-				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">digit_0</span>, <span class="ident">digit_1</span>)<span class="op">|</span> <span class="ident">digit_0</span> <span class="op">==</span> <span class="ident">digit_1</span>)
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">digit</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">digit</span>.<span class="ident">as_u32</span> ())
-				.<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> ()
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+		<span class="prelude-val">Ok </span>(
+			input.digits.iter_vals ()
+				.circular_tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+				.filter (|&amp; (digit_0, digit_1)| digit_0 == digit_1)
+				.map (|(digit, <span class="kw">_</span>)| digit.pan_u32 ())
+				.sum::&lt;u32&gt; ()
 		)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="kw">if</span> <span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">len</span> () <span class="op">%</span> <span class="number">2</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Must have an even number of digits&quot;</span>.<span class="ident">into</span> ());
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+		<span class="kw">if </span>input.digits.len () % <span class="number">2 </span>!= <span class="number">0 </span>{
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have an even number of digits&quot;</span>.into ());
 		}
-		<span class="prelude-val">Ok</span> (
-			<span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">iter_vals</span> ().<span class="ident">take</span> (<span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">len</span> () <span class="op">/</span> <span class="number">2</span>)
-				.<span class="ident">zip</span> (<span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">input</span>.<span class="ident">digits</span>.<span class="ident">len</span> () <span class="op">/</span> <span class="number">2</span>))
-				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">digit_0</span>, <span class="ident">digit_1</span>)<span class="op">|</span> <span class="ident">digit_0</span> <span class="op">==</span> <span class="ident">digit_1</span>)
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">digit</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">digit</span>.<span class="ident">as_u32</span> () <span class="op">*</span> <span class="number">2</span>)
-				.<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> ()
+		<span class="prelude-val">Ok </span>(
+			input.digits.iter_vals ().take (input.digits.len () / <span class="number">2</span>)
+				.zip (input.digits.iter_vals ().skip (input.digits.len () / <span class="number">2</span>))
+				.filter (|&amp; (digit_0, digit_1)| digit_0 == digit_1)
+				.map (|(digit, <span class="kw">_</span>)| digit.pan_u32 () * <span class="number">2</span>)
+				.sum::&lt;u32&gt; ()
 		)
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">digits</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+	<span class="attribute">#[ derive (Clone, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>digits: Vec &lt;u8&gt;,
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">if</span> <span class="ident">input</span>.<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">1</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Input must be exactly one line&quot;</span>.<span class="ident">into</span> ()) }
-			<span class="kw">let</span> <span class="ident">digits</span> <span class="op">=</span> <span class="ident">input</span> [<span class="number">0</span>].<span class="ident">chars</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">to_digit</span> (<span class="number">10</span>)
-					.<span class="ident">map</span> (<span class="ident">IntConv::as_u8</span>)
-					.<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Not a digit: {}&quot;</span>, <span class="ident">ch</span>).<span class="ident">into</span> ()))
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">digits</span> })
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">if </span>input.len () != <span class="number">1 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Input must be exactly one line&quot;</span>.into ()) }
+			<span class="kw">let </span>digits = input [<span class="number">0</span>].chars ()
+				.map (|ch| ch.to_digit (<span class="number">10</span>)
+					.map (u32::pan_u8)
+					.ok_or_else (|| <span class="macro">format! </span>(<span class="string">&quot;Not a digit: {}&quot;</span>, ch).into ()))
+				.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ digits })
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;3&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;1122&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;4&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;1111&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;1234&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;9&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [<span class="string">&quot;91212129&quot;</span>]));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;3&quot;</span>, puzzle.part_one (&amp; [<span class="string">&quot;1122&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;4&quot;</span>, puzzle.part_one (&amp; [<span class="string">&quot;1111&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;0&quot;</span>, puzzle.part_one (&amp; [<span class="string">&quot;1234&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;9&quot;</span>, puzzle.part_one (&amp; [<span class="string">&quot;91212129&quot;</span>]));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;1212&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;0&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;1221&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;4&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;123425&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;12&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;123123&quot;</span>]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;4&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [<span class="string">&quot;12131415&quot;</span>]));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_two (&amp; [<span class="string">&quot;1212&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;0&quot;</span>, puzzle.part_two (&amp; [<span class="string">&quot;1221&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;4&quot;</span>, puzzle.part_two (&amp; [<span class="string">&quot;123425&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;12&quot;</span>, puzzle.part_two (&amp; [<span class="string">&quot;123123&quot;</span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;4&quot;</span>, puzzle.part_two (&amp; [<span class="string">&quot;12131415&quot;</span>]));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

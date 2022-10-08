@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input",""]],"type":[["Dim",""],["Input",""]]};
+window.SIDEBAR_ITEMS = {"type":[["Dim",""]]};

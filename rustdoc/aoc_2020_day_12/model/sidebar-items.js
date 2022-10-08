@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Step",""]],"type":[["Coord",""],["Dir",""],["Pos",""]]};

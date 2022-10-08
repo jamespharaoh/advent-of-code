@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-11/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_11/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+</pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>input::Input;
+
+<span class="kw">const </span>ALL_CHARS: &amp; [char] = &amp; [
+	<span class="string">&#39;a&#39;</span>, <span class="string">&#39;b&#39;</span>, <span class="string">&#39;c&#39;</span>, <span class="string">&#39;d&#39;</span>, <span class="string">&#39;e&#39;</span>, <span class="string">&#39;f&#39;</span>, <span class="string">&#39;g&#39;</span>, <span class="string">&#39;h&#39;</span>, <span class="string">&#39;j&#39;</span>, <span class="string">&#39;k&#39;</span>, <span class="string">&#39;m&#39;</span>, <span class="string">&#39;n&#39;</span>, <span class="string">&#39;p&#39;</span>, <span class="string">&#39;q&#39;</span>, <span class="string">&#39;r&#39;</span>, <span class="string">&#39;s&#39;</span>, <span class="string">&#39;t&#39;</span>, <span class="string">&#39;u&#39;</span>, <span class="string">&#39;v&#39;</span>,
+	<span class="string">&#39;w&#39;</span>, <span class="string">&#39;x&#39;</span>, <span class="string">&#39;y&#39;</span>, <span class="string">&#39;z&#39;</span>,
+];
+
+<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
+	<span class="kw">let </span>password = next_password (&amp; input.initial) <span class="question-mark">?</span>;
+	<span class="prelude-val">Ok </span>(password)
+}
+
+<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
+	<span class="kw">let </span>password_0 = next_password (&amp; input.initial) <span class="question-mark">?</span>;
+	<span class="kw">let </span>password_1 = next_password (&amp; password_0) <span class="question-mark">?</span>;
+	<span class="prelude-val">Ok </span>(password_1)
+}
+
+<span class="kw">pub fn </span>next_password (input: &amp; str) -&gt; GenResult &lt;String&gt; {
+	<span class="kw">if </span>input.chars ().count () != <span class="number">8 </span>{
+		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Password must have eight characters&quot;</span>.into ());
+	}
+	<span class="kw">let </span><span class="kw-2">mut </span>char_idxs: Vec &lt;usize&gt; =
+		input.chars ()
+			.map (|ch| ALL_CHARS.iter ().copied ()
+				.position (|valid_ch| ch == valid_ch)
+				.ok_or_else (|| <span class="macro">format! </span>(<span class="string">&quot;Input contains invalid character: {}&quot;</span>, ch).into ()))
+			.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+	<span class="kw">fn </span>idxs_to_chars (char_idxs: &amp; [usize]) -&gt; <span class="kw">impl </span>Iterator &lt;Item = char&gt; + <span class="lifetime">&#39;_ </span>+ Clone {
+		char_idxs.iter ().copied ().map (|idx| ALL_CHARS [idx])
+	}
+	<span class="kw">let </span>new_password = <span class="kw">loop </span>{
+		<span class="kw">for </span>idx <span class="kw">in </span>(<span class="number">0 </span>.. char_idxs.len ()).rev () {
+			char_idxs [idx] += <span class="number">1</span>;
+			<span class="kw">if </span>char_idxs [idx] &lt; ALL_CHARS.len () &amp;&amp; (idx &lt; char_idxs.len () - <span class="number">2
+					</span>|| find_pair (idxs_to_chars (&amp; char_idxs [ .. char_idxs.len () - <span class="number">2</span>]))
+						.is_some ())
+				{ <span class="kw">break </span>}
+			char_idxs [idx] = <span class="number">0</span>;
+		}
+		<span class="kw">if </span>is_valid (idxs_to_chars (&amp; char_idxs)) {
+			<span class="kw">break </span>char_idxs.iter ().copied ()
+				.map (|idx| ALL_CHARS [idx])
+				.collect::&lt;String&gt; ();
+		}
+	};
+	<span class="prelude-val">Ok </span>(new_password)
+}
+
+<span class="kw">pub fn </span>is_valid &lt;Inpt&gt; (input: Inpt) -&gt; bool
+		<span class="kw">where </span>Inpt: Iterator &lt;Item = char&gt; + Clone {
+	<span class="kw">if </span>! input.clone ()
+		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+		.any (|(a, b, c)| a.pan_u32 () + <span class="number">1 </span>== b.pan_u32 () &amp;&amp; b.pan_u32 () + <span class="number">1 </span>== c.pan_u32 ()) {
+		<span class="kw">return </span><span class="bool-val">false</span>;
+	}
+	<span class="kw">let </span>(num_repeats, <span class="kw">_</span>, <span class="kw">_</span>) =
+		input.fold ((<span class="number">0_u32</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>), |(sum, last, prev), next|
+			<span class="kw">if </span>last == <span class="prelude-val">Some </span>(next) &amp;&amp; prev != <span class="prelude-val">Some </span>(next) {
+				(sum + <span class="number">1</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some </span>(next))
+			} <span class="kw">else </span>{
+				(sum, <span class="prelude-val">Some </span>(next), prev)
+			});
+	<span class="kw">if </span>num_repeats &lt; <span class="number">2 </span>{ <span class="kw">return </span><span class="bool-val">false </span>}
+	<span class="bool-val">true
+</span>}
+
+<span class="kw">pub fn </span>find_pair &lt;Inpt&gt; (input: Inpt) -&gt; <span class="prelude-ty">Option </span>&lt;(usize, char)&gt;
+		<span class="kw">where </span>Inpt: Iterator &lt;Item = char&gt; + Clone {
+	input
+		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+		.filter (|&amp; (a, b)| a == b)
+		.map (|(a, <span class="kw">_</span>)| a)
+		.enumerate ()
+		.next ()
+}
+
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>tests {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>is_valid () {
+		<span class="macro">assert! </span>(! logic::is_valid (<span class="string">&quot;hijklmmn&quot;</span>.chars ()));
+		<span class="macro">assert! </span>(! logic::is_valid (<span class="string">&quot;abbceffg&quot;</span>.chars ()));
+		<span class="macro">assert! </span>(! logic::is_valid (<span class="string">&quot;abbcegjk&quot;</span>.chars ()));
+	}
+
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>next_password () {
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;abcdffaa&quot;</span>, logic::next_password (<span class="string">&quot;abcdefgh&quot;</span>));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;ghjaabcc&quot;</span>, logic::next_password (<span class="string">&quot;ghhzzzzz&quot;</span>));
+	}
+
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

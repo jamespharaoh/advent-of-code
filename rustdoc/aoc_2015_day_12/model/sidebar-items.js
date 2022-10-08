@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Json",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["Json",""]],"type":[["Val",""]]};

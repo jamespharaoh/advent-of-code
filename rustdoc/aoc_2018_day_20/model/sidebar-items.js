@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Room",""],["RouteDir",""],["RouteRegexItem",""]],"struct":[["RouteRegex",""],["RouteRegexString",""]],"type":[["Coord",""],["Dir",""],["Grid",""],["Pos",""]]};

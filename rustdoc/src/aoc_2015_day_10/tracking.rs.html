@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/src/tracking.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tracking.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/tracking.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tracking.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -149,158 +149,156 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
-<span id="152">152</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+</pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>, <span class="ident">clap::Parser</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Args</span> {
+<span class="attribute">#[ derive (Debug, clap::Parser) ]
+</span><span class="kw">pub struct </span>Args {
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">required</span> <span class="op">=</span> <span class="bool-val">true</span>) ]</span>
-	<span class="ident">state</span>: <span class="ident">String</span>,
+	<span class="attribute">#[ clap (required = <span class="bool-val">true</span>) ]
+	</span>state: String,
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;1000&quot;</span>) ]</span>
-	<span class="ident">loops</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;1000&quot;</span>) ]
+	</span>loops: u16,
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;65536&quot;</span>) ]</span>
-	<span class="ident">max_length</span>: <span class="ident">usize</span>,
+	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;65536&quot;</span>) ]
+	</span>max_length: usize,
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;10&quot;</span>) ]</span>
-	<span class="ident">min_points</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;10&quot;</span>) ]
+	</span>min_points: u16,
 
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">Args</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">states</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-	<span class="ident">states</span>.<span class="ident">push</span> (<span class="ident">State::parse</span> (<span class="op">&amp;</span> <span class="ident">args</span>.<span class="ident">state</span>) <span class="question-mark">?</span>);
-	<span class="kw">for</span> <span class="ident">cur_gen</span> <span class="kw">in</span> <span class="number">0_u16</span> .. {
-		<span class="kw">if</span> <span class="ident">cur_gen</span> <span class="op">==</span> <span class="ident">args</span>.<span class="ident">loops</span> { <span class="kw">break</span> }
-		<span class="kw">let</span> <span class="ident">cur_state</span> <span class="op">=</span> <span class="ident">states</span>.<span class="ident">last</span> ().<span class="ident">unwrap</span> ();
-		<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">items_iter</span> <span class="op">=</span> <span class="ident">cur_state</span>.<span class="ident">items</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">enumerate</span> ().<span class="ident">multipeek</span> ();
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> <span class="prelude-val">None</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">item_idx</span> <span class="op">=</span> <span class="number">0</span>;
-			<span class="ident">iter::from_fn</span> (<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-				<span class="ident">items_iter</span>.<span class="ident">reset_peek</span> ();
-				<span class="kw">let</span> <span class="ident">item_0</span> <span class="op">=</span> <span class="ident">items_iter</span>.<span class="ident">peek</span> ().<span class="ident">copied</span> ();
-				<span class="kw">let</span> <span class="ident">item_1</span> <span class="op">=</span> <span class="ident">items_iter</span>.<span class="ident">peek</span> ().<span class="ident">copied</span> ();
-				<span class="comment">// deterine num to output</span>
-				<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">buffer</span>, <span class="ident">item_0</span>) {
-					(<span class="prelude-val">Some</span> (<span class="ident">buf</span>), <span class="kw">_</span>) =&gt; <span class="ident">buf</span>,
-					(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span> ((<span class="kw">_</span>, <span class="ident">Item</span> { <span class="ident">run</span>, .. }))) =&gt; <span class="ident">run</span>,
-					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+<span class="attribute">#[ allow (clippy::needless_pass_by_value) ]
+#[ allow (clippy::print_stdout) ]
+</span><span class="kw">pub fn </span>run (args: Args) -&gt; GenResult &lt;()&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>states = Vec::new ();
+	states.push (State::parse (&amp; args.state) <span class="question-mark">?</span>);
+	<span class="kw">for </span>cur_gen <span class="kw">in </span><span class="number">0_u16 </span>.. {
+		<span class="kw">if </span>cur_gen == args.loops { <span class="kw">break </span>}
+		<span class="kw">let </span>cur_state = states.last ().unwrap ();
+		<span class="kw">let </span>next_state = {
+			<span class="kw">let </span><span class="kw-2">mut </span>items_iter = cur_state.items.iter ().copied ().enumerate ().multipeek ();
+			<span class="kw">let </span><span class="kw-2">mut </span>buffer = <span class="prelude-val">None</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>item_idx = <span class="number">0</span>;
+			iter::from_fn (<span class="kw">move </span>|| {
+				items_iter.reset_peek ();
+				<span class="kw">let </span>item_0 = items_iter.peek ().copied ();
+				<span class="kw">let </span>item_1 = items_iter.peek ().copied ();
+				<span class="comment">// deterine num to output
+				</span><span class="kw">let </span>num = <span class="kw">match </span>(buffer, item_0) {
+					(<span class="prelude-val">Some </span>(buf), <span class="kw">_</span>) =&gt; buf,
+					(<span class="prelude-val">None</span>, <span class="prelude-val">Some </span>((<span class="kw">_</span>, Item { run, .. }))) =&gt; run,
+					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
 				};
-				<span class="comment">// measure size of run</span>
-				<span class="kw">let</span> (<span class="ident">next_0</span>, <span class="ident">next_1</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">item_0</span> {
-					<span class="prelude-val">Some</span> ((<span class="kw">_</span>, <span class="ident">Item</span> { <span class="ident">run</span>, <span class="ident">num</span>, .. })) =&gt; (<span class="prelude-val">Some</span> (<span class="ident">run</span>), <span class="prelude-val">Some</span> (<span class="ident">num</span>)),
-					<span class="prelude-val">None</span> =&gt; (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+				<span class="comment">// measure size of run
+				</span><span class="kw">let </span>(next_0, next_1) = <span class="kw">match </span>item_0 {
+					<span class="prelude-val">Some </span>((<span class="kw">_</span>, Item { run, num, .. })) =&gt; (<span class="prelude-val">Some </span>(run), <span class="prelude-val">Some </span>(num)),
+					<span class="prelude-val">None </span>=&gt; (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
 				};
-				<span class="kw">let</span> (<span class="ident">next_2</span>, <span class="ident">next_3</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">item_1</span> {
-					<span class="prelude-val">Some</span> ((<span class="kw">_</span>, <span class="ident">Item</span> { <span class="ident">run</span>, <span class="ident">num</span>, .. })) =&gt; (<span class="prelude-val">Some</span> (<span class="ident">run</span>), <span class="prelude-val">Some</span> (<span class="ident">num</span>)),
-					<span class="prelude-val">None</span> =&gt; (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
+				<span class="kw">let </span>(next_2, next_3) = <span class="kw">match </span>item_1 {
+					<span class="prelude-val">Some </span>((<span class="kw">_</span>, Item { run, num, .. })) =&gt; (<span class="prelude-val">Some </span>(run), <span class="prelude-val">Some </span>(num)),
+					<span class="prelude-val">None </span>=&gt; (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>),
 				};
-				<span class="kw">let</span> <span class="ident">buffer_run</span> <span class="op">=</span> <span class="ident">buffer</span>.<span class="ident">iter</span> ().<span class="ident">count</span> ();
-				<span class="kw">let</span> <span class="ident">next_run</span> <span class="op">=</span>
-					[<span class="ident">next_0</span>, <span class="ident">next_1</span>, <span class="ident">next_2</span>, <span class="ident">next_3</span>].<span class="ident">into_iter</span> ()
-						.<span class="ident">take_while</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">next</span><span class="op">|</span> <span class="ident">next</span> <span class="op">==</span> <span class="prelude-val">Some</span> (<span class="ident">num</span>))
-						.<span class="ident">count</span> ();
-				<span class="kw">let</span> <span class="ident">run</span>: <span class="ident">u8</span> <span class="op">=</span> (<span class="ident">buffer_run</span> <span class="op">+</span> <span class="ident">next_run</span>).<span class="ident">try_into</span> ().<span class="ident">unwrap</span> ();
-				<span class="comment">//println! (&quot;buf={:?} next=[{:?} {:?} {:?} {:?}] num={} run={}+{}={}&quot;, buffer, next_0, next_1, next_2, next_3, num, buffer_run, next_run, run);</span>
-				<span class="comment">// work out gen and index</span>
-				<span class="kw">let</span> (<span class="ident">gen</span>, <span class="ident">idx</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">buffer</span>.<span class="ident">is_some</span> () {
-					(<span class="ident">cur_gen</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">item_idx</span>)
-				} <span class="kw">else</span> {
-					<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">item_0</span>) <span class="op">=</span> <span class="ident">item_0</span>.<span class="ident">unwrap</span> ();
-					(<span class="ident">item_0</span>.<span class="ident">gen</span>, <span class="ident">item_0</span>.<span class="ident">idx</span>)
+				<span class="kw">let </span>buffer_run = buffer.iter ().count ();
+				<span class="kw">let </span>next_run =
+					[next_0, next_1, next_2, next_3].into_iter ()
+						.take_while (|&amp; next| next == <span class="prelude-val">Some </span>(num))
+						.count ();
+				<span class="kw">let </span>run: u8 = (buffer_run + next_run).try_into ().unwrap ();
+				<span class="comment">//println! (&quot;buf={:?} next=[{:?} {:?} {:?} {:?}] num={} run={}+{}={}&quot;, buffer, next_0, next_1, next_2, next_3, num, buffer_run, next_run, run);
+				// work out gen and index
+				</span><span class="kw">let </span>(gen, idx) = <span class="kw">if </span>buffer.is_some () {
+					(cur_gen + <span class="number">1</span>, item_idx)
+				} <span class="kw">else </span>{
+					<span class="kw">let </span>(<span class="kw">_</span>, item_0) = item_0.unwrap ();
+					(item_0.gen, item_0.idx)
 				};
-				<span class="comment">// update state</span>
-				<span class="kw">let</span> (<span class="ident">iter_adv</span>, <span class="ident">buffer_new</span>) <span class="op">=</span> <span class="kw">match</span> <span class="ident">next_run</span> {
-					<span class="number">0</span> =&gt; (<span class="number">0_i32</span>, <span class="prelude-val">None</span>),
-					<span class="number">1</span> =&gt; (<span class="number">1_i32</span>, <span class="prelude-val">Some</span> (<span class="ident">next_1</span>.<span class="ident">unwrap</span> ())),
-					<span class="number">2</span> =&gt; (<span class="number">1_i32</span>, <span class="prelude-val">None</span>),
-					<span class="number">3</span> =&gt; (<span class="number">2_i32</span>, <span class="prelude-val">Some</span> (<span class="ident">next_3</span>.<span class="ident">unwrap</span> ())),
-					<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (<span class="string">&quot;Found run of {} + {} = {}&quot;</span>, <span class="ident">buffer_run</span>, <span class="ident">next_run</span>, <span class="ident">run</span>),
+				<span class="comment">// update state
+				</span><span class="kw">let </span>(iter_adv, buffer_new) = <span class="kw">match </span>next_run {
+					<span class="number">0 </span>=&gt; (<span class="number">0_i32</span>, <span class="prelude-val">None</span>),
+					<span class="number">1 </span>=&gt; (<span class="number">1_i32</span>, <span class="prelude-val">Some </span>(next_1.unwrap ())),
+					<span class="number">2 </span>=&gt; (<span class="number">1_i32</span>, <span class="prelude-val">None</span>),
+					<span class="number">3 </span>=&gt; (<span class="number">2_i32</span>, <span class="prelude-val">Some </span>(next_3.unwrap ())),
+					<span class="kw">_ </span>=&gt; <span class="macro">panic! </span>(<span class="string">&quot;Found run of {} + {} = {}&quot;</span>, buffer_run, next_run, run),
 				};
-				<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0_i32</span> .. <span class="ident">iter_adv</span> { <span class="ident">items_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> (); }
-				<span class="ident">buffer</span> <span class="op">=</span> <span class="ident">buffer_new</span>;
-				<span class="ident">item_idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-				<span class="comment">// produce value</span>
-				<span class="prelude-val">Some</span> (<span class="ident">Item</span> { <span class="ident">run</span>, <span class="ident">num</span>, <span class="ident">gen</span>, <span class="ident">idx</span> })
+				<span class="kw">for _ in </span><span class="number">0_i32 </span>.. iter_adv { items_iter.next ().unwrap (); }
+				buffer = buffer_new;
+				item_idx += <span class="number">1</span>;
+				<span class="comment">// produce value
+				</span><span class="prelude-val">Some </span>(Item { run, num, gen, idx })
 			})
-		}.<span class="ident">take</span> (<span class="ident">args</span>.<span class="ident">max_length</span> <span class="op">*</span> <span class="number">2</span> <span class="op">/</span> <span class="number">3</span>).<span class="ident">collect</span> ();
-		<span class="ident">states</span>.<span class="ident">push</span> (<span class="ident">next_state</span>);
+		}.take (args.max_length * <span class="number">2 </span>/ <span class="number">3</span>).collect ();
+		states.push (next_state);
 	}
-	<span class="comment">// print states</span>
-	<span class="kw">for</span> (<span class="ident">state_gen</span>, <span class="ident">state</span>) <span class="kw">in</span> <span class="ident">states</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
-		<span class="kw">let</span> <span class="ident">state_gen</span> <span class="op">=</span> <span class="ident">state_gen</span>.<span class="ident">as_u16</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">align_iter</span> <span class="op">=</span>
-			<span class="ident">states</span>.<span class="ident">last</span> ().<span class="ident">unwrap</span> ().<span class="ident">items</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">Item</span> { <span class="ident">gen</span>, <span class="ident">idx</span>, .. }<span class="op">|</span> (<span class="ident">gen</span>, <span class="ident">idx</span>))
-				.<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">col</span>, (<span class="ident">gen</span>, <span class="ident">idx</span>))<span class="op">|</span> ((<span class="ident">gen</span>, <span class="ident">idx</span>), <span class="ident">col</span> <span class="op">*</span> <span class="number">3</span>))
-				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> ((<span class="ident">gen</span>, <span class="kw">_</span>), <span class="kw">_</span>)<span class="op">|</span> <span class="ident">gen</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">state_gen</span>);
-		<span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">align_key</span>, <span class="kw-2">mut</span> <span class="ident">align_col</span>) <span class="op">=</span> <span class="ident">align_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">col</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">for</span> <span class="op">&amp;</span> <span class="ident">Item</span> { <span class="ident">gen</span>, <span class="ident">idx</span>, <span class="ident">run</span>, <span class="ident">num</span> } <span class="kw">in</span> <span class="ident">state</span>.<span class="ident">items</span>.<span class="ident">iter</span> () {
-			<span class="kw">let</span> <span class="ident">item_key</span> <span class="op">=</span> (<span class="ident">gen</span>, <span class="ident">idx</span>);
-			<span class="kw">if</span> <span class="ident">item_key</span> <span class="op">==</span> <span class="ident">align_key</span> {
-				<span class="kw">while</span> <span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">align_col</span> { <span class="macro">print!</span> (<span class="string">&quot; &quot;</span>); <span class="ident">col</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>; }
-				<span class="macro">print!</span> (<span class="string">&quot;|&quot;</span>); <span class="ident">col</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-				(<span class="ident">align_key</span>, <span class="ident">align_col</span>) <span class="op">=</span> <span class="ident">align_iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap_or</span> (((<span class="number">0</span>, <span class="number">0</span>), <span class="number">0</span>));
+	<span class="comment">// print states
+	</span><span class="kw">for </span>(state_gen, state) <span class="kw">in </span>states.iter ().enumerate () {
+		<span class="kw">let </span>state_gen = state_gen.pan_u16 ();
+		<span class="kw">let </span><span class="kw-2">mut </span>align_iter =
+			states.last ().unwrap ().items.iter ().copied ()
+				.map (|Item { gen, idx, .. }| (gen, idx))
+				.enumerate ()
+				.map (|(col, (gen, idx))| ((gen, idx), col * <span class="number">3</span>))
+				.filter (|&amp; ((gen, <span class="kw">_</span>), <span class="kw">_</span>)| gen &lt;= state_gen);
+		<span class="kw">let </span>(<span class="kw-2">mut </span>align_key, <span class="kw-2">mut </span>align_col) = align_iter.next ().unwrap ();
+		<span class="kw">let </span><span class="kw-2">mut </span>col = <span class="number">0</span>;
+		<span class="kw">for </span>&amp; Item { gen, idx, run, num } <span class="kw">in </span>state.items.iter () {
+			<span class="kw">let </span>item_key = (gen, idx);
+			<span class="kw">if </span>item_key == align_key {
+				<span class="kw">while </span>col &lt; align_col { <span class="macro">print! </span>(<span class="string">&quot; &quot;</span>); col += <span class="number">1</span>; }
+				<span class="macro">print! </span>(<span class="string">&quot;|&quot;</span>); col += <span class="number">1</span>;
+				(align_key, align_col) = align_iter.next ().unwrap_or (((<span class="number">0</span>, <span class="number">0</span>), <span class="number">0</span>));
 			}
-			<span class="comment">//print! (&quot;[{}:{}]&quot;, gen, idx);</span>
-			<span class="macro">print!</span> (<span class="string">&quot;{}{}&quot;</span>, <span class="ident">run</span>, <span class="ident">num</span>); <span class="ident">col</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
+			<span class="comment">//print! (&quot;[{}:{}]&quot;, gen, idx);
+			</span><span class="macro">print! </span>(<span class="string">&quot;{}{}&quot;</span>, run, num); col += <span class="number">2</span>;
 		}
-		<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
+		<span class="macro">print! </span>(<span class="string">&quot;\n&quot;</span>);
 	}
-	<span class="prelude-val">Ok</span> (())
+	<span class="prelude-val">Ok </span>(())
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">State</span> {
-	<span class="ident">items</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
+<span class="kw">pub struct </span>State {
+	items: Vec &lt;Item&gt;,
 }
 
-<span class="kw">impl</span> <span class="ident">State</span> {
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">model::State::parse</span> (<span class="ident">input</span>) <span class="question-mark">?</span>.<span class="ident">try_into</span> () <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">state</span>)
-	}
-}
-
-<span class="kw">impl</span> <span class="ident">FromIterator</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">State</span> {
-	<span class="kw">fn</span> <span class="ident">from_iter</span> <span class="op">&lt;</span><span class="ident">IntoIter</span><span class="op">&gt;</span> (<span class="ident">iter</span>: <span class="ident">IntoIter</span>) -&gt; <span class="self">Self</span>
-			<span class="kw">where</span> <span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Item</span><span class="op">&gt;</span> {
-		<span class="self">Self</span> {
-			<span class="ident">items</span>: <span class="ident">iter</span>.<span class="ident">into_iter</span> ().<span class="ident">collect</span> (),
-		}
+<span class="kw">impl </span>State {
+	<span class="kw">pub fn </span>parse (input: &amp; str) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+		<span class="kw">let </span>state = model::State::parse (input) <span class="question-mark">?</span>.try_into () <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(state)
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span> <span class="op">&lt;</span><span class="ident">model::State</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">State</span> {
-	<span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">GenError</span>;
-	<span class="kw">fn</span> <span class="ident">try_from</span> (<span class="ident">state</span>: <span class="ident">model::State</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-		<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">len</span> () <span class="op">%</span> <span class="number">2</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-			<span class="prelude-val">Err</span> (<span class="string">&quot;TrackingState requires an even numbers of items&quot;</span>) <span class="question-mark">?</span>;
+<span class="kw">impl </span>FromIterator &lt;Item&gt; <span class="kw">for </span>State {
+	<span class="kw">fn </span>from_iter &lt;IntoIter&gt; (iter: IntoIter) -&gt; <span class="self">Self
+			</span><span class="kw">where </span>IntoIter: IntoIterator &lt;Item = Item&gt; {
+		<span class="self">Self </span>{
+			items: iter.into_iter ().collect (),
 		}
-		<span class="prelude-val">Ok</span> (<span class="self">Self</span> {
-			<span class="ident">items</span>: <span class="ident">state</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-				.<span class="ident">tuples</span>::<span class="op">&lt;</span>(<span class="kw">_</span>, <span class="kw">_</span>)<span class="op">&gt;</span> ()
-				.<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">idx</span>, (<span class="ident">run</span>, <span class="ident">num</span>))<span class="op">|</span>
-					<span class="prelude-val">Ok</span> (<span class="ident">Item</span> {
-						<span class="ident">gen</span>: <span class="number">0</span>,
-						<span class="ident">idx</span>: <span class="ident">idx</span>.<span class="ident">try_into</span> () <span class="question-mark">?</span>,
-						<span class="ident">run</span>,
-						<span class="ident">num</span>,
+	}
+}
+
+<span class="kw">impl </span>TryFrom &lt;model::State&gt; <span class="kw">for </span>State {
+	<span class="kw">type </span>Error = GenError;
+	<span class="kw">fn </span>try_from (state: model::State) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+		<span class="kw">if </span>state.len () % <span class="number">2 </span>!= <span class="number">0 </span>{
+			<span class="prelude-val">Err </span>(<span class="string">&quot;TrackingState requires an even numbers of items&quot;</span>) <span class="question-mark">?</span>;
+		}
+		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
+			items: state.iter ().copied ()
+				.tuples::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+				.enumerate ()
+				.map (|(idx, (run, num))|
+					<span class="prelude-val">Ok </span>(Item {
+						gen: <span class="number">0</span>,
+						idx: idx.try_into () <span class="question-mark">?</span>,
+						run,
+						num,
 					}))
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>,
+				.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>,
 		})
 	}
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Item</span> { <span class="ident">run</span>: <span class="ident">u8</span>, <span class="ident">num</span>: <span class="ident">u8</span>, <span class="ident">gen</span>: <span class="ident">u16</span>, <span class="ident">idx</span>: <span class="ident">u32</span> }
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+</span><span class="kw">pub struct </span>Item { run: u8, num: u8, gen: u16, idx: u32 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

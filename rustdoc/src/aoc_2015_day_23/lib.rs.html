@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-23/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-23/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -348,332 +348,330 @@
 <span id="348">348</span>
 <span id="349">349</span>
 <span id="350">350</span>
-<span id="351">351</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 23: Opening the Turing Lock
+//!
+//! [https://adventofcode.com/2015/day/23](https://adventofcode.com/2015/day/23)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Opening the Turing Lock&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">23</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Opening the Turing Lock&quot;</span>;
+	year = <span class="number">2015</span>;
+	day = <span class="number">23</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="doccomment">/// Logic for solving the puzzles.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="doccomment">/// Logic for solving the puzzles.
+///
+</span><span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Instr</span>;
-	<span class="kw">use</span> <span class="ident">model::Reg</span>;
-	<span class="kw">use</span> <span class="ident">model::Val</span>;
-	<span class="kw">use</span> <span class="ident">nums::Int</span>;
-	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::Instr;
+	<span class="kw">use </span>model::Reg;
+	<span class="kw">use </span>model::Val;
+	<span class="kw">use </span>nums::Int;
+	<span class="kw">use </span>nums::IntConv;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">reg_b</span>) <span class="op">=</span> <span class="ident">emulate</span> (<span class="ident">input</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">reg_b</span>)
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;Val&gt; {
+		<span class="kw">let </span>(<span class="kw">_</span>, reg_b) = emulate (input, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(reg_b)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> (<span class="kw">_</span>, <span class="ident">reg_b</span>) <span class="op">=</span> <span class="ident">emulate</span> (<span class="ident">input</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">reg_b</span>)
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;Val&gt; {
+		<span class="kw">let </span>(<span class="kw">_</span>, reg_b) = emulate (input, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x10000</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(reg_b)
 	}
 
-	<span class="kw">fn</span> <span class="ident">emulate</span> (
-		<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>,
-		<span class="kw-2">mut</span> <span class="ident">reg_a</span>: <span class="ident">Val</span>,
-		<span class="kw-2">mut</span> <span class="ident">reg_b</span>: <span class="ident">Val</span>,
-		<span class="kw-2">mut</span> <span class="ident">next</span>: <span class="ident">Val</span>,
-		<span class="kw-2">mut</span> <span class="ident">max_loops</span>: <span class="ident">usize</span>,
-	) -&gt; <span class="prelude-ty">Result</span> <span class="op">&lt;</span>(<span class="ident">Val</span>, <span class="ident">Val</span>), <span class="ident">EmulateError</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>emulate (
+		input: &amp; Input,
+		<span class="kw-2">mut </span>reg_a: Val,
+		<span class="kw-2">mut </span>reg_b: Val,
+		<span class="kw-2">mut </span>next: Val,
+		<span class="kw-2">mut </span>max_loops: usize,
+	) -&gt; <span class="prelude-ty">Result </span>&lt;(Val, Val), EmulateError&gt; {
 
-		<span class="comment">// main loop</span>
+		<span class="comment">// main loop
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">while</span> <span class="ident">next</span> <span class="op">&lt;</span> <span class="ident">Val::from_usize</span> (<span class="ident">input</span>.<span class="ident">instrs</span>.<span class="ident">len</span> ())
-			.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span> {
+		</span><span class="kw">let </span><span class="kw-2">mut </span>seen = HashSet::new ();
+		<span class="kw">while </span>next &lt; Val::from_usize (input.instrs.len ())
+			.map_err (|_err| EmulateError::Overflow) <span class="question-mark">? </span>{
 
-			<span class="comment">// abort when we reach max_loops</span>
+			<span class="comment">// abort when we reach max_loops
 
-			<span class="kw">if</span> <span class="ident">max_loops</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">EmulateError::MaxLoops</span>) }
-			<span class="ident">max_loops</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+			</span><span class="kw">if </span>max_loops == <span class="number">0 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(EmulateError::MaxLoops) }
+			max_loops -= <span class="number">1</span>;
 
-			<span class="comment">// detect infinite loops and abort</span>
+			<span class="comment">// detect infinite loops and abort
 
-			<span class="kw">if</span> <span class="op">!</span> <span class="ident">seen</span>.<span class="ident">insert</span> ((<span class="ident">reg_a</span>, <span class="ident">reg_b</span>, <span class="ident">next</span>)) { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">EmulateError::InfiniteLoop</span>) }
+			</span><span class="kw">if </span>! seen.insert ((reg_a, reg_b, next)) { <span class="kw">return </span><span class="prelude-val">Err </span>(EmulateError::InfiniteLoop) }
 
-			<span class="comment">// execute next instruction</span>
+			<span class="comment">// execute next instruction
 
-			<span class="kw">let</span> <span class="ident">instr</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">instrs</span> [<span class="ident">next</span>.<span class="ident">as_usize</span> ()];
-			<span class="kw">match</span> <span class="ident">instr</span> {
-				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::A</span>) =&gt; <span class="ident">reg_a</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,
-				<span class="ident">Instr::Hlf</span> (<span class="ident">Reg::B</span>) =&gt; <span class="ident">reg_b</span> <span class="op">/</span><span class="op">=</span> <span class="number">2</span>,
-				<span class="ident">Instr::Tpl</span> (<span class="ident">Reg::A</span>) =&gt;
-					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_a</span>, <span class="number">3</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
-				<span class="ident">Instr::Tpl</span> (<span class="ident">Reg::B</span>) =&gt;
-					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::mul_2</span> (<span class="ident">reg_b</span>, <span class="number">3</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
-				<span class="ident">Instr::Inc</span> (<span class="ident">Reg::A</span>) =&gt;
-					<span class="ident">reg_a</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_a</span>, <span class="number">1</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
-				<span class="ident">Instr::Inc</span> (<span class="ident">Reg::B</span>) =&gt;
-					<span class="ident">reg_b</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">reg_b</span>, <span class="number">1</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>,
-				<span class="ident">Instr::Jmp</span> (<span class="ident">offset</span>) =&gt; {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+			</span><span class="kw">let </span>instr = input.instrs [next.pan_usize ()];
+			<span class="kw">match </span>instr {
+				Instr::Hlf (Reg::A) =&gt; reg_a /= <span class="number">2</span>,
+				Instr::Hlf (Reg::B) =&gt; reg_b /= <span class="number">2</span>,
+				Instr::Tpl (Reg::A) =&gt;
+					reg_a = Val::mul_2 (reg_a, <span class="number">3</span>)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>,
+				Instr::Tpl (Reg::B) =&gt;
+					reg_b = Val::mul_2 (reg_b, <span class="number">3</span>)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>,
+				Instr::Inc (Reg::A) =&gt;
+					reg_a = Val::add_2 (reg_a, <span class="number">1</span>)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>,
+				Instr::Inc (Reg::B) =&gt;
+					reg_b = Val::add_2 (reg_b, <span class="number">1</span>)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>,
+				Instr::Jmp (offset) =&gt; {
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
-				<span class="ident">Instr::Jie</span> (<span class="ident">Reg::A</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_a</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+				Instr::Jie (Reg::A, offset) =&gt; <span class="kw">if </span>reg_a &amp; <span class="number">1 </span>== <span class="number">0 </span>{
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
-				<span class="ident">Instr::Jie</span> (<span class="ident">Reg::B</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_b</span> <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+				Instr::Jie (Reg::B, offset) =&gt; <span class="kw">if </span>reg_b &amp; <span class="number">1 </span>== <span class="number">0 </span>{
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
-				<span class="ident">Instr::Jio</span> (<span class="ident">Reg::A</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_a</span> <span class="op">==</span> <span class="number">1</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+				Instr::Jio (Reg::A, offset) =&gt; <span class="kw">if </span>reg_a == <span class="number">1 </span>{
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
-				<span class="ident">Instr::Jio</span> (<span class="ident">Reg::B</span>, <span class="ident">offset</span>) =&gt; <span class="kw">if</span> <span class="ident">reg_b</span> <span class="op">==</span> <span class="number">1</span> {
-					<span class="ident">next</span> <span class="op">=</span> <span class="ident">Val::add_signed</span> (<span class="ident">next</span>, <span class="ident">offset</span>)
-						.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">EmulateError::Overflow</span>) <span class="question-mark">?</span>;
+				Instr::Jio (Reg::B, offset) =&gt; <span class="kw">if </span>reg_b == <span class="number">1 </span>{
+					next = Val::add_signed (next, offset)
+						.map_err (|_err| EmulateError::Overflow) <span class="question-mark">?</span>;
 					<span class="kw">continue</span>;
 				},
 			}
 
-			<span class="comment">// move to next instruction, jump instructions skip this bit</span>
+			<span class="comment">// move to next instruction, jump instructions skip this bit
 
-			<span class="ident">next</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+			</span>next += <span class="number">1</span>;
 
 		}
 
-		<span class="comment">// return the two registers</span>
+		<span class="comment">// return the two registers
 
-		<span class="prelude-val">Ok</span> ((<span class="ident">reg_a</span>, <span class="ident">reg_b</span>))
+		</span><span class="prelude-val">Ok </span>((reg_a, reg_b))
 
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">enum</span> <span class="ident">EmulateError</span> {
-		<span class="ident">InfiniteLoop</span>,
-		<span class="ident">Overflow</span>,
-		<span class="ident">MaxLoops</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">enum </span>EmulateError {
+		InfiniteLoop,
+		Overflow,
+		MaxLoops,
 	}
 
-	<span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">EmulateError</span> {
+	<span class="kw">impl </span>Error <span class="kw">for </span>EmulateError {
 	}
 
-	<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">EmulateError</span> {
-		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-				<span class="ident"><span class="self">Self</span>::InfiniteLoop</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Infinite loop&quot;</span>) <span class="question-mark">?</span>,
-				<span class="ident"><span class="self">Self</span>::Overflow</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Arithmetic overflow&quot;</span>) <span class="question-mark">?</span>,
-				<span class="ident"><span class="self">Self</span>::MaxLoops</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Max loops reached&quot;</span>) <span class="question-mark">?</span>,
+	<span class="kw">impl </span>Display <span class="kw">for </span>EmulateError {
+		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+			<span class="kw">match </span>* <span class="self">self </span>{
+				<span class="self">Self</span>::InfiniteLoop =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;Infinite loop&quot;</span>) <span class="question-mark">?</span>,
+				<span class="self">Self</span>::Overflow =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;Arithmetic overflow&quot;</span>) <span class="question-mark">?</span>,
+				<span class="self">Self</span>::MaxLoops =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;Max loops reached&quot;</span>) <span class="question-mark">?</span>,
 			}
-			<span class="prelude-val">Ok</span> (())
+			<span class="prelude-val">Ok </span>(())
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-	<span class="kw">mod</span> <span class="ident">tests</span> {
+	<span class="attribute">#[ cfg (test) ]
+	</span><span class="kw">mod </span>tests {
 
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">emulate</span> () {
-			<span class="kw">use</span> <span class="ident">Instr</span>::<span class="kw-2">*</span>;
-			<span class="kw">use</span> <span class="ident">Reg</span>::<span class="kw-2">*</span>;
-			<span class="comment">// inc, hlf, tpl</span>
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Hlf</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Hlf</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="comment">// jmp</span>
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="number">2</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="comment">// jio</span>
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="comment">// jie</span>
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">2</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">0</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Inc</span> (<span class="ident">B</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">2</span>, <span class="number">1</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">B</span>), <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_eq_ok!</span> ((<span class="number">1</span>, <span class="number">0</span>), <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jie</span> (<span class="ident">B</span>, <span class="number">2</span>), <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Inc</span> (<span class="ident">A</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="comment">// errors</span>
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Infinite loop&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Jmp</span> (<span class="number">0</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Max loops reached&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Arithmetic overflow&quot;</span>, <span class="ident">logic::emulate</span> (
-				<span class="op">&amp;</span> <span class="ident">Input</span> { <span class="ident">instrs</span>: <span class="macro">vec!</span> [ <span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Tpl</span> (<span class="ident">A</span>), <span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));
-		}
-
-	}
-
-}
-
-<span class="doccomment">/// Representation of the puzzle input, etc.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">u32</span>;
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Offset</span> <span class="op">=</span> <span class="ident">i32</span>;
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">instrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span>,
-	}
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Instr</span> {
-		<span class="ident">Hlf</span> (<span class="ident">Reg</span>),
-		<span class="ident">Tpl</span> (<span class="ident">Reg</span>),
-		<span class="ident">Inc</span> (<span class="ident">Reg</span>),
-		<span class="ident">Jmp</span> (<span class="ident">Offset</span>),
-		<span class="ident">Jie</span> (<span class="ident">Reg</span>, <span class="ident">Offset</span>),
-		<span class="ident">Jio</span> (<span class="ident">Reg</span>, <span class="ident">Offset</span>),
-	}
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Reg</span> { <span class="ident">A</span>, <span class="ident">B</span> }
-
-	<span class="kw">impl</span> <span class="ident">Instr</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="ident">Parser::wrap</span> (<span class="ident">input</span>, <span class="ident"><span class="self">Self</span>::parse_real</span>)
-				.<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
-					<span class="macro">format!</span> (<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">input</span>))
-		}
-		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="ident">parser</span>
-				.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>)
-				.<span class="ident">set_word_pred</span> (<span class="op">|</span><span class="ident">ch</span><span class="op">|</span> <span class="ident">ch</span>.<span class="ident">is_ascii_alphanumeric</span> ());
-			<span class="ident">parser</span>.<span class="ident">any</span> ()
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;hlf&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Hlf</span> (<span class="ident">reg</span>))
-				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;tpl&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Tpl</span> (<span class="ident">reg</span>))
-				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;inc&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Inc</span> (<span class="ident">reg</span>))
-				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jmp&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jmp</span> (<span class="ident">offset</span>))
-				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jio&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jio</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
-				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;jie&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ();
-					<span class="kw">let</span> <span class="ident">reg</span> <span class="op">=</span> <span class="ident">Reg::parse_real</span> (<span class="ident">parser</span>) <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Jie</span> (<span class="ident">reg</span>, <span class="ident">offset</span>))
-				})
-				.<span class="ident">done</span> ()
-		}
-	}
-
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">instrs</span> <span class="op">=</span>
-				<span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ()
-					.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
-						<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="ident">Instr::parse_real</span>)
-							.<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
-								<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
-									<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
-					.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">instrs</span> })
-		}
-	}
-
-	<span class="kw">impl</span> <span class="ident">Reg</span> {
-		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="ident">parser</span>.<span class="ident">any</span> ()
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;a&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::A</span>) })
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> { <span class="ident">parser</span>.<span class="ident">expect_word</span> (<span class="string">&quot;b&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::B</span>) })
-				.<span class="ident">done</span> ()
-		}
-	}
-
-	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-	<span class="kw">mod</span> <span class="ident">tests</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 2: col 8: jio a, +-5&quot;</span>,
-				<span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;inc a&quot;</span>, <span class="string">&quot;jio a, +-5&quot;</span> ]));
-		}
-
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">instr_parse</span> () {
-			<span class="kw">use</span> { <span class="ident">Instr</span>::<span class="kw-2">*</span>, <span class="ident">Reg</span>::<span class="op">*</span> };
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Hlf</span> (<span class="ident">A</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;hlf a&quot;</span>));
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Tpl</span> (<span class="ident">B</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;tpl b&quot;</span>));
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Inc</span> (<span class="ident">A</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;inc a&quot;</span>));
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jmp</span> (<span class="op">-</span><span class="number">1</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jmp -1&quot;</span>));
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jio</span> (<span class="ident">B</span>, <span class="number">0</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jio b, 0&quot;</span>));
-			<span class="macro">assert_eq_ok!</span> (<span class="ident">Jie</span> (<span class="ident">A</span>, <span class="number">1</span>), <span class="ident">Instr::parse</span> (<span class="string">&quot;jie a, +1&quot;</span>));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: col 5: inc abc&quot;</span>, <span class="ident">Instr::parse</span> (<span class="string">&quot;inc abc&quot;</span>));
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>emulate () {
+			<span class="kw">use </span>Instr::<span class="kw-2">*</span>;
+			<span class="kw">use </span>Reg::<span class="kw-2">*</span>;
+			<span class="comment">// inc, hlf, tpl
+			</span><span class="macro">assert_eq_ok! </span>((<span class="number">2</span>, <span class="number">0</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Tpl (A), Inc (A), Hlf (A) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">0</span>, <span class="number">2</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (B), Tpl (B), Inc (B), Hlf (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jmp
+			</span><span class="macro">assert_eq_ok! </span>((<span class="number">1</span>, <span class="number">1</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Jmp (<span class="number">2</span>), Tpl (A), Inc (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jio
+			</span><span class="macro">assert_eq_ok! </span>((<span class="number">1</span>, <span class="number">1</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Jio (A, <span class="number">2</span>), Inc (B), Inc (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">0</span>, <span class="number">2</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Jio (A, <span class="number">2</span>), Inc (B), Inc (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">1</span>, <span class="number">1</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (B), Jio (B, <span class="number">2</span>), Inc (A), Inc (A) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">2</span>, <span class="number">0</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Jio (B, <span class="number">2</span>), Inc (A), Inc (A) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// jie
+			</span><span class="macro">assert_eq_ok! </span>((<span class="number">1</span>, <span class="number">2</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Jie (A, <span class="number">2</span>), Inc (B), Inc (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">0</span>, <span class="number">1</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Jie (A, <span class="number">2</span>), Inc (B), Inc (B) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">2</span>, <span class="number">1</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (B), Jie (B, <span class="number">2</span>), Inc (A), Inc (A) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_eq_ok! </span>((<span class="number">1</span>, <span class="number">0</span>), logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Jie (B, <span class="number">2</span>), Inc (A), Inc (A) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="comment">// errors
+			</span><span class="macro">assert_err! </span>(<span class="string">&quot;Infinite loop&quot;</span>, logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Jmp (<span class="number">0</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Max loops reached&quot;</span>, logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Jmp (-<span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">10</span>));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Arithmetic overflow&quot;</span>, logic::emulate (
+				&amp; Input { instrs: <span class="macro">vec! </span>[ Inc (A), Tpl (A), Jmp (-<span class="number">1</span>) ] }, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>));
 		}
 
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="doccomment">/// Representation of the puzzle input, etc.
+///
+</span><span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">pub type </span>Val = u32;
+	<span class="kw">pub type </span>Offset = i32;
+
+	<span class="attribute">#[ derive (Clone, Debug) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>instrs: Vec &lt;Instr&gt;,
+	}
+
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Instr {
+		Hlf (Reg),
+		Tpl (Reg),
+		Inc (Reg),
+		Jmp (Offset),
+		Jie (Reg, Offset),
+		Jio (Reg, Offset),
+	}
+
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Reg { A, B }
+
+	<span class="kw">impl </span>Instr {
+		<span class="kw">pub fn </span>parse (input: &amp; str) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			Parser::wrap (input, <span class="self">Self</span>::parse_real)
+				.map_parse_err (|<span class="kw">_</span>, col_idx|
+					<span class="macro">format! </span>(<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, col_idx + <span class="number">1</span>, input))
+		}
+		<span class="kw">fn </span>parse_real (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+			parser
+				.set_ignore_whitespace (<span class="bool-val">true</span>)
+				.set_word_pred (|ch| ch.is_ascii_alphanumeric ());
+			parser.any ()
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;hlf&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>reg = Reg::parse_real (parser) <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Hlf (reg))
+				})
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;tpl&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>reg = Reg::parse_real (parser) <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Tpl (reg))
+				})
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;inc&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>reg = Reg::parse_real (parser) <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Inc (reg))
+				})
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;jmp&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>offset = parser.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Jmp (offset))
+				})
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;jio&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>reg = Reg::parse_real (parser) <span class="question-mark">?</span>;
+					<span class="kw">let </span>offset = parser.expect (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Jio (reg, offset))
+				})
+				.of (|parser| {
+					parser.expect_word (<span class="string">&quot;jie&quot;</span>) <span class="question-mark">?</span>.confirm ();
+					<span class="kw">let </span>reg = Reg::parse_real (parser) <span class="question-mark">?</span>;
+					<span class="kw">let </span>offset = parser.expect (<span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Jie (reg, offset))
+				})
+				.done ()
+		}
+	}
+
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>instrs =
+				input.iter ().enumerate ()
+					.map (|(line_idx, line)|
+						Parser::wrap (line, Instr::parse_real)
+							.map_parse_err (|<span class="kw">_</span>, col_idx|
+								<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
+									line_idx + <span class="number">1</span>, col_idx + <span class="number">1</span>, line)))
+					.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ instrs })
+		}
+	}
+
+	<span class="kw">impl </span>Reg {
+		<span class="kw">fn </span>parse_real (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+			parser.any ()
+				.of (|parser| { parser.expect_word (<span class="string">&quot;a&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok </span>(<span class="self">Self</span>::A) })
+				.of (|parser| { parser.expect_word (<span class="string">&quot;b&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok </span>(<span class="self">Self</span>::B) })
+				.done ()
+		}
+	}
+
+	<span class="attribute">#[ cfg (test) ]
+	</span><span class="kw">mod </span>tests {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>input_parse () {
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Invalid input: line 2: col 7: jio a, +-5&quot;</span>,
+				Input::parse (&amp; [ <span class="string">&quot;inc a&quot;</span>, <span class="string">&quot;jio a, +-5&quot; </span>]));
+		}
+
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>instr_parse () {
+			<span class="kw">use </span>{ Instr::<span class="kw-2">*</span>, Reg::* };
+			<span class="macro">assert_eq_ok! </span>(Hlf (A), Instr::parse (<span class="string">&quot;hlf a&quot;</span>));
+			<span class="macro">assert_eq_ok! </span>(Tpl (B), Instr::parse (<span class="string">&quot;tpl b&quot;</span>));
+			<span class="macro">assert_eq_ok! </span>(Inc (A), Instr::parse (<span class="string">&quot;inc a&quot;</span>));
+			<span class="macro">assert_eq_ok! </span>(Jmp (-<span class="number">1</span>), Instr::parse (<span class="string">&quot;jmp -1&quot;</span>));
+			<span class="macro">assert_eq_ok! </span>(Jio (B, <span class="number">0</span>), Instr::parse (<span class="string">&quot;jio b, 0&quot;</span>));
+			<span class="macro">assert_eq_ok! </span>(Jie (A, <span class="number">1</span>), Instr::parse (<span class="string">&quot;jie a, +1&quot;</span>));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Invalid input: col 4: inc abc&quot;</span>, Instr::parse (<span class="string">&quot;inc abc&quot;</span>));
+		}
+
+	}
+
+}
+
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;jio a, +5&quot;</span>,
 		<span class="string">&quot;inc a&quot;</span>,
 		<span class="string">&quot;tpl a&quot;</span>,
@@ -687,18 +685,18 @@
 		<span class="string">&quot;jmp -3&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;3&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;3&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;2&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;2&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

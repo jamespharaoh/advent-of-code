@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Move",""]],"fn":[["calc_next_moves",""],["calc_next_states",""],["calc_result",""],["iterator",""],["part_one",""],["part_two",""]]};

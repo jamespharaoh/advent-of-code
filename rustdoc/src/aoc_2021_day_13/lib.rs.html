@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-13/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_13/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_13/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_13/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-13/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_13/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_13/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_13/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -43,310 +43,50 @@
 <span id="43">43</span>
 <span id="44">44</span>
 <span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
-<span id="86">86</span>
-<span id="87">87</span>
-<span id="88">88</span>
-<span id="89">89</span>
-<span id="90">90</span>
-<span id="91">91</span>
-<span id="92">92</span>
-<span id="93">93</span>
-<span id="94">94</span>
-<span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
-<span id="98">98</span>
-<span id="99">99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 13: Transparent Origami</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2021: Day 13: Transparent Origami
+//!
+//! [https://adventofcode.com/2021/day/13](https://adventofcode.com/2021/day/13)
+//!
+//! # Input
+//!
+//! First, a number of lines containing 2d points in `x,y` format, with `x` increasing to the right
+//! and `y` increasing downwards. Then, after a blank line, a number of lines containing folds in
+//! the form `fold along a=v` where `a` is the axis, `x` or `y`, and `v` is the point on the axis.
+//!
+//! # Part one
+//!
+//! Fold instructions merge points from after the fold to before it, in a mirror fashion. Apply the
+//! first fold only, then count how many unique points remain.
+//!
+//! # Part two
+//!
+//! Apply all the folds in order, then read the result as a series of capital letters.
+//!
+//! # Algorithm
+//!
+//! This is fairly simple. We simply apply the folds as described. To read the text we use the
+//! [`aoc_ocr`] library.
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_ocr</span> <span class="kw">as</span> <span class="ident">ocr</span>;
-<span class="kw">use</span> <span class="ident">aoc_pos</span> <span class="kw">as</span> <span class="ident">pos</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_ocr <span class="kw">as </span>ocr;
+<span class="kw">use </span>aoc_pos <span class="kw">as </span>pos;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Transparent Origami&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2021</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">13</span>;
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">lines</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">lines</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">lines</span>);
-	<span class="ident">commands</span> <span class="op">=</span> [
-		( <span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;run&quot;</span>; <span class="ident">method</span> <span class="op">=</span> <span class="ident">tool::run</span>; ),
+<span class="kw">mod </span>examples;
+<span class="kw">pub mod </span>input;
+<span class="kw">pub mod </span>logic;
+<span class="kw">pub mod </span>model;
+<span class="kw">pub mod </span>tool;
+
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Transparent Origami&quot;</span>;
+	year = <span class="number">2021</span>;
+	day = <span class="number">13</span>;
+	parse = |lines| input::Input::parse_from_lines (lines);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
+	commands = [
+		( name = <span class="string">&quot;run&quot;</span>; method = tool::run; ),
 	];
-}
-
-<span class="kw">mod</span> <span class="ident">tool</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Pos</span>;
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">clap::Parser</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RunArgs</span> {
-
-		<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">value_parser</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;inputs/day-13&quot;</span>) ]</span>
-		<span class="ident">input</span>: <span class="ident">String</span>,
-
-	}
-
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">RunArgs</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">fs::read_to_string</span> (<span class="ident">args</span>.<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">input_lines</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input_string</span>.<span class="ident">trim</span> ().<span class="ident">split</span> (<span class="string">&#39;\n&#39;</span>).<span class="ident">collect</span> ();
-		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Input::parse</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dots</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">dots</span>;
-		<span class="kw">for</span> <span class="ident">fold</span> <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">folds</span>.<span class="ident">iter</span> () {
-			<span class="ident">dots</span> <span class="op">=</span> <span class="ident">logic::fold_dots</span> (<span class="ident">fold</span>, <span class="op">&amp;</span> <span class="ident">dots</span>);
-		}
-		<span class="macro">print!</span> (<span class="string">&quot;{}&quot;</span>, <span class="ident">ocr::DrawDots</span> (<span class="ident">dots</span>.<span class="ident">iter_vals</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">Pos</span> { <span class="ident">y</span>, <span class="ident">x</span> }<span class="op">|</span> (<span class="ident">y</span>, <span class="ident">x</span>))));
-		<span class="prelude-val">Ok</span> (())
-	}
-
-}
-
-<span class="kw">mod</span> <span class="ident">logic</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Axis</span>;
-	<span class="kw">use</span> <span class="ident">model::Fold</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Pos</span>;
-	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
-
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Input::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">dots</span> <span class="op">=</span> <span class="ident">fold_dots</span> (<span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">folds</span> [<span class="number">0</span>], <span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">dots</span>);
-		<span class="prelude-val">Ok</span> (<span class="ident">dots</span>.<span class="ident">len</span> ().<span class="ident">as_u64</span> ())
-	}
-
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input</span> <span class="op">=</span> <span class="ident">Input::parse</span> (<span class="ident">lines</span>) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dots</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">dots</span>;
-		<span class="kw">for</span> <span class="ident">fold</span> <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">folds</span>.<span class="ident">iter</span> () {
-			<span class="ident">dots</span> <span class="op">=</span> <span class="ident">fold_dots</span> (<span class="ident">fold</span>, <span class="op">&amp;</span> <span class="ident">dots</span>);
-		}
-		<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ocr::read_dots</span> (<span class="op">&amp;</span> <span class="op">|</span><span class="ident">y</span>, <span class="ident">x</span><span class="op">|</span> <span class="ident">dots</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">Pos</span> { <span class="ident">y</span>, <span class="ident">x</span> })) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">result</span>)
-	}
-
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fold_dots</span> (<span class="ident">fold</span>: <span class="op">&amp;</span> <span class="ident">Fold</span>, <span class="ident">dots</span>: <span class="op">&amp;</span> <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>) -&gt; <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_dots</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">for</span> <span class="kw-2">mut</span> <span class="ident">dot</span> <span class="kw">in</span> <span class="ident">dots</span>.<span class="ident">iter_vals</span> () {
-			<span class="kw">match</span> <span class="ident">fold</span>.<span class="ident">axis</span> {
-				<span class="ident">Axis::X</span> =&gt; <span class="kw">if</span> <span class="ident">dot</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">fold</span>.<span class="ident">val</span> { <span class="ident">dot</span>.<span class="ident">x</span> <span class="op">=</span> <span class="ident">fold</span>.<span class="ident">val</span> <span class="op">-</span> (<span class="ident">dot</span>.<span class="ident">x</span> <span class="op">-</span> <span class="ident">fold</span>.<span class="ident">val</span>) },
-				<span class="ident">Axis::Y</span> =&gt; <span class="kw">if</span> <span class="ident">dot</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">fold</span>.<span class="ident">val</span> { <span class="ident">dot</span>.<span class="ident">y</span> <span class="op">=</span> <span class="ident">fold</span>.<span class="ident">val</span> <span class="op">-</span> (<span class="ident">dot</span>.<span class="ident">y</span> <span class="op">-</span> <span class="ident">fold</span>.<span class="ident">val</span>) },
-			}
-			<span class="ident">new_dots</span>.<span class="ident">insert</span> (<span class="ident">dot</span>);
-		}
-		<span class="ident">new_dots</span>
-	}
-
-}
-
-<span class="kw">mod</span> <span class="ident">model</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pos</span> <span class="op">=</span> <span class="ident">pos::PosYX</span> <span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>;
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">dots</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span>,
-		<span class="kw">pub</span> <span class="ident">folds</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Fold</span><span class="op">&gt;</span>,
-	}
-
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lines_iter</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ();
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dots</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="ident">lines_iter</span>.<span class="ident">by_ref</span> () {
-				<span class="kw">if</span> <span class="ident">line</span>.<span class="ident">is_empty</span> () { <span class="kw">break</span> }
-				<span class="kw">let</span> <span class="ident">line_err</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}&quot;</span>, <span class="ident">line</span>);
-				<span class="kw">let</span> <span class="ident">line_parts</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">line</span>.<span class="ident">split</span> (<span class="string">&#39;,&#39;</span>).<span class="ident">collect</span> ();
-				<span class="kw">if</span> <span class="ident">line_parts</span>.<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">2</span> { <span class="prelude-val">Err</span> (<span class="ident">line_err</span> ()) <span class="question-mark">?</span> }
-				<span class="ident">dots</span>.<span class="ident">insert</span> (<span class="ident">Pos</span> {
-					<span class="ident">x</span>: <span class="ident">line_parts</span> [<span class="number">0</span>].<span class="ident">parse</span> ().<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">line_err</span> ()) <span class="question-mark">?</span>,
-					<span class="ident">y</span>: <span class="ident">line_parts</span> [<span class="number">1</span>].<span class="ident">parse</span> ().<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">line_err</span> ()) <span class="question-mark">?</span>,
-				});
-			}
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">folds</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-			<span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="ident">lines_iter</span>.<span class="ident">by_ref</span> () {
-				<span class="kw">let</span> <span class="ident">line_err</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}&quot;</span>, <span class="ident">line</span>);
-				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">line</span>) <span class="op">=</span> <span class="ident">line</span>.<span class="ident">strip_prefix</span> (<span class="string">&quot;fold along x=&quot;</span>) {
-					<span class="ident">folds</span>.<span class="ident">push</span> (<span class="ident">Fold</span> { <span class="ident">axis</span>: <span class="ident">Axis::X</span>, <span class="ident">val</span>: <span class="ident">line</span>.<span class="ident">parse</span> () <span class="question-mark">?</span> });
-				} <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">line</span>) <span class="op">=</span> <span class="ident">line</span>.<span class="ident">strip_prefix</span> (<span class="string">&quot;fold along y=&quot;</span>) {
-					<span class="ident">folds</span>.<span class="ident">push</span> (<span class="ident">Fold</span> { <span class="ident">axis</span>: <span class="ident">Axis::Y</span>, <span class="ident">val</span>: <span class="ident">line</span>.<span class="ident">parse</span> () <span class="question-mark">?</span> });
-				} <span class="kw">else</span> {
-					<span class="prelude-val">Err</span> (<span class="ident">line_err</span> ()) <span class="question-mark">?</span>;
-				}
-			}
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">dots</span>, <span class="ident">folds</span> })
-		}
-	}
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Fold</span> {
-		<span class="kw">pub</span> <span class="ident">axis</span>: <span class="ident">Axis</span>,
-		<span class="kw">pub</span> <span class="ident">val</span>: <span class="ident">i64</span>,
-	}
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Axis</span> { <span class="ident">X</span>, <span class="ident">Y</span> }
-
-}
-
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
-		<span class="string">&quot;6,10&quot;</span>,
-		<span class="string">&quot;0,14&quot;</span>,
-		<span class="string">&quot;9,10&quot;</span>,
-		<span class="string">&quot;0,3&quot;</span>,
-		<span class="string">&quot;10,4&quot;</span>,
-		<span class="string">&quot;4,11&quot;</span>,
-		<span class="string">&quot;6,0&quot;</span>,
-		<span class="string">&quot;6,12&quot;</span>,
-		<span class="string">&quot;4,1&quot;</span>,
-		<span class="string">&quot;0,13&quot;</span>,
-		<span class="string">&quot;10,12&quot;</span>,
-		<span class="string">&quot;3,4&quot;</span>,
-		<span class="string">&quot;3,0&quot;</span>,
-		<span class="string">&quot;8,4&quot;</span>,
-		<span class="string">&quot;1,10&quot;</span>,
-		<span class="string">&quot;2,14&quot;</span>,
-		<span class="string">&quot;8,10&quot;</span>,
-		<span class="string">&quot;9,0&quot;</span>,
-		<span class="string">&quot;&quot;</span>,
-		<span class="string">&quot;fold along y=7&quot;</span>,
-		<span class="string">&quot;fold along x=5&quot;</span>,
-	];
-
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="macro">assert_eq!</span> (<span class="number">17</span>, <span class="ident">logic::part_one</span> (<span class="ident">EXAMPLE</span>) <span class="question-mark">?</span>);
-		<span class="prelude-val">Ok</span> (())
-	}
-
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

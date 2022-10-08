@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input",""]],"struct":[["Cube",""],["Pos",""],["Step",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Cube",""],["Pos",""],["Step",""]]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Dir",""]],"fn":[["parse_input",""]],"type":[["Input",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"type":[["Dir",""],["Pos",""]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["Equip",""],["Region",""]],"type":[["Coord",""],["Grid",""],["Pos",""],["Val",""]]};

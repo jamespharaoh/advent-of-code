@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-24/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-24/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -271,280 +271,278 @@
 <span id="271">271</span>
 <span id="272">272</span>
 <span id="273">273</span>
-<span id="274">274</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Input</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Each line contains a decimal integer, representing the weight of a single package.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Part one</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Split the packages into three piles of equal weight. Optimise so that one pile has the fewest</span>
-<span class="doccomment">//! possible number of packages. Further optimize so that the product of the weights of the</span>
-<span class="doccomment">//! packages in the first pile is as small as possible. Produce that product as a result.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Part two</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The same as part one, but with four piles instead of three.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Algorithm</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Iteratively build up a list of items to assign to each pile, always in order from heavier to</span>
-<span class="doccomment">//!   lighter. This ensures that we find a solution with the smallest possible number of packages</span>
-<span class="doccomment">//!   in the first pile before any other.</span>
-<span class="doccomment">//! - Once we find a solution for all three piles, record the size and product of the first pile,</span>
-<span class="doccomment">//!   and only consider solutions with a first pile which would signify an improvement.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 24: It Hangs in the Balance
+//!
+//! [https://adventofcode.com/2015/day/24](https://adventofcode.com/2015/day/24)
+//!
+//! # Input
+//!
+//! Each line contains a decimal integer, representing the weight of a single package.
+//!
+//! # Part one
+//!
+//! Split the packages into three piles of equal weight. Optimise so that one pile has the fewest
+//! possible number of packages. Further optimize so that the product of the weights of the
+//! packages in the first pile is as small as possible. Produce that product as a result.
+//!
+//! # Part two
+//!
+//! The same as part one, but with four piles instead of three.
+//!
+//! # Algorithm
+//!
+//! - Iteratively build up a list of items to assign to each pile, always in order from heavier to
+//!   lighter. This ensures that we find a solution with the smallest possible number of packages
+//!   in the first pile before any other.
+//! - Once we find a solution for all three piles, record the size and product of the first pile,
+//!   and only consider solutions with a first pile which would signify an improvement.
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;It Hangs in the Balance&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">24</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;It Hangs in the Balance&quot;</span>;
+	year = <span class="number">2015</span>;
+	day = <span class="number">24</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (input);
+	part_two = |input| logic::part_two (input);
 }
 
-<span class="doccomment">/// Logic for solving the puzzles.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="doccomment">/// Logic for solving the puzzles.
+///
+</span><span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">nums::Int</span>;
-	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>nums::Int;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">input</span>)
+	<span class="kw">pub fn </span>part_one (input: Input) -&gt; GenResult &lt;u64&gt; {
+		calc_result::&lt;<span class="number">3</span>&gt; (input)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span>::<span class="op">&lt;</span><span class="number">4</span><span class="op">&gt;</span> (<span class="ident">input</span>)
+	<span class="kw">pub fn </span>part_two (input: Input) -&gt; GenResult &lt;u64&gt; {
+		calc_result::&lt;<span class="number">4</span>&gt; (input)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_result</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">PILES</span>: <span class="ident">usize</span><span class="op">&gt;</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>calc_result &lt;<span class="kw">const </span>PILES: usize&gt; (input: Input) -&gt; GenResult &lt;u64&gt; {
 
-		<span class="comment">// make sure the weights are in reverse order</span>
+		<span class="comment">// make sure the weights are in reverse order
 
-		<span class="kw">let</span> <span class="ident">weights</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span>
-			<span class="ident">input</span>.<span class="ident">weights</span>.<span class="ident">into_iter</span> ()
-				.<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">weight</span><span class="op">|</span> <span class="ident">cmp::Reverse</span> (<span class="ident">weight</span>))
-				.<span class="ident">collect</span> ();
+		</span><span class="kw">let </span>weights: Vec &lt;u32&gt; =
+			input.weights.into_iter ()
+				.sorted_by_key (|&amp; weight| cmp::Reverse (weight))
+				.collect ();
 
-		<span class="comment">// sanity check (mainly for fuzzing)</span>
+		<span class="comment">// sanity check (mainly for fuzzing)
 
-		<span class="kw">if</span> <span class="ident">weights</span>.<span class="ident">len</span> () <span class="op">&gt;</span> <span class="number">50</span> {
-			<span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to deal with more than 50 items&quot;</span>) <span class="question-mark">?</span>;
+		</span><span class="kw">if </span>weights.len () &gt; <span class="number">50 </span>{
+			<span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to deal with more than 50 items&quot;</span>) <span class="question-mark">?</span>;
 		}
 
-		<span class="kw">if</span> <span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">dedup</span> ().<span class="ident">count</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">weights</span>.<span class="ident">len</span> () {
-			<span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>) <span class="question-mark">?</span>;
+		<span class="kw">if </span>weights.iter ().dedup ().count () != weights.len () {
+			<span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>) <span class="question-mark">?</span>;
 		}
 
-		<span class="kw">if</span> <span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">any</span> (<span class="op">|</span><span class="ident">weight</span><span class="op">|</span> <span class="ident">weight</span> <span class="op">&gt;</span> <span class="number">200</span>) {
-			<span class="prelude-val">Err</span> (<span class="string">&quot;Refusing to deal with weights over 200&quot;</span>) <span class="question-mark">?</span>;
+		<span class="kw">if </span>weights.iter ().copied ().any (|weight| weight &gt; <span class="number">200</span>) {
+			<span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to deal with weights over 200&quot;</span>) <span class="question-mark">?</span>;
 		}
 
-		<span class="comment">// work out the balanced weight of each pile</span>
+		<span class="comment">// work out the balanced weight of each pile
 
-		<span class="kw">let</span> <span class="ident">total_weight</span>: <span class="ident">u32</span> <span class="op">=</span>
-			<span class="ident">weights</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-				.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">0</span>), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">sum</span>
-					.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">sum</span><span class="op">|</span> <span class="ident">u32::add_2</span> (<span class="ident">sum</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">want_pile_weight</span> <span class="op">=</span> <span class="ident">total_weight</span> <span class="op">/</span> <span class="ident">PILES</span>.<span class="ident">as_u32</span> ();
-		<span class="kw">if</span> <span class="ident">want_pile_weight</span> <span class="op">*</span> <span class="ident">PILES</span>.<span class="ident">as_u32</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">total_weight</span> {
-			<span class="prelude-val">Err</span> (<span class="macro">format!</span> (<span class="string">&quot;Total weight is not a multiple of {}&quot;</span>, <span class="ident">PILES</span>)) <span class="question-mark">?</span>;
+		</span><span class="kw">let </span>total_weight: u32 =
+			weights.iter ().copied ()
+				.fold (<span class="prelude-val">Ok </span>(<span class="number">0</span>), |sum, item| sum
+					.and_then (|sum| u32::add_2 (sum, item))) <span class="question-mark">?</span>;
+		<span class="kw">let </span>want_pile_weight = total_weight / PILES.pan_u32 ();
+		<span class="kw">if </span>want_pile_weight * PILES.pan_u32 () != total_weight {
+			<span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Total weight is not a multiple of {}&quot;</span>, PILES)) <span class="question-mark">?</span>;
 		}
 
-		<span class="comment">// once we find one solution we can rule out any first piles which are bigger or have a</span>
-		<span class="comment">// higher quantum entanglement</span>
+		<span class="comment">// once we find one solution we can rule out any first piles which are bigger or have a
+		// higher quantum entanglement
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_len_0</span> <span class="op">=</span> <span class="ident">usize::MAX</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">max_quantum_0</span> <span class="op">=</span> <span class="ident">u64::MAX</span>;
+		</span><span class="kw">let </span><span class="kw-2">mut </span>max_len_0 = usize::MAX;
+		<span class="kw">let </span><span class="kw-2">mut </span>max_quantum_0 = u64::MAX;
 
-		<span class="comment">// stack holds a list of piles and the indexes of their contents</span>
+		<span class="comment">// stack holds a list of piles and the indexes of their contents
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span> [ <span class="macro">vec!</span> [] ];
+		</span><span class="kw">let </span><span class="kw-2">mut </span>stack: Vec &lt;Vec &lt;usize&gt;&gt; = <span class="macro">vec! </span>[ <span class="macro">vec! </span>[] ];
 
-		<span class="comment">// todo holds continuations, first value is number of piles to retain, second is number of</span>
-		<span class="comment">// items in top pile, third is new index to push to top pile, for initial state we have a</span>
-		<span class="comment">// single pile and branch for the full list of weights as the next item in it</span>
+		<span class="comment">// todo holds continuations, first value is number of piles to retain, second is number of
+		// items in top pile, third is new index to push to top pile, for initial state we have a
+		// single pile and branch for the full list of weights as the next item in it
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">todo</span>: <span class="ident">Vec</span> <span class="op">&lt;</span>(<span class="ident">usize</span>, <span class="ident">usize</span>, <span class="ident">usize</span>)<span class="op">&gt;</span> <span class="op">=</span>
-			(<span class="number">0</span> .. <span class="ident">weights</span>.<span class="ident">len</span> ())
-				.<span class="ident">rev</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> (<span class="number">1</span>, <span class="number">0</span>, <span class="ident">idx</span>))
-				.<span class="ident">collect</span> ();
+		</span><span class="kw">let </span><span class="kw-2">mut </span>todo: Vec &lt;(usize, usize, usize)&gt; =
+			(<span class="number">0 </span>.. weights.len ())
+				.rev ()
+				.map (|idx| (<span class="number">1</span>, <span class="number">0</span>, idx))
+				.collect ();
 
-		<span class="comment">// iterate through continuations, shortcircuit allows us to quickly get back to the first</span>
-		<span class="comment">// pile when we find a new solution, because we don&#39;t really care about the other piles, so</span>
-		<span class="comment">// long as we know there&#39;s at least one solution for them</span>
+		<span class="comment">// iterate through continuations, shortcircuit allows us to quickly get back to the first
+		// pile when we find a new solution, because we don&#39;t really care about the other piles, so
+		// long as we know there&#39;s at least one solution for them
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">shortcircuit</span> <span class="op">=</span> <span class="bool-val">false</span>;
-		<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">trunc_0</span>, <span class="ident">trunc_1</span>, <span class="ident">idx</span>)) <span class="op">=</span> <span class="ident">todo</span>.<span class="ident">pop</span> () {
-			<span class="kw">if</span> <span class="ident">shortcircuit</span> <span class="op">&amp;&amp;</span> <span class="ident">trunc_0</span> <span class="op">&gt;</span> <span class="number">1</span> { <span class="kw">continue</span> }
-			<span class="ident">shortcircuit</span> <span class="op">=</span> <span class="bool-val">false</span>;
+		</span><span class="kw">let </span><span class="kw-2">mut </span>shortcircuit = <span class="bool-val">false</span>;
+		<span class="kw">while let </span><span class="prelude-val">Some </span>((trunc_0, trunc_1, idx)) = todo.pop () {
+			<span class="kw">if </span>shortcircuit &amp;&amp; trunc_0 &gt; <span class="number">1 </span>{ <span class="kw">continue </span>}
+			shortcircuit = <span class="bool-val">false</span>;
 
-			<span class="comment">// truncate the number of piles according to the continuation</span>
+			<span class="comment">// truncate the number of piles according to the continuation
 
-			<span class="ident">stack</span>.<span class="ident">truncate</span> (<span class="ident">trunc_0</span>);
+			</span>stack.truncate (trunc_0);
 
-			<span class="comment">// truncate the items in the top pile according to the continuation</span>
+			<span class="comment">// truncate the items in the top pile according to the continuation
 
-			<span class="kw">let</span> <span class="ident">pile_stack</span> <span class="op">=</span> <span class="ident">stack</span>.<span class="ident">last_mut</span> ().<span class="ident">unwrap</span> ();
-			<span class="ident">pile_stack</span>.<span class="ident">truncate</span> (<span class="ident">trunc_1</span>);
+			</span><span class="kw">let </span>pile_stack = stack.last_mut ().unwrap ();
+			pile_stack.truncate (trunc_1);
 
-			<span class="comment">// add on the next item from the continuation</span>
+			<span class="comment">// add on the next item from the continuation
 
-			<span class="ident">pile_stack</span>.<span class="ident">push</span> (<span class="ident">idx</span>);
-			<span class="kw">let</span> <span class="ident">pile_stack_len</span> <span class="op">=</span> <span class="ident">pile_stack</span>.<span class="ident">len</span> ();
+			</span>pile_stack.push (idx);
+			<span class="kw">let </span>pile_stack_len = pile_stack.len ();
 
-			<span class="comment">// work out the top pile&#39;s weight, abort if it is too heavy</span>
+			<span class="comment">// work out the top pile&#39;s weight, abort if it is too heavy
 
-			<span class="kw">let</span> <span class="ident">pile_weight</span>: <span class="ident">u32</span> <span class="op">=</span>
-				<span class="ident">pile_stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>]).<span class="ident">sum</span> ();
-			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">&gt;</span> <span class="ident">want_pile_weight</span> { <span class="kw">continue</span> }
+			</span><span class="kw">let </span>pile_weight: u32 =
+				pile_stack.iter ().copied ().map (|idx| weights [idx]).sum ();
+			<span class="kw">if </span>pile_weight &gt; want_pile_weight { <span class="kw">continue </span>}
 
-			<span class="comment">// for the first pile only, check the quantum and abort if it&#39;s already too high</span>
+			<span class="comment">// for the first pile only, check the quantum and abort if it&#39;s already too high
 
-			<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">1</span> {
-				<span class="kw">if</span> <span class="ident">max_len_0</span> <span class="op">&lt;</span> <span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">len</span> () { <span class="kw">continue</span> }
-				<span class="kw">let</span> <span class="ident">quantum_0</span> <span class="op">=</span>
-					<span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-						.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>].<span class="ident">as_u64</span> ())
-						.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">1</span>), <span class="op">|</span><span class="ident">prod</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">prod</span>
-							.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">prod</span><span class="op">|</span> <span class="ident">u64::mul_2</span> (<span class="ident">prod</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
-				<span class="kw">if</span> <span class="ident">max_quantum_0</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">quantum_0</span> { <span class="kw">continue</span> }
+			</span><span class="kw">if </span>stack.len () == <span class="number">1 </span>{
+				<span class="kw">if </span>max_len_0 &lt; stack [<span class="number">0</span>].len () { <span class="kw">continue </span>}
+				<span class="kw">let </span>quantum_0 =
+					stack [<span class="number">0</span>].iter ().copied ()
+						.map (|idx| weights [idx].pan_u64 ())
+						.fold (<span class="prelude-val">Ok </span>(<span class="number">1</span>), |prod, item| prod
+							.and_then (|prod| u64::mul_2 (prod, item))) <span class="question-mark">?</span>;
+				<span class="kw">if </span>max_quantum_0 &lt;= quantum_0 { <span class="kw">continue </span>}
 			}
 
-			<span class="comment">// if this pile is now the right weight we start the next pile, or record a solution if</span>
-			<span class="comment">// this is the last pile</span>
+			<span class="comment">// if this pile is now the right weight we start the next pile, or record a solution if
+			// this is the last pile
 
-			<span class="kw">if</span> <span class="ident">pile_weight</span> <span class="op">==</span> <span class="ident">want_pile_weight</span> {
-				<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="ident">PILES</span> {
-					<span class="ident">stack</span>.<span class="ident">push</span> (<span class="macro">vec!</span> []);
-					<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">weights</span>.<span class="ident">len</span> ()).<span class="ident">rev</span> () {
-						<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">iter</span> ()
-							.<span class="ident">any</span> (<span class="op">|</span><span class="ident">pile_stack</span><span class="op">|</span> <span class="ident">pile_stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-								.<span class="ident">any</span> (<span class="op">|</span><span class="ident">existing_idx</span><span class="op">|</span> <span class="ident">idx</span> <span class="op">==</span> <span class="ident">existing_idx</span>))
-							{ <span class="kw">continue</span> }
-						<span class="ident">todo</span>.<span class="ident">push</span> ((<span class="ident">stack</span>.<span class="ident">len</span> (), <span class="number">0</span>, <span class="ident">idx</span>));
+			</span><span class="kw">if </span>pile_weight == want_pile_weight {
+				<span class="kw">if </span>stack.len () &lt; PILES {
+					stack.push (<span class="macro">vec! </span>[]);
+					<span class="kw">for </span>idx <span class="kw">in </span>(<span class="number">0 </span>.. weights.len ()).rev () {
+						<span class="kw">if </span>stack.iter ()
+							.any (|pile_stack| pile_stack.iter ().copied ()
+								.any (|existing_idx| idx == existing_idx))
+							{ <span class="kw">continue </span>}
+						todo.push ((stack.len (), <span class="number">0</span>, idx));
 					}
-				} <span class="kw">else</span> {
-					<span class="ident">max_len_0</span> <span class="op">=</span> <span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">len</span> ();
-					<span class="ident">max_quantum_0</span> <span class="op">=</span>
-						<span class="ident">stack</span> [<span class="number">0</span>].<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">weights</span> [<span class="ident">idx</span>].<span class="ident">as_u64</span> ())
-							.<span class="ident">fold</span> (<span class="prelude-val">Ok</span> (<span class="number">1</span>), <span class="op">|</span><span class="ident">prod</span>, <span class="ident">item</span><span class="op">|</span> <span class="ident">prod</span>
-								.<span class="ident">and_then</span> (<span class="op">|</span><span class="ident">prod</span><span class="op">|</span> <span class="ident">u64::mul_2</span> (<span class="ident">prod</span>, <span class="ident">item</span>))) <span class="question-mark">?</span>;
-					<span class="ident">shortcircuit</span> <span class="op">=</span> <span class="bool-val">true</span>;
+				} <span class="kw">else </span>{
+					max_len_0 = stack [<span class="number">0</span>].len ();
+					max_quantum_0 =
+						stack [<span class="number">0</span>].iter ().copied ()
+							.map (|idx| weights [idx].pan_u64 ())
+							.fold (<span class="prelude-val">Ok </span>(<span class="number">1</span>), |prod, item| prod
+								.and_then (|prod| u64::mul_2 (prod, item))) <span class="question-mark">?</span>;
+					shortcircuit = <span class="bool-val">true</span>;
 				}
 				<span class="kw">continue</span>;
 			}
 
-			<span class="comment">// branch out for every possible next weight to add to the top pile</span>
+			<span class="comment">// branch out for every possible next weight to add to the top pile
 
-			<span class="kw">let</span> <span class="ident">min_idx</span> <span class="op">=</span>
-				<span class="ident">stack</span>.<span class="ident">last</span> ().<span class="ident">unwrap</span> ().<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-					.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">idx</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">max</span> ().<span class="ident">unwrap_or</span> (<span class="number">0</span>);
-			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> (<span class="ident">min_idx</span> .. <span class="ident">weights</span>.<span class="ident">len</span> ()).<span class="ident">rev</span> () {
-				<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">iter</span> ()
-					.<span class="ident">any</span> (<span class="op">|</span><span class="ident">pile_stack</span><span class="op">|</span> <span class="ident">pile_stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-						.<span class="ident">any</span> (<span class="op">|</span><span class="ident">existing_idx</span><span class="op">|</span> <span class="ident">idx</span> <span class="op">==</span> <span class="ident">existing_idx</span>))
-					{ <span class="kw">continue</span> }
-				<span class="ident">todo</span>.<span class="ident">push</span> ((<span class="ident">stack</span>.<span class="ident">len</span> (), <span class="ident">pile_stack_len</span>, <span class="ident">idx</span>));
+			</span><span class="kw">let </span>min_idx =
+				stack.last ().unwrap ().iter ().copied ()
+					.map (|idx| idx + <span class="number">1</span>).max ().unwrap_or (<span class="number">0</span>);
+			<span class="kw">for </span>idx <span class="kw">in </span>(min_idx .. weights.len ()).rev () {
+				<span class="kw">if </span>stack.iter ()
+					.any (|pile_stack| pile_stack.iter ().copied ()
+						.any (|existing_idx| idx == existing_idx))
+					{ <span class="kw">continue </span>}
+				todo.push ((stack.len (), pile_stack_len, idx));
 			}
 
 		}
 
-		<span class="kw">if</span> <span class="ident">max_quantum_0</span> <span class="op">==</span> <span class="ident">u64::MAX</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>; }
-		<span class="prelude-val">Ok</span> (<span class="ident">max_quantum_0</span>)
+		<span class="kw">if </span>max_quantum_0 == u64::MAX { <span class="prelude-val">Err </span>(<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>; }
+		<span class="prelude-val">Ok </span>(max_quantum_0)
 
 	}
 
-	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-	<span class="kw">mod</span> <span class="ident">tests</span> {
+	<span class="attribute">#[ cfg (test) ]
+	</span><span class="kw">mod </span>tests {
 
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">calc_result</span> () {
-			<span class="macro">assert_eq_ok!</span> (<span class="number">5</span>, <span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">1</span> ..<span class="op">=</span> <span class="number">5</span>).<span class="ident">collect</span> () }));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;No solution found&quot;</span>,
-				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">1</span> ..<span class="op">=</span> <span class="number">3</span>).<span class="ident">collect</span> () }));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Refusing to deal with more than 50 items&quot;</span>,
-				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: (<span class="number">0</span> ..<span class="op">=</span> <span class="number">50</span>).<span class="ident">collect</span> () }));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>,
-				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: <span class="macro">vec!</span> [ <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span> ] }));
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Total weight is not a multiple of 3&quot;</span>,
-				<span class="ident">logic::calc_result</span>::<span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> (<span class="ident">Input</span> { <span class="ident">weights</span>: <span class="macro">vec!</span> [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> ] }));
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>calc_result () {
+			<span class="macro">assert_eq_ok! </span>(<span class="number">5</span>, logic::calc_result::&lt;<span class="number">3</span>&gt; (Input { weights: (<span class="number">1 </span>..= <span class="number">5</span>).collect () }));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;No solution found&quot;</span>,
+				logic::calc_result::&lt;<span class="number">3</span>&gt; (Input { weights: (<span class="number">1 </span>..= <span class="number">3</span>).collect () }));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Refusing to deal with more than 50 items&quot;</span>,
+				logic::calc_result::&lt;<span class="number">3</span>&gt; (Input { weights: (<span class="number">0 </span>..= <span class="number">50</span>).collect () }));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Refusing to deal with duplicated weights&quot;</span>,
+				logic::calc_result::&lt;<span class="number">3</span>&gt; (Input { weights: <span class="macro">vec! </span>[ <span class="number">1</span>, <span class="number">1</span>, <span class="number">1 </span>] }));
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Total weight is not a multiple of 3&quot;</span>,
+				logic::calc_result::&lt;<span class="number">3</span>&gt; (Input { weights: <span class="macro">vec! </span>[ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4 </span>] }));
 		}
 
 	}
 
 }
 
-<span class="doccomment">/// Representation of the puzzle input, etc.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="doccomment">/// Representation of the puzzle input, etc.
+///
+</span><span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">weights</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>,
+	<span class="attribute">#[ derive (Clone, Debug) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>weights: Vec &lt;u32&gt;,
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">weights</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span> <span class="prelude-val">Ok</span> (
-					<span class="ident">line</span>.<span class="ident">parse</span> ().<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span>
-						<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)) <span class="question-mark">?</span>))
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">weights</span> })
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>weights = input.iter ().enumerate ()
+				.map (|(line_idx, line)| <span class="prelude-val">Ok </span>(
+					line.parse ().map_err (|_err|
+						<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: {}&quot;</span>, line_idx + <span class="number">1</span>, line)) <span class="question-mark">?</span>))
+				.collect::&lt;GenResult &lt;Vec &lt;<span class="kw">_</span>&gt;&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ weights })
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-	<span class="kw">mod</span> <span class="ident">tests</span> {
+	<span class="attribute">#[ cfg (test) ]
+	</span><span class="kw">mod </span>tests {
 
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">input_parse</span> () {
-			<span class="macro">assert_err!</span> (<span class="string">&quot;Invalid input: line 2: 456X&quot;</span>, <span class="ident">Input::parse</span> (<span class="op">&amp;</span> [ <span class="string">&quot;123&quot;</span>, <span class="string">&quot;456X&quot;</span> ]));
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>input_parse () {
+			<span class="macro">assert_err! </span>(<span class="string">&quot;Invalid input: line 2: 456X&quot;</span>, Input::parse (&amp; [ <span class="string">&quot;123&quot;</span>, <span class="string">&quot;456X&quot; </span>]));
 		}
 
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [ <span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>, <span class="string">&quot;5&quot;</span>, <span class="string">&quot;7&quot;</span>, <span class="string">&quot;8&quot;</span>, <span class="string">&quot;9&quot;</span>, <span class="string">&quot;10&quot;</span>, <span class="string">&quot;11&quot;</span> ];
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [ <span class="string">&quot;1&quot;</span>, <span class="string">&quot;2&quot;</span>, <span class="string">&quot;3&quot;</span>, <span class="string">&quot;4&quot;</span>, <span class="string">&quot;5&quot;</span>, <span class="string">&quot;7&quot;</span>, <span class="string">&quot;8&quot;</span>, <span class="string">&quot;9&quot;</span>, <span class="string">&quot;10&quot;</span>, <span class="string">&quot;11&quot; </span>];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;99&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;99&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;44&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;44&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

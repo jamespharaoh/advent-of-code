@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/bithash/bithash.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bithash.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_bithash/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_bithash/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_bithash/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/bithash/bithash.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bithash.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_bithash/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_bithash/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_bithash/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -164,171 +164,171 @@
 <span id="164">164</span>
 <span id="165">165</span>
 <span id="166">166</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Bloom filter</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Bloom filter
 
-<span class="kw">use</span> <span class="ident">std::fmt</span>::{ <span class="self">self</span>, <span class="ident">Display</span> };
-<span class="kw">use</span> <span class="ident">std::hash</span>::{ <span class="ident">BuildHasher</span>, <span class="ident">Hash</span>, <span class="ident">Hasher</span> };
-<span class="kw">use</span> <span class="ident">std::ops</span>::{ <span class="ident">BitAnd</span>, <span class="ident">Not</span> };
+</span><span class="kw">use </span>std::fmt::{ <span class="self">self</span>, Display };
+<span class="kw">use </span>std::hash::{ BuildHasher, Hash, Hasher };
+<span class="kw">use </span>std::ops::{ BitAnd, Not };
 
-<span class="kw">use</span> <span class="ident">aoc_nums</span> <span class="kw">as</span> <span class="ident">nums</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+<span class="kw">use </span>aoc_nums <span class="kw">as </span>nums;
+<span class="kw">use </span>nums::IntConv;
 
-<span class="doccomment">/// State for building a [`BitHash`] iteratively</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BitHasher</span> <span class="op">&lt;</span><span class="ident">BldHsh</span>: <span class="ident">BuildHasher</span>, <span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span>, <span class="kw">const</span> <span class="ident">BITS</span>: <span class="ident">usize</span><span class="op">&gt;</span> {
+<span class="doccomment">/// State for building a [`BitHash`] iteratively
+///
+</span><span class="kw">pub struct </span>BitHasher &lt;BldHsh: BuildHasher, <span class="kw">const </span>LEN: usize, <span class="kw">const </span>BITS: usize&gt; {
 
-	<span class="doccomment">/// Current hash value</span>
-	<span class="doccomment">///</span>
-	<span class="ident">data</span>: [<span class="ident">u64</span>; <span class="ident">LEN</span>],
+	<span class="doccomment">/// Current hash value
+	///
+	</span>data: [u64; LEN],
 
-	<span class="doccomment">/// Build hasher state</span>
-	<span class="doccomment">///</span>
-	<span class="ident">hash_builder</span>: <span class="ident">BldHsh</span>,
+	<span class="doccomment">/// Build hasher state
+	///
+	</span>hash_builder: BldHsh,
 
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">BldHsh</span>: <span class="ident">BuildHasher</span>, <span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span>, <span class="kw">const</span> <span class="ident">BITS</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">BitHasher</span> <span class="op">&lt;</span><span class="ident">BldHsh</span>, <span class="ident">LEN</span>, <span class="ident">BITS</span><span class="op">&gt;</span> {
+<span class="kw">impl </span>&lt;BldHsh: BuildHasher, <span class="kw">const </span>LEN: usize, <span class="kw">const </span>BITS: usize&gt; BitHasher &lt;BldHsh, LEN, BITS&gt; {
 
-	<span class="doccomment">/// Construct a [`BitHasher`] with the provided [`BuildHasher`]</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new_with_hasher</span> (<span class="ident">hash_builder</span>: <span class="ident">BldHsh</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">data</span>: [<span class="number">0</span>; <span class="ident">LEN</span>], <span class="ident">hash_builder</span> }
+	<span class="doccomment">/// Construct a [`BitHasher`] with the provided [`BuildHasher`]
+	///
+	</span><span class="attribute">#[ inline ]
+	</span><span class="kw">pub const fn </span>new_with_hasher (hash_builder: BldHsh) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{ data: [<span class="number">0</span>; LEN], hash_builder }
 	}
 
-	<span class="doccomment">/// Update the hash value with a new item</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">update</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Hash</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">val</span>: <span class="ident">Val</span>) -&gt; <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">Self</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hash_builder</span>.<span class="ident">build_hasher</span> ();
-		<span class="ident">val</span>.<span class="ident">hash</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">hasher</span>);
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">hasher</span>.<span class="ident">finish</span> ();
-		<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">BITS</span> {
-			<span class="kw">let</span> <span class="ident">bit</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="ident">hash</span> <span class="op">&amp;</span> <span class="number">0x3f</span>);
-			<span class="ident">hash</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">6_u32</span>;
-			<span class="kw">let</span> <span class="ident">idx</span> <span class="op">=</span> (<span class="ident">hash</span> <span class="op">%</span> <span class="ident">LEN</span>.<span class="ident">to_u64</span> ().<span class="ident">unwrap</span> ()).<span class="ident">to_usize</span> ().<span class="ident">unwrap</span> ();
-			<span class="ident">hash</span> <span class="op">/</span><span class="op">=</span> <span class="ident">LEN</span>.<span class="ident">to_u64</span> ().<span class="ident">unwrap</span> ();
-			<span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>] <span class="op">|</span><span class="op">=</span> <span class="ident">bit</span>;
+	<span class="doccomment">/// Update the hash value with a new item
+	///
+	</span><span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>update &lt;Val: Hash&gt; (&amp; <span class="kw-2">mut </span><span class="self">self</span>, val: Val) -&gt; &amp; <span class="kw-2">mut </span><span class="self">Self </span>{
+		<span class="kw">let </span><span class="kw-2">mut </span>hasher = <span class="self">self</span>.hash_builder.build_hasher ();
+		val.hash (&amp; <span class="kw-2">mut </span>hasher);
+		<span class="kw">let </span><span class="kw-2">mut </span>hash = hasher.finish ();
+		<span class="kw">for _ in </span><span class="number">0 </span>.. BITS {
+			<span class="kw">let </span>bit = <span class="number">1 </span>&lt;&lt; (hash &amp; <span class="number">0x3f</span>);
+			hash &gt;&gt;= <span class="number">6_u32</span>;
+			<span class="kw">let </span>idx = (hash % LEN.to_u64 ().unwrap ()).to_usize ().unwrap ();
+			hash /= LEN.to_u64 ().unwrap ();
+			<span class="self">self</span>.data [idx] |= bit;
 		}
-		<span class="self">self</span>
-	}
+		<span class="self">self
+	</span>}
 
-	<span class="doccomment">/// Stop hashing and return the hash value</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">finish</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span> {
-		<span class="ident">BitHash</span> { <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">data</span> }
-	}
-
-}
-
-<span class="doccomment">/// A bit hash value</span>
-<span class="doccomment">///</span>
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> {
-
-	<span class="doccomment">/// The hash value</span>
-	<span class="doccomment">///</span>
-	<span class="ident">data</span>: [<span class="ident">u64</span>; <span class="ident">LEN</span>],
-
-}
-
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span> {
-
-	<span class="doccomment">/// A zero hash value, with no items added</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">zero</span> () -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">data</span>: [<span class="number">0</span>; <span class="ident">LEN</span>] }
-	}
-
-	<span class="doccomment">/// The number of one bits in the hash value</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">bits</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sum</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> { <span class="ident">sum</span> <span class="op">+</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>].<span class="ident">count_ones</span> ().<span class="ident">to_usize</span> ().<span class="ident">unwrap</span> (); }
-		<span class="ident">sum</span>
-	}
-
-	<span class="doccomment">/// Map the hash to an equivalent hash of a smaller size</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reduce</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">OTHER_LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">OTHER_LEN</span><span class="op">&gt;</span> {
-		<span class="kw">if</span> <span class="ident">LEN</span> <span class="op">&lt;</span> <span class="ident">OTHER_LEN</span> { <span class="macro">panic!</span> () }
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">OTHER_LEN</span>];
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> { <span class="ident">data</span> [<span class="ident">idx</span> <span class="op">%</span> <span class="ident">OTHER_LEN</span>] <span class="op">|</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>]; }
-		<span class="ident">BitHash</span> { <span class="ident">data</span> }
-	}
-
-	<span class="doccomment">/// Return true is this hash has no one bits</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_zero</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> { <span class="kw">if</span> <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>] <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">return</span> <span class="bool-val">false</span> } }
-		<span class="bool-val">true</span>
+	<span class="doccomment">/// Stop hashing and return the hash value
+	///
+	</span><span class="attribute">#[ inline ]
+	</span><span class="kw">pub const fn </span>finish (&amp; <span class="self">self</span>) -&gt; BitHash &lt;LEN&gt; {
+		BitHash { data: <span class="self">self</span>.data }
 	}
 
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span> {
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> {
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{:064b}&quot;</span>, <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>]) <span class="question-mark">?</span>;
+<span class="doccomment">/// A bit hash value
+///
+</span><span class="attribute">#[ derive (Clone, Copy) ]
+</span><span class="kw">pub struct </span>BitHash &lt;<span class="kw">const </span>LEN: usize&gt; {
+
+	<span class="doccomment">/// The hash value
+	///
+	</span>data: [u64; LEN],
+
+}
+
+<span class="kw">impl </span>&lt;<span class="kw">const </span>LEN: usize&gt; BitHash &lt;LEN&gt; {
+
+	<span class="doccomment">/// A zero hash value, with no items added
+	///
+	</span><span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>zero () -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{ data: [<span class="number">0</span>; LEN] }
+	}
+
+	<span class="doccomment">/// The number of one bits in the hash value
+	///
+	</span><span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>bits (&amp; <span class="self">self</span>) -&gt; usize {
+		<span class="kw">let </span><span class="kw-2">mut </span>sum = <span class="number">0</span>;
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN { sum += <span class="self">self</span>.data [idx].count_ones ().to_usize ().unwrap (); }
+		sum
+	}
+
+	<span class="doccomment">/// Map the hash to an equivalent hash of a smaller size
+	///
+	</span><span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>reduce &lt;<span class="kw">const </span>OTHER_LEN: usize&gt; (&amp; <span class="self">self</span>) -&gt; BitHash &lt;OTHER_LEN&gt; {
+		<span class="kw">if </span>LEN &lt; OTHER_LEN { <span class="macro">panic! </span>() }
+		<span class="kw">let </span><span class="kw-2">mut </span>data = [<span class="number">0</span>; OTHER_LEN];
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN { data [idx % OTHER_LEN] |= <span class="self">self</span>.data [idx]; }
+		BitHash { data }
+	}
+
+	<span class="doccomment">/// Return true is this hash has no one bits
+	///
+	</span><span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>is_zero (&amp; <span class="self">self</span>) -&gt; bool {
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN { <span class="kw">if </span><span class="self">self</span>.data [idx] != <span class="number">0 </span>{ <span class="kw">return </span><span class="bool-val">false </span>} }
+		<span class="bool-val">true
+	</span>}
+
+}
+
+<span class="kw">impl </span>&lt;<span class="kw">const </span>LEN: usize&gt; Display <span class="kw">for </span>BitHash &lt;LEN&gt; {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN {
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;{:064b}&quot;</span>, <span class="self">self</span>.data [idx]) <span class="question-mark">?</span>;
 		}
-		<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Ok </span>(())
 	}
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">BitAnd</span> <span class="kw">for</span> <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span> {
+<span class="kw">impl </span>&lt;<span class="kw">const </span>LEN: usize&gt; BitAnd <span class="kw">for </span>BitHash &lt;LEN&gt; {
 
-	<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
+	<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">bitand</span> (<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> { <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>] <span class="op">&amp;=</span> <span class="ident">other</span>.<span class="ident">data</span> [<span class="ident">idx</span>]; }
-		<span class="self">self</span>
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>bitand (<span class="kw-2">mut </span><span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN { <span class="self">self</span>.data [idx] &amp;= other.data [idx]; }
+		<span class="self">self
+	</span>}
+
+}
+
+<span class="kw">impl </span>&lt;<span class="kw">const </span>LEN: usize&gt; Not <span class="kw">for </span>BitHash &lt;LEN&gt; {
+
+	<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>not (<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. LEN { <span class="self">self</span>.data [idx] = ! <span class="self">self</span>.data [idx]; }
+		<span class="self">self
+	</span>}
+
+}
+
+<span class="doccomment">/// Extension trait to [`Iterator`] for working with [`BitHash`]
+///
+</span><span class="kw">pub trait </span>IteratorBitHash : Iterator {
+
+	<span class="doccomment">/// Construct a [`BitHash`] with the values from an iterator
+	///
+	</span><span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>bit_hash &lt;BldHsh, <span class="kw">const </span>LEN: usize, <span class="kw">const </span>BITS: usize&gt; (<span class="self">self</span>, hash_builder: BldHsh) -&gt; BitHash &lt;LEN&gt;
+			<span class="kw">where </span>BldHsh: BuildHasher, <span class="self">Self</span>: Sized, <span class="self">Self</span>::Item: Hash {
+		<span class="kw">let </span><span class="kw-2">mut </span>hasher = BitHasher::&lt;BldHsh, LEN, BITS&gt;::new_with_hasher (hash_builder);
+		<span class="kw">for </span>item <span class="kw">in </span><span class="self">self </span>{ hasher.update (&amp; item); }
+		hasher.finish ()
 	}
 
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span><span class="op">&gt;</span> <span class="ident">Not</span> <span class="kw">for</span> <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span> {
-
-	<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">not</span> (<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">LEN</span> { <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="op">!</span> <span class="self">self</span>.<span class="ident">data</span> [<span class="ident">idx</span>]; }
-		<span class="self">self</span>
-	}
-
-}
-
-<span class="doccomment">/// Extension trait to [`Iterator`] for working with [`BitHash`]</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IteratorBitHash</span> : <span class="ident">Iterator</span> {
-
-	<span class="doccomment">/// Construct a [`BitHash`] with the values from an iterator</span>
-	<span class="doccomment">///</span>
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">bit_hash</span> <span class="op">&lt;</span><span class="ident">BldHsh</span>, <span class="kw">const</span> <span class="ident">LEN</span>: <span class="ident">usize</span>, <span class="kw">const</span> <span class="ident">BITS</span>: <span class="ident">usize</span><span class="op">&gt;</span> (<span class="self">self</span>, <span class="ident">hash_builder</span>: <span class="ident">BldHsh</span>) -&gt; <span class="ident">BitHash</span> <span class="op">&lt;</span><span class="ident">LEN</span><span class="op">&gt;</span>
-			<span class="kw">where</span> <span class="ident">BldHsh</span>: <span class="ident">BuildHasher</span>, <span class="self">Self</span>: <span class="ident">Sized</span>, <span class="ident"><span class="self">Self</span>::Item</span>: <span class="ident">Hash</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hasher</span> <span class="op">=</span> <span class="ident">BitHasher</span>::<span class="op">&lt;</span><span class="ident">BldHsh</span>, <span class="ident">LEN</span>, <span class="ident">BITS</span><span class="op">&gt;</span><span class="ident">::new_with_hasher</span> (<span class="ident">hash_builder</span>);
-		<span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="self">self</span> { <span class="ident">hasher</span>.<span class="ident">update</span> (<span class="op">&amp;</span> <span class="ident">item</span>); }
-		<span class="ident">hasher</span>.<span class="ident">finish</span> ()
-	}
-
-}
-
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">SomeIter</span>, <span class="ident">SomeItem</span><span class="op">&gt;</span> <span class="ident">IteratorBitHash</span> <span class="kw">for</span> <span class="ident">SomeIter</span>
-	<span class="kw">where</span>
-		<span class="ident">SomeIter</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">SomeItem</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Sized</span>,
-		<span class="ident">SomeItem</span>: <span class="ident">Hash</span> {
+<span class="kw">impl </span>&lt;SomeIter, SomeItem&gt; IteratorBitHash <span class="kw">for </span>SomeIter
+	<span class="kw">where
+		</span>SomeIter: Iterator &lt;Item = SomeItem&gt; + Sized,
+		SomeItem: Hash {
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_bithash" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_bithash" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

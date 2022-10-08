@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-24/src/machine.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>machine.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-24/machine.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>machine.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -157,276 +157,164 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+</pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_prog</span> (<span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-	<span class="ident">lines</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span> -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Instr</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>);
-		<span class="kw">let</span> <span class="ident">parse_reg</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="prelude-val">Ok</span> (<span class="kw">match</span> <span class="ident">input</span> {
-			<span class="string">&quot;w&quot;</span> =&gt; <span class="ident">Reg::W</span>,
-			<span class="string">&quot;x&quot;</span> =&gt; <span class="ident">Reg::X</span>,
-			<span class="string">&quot;y&quot;</span> =&gt; <span class="ident">Reg::Y</span>,
-			<span class="string">&quot;z&quot;</span> =&gt; <span class="ident">Reg::Z</span>,
-			<span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">err</span> ()),
-		});
-		<span class="kw">let</span> <span class="ident">parse_reg_or_int</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">RegOrInt</span><span class="op">&gt;</span> {
-			<span class="prelude-val">Ok</span> (<span class="kw">match</span> <span class="ident">input</span> {
-				<span class="string">&quot;w&quot;</span> =&gt; <span class="ident">RegOrInt::W</span>,
-				<span class="string">&quot;x&quot;</span> =&gt; <span class="ident">RegOrInt::X</span>,
-				<span class="string">&quot;y&quot;</span> =&gt; <span class="ident">RegOrInt::Y</span>,
-				<span class="string">&quot;z&quot;</span> =&gt; <span class="ident">RegOrInt::Z</span>,
-				<span class="kw">_</span> =&gt; <span class="ident">RegOrInt::Int</span> (<span class="ident">input</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> ()
-					.<span class="ident">map_err</span> (<span class="op">|</span><span class="ident">_err</span><span class="op">|</span> <span class="ident">err</span> ()) <span class="question-mark">?</span>),
-			})
-		};
-		<span class="kw">let</span> <span class="ident">line_parts</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">line</span>.<span class="ident">split</span> (<span class="string">&#39; &#39;</span>).<span class="ident">collect</span> ();
-		<span class="kw">let</span> <span class="ident">instr_str</span> <span class="op">=</span> <span class="ident">line_parts</span> [<span class="number">0</span>];
-		<span class="kw">let</span> <span class="ident">instr_args</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="ident">line_parts</span> [<span class="number">1</span> .. ];
-		<span class="prelude-val">Ok</span> (<span class="kw">match</span> (<span class="ident">instr_str</span>, <span class="ident">instr_args</span>.<span class="ident">len</span> ()) {
-			(<span class="string">&quot;inp&quot;</span>, <span class="number">1</span>) =&gt; <span class="ident">Instr::Inp</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>),
-			(<span class="string">&quot;add&quot;</span>, <span class="number">2</span>) =&gt; <span class="ident">Instr::Add</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>, <span class="ident">parse_reg_or_int</span> (<span class="ident">instr_args</span> [<span class="number">1</span>]) <span class="question-mark">?</span>),
-			(<span class="string">&quot;mul&quot;</span>, <span class="number">2</span>) =&gt; <span class="ident">Instr::Mul</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>, <span class="ident">parse_reg_or_int</span> (<span class="ident">instr_args</span> [<span class="number">1</span>]) <span class="question-mark">?</span>),
-			(<span class="string">&quot;div&quot;</span>, <span class="number">2</span>) =&gt; <span class="ident">Instr::Div</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>, <span class="ident">parse_reg_or_int</span> (<span class="ident">instr_args</span> [<span class="number">1</span>]) <span class="question-mark">?</span>),
-			(<span class="string">&quot;mod&quot;</span>, <span class="number">2</span>) =&gt; <span class="ident">Instr::Mod</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>, <span class="ident">parse_reg_or_int</span> (<span class="ident">instr_args</span> [<span class="number">1</span>]) <span class="question-mark">?</span>),
-			(<span class="string">&quot;eql&quot;</span>, <span class="number">2</span>) =&gt; <span class="ident">Instr::Eql</span> (<span class="ident">parse_reg</span> (<span class="ident">instr_args</span> [<span class="number">0</span>]) <span class="question-mark">?</span>, <span class="ident">parse_reg_or_int</span> (<span class="ident">instr_args</span> [<span class="number">1</span>]) <span class="question-mark">?</span>),
-			<span class="kw">_</span> =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span> ()) <span class="question-mark">?</span>,
-		})
-	}).<span class="ident">collect</span> ()
+<span class="attribute">#[ must_use ]
+</span><span class="kw">pub fn </span>machine_input (input: [u8; <span class="number">14</span>]) -&gt; [i64; <span class="number">14</span>] {
+	<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0</span>; <span class="number">14</span>];
+	<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. <span class="number">14 </span>{ result [idx] = input [idx].pan_i64 (); }
+	result
 }
 
-<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">machine_input</span> (<span class="ident">input</span>: [<span class="ident">u8</span>; <span class="number">14</span>]) -&gt; [<span class="ident">i64</span>; <span class="number">14</span>] {
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">14</span>];
-	<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">14</span> { <span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">input</span> [<span class="ident">idx</span>].<span class="ident">as_i64</span> (); }
-	<span class="ident">result</span>
+<span class="attribute">#[ derive (Clone, Debug, Default, Eq, Hash, PartialEq) ]
+</span><span class="kw">pub struct </span>Machine {
+	<span class="kw">pub </span>regs: MachineRegs,
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Machine</span> {
-	<span class="kw">pub</span> <span class="ident">regs</span>: <span class="ident">MachineRegs</span>,
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+</span><span class="kw">pub enum </span>MachineError {
+	NoMoreInput,
+	DivideByZero,
+	NegativeModulo,
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">MachineError</span> {
-	<span class="ident">NoMoreInput</span>,
-	<span class="ident">DivideByZero</span>,
-	<span class="ident">NegativeModulo</span>,
-}
+<span class="kw">impl </span>Machine {
 
-<span class="kw">impl</span> <span class="ident">Machine</span> {
-
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span> () -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">regs</span>: <span class="ident">default</span> () }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>new () -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{ regs: default () }
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">step</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prog</span>: <span class="op">&amp;</span> [<span class="ident">Instr</span>], <span class="ident">input</span>: <span class="op">&amp;</span> [<span class="ident">i64</span>]) -&gt; <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="ident">bool</span>, <span class="ident">MachineError</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">instr</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">prog</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">pc</span>) {
-			<span class="prelude-val">Some</span> (<span class="op">&amp;</span> <span class="ident">instr</span>) =&gt; <span class="ident">instr</span>,
-			<span class="prelude-val">None</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Ok</span> (<span class="bool-val">true</span>),
+	<span class="kw">pub fn </span>step (&amp; <span class="kw-2">mut </span><span class="self">self</span>, prog: &amp; [Instr], input: &amp; [i64]) -&gt; <span class="prelude-ty">Result </span>&lt;bool, MachineError&gt; {
+		<span class="kw">let </span>instr = <span class="kw">match </span>prog.get (<span class="self">self</span>.regs.pc) {
+			<span class="prelude-val">Some </span>(&amp; instr) =&gt; instr,
+			<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="bool-val">true</span>),
 		};
-		<span class="kw">match</span> <span class="ident">instr</span> {
-			<span class="ident">Instr::Inp</span> (<span class="ident">dest</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">input</span>.<span class="ident">get</span> (<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">ic</span>) {
-					<span class="prelude-val">Some</span> (<span class="op">&amp;</span> <span class="ident">val</span>) =&gt; <span class="ident">val</span>,
-					<span class="prelude-val">None</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">MachineError::NoMoreInput</span>),
+		<span class="kw">match </span>instr {
+			Instr::Inp (dest) =&gt; {
+				<span class="kw">let </span>val = <span class="kw">match </span>input.get (<span class="self">self</span>.regs.ic) {
+					<span class="prelude-val">Some </span>(&amp; val) =&gt; val,
+					<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(MachineError::NoMoreInput),
 				};
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">ic</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="ident">val</span>);
+				<span class="self">self</span>.regs.ic += <span class="number">1</span>;
+				<span class="self">self</span>.regs.store (dest, val);
 			},
-			<span class="ident">Instr::Add</span> (<span class="ident">dest</span>, <span class="ident">src</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">src_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve_or_int</span> (<span class="ident">src</span>);
-				<span class="kw">let</span> <span class="ident">dst_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve</span> (<span class="ident">dest</span>);
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="ident">dst_val</span> <span class="op">+</span> <span class="ident">src_val</span>);
+			Instr::Add (dest, src) =&gt; {
+				<span class="kw">let </span>src_val = <span class="self">self</span>.regs.retrieve_or_int (src);
+				<span class="kw">let </span>dst_val = <span class="self">self</span>.regs.retrieve (dest);
+				<span class="self">self</span>.regs.store (dest, dst_val + src_val);
 			},
-			<span class="ident">Instr::Mul</span> (<span class="ident">dest</span>, <span class="ident">src</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">src_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve_or_int</span> (<span class="ident">src</span>);
-				<span class="kw">let</span> <span class="ident">dst_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve</span> (<span class="ident">dest</span>);
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="ident">dst_val</span> <span class="op">*</span> <span class="ident">src_val</span>);
+			Instr::Mul (dest, src) =&gt; {
+				<span class="kw">let </span>src_val = <span class="self">self</span>.regs.retrieve_or_int (src);
+				<span class="kw">let </span>dst_val = <span class="self">self</span>.regs.retrieve (dest);
+				<span class="self">self</span>.regs.store (dest, dst_val * src_val);
 			},
-			<span class="ident">Instr::Div</span> (<span class="ident">dest</span>, <span class="ident">src</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">src_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve_or_int</span> (<span class="ident">src</span>);
-				<span class="kw">if</span> <span class="ident">src_val</span> <span class="op">==</span> <span class="number">0</span> { <span class="prelude-val">Err</span> (<span class="ident">MachineError::DivideByZero</span>) <span class="question-mark">?</span> }
-				<span class="kw">let</span> <span class="ident">dst_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve</span> (<span class="ident">dest</span>);
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="ident">dst_val</span> <span class="op">/</span> <span class="ident">src_val</span>);
+			Instr::Div (dest, src) =&gt; {
+				<span class="kw">let </span>src_val = <span class="self">self</span>.regs.retrieve_or_int (src);
+				<span class="kw">if </span>src_val == <span class="number">0 </span>{ <span class="prelude-val">Err </span>(MachineError::DivideByZero) <span class="question-mark">? </span>}
+				<span class="kw">let </span>dst_val = <span class="self">self</span>.regs.retrieve (dest);
+				<span class="self">self</span>.regs.store (dest, dst_val / src_val);
 			},
-			<span class="ident">Instr::Mod</span> (<span class="ident">dest</span>, <span class="ident">src</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">src_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve_or_int</span> (<span class="ident">src</span>);
-				<span class="kw">if</span> <span class="ident">src_val</span> <span class="op">==</span> <span class="number">0</span> { <span class="prelude-val">Err</span> (<span class="ident">MachineError::DivideByZero</span>) <span class="question-mark">?</span> }
-				<span class="kw">let</span> <span class="ident">dst_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve</span> (<span class="ident">dest</span>);
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="ident">dst_val</span> <span class="op">%</span> <span class="ident">src_val</span>);
+			Instr::Mod (dest, src) =&gt; {
+				<span class="kw">let </span>src_val = <span class="self">self</span>.regs.retrieve_or_int (src);
+				<span class="kw">if </span>src_val == <span class="number">0 </span>{ <span class="prelude-val">Err </span>(MachineError::DivideByZero) <span class="question-mark">? </span>}
+				<span class="kw">let </span>dst_val = <span class="self">self</span>.regs.retrieve (dest);
+				<span class="self">self</span>.regs.store (dest, dst_val % src_val);
 			},
-			<span class="ident">Instr::Eql</span> (<span class="ident">dest</span>, <span class="ident">src</span>) =&gt; {
-				<span class="kw">let</span> <span class="ident">src_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve_or_int</span> (<span class="ident">src</span>);
-				<span class="kw">let</span> <span class="ident">dst_val</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">retrieve</span> (<span class="ident">dest</span>);
-				<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">store</span> (<span class="ident">dest</span>, <span class="kw">if</span> <span class="ident">dst_val</span> <span class="op">==</span> <span class="ident">src_val</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> });
+			Instr::Eql (dest, src) =&gt; {
+				<span class="kw">let </span>src_val = <span class="self">self</span>.regs.retrieve_or_int (src);
+				<span class="kw">let </span>dst_val = <span class="self">self</span>.regs.retrieve (dest);
+				<span class="self">self</span>.regs.store (dest, i64::from (dst_val == src_val));
 			},
 		}
-		<span class="self">self</span>.<span class="ident">regs</span>.<span class="ident">pc</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-		<span class="prelude-val">Ok</span> (<span class="bool-val">false</span>)
+		<span class="self">self</span>.regs.pc += <span class="number">1</span>;
+		<span class="prelude-val">Ok </span>(<span class="bool-val">false</span>)
 	}
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">dead_code</span>) ]</span>
-	<span class="kw">fn</span> <span class="ident">execute</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">prog</span>: <span class="op">&amp;</span> [<span class="ident">Instr</span>], <span class="ident">input</span>: <span class="op">&amp;</span> [<span class="ident">i64</span>]) -&gt; <span class="prelude-ty">Result</span> <span class="op">&lt;</span>(), <span class="ident">MachineError</span><span class="op">&gt;</span> {
-		<span class="kw">loop</span> {
-			<span class="kw">match</span> <span class="self">self</span>.<span class="ident">step</span> (<span class="ident">prog</span>, <span class="ident">input</span>) {
-				<span class="prelude-val">Ok</span> (<span class="bool-val">true</span>) =&gt; <span class="kw">break</span>,
-				<span class="prelude-val">Ok</span> (<span class="bool-val">false</span>) =&gt; <span class="kw">continue</span>,
-				<span class="prelude-val">Err</span> (<span class="ident">err</span>) =&gt; <span class="prelude-val">Err</span> (<span class="ident">err</span>) <span class="question-mark">?</span>,
+
+	<span class="attribute">#[ allow (dead_code) ]
+	</span><span class="kw">fn </span>execute (&amp; <span class="kw-2">mut </span><span class="self">self</span>, prog: &amp; [Instr], input: &amp; [i64]) -&gt; <span class="prelude-ty">Result </span>&lt;(), MachineError&gt; {
+		<span class="kw">loop </span>{
+			<span class="kw">match </span><span class="self">self</span>.step (prog, input) {
+				<span class="prelude-val">Ok </span>(<span class="bool-val">true</span>) =&gt; <span class="kw">break</span>,
+				<span class="prelude-val">Ok </span>(<span class="bool-val">false</span>) =&gt; <span class="kw">continue</span>,
+				<span class="prelude-val">Err </span>(err) =&gt; <span class="prelude-val">Err </span>(err) <span class="question-mark">?</span>,
 			}
 		}
-		<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Ok </span>(())
+	}
+
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Hash, PartialEq) ]
+</span><span class="kw">pub struct </span>MachineRegs {
+	<span class="kw">pub </span>w: i64,
+	<span class="kw">pub </span>x: i64,
+	<span class="kw">pub </span>y: i64,
+	<span class="kw">pub </span>z: i64,
+	<span class="kw">pub </span>pc: usize,
+	<span class="kw">pub </span>ic: usize,
+}
+
+<span class="kw">impl </span>MachineRegs {
+	<span class="kw">fn </span>store (&amp; <span class="kw-2">mut </span><span class="self">self</span>, reg: Reg, val: i64) {
+		<span class="kw">match </span>reg {
+			Reg::W =&gt; <span class="self">self</span>.w = val,
+			Reg::X =&gt; <span class="self">self</span>.x = val,
+			Reg::Y =&gt; <span class="self">self</span>.y = val,
+			Reg::Z =&gt; <span class="self">self</span>.z = val,
+		}
+	}
+	<span class="kw">const fn </span>retrieve (&amp; <span class="self">self</span>, reg: Reg) -&gt; i64 {
+		<span class="kw">match </span>reg {
+			Reg::W =&gt; <span class="self">self</span>.w,
+			Reg::X =&gt; <span class="self">self</span>.x,
+			Reg::Y =&gt; <span class="self">self</span>.y,
+			Reg::Z =&gt; <span class="self">self</span>.z,
+		}
+	}
+	<span class="kw">const fn </span>retrieve_or_int (&amp; <span class="self">self</span>, reg_or_int: RegOrInt) -&gt; i64 {
+		<span class="kw">match </span>reg_or_int {
+			RegOrInt::W =&gt; <span class="self">self</span>.w,
+			RegOrInt::X =&gt; <span class="self">self</span>.x,
+			RegOrInt::Y =&gt; <span class="self">self</span>.y,
+			RegOrInt::Z =&gt; <span class="self">self</span>.z,
+			RegOrInt::Int (val) =&gt; val,
+		}
 	}
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MachineRegs</span> {
-	<span class="kw">pub</span> <span class="ident">w</span>: <span class="ident">i64</span>,
-	<span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">i64</span>,
-	<span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">i64</span>,
-	<span class="kw">pub</span> <span class="ident">z</span>: <span class="ident">i64</span>,
-	<span class="kw">pub</span> <span class="ident">pc</span>: <span class="ident">usize</span>,
-	<span class="kw">pub</span> <span class="ident">ic</span>: <span class="ident">usize</span>,
-}
-
-<span class="kw">impl</span> <span class="ident">MachineRegs</span> {
-	<span class="kw">fn</span> <span class="ident">store</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reg</span>: <span class="ident">Reg</span>, <span class="ident">val</span>: <span class="ident">i64</span>) {
-		<span class="kw">match</span> <span class="ident">reg</span> {
-			<span class="ident">Reg::W</span> =&gt; <span class="self">self</span>.<span class="ident">w</span> <span class="op">=</span> <span class="ident">val</span>,
-			<span class="ident">Reg::X</span> =&gt; <span class="self">self</span>.<span class="ident">x</span> <span class="op">=</span> <span class="ident">val</span>,
-			<span class="ident">Reg::Y</span> =&gt; <span class="self">self</span>.<span class="ident">y</span> <span class="op">=</span> <span class="ident">val</span>,
-			<span class="ident">Reg::Z</span> =&gt; <span class="self">self</span>.<span class="ident">z</span> <span class="op">=</span> <span class="ident">val</span>,
-		}
-	}
-	<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">retrieve</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">reg</span>: <span class="ident">Reg</span>) -&gt; <span class="ident">i64</span> {
-		<span class="kw">match</span> <span class="ident">reg</span> {
-			<span class="ident">Reg::W</span> =&gt; <span class="self">self</span>.<span class="ident">w</span>,
-			<span class="ident">Reg::X</span> =&gt; <span class="self">self</span>.<span class="ident">x</span>,
-			<span class="ident">Reg::Y</span> =&gt; <span class="self">self</span>.<span class="ident">y</span>,
-			<span class="ident">Reg::Z</span> =&gt; <span class="self">self</span>.<span class="ident">z</span>,
-		}
-	}
-	<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">retrieve_or_int</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">reg_or_int</span>: <span class="ident">RegOrInt</span>) -&gt; <span class="ident">i64</span> {
-		<span class="kw">match</span> <span class="ident">reg_or_int</span> {
-			<span class="ident">RegOrInt::W</span> =&gt; <span class="self">self</span>.<span class="ident">w</span>,
-			<span class="ident">RegOrInt::X</span> =&gt; <span class="self">self</span>.<span class="ident">x</span>,
-			<span class="ident">RegOrInt::Y</span> =&gt; <span class="self">self</span>.<span class="ident">y</span>,
-			<span class="ident">RegOrInt::Z</span> =&gt; <span class="self">self</span>.<span class="ident">z</span>,
-			<span class="ident">RegOrInt::Int</span> (<span class="ident">val</span>) =&gt; <span class="ident">val</span>,
-		}
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Instr {
+		Inp (dst: Reg) = [ <span class="string">&quot;inp &quot;</span>, dst ],
+		Add (dst: Reg, src: RegOrInt) = [ <span class="string">&quot;add &quot;</span>, dst, <span class="string">&quot; &quot;</span>, src ],
+		Mul (dst: Reg, src: RegOrInt) = [ <span class="string">&quot;mul &quot;</span>, dst, <span class="string">&quot; &quot;</span>, src ],
+		Div (dst: Reg, src: RegOrInt) = [ <span class="string">&quot;div &quot;</span>, dst, <span class="string">&quot; &quot;</span>, src ],
+		Mod (dst: Reg, src: RegOrInt) = [ <span class="string">&quot;mod &quot;</span>, dst, <span class="string">&quot; &quot;</span>, src ],
+		Eql (dst: Reg, src: RegOrInt) = [ <span class="string">&quot;eql &quot;</span>, dst, <span class="string">&quot; &quot;</span>, src ],
 	}
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Instr</span> {
-	<span class="ident">Inp</span> (<span class="ident">Reg</span>),
-	<span class="ident">Add</span> (<span class="ident">Reg</span>, <span class="ident">RegOrInt</span>),
-	<span class="ident">Mul</span> (<span class="ident">Reg</span>, <span class="ident">RegOrInt</span>),
-	<span class="ident">Div</span> (<span class="ident">Reg</span>, <span class="ident">RegOrInt</span>),
-	<span class="ident">Mod</span> (<span class="ident">Reg</span>, <span class="ident">RegOrInt</span>),
-	<span class="ident">Eql</span> (<span class="ident">Reg</span>, <span class="ident">RegOrInt</span>),
-}
-
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Instr</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::Inp</span> (<span class="ident">arg</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;inp {}&quot;</span>, <span class="ident">arg</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Add</span> (<span class="ident">left</span>, <span class="ident">right</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;add {} {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Mul</span> (<span class="ident">left</span>, <span class="ident">right</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;mul {} {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Div</span> (<span class="ident">left</span>, <span class="ident">right</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;div {} {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Mod</span> (<span class="ident">left</span>, <span class="ident">right</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;mod {} {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Eql</span> (<span class="ident">left</span>, <span class="ident">right</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;eql {} {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>) <span class="question-mark">?</span>,
-		}
-		<span class="prelude-val">Ok</span> (())
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Reg {
+		W = [ <span class="string">&quot;w&quot; </span>],
+		X = [ <span class="string">&quot;x&quot; </span>],
+		Y = [ <span class="string">&quot;y&quot; </span>],
+		Z = [ <span class="string">&quot;z&quot; </span>],
 	}
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">RegOrInt</span> { <span class="ident">W</span>, <span class="ident">X</span>, <span class="ident">Y</span>, <span class="ident">Z</span>, <span class="ident">Int</span> (<span class="ident">i64</span>) }
-
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">RegOrInt</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::W</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;w&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::X</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Y</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;y&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Z</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;z&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Int</span> (<span class="ident">val</span>) =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">val</span>) <span class="question-mark">?</span>,
-		}
-		<span class="prelude-val">Ok</span> (())
-	}
-}
-
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Reg</span> { <span class="ident">W</span>, <span class="ident">X</span>, <span class="ident">Y</span>, <span class="ident">Z</span> }
-
-<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Reg</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::W</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;w&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::X</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Y</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;y&quot;</span>) <span class="question-mark">?</span>,
-			<span class="ident"><span class="self">Self</span>::Z</span> =&gt; <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;z&quot;</span>) <span class="question-mark">?</span>,
-		}
-		<span class="prelude-val">Ok</span> (())
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>RegOrInt {
+		W = [ <span class="string">&quot;w&quot; </span>],
+		X = [ <span class="string">&quot;x&quot; </span>],
+		Y = [ <span class="string">&quot;y&quot; </span>],
+		Z = [ <span class="string">&quot;z&quot; </span>],
+		Int (val: i64) = [ val ],
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

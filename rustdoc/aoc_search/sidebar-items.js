@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["SeenState",""]],"struct":[["PrioritySearch","Implements Digkstra’s algorithm"],["PrioritySearchAdder",""]],"trait":[["PrioritySearchVisitor",""],["Seen",""]]};
+window.SIDEBAR_ITEMS = {"mod":[["pairs_map",""],["permutations","Generate permutations of [`usize`] from `0 .. len`."],["prelude","Standard prelude for wildcard imports."],["priority",""]]};

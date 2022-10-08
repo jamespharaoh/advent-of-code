@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["array_vec",""],["puzzle_info",""]],"mod":[["parser",""],["puzzle",""]]};
+window.SIDEBAR_ITEMS = {"macro":[["puzzle_info",""]],"mod":[["puzzle",""]]};

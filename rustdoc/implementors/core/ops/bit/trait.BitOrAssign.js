@@ -1,3 +1,4 @@
 (function() {var implementors = {
+"aoc_2018_day_20":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitOrAssign.html\" title=\"trait core::ops::bit::BitOrAssign\">BitOrAssign</a>&lt;<a class=\"enum\" href=\"aoc_2018_day_20/model/enum.RouteDir.html\" title=\"enum aoc_2018_day_20::model::RouteDir\">RouteDir</a>&gt; for <a class=\"enum\" href=\"aoc_2018_day_20/model/enum.Room.html\" title=\"enum aoc_2018_day_20::model::Room\">Room</a>"]],
 "aoc_misc":[]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

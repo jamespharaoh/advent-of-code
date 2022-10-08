@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-14/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_14/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_14/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_14/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-14/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_14/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_14/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_14/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -148,159 +148,155 @@
 <span id="148">148</span>
 <span id="149">149</span>
 <span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 14: Reindeer Olympics</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2015/day/14](https://adventofcode.com/2015/day/14)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 14: Reindeer Olympics
+//!
+//! [https://adventofcode.com/2015/day/14](https://adventofcode.com/2015/day/14)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Reindeer Olympics&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">14</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Reindeer Olympics&quot;</span>;
+	year = <span class="number">2015</span>;
+	day = <span class="number">14</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Reindeer</span>;
-	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::Reindeer;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">max_dist</span> <span class="op">=</span>
-			<span class="ident">input</span>.<span class="ident">deers</span>.<span class="ident">iter</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">deer</span><span class="op">|</span> <span class="ident">calc_distance</span> (<span class="ident">deer</span>, <span class="ident">input</span>.<span class="ident">race_time</span>))
-				.<span class="ident">max</span> ()
-				.<span class="ident">unwrap_or</span> (<span class="number">0</span>);
-		<span class="prelude-val">Ok</span> (<span class="ident">max_dist</span>)
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u64&gt; {
+		<span class="kw">let </span>max_dist =
+			input.deers.iter ()
+				.map (|deer| calc_distance (deer, input.race_time))
+				.max ()
+				.unwrap_or (<span class="number">0</span>);
+		<span class="prelude-val">Ok </span>(max_dist)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iters</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">deers</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="ident">iter_distance</span>).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dists</span> <span class="op">=</span> <span class="ident">iter::repeat</span> (<span class="number">0</span>).<span class="ident">take</span> (<span class="ident">input</span>.<span class="ident">deers</span>.<span class="ident">len</span> ()).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">scores</span> <span class="op">=</span> <span class="ident">iter::repeat</span> (<span class="number">0</span>).<span class="ident">take</span> (<span class="ident">input</span>.<span class="ident">deers</span>.<span class="ident">len</span> ()).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ();
-		<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">input</span>.<span class="ident">race_time</span> {
-			<span class="ident">dists</span>.<span class="ident">clear</span> ();
-			<span class="ident">dists</span>.<span class="ident">extend</span> (<span class="ident">iters</span>.<span class="ident">iter_mut</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">iter</span><span class="op">|</span> <span class="ident">iter</span>.<span class="ident">next</span> ().<span class="ident">unwrap</span> ()));
-			<span class="kw">let</span> (<span class="ident">idx</span>, <span class="kw">_</span>) <span class="op">=</span>
-				<span class="ident">dists</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-					.<span class="ident">enumerate</span> ()
-					.<span class="ident">max_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">dist</span>)<span class="op">|</span> <span class="ident">dist</span>)
-					.<span class="ident">unwrap</span> ();
-			<span class="ident">scores</span> [<span class="ident">idx</span>] <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u64&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>iters = input.deers.iter ().map (iter_distance).collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ();
+		<span class="kw">let </span><span class="kw-2">mut </span>dists = iter::repeat (<span class="number">0</span>).take (input.deers.len ()).collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ();
+		<span class="kw">let </span><span class="kw-2">mut </span>scores = iter::repeat (<span class="number">0</span>).take (input.deers.len ()).collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ();
+		<span class="kw">for _ in </span><span class="number">0 </span>.. input.race_time {
+			dists.clear ();
+			dists.extend (iters.iter_mut ().map (|iter| iter.next ().unwrap ()));
+			<span class="kw">let </span>(idx, <span class="kw">_</span>) =
+				dists.iter ().copied ()
+					.enumerate ()
+					.max_by_key (|&amp; (<span class="kw">_</span>, dist)| dist)
+					.unwrap ();
+			scores [idx] += <span class="number">1</span>;
 		}
-		<span class="kw">let</span> <span class="ident">best_score</span> <span class="op">=</span> <span class="ident">scores</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">max</span> ().<span class="ident">unwrap</span> ();
-		<span class="prelude-val">Ok</span> (<span class="ident">best_score</span>)
+		<span class="kw">let </span>best_score = scores.iter ().copied ().max ().unwrap ();
+		<span class="prelude-val">Ok </span>(best_score)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter_distance</span> (<span class="ident">deer</span>: <span class="op">&amp;</span> <span class="ident">Reindeer</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">u64</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flying</span> <span class="op">=</span> <span class="bool-val">false</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">time</span> <span class="op">=</span> <span class="number">0</span>;
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dist</span> <span class="op">=</span> <span class="number">0_u64</span>;
-		<span class="ident">iter::from_fn</span> (<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
-			<span class="kw">if</span> <span class="ident">time</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="kw">if</span> <span class="ident">flying</span> {
-					<span class="ident">time</span> <span class="op">=</span> <span class="ident">deer</span>.<span class="ident">rest_time</span>;
-					<span class="ident">flying</span> <span class="op">=</span> <span class="bool-val">false</span>;
-				} <span class="kw">else</span> {
-					<span class="ident">time</span> <span class="op">=</span> <span class="ident">deer</span>.<span class="ident">fly_time</span>;
-					<span class="ident">flying</span> <span class="op">=</span> <span class="bool-val">true</span>;
+	<span class="kw">pub fn </span>iter_distance (deer: &amp; Reindeer) -&gt; <span class="kw">impl </span>Iterator &lt;Item = u64&gt; + <span class="lifetime">&#39;_ </span>{
+		<span class="kw">let </span><span class="kw-2">mut </span>flying = <span class="bool-val">false</span>;
+		<span class="kw">let </span><span class="kw-2">mut </span>time = <span class="number">0</span>;
+		<span class="kw">let </span><span class="kw-2">mut </span>dist = <span class="number">0_u64</span>;
+		iter::from_fn (<span class="kw">move </span>|| {
+			<span class="kw">if </span>time == <span class="number">0 </span>{
+				<span class="kw">if </span>flying {
+					time = deer.rest_time;
+					flying = <span class="bool-val">false</span>;
+				} <span class="kw">else </span>{
+					time = deer.fly_time;
+					flying = <span class="bool-val">true</span>;
 				}
 			}
-			<span class="ident">time</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-			<span class="kw">if</span> <span class="ident">flying</span> { <span class="ident">dist</span> <span class="op">+</span><span class="op">=</span> <span class="ident">deer</span>.<span class="ident">fly_speed</span>.<span class="ident">as_u64</span> (); }
-			<span class="prelude-val">Some</span> (<span class="ident">dist</span>)
+			time -= <span class="number">1</span>;
+			<span class="kw">if </span>flying { dist += deer.fly_speed.pan_u64 (); }
+			<span class="prelude-val">Some </span>(dist)
 		})
 	}
 
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_distance</span> (<span class="ident">deer</span>: <span class="op">&amp;</span> <span class="ident">Reindeer</span>, <span class="ident">time</span>: <span class="ident">u32</span>) -&gt; <span class="ident">u64</span> {
-		<span class="ident">iter_distance</span> (<span class="ident">deer</span>).<span class="ident">nth</span> (<span class="ident">time</span>.<span class="ident">as_usize</span> ()).<span class="ident">unwrap</span> ()
+	<span class="attribute">#[ must_use ]
+	</span><span class="kw">pub fn </span>calc_distance (deer: &amp; Reindeer, time: u32) -&gt; u64 {
+		iter_distance (deer).nth (time.pan_usize ()).unwrap ()
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">deers</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Reindeer</span><span class="op">&gt;</span>,
-		<span class="kw">pub</span> <span class="ident">race_time</span>: <span class="ident">u32</span>,
+	<span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>deers: Vec &lt;Reindeer&gt;,
+		<span class="kw">pub </span>race_time: u32,
 	}
 
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Reindeer</span> {
-		<span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-		<span class="kw">pub</span> <span class="ident">fly_speed</span>: <span class="ident">u32</span>,
-		<span class="kw">pub</span> <span class="ident">fly_time</span>: <span class="ident">u32</span>,
-		<span class="kw">pub</span> <span class="ident">rest_time</span>: <span class="ident">u32</span>,
+	<span class="kw">pub struct </span>Reindeer {
+		<span class="kw">pub </span>name: String,
+		<span class="kw">pub </span>fly_speed: u32,
+		<span class="kw">pub </span>fly_time: u32,
+		<span class="kw">pub </span>rest_time: u32,
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="kw-2">mut</span> <span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">race_time</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">race_time</span>) <span class="op">=</span> <span class="ident">input</span> [<span class="number">0</span>].<span class="ident">strip_prefix</span> (<span class="string">&quot;RACE_TIME=&quot;</span>) {
-				<span class="ident">input</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="ident">input</span> [ <span class="number">1</span> .. ];
-				<span class="ident">race_time</span>.<span class="ident">parse</span> () <span class="question-mark">?</span>
-			} <span class="kw">else</span> { <span class="number">2503</span> };
-			<span class="kw">if</span> <span class="ident">race_time</span> <span class="op">&lt;</span> <span class="number">1</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Race time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="kw">let</span> <span class="ident">deers</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span>
-				<span class="ident">input</span>.<span class="ident">iter</span> ()
-					.<span class="ident">enumerate</span> ()
-					.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
-						<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-							<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">word</span> () <span class="question-mark">?</span>.<span class="ident">to_owned</span> ();
-							<span class="kw">let</span> <span class="ident">fly_speed</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; can fly &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-							<span class="kw">if</span> <span class="ident">fly_speed</span> <span class="op">&lt;</span> <span class="number">1</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Fly speed must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
-							<span class="kw">let</span> <span class="ident">fly_time</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; km/s for &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-							<span class="kw">if</span> <span class="ident">fly_time</span> <span class="op">&lt;</span> <span class="number">1</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Fly time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
-							<span class="kw">let</span> <span class="ident">rest_time</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; seconds, but then must rest for &quot;</span>) <span class="question-mark">?</span>
-								.<span class="ident">int</span> () <span class="question-mark">?</span>;
-							<span class="kw">if</span> <span class="ident">rest_time</span> <span class="op">&lt;</span> <span class="number">1</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Rest time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
-							<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; seconds.&quot;</span>) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-							<span class="prelude-val">Ok</span> (<span class="ident">Reindeer</span> { <span class="ident">name</span>, <span class="ident">fly_speed</span>, <span class="ident">fly_time</span>, <span class="ident">rest_time</span> })
-						}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">char_idx</span><span class="op">|</span>
-							<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
-								<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">char_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
-					.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">deers</span>.<span class="ident">is_empty</span> () { <span class="prelude-val">Err</span> (<span class="string">&quot;Must have at least one deer&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">deers</span>, <span class="ident">race_time</span> })
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (<span class="kw-2">mut </span>input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>race_time = <span class="kw">if let </span><span class="prelude-val">Some </span>(race_time) = input [<span class="number">0</span>].strip_prefix (<span class="string">&quot;RACE_TIME=&quot;</span>) {
+				input = &amp; input [ <span class="number">1 </span>.. ];
+				race_time.parse () <span class="question-mark">?
+			</span>} <span class="kw">else </span>{ <span class="number">2503 </span>};
+			<span class="kw">if </span>race_time &lt; <span class="number">1 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Race time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="kw">let </span>deers: Vec &lt;<span class="kw">_</span>&gt; =
+				input.iter ()
+					.enumerate ()
+					.map (|(line_idx, line)|
+						Parser::wrap (line, |parser| {
+							<span class="kw">let </span>name = parser.word () <span class="question-mark">?</span>.to_owned ();
+							<span class="kw">let </span>fly_speed = parser.expect (<span class="string">&quot; can fly &quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+							<span class="kw">if </span>fly_speed &lt; <span class="number">1 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Fly speed must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
+							<span class="kw">let </span>fly_time = parser.expect (<span class="string">&quot; km/s for &quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+							<span class="kw">if </span>fly_time &lt; <span class="number">1 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Fly time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
+							<span class="kw">let </span>rest_time = parser.expect (<span class="string">&quot; seconds, but then must rest for &quot;</span>) <span class="question-mark">?
+								</span>.int () <span class="question-mark">?</span>;
+							<span class="kw">if </span>rest_time &lt; <span class="number">1 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Rest time must be at least 1&quot;</span>) <span class="question-mark">?</span>; }
+							parser.expect (<span class="string">&quot; seconds.&quot;</span>) <span class="question-mark">?</span>.end () <span class="question-mark">?</span>;
+							<span class="prelude-val">Ok </span>(Reindeer { name, fly_speed, fly_time, rest_time })
+						}).map_parse_err (|<span class="kw">_</span>, char_idx|
+							<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
+								line_idx + <span class="number">1</span>, char_idx + <span class="number">1</span>, line)))
+					.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="kw">if </span>deers.is_empty () { <span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least one deer&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ deers, race_time })
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;RACE_TIME=1000&quot;</span>,
 		<span class="string">&quot;Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.&quot;</span>,
 		<span class="string">&quot;Dancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1120&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1120&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;689&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;689&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input",""]],"type":[["Input",""],["Place",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["DistTable",""]],"type":[["Dist",""]]};

@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2020/day-09/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2020_day_09/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2020_day_09/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2020_day_09/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
+
+</span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>input::Input;
+
+<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u64&gt; {
+	<span class="prelude-val">Ok </span>(find_invalid (&amp; input.data).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
+}
+
+<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u64&gt; {
+	<span class="kw">let </span>invalid = find_invalid (&amp; input.data).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
+	<span class="kw">let </span>range = find_contiguous (&amp; input.data, invalid).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
+	<span class="kw">let </span>min = input.data [range.clone ()].iter ().copied ().min ().unwrap ();
+	<span class="kw">let </span>max = input.data [range].iter ().copied ().max ().unwrap ();
+	<span class="prelude-val">Ok </span>(min + max)
+}
+
+<span class="kw">fn </span>find_invalid (data: &amp; [u64]) -&gt; <span class="prelude-ty">Option </span>&lt;u64&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>window = Vec::new ();
+	<span class="kw">for </span>(idx, num) <span class="kw">in </span>data.iter ().copied ().enumerate () {
+		<span class="kw">if </span>window.len () == <span class="number">25 </span>&amp;&amp; ! contains_sum (window.iter ().map (|&amp; (<span class="kw">_</span>, num)| num), num) {
+			<span class="kw">return </span><span class="prelude-val">Some </span>(num);
+		}
+		<span class="kw">if </span><span class="number">25 </span>&lt;= idx { window.retain (|&amp; (prev_idx, <span class="kw">_</span>)| prev_idx != idx - <span class="number">25</span>); }
+		<span class="kw">let </span>insert_idx = window.binary_search_by_key (&amp; num, |&amp; (<span class="kw">_</span>, num)| num).either ();
+		window.insert (insert_idx, (idx, num));
+	}
+	<span class="prelude-val">None
+</span>}
+
+<span class="kw">fn </span>contains_sum (
+	iter: <span class="kw">impl </span>Iterator &lt;Item = u64&gt; + Clone + ExactSizeIterator + DoubleEndedIterator,
+	sum: u64,
+) -&gt; bool {
+	<span class="kw">let </span><span class="kw-2">mut </span>fwd_iter = iter.clone ().enumerate ().peekable ();
+	<span class="kw">let </span><span class="kw-2">mut </span>rev_iter = iter.enumerate ().rev ().peekable ();
+	<span class="kw">loop </span>{
+		<span class="kw">let </span>&amp; (fwd_idx, fwd_val) = fwd_iter.peek ().unwrap ();
+		<span class="kw">let </span>&amp; (rev_idx, rev_val) = rev_iter.peek ().unwrap ();
+		<span class="kw">if </span>fwd_idx == rev_idx { <span class="kw">return </span><span class="bool-val">false </span>}
+		<span class="kw">match </span>sum.cmp (&amp; (fwd_val + rev_val)) {
+			Ordering::Equal =&gt; <span class="kw">return </span><span class="bool-val">true</span>,
+			Ordering::Less =&gt; rev_iter.next ().unwrap (),
+			Ordering::Greater =&gt; fwd_iter.next ().unwrap (),
+		};
+	}
+}
+
+<span class="kw">fn </span>find_contiguous (data: &amp; [u64], target: u64) -&gt; <span class="prelude-ty">Option </span>&lt;Range &lt;usize&gt;&gt; {
+	<span class="kw">for </span>idx_0 <span class="kw">in </span><span class="number">0 </span>.. data.len () - <span class="number">2 </span>{
+		<span class="kw">let </span><span class="kw-2">mut </span>sum = data [idx_0];
+		<span class="kw">for </span>idx_1 <span class="kw">in </span>idx_0 + <span class="number">1 </span>.. data.len () {
+			sum += data [idx_1];
+			<span class="kw">if </span>target == sum { <span class="kw">return </span><span class="prelude-val">Some </span>(idx_0 .. idx_1 + <span class="number">1</span>) }
+			<span class="kw">if </span>target &lt; sum { <span class="kw">break </span>}
+		}
+	}
+	<span class="prelude-val">None
+</span>}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

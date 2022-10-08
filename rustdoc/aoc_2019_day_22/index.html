@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Advent of Code 2019: Day 22: Slam Shuffle"><meta name="keywords" content="rust, rustlang, rust-lang, aoc_2019_day_22"><title>aoc_2019_day_22 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../normalize.css"><link rel="stylesheet" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../ayu.css" disabled><link rel="stylesheet" href="../dark.css" disabled><link rel="stylesheet" href="../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../storage.js"></script><script defer src="../crates.js"></script><script defer src="../main.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../aoc_2019_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../aoc_2019_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></div></a><h2 class="location"><a href="#">Crate aoc_2019_day_22</a></h2><div class="sidebar-elems"><div class="block"><ul><li class="version">Version 0.1.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul></div><section><div class="block"><ul><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../aoc_2019_day_22/index.html"><img class="rust-logo" src="../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="main-heading"><h1 class="fqn">Crate <a class="mod" href="#">aoc_2019_day_22</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../src/aoc_2019_day_22/lib.rs.html#1-109">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Advent of Code 2019: Day 22: Slam Shuffle</p>
+<p><a href="https://adventofcode.com/2019/day/22">https://adventofcode.com/2019/day/22</a></p>
+<h2 id="input"><a href="#input">Input</a></h2>
+<p>A series of so-called shuffle operations, one per line, with three variants:</p>
+<ul>
+<li><code>deal into new stack</code></li>
+<li><code>cut n</code> where <code>n</code> is an integer</li>
+<li><code>deal with increment n</code> where <code>n</code> is a positive integer</li>
+</ul>
+<p>See the puzzle description for details on what these mean.</p>
+<h2 id="part-one"><a href="#part-one">Part one</a></h2>
+<p>Apply the described operations once with a deck of size <code>10007</code>. Return the final position of
+card <code>2019</code>.</p>
+<h2 id="part-two"><a href="#part-two">Part two</a></h2>
+<p>Apply the desired operations <code>101741582076661</code> times with a deck of size <code>119315717514047</code>.
+Return the value of the card in position <code>2020</code>.</p>
+<h2 id="algorithm"><a href="#algorithm">Algorithm</a></h2>
+<p>The change in a card’s position can be modelled as a combination of addition and multiplication
+modulo the deck size. This relies on the following two things being true:</p>
+<ul>
+<li>The deck size is a prime number</li>
+<li>The cards all start out with a position equal to their value</li>
+</ul>
+<p>The operations map as follows:</p>
+<ul>
+<li>“Deal into new stack” is a negation followed by subtracting one, which can be converted to
+multiplication by the deck size minus one, followed by addition of the deck size minus one</li>
+<li>“Cut” is subtraction, which can be converted to addition by subtracting the argument from the
+deck size</li>
+<li>“Deal with increment” is simple multiplication</li>
+</ul>
+<p>We can combine two steps in sequence using some simple maths. We model an operation as a
+multiplication followed by an addition:</p>
+<p><code>f (pos, mul, add) = pos × mul + add</code></p>
+<p>We can apply this function to itself and then extract a single copy of the original function as
+follows. Here we use <code>mul_a</code> and <code>add_a</code> as the first step’s arguments, and <code>mul_b</code> and <code>add_b</code>
+as the second step’s:</p>
+<div class="example-wrap"><pre class="language-text"><code>f (f (pos, mul_a, add_a), mul_b, add_b)
+    = (pos × mul_a + add_a) × mul_b + add_b
+    = pos × mul_a × mul_b + add_a × mul_b + add_b
+    = f (pos, mul_a × mul_b, add_a × mul_b + add_b)</code></pre></div>
+<p>Using this we can collapse the entire sequence of steps to a single step. This doesn’t help
+much for part one, but it is important for part two. We also need to be able to reverse the
+operations. We can derive this from some basic maths identities:</p>
+<div class="example-wrap"><pre class="language-text"><code>pos_1 = f (pos_0, mul, add)
+      = pos_0 × mul + add
+pos_0 × mul = pos_1 - add
+pos_0 = (pos_1 - add) ÷ mul
+      = pos_1 ÷ mul - add ÷ mul
+      = pos_1 × (1 ÷ mul) + (- add ÷ mul)
+      = f (pos_1, 1 ÷ mul, - add ÷ mul)</code></pre></div>
+<p>I am cheating a little here with the above representation, although the maths is sound. Instead
+of dividing, we are actually multiplying by the
+<a href="https://en.wikipedia.org/wiki/Modular_multiplicative_inverse">multiplicative inverse</a>, which
+is possible because the modulo is a prime number.</p>
+<p>Now we can represent all the steps as <code>(mul, add)</code>, combine steps into the same form, and
+find the reverse. We also need to be able to repeat steps many times. To do this, we repeatedly
+combine a step with itself to get equivalent steps for repetition counts of increasing powers
+of two. We apply these to the input zero or one times to get the right number. This is fairly
+simple to do because these are the binary digits of the repetition count.</p>
+<p>With all these operations implemented the algorithm becomes very simple:</p>
+<ul>
+<li>Convert the shuffles into <code>(mul, add)</code> operations</li>
+<li>Combine them into a single operation</li>
+<li>For part two, reverse the operation</li>
+<li>For part two, repeat the operation the specified number of times</li>
+<li>Apply the operation to the input</li>
+</ul>
+<p>Although the numbers involved fit into 64-bits, they are very high, and multiplication will
+overflow easily. For this reason we use <a href="https://doc.rust-lang.org/nightly/std/primitive.u64.html" title="u64"><code>u64</code></a> to store everything, but convert to <a href="https://doc.rust-lang.org/nightly/std/primitive.u128.html" title="u128"><code>u128</code></a>
+to perform operations. Once we modulo the result we can convert back to <a href="https://doc.rust-lang.org/nightly/std/primitive.u64.html" title="u64"><code>u64</code></a> safely.</p>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="input/index.html" title="aoc_2019_day_22::input mod">input</a></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="logic/index.html" title="aoc_2019_day_22::logic mod">logic</a></div><div class="item-right docblock-short">Logic for solving the puzzles</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="model/index.html" title="aoc_2019_day_22::model mod">model</a></div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.puzzle_metadata.html" title="aoc_2019_day_22::puzzle_metadata fn">puzzle_metadata</a></div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-current-crate="aoc_2019_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

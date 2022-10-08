@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Generate permutations of [`usize`] from `0 .. len`."><meta name="keywords" content="rust, rustlang, rust-lang, permutations"><title>aoc_search::permutations - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_search/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_search/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"><a href="#">Module permutations</a></h2><div class="sidebar-elems"><section><div class="block"><ul><li><a href="#structs">Structs</a></li></ul></div></section></div></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_search/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="main-heading"><h1 class="fqn">Module <a href="../index.html">aoc_search</a>::<wbr><a class="mod" href="#">permutations</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../../clipboard.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../src/aoc_search/permutations.rs.html#1-263">source</a> · <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span></div><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Generate permutations of <a href="https://doc.rust-lang.org/nightly/std/primitive.usize.html" title="usize"><code>usize</code></a> from <code>0 .. len</code>.</p>
+<p>The main functionality is provided by the <a href="struct.PermutationsHelper.html" title="PermutationsHelper"><code>PermutationsHelper</code></a> struct.</p>
+<p>Designed to be used with a indexed list of items of which to generate permutations, eg in a
+<a href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="Vec"><code>Vec</code></a> or similar. Provide the number of items when calling <a href="struct.PermutationsHelper.html#method.new" title="PermutationsHelper::new"><code>PermutationsHelper::new</code></a>, then
+call <a href="struct.PermutationsHelper.html#method.next"><code>next</code></a> in a loop, aborting if it returns <code>false</code>. After
+calling <a href="struct.PermutationsHelper.html#method.next"><code>next</code></a>, the indexes are available by treating this struct
+as a slice via the <a href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="Deref"><code>Deref</code></a> trait.</p>
+<h2 id="examples"><a href="#examples">Examples</a></h2>
+<p>Basic usage:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>perms_helper = PermutationsHelper::new (<span class="number">2</span>);
+<span class="macro">assert_eq! </span>(<span class="bool-val">true</span>, perms_helper.next ());
+<span class="macro">assert_eq! </span>(&amp; [<span class="number">0</span>, <span class="number">1</span>], &amp; * perms_helper);
+<span class="macro">assert_eq! </span>(<span class="bool-val">true</span>, perms_helper.next ());
+<span class="macro">assert_eq! </span>(&amp; [<span class="number">1</span>, <span class="number">0</span>], &amp; * perms_helper);
+<span class="macro">assert_eq! </span>(<span class="bool-val">false</span>, perms_helper.next ());</code></pre></div>
+<p>This struct doesn’t implement <a href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="Iterator"><code>Iterator</code></a> so that we avoid allocating a <a href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="Vec"><code>Vec</code></a> or similar
+for every iteration. It can easily be wrapped as one if needed:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>perms_helper = PermutationsHelper::new (<span class="number">2</span>);
+<span class="kw">let </span><span class="kw-2">mut </span>perms_iter = iter::from_fn (<span class="kw">move </span>||
+  perms_helper.next ().then (|| perms_helper.to_vec ()));
+<span class="macro">assert_eq! </span>(<span class="prelude-val">Some </span>(<span class="macro">vec! </span>[<span class="number">0</span>, <span class="number">1</span>]), perms_iter.next ());
+<span class="macro">assert_eq! </span>(<span class="prelude-val">Some </span>(<span class="macro">vec! </span>[<span class="number">1</span>, <span class="number">0</span>]), perms_iter.next ());
+<span class="macro">assert_eq! </span>(<span class="prelude-val">None</span>, perms_iter.next ());</code></pre></div>
+<p>A more typical example is generating permutations of indexes into a <a href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="Vec"><code>Vec</code></a>, performing a
+calculation based on the items in that order, and finally performing some type of search or
+aggregation over the results:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>items = <span class="macro">vec! </span>[ <span class="number">49_u64</span>, <span class="number">93</span>, <span class="number">51</span>, <span class="number">45</span>, <span class="number">26</span>, <span class="number">73</span>, <span class="number">20</span>, <span class="number">80 </span>];
+<span class="kw">let </span><span class="kw-2">mut </span>perms_helper = PermutationsHelper::new (items.len ());
+<span class="kw">let </span>calc_iter = iter::from_fn (<span class="kw">move </span>||
+  perms_helper.next ().then (|| perms_helper.iter ()
+    .map (|&amp; idx| items [idx])
+    .fold (<span class="number">0</span>, |sum, item| sum * <span class="number">100 </span>+ item)));
+<span class="macro">assert_eq! </span>(<span class="number">9380735149452620</span>, calc_iter.clone ().max ().unwrap ());
+<span class="macro">assert_eq! </span>(<span class="number">2026454951738093</span>, calc_iter.clone ().min ().unwrap ());</code></pre></div>
+<h2 id="algorithm"><a href="#algorithm">Algorithm</a></h2>
+<p>This implements a “classic” algorithm described on
+<a href="https://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order">Wikipedia</a>,
+which produces results in lexicographical order. The alogirthm starts with the items in order,
+then applies the following steps to generate subsequent iterations:</p>
+<ul>
+<li>Find the highest index <code>idx_0</code> where <code>items [idx_0] &lt; items [idx_0 + 1]</code></li>
+<li>Find the highest index <code>idx_1</code> where <code>idx_0 &lt; idx_1 &amp;&amp; items [idx_0] &lt; items [idx_1]</code></li>
+<li>Swap <code>items [idx_0]</code> and <code>items [idx_1]</code></li>
+<li>Reverse the order of <code>items [idx_0 + 1 .. ]</code></li>
+</ul>
+</div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.PermutationsHelper.html" title="aoc_search::permutations::PermutationsHelper struct">PermutationsHelper</a></div><div class="item-right docblock-short">The <code>PermutationsHelper</code> type. See the <a href="index.html">module level documentation</a> for more
+information.</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_search" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

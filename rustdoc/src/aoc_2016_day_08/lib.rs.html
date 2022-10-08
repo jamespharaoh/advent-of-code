@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-08/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_08/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_08/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_08/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-08/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_08/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_08/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_08/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -175,164 +175,162 @@
 <span id="175">175</span>
 <span id="176">176</span>
 <span id="177">177</span>
-<span id="178">178</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 8: Two-Factor Authentication</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2016/day/8](https://adventofcode.com/2016/day/8)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 8: Two-Factor Authentication
+//!
+//! [https://adventofcode.com/2016/day/8](https://adventofcode.com/2016/day/8)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_grid</span> <span class="kw">as</span> <span class="ident">grid</span>;
-<span class="kw">use</span> <span class="ident">aoc_ocr</span> <span class="kw">as</span> <span class="ident">ocr</span>;
-<span class="kw">use</span> <span class="ident">aoc_pos</span> <span class="kw">as</span> <span class="ident">pos</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_grid::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_ocr <span class="kw">as </span>ocr;
+<span class="kw">use </span>aoc_pos <span class="kw">as </span>pos;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Two-Factor Authentication&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2016</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">8</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Two-Factor Authentication&quot;</span>;
+	year = <span class="number">2016</span>;
+	day = <span class="number">8</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">grid::Grid</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Step</span>;
-	<span class="kw">use</span> <span class="ident">model::Pos</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::Step;
+	<span class="kw">use </span>model::Pos;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">grid</span> <span class="op">=</span> <span class="ident">calc_result</span> (<span class="ident">input</span>);
-		<span class="prelude-val">Ok</span> (<span class="ident">grid</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>).<span class="ident">count</span> ())
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;usize&gt; {
+		<span class="kw">let </span>grid = calc_result (input);
+		<span class="prelude-val">Ok </span>(grid.values ().filter (|&amp; val| val).count ())
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">grid</span> <span class="op">=</span> <span class="ident">calc_result</span> (<span class="ident">input</span>);
-		<span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span>
-			<span class="ident">ocr::read_dots</span> (<span class="op">&amp;</span> <span class="op">|</span><span class="ident">row</span>: <span class="ident">u32</span>, <span class="ident">col</span>: <span class="ident">u32</span><span class="op">|</span>
-				<span class="ident">grid</span>.<span class="ident">get</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }).<span class="ident">unwrap_or</span> (<span class="bool-val">false</span>)) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">code</span>)
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
+		<span class="kw">let </span>grid = calc_result (input);
+		<span class="kw">let </span>code = ocr::read_dots (
+			grid.iter ()
+				.filter_map (|(pos, val)| val
+					.then_some ((pos.row, pos.col)))) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(code)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>, <span class="ident">Pos</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">grid</span>: <span class="ident">Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>, <span class="ident">Pos</span><span class="op">&gt;</span> <span class="op">=</span>
-			<span class="ident">Grid::new_vec</span> ([<span class="number">0</span>, <span class="number">0</span>], [<span class="ident">input</span>.<span class="ident">height</span>.<span class="ident">as_usize</span> (), <span class="ident">input</span>.<span class="ident">width</span>.<span class="ident">as_usize</span> ()]);
-		<span class="kw">for</span> <span class="ident">step</span> <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">steps</span>.<span class="ident">iter_vals</span> () {
-			<span class="kw">match</span> <span class="ident">step</span> {
-				<span class="ident">Step::Rect</span> { <span class="ident">width</span>, <span class="ident">height</span> } =&gt; {
-					<span class="kw">for</span> <span class="ident">row</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">height</span> {
-						<span class="kw">for</span> <span class="ident">col</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">width</span> {
-							<span class="ident">grid</span>.<span class="ident">set</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }, <span class="bool-val">true</span>);
+	<span class="kw">fn </span>calc_result (input: &amp; Input) -&gt; GridBuf &lt;Vec &lt;bool&gt;, Pos, <span class="number">2</span>&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>grid: GridBuf &lt;Vec &lt;bool&gt;, Pos, <span class="number">2</span>&gt; =
+			GridBuf::new_size (Pos::new (input.height, input.width));
+		<span class="kw">for </span>step <span class="kw">in </span>input.steps.iter_vals () {
+			<span class="kw">match </span>step {
+				Step::Rect { width, height } =&gt; {
+					<span class="kw">for </span>row <span class="kw">in </span><span class="number">0 </span>.. height {
+						<span class="kw">for </span>col <span class="kw">in </span><span class="number">0 </span>.. width {
+							grid.set (Pos { row, col }, <span class="bool-val">true</span>);
 						}
 					}
 				},
-				<span class="ident">Step::RotateRow</span> { <span class="ident">row</span>, <span class="ident">dist</span> } =&gt; {
-					<span class="kw">let</span> <span class="ident">temp</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> <span class="op">=</span>
-						(<span class="number">0</span> .. <span class="ident">input</span>.<span class="ident">width</span>)
-							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">col</span><span class="op">|</span> <span class="ident">grid</span>.<span class="ident">get</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }).<span class="ident">unwrap</span> ())
-							.<span class="ident">collect</span> ();
-					<span class="kw">for</span> <span class="ident">old_col</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">input</span>.<span class="ident">width</span> {
-						<span class="kw">let</span> <span class="ident">col</span> <span class="op">=</span> (<span class="ident">old_col</span> <span class="op">+</span> <span class="ident">dist</span>) <span class="op">%</span> <span class="ident">input</span>.<span class="ident">width</span>;
-						<span class="ident">grid</span>.<span class="ident">set</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }, <span class="ident">temp</span> [<span class="ident">old_col</span>.<span class="ident">as_usize</span> ()]);
+				Step::RotateRow { row, dist } =&gt; {
+					<span class="kw">let </span>temp: Vec &lt;bool&gt; =
+						(<span class="number">0 </span>.. input.width)
+							.map (|col| grid.get (Pos { row, col }).unwrap ())
+							.collect ();
+					<span class="kw">for </span>old_col <span class="kw">in </span><span class="number">0 </span>.. input.width {
+						<span class="kw">let </span>col = (old_col + dist) % input.width;
+						grid.set (Pos { row, col }, temp [old_col.pan_usize ()]);
 					}
 				},
-				<span class="ident">Step::RotateCol</span> { <span class="ident">col</span>, <span class="ident">dist</span> } =&gt; {
-					<span class="kw">let</span> <span class="ident">temp</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> <span class="op">=</span>
-						(<span class="number">0</span> .. <span class="ident">input</span>.<span class="ident">height</span>)
-							.<span class="ident">map</span> (<span class="op">|</span><span class="ident">row</span><span class="op">|</span> <span class="ident">grid</span>.<span class="ident">get</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }).<span class="ident">unwrap</span> ())
-							.<span class="ident">collect</span> ();
-					<span class="kw">for</span> <span class="ident">old_row</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">input</span>.<span class="ident">height</span> {
-						<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> (<span class="ident">old_row</span> <span class="op">+</span> <span class="ident">dist</span>) <span class="op">%</span> <span class="ident">input</span>.<span class="ident">height</span>;
-						<span class="ident">grid</span>.<span class="ident">set</span> (<span class="ident">Pos</span> { <span class="ident">row</span>, <span class="ident">col</span> }, <span class="ident">temp</span> [<span class="ident">old_row</span>.<span class="ident">as_usize</span> ()]);
+				Step::RotateCol { col, dist } =&gt; {
+					<span class="kw">let </span>temp: Vec &lt;bool&gt; =
+						(<span class="number">0 </span>.. input.height)
+							.map (|row| grid.get (Pos { row, col }).unwrap ())
+							.collect ();
+					<span class="kw">for </span>old_row <span class="kw">in </span><span class="number">0 </span>.. input.height {
+						<span class="kw">let </span>row = (old_row + dist) % input.height;
+						grid.set (Pos { row, col }, temp [old_row.pan_usize ()]);
 					}
 				},
 			}
 		}
-		<span class="ident">grid</span>
+		grid
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pos</span> <span class="op">=</span> <span class="ident">pos::PosRowCol</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span>;
+	<span class="kw">pub type </span>Pos = pos::PosRowCol &lt;u32&gt;;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">steps</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Step</span><span class="op">&gt;</span>,
-		<span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">u32</span>,
-		<span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">u32</span>,
+	<span class="attribute">#[ derive (Clone, Debug) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>steps: Vec &lt;Step&gt;,
+		<span class="kw">pub </span>width: u32,
+		<span class="kw">pub </span>height: u32,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Step</span> {
-		<span class="ident">Rect</span> { <span class="ident">width</span>: <span class="ident">u32</span>, <span class="ident">height</span>: <span class="ident">u32</span> },
-		<span class="ident">RotateRow</span> { <span class="ident">row</span>: <span class="ident">u32</span>, <span class="ident">dist</span>: <span class="ident">u32</span> },
-		<span class="ident">RotateCol</span> { <span class="ident">col</span>: <span class="ident">u32</span>, <span class="ident">dist</span>: <span class="ident">u32</span> },
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Step {
+		Rect { width: u32, height: u32 },
+		RotateRow { row: u32, dist: u32 },
+		RotateCol { col: u32, dist: u32 },
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="kw-2">mut</span> <span class="ident">lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">lines</span>, <span class="string">&quot;WIDTH=&quot;</span>, <span class="number">50_u32</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">lines</span>, <span class="string">&quot;HEIGHT=&quot;</span>, <span class="number">6_u32</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">steps</span> <span class="op">=</span> <span class="ident">lines</span>.<span class="ident">iter</span> ()
-				.<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
-					<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-						<span class="ident">parser</span>.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>);
-						<span class="ident">Step::parse_real</span> (<span class="ident">parser</span>)
-					}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
-						<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Step</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">steps</span>.<span class="ident">iter_vals</span> ().<span class="ident">any</span> (<span class="op">|</span><span class="ident">step</span><span class="op">|</span>
-					<span class="kw">match</span> <span class="ident">step</span> {
-						<span class="ident">Step::Rect</span> { <span class="ident">width</span>: <span class="ident">step_width</span>, <span class="ident">height</span>: <span class="ident">step_height</span> } =&gt;
-							<span class="ident">step_width</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">width</span> <span class="op">|</span><span class="op">|</span> <span class="ident">step_height</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">height</span>,
-						<span class="ident">Step::RotateRow</span> { <span class="ident">row</span>, .. } =&gt; <span class="ident">height</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">row</span>,
-						<span class="ident">Step::RotateCol</span> { <span class="ident">col</span>, .. } =&gt; <span class="ident">width</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">col</span>,
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (<span class="kw-2">mut </span>lines: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>width = parser::input_param (&amp; <span class="kw-2">mut </span>lines, <span class="string">&quot;WIDTH=&quot;</span>, <span class="number">50_u32</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span>height = parser::input_param (&amp; <span class="kw-2">mut </span>lines, <span class="string">&quot;HEIGHT=&quot;</span>, <span class="number">6_u32</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span>steps = lines.iter ()
+				.enumerate ()
+				.map (|(line_idx, line)|
+					Parser::wrap (line, |parser| {
+						parser.set_ignore_whitespace (<span class="bool-val">true</span>);
+						Step::parse_real (parser)
+					}).map_parse_err (|<span class="kw">_</span>, col_idx| <span class="macro">format! </span>(
+						<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>, line_idx + <span class="number">1</span>, col_idx + <span class="number">1</span>, line)))
+				.collect::&lt;GenResult &lt;Vec &lt;Step&gt;&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="kw">if </span>steps.iter_vals ().any (|step|
+					<span class="kw">match </span>step {
+						Step::Rect { width: step_width, height: step_height } =&gt;
+							step_width &gt;= width || step_height &gt;= height,
+						Step::RotateRow { row, .. } =&gt; height &lt;= row,
+						Step::RotateCol { col, .. } =&gt; width &lt;= col,
 					}) {
-				<span class="prelude-val">Err</span> (<span class="string">&quot;Invalid input&quot;</span>) <span class="question-mark">?</span>;
+				<span class="prelude-val">Err </span>(<span class="string">&quot;Invalid input&quot;</span>) <span class="question-mark">?</span>;
 			}
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">steps</span>, <span class="ident">width</span>, <span class="ident">height</span> })
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ steps, width, height })
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">Step</span> {
-		<span class="kw">fn</span> <span class="ident">parse_real</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="ident">parser</span>.<span class="ident">any</span> ()
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rect&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Rect</span> { <span class="ident">width</span>, <span class="ident">height</span> })
+	<span class="kw">impl </span>Step {
+		<span class="kw">fn </span>parse_real (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+			parser.any ()
+				.of (|parser| {
+					<span class="kw">let </span>width = parser.expect (<span class="string">&quot;rect&quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>height = parser.expect (<span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Rect { width, height })
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rotate row y=&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">dist</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;by&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::RotateRow</span> { <span class="ident">row</span>, <span class="ident">dist</span> })
+				.of (|parser| {
+					<span class="kw">let </span>row = parser.expect (<span class="string">&quot;rotate row y=&quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>dist = parser.expect (<span class="string">&quot;by&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::RotateRow { row, dist })
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">col</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rotate column x=&quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">dist</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;by&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::RotateCol</span> { <span class="ident">col</span>, <span class="ident">dist</span> })
+				.of (|parser| {
+					<span class="kw">let </span>col = parser.expect (<span class="string">&quot;rotate column x=&quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>dist = parser.expect (<span class="string">&quot;by&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::RotateCol { col, dist })
 				})
-				.<span class="ident">done</span> ()
+				.done ()
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;WIDTH=7&quot;</span>,
 		<span class="string">&quot;HEIGHT=3&quot;</span>,
 		<span class="string">&quot;rect 3x2&quot;</span>,
@@ -341,18 +339,18 @@
 		<span class="string">&quot;rotate column x=1 by 1&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;6&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_err!</span> (<span class="string">&quot;Unrecognised character: 0x13440000 in position 1&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_err! </span>(<span class="string">&quot;Unrecognised character: 0x402804 &lt;&lt; 96 in position 1&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

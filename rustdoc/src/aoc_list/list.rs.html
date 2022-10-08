@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/list/list.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>list.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_list/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_list/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_list/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/list/list.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>list.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_list/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_list/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_list/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -376,141 +376,165 @@
 <span id="376">376</span>
 <span id="377">377</span>
 <span id="378">378</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Implementation of lisp-like lists</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! A list is represented as the first list item and a reference to another list to represent the</span>
-<span class="doccomment">//! remaining items - these are referred to as the &quot;head&quot; and the &quot;tail&quot;. There is a special case</span>
-<span class="doccomment">//! for the empty list.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! While this is much less efficient than a [`Vec`], it allows reuse in a way which can be very</span>
-<span class="doccomment">//! beneficial for certain types of algorithm. Adding new items to a list only creates one new</span>
-<span class="doccomment">//! allocation per item, and removing any number of items from the start of the list requires no</span>
-<span class="doccomment">//! allocation.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! We also declare [`CharList`] as `List &lt;char&gt;`, and implement some extra methods and traits to</span>
-<span class="doccomment">//! make it work nicely with [`String`] and [`str`].</span>
+<span id="379">379</span>
+<span id="380">380</span>
+<span id="381">381</span>
+<span id="382">382</span>
+<span id="383">383</span>
+<span id="384">384</span>
+<span id="385">385</span>
+<span id="386">386</span>
+<span id="387">387</span>
+<span id="388">388</span>
+<span id="389">389</span>
+<span id="390">390</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Implementation of lisp-like lists
+//!
+//! A list is represented as the first list item and a reference to another list to represent the
+//! remaining items - these are referred to as the &quot;head&quot; and the &quot;tail&quot;. There is a special case
+//! for the empty list.
+//!
+//! While this is much less efficient than a [`Vec`], it allows reuse in a way which can be very
+//! beneficial for certain types of algorithm. Adding new items to a list only creates one new
+//! allocation per item, and removing any number of items from the start of the list requires no
+//! allocation.
+//!
+//! We also declare [`CharList`] as `List &lt;char&gt;`, and implement some extra methods and traits to
+//! make it work nicely with [`String`] and [`prim@str`].
 
-<span class="kw">use</span> <span class="ident">aoc_misc</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_misc::<span class="kw-2">*</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">base_list::List</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">char_list::CharList</span>;
+<span class="kw">pub use </span>base_list::List;
+<span class="kw">pub use </span>char_list::CharList;
 
-<span class="kw">mod</span> <span class="ident">base_list</span> {
+<span class="kw">mod </span>base_list {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
-		<span class="ident">Empty</span>,
-		<span class="ident">Present</span> (<span class="ident">Rc</span> <span class="op">&lt;</span>(<span class="ident">Item</span>, <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>)<span class="op">&gt;</span>),
+	<span class="kw">pub enum </span>List &lt;Item&gt; {
+		Empty,
+		Present (Rc &lt;(Item, List &lt;Item&gt;)&gt;),
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
+	<span class="kw">impl </span>&lt;Item: Clone&gt; List &lt;Item&gt; {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span> () -&gt; <span class="self">Self</span> { <span class="ident"><span class="self">Self</span>::Empty</span> }
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub const fn </span>new () -&gt; <span class="self">Self </span>{ <span class="self">Self</span>::Empty }
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cons</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span>(<span class="op">&amp;</span> <span class="ident">Item</span>, <span class="op">&amp;</span> <span class="self">Self</span>)<span class="op">&gt;</span> {
-			<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-				<span class="ident"><span class="self">Self</span>::Present</span> (<span class="kw-2">ref</span> <span class="ident">inner</span>) =&gt; {
-					<span class="kw">let</span> (<span class="kw-2">ref</span> <span class="ident">head</span>, <span class="kw-2">ref</span> <span class="ident">tail</span>) <span class="op">=</span> <span class="op">*</span> <span class="ident">inner</span>.<span class="ident">as_ref</span> ();
-					<span class="prelude-val">Some</span> ((<span class="ident">head</span>, <span class="ident">tail</span>))
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>cons (&amp; <span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;(&amp; Item, &amp; <span class="self">Self</span>)&gt; {
+			<span class="kw">match </span>* <span class="self">self </span>{
+				<span class="self">Self</span>::Present (<span class="kw-2">ref </span>inner) =&gt; {
+					<span class="kw">let </span>(<span class="kw-2">ref </span>head, <span class="kw-2">ref </span>tail) = * inner.as_ref ();
+					<span class="prelude-val">Some </span>((head, tail))
 				},
-				<span class="ident"><span class="self">Self</span>::Empty</span> =&gt; <span class="prelude-val">None</span>,
+				<span class="self">Self</span>::Empty =&gt; <span class="prelude-val">None</span>,
 			}
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Item</span><span class="op">&gt;</span> {
-			<span class="self">self</span>.<span class="ident">cons</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">head</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">head</span>)
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>head (&amp; <span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;&amp; Item&gt; {
+			<span class="self">self</span>.cons ().map (|(head, <span class="kw">_</span>)| head)
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tail</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="self">self</span>.<span class="ident">cons</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">tail</span>)<span class="op">|</span> <span class="ident">tail</span>)
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>tail (&amp; <span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;&amp; <span class="self">Self</span>&gt; {
+			<span class="self">self</span>.cons ().map (|(<span class="kw">_</span>, tail)| tail)
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
-			<span class="self">self</span>.<span class="ident">cons</span> ().<span class="ident">is_none</span> ()
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>is_empty (&amp; <span class="self">self</span>) -&gt; bool {
+			<span class="self">self</span>.cons ().is_none ()
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">len</span> <span class="op">=</span> <span class="number">0</span>;
-			<span class="kw">while</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Present</span> (<span class="ident">inner</span>) <span class="op">=</span> <span class="ident">cur</span> {
-				<span class="kw">let</span> (<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">new</span>) <span class="op">=</span> <span class="op">*</span> <span class="ident">inner</span>.<span class="ident">as_ref</span> ();
-				<span class="ident">cur</span> <span class="op">=</span> <span class="ident">new</span>.<span class="ident">clone</span> ();
-				<span class="ident">len</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>len (&amp; <span class="self">self</span>) -&gt; usize {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>.clone ();
+			<span class="kw">let </span><span class="kw-2">mut </span>len = <span class="number">0</span>;
+			<span class="kw">while let </span><span class="self">Self</span>::Present (inner) = cur {
+				<span class="kw">let </span>(<span class="kw">_</span>, <span class="kw-2">ref </span>new) = * inner.as_ref ();
+				cur = new.clone ();
+				len += <span class="number">1</span>;
 			}
-			<span class="ident">len</span>
+			len
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">push_front</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">head</span>: <span class="ident">Item</span>) -&gt; <span class="self">Self</span> {
-			<span class="ident"><span class="self">Self</span>::Present</span> (<span class="ident">Rc::new</span> ((<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">clone</span> ())))
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>with_push_front (&amp; <span class="self">self</span>, head: Item) -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>::Present (Rc::new ((head, <span class="self">self</span>.clone ())))
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">iter</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ListIter</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
-			<span class="ident">ListIter</span> { <span class="ident">list</span>: <span class="self">self</span> }
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub const fn </span>iter (&amp; <span class="self">self</span>) -&gt; ListIter &lt;Item&gt; {
+			ListIter { list: <span class="self">self </span>}
+		}
+
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">pub fn </span>contains (&amp; <span class="self">self</span>, item: &amp; Item) -&gt; bool
+				<span class="kw">where </span>Item: Eq {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>.clone ();
+			<span class="kw">while let </span><span class="self">Self</span>::Present (<span class="kw-2">ref </span>inner) = cur {
+				<span class="kw">let </span>(<span class="kw-2">ref </span>head, <span class="kw-2">ref </span>tail) = * inner.as_ref ();
+				<span class="kw">if </span>head == item { <span class="kw">return </span><span class="bool-val">true </span>}
+				cur = tail.clone ();
+			}
+			<span class="bool-val">false
+		</span>}
+
+	}
+
+	<span class="kw">impl </span>&lt;Item: Clone + Debug&gt; Debug <span class="kw">for </span>List &lt;Item&gt; {
+
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;[&quot;</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>idx = <span class="number">0_usize</span>;
+			<span class="kw">while let </span><span class="prelude-val">Some </span>((head, tail)) = cur.cons () {
+				<span class="kw">if </span>idx &gt; <span class="number">0 </span>{ <span class="macro">write! </span>(formatter, <span class="string">&quot;, &quot;</span>) <span class="question-mark">?</span>; }
+				Debug::fmt (&amp; head, formatter) <span class="question-mark">?</span>;
+				cur = tail;
+				idx += <span class="number">1</span>;
+			}
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;]&quot;</span>) <span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(())
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
+	<span class="kw">impl </span>&lt;Item: Clone&gt; Clone <span class="kw">for </span>List &lt;Item&gt; {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;[&quot;</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">idx</span> <span class="op">=</span> <span class="number">0_usize</span>;
-			<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">head</span>, <span class="ident">tail</span>)) <span class="op">=</span> <span class="ident">cur</span>.<span class="ident">cons</span> () {
-				<span class="kw">if</span> <span class="ident">idx</span> <span class="op">&gt;</span> <span class="number">0</span> { <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;, &quot;</span>) <span class="question-mark">?</span>; }
-				<span class="ident">Debug::fmt</span> (<span class="op">&amp;</span> <span class="ident">head</span>, <span class="ident">formatter</span>) <span class="question-mark">?</span>;
-				<span class="ident">cur</span> <span class="op">=</span> <span class="ident">tail</span>;
-				<span class="ident">idx</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-			}
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;]&quot;</span>) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (())
-		}
-
-	}
-
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
-
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">clone</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="self">Self</span> {
-			<span class="kw">match</span> <span class="op">*</span> <span class="self">self</span> {
-				<span class="ident"><span class="self">Self</span>::Present</span> (<span class="kw-2">ref</span> <span class="ident">inner</span>) =&gt; <span class="ident"><span class="self">Self</span>::Present</span> (<span class="ident">Rc::clone</span> (<span class="ident">inner</span>)),
-				<span class="ident"><span class="self">Self</span>::Empty</span> =&gt; <span class="ident"><span class="self">Self</span>::Empty</span>,
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>clone (&amp; <span class="self">self</span>) -&gt; <span class="self">Self </span>{
+			<span class="kw">match </span>* <span class="self">self </span>{
+				<span class="self">Self</span>::Present (<span class="kw-2">ref </span>inner) =&gt; <span class="self">Self</span>::Present (Rc::clone (inner)),
+				<span class="self">Self</span>::Empty =&gt; <span class="self">Self</span>::Empty,
 			}
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">PartialEq</span><span class="op">&gt;</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
+	<span class="kw">impl </span>&lt;Item: Clone + PartialEq&gt; PartialEq <span class="kw">for </span>List &lt;Item&gt; {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">bool</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">right</span> <span class="op">=</span> <span class="ident">other</span>;
-			<span class="kw">loop</span> {
-				<span class="kw">match</span> (<span class="ident">left</span>.<span class="ident">cons</span> (), <span class="ident">right</span>.<span class="ident">cons</span> ()) {
-					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="bool-val">true</span>,
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span> (<span class="kw">_</span>)) =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,
-					(<span class="prelude-val">Some</span> ((<span class="ident">left_head</span>, <span class="ident">left_tail</span>)), <span class="prelude-val">Some</span> ((<span class="ident">right_head</span>, <span class="ident">right_tail</span>))) =&gt; {
-						<span class="kw">if</span> <span class="op">!</span> <span class="ident">Item::eq</span> (<span class="ident">left_head</span>, <span class="ident">right_head</span>) { <span class="kw">return</span> <span class="bool-val">false</span> }
-						(<span class="ident">left</span>, <span class="ident">right</span>) <span class="op">=</span> (<span class="ident">left_tail</span>, <span class="ident">right_tail</span>);
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; bool {
+			<span class="kw">let </span><span class="kw-2">mut </span>left = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>right = other;
+			<span class="kw">loop </span>{
+				<span class="kw">match </span>(left.cons (), right.cons ()) {
+					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="bool-val">true</span>,
+					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) | (<span class="prelude-val">None</span>, <span class="prelude-val">Some </span>(<span class="kw">_</span>)) =&gt; <span class="kw">return </span><span class="bool-val">false</span>,
+					(<span class="prelude-val">Some </span>((left_head, left_tail)), <span class="prelude-val">Some </span>((right_head, right_tail))) =&gt; {
+						<span class="kw">if </span>! Item::eq (left_head, right_head) { <span class="kw">return </span><span class="bool-val">false </span>}
+						(left, right) = (left_tail, right_tail);
 					},
 				}
 			}
@@ -518,25 +542,25 @@
 
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="ident">PartialOrd</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">PartialOrd</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">partial_cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">right</span> <span class="op">=</span> <span class="ident">other</span>;
-			<span class="kw">loop</span> {
-				<span class="kw">match</span> (<span class="ident">left</span>.<span class="ident">cons</span> (), <span class="ident">right</span>.<span class="ident">cons</span> ()) {
-					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Ordering::Equal</span>),
-					(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span> (<span class="kw">_</span>)) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Ordering::Less</span>),
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Ordering::Greater</span>),
-					(<span class="prelude-val">Some</span> ((<span class="ident">left_head</span>, <span class="ident">left_tail</span>)), <span class="prelude-val">Some</span> ((<span class="ident">right_head</span>, <span class="ident">right_tail</span>))) =&gt; {
-						<span class="kw">match</span> <span class="ident">left_head</span>.<span class="ident">partial_cmp</span> (<span class="ident">right_head</span>) {
-							<span class="prelude-val">Some</span> (<span class="ident">Ordering::Equal</span>) =&gt; {
-								<span class="ident">left</span> <span class="op">=</span> <span class="ident">left_tail</span>;
-								<span class="ident">right</span> <span class="op">=</span> <span class="ident">right_tail</span>;
+	<span class="kw">impl </span>&lt;Item&gt; PartialOrd <span class="kw">for </span>List &lt;Item&gt; <span class="kw">where </span>Item: Clone + PartialOrd {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>partial_cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;Ordering&gt; {
+			<span class="kw">let </span><span class="kw-2">mut </span>left = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>right = other;
+			<span class="kw">loop </span>{
+				<span class="kw">match </span>(left.cons (), right.cons ()) {
+					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(Ordering::Equal),
+					(<span class="prelude-val">None</span>, <span class="prelude-val">Some </span>(<span class="kw">_</span>)) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(Ordering::Less),
+					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(Ordering::Greater),
+					(<span class="prelude-val">Some </span>((left_head, left_tail)), <span class="prelude-val">Some </span>((right_head, right_tail))) =&gt; {
+						<span class="kw">match </span>left_head.partial_cmp (right_head) {
+							<span class="prelude-val">Some </span>(Ordering::Equal) =&gt; {
+								left = left_tail;
+								right = right_tail;
 							},
-							<span class="prelude-val">Some</span> (<span class="ident">Ordering::Greater</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Ordering::Greater</span>),
-							<span class="prelude-val">Some</span> (<span class="ident">Ordering::Less</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">Ordering::Less</span>),
-							<span class="prelude-val">None</span> =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
+							<span class="prelude-val">Some </span>(Ordering::Greater) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(Ordering::Greater),
+							<span class="prelude-val">Some </span>(Ordering::Less) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(Ordering::Less),
+							<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
 						}
 					},
 				}
@@ -544,24 +568,24 @@
 		}
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="ident">Ord</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Ord</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">Ordering</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">right</span> <span class="op">=</span> <span class="ident">other</span>;
-			<span class="kw">loop</span> {
-				<span class="kw">match</span> (<span class="ident">left</span>.<span class="ident">cons</span> (), <span class="ident">right</span>.<span class="ident">cons</span> ()) {
-					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="ident">Ordering::Equal</span>,
-					(<span class="prelude-val">None</span>, <span class="prelude-val">Some</span> (<span class="kw">_</span>)) =&gt; <span class="kw">return</span> <span class="ident">Ordering::Less</span>,
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="ident">Ordering::Greater</span>,
-					(<span class="prelude-val">Some</span> ((<span class="ident">left_head</span>, <span class="ident">left_tail</span>)), <span class="prelude-val">Some</span> ((<span class="ident">right_head</span>, <span class="ident">right_tail</span>))) =&gt; {
-						<span class="kw">match</span> <span class="ident">left_head</span>.<span class="ident">cmp</span> (<span class="ident">right_head</span>) {
-							<span class="ident">Ordering::Equal</span> =&gt; {
-								<span class="ident">left</span> <span class="op">=</span> <span class="ident">left_tail</span>;
-								<span class="ident">right</span> <span class="op">=</span> <span class="ident">right_tail</span>;
+	<span class="kw">impl </span>&lt;Item&gt; Ord <span class="kw">for </span>List &lt;Item&gt; <span class="kw">where </span>Item: Clone + Ord {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; Ordering {
+			<span class="kw">let </span><span class="kw-2">mut </span>left = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>right = other;
+			<span class="kw">loop </span>{
+				<span class="kw">match </span>(left.cons (), right.cons ()) {
+					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span>Ordering::Equal,
+					(<span class="prelude-val">None</span>, <span class="prelude-val">Some </span>(<span class="kw">_</span>)) =&gt; <span class="kw">return </span>Ordering::Less,
+					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span>Ordering::Greater,
+					(<span class="prelude-val">Some </span>((left_head, left_tail)), <span class="prelude-val">Some </span>((right_head, right_tail))) =&gt; {
+						<span class="kw">match </span>left_head.cmp (right_head) {
+							Ordering::Equal =&gt; {
+								left = left_tail;
+								right = right_tail;
 							},
-							<span class="ident">Ordering::Greater</span> =&gt; <span class="kw">return</span> <span class="ident">Ordering::Greater</span>,
-							<span class="ident">Ordering::Less</span> =&gt; <span class="kw">return</span> <span class="ident">Ordering::Less</span>,
+							Ordering::Greater =&gt; <span class="kw">return </span>Ordering::Greater,
+							Ordering::Less =&gt; <span class="kw">return </span>Ordering::Less,
 						}
 					},
 				}
@@ -569,184 +593,184 @@
 		}
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Eq</span><span class="op">&gt;</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> { }
+	<span class="kw">impl </span>&lt;Item: Clone + Eq&gt; Eq <span class="kw">for </span>List &lt;Item&gt; { }
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>: <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Hash</span><span class="op">&gt;</span> <span class="ident">Hash</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
+	<span class="kw">impl </span>&lt;Item: Clone + Hash&gt; Hash <span class="kw">for </span>List &lt;Item&gt; {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">hash</span> <span class="op">&lt;</span><span class="ident">Hshr</span>: <span class="ident">Hasher</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">hasher</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Hshr</span>) {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">head</span>, <span class="ident">tail</span>)) <span class="op">=</span> <span class="ident">cur</span>.<span class="ident">cons</span> () {
-				<span class="ident">head</span>.<span class="ident">hash</span> (<span class="ident">hasher</span>);
-				<span class="ident">cur</span> <span class="op">=</span> <span class="ident">tail</span>;
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>hash &lt;Hshr: Hasher&gt; (&amp; <span class="self">self</span>, hasher: &amp; <span class="kw-2">mut </span>Hshr) {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>;
+			<span class="kw">while let </span><span class="prelude-val">Some </span>((head, tail)) = cur.cons () {
+				head.hash (hasher);
+				cur = tail;
 			}
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> {
+	<span class="kw">impl </span>Display <span class="kw">for </span>List &lt;char&gt; {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
-			<span class="kw">while</span> <span class="kw">let</span> <span class="ident"><span class="self">Self</span>::Present</span> (<span class="ident">inner</span>) <span class="op">=</span> <span class="ident">cur</span> {
-				<span class="kw">let</span> <span class="op">&amp;</span> (<span class="ident">head</span>, <span class="kw-2">ref</span> <span class="ident">tail</span>) <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">as_ref</span> ();
-				<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">head</span>) <span class="question-mark">?</span>;
-				<span class="ident">cur</span> <span class="op">=</span> <span class="ident">tail</span>.<span class="ident">clone</span> ();
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>.clone ();
+			<span class="kw">while let </span><span class="self">Self</span>::Present (inner) = cur {
+				<span class="kw">let </span>&amp; (head, <span class="kw-2">ref </span>tail) = inner.as_ref ();
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, head) <span class="question-mark">?</span>;
+				cur = tail.clone ();
 			}
-			<span class="prelude-val">Ok</span> (())
+			<span class="prelude-val">Ok </span>(())
 		}
 
 	}
 
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ListIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span>, <span class="ident">Item</span>: <span class="ident">Clone</span><span class="op">&gt;</span> {
-		<span class="ident">list</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>,
+	<span class="kw">pub struct </span>ListIter &lt;<span class="lifetime">&#39;dat</span>, Item: Clone&gt; {
+		list: &amp; <span class="lifetime">&#39;dat </span>List &lt;Item&gt;,
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span>, <span class="ident">Item</span>: <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">ListIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span>, <span class="ident">Item</span><span class="op">&gt;</span> {
-		<span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">Item</span>;
-		<span class="kw">fn</span> <span class="ident">next</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">Item</span><span class="op">&gt;</span> {
-			<span class="self">self</span>.<span class="ident">list</span>.<span class="ident">cons</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">head</span>, <span class="ident">tail</span>)<span class="op">|</span> {
-				<span class="self">self</span>.<span class="ident">list</span> <span class="op">=</span> <span class="ident">tail</span>;
-				<span class="ident">head</span>
+	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;dat</span>, Item: Clone&gt; Iterator <span class="kw">for </span>ListIter &lt;<span class="lifetime">&#39;dat</span>, Item&gt; {
+		<span class="kw">type </span>Item = &amp; <span class="lifetime">&#39;dat </span>Item;
+		<span class="kw">fn </span>next (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;&amp; <span class="lifetime">&#39;dat </span>Item&gt; {
+			<span class="self">self</span>.list.cons ().map (|(head, tail)| {
+				<span class="self">self</span>.list = tail;
+				head
 			})
 		}
 	}
 
 }
 
-<span class="kw">mod</span> <span class="ident">char_list</span> {
+<span class="kw">mod </span>char_list {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">CharList</span> <span class="op">=</span> <span class="ident">List</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span>;
+	<span class="kw">pub type </span>CharList = List &lt;char&gt;;
 
-	<span class="kw">impl</span> <span class="ident">CharList</span> {
+	<span class="kw">impl </span>CharList {
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">starts_with</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">pat</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-			<span class="self">self</span>.<span class="ident">strip_prefix</span> (<span class="ident">pat</span>).<span class="ident">is_some</span> ()
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>starts_with (&amp; <span class="self">self</span>, pat: &amp; str) -&gt; bool {
+			<span class="self">self</span>.strip_prefix (pat).is_some ()
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">strip_prefix</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">pat</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pat_chars</span> <span class="op">=</span> <span class="ident">pat</span>.<span class="ident">chars</span> ();
-			<span class="kw">loop</span> {
-				<span class="kw">match</span> (<span class="ident">cur</span>.<span class="ident">cons</span> (), <span class="ident">pat_chars</span>.<span class="ident">next</span> ()) {
-					(<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">Some</span> (<span class="ident">cur</span>),
-					(<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
-					(<span class="prelude-val">Some</span> ((<span class="op">&amp;</span> <span class="ident">head</span>, <span class="ident">tail</span>)), <span class="prelude-val">Some</span> (<span class="ident">pat_ch</span>)) =&gt; {
-						<span class="kw">if</span> <span class="ident">head</span> <span class="op">!</span><span class="op">=</span> <span class="ident">pat_ch</span> { <span class="kw">return</span> <span class="prelude-val">None</span> }
-						<span class="ident">cur</span> <span class="op">=</span> <span class="ident">tail</span>;
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>strip_prefix (&amp; <span class="self">self</span>, pat: &amp; str) -&gt; <span class="prelude-ty">Option </span>&lt;&amp; <span class="self">Self</span>&gt; {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>pat_chars = pat.chars ();
+			<span class="kw">loop </span>{
+				<span class="kw">match </span>(cur.cons (), pat_chars.next ()) {
+					(<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Some </span>(cur),
+					(<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
+					(<span class="prelude-val">Some </span>((&amp; head, tail)), <span class="prelude-val">Some </span>(pat_ch)) =&gt; {
+						<span class="kw">if </span>head != pat_ch { <span class="kw">return </span><span class="prelude-val">None </span>}
+						cur = tail;
 					},
 				}
 			}
 		}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">prepend</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">prefix</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">clone</span> ();
-			<span class="kw">for</span> <span class="ident">prefix_ch</span> <span class="kw">in</span> <span class="ident">prefix</span>.<span class="ident">chars</span> ().<span class="ident">rev</span> () {
-				<span class="ident">cur</span> <span class="op">=</span> <span class="ident">cur</span>.<span class="ident">push_front</span> (<span class="ident">prefix_ch</span>);
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>prepend (&amp; <span class="self">self</span>, prefix: &amp; str) -&gt; <span class="self">Self </span>{
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>.clone ();
+			<span class="kw">for </span>prefix_ch <span class="kw">in </span>prefix.chars ().rev () {
+				cur = cur.with_push_front (prefix_ch);
 			}
-			<span class="ident">cur</span>
+			cur
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CharList</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="self">Self</span> {
-			<span class="ident"><span class="self">Self</span>::Empty</span>.<span class="ident">prepend</span> (<span class="ident">src</span>)
+	<span class="kw">impl </span>From &lt;&amp; str&gt; <span class="kw">for </span>CharList {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>from (src: &amp; str) -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>::Empty.prepend (src)
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CharList</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">String</span>) -&gt; <span class="self">Self</span> {
-			<span class="ident"><span class="self">Self</span>::Empty</span>.<span class="ident">prepend</span> (<span class="ident">src</span>)
+	<span class="kw">impl </span>From &lt;&amp; String&gt; <span class="kw">for </span>CharList {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>from (src: &amp; String) -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>::Empty.prepend (src)
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CharList</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">bool</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur</span> <span class="op">=</span> <span class="self">self</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">other_iter</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">chars</span> ();
-			<span class="kw">loop</span> {
-				<span class="kw">match</span> (<span class="ident">cur</span>.<span class="ident">cons</span> (), <span class="ident">other_iter</span>.<span class="ident">next</span> ()) {
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span> (<span class="kw">_</span>)) =&gt; <span class="kw">return</span> <span class="bool-val">false</span>,
-					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return</span> <span class="bool-val">true</span>,
-					(<span class="prelude-val">Some</span> ((<span class="op">&amp;</span> <span class="ident">cur_head</span>, <span class="ident">cur_tail</span>)), <span class="prelude-val">Some</span> (<span class="ident">other_ch</span>)) =&gt; {
-						<span class="kw">if</span> <span class="ident">cur_head</span> <span class="op">!</span><span class="op">=</span> <span class="ident">other_ch</span> { <span class="kw">return</span> <span class="bool-val">false</span> }
-						<span class="ident">cur</span> <span class="op">=</span> <span class="ident">cur_tail</span>;
+	<span class="kw">impl </span>PartialEq &lt;str&gt; <span class="kw">for </span>CharList {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; str) -&gt; bool {
+			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>other_iter = other.chars ();
+			<span class="kw">loop </span>{
+				<span class="kw">match </span>(cur.cons (), other_iter.next ()) {
+					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), <span class="prelude-val">None</span>) | (<span class="prelude-val">None</span>, <span class="prelude-val">Some </span>(<span class="kw">_</span>)) =&gt; <span class="kw">return </span><span class="bool-val">false</span>,
+					(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="kw">return </span><span class="bool-val">true</span>,
+					(<span class="prelude-val">Some </span>((&amp; cur_head, cur_tail)), <span class="prelude-val">Some </span>(other_ch)) =&gt; {
+						<span class="kw">if </span>cur_head != other_ch { <span class="kw">return </span><span class="bool-val">false </span>}
+						cur = cur_tail;
 					},
 				}
 			}
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">CharList</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">String</span>) -&gt; <span class="ident">bool</span> {
-			<span class="ident">PartialEq::eq</span> (<span class="self">self</span>, <span class="ident">other</span>.<span class="ident">as_str</span> ())
+	<span class="kw">impl </span>PartialEq &lt;String&gt; <span class="kw">for </span>CharList {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; String) -&gt; bool {
+			PartialEq::eq (<span class="self">self</span>, other.as_str ())
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span><span class="ident">CharList</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="op">&amp;</span> <span class="ident">String</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">CharList</span>) -&gt; <span class="ident">bool</span> {
-			<span class="ident">PartialEq::eq</span> (<span class="self">self</span>.<span class="ident">as_str</span> (), <span class="ident">other</span>)
+	<span class="kw">impl </span>PartialEq &lt;CharList&gt; <span class="kw">for </span>&amp; String {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; CharList) -&gt; bool {
+			PartialEq::eq (<span class="self">self</span>.as_str (), other)
 		}
 	}
 
-	<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span><span class="ident">CharList</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">str</span> {
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="ident">CharList</span>) -&gt; <span class="ident">bool</span> {
-			<span class="ident">PartialEq::eq</span> (<span class="ident">other</span>, <span class="self">self</span>)
+	<span class="kw">impl </span>PartialEq &lt;CharList&gt; <span class="kw">for </span>str {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; CharList) -&gt; bool {
+			PartialEq::eq (other, <span class="self">self</span>)
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-	<span class="kw">mod</span> <span class="ident">tests</span> {
+	<span class="attribute">#[ cfg (test) ]
+	</span><span class="kw">mod </span>tests {
 
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-		<span class="kw">use</span> <span class="ident">CharList</span> <span class="kw">as</span> <span class="ident">CL</span>;
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+		<span class="kw">use </span>CharList <span class="kw">as </span>CL;
 
-		<span class="kw">fn</span> <span class="ident">cl</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">CL</span> { <span class="ident">CL::from</span> (<span class="ident">src</span>) }
+		<span class="kw">fn </span>cl (src: &amp; str) -&gt; CL { CL::from (src) }
 
-		<span class="kw">const</span> <span class="ident">SAMPLES</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [ <span class="string">&quot;&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;ab&quot;</span>, <span class="string">&quot;abc&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;bc&quot;</span>, <span class="string">&quot;c&quot;</span> ];
+		<span class="kw">const </span>SAMPLES: &amp; [&amp; str] = &amp; [ <span class="string">&quot;&quot;</span>, <span class="string">&quot;a&quot;</span>, <span class="string">&quot;ab&quot;</span>, <span class="string">&quot;abc&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;bc&quot;</span>, <span class="string">&quot;c&quot; </span>];
 
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">eq</span> () {
-			<span class="kw">for</span> <span class="ident">left</span> <span class="kw">in</span> <span class="ident">SAMPLES</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> () {
-				<span class="kw">for</span> <span class="ident">right</span> <span class="kw">in</span> <span class="ident">SAMPLES</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> () {
-					<span class="kw">if</span> <span class="ident">left</span> <span class="op">==</span> <span class="ident">right</span> {
-						<span class="macro">assert!</span> (<span class="ident">cl</span> (<span class="ident">left</span>) <span class="op">==</span> <span class="ident">cl</span> (<span class="ident">right</span>),
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>eq () {
+			<span class="kw">for </span>left <span class="kw">in </span>SAMPLES.iter ().cloned () {
+				<span class="kw">for </span>right <span class="kw">in </span>SAMPLES.iter ().cloned () {
+					<span class="kw">if </span>left == right {
+						<span class="macro">assert! </span>(cl (left) == cl (right),
 							<span class="string">&quot;{:?} == {:?} but CharList::from ({:?}) != CharList::from ({:?})&quot;</span>,
-							<span class="ident">left</span>, <span class="ident">right</span>, <span class="ident">left</span>, <span class="ident">right</span>);
-					} <span class="kw">else</span> {
-						<span class="macro">assert!</span> (<span class="ident">cl</span> (<span class="ident">left</span>) <span class="op">!</span><span class="op">=</span> <span class="ident">cl</span> (<span class="ident">right</span>),
+							left, right, left, right);
+					} <span class="kw">else </span>{
+						<span class="macro">assert! </span>(cl (left) != cl (right),
 							<span class="string">&quot;{:?} != {:?} but CharList::from ({:?}) == CharList::from ({:?})&quot;</span>,
-							<span class="ident">left</span>, <span class="ident">right</span>, <span class="ident">left</span>, <span class="ident">right</span>);
+							left, right, left, right);
 					}
 				}
 			}
 		}
 
-		<span class="attribute">#[ <span class="ident">test</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">strip_prefix</span> () {
-			<span class="kw">for</span> <span class="ident">left</span> <span class="kw">in</span> <span class="ident">SAMPLES</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> () {
-				<span class="kw">for</span> <span class="ident">right</span> <span class="kw">in</span> <span class="ident">SAMPLES</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> () {
-					<span class="kw">let</span> <span class="ident">expected</span> <span class="op">=</span> <span class="ident">left</span>.<span class="ident">strip_prefix</span> (<span class="ident">right</span>);
-					<span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="ident">cl</span> (<span class="ident">left</span>).<span class="ident">strip_prefix</span> (<span class="ident">right</span>).<span class="ident">cloned</span> ();
-					<span class="macro">assert_eq!</span> (<span class="ident">expected</span>.<span class="ident">map</span> (<span class="ident">cl</span>), <span class="ident">actual</span>,
+		<span class="attribute">#[ test ]
+		</span><span class="kw">fn </span>strip_prefix () {
+			<span class="kw">for </span>left <span class="kw">in </span>SAMPLES.iter ().cloned () {
+				<span class="kw">for </span>right <span class="kw">in </span>SAMPLES.iter ().cloned () {
+					<span class="kw">let </span>expected = left.strip_prefix (right);
+					<span class="kw">let </span>actual = cl (left).strip_prefix (right).cloned ();
+					<span class="macro">assert_eq! </span>(expected.map (cl), actual,
 						<span class="string">&quot;{:?}.strip_prefix ({:?}) == {:?} but {:?}.strip_prefix ({:?}) == {:?}&quot;</span>,
-						<span class="ident">left</span>, <span class="ident">right</span>, <span class="ident">expected</span>, <span class="ident">cl</span> (<span class="ident">left</span>), <span class="ident">right</span>, <span class="ident">actual</span>);
+						left, right, expected, cl (left), right, actual);
 				}
 			}
 		}
@@ -755,4 +779,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_list" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_list" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

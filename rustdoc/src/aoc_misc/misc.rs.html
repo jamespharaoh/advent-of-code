@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/misc/misc.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>misc.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_misc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_misc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_misc/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/misc/misc.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>misc.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_misc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_misc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_misc/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -218,225 +218,331 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
-</pre><pre class="rust"><code><span class="kw">pub</span> <span class="kw">use</span> <span class="ident">arrayvec::ArrayVec</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools::Either</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools::EitherOrBoth</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools::Itertools</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools::MultiPeek</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">itertools::izip</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::borrow::Borrow</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::borrow::Cow</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::cell::Cell</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::cell::RefCell</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::cmp</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::cmp::Ordering</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::BinaryHeap</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::BTreeMap</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::BTreeSet</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::VecDeque</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::btree_map::Entry</span> <span class="kw">as</span> <span class="ident">BTreeEntry</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::btree_map::Iter</span> <span class="kw">as</span> <span class="ident">BTreeIter</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::btree_map::Values</span> <span class="kw">as</span> <span class="ident">BTreeValues</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::hash_map::DefaultHasher</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::hash_map::Entry</span> <span class="kw">as</span> <span class="ident">HashMapEntry</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::hash_map::RandomState</span> <span class="kw">as</span> <span class="ident">RandomHasher</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::convert::Infallible</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::error::Error</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ffi::OsString</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::fmt</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::fmt::Debug</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::fmt::Display</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::fmt::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::fs</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::hash</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::hash::BuildHasher</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::hash::BuildHasherDefault</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::hash::Hash</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::hash::Hasher</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::iter</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::iter::Peekable</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::mem</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Add</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitAnd</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitAndAssign</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitOr</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::BitOrAssign</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Div</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Index</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::IndexMut</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Mul</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Neg</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Range</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::RangeInclusive</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Rem</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Shl</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::ShlAssign</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Shr</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::ShrAssign</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::ops::Sub</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::path::Path</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::rc::Rc</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::rc::Weak</span> <span class="kw">as</span> <span class="ident">RcWeak</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::slice</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::slice::Iter</span> <span class="kw">as</span> <span class="ident">SliceIter</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::str::Chars</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::sync::Condvar</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::sync::Mutex</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::sync::atomic::AtomicUsize</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::sync::atomic::Ordering</span> <span class="kw">as</span> <span class="ident">AtomicOrdering</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::thread</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::thread::JoinHandle</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::time</span>;
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+</pre><pre class="rust"><code><span class="kw">pub use </span>arrayvec::ArrayVec;
+<span class="kw">pub use </span>itertools;
+<span class="kw">pub use </span>itertools::Either;
+<span class="kw">pub use </span>itertools::EitherOrBoth;
+<span class="kw">pub use </span>itertools::Itertools;
+<span class="kw">pub use </span>itertools::MultiPeek;
+<span class="kw">pub use </span>itertools::izip;
+<span class="kw">pub use </span>std::array;
+<span class="kw">pub use </span>std::borrow::Borrow;
+<span class="kw">pub use </span>std::borrow::BorrowMut;
+<span class="kw">pub use </span>std::borrow::Cow;
+<span class="kw">pub use </span>std::cell::Cell;
+<span class="kw">pub use </span>std::cell::RefCell;
+<span class="kw">pub use </span>std::cmp;
+<span class="kw">pub use </span>std::cmp::Ordering;
+<span class="kw">pub use </span>std::collections::BinaryHeap;
+<span class="kw">pub use </span>std::collections::BTreeMap;
+<span class="kw">pub use </span>std::collections::BTreeSet;
+<span class="kw">pub use </span>std::collections::VecDeque;
+<span class="kw">pub use </span>std::collections::btree_map::Entry <span class="kw">as </span>BTreeEntry;
+<span class="kw">pub use </span>std::collections::btree_map::Iter <span class="kw">as </span>BTreeIter;
+<span class="kw">pub use </span>std::collections::btree_map::IterMut <span class="kw">as </span>BTreeIterMut;
+<span class="kw">pub use </span>std::collections::btree_map::Keys <span class="kw">as </span>BTreeKeys;
+<span class="kw">pub use </span>std::collections::btree_map::Values <span class="kw">as </span>BTreeValues;
+<span class="kw">pub use </span>std::collections::hash_map::DefaultHasher;
+<span class="kw">pub use </span>std::collections::hash_map::Entry <span class="kw">as </span>HashMapEntry;
+<span class="kw">pub use </span>std::collections::hash_map::RandomState <span class="kw">as </span>RandomHasher;
+<span class="kw">pub use </span>std::convert::Infallible;
+<span class="kw">pub use </span>std::error::Error;
+<span class="kw">pub use </span>std::ffi::OsString;
+<span class="kw">pub use </span>std::fmt;
+<span class="kw">pub use </span>std::fmt::Debug;
+<span class="kw">pub use </span>std::fmt::Display;
+<span class="kw">pub use </span>std::fmt::Write <span class="kw">as _</span>;
+<span class="kw">pub use </span>std::fs;
+<span class="kw">pub use </span>std::hash;
+<span class="kw">pub use </span>std::hash::BuildHasher;
+<span class="kw">pub use </span>std::hash::BuildHasherDefault;
+<span class="kw">pub use </span>std::hash::Hash;
+<span class="kw">pub use </span>std::hash::Hasher;
+<span class="kw">pub use </span>std::iter;
+<span class="kw">pub use </span>std::iter::FusedIterator;
+<span class="kw">pub use </span>std::iter::Peekable;
+<span class="kw">pub use </span>std::io;
+<span class="kw">pub use </span>std::marker::PhantomData;
+<span class="kw">pub use </span>std::mem;
+<span class="kw">pub use </span>std::num::ParseIntError;
+<span class="kw">pub use </span>std::ops;
+<span class="kw">pub use </span>std::ops::Add;
+<span class="kw">pub use </span>std::ops::AddAssign;
+<span class="kw">pub use </span>std::ops::BitAnd;
+<span class="kw">pub use </span>std::ops::BitAndAssign;
+<span class="kw">pub use </span>std::ops::BitOr;
+<span class="kw">pub use </span>std::ops::BitOrAssign;
+<span class="kw">pub use </span>std::ops::Bound;
+<span class="kw">pub use </span>std::ops::Bound::Included;
+<span class="kw">pub use </span>std::ops::Bound::Excluded;
+<span class="kw">pub use </span>std::ops::Bound::Unbounded;
+<span class="kw">pub use </span>std::ops::Deref;
+<span class="kw">pub use </span>std::ops::DerefMut;
+<span class="kw">pub use </span>std::ops::Div;
+<span class="kw">pub use </span>std::ops::Index;
+<span class="kw">pub use </span>std::ops::IndexMut;
+<span class="kw">pub use </span>std::ops::Mul;
+<span class="kw">pub use </span>std::ops::Neg;
+<span class="kw">pub use </span>std::ops::Range;
+<span class="kw">pub use </span>std::ops::RangeBounds;
+<span class="kw">pub use </span>std::ops::RangeInclusive;
+<span class="kw">pub use </span>std::ops::Rem;
+<span class="kw">pub use </span>std::ops::Shl;
+<span class="kw">pub use </span>std::ops::ShlAssign;
+<span class="kw">pub use </span>std::ops::Shr;
+<span class="kw">pub use </span>std::ops::ShrAssign;
+<span class="kw">pub use </span>std::ops::Sub;
+<span class="kw">pub use </span>std::path::Path;
+<span class="kw">pub use </span>std::rc::Rc;
+<span class="kw">pub use </span>std::rc::Weak <span class="kw">as </span>RcWeak;
+<span class="kw">pub use </span>std::slice;
+<span class="kw">pub use </span>std::slice::Iter <span class="kw">as </span>SliceIter;
+<span class="kw">pub use </span>std::slice::IterMut <span class="kw">as </span>SliceIterMut;
+<span class="kw">pub use </span>std::str;
+<span class="kw">pub use </span>std::str::Chars;
+<span class="kw">pub use </span>std::str::FromStr;
+<span class="kw">pub use </span>std::sync::Arc;
+<span class="kw">pub use </span>std::sync::Condvar;
+<span class="kw">pub use </span>std::sync::Mutex;
+<span class="kw">pub use </span>std::sync::atomic::AtomicUsize;
+<span class="kw">pub use </span>std::sync::atomic::Ordering <span class="kw">as </span>AtomicOrdering;
+<span class="kw">pub use </span>std::thread;
+<span class="kw">pub use </span>std::thread::JoinHandle;
+<span class="kw">pub use </span>std::time;
+<span class="kw">pub use </span>std::vec::IntoIter <span class="kw">as </span>VecIntoIter;
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">not</span> (<span class="ident">fuzzing</span>)) ]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::HashSet</span>;
+<span class="kw">mod </span>collections;
+<span class="kw">pub use </span><span class="kw">crate</span>::collections::<span class="kw-2">*</span>;
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">fuzzing</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::BTreeSet</span> <span class="kw">as</span> <span class="ident">HashSet</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::iter_ext::<span class="kw-2">*</span>;
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">not</span> (<span class="ident">fuzzing</span>)) ]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">std::collections::HashMap</span>;
+<span class="kw">pub type </span>GenError = Box &lt;<span class="kw">dyn </span>Error&gt;;
+<span class="kw">pub type </span>GenResult &lt;<span class="prelude-val">Ok</span>&gt; = <span class="prelude-ty">Result </span>&lt;<span class="prelude-val">Ok</span>, GenError&gt;;
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">fuzzing</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::test_map::HashMap</span>;
-
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">fuzzing</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">test_map</span>;
-
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">GenError</span> <span class="op">=</span> <span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Error</span><span class="op">&gt;</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="prelude-val">Ok</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="prelude-val">Ok</span>, <span class="ident">GenError</span><span class="op">&gt;</span>;
-
-<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default</span> <span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Default</span><span class="op">&gt;</span> () -&gt; <span class="ident">T</span> {
-	<span class="ident">Default::default</span> ()
+<span class="attribute">#[ inline ]
+#[ must_use ]
+</span><span class="kw">pub fn </span>default &lt;T: Default&gt; () -&gt; T {
+	Default::default ()
 }
 
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">ok_or</span> {
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">if_err</span>:<span class="ident">expr</span> ) =&gt; {
-		<span class="kw">match</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>) { <span class="prelude-val">Ok</span> (<span class="ident">val</span>) =&gt; <span class="ident">val</span>, <span class="prelude-val">Err</span> (<span class="kw">_</span>) =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">if_err</span> }
-	};
+<span class="kw">pub trait </span>ResultEither &lt;Val&gt; {
+	<span class="kw">fn </span>either (<span class="self">self</span>) -&gt; Val;
 }
 
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">some_or</span> {
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">if_err</span>:<span class="ident">expr</span> ) =&gt; {
-		<span class="kw">match</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>) { <span class="prelude-val">Some</span> (<span class="ident">val</span>) =&gt; <span class="ident">val</span>, <span class="prelude-val">None</span> =&gt; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">if_err</span> }
-	};
-}
-
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">assert_is_ok</span> {
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>:<span class="ident">expr</span> ) =&gt; {
-		<span class="macro">assert!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>.<span class="ident">is_ok</span> ());
-	};
-}
-
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">assert_eq_ok</span> {
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>:<span class="ident">expr</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>:<span class="ident">expr</span> ) =&gt; {
-		<span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>;
-		<span class="macro">assert!</span> (<span class="ident">actual</span>.<span class="ident">is_ok</span> (), <span class="string">&quot;Expected Ok but got {:?}&quot;</span>, <span class="ident">actual</span>);
-		<span class="macro">assert_eq!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>, <span class="ident">actual</span>.<span class="ident">unwrap</span> ());
-	};
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>: <span class="ident">expr</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>:<span class="ident">expr</span> , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">let</span> <span class="ident">actual</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>;
-		<span class="macro">assert!</span> (<span class="ident">actual</span>.<span class="ident">is_ok</span> (), $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="kw-2">*</span>);
-		<span class="macro">assert_eq!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>, <span class="ident">actual</span>.<span class="ident">unwrap</span> ());
-	};
-}
-
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">assert_err</span> {
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>:<span class="ident">expr</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>:<span class="ident">expr</span> ) =&gt; {
-		<span class="macro">assert_eq!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expect</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">actual</span>.<span class="ident">unwrap_err</span> ().<span class="ident">to_string</span> ());
-	};
-}
-
-<span class="kw">mod</span> <span class="ident">iter_ext</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">iter::Copied</span>;
-
-	<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoIteratorExt</span>: <span class="ident">IntoIterator</span> <span class="op">+</span> <span class="ident">Sized</span> {
-
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">iter_vals</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span>, <span class="ident">Item</span><span class="op">&gt;</span> (<span class="self">self</span>) -&gt; <span class="ident">Copied</span> <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::IntoIter</span><span class="op">&gt;</span>
-			<span class="kw">where</span>
-				<span class="ident">Item</span>: <span class="lifetime">&#39;dat</span> <span class="op">+</span> <span class="ident">Copy</span>,
-				<span class="self">Self</span>: <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">Item</span><span class="op">&gt;</span> {
-			<span class="self">self</span>.<span class="ident">into_iter</span> ().<span class="ident">copied</span> ()
-		}
-
+<span class="kw">impl </span>&lt;Val&gt; ResultEither &lt;Val&gt; <span class="kw">for </span><span class="prelude-ty">Result </span>&lt;Val, Val&gt; {
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">fn </span>either (<span class="self">self</span>) -&gt; Val {
+		<span class="kw">match </span><span class="self">self </span>{ <span class="prelude-val">Ok </span>(val) =&gt; val, <span class="prelude-val">Err </span>(val) =&gt; val }
 	}
+}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;dat</span>, <span class="ident">IntoIter</span><span class="op">&gt;</span> <span class="ident">IntoIteratorExt</span> <span class="kw">for</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">IntoIter</span>
-		<span class="kw">where</span> <span class="op">&amp;</span> <span class="lifetime">&#39;dat</span> <span class="ident">IntoIter</span>: <span class="ident">IntoIterator</span> {}
+<span class="attribute">#[ allow (clippy::missing_const_for_fn) ]
+#[ inline ]
+#[ must_use ]
+</span><span class="kw">pub fn </span>ok_or_err &lt;Val&gt; (result: <span class="prelude-ty">Result </span>&lt;Val, Val&gt;) -&gt; Val {
+	<span class="kw">match </span>result {
+		<span class="prelude-val">Ok </span>(val) =&gt; val,
+		<span class="prelude-val">Err </span>(val) =&gt; val,
+	}
+}
 
-	<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IteratorExt</span>: <span class="ident">Iterator</span> {
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>ok_or {
+	( <span class="macro-nonterminal">$val</span>:expr, <span class="macro-nonterminal">$if_err</span>:expr $(,)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">match </span>(<span class="macro-nonterminal">$val</span>) { <span class="prelude-val">Ok </span>(val) =&gt; val, <span class="prelude-val">Err </span>(<span class="kw">_</span>) =&gt; <span class="macro-nonterminal">$if_err </span>}
+	};
+}
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">collect_array</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">DIM</span>: <span class="ident">usize</span><span class="op">&gt;</span> (<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span>[<span class="ident"><span class="self">Self</span>::Item</span>; <span class="ident">DIM</span>]<span class="op">&gt;</span>
-				<span class="kw">where</span> <span class="self">Self</span>: <span class="ident">Sized</span>, <span class="ident"><span class="self">Self</span>::Item</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Default</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="ident">default</span> (); <span class="ident">DIM</span>];
-			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">DIM</span> {
-				<span class="macro">assert!</span> (<span class="ident">idx</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="ident">len</span> ());
-				<span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="macro">some_or!</span> (<span class="self">self</span>.<span class="ident">next</span> (), <span class="kw">return</span> <span class="prelude-val">None</span>);
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>some_or {
+	( <span class="macro-nonterminal">$val</span>:expr, <span class="macro-nonterminal">$if_err</span>:expr $(,)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">match </span>(<span class="macro-nonterminal">$val</span>) { <span class="prelude-val">Some </span>(val) =&gt; val, <span class="prelude-val">None </span>=&gt; <span class="macro-nonterminal">$if_err </span>}
+	};
+}
+
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>assert_is_ok {
+	( <span class="macro-nonterminal">$actual</span>:expr ) =&gt; {
+		<span class="macro">assert! </span>(<span class="macro-nonterminal">$actual</span>.is_ok ());
+	};
+}
+
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>assert_eq_ok {
+	( <span class="macro-nonterminal">$expect</span>:expr , <span class="macro-nonterminal">$actual</span>:expr ) =&gt; {
+		<span class="kw">let </span>actual = <span class="macro-nonterminal">$actual</span>;
+		<span class="macro">assert! </span>(actual.is_ok (), <span class="string">&quot;Expected Ok but got {:?}&quot;</span>, actual);
+		<span class="macro">assert_eq! </span>(<span class="macro-nonterminal">$expect</span>, actual.unwrap ());
+	};
+	( <span class="macro-nonterminal">$expect</span>: expr , <span class="macro-nonterminal">$actual</span>:expr , $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
+		<span class="kw">let </span>actual = <span class="macro-nonterminal">$actual</span>;
+		<span class="macro">assert! </span>(actual.is_ok (), $(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>);
+		<span class="macro">assert_eq! </span>(<span class="macro-nonterminal">$expect</span>, actual.unwrap ());
+	};
+}
+
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>assert_err {
+	( <span class="macro-nonterminal">$expect</span>:expr , <span class="macro-nonterminal">$actual</span>:expr ) =&gt; {
+		<span class="macro">assert_eq! </span>(<span class="macro-nonterminal">$expect</span>, <span class="macro-nonterminal">$actual</span>.unwrap_err ().to_string ());
+	};
+}
+
+<span class="kw">mod </span>iter_ext {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="kw">pub trait </span>IteratorExt: Iterator {
+
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>array &lt;<span class="kw">const </span>DIM: usize&gt; (<span class="kw-2">mut </span><span class="self">self</span>) -&gt; [<span class="self">Self</span>::Item; DIM]
+				<span class="kw">where </span><span class="self">Self</span>: Sized, <span class="self">Self</span>::Item: Copy + Default {
+			<span class="kw">let </span><span class="kw-2">mut </span>result = [default (); DIM];
+			<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. DIM {
+				result [idx] = <span class="self">self</span>.next ().unwrap ();
 			}
-			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">next</span> ().<span class="ident">is_some</span> () { <span class="kw">return</span> <span class="prelude-val">None</span> }
-			<span class="prelude-val">Some</span> (<span class="ident">result</span>)
+			<span class="macro">assert! </span>(<span class="self">self</span>.next ().is_none ());
+			result
 		}
 
-	}
-
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">SomeIter</span>: <span class="ident">Iterator</span><span class="op">&gt;</span> <span class="ident">IteratorExt</span> <span class="kw">for</span> <span class="ident">SomeIter</span> {}
-
-	<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IteratorResultExt</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Error</span><span class="op">&gt;</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">collect_array_ok</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">DIM</span>: <span class="ident">usize</span><span class="op">&gt;</span> (<span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="prelude-ty">Option</span> <span class="op">&lt;</span>[<span class="ident">Item</span>; <span class="ident">DIM</span>]<span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
-				<span class="kw">where</span> <span class="self">Self</span>: <span class="ident">Sized</span>, <span class="ident">Item</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Default</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> [<span class="ident">default</span> (); <span class="ident">DIM</span>];
-			<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">DIM</span> {
-				<span class="macro">assert!</span> (<span class="ident">idx</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="ident">len</span> ());
-				<span class="ident">result</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="macro">some_or!</span> (<span class="self">self</span>.<span class="ident">next</span> (), <span class="kw">return</span> <span class="prelude-val">Ok</span> (<span class="prelude-val">None</span>)) <span class="question-mark">?</span>;
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>try_array &lt;Item, Error, <span class="kw">const </span>DIM: usize&gt; (<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result </span>&lt;[Item; DIM], Error&gt;
+				<span class="kw">where </span><span class="self">Self</span>: Sized + Iterator &lt;Item = <span class="prelude-ty">Result </span>&lt;Item, Error&gt;&gt;, Item: Copy + Default {
+			<span class="kw">let </span><span class="kw-2">mut </span>result = [default (); DIM];
+			<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. DIM {
+				result [idx] = <span class="self">self</span>.next ().unwrap () <span class="question-mark">?</span>;
 			}
-			<span class="kw">if</span> <span class="self">self</span>.<span class="ident">next</span> ().<span class="ident">is_some</span> () { <span class="kw">return</span> <span class="prelude-val">Ok</span> (<span class="prelude-val">None</span>) }
-			<span class="prelude-val">Ok</span> (<span class="prelude-val">Some</span> (<span class="ident">result</span>))
+			<span class="macro">assert! </span>(<span class="self">self</span>.next ().is_none ());
+			<span class="prelude-val">Ok </span>(result)
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Error</span>, <span class="ident">SomeIter</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">IteratorResultExt</span> <span class="op">&lt;</span><span class="ident">Item</span>, <span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SomeIter</span> {}
+	<span class="kw">impl </span>&lt;SomeIter: Iterator&gt; IteratorExt <span class="kw">for </span>SomeIter {}
 
 }
 
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">array_vec</span> {
-	( ) =&gt; { <span class="ident">ArrayVec::new</span> () };
-	( $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vals</span>:<span class="ident">expr</span>),<span class="op">+</span> ) =&gt; {
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>array_vec {
+	() =&gt; { ArrayVec::new () };
+	( $(<span class="macro-nonterminal">$val</span>:expr),* $(,)<span class="question-mark">? </span>) =&gt; {
 		{
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-			<span class="macro">array_vec!</span> (@<span class="ident">push</span> <span class="ident">result</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">vals</span>,)<span class="kw-2">*</span>);
-			<span class="ident">result</span>
+			<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+			$( result.push (<span class="macro-nonterminal">$val</span>); )*
+			result
 		}
 	};
-	( @<span class="ident">push</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>:<span class="ident">ident</span> $(,)<span class="question-mark">?</span> ) =&gt; {};
-	( @<span class="ident">push</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>:<span class="ident">ident</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">expr</span>)<span class="op">*</span> ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>.<span class="ident">push</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>);
-		<span class="macro">array_vec!</span> (@<span class="ident">push</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
+	( <span class="macro-nonterminal">$val</span>:expr; <span class="macro-nonterminal">$num</span>:expr ) =&gt; {
+		[<span class="macro-nonterminal">$val</span>; <span class="macro-nonterminal">$num</span>].into_iter ().collect ()
 	};
-	( @<span class="ident">push</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>:<span class="ident">ident</span> , <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">expr</span>)<span class="op">*</span> , ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>.<span class="ident">push</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>);
-		<span class="macro">array_vec!</span> (@<span class="ident">push</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
+}
+
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>wrapper_deref_mut {
+	(
+		$(<span class="attribute">#[<span class="macro-nonterminal">$struct_meta</span>:meta]</span>)*
+		<span class="macro-nonterminal">$struct_vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$struct_name</span>:ident $(&lt;$(<span class="macro-nonterminal">$struct_param</span>:tt),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="macro-nonterminal">$field_vis</span>:vis <span class="macro-nonterminal">$field_name</span>:ident: <span class="macro-nonterminal">$field_type</span>:ty,
+		}
+	) =&gt; {
+
+		$(<span class="attribute">#[<span class="macro-nonterminal">$struct_meta</span>]</span>)*
+		<span class="macro-nonterminal">$struct_vis </span><span class="kw">struct </span><span class="macro-nonterminal">$struct_name </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="macro-nonterminal">$field_vis $field_name</span>: <span class="macro-nonterminal">$field_type</span>,
+		}
+
+		<span class="kw">impl </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>::std::ops::Deref <span class="kw">for </span><span class="macro-nonterminal">$struct_name </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="kw">type </span>Target = <span class="macro-nonterminal">$field_type</span>;
+			<span class="kw">fn </span>deref (&amp; <span class="self">self</span>) -&gt; &amp; <span class="macro-nonterminal">$field_type </span>{
+				&amp; <span class="self">self</span>.<span class="macro-nonterminal">$field_name
+			</span>}
+		}
+
+		<span class="kw">impl </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>::std::ops::DerefMut <span class="kw">for </span><span class="macro-nonterminal">$struct_name </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="kw">fn </span>deref_mut (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; &amp; <span class="kw-2">mut </span><span class="macro-nonterminal">$field_type </span>{
+				&amp; <span class="kw-2">mut </span><span class="self">self</span>.<span class="macro-nonterminal">$field_name
+			</span>}
+		}
+
+	};
+}
+
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>wrapper_deref {
+	(
+		$(<span class="attribute">#[<span class="macro-nonterminal">$struct_meta</span>:meta]</span>)*
+		<span class="macro-nonterminal">$struct_vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$struct_name</span>:ident $(&lt;$(<span class="macro-nonterminal">$struct_param</span>:tt),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="macro-nonterminal">$field_vis</span>:vis <span class="macro-nonterminal">$field_name</span>:ident: <span class="macro-nonterminal">$field_type</span>:ty,
+		}
+	) =&gt; {
+
+		$(<span class="attribute">#[<span class="macro-nonterminal">$struct_meta</span>]</span>)*
+		<span class="macro-nonterminal">$struct_vis </span><span class="kw">struct </span><span class="macro-nonterminal">$struct_name </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="macro-nonterminal">$field_vis $field_name</span>: <span class="macro-nonterminal">$field_type</span>,
+		}
+
+		<span class="kw">impl </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>::std::ops::Deref <span class="kw">for </span><span class="macro-nonterminal">$struct_name </span>$(&lt;$(<span class="macro-nonterminal">$struct_param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
+			<span class="kw">type </span>Target = <span class="macro-nonterminal">$field_type</span>;
+			<span class="kw">fn </span>deref (&amp; <span class="self">self</span>) -&gt; &amp; <span class="macro-nonterminal">$field_type </span>{
+				&amp; <span class="self">self</span>.<span class="macro-nonterminal">$field_name
+			</span>}
+		}
+
 	};
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_misc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_misc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

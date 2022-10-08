@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/src/cycles.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cycles.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/cycles.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cycles.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -441,29 +441,26 @@
 <span id="441">441</span>
 <span id="442">442</span>
 <span id="443">443</span>
-<span id="444">444</span>
-<span id="445">445</span>
-</pre><pre class="rust"><code><span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::else_if_without_else</span>) ]</span>
+</pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::else_if_without_else) ]
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">model::State</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+</span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>model::State;
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Debug</span>, <span class="ident">clap::Parser</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Args</span> {
+<span class="attribute">#[ derive (Debug, clap::Parser) ]
+</span><span class="kw">pub struct </span>Args {
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;20&quot;</span>) ]</span>
-	<span class="ident">iterations</span>: <span class="ident">usize</span>,
+	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;20&quot;</span>) ]
+	</span>iterations: usize,
 
-	<span class="attribute">#[ <span class="ident">clap</span> (<span class="ident">long</span>, <span class="ident">default_value</span> <span class="op">=</span> <span class="string">&quot;10&quot;</span>) ]</span>
-	<span class="ident">max_length</span>: <span class="ident">usize</span>,
+	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;10&quot;</span>) ]
+	</span>max_length: usize,
 
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Span</span> (<span class="ident">Rc</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>);
+<span class="attribute">#[ derive (Clone, Eq, Hash, PartialEq) ]
+</span><span class="kw">pub struct </span>Span (Rc &lt;[u8]&gt;);
 
-<span class="kw">impl</span> <span class="ident">Span</span> {
+<span class="kw">impl </span>Span {
 	<span class="comment">/*
 	fn split (&amp; self) -&gt; Vec &lt;Span&gt; {
 		iter::empty ()
@@ -486,407 +483,406 @@
 			.next ()
 			.is_some ()
 	}
-	*/</span>
-}
+	*/
+</span>}
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Span (\&quot;{}\&quot;)&quot;</span>, <span class="self">self</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (())
+<span class="kw">impl </span>Debug <span class="kw">for </span>Span {
+	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="macro">write! </span>(formatter, <span class="string">&quot;Span (\&quot;{}\&quot;)&quot;</span>, <span class="self">self</span>) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(())
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="kw">for</span> <span class="op">&amp;</span> <span class="ident">val</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">iter</span> () {
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">char::from_digit</span> (<span class="ident">val</span>.<span class="ident">as_u32</span> (), <span class="number">10</span>).<span class="ident">unwrap</span> ()) <span class="question-mark">?</span>;
+<span class="kw">impl </span>Display <span class="kw">for </span>Span {
+	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="kw">for </span>&amp; val <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter () {
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, char::from_digit (val.pan_u32 (), <span class="number">10</span>).unwrap ()) <span class="question-mark">?</span>;
 		}
-		<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Ok </span>(())
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Borrow</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">borrow</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> [<span class="ident">u8</span>] { <span class="op">&amp;</span> <span class="self">self</span>.<span class="number">0</span> }
+<span class="kw">impl </span>Borrow &lt;[u8]&gt; <span class="kw">for </span>Span {
+	<span class="kw">fn </span>borrow (&amp; <span class="self">self</span>) -&gt; &amp; [u8] { &amp; <span class="self">self</span>.<span class="number">0 </span>}
 }
 
-<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="op">&amp;</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> (<span class="ident">other</span>.<span class="ident">into</span> ())
+<span class="kw">impl </span>From &lt;&amp; [u8]&gt; <span class="kw">for </span>Span {
+	<span class="kw">fn </span>from (other: &amp; [u8]) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>(other.into ())
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">TryFrom</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">GenError</span>;
-	<span class="kw">fn</span> <span class="ident">try_from</span> (<span class="ident">src</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::from</span> (<span class="ident">model::State::parse</span> (<span class="ident">src</span>) <span class="question-mark">?</span>.<span class="ident">as_slice</span> ()))
+<span class="kw">impl </span>TryFrom &lt;&amp; str&gt; <span class="kw">for </span>Span {
+	<span class="kw">type </span>Error = GenError;
+	<span class="kw">fn </span>try_from (src: &amp; str) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+		<span class="prelude-val">Ok </span>(<span class="self">Self</span>::from (model::State::parse (src) <span class="question-mark">?</span>.as_slice ()))
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span> () <span class="op">==</span> <span class="ident">other</span>
+<span class="kw">impl </span>PartialEq &lt;[u8]&gt; <span class="kw">for </span>Span {
+	<span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; [u8]) -&gt; bool {
+		<span class="self">self</span>.<span class="number">0</span>.as_ref () == other
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">PartialOrd</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">partial_cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Some</span> (<span class="self">self</span>.<span class="ident">cmp</span> (<span class="ident">other</span>))
+<span class="kw">impl </span>PartialOrd <span class="kw">for </span>Span {
+	<span class="kw">fn </span>partial_cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;Ordering&gt; {
+		<span class="prelude-val">Some </span>(<span class="self">self</span>.cmp (other))
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Ord</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">fn</span> <span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">Ordering</span> {
-		<span class="self">self</span>.<span class="number">0</span>.<span class="ident">len</span> ().<span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="ident">other</span>.<span class="ident">len</span> ())
-			.<span class="ident">then</span> (<span class="self">self</span>.<span class="number">0</span>.<span class="ident">cmp</span> (<span class="op">&amp;</span> <span class="ident">other</span>.<span class="number">0</span>))
+<span class="kw">impl </span>Ord <span class="kw">for </span>Span {
+	<span class="kw">fn </span>cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; Ordering {
+		<span class="self">self</span>.<span class="number">0</span>.len ().cmp (&amp; other.len ())
+			.then (<span class="self">self</span>.<span class="number">0</span>.cmp (&amp; other.<span class="number">0</span>))
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Span</span> {
-	<span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> [<span class="ident">u8</span>];
-	<span class="kw">fn</span> <span class="ident">deref</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> [<span class="ident">u8</span>] { <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ref</span> () }
+<span class="kw">impl </span>Deref <span class="kw">for </span>Span {
+	<span class="kw">type </span>Target = [u8];
+	<span class="kw">fn </span>deref (&amp; <span class="self">self</span>) -&gt; &amp; [u8] { <span class="self">self</span>.<span class="number">0</span>.as_ref () }
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-<span class="kw">enum</span> <span class="ident">Destiny</span> {
-	<span class="ident">Unstable</span> (<span class="ident">Span</span>),
-	<span class="ident">Atomic</span> (<span class="ident">Atomic</span>),
-	<span class="ident">Stable</span> (<span class="ident">Rc</span> <span class="op">&lt;</span>[<span class="ident">Atomic</span>]<span class="op">&gt;</span>),
+<span class="attribute">#[ derive (Clone, Debug, Eq, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">enum </span>Destiny {
+	Unstable (Span),
+	Atomic (Atomic),
+	Stable (Rc &lt;[Atomic]&gt;),
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-<span class="kw">struct</span> <span class="ident">Atomic</span> (<span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">AtomicInner</span><span class="op">&gt;</span>);
+<span class="attribute">#[ derive (Clone, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">struct </span>Atomic (Rc &lt;AtomicInner&gt;);
 
-<span class="kw">impl</span> <span class="ident">Borrow</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Atomic</span> {
-	<span class="kw">fn</span> <span class="ident">borrow</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> [<span class="ident">u8</span>] { <span class="op">&amp;</span> <span class="self">self</span>.<span class="ident">deref</span> ().<span class="ident">key</span> }
+<span class="kw">impl </span>Borrow &lt;[u8]&gt; <span class="kw">for </span>Atomic {
+	<span class="kw">fn </span>borrow (&amp; <span class="self">self</span>) -&gt; &amp; [u8] { &amp; <span class="self">self</span>.deref ().key }
 }
 
-<span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Atomic</span> {
-	<span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">AtomicInner</span>;
-	<span class="kw">fn</span> <span class="ident">deref</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="ident">AtomicInner</span> { <span class="op">&amp;</span> <span class="self">self</span>.<span class="number">0</span> }
+<span class="kw">impl </span>Deref <span class="kw">for </span>Atomic {
+	<span class="kw">type </span>Target = AtomicInner;
+	<span class="kw">fn </span>deref (&amp; <span class="self">self</span>) -&gt; &amp; AtomicInner { &amp; <span class="self">self</span>.<span class="number">0 </span>}
 }
 
-<span class="kw">impl</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="ident">AtomicInner</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Atomic</span> {
-	<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">inner</span>: <span class="ident">AtomicInner</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> (<span class="ident">Rc::new</span> (<span class="ident">inner</span>))
+<span class="kw">impl </span>From &lt;AtomicInner&gt; <span class="kw">for </span>Atomic {
+	<span class="kw">fn </span>from (inner: AtomicInner) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>(Rc::new (inner))
 	}
 }
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Ord</span>, <span class="ident">PartialOrd</span>) ]</span>
-<span class="kw">struct</span> <span class="ident">AtomicInner</span> {
-	<span class="ident">key</span>: <span class="ident">Span</span>,
-	<span class="ident">next</span>: <span class="ident">Rc</span> <span class="op">&lt;</span>[<span class="ident">Atomic</span>]<span class="op">&gt;</span>,
-	<span class="ident">first</span>: [<span class="ident">u8</span>; <span class="number">3</span>],
-	<span class="ident">last</span>: <span class="ident">u8</span>,
+<span class="attribute">#[ derive (Clone, Ord, PartialOrd) ]
+</span><span class="kw">struct </span>AtomicInner {
+	key: Span,
+	next: Rc &lt;[Atomic]&gt;,
+	first: [u8; <span class="number">3</span>],
+	last: u8,
 }
 
-<span class="kw">impl</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Atomic</span> {
-	<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-		<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;Atomic ({} next=&quot;</span>, <span class="self">self</span>.<span class="ident">key</span>) <span class="question-mark">?</span>;
-		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">next</span>.<span class="ident">is_empty</span> () { <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;TODO&quot;</span>) <span class="question-mark">?</span>; }
-		<span class="kw">for</span> (<span class="ident">next_idx</span>, <span class="ident">next</span>) <span class="kw">in</span> <span class="self">self</span>.<span class="ident">next</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
-			<span class="kw">if</span> <span class="ident">next_idx</span> <span class="op">&gt;</span> <span class="number">0</span> { <span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">next</span>.<span class="ident">key</span>) <span class="question-mark">?</span>;
+<span class="kw">impl </span>Debug <span class="kw">for </span>Atomic {
+	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="macro">write! </span>(formatter, <span class="string">&quot;Atomic ({} next=&quot;</span>, <span class="self">self</span>.key) <span class="question-mark">?</span>;
+		<span class="kw">if </span><span class="self">self</span>.next.is_empty () { <span class="macro">write! </span>(formatter, <span class="string">&quot;TODO&quot;</span>) <span class="question-mark">?</span>; }
+		<span class="kw">for </span>(next_idx, next) <span class="kw">in </span><span class="self">self</span>.next.iter ().enumerate () {
+			<span class="kw">if </span>next_idx &gt; <span class="number">0 </span>{ <span class="macro">write! </span>(formatter, <span class="string">&quot;,&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, next.key) <span class="question-mark">?</span>;
 		}
-		<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot; first=&quot;</span>) <span class="question-mark">?</span>;
-		<span class="kw">for</span> <span class="ident">item</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">first</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">char::from_digit</span> (<span class="ident">item</span>.<span class="ident">as_u32</span> (), <span class="number">10</span>).<span class="ident">unwrap</span> ()) <span class="question-mark">?</span>;
+		<span class="macro">write! </span>(formatter, <span class="string">&quot; first=&quot;</span>) <span class="question-mark">?</span>;
+		<span class="kw">for </span>item <span class="kw">in </span><span class="self">self</span>.first.iter ().copied () {
+			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, char::from_digit (item.pan_u32 (), <span class="number">10</span>).unwrap ()) <span class="question-mark">?</span>;
 		}
-		<span class="macro">write!</span> (<span class="ident">formatter</span>, <span class="string">&quot; last={})&quot;</span>, <span class="self">self</span>.<span class="ident">last</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (())
+		<span class="macro">write! </span>(formatter, <span class="string">&quot; last={})&quot;</span>, <span class="self">self</span>.last) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(())
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {
-	<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">key</span> <span class="op">==</span> <span class="op">*</span> <span class="ident">other</span> }
+<span class="kw">impl </span>PartialEq &lt;[u8]&gt; <span class="kw">for </span>AtomicInner {
+	<span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; [u8]) -&gt; bool { <span class="self">self</span>.key == * other }
 }
 
-<span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {
-	<span class="kw">fn</span> <span class="ident">eq</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> <span class="self">Self</span>) -&gt; <span class="ident">bool</span> { <span class="self">self</span>.<span class="ident">key</span> <span class="op">==</span> <span class="ident">other</span>.<span class="ident">key</span> }
+<span class="kw">impl </span>PartialEq <span class="kw">for </span>AtomicInner {
+	<span class="kw">fn </span>eq (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; bool { <span class="self">self</span>.key == other.key }
 }
 
-<span class="kw">impl</span> <span class="ident">Eq</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {}
+<span class="kw">impl </span>Eq <span class="kw">for </span>AtomicInner {}
 
-<span class="kw">impl</span> <span class="ident">Hash</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {
-	<span class="kw">fn</span> <span class="ident">hash</span> <span class="op">&lt;</span><span class="ident">Hr</span>: <span class="ident">Hasher</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">hasher</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Hr</span>) {
-		<span class="self">self</span>.<span class="ident">key</span>.<span class="ident">hash</span> (<span class="ident">hasher</span>);
+<span class="kw">impl </span>Hash <span class="kw">for </span>AtomicInner {
+	<span class="kw">fn </span>hash &lt;Hr: Hasher&gt; (&amp; <span class="self">self</span>, hasher: &amp; <span class="kw-2">mut </span>Hr) {
+		<span class="self">self</span>.key.hash (hasher);
 	}
 }
 
-<span class="kw">impl</span> <span class="ident">PartialOrd</span> <span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">AtomicInner</span> {
-	<span class="kw">fn</span> <span class="ident">partial_cmp</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Ordering</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">key</span>.<span class="ident">deref</span> ().<span class="ident">partial_cmp</span> (<span class="ident">other</span>)
+<span class="kw">impl </span>PartialOrd &lt;[u8]&gt; <span class="kw">for </span>AtomicInner {
+	<span class="kw">fn </span>partial_cmp (&amp; <span class="self">self</span>, other: &amp; [u8]) -&gt; <span class="prelude-ty">Option </span>&lt;Ordering&gt; {
+		<span class="self">self</span>.key.deref ().partial_cmp (other)
 	}
 }
 
-<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">compatible</span> (<span class="ident">prev</span>: <span class="ident">u8</span>, <span class="ident">next</span>: <span class="op">&amp;</span> [<span class="ident">u8</span>]) -&gt; <span class="ident">bool</span> {
-	<span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">0</span>] <span class="op">&amp;&amp;</span> <span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">1</span>] <span class="op">&amp;&amp;</span> <span class="ident">prev</span> <span class="op">!</span><span class="op">=</span> <span class="ident">next</span> [<span class="number">2</span>]
+<span class="kw">const fn </span>compatible (prev: u8, next: &amp; [u8]) -&gt; bool {
+	prev != next [<span class="number">0</span>] &amp;&amp; prev != next [<span class="number">1</span>] &amp;&amp; prev != next [<span class="number">2</span>]
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::needless_pass_by_value</span>) ]</span>
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::todo</span>) ]</span>
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::too_many_lines</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span> (<span class="ident">args</span>: <span class="ident">Args</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="attribute">#[ allow (clippy::needless_pass_by_value) ]
+#[ allow (clippy::print_stdout) ]
+#[ allow (clippy::todo) ]
+#[ allow (clippy::too_many_lines) ]
+</span><span class="kw">pub fn </span>run (args: Args) -&gt; GenResult &lt;()&gt; {
 
-	<span class="kw">let</span> <span class="ident">stables</span> <span class="op">=</span> <span class="ident">find_stables</span> (<span class="ident">args</span>.<span class="ident">max_length</span>, <span class="ident">args</span>.<span class="ident">iterations</span>);
-	<span class="macro">println!</span> (<span class="string">&quot;NUM STABLES: {}&quot;</span>, <span class="ident">stables</span>.<span class="ident">len</span> ());
-	<span class="macro">println!</span> (<span class="string">&quot;NUM SINGULAR: {}&quot;</span>, <span class="ident">stables</span>.<span class="ident">values</span> ().<span class="ident">filter</span> (<span class="op">|</span><span class="ident">stable</span><span class="op">|</span>
-		<span class="ident">stable</span>.<span class="ident">as_ref</span> ().<span class="ident">map_or</span> (<span class="bool-val">false</span>, <span class="op">|</span><span class="ident">stable</span><span class="op">|</span> <span class="ident">stable</span>.<span class="ident">parts</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">1</span>)).<span class="ident">count</span> ());
+	<span class="kw">let </span>stables = find_stables (args.max_length, args.iterations);
+	<span class="macro">println! </span>(<span class="string">&quot;NUM STABLES: {}&quot;</span>, stables.len ());
+	<span class="macro">println! </span>(<span class="string">&quot;NUM SINGULAR: {}&quot;</span>, stables.values ().filter (|stable|
+		stable.as_ref ().map_or (<span class="bool-val">false</span>, |stable| stable.parts.len () == <span class="number">1</span>)).count ());
 
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">destinies</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Span</span>, <span class="ident">Destiny</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap::new</span> ();
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">atomics</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Atomic</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
+	<span class="kw">let </span><span class="kw-2">mut </span>destinies: HashMap &lt;Span, Destiny&gt; = HashMap::new ();
+	<span class="kw">let </span><span class="kw-2">mut </span>atomics: HashSet &lt;Atomic&gt; = HashSet::new ();
 
-	<span class="kw">for</span> <span class="ident">length</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">args</span>.<span class="ident">max_length</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
+	<span class="kw">for </span>length <span class="kw">in </span>(<span class="number">2 </span>..= args.max_length).step_by (<span class="number">2</span>) {
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1_u8</span> ..<span class="op">=</span> <span class="number">3_u8</span>))
-			.<span class="ident">multi_cartesian_product</span> ()
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">nums</span><span class="op">|</span> <span class="ident">State::try_from</span> (<span class="ident">nums</span>).<span class="ident">unwrap</span> ()) {
+		<span class="lifetime">&#39;STATE</span>: <span class="kw">for </span>state <span class="kw">in </span>(<span class="number">0 </span>.. length).map (|<span class="kw">_</span>| (<span class="number">1_u8 </span>..= <span class="number">3_u8</span>))
+			.multi_cartesian_product ()
+			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			<span class="kw">let</span> <span class="ident">has_long_run</span> <span class="op">=</span> {
-				<span class="kw">let</span> <span class="ident">group_by_temp</span> <span class="op">=</span>
-					<span class="ident">state</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-						.<span class="ident">group_by</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">item</span><span class="op">|</span> <span class="ident">item</span>);
-				<span class="ident">group_by_temp</span>.<span class="ident">into_iter</span> ()
-					.<span class="ident">any</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">group</span>)<span class="op">|</span> <span class="ident">group</span>.<span class="ident">count</span> () <span class="op">&gt;</span> <span class="number">3</span>)
+			<span class="kw">let </span>has_long_run = {
+				<span class="kw">let </span>group_by_temp =
+					state.iter ().copied ()
+						.group_by (|&amp; item| item);
+				group_by_temp.into_iter ()
+					.any (|(<span class="kw">_</span>, group)| group.count () &gt; <span class="number">3</span>)
 			};
-			<span class="kw">if</span> <span class="ident">has_long_run</span> { <span class="kw">continue</span> }
+			<span class="kw">if </span>has_long_run { <span class="kw">continue </span>}
 
-			<span class="kw">for</span> <span class="ident">prefix_len</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">length</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">2</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
-				<span class="kw">match</span> (
-					<span class="ident">atomics</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">state</span> [ .. <span class="ident">prefix_len</span>]),
-					<span class="ident">destinies</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">state</span> [<span class="ident">prefix_len</span> .. ]).<span class="ident">unwrap_or_else</span> (<span class="op">|</span><span class="op">|</span>
-						<span class="macro">panic!</span> (<span class="string">&quot;Can&#39;t find destiny for {:?}&quot;</span>, <span class="op">&amp;</span> <span class="ident">state</span> [<span class="ident">prefix_len</span> .. ])),
+			<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>..= length.pan_usize () - <span class="number">2</span>).step_by (<span class="number">2</span>) {
+				<span class="kw">match </span>(
+					atomics.get (&amp; state [ .. prefix_len]),
+					destinies.get (&amp; state [prefix_len .. ]).unwrap_or_else (||
+						<span class="macro">panic! </span>(<span class="string">&quot;Can&#39;t find destiny for {:?}&quot;</span>, &amp; state [prefix_len .. ])),
 				) {
-					(<span class="prelude-val">Some</span> (<span class="kw">_</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Unstable</span> (<span class="kw">_</span>)) <span class="op">|</span> (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">continue</span>,
-					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Atomic</span> (<span class="kw-2">ref</span> <span class="ident">suffix</span>)) =&gt; {
-						<span class="kw">if</span> <span class="op">!</span> <span class="ident">compatible</span> (<span class="ident">prefix</span>.<span class="ident">last</span>, <span class="op">&amp;</span> <span class="ident">suffix</span>.<span class="ident">first</span>) { <span class="kw">continue</span> }
-						<span class="ident">destinies</span>.<span class="ident">insert</span> (
-							<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
-							<span class="ident">Destiny::Stable</span> ([ <span class="ident">prefix</span>.<span class="ident">clone</span> (), <span class="ident">suffix</span>.<span class="ident">clone</span> () ].<span class="ident">as_slice</span> ().<span class="ident">into</span> ()));
-						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
+					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), &amp; Destiny::Unstable (<span class="kw">_</span>)) | (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">continue</span>,
+					(<span class="prelude-val">Some </span>(prefix), &amp; Destiny::Atomic (<span class="kw-2">ref </span>suffix)) =&gt; {
+						<span class="kw">if </span>! compatible (prefix.last, &amp; suffix.first) { <span class="kw">continue </span>}
+						destinies.insert (
+							state.as_slice ().into (),
+							Destiny::Stable ([ prefix.clone (), suffix.clone () ].as_slice ().into ()));
+						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 					},
-					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="op">&amp;</span> <span class="ident">Destiny::Stable</span> (<span class="kw-2">ref</span> <span class="ident">suffix</span>)) =&gt; {
-						<span class="kw">if</span> <span class="op">!</span> <span class="ident">compatible</span> (<span class="ident">prefix</span>.<span class="ident">last</span>, <span class="op">&amp;</span> <span class="ident">suffix</span> [<span class="number">0</span>].<span class="ident">first</span>) { <span class="kw">continue</span> }
-						<span class="ident">destinies</span>.<span class="ident">insert</span> (
-							<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
-							<span class="ident">Destiny::Stable</span> (
-								<span class="ident">iter::once</span> (<span class="ident">prefix</span>.<span class="ident">clone</span> ())
-									.<span class="ident">chain</span> (<span class="ident">suffix</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ())
-									.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ()
-									.<span class="ident">into</span> ()));
-						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
+					(<span class="prelude-val">Some </span>(prefix), &amp; Destiny::Stable (<span class="kw-2">ref </span>suffix)) =&gt; {
+						<span class="kw">if </span>! compatible (prefix.last, &amp; suffix [<span class="number">0</span>].first) { <span class="kw">continue </span>}
+						destinies.insert (
+							state.as_slice ().into (),
+							Destiny::Stable (
+								iter::once (prefix.clone ())
+									.chain (suffix.iter ().cloned ())
+									.collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ()
+									.into ()));
+						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 					},
 				}
 			}
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seq_ord</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-			<span class="ident">seq_ord</span>.<span class="ident">push</span> (<span class="ident">state</span>.<span class="ident">clone</span> ());
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seq_set</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-			<span class="ident">seq_set</span>.<span class="ident">insert</span> (<span class="ident">state</span>.<span class="ident">clone</span> ());
+			<span class="kw">let </span><span class="kw-2">mut </span>seq_ord = Vec::new ();
+			seq_ord.push (state.clone ());
+			<span class="kw">let </span><span class="kw-2">mut </span>seq_set = HashSet::new ();
+			seq_set.insert (state.clone ());
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">clone</span> ();
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left_1</span> <span class="op">=</span> <span class="ident">state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">1</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left_2</span> <span class="op">=</span> <span class="ident">state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">2</span>;
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">left_3</span> <span class="op">=</span> <span class="ident">state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">3</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>prev_state = state.clone ();
+			<span class="kw">let </span><span class="kw-2">mut </span>left_1 = state [<span class="number">0</span>] == <span class="number">1</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>left_2 = state [<span class="number">0</span>] == <span class="number">2</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>left_3 = state [<span class="number">0</span>] == <span class="number">3</span>;
 
-			<span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">args</span>.<span class="ident">iterations</span> {
-				<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">logic::one_round</span> (<span class="op">&amp;</span> <span class="ident">prev_state</span>);
+			<span class="kw">for _ in </span><span class="number">0 </span>.. args.iterations {
+				<span class="kw">let </span>next_state = logic::one_round (&amp; prev_state);
 
-				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">_whatever</span>) <span class="op">=</span> <span class="ident">destinies</span>.<span class="ident">get</span> (<span class="ident">next_state</span>.<span class="ident">as_slice</span> ()) {
-					<span class="comment">//todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state); TODO</span>
+				<span class="kw">if let </span><span class="prelude-val">Some </span>(_whatever) = destinies.get (next_state.as_slice ()) {
+					<span class="comment">//todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state); TODO
+				</span>}
+
+				seq_ord.push (next_state.clone ());
+				seq_set.insert (next_state.clone ());
+
+				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">1 </span>{ left_1 = <span class="bool-val">true</span>; }
+				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">2 </span>{ left_2 = <span class="bool-val">true</span>; }
+				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">3 </span>{ left_3 = <span class="bool-val">true</span>; }
+
+				<span class="kw">if </span>left_1 &amp;&amp; left_2 &amp;&amp; left_3 {
+					destinies.insert (
+						state.as_slice ().into (),
+						Destiny::Unstable (seq_ord [<span class="number">1</span>].as_slice ().into ()));
+					<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 				}
 
-				<span class="ident">seq_ord</span>.<span class="ident">push</span> (<span class="ident">next_state</span>.<span class="ident">clone</span> ());
-				<span class="ident">seq_set</span>.<span class="ident">insert</span> (<span class="ident">next_state</span>.<span class="ident">clone</span> ());
-
-				<span class="kw">if</span> <span class="ident">next_state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">1</span> { <span class="ident">left_1</span> <span class="op">=</span> <span class="bool-val">true</span>; }
-				<span class="kw">if</span> <span class="ident">next_state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">2</span> { <span class="ident">left_2</span> <span class="op">=</span> <span class="bool-val">true</span>; }
-				<span class="kw">if</span> <span class="ident">next_state</span> [<span class="number">0</span>] <span class="op">==</span> <span class="number">3</span> { <span class="ident">left_3</span> <span class="op">=</span> <span class="bool-val">true</span>; }
-
-				<span class="kw">if</span> <span class="ident">left_1</span> <span class="op">&amp;&amp;</span> <span class="ident">left_2</span> <span class="op">&amp;&amp;</span> <span class="ident">left_3</span> {
-					<span class="ident">destinies</span>.<span class="ident">insert</span> (
-						<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
-						<span class="ident">Destiny::Unstable</span> (<span class="ident">seq_ord</span> [<span class="number">1</span>].<span class="ident">as_slice</span> ().<span class="ident">into</span> ()));
-					<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
-				}
-
-				<span class="ident">prev_state</span> <span class="op">=</span> <span class="ident">next_state</span>;
+				prev_state = next_state;
 			}
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">next_rest</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="ident">seq_ord</span> [<span class="number">1</span>] [ .. ];
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">atomic_next</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-			<span class="lifetime">&#39;OUTER</span>: <span class="kw">while</span> <span class="op">!</span> <span class="ident">next_rest</span>.<span class="ident">is_empty</span> () {
-				<span class="kw">for</span> <span class="ident">prefix_len</span> <span class="kw">in</span> (<span class="number">2</span> .. <span class="ident">next_rest</span>.<span class="ident">len</span> ()).<span class="ident">step_by</span> (<span class="number">2</span>) {
-					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">prefix_atomic</span>) <span class="op">=</span> <span class="ident">atomics</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">seq_ord</span> [<span class="number">1</span>] [<span class="number">0</span> .. <span class="ident">prefix_len</span>]) {
-						<span class="ident">atomic_next</span>.<span class="ident">push</span> (<span class="ident">prefix_atomic</span>.<span class="ident">clone</span> ());
-						<span class="ident">next_rest</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="ident">next_rest</span> [ <span class="ident">prefix_len</span> .. ];
-						<span class="kw">continue</span> <span class="lifetime">&#39;OUTER</span>;
+			<span class="kw">let </span><span class="kw-2">mut </span>next_rest = &amp; seq_ord [<span class="number">1</span>] [ .. ];
+			<span class="kw">let </span><span class="kw-2">mut </span>atomic_next = Vec::new ();
+			<span class="lifetime">&#39;OUTER</span>: <span class="kw">while </span>! next_rest.is_empty () {
+				<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>.. next_rest.len ()).step_by (<span class="number">2</span>) {
+					<span class="kw">if let </span><span class="prelude-val">Some </span>(prefix_atomic) = atomics.get (&amp; seq_ord [<span class="number">1</span>] [<span class="number">0 </span>.. prefix_len]) {
+						atomic_next.push (prefix_atomic.clone ());
+						next_rest = &amp; next_rest [ prefix_len .. ];
+						<span class="kw">continue </span><span class="lifetime">&#39;OUTER</span>;
 					}
 				}
-				<span class="comment">//unreachable! (&quot;Can&#39;t find atomics for: {}: {}&quot;, state, seq_ord [1]);</span>
-				<span class="ident">atomic_next</span>.<span class="ident">clear</span> ();
+				<span class="comment">//unreachable! (&quot;Can&#39;t find atomics for: {}: {}&quot;, state, seq_ord [1]);
+				</span>atomic_next.clear ();
 				<span class="kw">break</span>;
 			}
 
-			<span class="kw">let</span> <span class="ident">key</span>: <span class="ident">Span</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> ();
-			<span class="kw">let</span> <span class="ident">atomic</span>: <span class="ident">Atomic</span> <span class="op">=</span> <span class="ident">AtomicInner</span> {
-				<span class="ident">key</span>: <span class="ident">key</span>.<span class="ident">clone</span> (),
-				<span class="ident">next</span>: <span class="ident">atomic_next</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (),
-				<span class="ident">first</span>: [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>].<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> <span class="ident">seq_ord</span> [<span class="ident">idx</span>].<span class="ident">first</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> ()),
-				<span class="ident">last</span>: <span class="ident">seq_ord</span> [<span class="number">0</span>].<span class="ident">last</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> (),
-			}.<span class="ident">into</span> ();
-			<span class="ident">atomics</span>.<span class="ident">insert</span> (<span class="ident">atomic</span>.<span class="ident">clone</span> ());
-			<span class="ident">destinies</span>.<span class="ident">insert</span> (<span class="ident">key</span>, <span class="ident">Destiny::Atomic</span> (<span class="ident">atomic</span>));
+			<span class="kw">let </span>key: Span = state.as_slice ().into ();
+			<span class="kw">let </span>atomic: Atomic = AtomicInner {
+				key: key.clone (),
+				next: atomic_next.as_slice ().into (),
+				first: [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>].map (|idx| seq_ord [idx].first ().copied ().unwrap ()),
+				last: seq_ord [<span class="number">0</span>].last ().copied ().unwrap (),
+			}.into ();
+			atomics.insert (atomic.clone ());
+			destinies.insert (key, Destiny::Atomic (atomic));
 
 		}
 
 	}
 
-	<span class="macro">println!</span> (<span class="string">&quot;ATOMICS: count={}&quot;</span>, <span class="ident">atomics</span>.<span class="ident">len</span> ());
-	<span class="kw">for</span> <span class="ident">atomic</span> <span class="kw">in</span> <span class="ident">atomics</span>.<span class="ident">iter</span> ().<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="ident">atomic</span><span class="op">|</span> <span class="ident">atomic</span>.<span class="ident">key</span>.<span class="ident">clone</span> ()) {
-		<span class="macro">println!</span> (<span class="string">&quot; - {:?}&quot;</span>, <span class="ident">atomic</span>);
+	<span class="macro">println! </span>(<span class="string">&quot;ATOMICS: count={}&quot;</span>, atomics.len ());
+	<span class="kw">for </span>atomic <span class="kw">in </span>atomics.iter ().sorted_by_key (|atomic| atomic.key.clone ()) {
+		<span class="macro">println! </span>(<span class="string">&quot; - {:?}&quot;</span>, atomic);
 	}
 
-	<span class="macro">println!</span> (<span class="string">&quot;DESTINIES: count={}&quot;</span>, <span class="ident">destinies</span>.<span class="ident">len</span> ());
-	<span class="kw">for</span> (<span class="ident">_key</span>, <span class="ident">_destiny</span>) <span class="kw">in</span> <span class="ident">destinies</span>.<span class="ident">iter</span> ().<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">key</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">key</span>.<span class="ident">clone</span> ()) {
-		<span class="comment">//println! (&quot; - {:?}&quot;, atomic);</span>
-	}
+	<span class="macro">println! </span>(<span class="string">&quot;DESTINIES: count={}&quot;</span>, destinies.len ());
+	<span class="kw">for </span>(_key, _destiny) <span class="kw">in </span>destinies.iter ().sorted_by_key (|&amp; (key, <span class="kw">_</span>)| key.clone ()) {
+		<span class="comment">//println! (&quot; - {:?}&quot;, atomic);
+	</span>}
 
-	<span class="macro">todo!</span> ();
+	<span class="macro">todo! </span>();
 
 }
 
-<span class="kw">struct</span> <span class="ident">Stable</span> {
-	<span class="ident">parts</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Span</span><span class="op">&gt;</span>,
-	<span class="ident">first</span>: [<span class="ident">u8</span>; <span class="number">3</span>],
-	<span class="ident">last</span>: <span class="ident">u8</span>,
+<span class="kw">struct </span>Stable {
+	parts: Vec &lt;Span&gt;,
+	first: [u8; <span class="number">3</span>],
+	last: u8,
 }
 
-<span class="kw">fn</span> <span class="ident">find_stables</span> (<span class="ident">max_length</span>: <span class="ident">usize</span>, <span class="ident">iterations</span>: <span class="ident">usize</span>) -&gt; <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Span</span>, <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Stable</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">fn </span>find_stables (max_length: usize, iterations: usize) -&gt; HashMap &lt;Span, <span class="prelude-ty">Option </span>&lt;Stable&gt;&gt; {
 
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stables</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">Span</span>, <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Stable</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashMap::new</span> ();
+	<span class="kw">let </span><span class="kw-2">mut </span>stables: HashMap &lt;Span, <span class="prelude-ty">Option </span>&lt;Stable&gt;&gt; = HashMap::new ();
 
-	<span class="kw">for</span> <span class="ident">length</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">max_length</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
+	<span class="kw">for </span>length <span class="kw">in </span>(<span class="number">2 </span>..= max_length).step_by (<span class="number">2</span>) {
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for</span> <span class="ident">state</span> <span class="kw">in</span> (<span class="number">0</span> .. <span class="ident">length</span>).<span class="ident">map</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> (<span class="number">1_u8</span> ..<span class="op">=</span> <span class="number">3_u8</span>))
-			.<span class="ident">multi_cartesian_product</span> ()
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">nums</span><span class="op">|</span> <span class="ident">State::try_from</span> (<span class="ident">nums</span>).<span class="ident">unwrap</span> ()) {
+		<span class="lifetime">&#39;STATE</span>: <span class="kw">for </span>state <span class="kw">in </span>(<span class="number">0 </span>.. length).map (|<span class="kw">_</span>| (<span class="number">1_u8 </span>..= <span class="number">3_u8</span>))
+			.multi_cartesian_product ()
+			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			<span class="kw">let</span> <span class="ident">has_long_run</span> <span class="op">=</span> {
-				<span class="kw">let</span> <span class="ident">group_by_temp</span> <span class="op">=</span>
-					<span class="ident">state</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-						.<span class="ident">group_by</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">item</span><span class="op">|</span> <span class="ident">item</span>);
-				<span class="ident">group_by_temp</span>.<span class="ident">into_iter</span> ()
-					.<span class="ident">any</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">group</span>)<span class="op">|</span> <span class="ident">group</span>.<span class="ident">count</span> () <span class="op">&gt;</span> <span class="number">3</span>)
+			<span class="kw">let </span>has_long_run = {
+				<span class="kw">let </span>group_by_temp =
+					state.iter ().copied ()
+						.group_by (|&amp; item| item);
+				group_by_temp.into_iter ()
+					.any (|(<span class="kw">_</span>, group)| group.count () &gt; <span class="number">3</span>)
 			};
-			<span class="kw">if</span> <span class="ident">has_long_run</span> { <span class="kw">continue</span> }
+			<span class="kw">if </span>has_long_run { <span class="kw">continue </span>}
 
-			<span class="kw">for</span> <span class="ident">prefix_len</span> <span class="kw">in</span> (<span class="number">2</span> ..<span class="op">=</span> <span class="ident">length</span>.<span class="ident">as_usize</span> () <span class="op">-</span> <span class="number">2</span>).<span class="ident">step_by</span> (<span class="number">2</span>) {
-				<span class="kw">match</span> (
-					<span class="ident">stables</span> [<span class="op">&amp;</span> <span class="ident">state</span> [ .. <span class="ident">prefix_len</span>]].<span class="ident">as_ref</span> (),
-					<span class="ident">stables</span> [<span class="op">&amp;</span> <span class="ident">state</span> [<span class="ident">prefix_len</span> .. ]].<span class="ident">as_ref</span> (),
+			<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>..= length.pan_usize () - <span class="number">2</span>).step_by (<span class="number">2</span>) {
+				<span class="kw">match </span>(
+					stables [&amp; state [ .. prefix_len]].as_ref (),
+					stables [&amp; state [prefix_len .. ]].as_ref (),
 				) {
-					(<span class="prelude-val">Some</span> (<span class="ident">prefix</span>), <span class="prelude-val">Some</span> (<span class="ident">suffix</span>))
-							<span class="kw">if</span> <span class="ident">compatible</span> (<span class="ident">prefix</span>.<span class="ident">last</span>, <span class="op">&amp;</span> <span class="ident">suffix</span>.<span class="ident">first</span>) =&gt; {
-						<span class="macro">assert_eq!</span> (<span class="ident">prefix</span>.<span class="ident">parts</span>.<span class="ident">len</span> (), <span class="number">1</span>);
-						<span class="ident">stables</span>.<span class="ident">insert</span> (<span class="ident">state</span>.<span class="ident">as_slice</span> ().<span class="ident">into</span> (), <span class="prelude-val">Some</span> (<span class="ident">Stable</span> {
-							<span class="ident">parts</span>: <span class="ident">prefix</span>.<span class="ident">parts</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ()
-								.<span class="ident">chain</span> (<span class="ident">suffix</span>.<span class="ident">parts</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ())
-								.<span class="ident">collect</span> (),
-							<span class="ident">first</span>: <span class="ident">prefix</span>.<span class="ident">first</span>,
-							<span class="ident">last</span>: <span class="ident">suffix</span>.<span class="ident">last</span>,
+					(<span class="prelude-val">Some </span>(prefix), <span class="prelude-val">Some </span>(suffix))
+							<span class="kw">if </span>compatible (prefix.last, &amp; suffix.first) =&gt; {
+						<span class="macro">assert_eq! </span>(prefix.parts.len (), <span class="number">1</span>);
+						stables.insert (state.as_slice ().into (), <span class="prelude-val">Some </span>(Stable {
+							parts: prefix.parts.iter ().cloned ()
+								.chain (suffix.parts.iter ().cloned ())
+								.collect (),
+							first: prefix.first,
+							last: suffix.last,
 						}));
-						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
+						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 					},
-					<span class="kw">_</span> =&gt; <span class="kw">continue</span>,
+					<span class="kw">_ </span>=&gt; <span class="kw">continue</span>,
 				}
 			}
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sequence</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-			<span class="ident">sequence</span>.<span class="ident">push</span> (<span class="ident">state</span>.<span class="ident">clone</span> ());
+			<span class="kw">let </span><span class="kw-2">mut </span>sequence = Vec::new ();
+			sequence.push (state.clone ());
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">prev_state</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">clone</span> ();
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">first_seq</span>: <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">3</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-			<span class="ident">first_seq</span>.<span class="ident">push</span> (<span class="ident">state</span>.<span class="ident">first</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> ());
+			<span class="kw">let </span><span class="kw-2">mut </span>prev_state = state.clone ();
+			<span class="kw">let </span><span class="kw-2">mut </span>first_seq: ArrayVec &lt;u8, <span class="number">3</span>&gt; = ArrayVec::new ();
+			first_seq.push (state.first ().copied ().unwrap ());
 
-			<span class="kw">let</span> <span class="ident">key</span> <span class="op">=</span> <span class="ident">Span::from</span> (<span class="ident">state</span>.<span class="ident">as_slice</span> ());
+			<span class="kw">let </span>key = Span::from (state.as_slice ());
 
-			<span class="kw">for</span> <span class="ident">step_idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">iterations</span> {
-				<span class="kw">let</span> <span class="ident">next_state</span> <span class="op">=</span> <span class="ident">logic::one_round</span> (<span class="op">&amp;</span> <span class="ident">prev_state</span>);
-				<span class="kw">let</span> <span class="ident">next_first</span> <span class="op">=</span> <span class="ident">next_state</span>.<span class="ident">first</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> ();
+			<span class="kw">for </span>step_idx <span class="kw">in </span><span class="number">0 </span>.. iterations {
+				<span class="kw">let </span>next_state = logic::one_round (&amp; prev_state);
+				<span class="kw">let </span>next_first = next_state.first ().copied ().unwrap ();
 
 				<span class="comment">/*
 				if let Some (whatever) = stables.get (next_state.as_slice ()) {
 					todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state);
 				}
-				*/</span>
+				*/
 
-				<span class="ident">sequence</span>.<span class="ident">push</span> (<span class="ident">next_state</span>.<span class="ident">clone</span> ());
+				</span>sequence.push (next_state.clone ());
 
-				<span class="kw">if</span> <span class="op">!</span> <span class="ident">first_seq</span>.<span class="ident">is_full</span> () {
-					<span class="ident">first_seq</span>.<span class="ident">push</span> (<span class="ident">next_first</span>);
-					<span class="kw">if</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="ident">into_iter</span> ()
-						.<span class="ident">all</span> (<span class="op">|</span><span class="ident">num_0</span><span class="op">|</span> <span class="ident">first_seq</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()
-							.<span class="ident">any</span> (<span class="op">|</span><span class="ident">num_1</span><span class="op">|</span> <span class="ident">num_0</span> <span class="op">==</span> <span class="ident">num_1</span>)) {
-						<span class="ident">stables</span>.<span class="ident">insert</span> (<span class="ident">key</span>.<span class="ident">clone</span> (), <span class="prelude-val">None</span>);
-						<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
+				<span class="kw">if </span>! first_seq.is_full () {
+					first_seq.push (next_first);
+					<span class="kw">if </span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].into_iter ()
+						.all (|num_0| first_seq.iter ().copied ()
+							.any (|num_1| num_0 == num_1)) {
+						stables.insert (key.clone (), <span class="prelude-val">None</span>);
+						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 					}
-				} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">first_seq</span> [(<span class="ident">step_idx</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">%</span> <span class="number">3</span>] <span class="op">!</span><span class="op">=</span> <span class="ident">next_first</span> {
-					<span class="ident">stables</span>.<span class="ident">insert</span> (<span class="ident">key</span>.<span class="ident">clone</span> (), <span class="prelude-val">None</span>);
-					<span class="kw">continue</span> <span class="lifetime">&#39;STATE</span>;
+				} <span class="kw">else if </span>first_seq [(step_idx + <span class="number">1</span>) % <span class="number">3</span>] != next_first {
+					stables.insert (key.clone (), <span class="prelude-val">None</span>);
+					<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
 				}
 
-				<span class="ident">prev_state</span> <span class="op">=</span> <span class="ident">next_state</span>;
+				prev_state = next_state;
 			}
 
-			<span class="ident">stables</span>.<span class="ident">insert</span> (<span class="ident">key</span>.<span class="ident">clone</span> (), <span class="prelude-val">Some</span> (<span class="ident">Stable</span> {
-				<span class="ident">parts</span>: <span class="macro">vec!</span> [ <span class="ident">key</span> ],
-				<span class="ident">first</span>: [ <span class="ident">first_seq</span> [<span class="number">0</span>], <span class="ident">first_seq</span> [<span class="number">1</span>], <span class="ident">first_seq</span> [<span class="number">2</span>] ],
-				<span class="ident">last</span>: <span class="ident">state</span>.<span class="ident">last</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> (),
+			stables.insert (key.clone (), <span class="prelude-val">Some </span>(Stable {
+				parts: <span class="macro">vec! </span>[ key ],
+				first: [ first_seq [<span class="number">0</span>], first_seq [<span class="number">1</span>], first_seq [<span class="number">2</span>] ],
+				last: state.last ().copied ().unwrap (),
 			}));
 
 		}
 
 	}
 
-	<span class="ident">stables</span>
+	stables
 
 }
 
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Intern</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Item</span>: <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> {
-	<span class="kw">type</span> <span class="ident">Shared</span>;
-	<span class="kw">fn</span> <span class="ident">intern</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="ident">Item</span>) -&gt; <span class="ident"><span class="self">Self</span>::Shared</span>;
-	<span class="kw">fn</span> <span class="ident">intern_get</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="op">&amp;</span> <span class="ident">Item</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Shared</span><span class="op">&gt;</span>;
+<span class="kw">pub trait </span>Intern &lt;Item&gt; <span class="kw">where </span>Item: Eq + Hash {
+	<span class="kw">type </span>Shared;
+	<span class="kw">fn </span>intern (<span class="self">self</span>, item: Item) -&gt; <span class="self">Self</span>::Shared;
+	<span class="kw">fn </span>intern_get (<span class="self">self</span>, item: &amp; Item) -&gt; <span class="prelude-ty">Option </span>&lt;<span class="self">Self</span>::Shared&gt;;
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="ident">Intern</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="op">&amp;</span> <span class="ident">RefCell</span> <span class="op">&lt;</span><span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>
-		<span class="kw">where</span> <span class="ident">Item</span>: <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Ord</span> {
-	<span class="kw">type</span> <span class="ident">Shared</span> <span class="op">=</span> <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>;
-	<span class="kw">fn</span> <span class="ident">intern</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="ident">Item</span>) -&gt; <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">borrow_mut</span> ();
-		<span class="kw">use</span> <span class="ident">std::ops::DerefMut</span>;
-		<span class="ident">lock</span>.<span class="ident">deref_mut</span> ().<span class="ident">intern</span> (<span class="ident">item</span>)
+<span class="kw">impl </span>&lt;Item&gt; Intern &lt;Item&gt; <span class="kw">for </span>&amp; RefCell &lt;HashSet &lt;Rc &lt;Item&gt;&gt;&gt;
+		<span class="kw">where </span>Item: Eq + Hash + Ord {
+	<span class="kw">type </span>Shared = Rc &lt;Item&gt;;
+	<span class="kw">fn </span>intern (<span class="self">self</span>, item: Item) -&gt; Rc &lt;Item&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>lock = <span class="self">self</span>.borrow_mut ();
+		lock.deref_mut ().intern (item)
 	}
-	<span class="kw">fn</span> <span class="ident">intern_get</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="op">&amp;</span> <span class="ident">Item</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">lock</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">borrow</span> ();
-		<span class="ident">lock</span>.<span class="ident">deref</span> ().<span class="ident">get</span> (<span class="ident">item</span>).<span class="ident">cloned</span> ()
+	<span class="kw">fn </span>intern_get (<span class="self">self</span>, item: &amp; Item) -&gt; <span class="prelude-ty">Option </span>&lt;Rc &lt;Item&gt;&gt; {
+		<span class="kw">let </span>lock = <span class="self">self</span>.borrow ();
+		lock.deref ().get (item).cloned ()
 	}
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="ident">Intern</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span>
-		<span class="kw">where</span> <span class="ident">Item</span>: <span class="ident">Eq</span> <span class="op">+</span> <span class="ident">Hash</span> <span class="op">+</span> <span class="ident">Ord</span> {
-	<span class="kw">type</span> <span class="ident">Shared</span> <span class="op">=</span> <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span>;
-	<span class="kw">fn</span> <span class="ident">intern</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="ident">Item</span>) -&gt; <span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span> {
-		<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">shared</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">get</span> (<span class="op">&amp;</span> <span class="ident">item</span>) {
-			<span class="kw">return</span> <span class="ident">Rc::clone</span> (<span class="ident">shared</span>);
+<span class="kw">impl </span>&lt;Item&gt; Intern &lt;Item&gt; <span class="kw">for </span>&amp; <span class="kw-2">mut </span>HashSet &lt;Rc &lt;Item&gt;&gt;
+		<span class="kw">where </span>Item: Eq + Hash + Ord {
+	<span class="kw">type </span>Shared = Rc &lt;Item&gt;;
+	<span class="kw">fn </span>intern (<span class="self">self</span>, item: Item) -&gt; Rc &lt;Item&gt; {
+		<span class="kw">if let </span><span class="prelude-val">Some </span>(shared) = <span class="self">self</span>.get (&amp; item) {
+			<span class="kw">return </span>Rc::clone (shared);
 		}
-		<span class="kw">let</span> <span class="ident">shared</span> <span class="op">=</span> <span class="ident">Rc::new</span> (<span class="ident">item</span>);
-		(<span class="op">*</span> <span class="self">self</span>).<span class="ident">insert</span> (<span class="ident">Rc::clone</span> (<span class="op">&amp;</span> <span class="ident">shared</span>));
-		<span class="ident">shared</span>
+		<span class="kw">let </span>shared = Rc::new (item);
+		(* <span class="self">self</span>).insert (Rc::clone (&amp; shared));
+		shared
 	}
-	<span class="kw">fn</span> <span class="ident">intern_get</span> (<span class="self">self</span>, <span class="ident">item</span>: <span class="op">&amp;</span> <span class="ident">Item</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">Rc</span> <span class="op">&lt;</span><span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">get</span> (<span class="ident">item</span>).<span class="ident">cloned</span> ()
+	<span class="kw">fn </span>intern_get (<span class="self">self</span>, item: &amp; Item) -&gt; <span class="prelude-ty">Option </span>&lt;Rc &lt;Item&gt;&gt; {
+		<span class="self">self</span>.get (item).cloned ()
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

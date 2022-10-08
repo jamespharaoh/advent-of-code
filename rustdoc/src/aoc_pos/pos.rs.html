@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/pos/pos.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pos.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_pos/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_pos/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_pos/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/pos/pos.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>pos.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_pos/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_pos/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_pos/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -568,575 +568,1137 @@
 <span id="568">568</span>
 <span id="569">569</span>
 <span id="570">570</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fmt</span>::{ <span class="self">self</span>, <span class="ident">Debug</span> };
-<span class="kw">use</span> <span class="ident">std::ops</span>::{ <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span> };
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
+<span id="717">717</span>
+<span id="718">718</span>
+<span id="719">719</span>
+<span id="720">720</span>
+<span id="721">721</span>
+<span id="722">722</span>
+<span id="723">723</span>
+<span id="724">724</span>
+<span id="725">725</span>
+<span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
+<span id="796">796</span>
+<span id="797">797</span>
+<span id="798">798</span>
+<span id="799">799</span>
+<span id="800">800</span>
+<span id="801">801</span>
+<span id="802">802</span>
+<span id="803">803</span>
+<span id="804">804</span>
+<span id="805">805</span>
+<span id="806">806</span>
+<span id="807">807</span>
+<span id="808">808</span>
+<span id="809">809</span>
+<span id="810">810</span>
+<span id="811">811</span>
+<span id="812">812</span>
+<span id="813">813</span>
+<span id="814">814</span>
+<span id="815">815</span>
+<span id="816">816</span>
+<span id="817">817</span>
+<span id="818">818</span>
+<span id="819">819</span>
+<span id="820">820</span>
+<span id="821">821</span>
+<span id="822">822</span>
+<span id="823">823</span>
+<span id="824">824</span>
+<span id="825">825</span>
+<span id="826">826</span>
+<span id="827">827</span>
+<span id="828">828</span>
+<span id="829">829</span>
+<span id="830">830</span>
+<span id="831">831</span>
+<span id="832">832</span>
+<span id="833">833</span>
+<span id="834">834</span>
+<span id="835">835</span>
+<span id="836">836</span>
+<span id="837">837</span>
+<span id="838">838</span>
+<span id="839">839</span>
+<span id="840">840</span>
+<span id="841">841</span>
+<span id="842">842</span>
+<span id="843">843</span>
+<span id="844">844</span>
+<span id="845">845</span>
+<span id="846">846</span>
+<span id="847">847</span>
+<span id="848">848</span>
+<span id="849">849</span>
+<span id="850">850</span>
+<span id="851">851</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{ <span class="self">self</span>, Debug };
+<span class="kw">use </span>std::ops::{ Add, Neg, Rem, Sub };
 
-<span class="kw">use</span> <span class="ident">aoc_misc</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_nums</span> <span class="kw">as</span> <span class="ident">nums</span>;
-<span class="kw">use</span> <span class="ident">nums::Int</span>;
-<span class="kw">use</span> <span class="ident">nums::IntSigned</span>;
-<span class="kw">use</span> <span class="ident">nums::NumResult</span>;
+<span class="kw">use </span>aoc_checked::checked <span class="kw">as </span>chk;
+<span class="kw">use </span>aoc_misc::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_nums <span class="kw">as </span>nums;
+<span class="kw">use </span>nums::Int;
+<span class="kw">use </span>nums::IntSigned;
+<span class="kw">use </span>nums::NumResult;
+<span class="kw">use </span>nums::TryAdd;
+<span class="kw">use </span>nums::TryMul;
+<span class="kw">use </span>nums::TrySub;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">coord::Coord</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::Dir2d</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::DirGeo</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::PosXY</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::PosYX</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::PosGeo</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::PosRowCol</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_2::Turn2d</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">dim_3::PosXYZ</span>;
+<span class="kw">pub use </span>gen::GenAxis;
+<span class="kw">pub use </span>gen::GenPos;
+<span class="kw">pub use </span>dim_2::AxisRowCol;
+<span class="kw">pub use </span>dim_2::AxisXY;
+<span class="kw">pub use </span>dim_2::Dir2d;
+<span class="kw">pub use </span>dim_2::DirGeo;
+<span class="kw">pub use </span>dim_2::DirGeoHexLat;
+<span class="kw">pub use </span>dim_2::PosXY;
+<span class="kw">pub use </span>dim_2::PosYX;
+<span class="kw">pub use </span>dim_2::PosGeo;
+<span class="kw">pub use </span>dim_2::PosGeoHexLat;
+<span class="kw">pub use </span>dim_2::PosRowCol;
+<span class="kw">pub use </span>dim_2::Turn2d;
+<span class="kw">pub use </span>dim_2::TurnHex;
 
-<span class="macro">macro_rules!</span> <span class="ident">pos_ops</span> {
+<span class="macro">macro_rules! </span>pos_decl {
+	(
+		<span class="macro-nonterminal">$name</span>:ident <span class="macro-nonterminal">$axis_type</span>:ident <span class="macro-nonterminal">$dims</span>:literal
+		$(, <span class="macro-nonterminal">$field</span>:ident <span class="macro-nonterminal">$axis</span>:ident <span class="macro-nonterminal">$neg</span>:ident <span class="macro-nonterminal">$pos</span>:ident )+
+	) =&gt; {
 
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="ident">Debug</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Debug</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">fmt</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">formatter</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) -&gt; <span class="ident">fmt::Result</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>)) <span class="question-mark">?</span>;
-				<span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="string">&quot; (&quot;</span>) <span class="question-mark">?</span>;
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="kw">if</span> <span class="ident">idx</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="string">&quot;, &quot;</span>) <span class="question-mark">?</span>; }
-					<span class="ident">Debug::fmt</span> (<span class="op">&amp;</span> <span class="ident">self_coords</span> [<span class="ident">idx</span>], <span class="ident">formatter</span>) <span class="question-mark">?</span>;
-				}
-				<span class="ident">formatter</span>.<span class="ident">write_str</span> (<span class="string">&quot;)&quot;</span>) <span class="question-mark">?</span>;
-				<span class="prelude-val">Ok</span> (())
-			}
-		}
-		<span class="macro">pos_ops!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
-	};
+		<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		</span><span class="kw">pub enum </span><span class="macro-nonterminal">$axis_type </span>{ $(<span class="macro-nonterminal">$axis</span>),+ }
 
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="ident">Add</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_add</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="ident">other_coords</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_coords</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ZERO</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="ident">result_coords</span> [<span class="ident">idx</span>] <span class="op">=</span>
-						<span class="kw">match</span> <span class="ident">self_coords</span> [<span class="ident">idx</span>].<span class="ident">add_signed</span> (<span class="ident">other_coords</span> [<span class="ident">idx</span>]) {
-							<span class="prelude-val">Ok</span> (<span class="ident">val</span>) =&gt; <span class="ident">val</span>,
-							<span class="prelude-val">Err</span> (<span class="kw">_</span>) =&gt; <span class="kw">return</span> <span class="prelude-val">None</span>,
-						};
+		<span class="kw">impl </span>GenAxis &lt;<span class="macro-nonterminal">$dims</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$axis_type </span>{ }
+
+		<span class="attribute">#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		</span><span class="kw">pub struct </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; { $(<span class="kw">pub </span><span class="macro-nonterminal">$field</span>: Val),+ }
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; <span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub const fn </span>new ($(<span class="macro-nonterminal">$field</span>: Val),+) -&gt; <span class="self">Self </span>{
+				<span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>),+ }
+			}
+
+			<span class="kw">pub const </span>ZERO: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::ZERO),+ };
+			<span class="kw">pub const </span>MIN: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::MIN),+ };
+			<span class="kw">pub const </span>MAX: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::MAX),+ };
+
+			$(
+
+				<span class="attribute">#[ inline ]
+				</span><span class="kw">pub fn </span><span class="macro-nonterminal">$neg </span>(<span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+					<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
+					result.<span class="macro-nonterminal">$field </span>= Val::sub_2 (result.<span class="macro-nonterminal">$field</span>, num) <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(result)
 				}
-				<span class="prelude-val">Some</span> (<span class="ident"><span class="self">Self</span>::coord_from_array</span> (<span class="ident">result_coords</span>))
+
+				<span class="attribute">#[ inline ]
+				</span><span class="kw">pub fn </span><span class="macro-nonterminal">$pos </span>(<span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+					<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
+					result.<span class="macro-nonterminal">$field </span>= Val::add_2 (result.<span class="macro-nonterminal">$field</span>, num) <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(result)
+				}
+
+			)+
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; GenPos &lt;<span class="macro-nonterminal">$dims</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+
+			<span class="kw">type </span>Val = Val;
+			<span class="kw">type </span>Axis = <span class="macro-nonterminal">$axis_type</span>;
+
+			<span class="kw">const </span>ZERO: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::ZERO),+ };
+			<span class="kw">const </span>MIN: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::MIN),+ };
+			<span class="kw">const </span>MAX: <span class="self">Self </span>= <span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>: Val::MAX),+ };
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; From &lt;[Val; <span class="macro-nonterminal">$dims</span>]&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>from (array: [Val; <span class="macro-nonterminal">$dims</span>]) -&gt; <span class="self">Self </span>{
+				<span class="kw">let </span>[ $(<span class="macro-nonterminal">$field</span>),+ ] = array;
+				<span class="self">Self </span>{ $(<span class="macro-nonterminal">$field</span>),+ }
 			}
 		}
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Add</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">add</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="ident">other_coords</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_coords</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ZERO</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="ident">result_coords</span> [<span class="ident">idx</span>] <span class="op">=</span>
-						<span class="ident">self_coords</span> [<span class="ident">idx</span>].<span class="ident">add_signed</span> (<span class="ident">other_coords</span> [<span class="ident">idx</span>]).<span class="ident">unwrap</span> ();
-				}
-				<span class="ident"><span class="self">Self</span>::coord_from_array</span> (<span class="ident">result_coords</span>)
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; From &lt;<span class="macro-nonterminal">$name </span>&lt;Val&gt;&gt; <span class="kw">for </span>[Val; <span class="macro-nonterminal">$dims</span>] {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>from (pos: <span class="macro-nonterminal">$name </span>&lt;Val&gt;) -&gt; <span class="self">Self </span>{
+				[ $(pos.<span class="macro-nonterminal">$field</span>),+ ]
 			}
 		}
-		<span class="macro">pos_ops!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Index &lt;<span class="macro-nonterminal">$axis_type</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+
+			<span class="kw">type </span>Output = Val;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>index (&amp; <span class="self">self</span>, axis: <span class="macro-nonterminal">$axis_type</span>) -&gt; &amp; Val {
+				<span class="kw">match </span>axis {
+					$( <span class="macro-nonterminal">$axis_type</span>::<span class="macro-nonterminal">$axis </span>=&gt; &amp; <span class="self">self</span>.<span class="macro-nonterminal">$field</span>, )+
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; IndexMut &lt;<span class="macro-nonterminal">$axis_type</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>index_mut (&amp; <span class="kw-2">mut </span><span class="self">self</span>, axis: <span class="macro-nonterminal">$axis_type</span>) -&gt; &amp; <span class="kw-2">mut </span>Val {
+				<span class="kw">match </span>axis {
+					$( <span class="macro-nonterminal">$axis_type</span>::<span class="macro-nonterminal">$axis </span>=&gt; &amp; <span class="kw-2">mut </span><span class="self">self</span>.<span class="macro-nonterminal">$field</span>, )+
+				}
+			}
+
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: Debug, Default);
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: Add, Mul, Neg, Rem, Sub);
+
 	};
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="ident">Neg</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span> <span class="op">+</span> <span class="ident">Neg</span> <span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="ident">Val</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Neg</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">neg</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_coords</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ZERO</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="ident">result_coords</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="op">-</span> <span class="ident">self_coords</span> [<span class="ident">idx</span>];
+}
+
+<span class="macro">macro_rules! </span>pos_dirs {
+
+	(
+		<span class="macro-nonterminal">$name</span>:ident <span class="macro-nonterminal">$dir</span>:ident <span class="macro-nonterminal">$dims</span>:literal
+		$(, <span class="macro-nonterminal">$variant</span>:ident <span class="macro-nonterminal">$method</span>:ident [ $(<span class="macro-nonterminal">$sign</span>:ident),+ ] )+
+		$(,)<span class="question-mark">?
+	</span>) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int &lt;Signed = Val&gt; + IntSigned&gt; From &lt;<span class="macro-nonterminal">$dir</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>from (dir: <span class="macro-nonterminal">$dir</span>) -&gt; <span class="self">Self </span>{
+				<span class="kw">match </span>dir {
+					$( <span class="macro-nonterminal">$dir</span>::<span class="macro-nonterminal">$variant </span>=&gt; <span class="self">Self</span>::new ($(Val::<span class="macro-nonterminal">$sign</span>),+), )+
 				}
-				<span class="ident"><span class="self">Self</span>::coord_from_array</span> (<span class="ident">result_coords</span>)
 			}
 		}
-		<span class="macro">pos_ops!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
+
 	};
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="ident">Rem</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Rem</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">rem</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="ident">other_coords</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_coords</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ZERO</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="ident">result_coords</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">self_coords</span> [<span class="ident">idx</span>] <span class="op">%</span> <span class="ident">other_coords</span> [<span class="ident">idx</span>];
-				}
-				<span class="ident"><span class="self">Self</span>::coord_from_array</span> (<span class="ident">result_coords</span>)
-			}
-		}
-		<span class="macro">pos_ops!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
-	};
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="ident">Sub</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Sub</span> <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">sub</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">let</span> <span class="ident">self_coords</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="ident">other_coords</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result_coords</span> <span class="op">=</span> <span class="ident"><span class="self">Self</span>::ZERO</span>.<span class="ident">coord_to_array</span> ();
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="ident">self_coords</span>.<span class="ident">len</span> () {
-					<span class="ident">result_coords</span> [<span class="ident">idx</span>] <span class="op">=</span>
-						<span class="ident">self_coords</span> [<span class="ident">idx</span>].<span class="ident">sub_signed</span> (<span class="ident">other_coords</span> [<span class="ident">idx</span>]).<span class="ident">unwrap</span> ();
-				}
-				<span class="ident"><span class="self">Self</span>::coord_from_array</span> (<span class="ident">result_coords</span>)
-			}
-		}
-		<span class="macro">pos_ops!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>),<span class="kw-2">*</span>);
-	};
-	( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : ) =&gt; {};
 
 }
 
-<span class="kw">mod</span> <span class="ident">coord</span> {
+<span class="macro">macro_rules! </span>pos_ops {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Debug $(,<span class="macro-nonterminal">$rest</span>:ident)<span class="kw-2">*</span>) =&gt; {
 
-	<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="kw">const</span> <span class="ident">DIMS</span>: <span class="ident">usize</span><span class="op">&gt;</span>: <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Debug</span> <span class="op">+</span> <span class="ident">Sized</span> {
+		<span class="kw">impl </span>&lt;Val: Int&gt; Debug <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+				<span class="kw">let </span>array: [Val; <span class="macro-nonterminal">$dims</span>] = (* <span class="self">self</span>).into ();
+				formatter.write_str (<span class="macro">stringify! </span>(<span class="macro-nonterminal">$name</span>)) <span class="question-mark">?</span>;
+				formatter.write_str (<span class="string">&quot; (&quot;</span>) <span class="question-mark">?</span>;
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. array.len () {
+					<span class="kw">if </span>idx != <span class="number">0 </span>{ formatter.write_str (<span class="string">&quot;, &quot;</span>) <span class="question-mark">?</span>; }
+					Debug::fmt (&amp; array [idx], formatter) <span class="question-mark">?</span>;
+				}
+				formatter.write_str (<span class="string">&quot;)&quot;</span>) <span class="question-mark">?</span>;
+				<span class="prelude-val">Ok </span>(())
+			}
+		}
 
-		<span class="kw">type</span> <span class="ident">Val</span>: <span class="ident">Int</span>;
-		<span class="kw">type</span> <span class="ident">Signed</span>;
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
 
-		<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident"><span class="self">Self</span>::Val</span>; <span class="ident">DIMS</span>];
-		<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">array</span>: [<span class="ident"><span class="self">Self</span>::Val</span>; <span class="ident">DIMS</span>]) -&gt; <span class="self">Self</span>;
+	};
 
-		<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-		<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-		<span class="kw">fn</span> <span class="ident">zero</span> () -&gt; <span class="self">Self</span> {
-			<span class="ident"><span class="self">Self</span>::coord_from_array</span> ([<span class="ident"><span class="self">Self</span>::Val::ZERO</span>; <span class="ident">DIMS</span>])
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Default $(,<span class="macro-nonterminal">$rest</span>:ident)<span class="kw-2">*</span>) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Default <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>default () -&gt; <span class="self">Self </span>{
+				<span class="self">Self</span>::ZERO
+			}
+		}
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Add $(,<span class="macro-nonterminal">$rest</span>:ident)* ) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int, ArgVal: Int&gt; Add &lt;<span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt;
+				<span class="kw">where </span>Val: TryAdd &lt;ArgVal, Output = Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;) -&gt; <span class="self">Self </span>{
+				<span class="self">self</span>.try_add (other).unwrap ()
+			}
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int, ArgVal: Int&gt; AddAssign &lt;<span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt;
+				<span class="kw">where </span>Val: TryAdd &lt;ArgVal, Output = Val&gt; {
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;) {
+				* <span class="self">self </span>= <span class="self">self</span>.try_add (other).unwrap ()
+			}
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int, ArgVal: Int&gt; TryAdd &lt;<span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt;
+				<span class="kw">where </span>Val: TryAdd &lt;ArgVal, Output = Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span>other_array: [ArgVal; <span class="macro-nonterminal">$dims</span>] = other.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = self_array [idx].try_add (other_array [idx]) <span class="question-mark">?
+				</span>}
+				<span class="prelude-val">Ok </span>(result_array.into ())
+			}
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Mul $(,<span class="macro-nonterminal">$rest</span>:ident)* ) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int + TryMul &lt;Output = Val&gt;&gt; TryMul &lt;Val&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>try_mul (<span class="self">self</span>, arg: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = self_array [idx].try_mul (arg) <span class="question-mark">?</span>;
+				}
+				<span class="prelude-val">Ok </span>(result_array.into ())
+			}
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Mul &lt;Val&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>mul (<span class="self">self</span>, arg: Val) -&gt; <span class="self">Self </span>{
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = self_array [idx] * arg;
+				}
+				result_array.into ()
+			}
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Neg $(,<span class="macro-nonterminal">$rest</span>:ident)* ) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int + Neg &lt;Output = Val&gt;&gt; Neg <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>neg (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = - self_array [idx];
+				}
+				result_array.into ()
+			}
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Rem $(,<span class="macro-nonterminal">$rest</span>:ident)* ) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Rem <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>rem (<span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;Val&gt;) -&gt; <span class="self">Self </span>{
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span>other_array: [Val; <span class="macro-nonterminal">$dims</span>] = other.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = self_array [idx] % other_array [idx];
+				}
+				result_array.into ()
+			}
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: Sub $(,<span class="macro-nonterminal">$rest</span>:ident)* ) =&gt; {
+
+		<span class="kw">impl </span>&lt;Val: Int, ArgVal: Int&gt; Sub &lt;<span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt;
+				<span class="kw">where </span>Val: TrySub &lt;ArgVal, Output = Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>sub (<span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;) -&gt; <span class="self">Self </span>{
+				<span class="self">self</span>.try_sub (other).unwrap ()
+			}
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int, ArgVal: Int&gt; TrySub &lt;<span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;&gt; <span class="kw">for </span><span class="macro-nonterminal">$name </span>&lt;Val&gt;
+				<span class="kw">where </span>Val: TrySub &lt;ArgVal, Output = Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>try_sub (<span class="self">self</span>, other: <span class="macro-nonterminal">$name </span>&lt;ArgVal&gt;) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span>self_array: [Val; <span class="macro-nonterminal">$dims</span>] = <span class="self">self</span>.into ();
+				<span class="kw">let </span>other_array: [ArgVal; <span class="macro-nonterminal">$dims</span>] = other.into ();
+				<span class="kw">let </span><span class="kw-2">mut </span>result_array = [Val::ZERO; <span class="macro-nonterminal">$dims</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. self_array.len () {
+					result_array [idx] = self_array [idx].try_sub (other_array [idx]) <span class="question-mark">?
+				</span>}
+				<span class="prelude-val">Ok </span>(result_array.into ())
+			}
+		}
+
+		<span class="macro">pos_ops! </span>(<span class="macro-nonterminal">$name </span>&lt;<span class="macro-nonterminal">$dims</span>&gt;: $(<span class="macro-nonterminal">$rest</span>),<span class="kw-2">*</span>);
+
+	};
+
+	( <span class="macro-nonterminal">$name</span>:ident &lt;<span class="macro-nonterminal">$dims</span>:literal&gt;: ) =&gt; {};
+
+}
+
+<span class="kw">mod </span>gen {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="kw">pub trait </span>GenAxis &lt;<span class="kw">const </span>DIMS: usize&gt; {
+	}
+
+	<span class="kw">pub trait </span>GenPos &lt;<span class="kw">const </span>DIMS: usize&gt;:
+		Copy + Debug + Eq + Hash + Ord + Sized +
+		From &lt;[<span class="self">Self</span>::Val; DIMS]&gt; +
+		Into &lt;[<span class="self">Self</span>::Val; DIMS]&gt; +
+		TryAdd &lt;Output = <span class="self">Self</span>&gt; +
+		TryMul &lt;<span class="self">Self</span>::Val, Output = <span class="self">Self</span>&gt; {
+
+		<span class="kw">type </span>Val: Int;
+		<span class="kw">type </span>Axis: GenAxis &lt;DIMS&gt;;
+
+		<span class="attribute">#[ inline ]
+		#[ must_use ]
+		</span><span class="kw">fn </span>zero () -&gt; <span class="self">Self </span>{
+			[<span class="self">Self</span>::Val::ZERO; DIMS].into ()
+		}
+
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>as_array (<span class="self">self</span>) -&gt; [<span class="self">Self</span>::Val; DIMS] {
+			<span class="self">self</span>.into ()
+		}
+
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>into_iter (<span class="self">self</span>) -&gt; array::IntoIter &lt;<span class="self">Self</span>::Val, DIMS&gt; {
+			<span class="self">self</span>.as_array ().into_iter ()
+		}
+
+		<span class="kw">const </span>ZERO: <span class="self">Self</span>;
+		<span class="kw">const </span>MIN: <span class="self">Self</span>;
+		<span class="kw">const </span>MAX: <span class="self">Self</span>;
+
+	}
+
+}
+
+<span class="kw">mod </span>dim_2 {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="kw">pub use </span>geo::<span class="kw-2">*</span>;
+	<span class="kw">pub use </span>geo_hex::<span class="kw-2">*</span>;
+	<span class="kw">pub use </span>row_col::<span class="kw-2">*</span>;
+	<span class="kw">pub use </span>xy::<span class="kw-2">*</span>;
+	<span class="kw">pub use </span>yx::<span class="kw-2">*</span>;
+
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Turn2d { <span class="prelude-val">None</span>, Left, Right, Around }
+
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>TurnHex { <span class="prelude-val">None</span>, SoftRight, HardRight, Around, HardLeft, SoftLeft }
+
+	<span class="kw">mod </span>xy {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="macro">pos_decl! </span>(PosXY AxisXY <span class="number">2</span>, x X left right, y Y down up);
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; PosXY &lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_4 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">4</span>&gt; {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ x, y } = * <span class="self">self</span>;
+				<span class="kw">if </span><span class="self">self</span>.x &gt; Val::MIN { result.push (<span class="self">Self </span>{ x: x - Val::ONE, y }); }
+				<span class="kw">if </span><span class="self">self</span>.x &lt; Val::MAX { result.push (<span class="self">Self </span>{ x: x + Val::ONE, y }); }
+				<span class="kw">if </span><span class="self">self</span>.y &gt; Val::MIN { result.push (<span class="self">Self </span>{ x, y: y - Val::ONE }); }
+				<span class="kw">if </span><span class="self">self</span>.y &lt; Val::MAX { result.push (<span class="self">Self </span>{ x, y: y + Val::ONE }); }
+				result
+			}
+
+		}
+
+	}
+
+	<span class="kw">mod </span>yx {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="macro">pos_decl! </span>(PosYX AxisXY <span class="number">2</span>, y Y up down, x X left right);
+
+		<span class="macro">pos_dirs! </span>{
+			PosYX Dir2d <span class="number">2</span>,
+			Up up [ NEG_ONE, ZERO ],
+			Down down [ ONE, ZERO ],
+			Left left [ ZERO, NEG_ONE ],
+			Right right [ ZERO, ONE ],
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; PosYX &lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_4 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">4</span>&gt; <span class="kw">where </span>Val: Int {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ y, x } = * <span class="self">self</span>;
+				<span class="kw">if </span><span class="self">self</span>.y &gt; Val::MIN { result.push (<span class="self">Self </span>{ x, y: y - Val::ONE }); }
+				<span class="kw">if </span><span class="self">self</span>.y &lt; Val::MAX { result.push (<span class="self">Self </span>{ x, y: y + Val::ONE }); }
+				<span class="kw">if </span><span class="self">self</span>.x &gt; Val::MIN { result.push (<span class="self">Self </span>{ x: x - Val::ONE, y }); }
+				<span class="kw">if </span><span class="self">self</span>.x &lt; Val::MAX { result.push (<span class="self">Self </span>{ x: x + Val::ONE, y }); }
+				result
+			}
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_8 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">8</span>&gt; <span class="kw">where </span>Val: Int {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ y, x } = * <span class="self">self</span>;
+				<span class="kw">if </span><span class="self">self</span>.y &gt; Val::MIN {
+					<span class="kw">let </span>y = y - Val::ONE;
+					<span class="kw">if </span><span class="self">self</span>.x &gt; Val::MIN { result.push (<span class="self">Self </span>{ x: x - Val::ONE, y }); }
+					result.push (<span class="self">Self </span>{ y, x });
+					<span class="kw">if </span><span class="self">self</span>.x &lt; Val::MAX { result.push (<span class="self">Self </span>{ x: x + Val::ONE, y }); }
+				}
+				<span class="kw">if </span><span class="self">self</span>.x &gt; Val::MIN { result.push (<span class="self">Self </span>{ x: x - Val::ONE, y }); }
+				<span class="kw">if </span><span class="self">self</span>.x &lt; Val::MAX { result.push (<span class="self">Self </span>{ x: x + Val::ONE, y }); }
+				<span class="kw">if </span><span class="self">self</span>.y &lt; Val::MAX {
+					<span class="kw">let </span>y = y + Val::ONE;
+					<span class="kw">if </span><span class="self">self</span>.x &gt; Val::MIN { result.push (<span class="self">Self </span>{ x: x - Val::ONE, y }); }
+					result.push (<span class="self">Self </span>{ y, x });
+					<span class="kw">if </span><span class="self">self</span>.x &lt; Val::MAX { result.push (<span class="self">Self </span>{ x: x + Val::ONE, y }); }
+				}
+				result
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: IntSigned&gt; Add &lt;Turn2d&gt; <span class="kw">for </span>PosYX &lt;Val&gt; {
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, turn: Turn2d) -&gt; <span class="self">Self </span>{
+				<span class="kw">match </span>turn {
+					Turn2d::None =&gt; <span class="self">Self</span>::new (<span class="self">self</span>.y, <span class="self">self</span>.x),
+					Turn2d::Right =&gt; <span class="self">Self</span>::new (<span class="self">self</span>.x, - <span class="self">self</span>.y),
+					Turn2d::Around =&gt; <span class="self">Self</span>::new (- <span class="self">self</span>.y, - <span class="self">self</span>.x),
+					Turn2d::Left =&gt; <span class="self">Self</span>::new (- <span class="self">self</span>.x, <span class="self">self</span>.y),
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Index &lt;AxisXY&gt; <span class="kw">for </span>PosXYZ &lt;Val&gt; {
+
+			<span class="kw">type </span>Output = Val;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>index (&amp; <span class="self">self</span>, axis: AxisXY) -&gt; &amp; Val {
+				<span class="kw">match </span>axis {
+					AxisXY::X =&gt; &amp; <span class="self">self</span>.x,
+					AxisXY::Y =&gt; &amp; <span class="self">self</span>.y,
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; TryAdd &lt;(Dir2d, Val)&gt; <span class="kw">for </span>PosYX &lt;Val&gt; {
+
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, (dir, dist): (Dir2d, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
+				<span class="kw">match </span>dir {
+					Dir2d::Up =&gt; result.y = Val::sub_2 (result.y, dist) <span class="question-mark">?</span>,
+					Dir2d::Down =&gt; result.y = Val::add_2 (result.y, dist) <span class="question-mark">?</span>,
+					Dir2d::Left =&gt; result.x = Val::sub_2 (result.x, dist) <span class="question-mark">?</span>,
+					Dir2d::Right =&gt; result.x = Val::add_2 (result.x, dist) <span class="question-mark">?</span>,
+				}
+				<span class="prelude-val">Ok </span>(result)
+			}
+
+		}
+
+	}
+
+	<span class="kw">mod </span>geo {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="macro">pos_decl! </span>(PosGeo AxisGeo <span class="number">2</span>, n N south north, e E west east);
+		<span class="macro">pos_dirs! </span>(PosGeo DirGeo <span class="number">2</span>,
+			South south [ NEG_ONE, ZERO ],
+			North north [ ONE, ZERO ],
+			West west [ ZERO, NEG_ONE ],
+			East east [ ZERO, ONE ]);
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; PosGeo &lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>left (&amp; <span class="self">self</span>) -&gt; <span class="self">Self </span><span class="kw">where </span>Val: IntSigned {
+				<span class="self">Self </span>{ n: <span class="self">self</span>.e, e: - <span class="self">self</span>.n }
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>right (&amp; <span class="self">self</span>) -&gt; <span class="self">Self </span><span class="kw">where </span>Val: IntSigned {
+				<span class="self">Self </span>{ n: - <span class="self">self</span>.e, e: <span class="self">self</span>.n }
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>around (&amp; <span class="self">self</span>) -&gt; <span class="self">Self </span><span class="kw">where </span>Val: IntSigned {
+				<span class="self">Self </span>{ n: - <span class="self">self</span>.n, e: - <span class="self">self</span>.e }
+			}
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_4 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">4</span>&gt; <span class="kw">where </span>Val: Int {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ n, e } = * <span class="self">self</span>;
+				<span class="kw">if </span>n &gt; Val::MIN { result.push (<span class="self">Self </span>{ n: n - Val::ONE, e }); }
+				<span class="kw">if </span>n &lt; Val::MAX { result.push (<span class="self">Self </span>{ n: n + Val::ONE, e }); }
+				<span class="kw">if </span>e &gt; Val::MIN { result.push (<span class="self">Self </span>{ n, e: e - Val::ONE }); }
+				<span class="kw">if </span>e &lt; Val::MAX { result.push (<span class="self">Self </span>{ n, e: e + Val::ONE }); }
+				result
+			}
+
+		}
+
+		<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		</span><span class="kw">pub enum </span>DirGeo { North, South, East, West }
+
+		<span class="kw">impl </span>DirGeo {
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>left (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ Turn2d::Left
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>right (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ Turn2d::Right
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>around (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ Turn2d::Around
+			}
+
+		}
+
+		<span class="kw">impl </span>Add &lt;Turn2d&gt; <span class="kw">for </span>DirGeo {
+
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, other: Turn2d) -&gt; <span class="self">Self </span>{
+				<span class="kw">use </span>Turn2d::{ <span class="prelude-val">None</span>, Left, Right, Around };
+				<span class="kw">use </span>DirGeo::{ North, South, East, West };
+				<span class="kw">match </span>(<span class="self">self</span>, other) {
+					(North, <span class="prelude-val">None</span>) | (West, Right) | (East, Left) | (South, Around) =&gt; North,
+					(South, <span class="prelude-val">None</span>) | (East, Right) | (West, Left) | (North, Around) =&gt; South,
+					(East, <span class="prelude-val">None</span>) | (North, Right) | (South, Left) | (West, Around) =&gt; East,
+					(West, <span class="prelude-val">None</span>) | (South, Right) | (North, Left) | (East, Around) =&gt; West,
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Add &lt;(DirGeo, Val)&gt; <span class="kw">for </span>PosGeo &lt;Val&gt; {
+
+			<span class="kw">type </span>Output = NumResult &lt;<span class="self">Self</span>&gt;;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, (dir, dist): (DirGeo, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
+				<span class="kw">match </span>dir {
+					DirGeo::North =&gt; result.n = Val::add_2 (result.n, dist) <span class="question-mark">?</span>,
+					DirGeo::South =&gt; result.n = Val::sub_2 (result.n, dist) <span class="question-mark">?</span>,
+					DirGeo::East =&gt; result.e = Val::add_2 (result.e, dist) <span class="question-mark">?</span>,
+					DirGeo::West =&gt; result.e = Val::sub_2 (result.e, dist) <span class="question-mark">?</span>,
+				}
+				<span class="prelude-val">Ok </span>(result)
+			}
+
+		}
+
+	}
+
+	<span class="kw">mod </span>geo_hex {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="macro">pos_decl! </span>(PosGeoHexLat AxisGeoHexLat <span class="number">2</span>, nw NW south_east north_west, e E west east);
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; PosGeoHexLat &lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>north_east (&amp; <span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ nw: <span class="macro">chk! </span>(<span class="self">self</span>.nw + num) <span class="question-mark">?</span>, e: <span class="macro">chk! </span>(<span class="self">self</span>.e + num) <span class="question-mark">? </span>})
+			}
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>south_west (&amp; <span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ nw: <span class="macro">chk! </span>(<span class="self">self</span>.nw - num) <span class="question-mark">?</span>, e: <span class="macro">chk! </span>(<span class="self">self</span>.e - num) <span class="question-mark">? </span>})
+			}
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">6</span>&gt; <span class="kw">where </span>Val: Int {
+				[
+					<span class="self">self</span>.north_west (Val::ONE).ok (),
+					<span class="self">self</span>.north_east (Val::ONE).ok (),
+					<span class="self">self</span>.east (Val::ONE).ok (),
+					<span class="self">self</span>.south_east (Val::ONE).ok (),
+					<span class="self">self</span>.south_west (Val::ONE).ok (),
+					<span class="self">self</span>.west (Val::ONE).ok (),
+				].into_iter ().flatten ().collect ()
+			}
+
+		}
+
+		<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		</span><span class="kw">pub enum </span>DirGeoHexLat { NorthWest, NorthEast, East, SouthEast, SouthWest, West }
+
+		<span class="kw">impl </span>DirGeoHexLat {
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>soft_right (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ TurnHex::SoftRight
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>hard_right (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ TurnHex::HardRight
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>around (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ TurnHex::Around
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>hard_left (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ TurnHex::HardLeft
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub fn </span>soft_left (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="self">self </span>+ TurnHex::SoftLeft
+			}
+
+		}
+
+		<span class="kw">impl </span>Add &lt;TurnHex&gt; <span class="kw">for </span>DirGeoHexLat {
+
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, other: TurnHex) -&gt; <span class="self">Self </span>{
+				<span class="kw">use </span>TurnHex::{ <span class="prelude-val">None</span>, SoftRight, HardRight, Around, HardLeft, SoftLeft };
+				<span class="kw">use </span>DirGeoHexLat::{ NorthWest, NorthEast, East, SouthEast, SouthWest, West };
+				<span class="kw">match </span>(<span class="self">self</span>, other) {
+					(NorthWest, <span class="prelude-val">None</span>) | (West, SoftRight) | (SouthWest, HardRight) |
+						(SouthEast, Around) | (East, HardLeft) | (NorthEast, SoftLeft) =&gt;
+							NorthWest,
+					(NorthEast, <span class="prelude-val">None</span>) | (NorthWest, SoftRight) | (West, HardRight) |
+						(SouthWest, Around) | (SouthEast, HardLeft) | (East, SoftLeft) =&gt;
+							NorthEast,
+					(East, <span class="prelude-val">None</span>) | (NorthEast, SoftRight) | (NorthWest, HardRight) |
+						(West, Around) | (SouthWest, HardLeft) | (SouthEast, SoftLeft) =&gt;
+							East,
+					(SouthEast, <span class="prelude-val">None</span>) | (East, SoftRight) | (NorthEast, HardRight) |
+						(NorthWest, Around) | (West, HardLeft) | (SouthWest, SoftLeft) =&gt;
+							SouthEast,
+					(SouthWest, <span class="prelude-val">None</span>) | (SouthEast, SoftRight) | (East, HardRight) |
+						(NorthEast, Around) | (NorthWest, HardLeft) | (West, SoftLeft) =&gt;
+							SouthWest,
+					(West, <span class="prelude-val">None</span>) | (SouthWest, SoftRight) | (SouthEast, HardRight) |
+						(East, Around) | (NorthEast, HardLeft) | (NorthWest, SoftLeft) =&gt;
+							West,
+				}
+			}
+
+		}
+
+	}
+
+	<span class="kw">mod </span>row_col {
+
+		<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+		<span class="macro">pos_decl! </span>(PosRowCol AxisRowCol <span class="number">2</span>, row Row up down, col Col left right);
+		<span class="macro">pos_dirs! </span>{
+			PosRowCol Dir2d <span class="number">2</span>,
+			Up up [ NEG_ONE, ZERO ],
+			Down down [ ONE, ZERO ],
+			Left left [ ZERO, NEG_ONE ],
+			Right right [ ZERO, ONE ],
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; PosRowCol &lt;Val&gt; {
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_4 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">4</span>&gt; <span class="kw">where </span>Val: Int {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ row, col } = * <span class="self">self</span>;
+				<span class="kw">if </span>row &gt; Val::MIN { result.push (<span class="self">Self </span>{ row: row - Val::ONE, col }); }
+				<span class="kw">if </span>row &lt; Val::MAX { result.push (<span class="self">Self </span>{ row: row + Val::ONE, col }); }
+				<span class="kw">if </span>col &gt; Val::MIN { result.push (<span class="self">Self </span>{ row, col: col - Val::ONE }); }
+				<span class="kw">if </span>col &lt; Val::MAX { result.push (<span class="self">Self </span>{ row, col: col + Val::ONE }); }
+				result
+			}
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">pub fn </span>adjacent_8 (&amp; <span class="self">self</span>) -&gt; ArrayVec &lt;<span class="self">Self</span>, <span class="number">8</span>&gt; <span class="kw">where </span>Val: Int {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = ArrayVec::new ();
+				<span class="kw">let </span><span class="self">Self </span>{ row, col } = * <span class="self">self</span>;
+				<span class="kw">if </span><span class="self">self</span>.row &gt; Val::MIN {
+					<span class="kw">let </span>row = row - Val::ONE;
+					<span class="kw">if </span><span class="self">self</span>.col &gt; Val::MIN { result.push (<span class="self">Self </span>{ row, col: col - Val::ONE }); }
+					result.push (<span class="self">Self </span>{ row, col });
+					<span class="kw">if </span><span class="self">self</span>.col &lt; Val::MAX { result.push (<span class="self">Self </span>{ row, col: col + Val::ONE }); }
+				}
+				<span class="kw">if </span><span class="self">self</span>.col &gt; Val::MIN { result.push (<span class="self">Self </span>{ row, col: col - Val::ONE }); }
+				<span class="kw">if </span><span class="self">self</span>.col &lt; Val::MAX { result.push (<span class="self">Self </span>{ row, col: col + Val::ONE }); }
+				<span class="kw">if </span><span class="self">self</span>.row &lt; Val::MAX {
+					<span class="kw">let </span>row = row + Val::ONE;
+					<span class="kw">if </span><span class="self">self</span>.col &gt; Val::MIN { result.push (<span class="self">Self </span>{ row, col: col - Val::ONE }); }
+					result.push (<span class="self">Self </span>{ row, col });
+					<span class="kw">if </span><span class="self">self</span>.col &lt; Val::MAX { result.push (<span class="self">Self </span>{ row, col: col + Val::ONE }); }
+				}
+				result
+			}
+
+		}
+
+		<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+		</span><span class="kw">pub enum </span>Dir2d { Up, Down, Left, Right }
+
+		<span class="kw">impl </span>Dir2d {
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub const fn </span>left (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="kw">match </span><span class="self">self </span>{
+					<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::Left,
+					<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::Right,
+					<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::Down,
+					<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::Up,
+				}
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub const fn </span>right (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="kw">match </span><span class="self">self </span>{
+					<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::Right,
+					<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::Left,
+					<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::Up,
+					<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::Down,
+				}
+			}
+
+			<span class="attribute">#[ inline ]
+			#[ must_use ]
+			</span><span class="kw">pub const fn </span>around (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+				<span class="kw">match </span><span class="self">self </span>{
+					<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::Down,
+					<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::Up,
+					<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::Right,
+					<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::Left,
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>Add &lt;Turn2d&gt; <span class="kw">for </span>Dir2d {
+
+			<span class="kw">type </span>Output = <span class="self">Self</span>;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, other: Turn2d) -&gt; <span class="self">Self </span>{
+				<span class="kw">use </span>Turn2d::{ <span class="prelude-val">None</span>, Left <span class="kw">as </span>TLeft, Right <span class="kw">as </span>TRight, Around };
+				<span class="kw">use </span>Dir2d::{ Up, Down, Left <span class="kw">as </span>DLeft, Right <span class="kw">as </span>DRight };
+				<span class="kw">match </span>(<span class="self">self</span>, other) {
+					(Up, <span class="prelude-val">None</span>) | (DLeft, TRight) | (DRight, TLeft) | (Down, Around) =&gt; Up,
+					(Down, <span class="prelude-val">None</span>) | (DRight, TRight) | (DLeft, TLeft) | (Up, Around) =&gt; Down,
+					(DLeft, <span class="prelude-val">None</span>) | (Down, TRight) | (Up, TLeft) | (DRight, Around) =&gt; DLeft,
+					(DRight, <span class="prelude-val">None</span>) | (Up, TRight) | (Down, TLeft) | (DLeft, Around) =&gt; DRight,
+				}
+			}
+
+		}
+
+		<span class="kw">impl </span>&lt;Val: Int&gt; Add &lt;(Dir2d, Val)&gt; <span class="kw">for </span>PosRowCol &lt;Val&gt; {
+
+			<span class="kw">type </span>Output = NumResult &lt;<span class="self">Self</span>&gt;;
+
+			<span class="attribute">#[ inline ]
+			</span><span class="kw">fn </span>add (<span class="self">self</span>, (dir, dist): (Dir2d, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
+				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
+				<span class="kw">match </span>dir {
+					Dir2d::Up =&gt; result.row = Val::sub_2 (result.row, dist) <span class="question-mark">?</span>,
+					Dir2d::Down =&gt; result.row = Val::add_2 (result.row, dist) <span class="question-mark">?</span>,
+					Dir2d::Left =&gt; result.col = Val::sub_2 (result.col, dist) <span class="question-mark">?</span>,
+					Dir2d::Right =&gt; result.col = Val::add_2 (result.col, dist) <span class="question-mark">?</span>,
+				}
+				<span class="prelude-val">Ok </span>(result)
+			}
+
 		}
 
 	}
 
 }
 
-<span class="kw">mod</span> <span class="ident">dim_2</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">geo::DirGeo</span>;
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">geo::PosGeo</span>;
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">row_col::Dir2d</span>;
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">row_col::PosRowCol</span>;
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">xy::PosXY</span>;
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">yx::PosYX</span>;
-
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Turn2d</span> { <span class="prelude-val">None</span>, <span class="ident">Left</span>, <span class="ident">Right</span>, <span class="ident">Around</span> }
-
-	<span class="kw">mod</span> <span class="ident">xy</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosXY</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">Val</span> }
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosXY</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">Int::ZERO</span>, <span class="ident">y</span>: <span class="ident">Int::ZERO</span> };
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_4</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">4</span><span class="op">&gt;</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">y</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">y</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				<span class="ident">result</span>
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosXY</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">Val</span>;
-			<span class="kw">type</span> <span class="ident">Signed</span> <span class="op">=</span> <span class="ident">PosXY</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident">Val</span>; <span class="number">2</span>] {
-				[ <span class="self">self</span>.<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">y</span> ]
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">arr</span>: [<span class="ident">Val</span>; <span class="number">2</span>]) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">arr</span> [<span class="number">0</span>], <span class="ident">y</span>: <span class="ident">arr</span> [<span class="number">1</span>] }
-			}
-
-		}
-
-		<span class="macro">pos_ops!</span> (<span class="ident">PosXY</span>: <span class="ident">Debug</span>);
-		<span class="macro">pos_ops!</span> (<span class="ident">PosXY</span>: <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Sub</span>, <span class="ident">Rem</span>);
-
-	}
-
-	<span class="kw">mod</span> <span class="ident">yx</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">Val</span> }
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">Val::ZERO</span>, <span class="ident">x</span>: <span class="ident">Val::ZERO</span> };
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_4</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">4</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">y</span>, <span class="ident">x</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">y</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">y</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="ident">result</span>
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_8</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">8</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">y</span>, <span class="ident">x</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> {
-					<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">y</span> <span class="op">-</span> <span class="ident">Val::ONE</span>;
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">y</span>, <span class="ident">x</span> });
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				}
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">y</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> {
-					<span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">y</span> <span class="op">+</span> <span class="ident">Val::ONE</span>;
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">y</span>, <span class="ident">x</span> });
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">x</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">y</span> }); }
-				}
-				<span class="ident">result</span>
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">Val</span>;
-			<span class="kw">type</span> <span class="ident">Signed</span> <span class="op">=</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident">Val</span>; <span class="number">2</span>] {
-				[ <span class="self">self</span>.<span class="ident">y</span>, <span class="self">self</span>.<span class="ident">x</span> ]
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">arr</span>: [<span class="ident">Val</span>; <span class="number">2</span>]) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">arr</span> [<span class="number">0</span>], <span class="ident">x</span>: <span class="ident">arr</span> [<span class="number">1</span>] }
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span> <span class="op">&lt;</span><span class="ident">Signed</span> <span class="op">=</span> <span class="ident">Val</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">IntSigned</span><span class="op">&gt;</span> <span class="ident">From</span> <span class="op">&lt;</span><span class="ident">Dir2d</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosYX</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">from</span> (<span class="ident">dir</span>: <span class="ident">Dir2d</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">match</span> <span class="ident">dir</span> {
-					<span class="ident">Dir2d::Up</span> =&gt; <span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">Val::NEG_ONE</span>, <span class="ident">x</span>: <span class="ident">Val::ZERO</span> },
-					<span class="ident">Dir2d::Down</span> =&gt; <span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">Val::ONE</span>, <span class="ident">x</span>: <span class="ident">Val::ZERO</span> },
-					<span class="ident">Dir2d::Left</span> =&gt; <span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">Val::ZERO</span>, <span class="ident">x</span>: <span class="ident">Val::NEG_ONE</span> },
-					<span class="ident">Dir2d::Right</span> =&gt; <span class="self">Self</span> { <span class="ident">y</span>: <span class="ident">Val::ZERO</span>, <span class="ident">x</span>: <span class="ident">Val::ONE</span> },
-				}
-			}
-
-		}
-
-		<span class="macro">pos_ops!</span> (<span class="ident">PosYX</span>: <span class="ident">Debug</span>);
-		<span class="macro">pos_ops!</span> (<span class="ident">PosYX</span>: <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span>);
-
-	}
-
-	<span class="kw">mod</span> <span class="ident">geo</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">n</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">e</span>: <span class="ident">Val</span> }
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">n</span>: <span class="ident">Val::ZERO</span>, <span class="ident">e</span>: <span class="ident">Val::ZERO</span> };
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">north</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">n</span>: <span class="self">self</span>.<span class="ident">n</span>.<span class="ident">safe_add</span> (<span class="ident">num</span>), <span class="ident">e</span>: <span class="self">self</span>.<span class="ident">e</span> }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">south</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">n</span>: <span class="self">self</span>.<span class="ident">n</span>.<span class="ident">safe_sub</span> (<span class="ident">num</span>), <span class="ident">e</span>: <span class="self">self</span>.<span class="ident">e</span> }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">east</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">n</span>: <span class="self">self</span>.<span class="ident">n</span>, <span class="ident">e</span>: <span class="self">self</span>.<span class="ident">e</span>.<span class="ident">safe_add</span> (<span class="ident">num</span>) }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">west</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">n</span>: <span class="self">self</span>.<span class="ident">n</span>, <span class="ident">e</span>: <span class="self">self</span>.<span class="ident">e</span>.<span class="ident">safe_sub</span> (<span class="ident">num</span>) }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_4</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">4</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">n</span>, <span class="ident">e</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="ident">n</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">n</span>: <span class="ident">n</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">e</span> }); }
-				<span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">n</span>: <span class="ident">n</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">e</span> }); }
-				<span class="kw">if</span> <span class="ident">e</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">n</span>, <span class="ident">e</span>: <span class="ident">e</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="ident">e</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">n</span>, <span class="ident">e</span>: <span class="ident">e</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				<span class="ident">result</span>
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">Val</span>;
-			<span class="kw">type</span> <span class="ident">Signed</span> <span class="op">=</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident">Val</span>; <span class="number">2</span>] {
-				[ <span class="self">self</span>.<span class="ident">n</span>, <span class="self">self</span>.<span class="ident">e</span> ]
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">arr</span>: [<span class="ident">Val</span>; <span class="number">2</span>]) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">n</span>: <span class="ident">arr</span> [<span class="number">0</span>], <span class="ident">e</span>: <span class="ident">arr</span> [<span class="number">1</span>] }
-			}
-
-		}
-
-		<span class="macro">pos_ops!</span> (<span class="ident">PosGeo</span>: <span class="ident">Debug</span>);
-		<span class="macro">pos_ops!</span> (<span class="ident">PosGeo</span>: <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span>);
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">DirGeo</span> { <span class="ident">North</span>, <span class="ident">South</span>, <span class="ident">East</span>, <span class="ident">West</span> }
-
-		<span class="kw">impl</span> <span class="ident">Add</span> <span class="op">&lt;</span><span class="ident">Turn2d</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">DirGeo</span> {
-
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">add</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">Turn2d</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">use</span> <span class="ident">Turn2d</span>::{ <span class="prelude-val">None</span>, <span class="ident">Left</span>, <span class="ident">Right</span>, <span class="ident">Around</span> };
-				<span class="kw">use</span> <span class="ident">DirGeo</span>::{ <span class="ident">North</span>, <span class="ident">South</span>, <span class="ident">East</span>, <span class="ident">West</span> };
-				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">other</span>) {
-					(<span class="ident">North</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">West</span>, <span class="ident">Right</span>) <span class="op">|</span> (<span class="ident">East</span>, <span class="ident">Left</span>) <span class="op">|</span> (<span class="ident">South</span>, <span class="ident">Around</span>) =&gt; <span class="ident">North</span>,
-					(<span class="ident">South</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">East</span>, <span class="ident">Right</span>) <span class="op">|</span> (<span class="ident">West</span>, <span class="ident">Left</span>) <span class="op">|</span> (<span class="ident">North</span>, <span class="ident">Around</span>) =&gt; <span class="ident">South</span>,
-					(<span class="ident">East</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">North</span>, <span class="ident">Right</span>) <span class="op">|</span> (<span class="ident">South</span>, <span class="ident">Left</span>) <span class="op">|</span> (<span class="ident">West</span>, <span class="ident">Around</span>) =&gt; <span class="ident">East</span>,
-					(<span class="ident">West</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">South</span>, <span class="ident">Right</span>) <span class="op">|</span> (<span class="ident">North</span>, <span class="ident">Left</span>) <span class="op">|</span> (<span class="ident">East</span>, <span class="ident">Around</span>) =&gt; <span class="ident">West</span>,
-				}
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Add</span> <span class="op">&lt;</span>(<span class="ident">DirGeo</span>, <span class="ident">Val</span>)<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">add</span> (<span class="self">self</span>, (<span class="ident">dir</span>, <span class="ident">dist</span>): (<span class="ident">DirGeo</span>, <span class="ident">Val</span>)) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>;
-				<span class="kw">match</span> <span class="ident">dir</span> {
-					<span class="ident">DirGeo::North</span> =&gt; <span class="ident">result</span>.<span class="ident">n</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">result</span>.<span class="ident">n</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">DirGeo::South</span> =&gt; <span class="ident">result</span>.<span class="ident">n</span> <span class="op">=</span> <span class="ident">Val::sub_2</span> (<span class="ident">result</span>.<span class="ident">n</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">DirGeo::East</span> =&gt; <span class="ident">result</span>.<span class="ident">e</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">result</span>.<span class="ident">e</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">DirGeo::West</span> =&gt; <span class="ident">result</span>.<span class="ident">e</span> <span class="op">=</span> <span class="ident">Val::sub_2</span> (<span class="ident">result</span>.<span class="ident">e</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-				}
-				<span class="prelude-val">Ok</span> (<span class="ident">result</span>)
-			}
-
-		}
-
-	}
-
-	<span class="kw">mod</span> <span class="ident">row_col</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">row</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">col</span>: <span class="ident">Val</span> }
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">row</span>: <span class="ident">Val::ZERO</span>, <span class="ident">col</span>: <span class="ident">Val::ZERO</span> };
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">up</span> (<span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">row</span>: <span class="self">self</span>.<span class="ident">row</span>.<span class="ident">safe_sub</span> (<span class="ident">num</span>), <span class="ident">col</span>: <span class="self">self</span>.<span class="ident">col</span> }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">down</span> (<span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">row</span>: <span class="self">self</span>.<span class="ident">row</span>.<span class="ident">safe_add</span> (<span class="ident">num</span>), <span class="ident">col</span>: <span class="self">self</span>.<span class="ident">col</span> }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">left</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">row</span>: <span class="self">self</span>.<span class="ident">row</span>, <span class="ident">col</span>: <span class="self">self</span>.<span class="ident">col</span>.<span class="ident">safe_sub</span> (<span class="ident">num</span>) }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">right</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">num</span>: <span class="ident">Val</span>) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">row</span>: <span class="self">self</span>.<span class="ident">row</span>, <span class="ident">col</span>: <span class="self">self</span>.<span class="ident">col</span>.<span class="ident">safe_add</span> (<span class="ident">num</span>) }
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_4</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">4</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="ident">row</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>: <span class="ident">row</span> <span class="op">-</span> <span class="ident">Val::ONE</span>, <span class="ident">col</span> }); }
-				<span class="kw">if</span> <span class="ident">row</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>: <span class="ident">row</span> <span class="op">+</span> <span class="ident">Val::ONE</span>, <span class="ident">col</span> }); }
-				<span class="kw">if</span> <span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				<span class="ident">result</span>
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">adjacent_8</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="self">Self</span>, <span class="number">8</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">Val</span>: <span class="ident">Int</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
-				<span class="kw">let</span> <span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> } <span class="op">=</span> <span class="op">*</span> <span class="self">self</span>;
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">row</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> {
-					<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">row</span> <span class="op">-</span> <span class="ident">Val::ONE</span>;
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> });
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				}
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				<span class="kw">if</span> <span class="self">self</span>.<span class="ident">row</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> {
-					<span class="kw">let</span> <span class="ident">row</span> <span class="op">=</span> <span class="ident">row</span> <span class="op">+</span> <span class="ident">Val::ONE</span>;
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&gt;</span> <span class="ident">Val::MIN</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">-</span> <span class="ident">Val::ONE</span> }); }
-					<span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span> });
-					<span class="kw">if</span> <span class="self">self</span>.<span class="ident">col</span> <span class="op">&lt;</span> <span class="ident">Val::MAX</span> { <span class="ident">result</span>.<span class="ident">push</span> (<span class="self">Self</span> { <span class="ident">row</span>, <span class="ident">col</span>: <span class="ident">col</span> <span class="op">+</span> <span class="ident">Val::ONE</span> }); }
-				}
-				<span class="ident">result</span>
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">2</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">Val</span>;
-			<span class="kw">type</span> <span class="ident">Signed</span> <span class="op">=</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident">Val</span>; <span class="number">2</span>] {
-				[ <span class="self">self</span>.<span class="ident">row</span>, <span class="self">self</span>.<span class="ident">col</span> ]
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">arr</span>: [<span class="ident">Val</span>; <span class="number">2</span>]) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">row</span>: <span class="ident">arr</span> [<span class="number">0</span>], <span class="ident">col</span>: <span class="ident">arr</span> [<span class="number">1</span>] }
-			}
-
-		}
-
-		<span class="macro">pos_ops!</span> (<span class="ident">PosRowCol</span>: <span class="ident">Debug</span>);
-		<span class="macro">pos_ops!</span> (<span class="ident">PosRowCol</span>: <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span>);
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Dir2d</span> { <span class="ident">Up</span>, <span class="ident">Down</span>, <span class="ident">Left</span>, <span class="ident">Right</span> }
-
-		<span class="kw">impl</span> <span class="ident">Add</span> <span class="op">&lt;</span><span class="ident">Turn2d</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Dir2d</span> {
-
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="self">Self</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">add</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">Turn2d</span>) -&gt; <span class="self">Self</span> {
-				<span class="kw">use</span> <span class="ident">Turn2d</span>::{ <span class="prelude-val">None</span>, <span class="ident">Left</span> <span class="kw">as</span> <span class="ident">TLeft</span>, <span class="ident">Right</span> <span class="kw">as</span> <span class="ident">TRight</span>, <span class="ident">Around</span> };
-				<span class="kw">use</span> <span class="ident">Dir2d</span>::{ <span class="ident">Up</span>, <span class="ident">Down</span>, <span class="ident">Left</span> <span class="kw">as</span> <span class="ident">DLeft</span>, <span class="ident">Right</span> <span class="kw">as</span> <span class="ident">DRight</span> };
-				<span class="kw">match</span> (<span class="self">self</span>, <span class="ident">other</span>) {
-					(<span class="ident">Up</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">DLeft</span>, <span class="ident">TRight</span>) <span class="op">|</span> (<span class="ident">DRight</span>, <span class="ident">TLeft</span>) <span class="op">|</span> (<span class="ident">Down</span>, <span class="ident">Around</span>) =&gt; <span class="ident">Up</span>,
-					(<span class="ident">Down</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">DRight</span>, <span class="ident">TRight</span>) <span class="op">|</span> (<span class="ident">DLeft</span>, <span class="ident">TLeft</span>) <span class="op">|</span> (<span class="ident">Up</span>, <span class="ident">Around</span>) =&gt; <span class="ident">Down</span>,
-					(<span class="ident">DLeft</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">Down</span>, <span class="ident">TRight</span>) <span class="op">|</span> (<span class="ident">Up</span>, <span class="ident">TLeft</span>) <span class="op">|</span> (<span class="ident">DRight</span>, <span class="ident">Around</span>) =&gt; <span class="ident">DLeft</span>,
-					(<span class="ident">DRight</span>, <span class="prelude-val">None</span>) <span class="op">|</span> (<span class="ident">Up</span>, <span class="ident">TRight</span>) <span class="op">|</span> (<span class="ident">Down</span>, <span class="ident">TLeft</span>) <span class="op">|</span> (<span class="ident">DLeft</span>, <span class="ident">Around</span>) =&gt; <span class="ident">DRight</span>,
-				}
-			}
-
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Add</span> <span class="op">&lt;</span>(<span class="ident">Dir2d</span>, <span class="ident">Val</span>)<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosRowCol</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">add</span> (<span class="self">self</span>, (<span class="ident">dir</span>, <span class="ident">dist</span>): (<span class="ident">Dir2d</span>, <span class="ident">Val</span>)) -&gt; <span class="ident">NumResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>;
-				<span class="kw">match</span> <span class="ident">dir</span> {
-					<span class="ident">Dir2d::Up</span> =&gt; <span class="ident">result</span>.<span class="ident">row</span> <span class="op">=</span> <span class="ident">Val::sub_2</span> (<span class="ident">result</span>.<span class="ident">row</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">Dir2d::Down</span> =&gt; <span class="ident">result</span>.<span class="ident">row</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">result</span>.<span class="ident">row</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">Dir2d::Left</span> =&gt; <span class="ident">result</span>.<span class="ident">col</span> <span class="op">=</span> <span class="ident">Val::sub_2</span> (<span class="ident">result</span>.<span class="ident">col</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-					<span class="ident">Dir2d::Right</span> =&gt; <span class="ident">result</span>.<span class="ident">col</span> <span class="op">=</span> <span class="ident">Val::add_2</span> (<span class="ident">result</span>.<span class="ident">col</span>, <span class="ident">dist</span>) <span class="question-mark">?</span>,
-				}
-				<span class="prelude-val">Ok</span> (<span class="ident">result</span>)
-			}
-
-		}
-
-	}
-
-}
-
-<span class="kw">mod</span> <span class="ident">dim_3</span> {
-
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">xyz::PosXYZ</span>;
-
-	<span class="kw">mod</span> <span class="ident">xyz</span> {
-
-		<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
-		<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-		<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PosXYZ</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> { <span class="kw">pub</span> <span class="ident">x</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">y</span>: <span class="ident">Val</span>, <span class="kw">pub</span> <span class="ident">z</span>: <span class="ident">Val</span> }
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">PosXYZ</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZERO</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">Val::ZERO</span>, <span class="ident">y</span>: <span class="ident">Val::ZERO</span>, <span class="ident">z</span>: <span class="ident">Val::ZERO</span> };
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MAX</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">Val::MAX</span>, <span class="ident">y</span>: <span class="ident">Val::MAX</span>, <span class="ident">z</span>: <span class="ident">Val::MAX</span> };
-			<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MIN</span>: <span class="self">Self</span> <span class="op">=</span> <span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">Val::MIN</span>, <span class="ident">y</span>: <span class="ident">Val::MIN</span>, <span class="ident">z</span>: <span class="ident">Val::MIN</span> };
-		}
-
-		<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Val</span>: <span class="ident">Int</span><span class="op">&gt;</span> <span class="ident">Coord</span> <span class="op">&lt;</span><span class="number">3</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PosXYZ</span> <span class="op">&lt;</span><span class="ident">Val</span><span class="op">&gt;</span> {
-
-			<span class="kw">type</span> <span class="ident">Val</span> <span class="op">=</span> <span class="ident">Val</span>;
-			<span class="kw">type</span> <span class="ident">Signed</span> <span class="op">=</span> <span class="ident">PosGeo</span> <span class="op">&lt;</span><span class="ident">Val::Signed</span><span class="op">&gt;</span>;
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_to_array</span> (<span class="self">self</span>) -&gt; [<span class="ident">Val</span>; <span class="number">3</span>] {
-				[ <span class="self">self</span>.<span class="ident">x</span>, <span class="self">self</span>.<span class="ident">y</span>, <span class="self">self</span>.<span class="ident">z</span> ]
-			}
-
-			<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-			<span class="kw">fn</span> <span class="ident">coord_from_array</span> (<span class="ident">arr</span>: [<span class="ident">Val</span>; <span class="number">3</span>]) -&gt; <span class="self">Self</span> {
-				<span class="self">Self</span> { <span class="ident">x</span>: <span class="ident">arr</span> [<span class="number">0</span>], <span class="ident">y</span>: <span class="ident">arr</span> [<span class="number">1</span>], <span class="ident">z</span>: <span class="ident">arr</span> [<span class="number">2</span>] }
-			}
-
-		}
-
-		<span class="macro">pos_ops!</span> (<span class="ident">PosXYZ</span>: <span class="ident">Debug</span>);
-		<span class="macro">pos_ops!</span> (<span class="ident">PosXYZ</span>: <span class="ident">Add</span>, <span class="ident">Neg</span>, <span class="ident">Rem</span>, <span class="ident">Sub</span>);
-
-	}
-
-}
+<span class="macro">pos_decl! </span>(PosXYZ AxisXYZ <span class="number">3</span>, x X left right, y Y down up, z Z behind ahead);
+
+<span class="macro">pos_decl! </span>(PosWXYZ AxisWXYZ <span class="number">4</span>, w W wane wax, x X left right, y Y down up, z Z behind ahead);
+<span class="macro">pos_decl! </span>(PosXYZT AxisXYZT <span class="number">4</span>, x X left right, y Y down up, z Z behind ahead, t T before after);
+<span class="macro">pos_decl! </span>(PosXYZW AxisXYZW <span class="number">4</span>, x X left right, y Y down up, z Z behind ahead, w W wane wax);
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_pos" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_pos" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

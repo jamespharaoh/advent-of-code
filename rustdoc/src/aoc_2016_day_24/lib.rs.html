@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-24/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-24/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -313,199 +313,196 @@
 <span id="313">313</span>
 <span id="314">314</span>
 <span id="315">315</span>
-<span id="316">316</span>
-<span id="317">317</span>
-<span id="318">318</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 24: Air Duct Spelunking</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2016/day/24](https://adventofcode.com/2016/day/24)</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Input</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Map with `#` for wall tiles, `.` for open tiles, and digits `0` to `9` for points of interest.</span>
-<span class="doccomment">//! Starting point is always `0`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Part one</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Work out the shortest route starting at `0` and passing through all points of interest.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Part two</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Same as part one, while also returning to `0` afterwards.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Algorithm</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This works in two steps:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Work out the shortest route from every point of interest to every other. This uses a simple</span>
-<span class="doccomment">//!   breadth first path-finding algorithm, starting from each of the points and recording the</span>
-<span class="doccomment">//!   shortest distance to each of the others.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! - Use [`search::PrioritySearch`] to find the shortest path connecting them. As an optimisation,</span>
-<span class="doccomment">//!   we sort the routes used as search nodes, except for the last item, since we don&#39;t care about</span>
-<span class="doccomment">//!   the order, only the distance and the point we are setting off from for the next leg.</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 24: Air Duct Spelunking
+//!
+//! [https://adventofcode.com/2016/day/24](https://adventofcode.com/2016/day/24)
+//!
+//! # Input
+//!
+//! Map with `#` for wall tiles, `.` for open tiles, and digits `0` to `9` for points of interest.
+//! Starting point is always `0`.
+//!
+//! # Part one
+//!
+//! Work out the shortest route starting at `0` and passing through all points of interest.
+//!
+//! # Part two
+//!
+//! Same as part one, while also returning to `0` afterwards.
+//!
+//! # Algorithm
+//!
+//! This works in two steps:
+//!
+//! - Work out the shortest route from every point of interest to every other. This uses a simple
+//!   breadth first path-finding algorithm, starting from each of the points and recording the
+//!   shortest distance to each of the others.
+//!
+//! - Use [`search::PrioritySearch`] to find the shortest path connecting them. As an optimisation,
+//!   we sort the routes used as search nodes, except for the last item, since we don&#39;t care about
+//!   the order, only the distance and the point we are setting off from for the next leg.
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_grid</span> <span class="kw">as</span> <span class="ident">grid</span>;
-<span class="kw">use</span> <span class="ident">aoc_pos</span> <span class="kw">as</span> <span class="ident">pos</span>;
-<span class="kw">use</span> <span class="ident">aoc_search</span> <span class="kw">as</span> <span class="ident">search</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_grid::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_pos <span class="kw">as </span>pos;
+<span class="kw">use </span>aoc_search <span class="kw">as </span>search;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Air Duct Spelunking&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2016</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">24</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Air Duct Spelunking&quot;</span>;
+	year = <span class="number">2016</span>;
+	day = <span class="number">24</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Pos</span>;
-	<span class="kw">use</span> <span class="ident">model::Tile</span>;
-	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
-	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::Pos;
+	<span class="kw">use </span>model::Tile;
+	<span class="kw">use </span>search::PrioritySearch;
+	<span class="kw">use </span>search::PrioritySearchAdder;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span> (<span class="ident">input</span>, <span class="bool-val">false</span>)
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+		calc_result (input, <span class="bool-val">false</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span> (<span class="ident">input</span>, <span class="bool-val">true</span>)
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+		calc_result (input, <span class="bool-val">true</span>)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>, <span class="ident">round_trip</span>: <span class="ident">bool</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> (<span class="ident">nums</span>, <span class="ident">dists</span>) <span class="op">=</span> <span class="ident">calc_distances</span> (<span class="ident">input</span>) <span class="question-mark">?</span>;
-		<span class="ident">calc_shortest</span> (<span class="op">&amp;</span> <span class="ident">nums</span>, <span class="op">&amp;</span> <span class="ident">dists</span>, <span class="ident">round_trip</span>)
+	<span class="kw">fn </span>calc_result (input: &amp; Input, round_trip: bool) -&gt; GenResult &lt;u32&gt; {
+		<span class="kw">let </span>(nums, dists) = calc_distances (input) <span class="question-mark">?</span>;
+		calc_shortest (&amp; nums, &amp; dists, round_trip)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_shortest</span> (
-		<span class="ident">nums</span>: <span class="op">&amp;</span> [(<span class="ident">u8</span>, <span class="ident">Pos</span>)],
-		<span class="ident">dists</span>: <span class="op">&amp;</span> [(<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u32</span>)],
-		<span class="ident">round_trip</span>: <span class="ident">bool</span>,
-	) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>calc_shortest (
+		nums: &amp; [(u8, Pos)],
+		dists: &amp; [(u8, u8, u32)],
+		round_trip: bool,
+	) -&gt; GenResult &lt;u32&gt; {
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">PrioritySearch::with_hash_map</span> (
-			<span class="op">|</span><span class="kw-2">mut</span> <span class="ident">route</span>: <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">11</span><span class="op">&gt;</span>, <span class="ident">dist</span>, <span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
-				<span class="kw">let</span> <span class="ident">here</span> <span class="op">=</span> <span class="ident">route</span>.<span class="ident">last</span> ().<span class="ident">copied</span> ().<span class="ident">unwrap</span> ();
-				<span class="ident">route</span>.<span class="ident">sort</span> ();
-				<span class="kw">for</span> <span class="op">&amp;</span> (<span class="ident">from</span>, <span class="ident">to</span>, <span class="ident">next_dist</span>) <span class="kw">in</span> <span class="ident">dists</span>.<span class="ident">iter</span> () {
-					<span class="kw">if</span> <span class="ident">from</span> <span class="op">!</span><span class="op">=</span> <span class="ident">here</span> { <span class="kw">continue</span> }
-					<span class="kw">if</span> <span class="ident">route</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="ident">nums</span>.<span class="ident">len</span> () <span class="op">&amp;&amp;</span> <span class="ident">to</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> { <span class="kw">continue</span> }
-					<span class="kw">if</span> <span class="ident">route</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="ident">nums</span>.<span class="ident">len</span> () <span class="op">&amp;&amp;</span> <span class="ident">route</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">to</span>) { <span class="kw">continue</span> }
-					<span class="kw">if</span> <span class="ident">route</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="ident">nums</span>.<span class="ident">len</span> () <span class="op">+</span> <span class="kw">if</span> <span class="ident">round_trip</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="number">0</span> } {
-						<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_route</span> <span class="op">=</span> <span class="ident">route</span>.<span class="ident">clone</span> ();
-						<span class="ident">new_route</span>.<span class="ident">push</span> (<span class="ident">to</span>);
-						<span class="ident">adder</span>.<span class="ident">add</span> (<span class="ident">new_route</span>.<span class="ident">clone</span> (), <span class="ident">dist</span> <span class="op">+</span> <span class="ident">next_dist</span>);
+		<span class="kw">let </span><span class="kw-2">mut </span>search = PrioritySearch::with_hash_map (
+			|<span class="kw-2">mut </span>route: ArrayVec &lt;u8, <span class="number">11</span>&gt;, dist, <span class="kw-2">mut </span>adder: PrioritySearchAdder &lt;<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>&gt;| {
+				<span class="kw">let </span>here = route.last ().copied ().unwrap ();
+				route.sort ();
+				<span class="kw">for </span>&amp; (from, to, next_dist) <span class="kw">in </span>dists.iter () {
+					<span class="kw">if </span>from != here { <span class="kw">continue </span>}
+					<span class="kw">if </span>route.len () == nums.len () &amp;&amp; to != <span class="number">0 </span>{ <span class="kw">continue </span>}
+					<span class="kw">if </span>route.len () &lt; nums.len () &amp;&amp; route.contains (&amp; to) { <span class="kw">continue </span>}
+					<span class="kw">if </span>route.len () &lt; nums.len () + usize::from (round_trip) {
+						<span class="kw">let </span><span class="kw-2">mut </span>new_route = route.clone ();
+						new_route.push (to);
+						adder.add (new_route.clone (), dist + next_dist);
 					}
 				}
-				(<span class="ident">route</span>, <span class="ident">dist</span>)
+				(route, dist)
 			});
 
-		<span class="ident">search</span>
-			.<span class="ident">push</span> (<span class="macro">array_vec!</span> [ <span class="number">0_u8</span> ], <span class="number">0</span>)
-			.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw-2">ref</span> <span class="ident">route</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">route</span>.<span class="ident">len</span> () <span class="op">==</span>
-				<span class="kw">if</span> <span class="ident">round_trip</span> { <span class="ident">nums</span>.<span class="ident">len</span> () <span class="op">+</span> <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">nums</span>.<span class="ident">len</span> () })
-			.<span class="ident">map</span> (<span class="op">|</span>(<span class="kw">_</span>, <span class="ident">dist</span>)<span class="op">|</span> <span class="ident">dist</span>)
-			.<span class="ident">next</span> ()
-			.<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="string">&quot;No solution found&quot;</span>.<span class="ident">into</span> ())
+		search
+			.push (<span class="macro">array_vec! </span>[ <span class="number">0_u8 </span>], <span class="number">0</span>)
+			.filter (|&amp; (<span class="kw-2">ref </span>route, <span class="kw">_</span>)| route.len () ==
+				<span class="kw">if </span>round_trip { nums.len () + <span class="number">1 </span>} <span class="kw">else </span>{ nums.len () })
+			.map (|(<span class="kw">_</span>, dist)| dist)
+			.next ()
+			.ok_or_else (|| <span class="string">&quot;No solution found&quot;</span>.into ())
 
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_distances</span> (
-		<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>,
-	) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>(<span class="ident">Vec</span> <span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">Pos</span>)<span class="op">&gt;</span>, <span class="ident">Vec</span> <span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>)<span class="op">&gt;</span> {
+	<span class="kw">fn </span>calc_distances (
+		input: &amp; Input,
+	) -&gt; GenResult &lt;(Vec &lt;(u8, Pos)&gt;, Vec &lt;(u8, u8, u32)&gt;)&gt; {
 
-		<span class="comment">// find list of numbers in grid</span>
+		<span class="comment">// find list of numbers in grid
 
-		<span class="kw">let</span> <span class="ident">nums</span>: <span class="ident">Vec</span> <span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">Pos</span>)<span class="op">&gt;</span> <span class="op">=</span>
-			<span class="ident">input</span>.<span class="ident">tiles</span>.<span class="ident">iter</span> ()
-				.<span class="ident">filter_map</span> (<span class="op">|</span>(<span class="ident">pos</span>, <span class="ident">tile</span>)<span class="op">|</span> <span class="kw">match</span> <span class="ident">tile</span> {
-					<span class="ident">Tile::Num</span> (<span class="ident">num</span>) =&gt; <span class="prelude-val">Some</span> ((<span class="ident">num</span>, <span class="ident">pos</span>)),
-					<span class="ident">Tile::Wall</span> <span class="op">|</span> <span class="ident">Tile::Open</span> =&gt; <span class="prelude-val">None</span>,
+		</span><span class="kw">let </span>nums: Vec &lt;(u8, Pos)&gt; =
+			input.tiles.iter ()
+				.filter_map (|(pos, tile)| <span class="kw">match </span>tile {
+					Tile::Num (num) =&gt; <span class="prelude-val">Some </span>((num, pos)),
+					Tile::Wall | Tile::Open =&gt; <span class="prelude-val">None</span>,
 				})
-				.<span class="ident">sorted</span> ()
-				.<span class="ident">collect</span> ();
+				.sorted ()
+				.collect ();
 
-		<span class="comment">// check for duplicates</span>
+		<span class="comment">// check for duplicates
 
-		<span class="kw">if</span> <span class="ident">nums</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="ident">num</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">num</span>).<span class="ident">sorted</span> ().<span class="ident">dedup</span> ().<span class="ident">count</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">nums</span>.<span class="ident">len</span> () {
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Duplicated nums&quot;</span>.<span class="ident">into</span> ());
+		</span><span class="kw">if </span>nums.iter ().map (|&amp; (num, <span class="kw">_</span>)| num).sorted ().dedup ().count () != nums.len () {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Duplicated nums&quot;</span>.into ());
 		}
 
-		<span class="comment">// check start exists</span>
+		<span class="comment">// check start exists
 
-		<span class="kw">if</span> <span class="op">!</span> <span class="ident">nums</span>.<span class="ident">iter_vals</span> ().<span class="ident">any</span> (<span class="op">|</span>(<span class="ident">num</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">num</span> <span class="op">==</span> <span class="number">0_u8</span>) {
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;No starting position&quot;</span>.<span class="ident">into</span> ());
+		</span><span class="kw">if </span>! nums.iter_vals ().any (|(num, <span class="kw">_</span>)| num == <span class="number">0_u8</span>) {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;No starting position&quot;</span>.into ());
 		}
 
-		<span class="comment">// assume we already visited all walls, reusing this makes things quicker</span>
+		<span class="comment">// assume we already visited all walls, reusing this makes things quicker
 
-		<span class="kw">let</span> <span class="ident">seen_template</span> <span class="op">=</span> <span class="ident">grid::Grid</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>, <span class="ident">Pos</span><span class="op">&gt;</span><span class="ident">::wrap</span> (
-			<span class="ident">input</span>.<span class="ident">tiles</span>.<span class="ident">values</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">tile</span><span class="op">|</span> <span class="macro">matches!</span> (<span class="ident">tile</span>, <span class="ident">Tile::Wall</span>)).<span class="ident">collect</span> (),
-			<span class="ident">input</span>.<span class="ident">tiles</span>.<span class="ident">raw_origin</span> (),
-			<span class="ident">input</span>.<span class="ident">tiles</span>.<span class="ident">size</span> ());
+		</span><span class="kw">let </span>seen_template = GridBuf::&lt;Vec &lt;bool&gt;, Pos, <span class="number">2</span>&gt;::wrap_range (
+			input.tiles.values ().map (|tile| <span class="macro">matches! </span>(tile, Tile::Wall)).collect (),
+			input.tiles.start (),
+			input.tiles.end ()) <span class="question-mark">?</span>;
 
-		<span class="comment">// work out distances</span>
+		<span class="comment">// work out distances
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dists</span>: <span class="ident">Vec</span> <span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>, <span class="ident">u32</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-		<span class="lifetime">&#39;OUTER</span>: <span class="kw">for</span> (<span class="ident">start_idx</span>, <span class="op">&amp;</span> (<span class="ident">start_num</span>, <span class="ident">start_pos</span>)) <span class="kw">in</span> <span class="ident">nums</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> () {
+		</span><span class="kw">let </span><span class="kw-2">mut </span>dists: Vec &lt;(u8, u8, u32)&gt; = Vec::new ();
+		<span class="lifetime">&#39;OUTER</span>: <span class="kw">for </span>(start_idx, &amp; (start_num, start_pos)) <span class="kw">in </span>nums.iter ().enumerate () {
 
-			<span class="comment">// track places visited so far</span>
+			<span class="comment">// track places visited so far
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span> <span class="op">=</span> <span class="ident">seen_template</span>.<span class="ident">clone</span> ();
-			<span class="ident">seen</span>.<span class="ident">set</span> (<span class="ident">start_pos</span>, <span class="bool-val">true</span>);
+			</span><span class="kw">let </span><span class="kw-2">mut </span>seen = seen_template.clone ();
+			seen.set (start_pos, <span class="bool-val">true</span>);
 
-			<span class="comment">// track next places to visit</span>
+			<span class="comment">// track next places to visit
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">todo</span>: <span class="ident">VecDeque</span> <span class="op">&lt;</span>(<span class="ident">u32</span>, <span class="ident">Pos</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">VecDeque::new</span> ();
-			<span class="ident">todo</span>.<span class="ident">push_back</span> ((<span class="number">0</span>, <span class="ident">start_pos</span>));
+			</span><span class="kw">let </span><span class="kw-2">mut </span>todo: VecDeque &lt;(u32, Pos)&gt; = VecDeque::new ();
+			todo.push_back ((<span class="number">0</span>, start_pos));
 
-			<span class="comment">// work out number of distance to find, allows some short-circuiting</span>
+			<span class="comment">// work out number of distance to find, allows some short-circuiting
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_to_find</span> <span class="op">=</span> <span class="ident">nums</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="number">1</span> <span class="op">-</span> <span class="ident">start_idx</span>;
-			<span class="kw">if</span> <span class="ident">num_to_find</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">continue</span> }
+			</span><span class="kw">let </span><span class="kw-2">mut </span>num_to_find = nums.len () - <span class="number">1 </span>- start_idx;
+			<span class="kw">if </span>num_to_find == <span class="number">0 </span>{ <span class="kw">continue </span>}
 
-			<span class="comment">// iterate &#39;todo&#39; places</span>
+			<span class="comment">// iterate &#39;todo&#39; places
 
-			<span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span> ((<span class="ident">dist</span>, <span class="ident">pos</span>)) <span class="op">=</span> <span class="ident">todo</span>.<span class="ident">pop_front</span> () {
+			</span><span class="kw">while let </span><span class="prelude-val">Some </span>((dist, pos)) = todo.pop_front () {
 
-				<span class="comment">// iterate adjacent positions</span>
+				<span class="comment">// iterate adjacent positions
 
-				<span class="kw">for</span> <span class="ident">adj_pos</span> <span class="kw">in</span> <span class="ident">pos</span>.<span class="ident">adjacent_4</span> () {
+				</span><span class="kw">for </span>adj_pos <span class="kw">in </span>pos.adjacent_4 () {
 
-					<span class="comment">// track seen tiles and short-cirtcuit</span>
+					<span class="comment">// track seen tiles and short-cirtcuit
 
-					<span class="kw">if</span> <span class="ident">seen</span>.<span class="ident">get</span> (<span class="ident">adj_pos</span>).<span class="ident">unwrap_or</span> (<span class="bool-val">true</span>) { <span class="kw">continue</span> }
-					<span class="ident">seen</span>.<span class="ident">set</span> (<span class="ident">adj_pos</span>, <span class="bool-val">true</span>);
+					</span><span class="kw">if </span>seen.get (adj_pos).unwrap_or (<span class="bool-val">true</span>) { <span class="kw">continue </span>}
+					seen.set (adj_pos, <span class="bool-val">true</span>);
 
-					<span class="comment">// add adjacent position to `todo`</span>
+					<span class="comment">// add adjacent position to `todo`
 
-					<span class="kw">let</span> <span class="ident">adj_tile</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">tiles</span>.<span class="ident">get</span> (<span class="ident">adj_pos</span>).<span class="ident">unwrap</span> ();
-					<span class="ident">todo</span>.<span class="ident">push_back</span> ((<span class="ident">dist</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">adj_pos</span>));
+					</span><span class="kw">let </span>adj_tile = input.tiles.get (adj_pos).unwrap ();
+					todo.push_back ((dist + <span class="number">1</span>, adj_pos));
 
-					<span class="comment">// check if we reached a point-of-interest</span>
+					<span class="comment">// check if we reached a point-of-interest
 
-					<span class="kw">if</span> <span class="kw">let</span> <span class="ident">Tile::Num</span> (<span class="ident">num</span>) <span class="op">=</span> <span class="ident">adj_tile</span> {
+					</span><span class="kw">if let </span>Tile::Num (num) = adj_tile {
 
-						<span class="comment">// only record it if it is greater than us, to prevent counting twice and</span>
-						<span class="comment">// allow short-circuiting</span>
+						<span class="comment">// only record it if it is greater than us, to prevent counting twice and
+						// allow short-circuiting
 
-						<span class="kw">if</span> <span class="ident">num</span> <span class="op">&lt;</span> <span class="ident">start_num</span> { <span class="kw">continue</span> }
+						</span><span class="kw">if </span>num &lt; start_num { <span class="kw">continue </span>}
 
-						<span class="comment">// record distance, both ways</span>
+						<span class="comment">// record distance, both ways
 
-						<span class="ident">dists</span>.<span class="ident">push</span> ((<span class="ident">start_num</span>, <span class="ident">num</span>, <span class="ident">dist</span> <span class="op">+</span> <span class="number">1</span>));
-						<span class="ident">dists</span>.<span class="ident">push</span> ((<span class="ident">num</span>, <span class="ident">start_num</span>, <span class="ident">dist</span> <span class="op">+</span> <span class="number">1</span>));
+						</span>dists.push ((start_num, num, dist + <span class="number">1</span>));
+						dists.push ((num, start_num, dist + <span class="number">1</span>));
 
-						<span class="comment">// abort path-finding if we found all the points greater than start</span>
+						<span class="comment">// abort path-finding if we found all the points greater than start
 
-						<span class="ident">num_to_find</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-						<span class="kw">if</span> <span class="ident">num_to_find</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">continue</span> <span class="lifetime">&#39;OUTER</span> }
+						</span>num_to_find -= <span class="number">1</span>;
+						<span class="kw">if </span>num_to_find == <span class="number">0 </span>{ <span class="kw">continue </span><span class="lifetime">&#39;OUTER </span>}
 
 					}
 
@@ -513,107 +510,104 @@
 
 			}
 
-			<span class="comment">// due to short-circuiting, this loop should never complete if all the points are</span>
-			<span class="comment">// connected</span>
+			<span class="comment">// due to short-circuiting, this loop should never complete if all the points are
+			// connected
 
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;No solution found1&quot;</span>.<span class="ident">into</span> ());
+			</span><span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;No solution found1&quot;</span>.into ());
 
 		}
 
-		<span class="comment">// return</span>
+		<span class="comment">// return
 
-		<span class="prelude-val">Ok</span> ((<span class="ident">nums</span>, <span class="ident">dists</span>))
+		</span><span class="prelude-val">Ok </span>((nums, dists))
 
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Coord</span> <span class="op">=</span> <span class="ident">u16</span>;
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TilesGrid</span> <span class="op">=</span> <span class="ident">grid::Grid</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Tile</span><span class="op">&gt;</span>, <span class="ident">Pos</span><span class="op">&gt;</span>;
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Pos</span> <span class="op">=</span> <span class="ident">pos::PosRowCol</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
+	<span class="kw">pub type </span>Coord = u16;
+	<span class="kw">pub type </span>TilesGrid = GridBuf &lt;Vec &lt;Tile&gt;, Pos, <span class="number">2</span>&gt;;
+	<span class="kw">pub type </span>Pos = pos::PosRowCol &lt;u16&gt;;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">tiles</span>: <span class="ident">TilesGrid</span>,
-		<span class="kw">pub</span> <span class="ident">width</span>: <span class="ident">Coord</span>,
-		<span class="kw">pub</span> <span class="ident">height</span>: <span class="ident">Coord</span>,
+	<span class="attribute">#[ derive (Clone, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>tiles: TilesGrid,
+		<span class="kw">pub </span>width: Coord,
+		<span class="kw">pub </span>height: Coord,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Tile</span> { <span class="ident">Wall</span>, <span class="ident">Open</span>, <span class="ident">Num</span> (<span class="ident">u8</span>) }
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Tile { Wall, Open, Num (u8) }
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
+	<span class="kw">impl </span>Input {
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+		<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
 
-			<span class="comment">// work out and validate width and height</span>
+			<span class="comment">// work out and validate width and height
 
-			<span class="kw">let</span> <span class="ident">height</span> <span class="op">=</span> <span class="ident">Coord::try_from</span> (<span class="ident">input</span>.<span class="ident">len</span> ()).<span class="ident">unwrap</span> ();
-			<span class="kw">let</span> <span class="ident">width</span> <span class="op">=</span> <span class="ident">Coord::try_from</span> (<span class="ident">input</span> [<span class="number">0</span>].<span class="ident">chars</span> ().<span class="ident">count</span> ()).<span class="ident">unwrap</span> ();
-			<span class="kw">if</span> <span class="ident">width</span> <span class="op">==</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">height</span> <span class="op">==</span> <span class="number">0</span>
-					<span class="op">|</span><span class="op">|</span> <span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">any</span> (<span class="op">|</span><span class="ident">line</span><span class="op">|</span> <span class="ident">line</span>.<span class="ident">chars</span> ().<span class="ident">count</span> () <span class="op">!</span><span class="op">=</span> <span class="ident">width</span>.<span class="ident">as_usize</span> ()) {
-				<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Invalid input&quot;</span>.<span class="ident">into</span> ());
+			</span><span class="kw">let </span>height = Coord::try_from (input.len ()).unwrap ();
+			<span class="kw">let </span>width = Coord::try_from (input [<span class="number">0</span>].chars ().count ()).unwrap ();
+			<span class="kw">if </span>width == <span class="number">0 </span>|| height == <span class="number">0
+					</span>|| input.iter ().any (|line| line.chars ().count () != width.pan_usize ()) {
+				<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Invalid input&quot;</span>.into ());
 			}
 
-			<span class="comment">// parse chars into tiles and collect</span>
+			<span class="comment">// parse chars into tiles and collect
 
-			<span class="kw">let</span> <span class="ident">tiles_vec</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Tile</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter</span> ()
-				.<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
-					<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-						<span class="kw">let</span> <span class="ident">items</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span>
-								<span class="ident">iter::from_fn</span> (<span class="op">|</span><span class="op">|</span> <span class="prelude-val">Some</span> (<span class="ident">parser</span>.<span class="ident">item</span> ()))
-							.<span class="ident">take</span> (<span class="ident">width</span>.<span class="ident">as_usize</span> ())
-							.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-						<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-						<span class="prelude-val">Ok</span> (<span class="ident">items</span>)
-					}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
-						<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
-							<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)))
-				.<span class="ident">flatten_ok</span> ()
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
+			</span><span class="kw">let </span>tiles_vec: Vec &lt;Tile&gt; = input.iter ()
+				.enumerate ()
+				.map (|(line_idx, line)|
+					Parser::wrap (line, |parser| {
+						<span class="kw">let </span>items: Vec &lt;<span class="kw">_</span>&gt; =
+								iter::from_fn (|| <span class="prelude-val">Some </span>(parser.item ()))
+							.take (width.pan_usize ())
+							.collect::&lt;ParseResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+						parser.end () <span class="question-mark">?</span>;
+						<span class="prelude-val">Ok </span>(items)
+					}).map_parse_err (|<span class="kw">_</span>, col_idx|
+						<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
+							line_idx + <span class="number">1</span>, col_idx + <span class="number">1</span>, line)))
+				.flatten_ok ()
+				.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
 
-			<span class="comment">// wrap collected tiles into &#39;Grid&#39;</span>
+			<span class="comment">// wrap collected tiles into &#39;Grid&#39;
 
-			<span class="kw">let</span> <span class="ident">tiles</span> <span class="op">=</span>
-				<span class="ident">TilesGrid::wrap</span> (
-					<span class="ident">tiles_vec</span>,
-					[<span class="number">0</span>, <span class="number">0</span>],
-					[ <span class="ident">height</span>.<span class="ident">as_usize</span> (), <span class="ident">width</span>.<span class="ident">as_usize</span> () ]);
+			</span><span class="kw">let </span>tiles = TilesGrid::wrap_size (
+				tiles_vec,
+				Pos::new (height, width));
 
-			<span class="comment">// construct and return</span>
+			<span class="comment">// construct and return
 
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">tiles</span>, <span class="ident">width</span>, <span class="ident">height</span> })
+			</span><span class="prelude-val">Ok </span>(<span class="self">Self </span>{ tiles, width, height })
 
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="ident">FromParser</span> <span class="kw">for</span> <span class="ident">Tile</span> {
-		<span class="kw">fn</span> <span class="ident">from_parser</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="prelude-val">Ok</span> (<span class="kw">match</span> <span class="ident">parser</span>.<span class="ident">expect_next</span> () <span class="question-mark">?</span> {
-				<span class="string">&#39;#&#39;</span> =&gt; <span class="ident"><span class="self">Self</span>::Wall</span>,
-				<span class="string">&#39;.&#39;</span> =&gt; <span class="ident"><span class="self">Self</span>::Open</span>,
-				<span class="ident">ch</span> <span class="kw">if</span> (<span class="string">&#39;0&#39;</span> ..<span class="op">=</span> <span class="string">&#39;9&#39;</span>).<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">ch</span>) =&gt;
-					<span class="ident"><span class="self">Self</span>::Num</span> (<span class="ident">ch</span>.<span class="ident">to_digit</span> (<span class="number">10</span>).<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="ident">parser</span>.<span class="ident">err</span> ()) <span class="question-mark">?</span>.<span class="ident">as_u8</span> ()),
-				<span class="kw">_</span> =&gt; <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">parser</span>.<span class="ident">err</span> ()),
+	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Tile {
+		<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+			<span class="prelude-val">Ok </span>(<span class="kw">match </span>parser.expect_next () <span class="question-mark">? </span>{
+				<span class="string">&#39;#&#39; </span>=&gt; <span class="self">Self</span>::Wall,
+				<span class="string">&#39;.&#39; </span>=&gt; <span class="self">Self</span>::Open,
+				ch <span class="kw">if </span>(<span class="string">&#39;0&#39; </span>..= <span class="string">&#39;9&#39;</span>).contains (&amp; ch) =&gt;
+					<span class="self">Self</span>::Num (ch.to_digit (<span class="number">10</span>).ok_or_else (|| parser.err ()) <span class="question-mark">?</span>.pan_u8 ()),
+				<span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ()),
 			})
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;###########&quot;</span>,
 		<span class="string">&quot;#0.1.....2#&quot;</span>,
 		<span class="string">&quot;#.#######.#&quot;</span>,
@@ -621,18 +615,18 @@
 		<span class="string">&quot;###########&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;14&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;14&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;20&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;20&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

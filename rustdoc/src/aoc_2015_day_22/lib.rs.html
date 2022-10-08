@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-22/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_22/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-22/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_22/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -274,281 +274,281 @@
 <span id="274">274</span>
 <span id="275">275</span>
 <span id="276">276</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 22: Wizard Simulator 20XX</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2015/day/22](https://adventofcode.com/2015/day/22)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 22: Wizard Simulator 20XX
+//!
+//! [https://adventofcode.com/2015/day/22](https://adventofcode.com/2015/day/22)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">aoc_search</span> <span class="kw">as</span> <span class="ident">search</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
+<span class="kw">use </span>aoc_search <span class="kw">as </span>search;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Wizard Simulator 20XX&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">22</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Wizard Simulator 20XX&quot;</span>;
+	year = <span class="number">2015</span>;
+	day = <span class="number">22</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (input);
+	part_two = |input| logic::part_two (input);
 }
 
-<span class="doccomment">/// Logic for solving the puzzles.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="doccomment">/// Logic for solving the puzzles.
+///
+</span><span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Boss</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::Player</span>;
-	<span class="kw">use</span> <span class="ident">search::PrioritySearch</span>;
-	<span class="kw">use</span> <span class="ident">search::PrioritySearchAdder</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Boss;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::Player;
+	<span class="kw">use </span>search::PrioritySearch;
+	<span class="kw">use </span>search::PrioritySearchAdder;
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> (<span class="ident">calc_result</span> (<span class="ident">input</span>, <span class="ident">Difficulty::Easy</span>).<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
+	<span class="kw">pub fn </span>part_one (input: Input) -&gt; GenResult &lt;u16&gt; {
+		<span class="prelude-val">Ok </span>(calc_result (input, Difficulty::Easy).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> (<span class="ident">calc_result</span> (<span class="ident">input</span>, <span class="ident">Difficulty::Hard</span>).<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
+	<span class="kw">pub fn </span>part_two (input: Input) -&gt; GenResult &lt;u16&gt; {
+		<span class="prelude-val">Ok </span>(calc_result (input, Difficulty::Hard).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">input</span>: <span class="ident">Input</span>, <span class="ident">difficulty</span>: <span class="ident">Difficulty</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-		<span class="ident">outcomes</span> (<span class="ident">input</span>, <span class="ident">difficulty</span>)
-			.<span class="ident">filter</span> (<span class="op">|</span><span class="ident">outcome</span><span class="op">|</span> <span class="ident">outcome</span>.<span class="ident">winner</span> <span class="op">==</span> <span class="ident">Contender::Player</span>)
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">outcome</span><span class="op">|</span> <span class="ident">outcome</span>.<span class="ident">mana</span>)
-			.<span class="ident">next</span> ()
+	<span class="kw">fn </span>calc_result (input: Input, difficulty: Difficulty) -&gt; <span class="prelude-ty">Option </span>&lt;u16&gt; {
+		outcomes (input, difficulty)
+			.filter (|outcome| outcome.winner == Contender::Player)
+			.map (|outcome| outcome.mana)
+			.next ()
 	}
 
-	<span class="kw">fn</span> <span class="ident">outcomes</span> (<span class="ident">input</span>: <span class="ident">Input</span>, <span class="ident">difficulty</span>: <span class="ident">Difficulty</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Outcome</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>outcomes (input: Input, difficulty: Difficulty) -&gt; <span class="kw">impl </span>Iterator &lt;Item = Outcome&gt; {
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">search</span> <span class="op">=</span> <span class="ident">PrioritySearch::with_hash_map</span> (
-			<span class="op">|</span><span class="ident">state</span>: <span class="ident">State</span>, <span class="kw">_</span>, <span class="kw-2">mut</span> <span class="ident">adder</span>: <span class="ident">PrioritySearchAdder</span> <span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
-				<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="prelude-val">Some</span> (<span class="ident">Outcome</span> { <span class="ident">winner</span>: <span class="ident">Contender::Player</span>, <span class="ident">mana</span>: <span class="ident">state</span>.<span class="ident">mana</span> })
-				} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="prelude-val">Some</span> (<span class="ident">Outcome</span> { <span class="ident">winner</span>: <span class="ident">Contender::Boss</span>, <span class="ident">mana</span>: <span class="ident">state</span>.<span class="ident">mana</span> })
-				} <span class="kw">else</span> {
-					<span class="kw">for</span> <span class="ident">next_state</span> <span class="kw">in</span> <span class="ident">next_states</span> (<span class="ident">state</span>) {
-						<span class="ident">adder</span>.<span class="ident">add</span> (<span class="ident">next_state</span>, <span class="ident">next_state</span>.<span class="ident">mana</span>);
+		<span class="kw">let </span><span class="kw-2">mut </span>search = PrioritySearch::with_hash_map (
+			|state: State, <span class="kw">_</span>, <span class="kw-2">mut </span>adder: PrioritySearchAdder &lt;<span class="lifetime">&#39;_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>&gt;| {
+				<span class="kw">if </span>state.boss.hit_points == <span class="number">0 </span>{
+					<span class="prelude-val">Some </span>(Outcome { winner: Contender::Player, mana: state.mana })
+				} <span class="kw">else if </span>state.player.hit_points == <span class="number">0 </span>{
+					<span class="prelude-val">Some </span>(Outcome { winner: Contender::Boss, mana: state.mana })
+				} <span class="kw">else </span>{
+					<span class="kw">for </span>next_state <span class="kw">in </span>next_states (state) {
+						adder.add (next_state, next_state.mana);
 					}
-					<span class="prelude-val">None</span>
-				}
+					<span class="prelude-val">None
+				</span>}
 			},
 		);
 
-		<span class="ident">search</span>.<span class="ident">push</span> (<span class="ident">State</span> {
-			<span class="ident">player</span>: <span class="ident">input</span>.<span class="ident">player</span>,
-			<span class="ident">boss</span>: <span class="ident">input</span>.<span class="ident">boss</span>,
-			<span class="ident">effects</span>: <span class="ident">Effects</span> { <span class="ident">shield</span>: <span class="number">0</span>, <span class="ident">poison</span>: <span class="number">0</span>, <span class="ident">recharge</span>: <span class="number">0</span> },
-			<span class="ident">turn</span>: <span class="ident">Contender::Player</span>,
-			<span class="ident">difficulty</span>,
-			<span class="ident">mana</span>: <span class="number">0</span>,
+		search.push (State {
+			player: input.player,
+			boss: input.boss,
+			effects: Effects { shield: <span class="number">0</span>, poison: <span class="number">0</span>, recharge: <span class="number">0 </span>},
+			turn: Contender::Player,
+			difficulty,
+			mana: <span class="number">0</span>,
 		}, <span class="number">0</span>);
 
-		<span class="ident">search</span>.<span class="ident">flatten</span> ()
+		search.flatten ()
 
 	}
 
-	<span class="kw">fn</span> <span class="ident">next_states</span> (<span class="kw-2">mut</span> <span class="ident">state</span>: <span class="ident">State</span>) -&gt; <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="ident">State</span>, <span class="number">5</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>next_states (<span class="kw-2">mut </span>state: State) -&gt; ArrayVec &lt;State, <span class="number">5</span>&gt; {
 
-		<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">shield</span> <span class="op">&gt;</span> <span class="number">0</span> {
-			<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">shield</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+		<span class="kw">if </span>state.effects.shield &gt; <span class="number">0 </span>{
+			state.effects.shield -= <span class="number">1</span>;
 		}
 
-		<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">poison</span> <span class="op">&gt;</span> <span class="number">0</span> {
-			<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cmp::min</span> (<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span>, <span class="number">3</span>);
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="macro">array_vec!</span> [ <span class="ident">state</span> ] }
-			<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">poison</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+		<span class="kw">if </span>state.effects.poison &gt; <span class="number">0 </span>{
+			state.boss.hit_points -= cmp::min (state.boss.hit_points, <span class="number">3</span>);
+			<span class="kw">if </span>state.boss.hit_points == <span class="number">0 </span>{ <span class="kw">return </span><span class="macro">array_vec! </span>[ state ] }
+			state.effects.poison -= <span class="number">1</span>;
 		}
 
-		<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">recharge</span> <span class="op">&gt;</span> <span class="number">0</span> {
-			<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">101</span>;
-			<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">recharge</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+		<span class="kw">if </span>state.effects.recharge &gt; <span class="number">0 </span>{
+			state.player.mana += <span class="number">101</span>;
+			state.effects.recharge -= <span class="number">1</span>;
 		}
 
-		<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">turn</span> <span class="op">==</span> <span class="ident">Contender::Player</span> {
+		<span class="kw">if </span>state.turn == Contender::Player {
 
-			<span class="ident">state</span>.<span class="ident">turn</span> <span class="op">=</span> <span class="ident">Contender::Boss</span>;
+			state.turn = Contender::Boss;
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&lt;</span> <span class="number">53</span> {
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">=</span> <span class="number">0</span>;
-				<span class="kw">return</span> <span class="macro">array_vec!</span> [ <span class="ident">state</span> ];
+			<span class="kw">if </span>state.player.mana &lt; <span class="number">53 </span>{
+				state.player.hit_points = <span class="number">0</span>;
+				<span class="kw">return </span><span class="macro">array_vec! </span>[ state ];
 			}
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">difficulty</span> <span class="op">==</span> <span class="ident">Difficulty::Hard</span> {
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-				<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">==</span> <span class="number">0</span> {
-					<span class="kw">return</span> <span class="macro">array_vec!</span> [ <span class="ident">state</span> ];
+			<span class="kw">if </span>state.difficulty == Difficulty::Hard {
+				state.player.hit_points -= <span class="number">1</span>;
+				<span class="kw">if </span>state.player.hit_points == <span class="number">0 </span>{
+					<span class="kw">return </span><span class="macro">array_vec! </span>[ state ];
 				}
 			}
 
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">results</span> <span class="op">=</span> <span class="ident">ArrayVec::new</span> ();
+			<span class="kw">let </span><span class="kw-2">mut </span>results = ArrayVec::new ();
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">53</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">-</span><span class="op">=</span> <span class="number">53</span>;
-				<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cmp::min</span> (<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span>, <span class="number">4</span>);
-				<span class="ident">state</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">53</span>;
-				<span class="ident">results</span>.<span class="ident">push</span> (<span class="ident">state</span>);
+			<span class="kw">if </span>state.player.mana &gt;= <span class="number">53 </span>{
+				<span class="kw">let </span><span class="kw-2">mut </span>state = state;
+				state.player.mana -= <span class="number">53</span>;
+				state.boss.hit_points -= cmp::min (state.boss.hit_points, <span class="number">4</span>);
+				state.mana += <span class="number">53</span>;
+				results.push (state);
 			}
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">73</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">-</span><span class="op">=</span> <span class="number">73</span>;
-				<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cmp::min</span> (<span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">hit_points</span>, <span class="number">2</span>);
-				<span class="ident">state</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">73</span>;
-				<span class="ident">results</span>.<span class="ident">push</span> (<span class="ident">state</span>);
+			<span class="kw">if </span>state.player.mana &gt;= <span class="number">73 </span>{
+				<span class="kw">let </span><span class="kw-2">mut </span>state = state;
+				state.player.hit_points += <span class="number">2</span>;
+				state.player.mana -= <span class="number">73</span>;
+				state.boss.hit_points -= cmp::min (state.boss.hit_points, <span class="number">2</span>);
+				state.mana += <span class="number">73</span>;
+				results.push (state);
 			}
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">113</span> <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">shield</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">-</span><span class="op">=</span> <span class="number">113</span>;
-				<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">shield</span> <span class="op">=</span> <span class="number">6</span>;
-				<span class="ident">state</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">113</span>;
-				<span class="ident">results</span>.<span class="ident">push</span> (<span class="ident">state</span>);
+			<span class="kw">if </span>state.player.mana &gt;= <span class="number">113 </span>&amp;&amp; state.effects.shield == <span class="number">0 </span>{
+				<span class="kw">let </span><span class="kw-2">mut </span>state = state;
+				state.player.mana -= <span class="number">113</span>;
+				state.effects.shield = <span class="number">6</span>;
+				state.mana += <span class="number">113</span>;
+				results.push (state);
 			}
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">173</span> <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">poison</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">-</span><span class="op">=</span> <span class="number">173</span>;
-				<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">poison</span> <span class="op">=</span> <span class="number">6</span>;
-				<span class="ident">state</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">173</span>;
-				<span class="ident">results</span>.<span class="ident">push</span> (<span class="ident">state</span>);
+			<span class="kw">if </span>state.player.mana &gt;= <span class="number">173 </span>&amp;&amp; state.effects.poison == <span class="number">0 </span>{
+				<span class="kw">let </span><span class="kw-2">mut </span>state = state;
+				state.player.mana -= <span class="number">173</span>;
+				state.effects.poison = <span class="number">6</span>;
+				state.mana += <span class="number">173</span>;
+				results.push (state);
 			}
 
-			<span class="kw">if</span> <span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">229</span> <span class="op">&amp;&amp;</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">recharge</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">state</span>;
-				<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">mana</span> <span class="op">-</span><span class="op">=</span> <span class="number">229</span>;
-				<span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">recharge</span> <span class="op">=</span> <span class="number">5</span>;
-				<span class="ident">state</span>.<span class="ident">mana</span> <span class="op">+</span><span class="op">=</span> <span class="number">229</span>;
-				<span class="ident">results</span>.<span class="ident">push</span> (<span class="ident">state</span>);
+			<span class="kw">if </span>state.player.mana &gt;= <span class="number">229 </span>&amp;&amp; state.effects.recharge == <span class="number">0 </span>{
+				<span class="kw">let </span><span class="kw-2">mut </span>state = state;
+				state.player.mana -= <span class="number">229</span>;
+				state.effects.recharge = <span class="number">5</span>;
+				state.mana += <span class="number">229</span>;
+				results.push (state);
 			}
 
-			<span class="ident">results</span>
+			results
 
-		} <span class="kw">else</span> {
+		} <span class="kw">else </span>{
 
-			<span class="ident">state</span>.<span class="ident">turn</span> <span class="op">=</span> <span class="ident">Contender::Player</span>;
+			state.turn = Contender::Player;
 
-			<span class="kw">let</span> <span class="ident">armor</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">effects</span>.<span class="ident">shield</span> <span class="op">&gt;</span> <span class="number">0</span> { <span class="number">7</span> } <span class="kw">else</span> { <span class="number">0</span> };
-			<span class="kw">let</span> <span class="ident">attack</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">damage</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">armor</span> { <span class="number">1</span> } <span class="kw">else</span> { <span class="ident">state</span>.<span class="ident">boss</span>.<span class="ident">damage</span> <span class="op">-</span> <span class="ident">armor</span> };
-			<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cmp::min</span> (<span class="ident">state</span>.<span class="ident">player</span>.<span class="ident">hit_points</span>, <span class="ident">attack</span>);
-			<span class="macro">array_vec!</span> [ <span class="ident">state</span> ]
+			<span class="kw">let </span>armor = <span class="kw">if </span>state.effects.shield &gt; <span class="number">0 </span>{ <span class="number">7 </span>} <span class="kw">else </span>{ <span class="number">0 </span>};
+			<span class="kw">let </span>attack = <span class="kw">if </span>state.boss.damage &lt;= armor { <span class="number">1 </span>} <span class="kw">else </span>{ state.boss.damage - armor };
+			state.player.hit_points -= cmp::min (state.player.hit_points, attack);
+			<span class="macro">array_vec! </span>[ state ]
 
 		}
 
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">struct</span> <span class="ident">Outcome</span> {
-		<span class="ident">winner</span>: <span class="ident">Contender</span>,
-		<span class="ident">mana</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">struct </span>Outcome {
+		winner: Contender,
+		mana: u16,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">struct</span> <span class="ident">Effects</span> {
-		<span class="ident">shield</span>: <span class="ident">u8</span>,
-		<span class="ident">poison</span>: <span class="ident">u8</span>,
-		<span class="ident">recharge</span>: <span class="ident">u8</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">struct </span>Effects {
+		shield: u8,
+		poison: u8,
+		recharge: u8,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">struct</span> <span class="ident">State</span> {
-		<span class="ident">player</span>: <span class="ident">Player</span>,
-		<span class="ident">boss</span>: <span class="ident">Boss</span>,
-		<span class="ident">effects</span>: <span class="ident">Effects</span>,
-		<span class="ident">turn</span>: <span class="ident">Contender</span>,
-		<span class="ident">difficulty</span>: <span class="ident">Difficulty</span>,
-		<span class="ident">mana</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">struct </span>State {
+		player: Player,
+		boss: Boss,
+		effects: Effects,
+		turn: Contender,
+		difficulty: Difficulty,
+		mana: u16,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">enum</span> <span class="ident">Contender</span> { <span class="ident">Player</span>, <span class="ident">Boss</span> }
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">enum </span>Contender { Player, Boss }
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">enum</span> <span class="ident">Difficulty</span> { <span class="ident">Easy</span>, <span class="ident">Hard</span> }
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">enum </span>Difficulty { Easy, Hard }
 
 }
 
-<span class="doccomment">/// Representation of the puzzle input, etc.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="doccomment">/// Representation of the puzzle input, etc.
+///
+</span><span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">player</span>: <span class="ident">Player</span>,
-		<span class="kw">pub</span> <span class="ident">boss</span>: <span class="ident">Boss</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>player: Player,
+		<span class="kw">pub </span>boss: Boss,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Player</span> {
-		<span class="kw">pub</span> <span class="ident">hit_points</span>: <span class="ident">u16</span>,
-		<span class="kw">pub</span> <span class="ident">mana</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub struct </span>Player {
+		<span class="kw">pub </span>hit_points: u16,
+		<span class="kw">pub </span>mana: u16,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Boss</span> {
-		<span class="kw">pub</span> <span class="ident">hit_points</span>: <span class="ident">u16</span>,
-		<span class="kw">pub</span> <span class="ident">damage</span>: <span class="ident">u16</span>,
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub struct </span>Boss {
+		<span class="kw">pub </span>hit_points: u16,
+		<span class="kw">pub </span>damage: u16,
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">player</span> <span class="op">=</span> <span class="ident">Player</span> { <span class="ident">hit_points</span>: <span class="number">50</span>, <span class="ident">mana</span>: <span class="number">500</span> };
-			<span class="kw">if</span> <span class="ident">input</span>.<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">2</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Invalid input&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="kw">fn</span> <span class="ident">parse_line</span> (<span class="ident">line_idx</span>: <span class="ident">usize</span>, <span class="ident">line</span>: <span class="op">&amp;</span> <span class="ident">str</span>, <span class="ident">expect</span>: <span class="op">&amp;</span> <span class="ident">str</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
-				<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="ident">expect</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident">value</span>)
-				}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>))
+	<span class="kw">impl </span>Input {
+		<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>player = Player { hit_points: <span class="number">50</span>, mana: <span class="number">500 </span>};
+			<span class="kw">if </span>input.len () != <span class="number">2 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Invalid input&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="kw">fn </span>parse_line (line_idx: usize, line: &amp; str, expect: &amp; str) -&gt; GenResult &lt;u16&gt; {
+				Parser::wrap (line, |parser| {
+					<span class="kw">let </span>value = parser.expect (expect) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(value)
+				}).map_parse_err (|<span class="kw">_</span>, <span class="kw">_</span>|
+					<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: {}&quot;</span>, line_idx + <span class="number">1</span>, line))
 			}
-			<span class="kw">let</span> <span class="ident">hit_points</span> <span class="op">=</span> <span class="ident">parse_line</span> (<span class="number">0</span>, <span class="ident">input</span> [<span class="number">0</span>], <span class="string">&quot;Hit Points: &quot;</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">damage</span> <span class="op">=</span> <span class="ident">parse_line</span> (<span class="number">1</span>, <span class="ident">input</span> [<span class="number">1</span>], <span class="string">&quot;Damage: &quot;</span>) <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">hit_points</span> <span class="op">&gt;</span> <span class="number">100</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Boss hit points are limited to 100&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="kw">if</span> <span class="ident">damage</span> <span class="op">&gt;</span> <span class="number">15</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Boss damage is limited to 15&quot;</span>) <span class="question-mark">?</span>; }
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">player</span>, <span class="ident">boss</span>: <span class="ident">Boss</span> { <span class="ident">hit_points</span>, <span class="ident">damage</span> }})
+			<span class="kw">let </span>hit_points = parse_line (<span class="number">0</span>, input [<span class="number">0</span>], <span class="string">&quot;Hit Points: &quot;</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span>damage = parse_line (<span class="number">1</span>, input [<span class="number">1</span>], <span class="string">&quot;Damage: &quot;</span>) <span class="question-mark">?</span>;
+			<span class="kw">if </span>hit_points &gt; <span class="number">100 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Boss hit points are limited to 100&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="kw">if </span>damage &gt; <span class="number">15 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Boss damage is limited to 15&quot;</span>) <span class="question-mark">?</span>; }
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ player, boss: Boss { hit_points, damage }})
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;491&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;787&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1249&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;734&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;900&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1269&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;754&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;900&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1309&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;491&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;787&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1249&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;734&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;900&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1269&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;754&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;900&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1309&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;734&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;900&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1309&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 8&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;754&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;920&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1309&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 9&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;794&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1256&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;1442&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 10&quot;</span> ]));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;734&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;900&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1309&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 8&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;754&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;920&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1309&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 9&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;794&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 40&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1256&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 50&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1442&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;Hit Points: 60&quot;</span>, <span class="string">&quot;Damage: 10&quot; </span>]));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

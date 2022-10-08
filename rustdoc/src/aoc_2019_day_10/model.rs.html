@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2019/day-10/model.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2019_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2019_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2019_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+</pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">pub type </span>Coord = i16;
+<span class="kw">pub type </span>Grid = GridBuf &lt;Vec &lt;Space&gt;, Pos, <span class="number">2</span>&gt;;
+<span class="kw">pub type </span>Pos = aoc_pos::PosYX &lt;Coord&gt;;
+
+<span class="macro">parse_display_enum! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Space {
+		Asteroid = <span class="string">&quot;#&quot;</span>,
+		<span class="attribute">#[ default ] </span>Empty = <span class="string">&quot;.&quot;</span>,
+	}
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">pub struct </span>DirVec {
+	<span class="kw">pub </span>dir: Dir,
+	<span class="kw">pub </span>mul: Coord,
+}
+
+<span class="kw">impl </span>DirVec {
+	<span class="attribute">#[ must_use ]
+	</span><span class="kw">pub fn </span>new (offset: Pos) -&gt; <span class="self">Self </span>{
+		<span class="kw">if </span>offset == Pos::ZERO { <span class="macro">panic! </span>() }
+		<span class="kw">if </span>offset.x == <span class="number">0 </span>{
+			<span class="kw">let </span>sign = offset.y.signum ();
+			<span class="kw">return </span><span class="self">Self </span>{ dir: Dir (Pos { y: sign, x: <span class="number">0 </span>}), mul: offset.y.abs () }
+		}
+		<span class="kw">if </span>offset.y == <span class="number">0 </span>{
+			<span class="kw">let </span>sign = offset.x.signum ();
+			<span class="kw">return </span><span class="self">Self </span>{ dir: Dir (Pos { y: <span class="number">0</span>, x: sign }), mul: offset.x.abs () }
+		}
+		<span class="kw">let </span>mul = calc_gcd (offset.y.abs (), offset.x.abs ());
+		<span class="kw">let </span>dir = Dir (Pos { y: offset.y / mul, x: offset.x / mul });
+		<span class="self">Self </span>{ dir, mul }
+	}
+	<span class="attribute">#[ must_use ]
+	</span><span class="kw">pub fn </span>pos (<span class="self">self</span>) -&gt; Pos {
+		<span class="self">self</span>.dir.<span class="number">0 </span>* <span class="self">self</span>.mul
+	}
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+</span><span class="kw">pub struct </span>Dir (Pos);
+
+<span class="kw">impl </span>Ord <span class="kw">for </span>Dir {
+	<span class="kw">fn </span>cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; Ordering {
+		<span class="kw">let </span>pos_0 = <span class="self">self</span>.<span class="number">0</span>;
+		<span class="kw">let </span>pos_1 = other.<span class="number">0</span>;
+		<span class="kw">fn </span>get_dir (pos: Pos) -&gt; u8 {
+			<span class="kw">match </span>(pos.y.signum (), pos.x.signum ()) {
+				(-<span class="number">1</span>, <span class="number">0</span>) =&gt; <span class="number">0</span>,
+				(-<span class="number">1</span>, <span class="number">1</span>) =&gt; <span class="number">1</span>,
+				(<span class="number">0</span>, <span class="number">1</span>) =&gt; <span class="number">2</span>,
+				(<span class="number">1</span>, <span class="number">1</span>) =&gt; <span class="number">3</span>,
+				(<span class="number">1</span>, <span class="number">0</span>) =&gt; <span class="number">4</span>,
+				(<span class="number">1</span>, -<span class="number">1</span>) =&gt; <span class="number">5</span>,
+				(<span class="number">0</span>, -<span class="number">1</span>) =&gt; <span class="number">6</span>,
+				(-<span class="number">1</span>, -<span class="number">1</span>) =&gt; <span class="number">7</span>,
+				<span class="kw">_ </span>=&gt; <span class="macro">unreachable! </span>(),
+			}
+		}
+		<span class="kw">let </span>key_0 = (get_dir (pos_0), pos_0.y * pos_1.x);
+		<span class="kw">let </span>key_1 = (get_dir (pos_1), pos_1.y * pos_0.x);
+		key_0.cmp (&amp; key_1)
+	}
+}
+
+<span class="kw">impl </span>PartialOrd <span class="kw">for </span>Dir {
+	<span class="kw">fn </span>partial_cmp (&amp; <span class="self">self</span>, other: &amp; <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;Ordering&gt; {
+		<span class="prelude-val">Some </span>(<span class="self">self</span>.cmp (other))
+	}
+}
+
+<span class="kw">const fn </span>calc_gcd (<span class="kw-2">mut </span>num_0: Coord, <span class="kw-2">mut </span>num_1: Coord) -&gt; Coord {
+	<span class="kw">loop </span>{
+		<span class="kw">let </span>rem = num_0 % num_1;
+		<span class="kw">if </span>rem == <span class="number">0 </span>{ <span class="kw">return </span>num_1 }
+		num_0 = num_1;
+		num_1 = rem;
+	}
+}
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

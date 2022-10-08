@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["WireInput",""]],"struct":[["Input",""],["Wire",""],["WireId",""]],"type":[["WireVal",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["WireInput",""]],"struct":[["Wire",""],["WireId",""]],"type":[["WireVal",""]]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["num_cpus",""]],"struct":[["ThreadMap",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["num_cpus",""],["num_cpus_max",""]],"mod":[["prelude",""]],"struct":[["ThreadMap",""]],"trait":[["IteratorThreadMap",""]]};

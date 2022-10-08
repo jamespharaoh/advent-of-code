@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":[["Step",""]],"type":[["Dir",""],["Pos",""],["Val",""]]};

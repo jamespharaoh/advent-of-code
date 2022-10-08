@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/src/puzzle.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>puzzle.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_common/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_common/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_common/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/src/puzzle.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>puzzle.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_common/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_common/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_common/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -514,521 +514,621 @@
 <span id="514">514</span>
 <span id="515">515</span>
 <span id="516">516</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="ident">std::fs::File</span>;
-<span class="kw">use</span> <span class="ident">std::io</span>;
-<span class="kw">use</span> <span class="ident">std::io::BufRead</span> <span class="kw">as</span> <span class="kw">_</span>;
-<span class="kw">use</span> <span class="ident">std::io::BufReader</span>;
-<span class="kw">use</span> <span class="ident">std::io::Write</span> <span class="kw">as</span> <span class="kw">_</span>;
-<span class="kw">use</span> <span class="ident">std::path::PathBuf</span>;
-<span class="kw">use</span> <span class="ident">std::time::Instant</span>;
+<span id="517">517</span>
+<span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+</pre><pre class="rust"><code><span class="kw">use </span>std::fs::File;
+<span class="kw">use </span>std::io;
+<span class="kw">use </span>std::io::BufRead <span class="kw">as _</span>;
+<span class="kw">use </span>std::io::BufReader;
+<span class="kw">use </span>std::io::Write <span class="kw">as _</span>;
+<span class="kw">use </span>std::path::PathBuf;
+<span class="kw">use </span>std::time::Instant;
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+<span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>nums::IntConv;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RunStats</span> {
-	<span class="ident">num_correct</span>: <span class="ident">usize</span>,
-	<span class="ident">num_incorrect</span>: <span class="ident">usize</span>,
-	<span class="ident">num_unknown</span>: <span class="ident">usize</span>,
+<span class="kw">pub struct </span>RunStats {
+	num_correct: usize,
+	num_incorrect: usize,
+	num_unknown: usize,
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_year_and_exit</span> (
-	<span class="ident">puzzles</span>: <span class="op">&amp;</span> [<span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Puzzle</span><span class="op">&gt;</span>],
-	<span class="ident">require_answers</span>: <span class="ident">bool</span>,
-) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="ident">stats</span> <span class="op">=</span> <span class="ident">run_year</span> (<span class="ident">puzzles</span>) <span class="question-mark">?</span>;
-	<span class="kw">let</span> <span class="ident">num_errors</span> <span class="op">=</span>
-		<span class="kw">if</span> <span class="ident">require_answers</span> { <span class="ident">stats</span>.<span class="ident">num_incorrect</span> <span class="op">+</span> <span class="ident">stats</span>.<span class="ident">num_unknown</span> }
-		<span class="kw">else</span> { <span class="ident">stats</span>.<span class="ident">num_incorrect</span> };
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::exit</span>) ]</span>
-	<span class="ident">std::process::exit</span> (
-		<span class="kw">if</span> <span class="ident">num_errors</span> <span class="op">==</span> <span class="number">0</span> { <span class="number">0</span> }
-		<span class="kw">else</span> { <span class="number">1</span> });
+<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+</span><span class="kw">pub fn </span>run_year_and_exit (
+	puzzles: &amp; [Box &lt;<span class="kw">dyn </span>Puzzle&gt;],
+	require_answers: bool,
+) -&gt; GenResult &lt;()&gt; {
+	<span class="kw">let </span>stats = run_year (puzzles) <span class="question-mark">?</span>;
+	<span class="kw">let </span>num_errors =
+		<span class="kw">if </span>require_answers { stats.num_incorrect + stats.num_unknown }
+		<span class="kw">else </span>{ stats.num_incorrect };
+	<span class="attribute">#[ allow (clippy::exit) ]
+	</span>std::process::exit (i32::from (num_errors != <span class="number">0</span>));
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run_year</span> (<span class="ident">puzzles</span>: <span class="op">&amp;</span> [<span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Puzzle</span><span class="op">&gt;</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">RunStats</span><span class="op">&gt;</span> {
+<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+#[ allow (clippy::print_stdout) ]
+</span><span class="kw">pub fn </span>run_year (puzzles: &amp; [Box &lt;<span class="kw">dyn </span>Puzzle&gt;]) -&gt; GenResult &lt;RunStats&gt; {
 
-	<span class="kw">let</span> <span class="ident">flush</span> <span class="op">=</span> <span class="op">|</span><span class="op">|</span> <span class="ident">io::stdout</span> ().<span class="ident">flush</span> ().<span class="ident">unwrap</span> ();
+	<span class="kw">let </span>flush = || io::stdout ().flush ().unwrap ();
 
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stats</span> <span class="op">=</span> <span class="ident">RunStats</span> {
-		<span class="ident">num_correct</span>: <span class="number">0</span>,
-		<span class="ident">num_incorrect</span>: <span class="number">0</span>,
-		<span class="ident">num_unknown</span>: <span class="number">0</span>,
+	<span class="kw">let </span><span class="kw-2">mut </span>stats = RunStats {
+		num_correct: <span class="number">0</span>,
+		num_incorrect: <span class="number">0</span>,
+		num_unknown: <span class="number">0</span>,
 	};
 
-	<span class="comment">// work out max name length</span>
+	<span class="comment">// work out max name length
 
-	<span class="kw">let</span> <span class="ident">name_len</span> <span class="op">=</span>
-		<span class="ident">puzzles</span>.<span class="ident">iter</span> ()
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">puzzle</span><span class="op">|</span> <span class="ident">puzzle</span>.<span class="ident">name</span> ().<span class="ident">len</span> ())
-			.<span class="ident">max</span> ()
-			.<span class="ident">unwrap</span> ();
+	</span><span class="kw">let </span>name_len =
+		puzzles.iter ()
+			.map (|puzzle| puzzle.name ().len ())
+			.max ()
+			.unwrap ();
 
-	<span class="comment">// load answers</span>
+	<span class="comment">// load answers
 
-	<span class="kw">let</span> <span class="ident">answers_path</span> <span class="op">=</span> <span class="ident">PathBuf::from</span> (
-		<span class="macro">format!</span> (<span class="string">&quot;{}/inputs/answers&quot;</span>, <span class="ident">puzzles</span> [<span class="number">0</span>].<span class="ident">year</span> ()));
+	</span><span class="kw">let </span>answers_path = PathBuf::from (
+		<span class="macro">format! </span>(<span class="string">&quot;{}/inputs/answers&quot;</span>, puzzles [<span class="number">0</span>].year ()));
 
-	<span class="kw">let</span> <span class="ident">answers</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span>(<span class="ident">u8</span>, <span class="ident">u8</span>), <span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span>
-		<span class="kw">if</span> <span class="ident">answers_path</span>.<span class="ident">exists</span> () {
-			<span class="ident">BufReader::new</span> (<span class="ident">File::open</span> (<span class="ident">answers_path</span>) <span class="question-mark">?</span>)
-				.<span class="ident">lines</span> ()
-				.<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span><span class="ident">line</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">line</span> <span class="op">=</span> <span class="ident">line</span> <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">line_parts</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="op">=</span>
-						<span class="ident">line</span>.<span class="ident">split</span> (<span class="string">&#39; &#39;</span>)
-							.<span class="ident">map</span> (<span class="ident">str::to_string</span>)
-							.<span class="ident">collect</span> ();
-					<span class="kw">let</span> <span class="ident">day</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="ident">line_parts</span> [<span class="number">0</span>].<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (
-						<span class="ident">line_parts</span>.<span class="ident">into_iter</span> ()
-							.<span class="ident">skip</span> (<span class="number">1</span>)
-							.<span class="ident">enumerate</span> ()
-							.<span class="ident">map</span> (<span class="kw">move</span> <span class="op">|</span>(<span class="ident">idx</span>, <span class="ident">val</span>)<span class="op">|</span>
-								((<span class="ident">day</span>, <span class="ident">idx</span>.<span class="ident">as_u8</span> ()), <span class="ident">val</span>))
+	<span class="kw">let </span>answers: HashMap &lt;(u8, u8), String&gt; =
+		<span class="kw">if </span>answers_path.exists () {
+			BufReader::new (File::open (answers_path) <span class="question-mark">?</span>)
+				.lines ()
+				.map (<span class="kw">move </span>|line| {
+					<span class="kw">let </span>line = line <span class="question-mark">?</span>;
+					<span class="kw">let </span>line_parts: Vec &lt;String&gt; =
+						line.split (<span class="string">&#39; &#39;</span>)
+							.map (str::to_string)
+							.collect ();
+					<span class="kw">let </span>day: u8 = line_parts [<span class="number">0</span>].parse::&lt;u8&gt; () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(
+						line_parts.into_iter ()
+							.skip (<span class="number">1</span>)
+							.enumerate ()
+							.map (<span class="kw">move </span>|(idx, val)|
+								((day, idx.pan_u8 ()), val))
 					)
 				})
-				.<span class="ident">flatten_ok</span> ()
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>
-		} <span class="kw">else</span> { <span class="ident">HashMap::new</span> () };
+				.flatten_ok ()
+				.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?
+		</span>} <span class="kw">else </span>{ HashMap::new () };
 
-	<span class="comment">// iterate puzzles</span>
+	<span class="kw">let </span>answer_lens =
+		answers.iter ()
+			.fold ([<span class="number">0</span>, <span class="number">0</span>], |[<span class="kw-2">mut </span>part_0, <span class="kw-2">mut </span>part_1], (&amp; (_day, part), answer)| {
+				<span class="kw">if </span>part == <span class="number">0 </span>{ part_0 = cmp::max (part_0, answer.len ()); }
+				<span class="kw">if </span>part == <span class="number">1 </span>{ part_1 = cmp::max (part_1, answer.len ()); }
+				[part_0, part_1]
+			});
 
-	<span class="kw">for</span> <span class="ident">puzzle</span> <span class="kw">in</span> <span class="ident">puzzles</span>.<span class="ident">iter</span> () {
+	<span class="comment">// iterate puzzles
 
-		<span class="comment">// load input</span>
+	</span><span class="kw">for </span>puzzle <span class="kw">in </span>puzzles.iter () {
 
-		<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">load_input</span> () <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">input_lines</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span>
-			<span class="ident">input_string</span>.<span class="ident">trim</span> ().<span class="ident">split</span> (<span class="string">&#39;\n&#39;</span>).<span class="ident">collect</span> ();
+		<span class="comment">// load input
 
-		<span class="comment">// print day and puzzle name</span>
+		</span><span class="kw">let </span>input_string = puzzle.load_input () <span class="question-mark">?</span>;
+		<span class="kw">let </span>input_lines: Vec &lt;&amp; str&gt; =
+			input_string.trim_end ().split (<span class="string">&#39;\n&#39;</span>).collect ();
 
-		<span class="macro">print!</span> (
-			<span class="string">&quot;{day:02}  {name:name_len$}&quot;</span>,
-			<span class="ident">day</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">day</span> (),
-			<span class="ident">name</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">name</span> (),
-			<span class="ident">name_len</span> <span class="op">=</span> <span class="ident">name_len</span>);
+		<span class="comment">// print day and puzzle name
 
-		<span class="comment">// start timer</span>
+		</span><span class="macro">print! </span>(
+			<span class="string">&quot;{day:02} {name:len$}&quot;</span>,
+			day = puzzle.day (),
+			name = puzzle.name (),
+			len = name_len + <span class="number">2</span>);
 
-		<span class="kw">let</span> <span class="ident">start_time</span> <span class="op">=</span> <span class="ident">time::Instant::now</span> ();
+		<span class="comment">// start timer
 
-		<span class="comment">// iterate over parts</span>
+		</span><span class="kw">let </span>start_time = time::Instant::now ();
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">errors</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-		<span class="kw">for</span> (<span class="ident">part_idx</span>, <span class="ident">part_name</span>) <span class="kw">in</span> [ <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot;</span> ].<span class="ident">into_iter</span> ().<span class="ident">enumerate</span> () {
+		<span class="comment">// iterate over parts
 
-			<span class="comment">// handle missing part</span>
+		</span><span class="kw">let </span><span class="kw-2">mut </span>errors = Vec::new ();
+		<span class="kw">for </span>(part_idx, part_name) <span class="kw">in </span>[ <span class="string">&quot;One&quot;</span>, <span class="string">&quot;Two&quot; </span>].into_iter ().enumerate () {
 
-			<span class="kw">if</span> <span class="ident">puzzle</span>.<span class="ident">num_parts</span> () <span class="op">&lt;</span> <span class="ident">part_idx</span> <span class="op">+</span> <span class="number">1</span> {
-				<span class="macro">print!</span> (<span class="string">&quot;{:24}&quot;</span>, <span class="string">&quot;&quot;</span>);
+			<span class="comment">// handle missing part
+
+			</span><span class="kw">if </span>puzzle.num_parts () &lt; part_idx + <span class="number">1 </span>{
+				<span class="macro">print! </span>(<span class="string">&quot;{:len$}&quot;</span>, <span class="string">&quot;&quot;</span>, len = answer_lens [part_idx] + <span class="number">7</span>);
 				<span class="kw">continue</span>;
 			}
 
-			<span class="comment">// print part name</span>
+			<span class="comment">// print part name
 
-			<span class="macro">print!</span> (<span class="string">&quot;  {}: &quot;</span>, <span class="ident">part_name</span>);
+			</span><span class="macro">print! </span>(<span class="string">&quot;{}: &quot;</span>, part_name);
 
-			<span class="comment">// calculate result</span>
+			<span class="comment">// calculate result
 
-			<span class="ident">flush</span> ();
+			</span>flush ();
 
-			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span>
-				<span class="kw">if</span> <span class="ident">part_idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> }
-				<span class="kw">else</span> { <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span> };
+			<span class="kw">let </span>result =
+				<span class="kw">if </span>part_idx == <span class="number">0 </span>{ puzzle.part_one (&amp; input_lines) <span class="question-mark">? </span>}
+				<span class="kw">else </span>{ puzzle.part_two (&amp; input_lines) <span class="question-mark">? </span>};
 
-			<span class="comment">// check against answers</span>
+			<span class="comment">// check against answers
 
-			<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">answer</span>) <span class="op">=</span> <span class="ident">answers</span>.<span class="ident">get</span> (<span class="op">&amp;</span> (<span class="ident">puzzle</span>.<span class="ident">day</span> (), <span class="ident">part_idx</span>.<span class="ident">as_u8</span> ())) {
-				<span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">result</span> <span class="op">==</span> <span class="ident">answer</span> {
-					<span class="ident">stats</span>.<span class="ident">num_correct</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-				} <span class="kw">else</span> <span class="kw">if</span> <span class="op">&amp;</span> <span class="ident">result</span> <span class="op">!</span><span class="op">=</span> <span class="ident">answer</span> {
-					<span class="ident">stats</span>.<span class="ident">num_incorrect</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-					<span class="ident">errors</span>.<span class="ident">push</span> (<span class="macro">format!</span> (
+			</span><span class="kw">if let </span><span class="prelude-val">Some </span>(answer) = answers.get (&amp; (puzzle.day (), part_idx.pan_u8 ())) {
+				<span class="kw">if </span>&amp; result == answer {
+					stats.num_correct += <span class="number">1</span>;
+				} <span class="kw">else if </span>&amp; result != answer {
+					stats.num_incorrect += <span class="number">1</span>;
+					errors.push (<span class="macro">format! </span>(
 						<span class="string">&quot;Part {part}: Expected {answer:?}, but calculated {result:?}&quot;</span>,
-						<span class="ident">part</span> <span class="op">=</span> <span class="ident">part_idx</span> <span class="op">+</span> <span class="number">1</span>,
-						<span class="ident">answer</span> <span class="op">=</span> <span class="ident">answer</span>,
-						<span class="ident">result</span> <span class="op">=</span> <span class="ident">result</span>));
-				} <span class="kw">else</span> {
-					<span class="comment">// no answer</span>
-				}
-			} <span class="kw">else</span> { <span class="ident">stats</span>.<span class="ident">num_unknown</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>; }
+						part = part_idx + <span class="number">1</span>,
+						answer = answer,
+						result = result));
+				} <span class="kw">else </span>{
+					<span class="comment">// no answer
+				</span>}
+			} <span class="kw">else </span>{ stats.num_unknown += <span class="number">1</span>; }
 
-			<span class="comment">// print result</span>
+			<span class="comment">// print result
 
-			<span class="macro">print!</span> (<span class="string">&quot;{:17}&quot;</span>, <span class="ident">result</span>);
+			</span><span class="macro">print! </span>(<span class="string">&quot;{result:len$}&quot;</span>, len = answer_lens [part_idx] + <span class="number">2</span>);
 
 		}
 
-		<span class="comment">// print duration</span>
+		<span class="comment">// print duration
 
-		<span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="ident">time::Instant::now</span> ();
-		<span class="kw">let</span> <span class="ident">duration</span> <span class="op">=</span> <span class="ident">end_time</span> <span class="op">-</span> <span class="ident">start_time</span>;
+		</span><span class="kw">let </span>end_time = time::Instant::now ();
+		<span class="kw">let </span>duration = end_time - start_time;
 
-		<span class="macro">print!</span> (
+		<span class="macro">print! </span>(
 			<span class="string">&quot;Time: {millis:&gt;4}.{micros:02}ms\n&quot;</span>,
-			<span class="ident">millis</span> <span class="op">=</span> <span class="ident">duration</span>.<span class="ident">as_millis</span> (),
-			<span class="ident">micros</span> <span class="op">=</span> (<span class="ident">duration</span>.<span class="ident">as_micros</span> () <span class="op">%</span> <span class="number">1000</span>) <span class="op">/</span> <span class="number">10</span>);
+			millis = duration.as_millis (),
+			micros = (duration.as_micros () % <span class="number">1000</span>) / <span class="number">10</span>);
 
-		<span class="comment">// print errors</span>
+		<span class="comment">// print errors
 
-		<span class="kw">for</span> <span class="ident">error</span> <span class="kw">in</span> <span class="ident">errors</span> {
-			<span class="macro">print!</span> (<span class="string">&quot;  {}\n&quot;</span>, <span class="ident">error</span>);
+		</span><span class="kw">for </span>error <span class="kw">in </span>errors {
+			<span class="macro">print! </span>(<span class="string">&quot;  {}\n&quot;</span>, error);
 		}
 
 	}
 
-	<span class="prelude-val">Ok</span> (<span class="ident">stats</span>)
+	<span class="prelude-val">Ok </span>(stats)
 
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-<span class="kw">fn</span> <span class="ident">puzzle_invoke_real</span> (
-	<span class="ident">puzzle</span>: <span class="op">&amp;</span> <span class="kw">dyn</span> <span class="ident">Puzzle</span>,
-	<span class="ident">args</span>: <span class="op">&amp;</span> [<span class="ident">OsString</span>],
-) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">command</span> <span class="op">=</span> <span class="ident">Command::new</span> (<span class="macro">format!</span> (<span class="string">&quot;aoc-{}-day-{}&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">year</span> (), <span class="ident">puzzle</span>.<span class="ident">day</span> ()));
-	<span class="kw">for</span> <span class="ident">part_num</span> <span class="kw">in</span> <span class="number">1</span> ..<span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">num_parts</span> () {
-		<span class="ident">command</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">subcommand</span> (
-			<span class="ident">Command::new</span> (<span class="macro">format!</span> (<span class="string">&quot;part-{}&quot;</span>, <span class="ident">part_num</span>))
-				.<span class="ident">arg</span> (
-					<span class="ident">clap::Arg::new</span> (<span class="string">&quot;repeat&quot;</span>)
-						.<span class="ident">long</span> (<span class="string">&quot;repeat&quot;</span>)
-						.<span class="ident">value_parser</span> (<span class="macro">clap::value_parser!</span> (<span class="ident">u64</span>).<span class="ident">range</span> (<span class="number">1</span> .. ))
-						.<span class="ident">takes_value</span> (<span class="bool-val">true</span>)
-						.<span class="ident">default_value</span> (<span class="string">&quot;1&quot;</span>)
-						.<span class="ident">help</span> (<span class="string">&quot;Number of times to repeat the calculation&quot;</span>))
+<span class="attribute">#[ allow (clippy::print_stdout) ]
+</span><span class="kw">fn </span>puzzle_invoke_real (
+	puzzle: &amp; <span class="kw">dyn </span>Puzzle,
+	args: &amp; [OsString],
+) -&gt; GenResult &lt;()&gt; {
+
+	<span class="kw">let </span>input_path_default = puzzle.find_input_or_default ();
+
+	<span class="kw">let </span><span class="kw-2">mut </span>command =
+		clap::Command::new (<span class="macro">format! </span>(<span class="string">&quot;aoc-{}-day-{}&quot;</span>, puzzle.year (), puzzle.day ()))
+			.arg (
+				clap::Arg::new (<span class="string">&quot;input&quot;</span>)
+					.long (<span class="string">&quot;input&quot;</span>)
+					.value_parser (<span class="macro">clap::value_parser! </span>(PathBuf))
+					.takes_value (<span class="bool-val">true</span>)
+					.default_value_os (input_path_default.as_os_str ())
+					.help (<span class="string">&quot;Input file to use&quot;</span>)
+					.global (<span class="bool-val">true</span>));
+
+	<span class="kw">for </span>part_num <span class="kw">in </span><span class="number">1 </span>..= puzzle.num_parts () {
+
+		command = command.subcommand (
+			clap::Command::new (<span class="macro">format! </span>(<span class="string">&quot;part-{}&quot;</span>, part_num))
+				.arg (
+					clap::Arg::new (<span class="string">&quot;repeat&quot;</span>)
+						.long (<span class="string">&quot;repeat&quot;</span>)
+						.value_parser (<span class="macro">clap::value_parser! </span>(u64).range (<span class="number">1 </span>.. ))
+						.takes_value (<span class="bool-val">true</span>)
+						.default_value (<span class="string">&quot;1&quot;</span>)
+						.help (<span class="string">&quot;Number of times to repeat the calculation&quot;</span>))
+		);
+
+	}
+
+	<span class="kw">for </span>puzzle_command <span class="kw">in </span>puzzle.commands () {
+		command = command.subcommand (
+			puzzle_command.command ()
+				.name (puzzle_command.name ())
 		);
 	}
-	<span class="kw">for</span> <span class="ident">puzzle_command</span> <span class="kw">in</span> <span class="ident">puzzle</span>.<span class="ident">commands</span> () {
-		<span class="ident">command</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">subcommand</span> (
-			<span class="ident">puzzle_command</span>.<span class="ident">command</span> ()
-				.<span class="ident">name</span> (<span class="ident">puzzle_command</span>.<span class="ident">name</span> ())
-		);
-	}
-	<span class="kw">let</span> <span class="ident">matches</span> <span class="op">=</span> <span class="ident">command</span>.<span class="ident">get_matches_from</span> (<span class="ident">args</span>);
-	<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">load_input</span> () <span class="question-mark">?</span>;
-	<span class="kw">let</span> <span class="ident">input_lines</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input_string</span>.<span class="ident">trim</span> ().<span class="ident">split</span> (<span class="string">&#39;\n&#39;</span>).<span class="ident">collect</span> ();
-	<span class="kw">match</span> <span class="ident">matches</span>.<span class="ident">subcommand</span> () {
-		<span class="prelude-val">None</span> =&gt; {
-			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
-			<span class="macro">println!</span> (<span class="string">&quot;Part one: {}&quot;</span>, <span class="ident">result</span>);
-			<span class="kw">if</span> <span class="ident">puzzle</span>.<span class="ident">num_parts</span> () <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
-				<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
-				<span class="macro">println!</span> (<span class="string">&quot;Part two: {}&quot;</span>, <span class="ident">result</span>);
+
+	<span class="kw">let </span>matches = command.get_matches_from (args);
+	<span class="kw">let </span>input_path = matches.get_one::&lt;PathBuf&gt; (<span class="string">&quot;input&quot;</span>).unwrap ();
+	<span class="kw">let </span>input_string = fs::read_to_string (input_path) <span class="question-mark">?</span>;
+	<span class="kw">let </span>input_lines: Vec &lt;&amp; str&gt; = input_string.trim_end ().split (<span class="string">&#39;\n&#39;</span>).collect ();
+
+	<span class="kw">match </span>matches.subcommand () {
+		<span class="prelude-val">None </span>=&gt; {
+			<span class="kw">let </span>result = puzzle.part_one (&amp; input_lines) <span class="question-mark">?</span>;
+			<span class="macro">println! </span>(<span class="string">&quot;Part one: {}&quot;</span>, result);
+			<span class="kw">if </span>puzzle.num_parts () &gt;= <span class="number">2 </span>{
+				<span class="kw">let </span>result = puzzle.part_two (&amp; input_lines) <span class="question-mark">?</span>;
+				<span class="macro">println! </span>(<span class="string">&quot;Part two: {}&quot;</span>, result);
 			}
 		},
-		<span class="prelude-val">Some</span> ((<span class="string">&quot;part-1&quot;</span>, <span class="ident">matches</span>)) =&gt; {
-			<span class="kw">let</span> <span class="ident">repeat</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="op">*</span> <span class="ident">matches</span>.<span class="ident">get_one</span> (<span class="string">&quot;repeat&quot;</span>).<span class="ident">unwrap</span> ();
-			<span class="ident">runner</span> (<span class="ident">repeat</span>, <span class="op">|</span><span class="ident">idx</span><span class="op">|</span> {
-				<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
-				<span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="macro">println!</span> (<span class="string">&quot;Result: {}&quot;</span>, <span class="ident">result</span>); }
-				<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Some </span>((<span class="string">&quot;part-1&quot;</span>, matches)) =&gt; {
+			<span class="kw">let </span>repeat: u64 = * matches.get_one (<span class="string">&quot;repeat&quot;</span>).unwrap ();
+			runner (repeat, |idx| {
+				<span class="kw">let </span>result = puzzle.part_one (&amp; input_lines) <span class="question-mark">?</span>;
+				<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Result: {}&quot;</span>, result); }
+				<span class="prelude-val">Ok </span>(())
 			}) <span class="question-mark">?</span>;
 		},
-		<span class="prelude-val">Some</span> ((<span class="string">&quot;part-2&quot;</span>, <span class="ident">matches</span>)) =&gt; {
-			<span class="kw">let</span> <span class="ident">repeat</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="op">*</span> <span class="ident">matches</span>.<span class="ident">get_one</span> (<span class="string">&quot;repeat&quot;</span>).<span class="ident">unwrap</span> ();
-			<span class="ident">runner</span> (<span class="ident">repeat</span>, <span class="op">|</span><span class="ident">idx</span><span class="op">|</span> {
-				<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="ident">input_lines</span>) <span class="question-mark">?</span>;
-				<span class="kw">if</span> <span class="ident">idx</span> <span class="op">==</span> <span class="number">0</span> { <span class="macro">println!</span> (<span class="string">&quot;Result: {}&quot;</span>, <span class="ident">result</span>); }
-				<span class="prelude-val">Ok</span> (())
+		<span class="prelude-val">Some </span>((<span class="string">&quot;part-2&quot;</span>, matches)) =&gt; {
+			<span class="kw">let </span>repeat: u64 = * matches.get_one (<span class="string">&quot;repeat&quot;</span>).unwrap ();
+			runner (repeat, |idx| {
+				<span class="kw">let </span>result = puzzle.part_two (&amp; input_lines) <span class="question-mark">?</span>;
+				<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Result: {}&quot;</span>, result); }
+				<span class="prelude-val">Ok </span>(())
 			}) <span class="question-mark">?</span>;
 		},
-		<span class="prelude-val">Some</span> ((<span class="ident">name</span>, <span class="ident">matches</span>)) =&gt; {
-			<span class="kw">for</span> <span class="ident">puzzle_command</span> <span class="kw">in</span> <span class="ident">puzzle</span>.<span class="ident">commands</span> () {
-				<span class="kw">if</span> <span class="ident">puzzle_command</span>.<span class="ident">name</span> () <span class="op">==</span> <span class="ident">name</span> {
-					<span class="kw">return</span> <span class="ident">puzzle_command</span>.<span class="ident">invoke</span> (<span class="ident">matches</span>);
+		<span class="prelude-val">Some </span>((name, matches)) =&gt; {
+			<span class="kw">for </span>puzzle_command <span class="kw">in </span>puzzle.commands () {
+				<span class="kw">if </span>puzzle_command.name () == name {
+					<span class="kw">return </span>puzzle_command.invoke (matches);
 				}
 			}
-			<span class="macro">unreachable!</span> ();
+			<span class="macro">unreachable! </span>();
 		},
 	}
-	<span class="prelude-val">Ok</span> (())
+	<span class="prelude-val">Ok </span>(())
 }
 
-<span class="kw">fn</span> <span class="ident">percentile</span> (<span class="ident">times</span>: <span class="op">&amp;</span> [<span class="ident">u64</span>], <span class="ident">num</span>: <span class="ident">u64</span>, <span class="ident">denom</span>: <span class="ident">u64</span>) -&gt; <span class="ident">u64</span> {
-	<span class="kw">let</span> <span class="ident">size</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">len</span> ().<span class="ident">as_u64</span> () <span class="op">-</span> <span class="number">1</span>;
-	<span class="kw">let</span> <span class="ident">idx</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">/</span> <span class="ident">denom</span>;
-	<span class="kw">let</span> <span class="ident">rem</span> <span class="op">=</span> <span class="ident">num</span> <span class="op">*</span> <span class="ident">size</span> <span class="op">%</span> <span class="ident">denom</span>;
-	<span class="kw">if</span> <span class="ident">rem</span> <span class="op">==</span> <span class="number">0</span> { <span class="kw">return</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] }
-	<span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> ()] <span class="op">*</span> (<span class="ident">denom</span> <span class="op">-</span> <span class="ident">rem</span>) <span class="op">/</span> <span class="ident">denom</span>
-		<span class="op">+</span> <span class="ident">times</span> [<span class="ident">idx</span>.<span class="ident">as_usize</span> () <span class="op">+</span> <span class="number">1</span>] <span class="op">*</span> <span class="ident">rem</span> <span class="op">/</span> <span class="ident">denom</span>
+<span class="kw">fn </span>percentile (times: &amp; [u64], num: u64, denom: u64) -&gt; u64 {
+	<span class="kw">let </span>size = times.len ().pan_u64 () - <span class="number">1</span>;
+	<span class="kw">let </span>idx: u64 = num * size / denom;
+	<span class="kw">let </span>rem = num * size % denom;
+	<span class="kw">if </span>rem == <span class="number">0 </span>{ <span class="kw">return </span>times [idx.pan_usize ()] }
+	times [idx.pan_usize ()] * (denom - rem) / denom
+		+ times [idx.pan_usize () + <span class="number">1</span>] * rem / denom
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::print_stdout</span>) ]</span>
-<span class="kw">fn</span> <span class="ident">runner</span> <span class="op">&lt;</span><span class="ident">InnerFn</span>: <span class="ident">Fn</span> (<span class="ident">u64</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span> (<span class="ident">repeat</span>: <span class="ident">u64</span>, <span class="ident">inner_fn</span>: <span class="ident">InnerFn</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-	<span class="kw">let</span> <span class="ident">times</span> <span class="op">=</span> {
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">times</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> (<span class="number">0</span> .. <span class="ident">repeat</span>)
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">idx</span><span class="op">|</span> { <span class="ident">inner_fn</span> (<span class="ident">idx</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok</span> (<span class="ident">Instant::now</span> ()) })
-			.<span class="ident">scan</span> (<span class="ident">Instant::now</span> (), <span class="op">|</span><span class="ident">state</span>, <span class="ident">cur</span><span class="op">|</span>
-				<span class="prelude-val">Some</span> (<span class="ident">cur</span>.<span class="ident">map</span> (<span class="op">|</span><span class="ident">cur</span><span class="op">|</span> <span class="ident">cur</span> <span class="op">-</span> <span class="ident">mem::replace</span> (<span class="ident">state</span>, <span class="ident">cur</span>))))
-			.<span class="ident">map_ok</span> (<span class="op">|</span><span class="ident">duration</span><span class="op">|</span> <span class="ident">duration</span>.<span class="ident">as_micros</span> ().<span class="ident">as_u64</span> ())
-			.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-		<span class="ident">times</span>.<span class="ident">sort_unstable</span> ();
-		<span class="ident">times</span>
+<span class="attribute">#[ allow (clippy::print_stdout) ]
+</span><span class="kw">fn </span>runner (
+	repeat: u64,
+	<span class="kw-2">mut </span>inner_fn: <span class="kw">impl </span>FnMut (u64) -&gt; GenResult &lt;()&gt;,
+) -&gt; GenResult &lt;()&gt; {
+	<span class="kw">let </span>times = {
+		<span class="kw">let </span><span class="kw-2">mut </span>times: Vec &lt;<span class="kw">_</span>&gt; = (<span class="number">0 </span>.. repeat)
+			.map (|idx| { inner_fn (idx) <span class="question-mark">?</span>; <span class="prelude-val">Ok </span>(Instant::now ()) })
+			.scan (Instant::now (), |state, cur|
+				<span class="prelude-val">Some </span>(cur.map (|cur| cur - mem::replace (state, cur))))
+			.map_ok (|duration| duration.as_micros ().pan_u64 ())
+			.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+		times.sort_unstable ();
+		times
 	};
-	<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">==</span> <span class="number">1</span> { <span class="kw">return</span> <span class="prelude-val">Ok</span> (()) }
-	<span class="kw">let</span> <span class="ident">total</span> <span class="op">=</span> <span class="ident">times</span>.<span class="ident">iter</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="op">&amp;</span> <span class="ident">val</span><span class="op">|</span> <span class="ident">val</span>.<span class="ident">as_u128</span> ()).<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">u128</span><span class="op">&gt;</span> ();
-	<span class="kw">let</span> <span class="ident">mean</span> <span class="op">=</span> (<span class="ident">total</span> <span class="op">/</span> <span class="ident">repeat</span>.<span class="ident">as_u128</span> ()).<span class="ident">as_u64</span> ();
-	<span class="kw">let</span> <span class="ident">disp_float</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>, <span class="ident">ref_val</span><span class="op">|</span>
-		<span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000_000_f64</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}s&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000_000_f64</span>) }
-		<span class="kw">else</span> <span class="kw">if</span> <span class="ident">ref_val</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2_000_f64</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.3}ms&quot;</span>, <span class="ident">val</span> <span class="op">/</span> <span class="number">1_000_f64</span>) }
-		<span class="kw">else</span> { <span class="macro">format!</span> (<span class="string">&quot;{:.0}µs&quot;</span>, <span class="ident">val</span>) };
-	<span class="kw">let</span> <span class="ident">disp</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u128</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">val</span>.<span class="ident">as_f64</span> ());
-	<span class="kw">let</span> <span class="ident">disp_mean</span> <span class="op">=</span> <span class="op">|</span><span class="ident">val</span>: <span class="ident">u64</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">val</span>.<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
-	<span class="kw">let</span> <span class="ident">disp_pc</span> <span class="op">=</span> <span class="op">|</span><span class="ident">pc</span><span class="op">|</span> <span class="ident">disp_float</span> (<span class="ident">percentile</span> (<span class="op">&amp;</span> <span class="ident">times</span>, <span class="ident">pc</span>, <span class="number">1000</span>).<span class="ident">as_f64</span> (), <span class="ident">mean</span>.<span class="ident">as_f64</span> ());
-	<span class="macro">print!</span> (<span class="string">&quot;Statistics: total={} count={} mean={},&quot;</span>, <span class="ident">disp</span> (<span class="ident">total</span>), <span class="ident">repeat</span>, <span class="ident">disp_mean</span> (<span class="ident">mean</span>));
-	<span class="kw">const</span> <span class="ident">PERCENTILE_OPTIONS</span>: <span class="op">&amp;</span> [(<span class="ident">u64</span>, <span class="op">&amp;</span> [<span class="ident">u64</span>])] <span class="op">=</span> <span class="op">&amp;</span> [
-		(<span class="number">1000</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">999</span>, <span class="number">1000</span>]),
-		(<span class="number">100</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">1000</span>]),
-		(<span class="number">25</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">750</span>, <span class="number">900</span>, <span class="number">1000</span>]),
-		(<span class="number">10</span>, <span class="op">&amp;</span> [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">1000</span>]),
-		(<span class="number">0</span>, <span class="op">&amp;</span> []),
+	<span class="kw">if </span>repeat == <span class="number">1 </span>{ <span class="kw">return </span><span class="prelude-val">Ok </span>(()) }
+	<span class="kw">let </span>total = times.iter ().map (|&amp; val| val.pan_u128 ()).sum::&lt;u128&gt; ();
+	<span class="kw">let </span>mean = (total / repeat.pan_u128 ()).pan_u64 ();
+	<span class="kw">let </span>disp_float = |val, ref_val|
+		<span class="kw">if </span>ref_val &gt;= <span class="number">2_000_000_f64 </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.3}s&quot;</span>, val / <span class="number">1_000_000_f64</span>) }
+		<span class="kw">else if </span>ref_val &gt;= <span class="number">2_000_f64 </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.3}ms&quot;</span>, val / <span class="number">1_000_f64</span>) }
+		<span class="kw">else </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.0}µs&quot;</span>, val) };
+	<span class="kw">let </span>disp = |val: u128| disp_float (val.pan_f64 (), val.pan_f64 ());
+	<span class="kw">let </span>disp_mean = |val: u64| disp_float (val.pan_f64 (), mean.pan_f64 ());
+	<span class="kw">let </span>disp_pc = |pc| disp_float (percentile (&amp; times, pc, <span class="number">1000</span>).pan_f64 (), mean.pan_f64 ());
+	<span class="macro">print! </span>(<span class="string">&quot;Statistics: total={} count={} mean={},&quot;</span>, disp (total), repeat, disp_mean (mean));
+	<span class="kw">const </span>PERCENTILE_OPTIONS: &amp; [(u64, &amp; [u64])] = &amp; [
+		(<span class="number">1000</span>, &amp; [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">999</span>, <span class="number">1000</span>]),
+		(<span class="number">100</span>, &amp; [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">990</span>, <span class="number">1000</span>]),
+		(<span class="number">25</span>, &amp; [<span class="number">0</span>, <span class="number">500</span>, <span class="number">750</span>, <span class="number">900</span>, <span class="number">1000</span>]),
+		(<span class="number">10</span>, &amp; [<span class="number">0</span>, <span class="number">500</span>, <span class="number">900</span>, <span class="number">1000</span>]),
+		(<span class="number">0</span>, &amp; []),
 	];
-	<span class="kw">for</span> (<span class="ident">min_repeat</span>, <span class="ident">percentiles</span>) <span class="kw">in</span> <span class="ident">PERCENTILE_OPTIONS</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-		<span class="kw">if</span> <span class="ident">repeat</span> <span class="op">&lt;</span> <span class="ident">min_repeat</span> <span class="op">*</span> <span class="number">2</span> { <span class="kw">continue</span> }
-		<span class="kw">for</span> <span class="ident">percentile</span> <span class="kw">in</span> <span class="ident">percentiles</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">if</span> <span class="ident">percentile</span> <span class="op">%</span> <span class="number">10</span> <span class="op">==</span> <span class="number">0</span> {
-				<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span> <span class="op">/</span> <span class="number">10</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
-			} <span class="kw">else</span> {
-				<span class="macro">print!</span> (<span class="string">&quot; p{}={}&quot;</span>, <span class="ident">percentile</span>.<span class="ident">as_f64</span> () <span class="op">/</span> <span class="number">10.0_f64</span>, <span class="ident">disp_pc</span> (<span class="ident">percentile</span>));
+	<span class="kw">for </span>(min_repeat, percentiles) <span class="kw">in </span>PERCENTILE_OPTIONS.iter ().copied () {
+		<span class="kw">if </span>repeat &lt; min_repeat * <span class="number">2 </span>{ <span class="kw">continue </span>}
+		<span class="kw">for </span>percentile <span class="kw">in </span>percentiles.iter ().copied () {
+			<span class="kw">if </span>percentile % <span class="number">10 </span>== <span class="number">0 </span>{
+				<span class="macro">print! </span>(<span class="string">&quot; p{}={}&quot;</span>, percentile / <span class="number">10</span>, disp_pc (percentile));
+			} <span class="kw">else </span>{
+				<span class="macro">print! </span>(<span class="string">&quot; p{}={}&quot;</span>, percentile.pan_f64 () / <span class="number">10.0_f64</span>, disp_pc (percentile));
 			}
 		}
-		<span class="kw">if</span> <span class="ident">percentiles</span>.<span class="ident">is_empty</span> () {
-			<span class="macro">print!</span> (<span class="string">&quot; min={} median={} max={}&quot;</span>, <span class="ident">disp_pc</span> (<span class="number">0</span>), <span class="ident">disp_pc</span> (<span class="number">500</span>), <span class="ident">disp_pc</span> (<span class="number">1000</span>));
+		<span class="kw">if </span>percentiles.is_empty () {
+			<span class="macro">print! </span>(<span class="string">&quot; min={} median={} max={}&quot;</span>, disp_pc (<span class="number">0</span>), disp_pc (<span class="number">500</span>), disp_pc (<span class="number">1000</span>));
 		}
 		<span class="kw">break</span>;
 	}
-	<span class="macro">print!</span> (<span class="string">&quot;\n&quot;</span>);
-	<span class="prelude-val">Ok</span> (())
+	<span class="macro">print! </span>(<span class="string">&quot;\n&quot;</span>);
+	<span class="prelude-val">Ok </span>(())
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Puzzle</span> {
+<span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
+</span><span class="kw">pub trait </span>Puzzle {
 
-	<span class="kw">fn</span> <span class="ident">dyn_puzzle</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="kw">dyn</span> <span class="ident">Puzzle</span>;
+	<span class="kw">fn </span>dyn_puzzle (&amp; <span class="self">self</span>) -&gt; &amp; <span class="kw">dyn </span>Puzzle;
 
-	<span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span>;
-	<span class="kw">fn</span> <span class="ident">year</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u16</span>;
-	<span class="kw">fn</span> <span class="ident">day</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u8</span>;
+	<span class="kw">fn </span>name (&amp; <span class="self">self</span>) -&gt; &amp; <span class="lifetime">&#39;static </span>str;
+	<span class="kw">fn </span>year (&amp; <span class="self">self</span>) -&gt; u16;
+	<span class="kw">fn </span>day (&amp; <span class="self">self</span>) -&gt; u8;
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">_lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> { <span class="macro">unimplemented!</span> () }
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>part_one (&amp; <span class="self">self</span>, _lines: &amp; [&amp; str]) -&gt; GenResult &lt;String&gt; { <span class="macro">unimplemented! </span>() }
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">_lines</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> { <span class="macro">unimplemented!</span> () }
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>part_two (&amp; <span class="self">self</span>, _lines: &amp; [&amp; str]) -&gt; GenResult &lt;String&gt; { <span class="macro">unimplemented! </span>() }
 
-	<span class="kw">fn</span> <span class="ident">num_parts</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span>;
+	<span class="kw">fn </span>num_parts (&amp; <span class="self">self</span>) -&gt; usize;
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">commands</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">PuzzleCommand</span><span class="op">&gt;</span> {
-		<span class="ident">Vec::new</span> ()
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>commands (&amp; <span class="self">self</span>) -&gt; Vec &lt;PuzzleCommand&gt; {
+		Vec::new ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">set_default_params</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) { }
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>set_default_params (&amp; <span class="kw-2">mut </span><span class="self">self</span>) { }
 
-	<span class="kw">fn</span> <span class="ident">set_param_real</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>);
+	<span class="kw">fn </span>set_param_real (&amp; <span class="kw-2">mut </span><span class="self">self</span>, name: String, value: String);
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">set_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="op">&amp;</span> <span class="ident">str</span>, <span class="ident">value</span>: <span class="ident">String</span>) {
-		<span class="self">self</span>.<span class="ident">set_param_real</span> (<span class="ident">name</span>.<span class="ident">to_owned</span> (), <span class="ident">value</span>);
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>set_param (&amp; <span class="kw-2">mut </span><span class="self">self</span>, name: &amp; str, value: String) {
+		<span class="self">self</span>.set_param_real (name.to_owned (), value);
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">invoke</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">args</span>: <span class="op">&amp;</span> [<span class="ident">OsString</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		<span class="ident">puzzle_invoke_real</span> (<span class="self">self</span>.<span class="ident">dyn_puzzle</span> (), <span class="ident">args</span>)
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>invoke (&amp; <span class="self">self</span>, args: &amp; [OsString]) -&gt; GenResult &lt;()&gt; {
+		puzzle_invoke_real (<span class="self">self</span>.dyn_puzzle (), args)
 	}
 
-	<span class="kw">fn</span> <span class="ident">load_input</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">input_path</span> <span class="op">=</span> [
-			<span class="macro">format!</span> (<span class="string">&quot;{:04}/inputs/day-{:02}&quot;</span>, <span class="self">self</span>.<span class="ident">year</span> (), <span class="self">self</span>.<span class="ident">day</span> ()),
-			<span class="macro">format!</span> (<span class="string">&quot;inputs/day-{:02}&quot;</span>, <span class="self">self</span>.<span class="ident">day</span> ()),
-			<span class="macro">format!</span> (<span class="string">&quot;../inputs/day-{:02}&quot;</span>, <span class="self">self</span>.<span class="ident">day</span> ()),
-		].<span class="ident">into_iter</span> ()
-			.<span class="ident">find</span> (<span class="op">|</span><span class="ident">path</span><span class="op">|</span> <span class="ident">Path::new</span> (<span class="ident">path</span>).<span class="ident">exists</span> ())
-			.<span class="ident">ok_or_else</span> (<span class="op">|</span><span class="op">|</span> <span class="macro">format!</span> (
+	<span class="kw">fn </span>find_input_or_default (&amp; <span class="self">self</span>) -&gt; PathBuf {
+		<span class="self">self</span>.find_input ()
+			.unwrap_or_else (|<span class="kw">_</span>| <span class="macro">format! </span>(
+				<span class="string">&quot;{:04}/inputs/day-{:02}&quot;</span>, <span class="self">self</span>.year (), <span class="self">self</span>.day ()).into ())
+	}
+
+	<span class="kw">fn </span>find_input (&amp; <span class="self">self</span>) -&gt; GenResult &lt;PathBuf&gt; {
+		<span class="prelude-val">Ok </span>(
+			[
+				<span class="macro">format! </span>(<span class="string">&quot;{:04}/inputs/day-{:02}&quot;</span>, <span class="self">self</span>.year (), <span class="self">self</span>.day ()),
+				<span class="macro">format! </span>(<span class="string">&quot;inputs/day-{:02}&quot;</span>, <span class="self">self</span>.day ()),
+				<span class="macro">format! </span>(<span class="string">&quot;../inputs/day-{:02}&quot;</span>, <span class="self">self</span>.day ()),
+			].into_iter ()
+				.find (|path| Path::new (path).exists ())
+				.ok_or_else (|| <span class="macro">format! </span>(
+					<span class="string">&quot;Unable to find inputs/day-{:02} in \&quot;{:04}\&quot;, \&quot;.\&quot; or \&quot;..\&quot;&quot;</span>,
+					<span class="self">self</span>.day (),
+					<span class="self">self</span>.year ())) <span class="question-mark">?
+				</span>.into ()
+		)
+	}
+
+	<span class="kw">fn </span>load_input (&amp; <span class="self">self</span>) -&gt; GenResult &lt;String&gt; {
+		<span class="kw">let </span>input_path = [
+			<span class="macro">format! </span>(<span class="string">&quot;{:04}/inputs/day-{:02}&quot;</span>, <span class="self">self</span>.year (), <span class="self">self</span>.day ()),
+			<span class="macro">format! </span>(<span class="string">&quot;inputs/day-{:02}&quot;</span>, <span class="self">self</span>.day ()),
+			<span class="macro">format! </span>(<span class="string">&quot;../inputs/day-{:02}&quot;</span>, <span class="self">self</span>.day ()),
+		].into_iter ()
+			.find (|path| Path::new (path).exists ())
+			.ok_or_else (|| <span class="macro">format! </span>(
 				<span class="string">&quot;Unable to find inputs/day-{:02} in \&quot;{:04}\&quot;, \&quot;.\&quot; or \&quot;..\&quot;&quot;</span>,
-				<span class="self">self</span>.<span class="ident">day</span> (),
-				<span class="self">self</span>.<span class="ident">year</span> ())) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">input_string</span> <span class="op">=</span> <span class="ident">fs::read_to_string</span> (<span class="ident">input_path</span>) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">input_string</span>)
+				<span class="self">self</span>.day (),
+				<span class="self">self</span>.year ())) <span class="question-mark">?</span>;
+		<span class="kw">let </span>input_string = fs::read_to_string (input_path) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(input_string)
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PuzzleCommand</span> {
-	<span class="ident">name</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-	<span class="ident">invoke_fn</span>: <span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span> (<span class="op">&amp;</span> <span class="ident">ArgMatches</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
-	<span class="ident">magic</span>: <span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">MagicTrait</span><span class="op">&gt;</span>,
+<span class="kw">pub struct </span>PuzzleCommand {
+	name: &amp; <span class="lifetime">&#39;static </span>str,
+	invoke_fn: Box &lt;<span class="kw">dyn </span>Fn (&amp; ArgMatches) -&gt; GenResult &lt;()&gt;&gt;,
+	magic: Box &lt;<span class="kw">dyn </span>MagicTrait&gt;,
 }
 
-<span class="kw">trait</span> <span class="ident">MagicTrait</span> {
-	<span class="kw">fn</span> <span class="ident">command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span>;
+<span class="kw">trait </span>MagicTrait {
+	<span class="kw">fn </span>command &lt;<span class="lifetime">&#39;help</span>&gt; (&amp; <span class="self">self</span>) -&gt; Command &lt;<span class="lifetime">&#39;help</span>&gt;;
 }
 
-<span class="kw">struct</span> <span class="ident">MagicStruct</span> <span class="op">&lt;</span><span class="ident">Args</span><span class="op">&gt;</span> {
-	<span class="ident">phantom</span>: <span class="ident">PhantomData</span> <span class="op">&lt;</span><span class="ident">Args</span><span class="op">&gt;</span>,
+<span class="kw">struct </span>MagicStruct &lt;Args&gt; {
+	phantom: PhantomData &lt;Args&gt;,
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">Args</span>: <span class="ident">clap::CommandFactory</span><span class="op">&gt;</span> <span class="ident">MagicTrait</span> <span class="kw">for</span> <span class="ident">MagicStruct</span> <span class="op">&lt;</span><span class="ident">Args</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> { <span class="ident">Args::command</span> () }
+<span class="kw">impl </span>&lt;Args: clap::CommandFactory&gt; MagicTrait <span class="kw">for </span>MagicStruct &lt;Args&gt; {
+	<span class="kw">fn </span>command &lt;<span class="lifetime">&#39;help</span>&gt; (&amp; <span class="self">self</span>) -&gt; Command &lt;<span class="lifetime">&#39;help</span>&gt; { Args::command () }
 }
 
-<span class="kw">impl</span> <span class="ident">PuzzleCommand</span> {
+<span class="kw">impl </span>PuzzleCommand {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span> <span class="op">&lt;</span>
-		<span class="ident">Args</span>: <span class="ident">clap::Parser</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-		<span class="ident">InvokeFn</span>: <span class="ident">Fn</span> (<span class="ident">Args</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-	<span class="op">&gt;</span> (
-		<span class="ident">name</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span>,
-		<span class="ident">invoke_fn</span>: <span class="ident">InvokeFn</span>,
-	) -&gt; <span class="self">Self</span> {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>new &lt;
+		Args: clap::Parser + <span class="lifetime">&#39;static</span>,
+		InvokeFn: Fn (Args) -&gt; GenResult &lt;()&gt; + <span class="lifetime">&#39;static</span>,
+	&gt; (
+		name: &amp; <span class="lifetime">&#39;static </span>str,
+		invoke_fn: InvokeFn,
+	) -&gt; <span class="self">Self </span>{
 
-		<span class="kw">let</span> <span class="ident">invoke_fn</span> <span class="op">=</span> <span class="ident">Box::new</span> (
-			<span class="kw">move</span> <span class="op">|</span><span class="ident">matches</span>: <span class="op">&amp;</span> <span class="kw">_</span><span class="op">|</span> <span class="ident">invoke_fn</span> (<span class="ident">Args::from_arg_matches</span> (<span class="ident">matches</span>).<span class="ident">unwrap</span> ()),
+		<span class="kw">let </span>invoke_fn = Box::new (
+			<span class="kw">move </span>|matches: &amp; <span class="kw">_</span>| invoke_fn (Args::from_arg_matches (matches).unwrap ()),
 		);
 
-		<span class="kw">let</span> <span class="ident">magic</span>: <span class="ident">Box</span> <span class="op">&lt;</span><span class="ident">MagicStruct</span> <span class="op">&lt;</span><span class="ident">Args</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Box::new</span> (<span class="ident">MagicStruct</span> {
-			<span class="ident">phantom</span>: <span class="ident">PhantomData</span>,
+		<span class="kw">let </span>magic: Box &lt;MagicStruct &lt;Args&gt;&gt; = Box::new (MagicStruct {
+			phantom: PhantomData,
 		});
 
-		<span class="self">Self</span> { <span class="ident">name</span>, <span class="ident">invoke_fn</span>, <span class="ident">magic</span> }
+		<span class="self">Self </span>{ name, invoke_fn, magic }
 
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="ident">str</span> {
-		<span class="self">self</span>.<span class="ident">name</span>
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>name (&amp; <span class="self">self</span>) -&gt; &amp; str {
+		<span class="self">self</span>.name
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Command</span> <span class="op">&lt;</span><span class="lifetime">&#39;help</span><span class="op">&gt;</span> {
-		<span class="self">self</span>.<span class="ident">magic</span>.<span class="ident">command</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>command &lt;<span class="lifetime">&#39;help</span>&gt; (&amp; <span class="self">self</span>) -&gt; Command &lt;<span class="lifetime">&#39;help</span>&gt; {
+		<span class="self">self</span>.magic.command ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invoke</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="ident">args</span>: <span class="op">&amp;</span> <span class="ident">ArgMatches</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-		(<span class="self">self</span>.<span class="ident">invoke_fn</span>) (<span class="ident">args</span>)
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>invoke (&amp; <span class="self">self</span>, args: &amp; ArgMatches) -&gt; GenResult &lt;()&gt; {
+		(<span class="self">self</span>.invoke_fn) (args)
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">macro_export</span> ]</span>
-<span class="macro">macro_rules!</span> <span class="ident">puzzle_info</span> {
+<span class="attribute">#[ macro_export ]
+</span><span class="macro">macro_rules! </span>puzzle_info {
 
 	(
-		<span class="ident">name</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">literal</span> ;
-		<span class="ident">year</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">year</span>:<span class="ident">literal</span> ;
-		<span class="ident">day</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">day</span>:<span class="ident">literal</span> ;
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest4</span>:<span class="ident">tt</span>)<span class="op">*</span>
+		name = <span class="macro-nonterminal">$name</span>:literal ;
+		year = <span class="macro-nonterminal">$year</span>:literal ;
+		day = <span class="macro-nonterminal">$day</span>:literal ;
+		$(<span class="macro-nonterminal">$rest4</span>:tt)*
 	) =&gt; {
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">puzzle_metadata</span> () -&gt; <span class="ident">Box</span> <span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">::aoc_common::puzzle::Puzzle</span><span class="op">&gt;</span> {
-			<span class="kw">use</span> <span class="ident">::aoc_common::puzzle::Puzzle</span>;
-			<span class="kw">struct</span> <span class="ident">ThisPuzzle</span> { <span class="ident">params</span>: <span class="ident">HashMap</span> <span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">String</span><span class="op">&gt;</span> }
-			<span class="kw">impl</span> <span class="ident">Puzzle</span> <span class="kw">for</span> <span class="ident">ThisPuzzle</span> {
-				<span class="kw">fn</span> <span class="ident">dyn_puzzle</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="kw">dyn</span> <span class="ident">Puzzle</span> { <span class="self">self</span> }
-				<span class="kw">fn</span> <span class="ident">name</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> <span class="ident">str</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> }
-				<span class="kw">fn</span> <span class="ident">year</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u16</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">year</span> }
-				<span class="kw">fn</span> <span class="ident">day</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">u8</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">day</span> }
-				<span class="kw">fn</span> <span class="ident">set_param_real</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="ident">String</span>, <span class="ident">value</span>: <span class="ident">String</span>) {
-					<span class="self">self</span>.<span class="ident">params</span>.<span class="ident">insert</span> (<span class="ident">name</span>, <span class="ident">value</span>);
+		<span class="kw">pub fn </span>puzzle_metadata () -&gt; Box &lt;<span class="kw">dyn </span>::aoc_common::puzzle::Puzzle&gt; {
+			<span class="kw">use </span>::aoc_common::puzzle::Puzzle;
+			<span class="kw">struct </span>ThisPuzzle { params: HashMap &lt;String, String&gt; }
+			<span class="kw">impl </span>Puzzle <span class="kw">for </span>ThisPuzzle {
+				<span class="kw">fn </span>dyn_puzzle (&amp; <span class="self">self</span>) -&gt; &amp; <span class="kw">dyn </span>Puzzle { <span class="self">self </span>}
+				<span class="kw">fn </span>name (&amp; <span class="self">self</span>) -&gt; &amp; <span class="lifetime">&#39;static </span>str { <span class="macro-nonterminal">$name </span>}
+				<span class="kw">fn </span>year (&amp; <span class="self">self</span>) -&gt; u16 { <span class="macro-nonterminal">$year </span>}
+				<span class="kw">fn </span>day (&amp; <span class="self">self</span>) -&gt; u8 { <span class="macro-nonterminal">$day </span>}
+				<span class="kw">fn </span>set_param_real (&amp; <span class="kw-2">mut </span><span class="self">self</span>, name: String, value: String) {
+					<span class="self">self</span>.params.insert (name, value);
 				}
-				<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="ident">input</span>, <span class="prelude-val">Ok</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> (<span class="ident">input</span>), <span class="number">0</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest4</span>)<span class="op">*</span> }
+				<span class="macro">puzzle_info! </span>{ @rest (input, <span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, Infallible&gt; (input), <span class="number">0</span>) $(<span class="macro-nonterminal">$rest4</span>)* }
 			}
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">ThisPuzzle</span> { <span class="ident">params</span>: <span class="ident">HashMap::new</span> () };
-			<span class="ident">puzzle</span>.<span class="ident">set_default_params</span> ();
-			<span class="ident">Box::new</span> (<span class="ident">puzzle</span>)
+			<span class="kw">let </span><span class="kw-2">mut </span>puzzle = ThisPuzzle { params: HashMap::new () };
+			puzzle.set_default_params ();
+			Box::new (puzzle)
 		}
 	};
 
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>) ) =&gt; {
-		<span class="kw">fn</span> <span class="ident">num_parts</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">usize</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span> }
+	( @rest (<span class="macro-nonterminal">$parse_input</span>:ident, <span class="macro-nonterminal">$parse_expr</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr) ) =&gt; {
+		<span class="kw">fn </span>num_parts (&amp; <span class="self">self</span>) -&gt; usize { <span class="macro-nonterminal">$num_parts </span>}
 	};
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input_old</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr_old</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>)
-		<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>;
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest1</span>:<span class="ident">tt</span>)<span class="op">*</span>
+	( @rest (<span class="macro-nonterminal">$parse_input_old</span>:ident, <span class="macro-nonterminal">$parse_expr_old</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr)
+		parse = |<span class="macro-nonterminal">$parse_input</span>:ident| <span class="macro-nonterminal">$parse_expr</span>:expr;
+		$(<span class="macro-nonterminal">$rest1</span>:tt)*
 	) =&gt; {
-		<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest1</span>)<span class="op">*</span> }
+		<span class="macro">puzzle_info! </span>{ @rest (<span class="macro-nonterminal">$parse_input</span>, <span class="macro-nonterminal">$parse_expr</span>, <span class="macro-nonterminal">$num_parts</span>) $(<span class="macro-nonterminal">$rest1</span>)* }
 	};
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>)
-		<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_input</span>:<span class="ident">ident</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span>:<span class="ident">ty</span>)<span class="kw-2">*</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_expr</span>:<span class="ident">expr</span>;
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest0</span>:<span class="ident">tt</span>)<span class="op">*</span>
+	( @rest (<span class="macro-nonterminal">$parse_input</span>:ident, <span class="macro-nonterminal">$parse_expr</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr)
+		part_one = |<span class="macro-nonterminal">$part_input</span>:ident $(, <span class="macro-nonterminal">$param_name</span>:ident : <span class="macro-nonterminal">$param_type</span>:ty)<span class="kw-2">*</span>| <span class="macro-nonterminal">$part_expr</span>:expr;
+		$(<span class="macro-nonterminal">$rest0</span>:tt)*
 	) =&gt; {
-		<span class="kw">fn</span> <span class="ident">part_one</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+		<span class="kw">fn </span>part_one (&amp; <span class="self">self</span>, <span class="macro-nonterminal">$parse_input</span>: &amp; [&amp; str]) -&gt; GenResult &lt;String&gt; {
 			$(
-				<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span> <span class="op">=</span>
-					<span class="self">self</span>.<span class="ident">params</span> [<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>)].<span class="ident">parse</span> ().<span class="ident">unwrap</span> ();
-			)<span class="op">*</span>
-			<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_input</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span> <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_expr</span> <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>))
+				<span class="kw">let </span><span class="macro-nonterminal">$param_name</span>: <span class="macro-nonterminal">$param_type </span>=
+					<span class="self">self</span>.params [<span class="macro">stringify! </span>(<span class="macro-nonterminal">$param_name</span>)].parse ().unwrap ();
+			)*
+			<span class="kw">let </span><span class="macro-nonterminal">$part_input </span>= <span class="macro-nonterminal">$parse_expr </span><span class="question-mark">?</span>;
+			<span class="kw">let </span>result = <span class="macro-nonterminal">$part_expr </span><span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(<span class="macro">format! </span>(<span class="string">&quot;{}&quot;</span>, result))
 		}
-		<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span> <span class="op">+</span> <span class="number">1</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest0</span>)<span class="op">*</span> }
+		<span class="macro">puzzle_info! </span>{ @rest (<span class="macro-nonterminal">$parse_input</span>, <span class="macro-nonterminal">$parse_expr</span>, <span class="macro-nonterminal">$num_parts </span>+ <span class="number">1</span>) $(<span class="macro-nonterminal">$rest0</span>)* }
 	};
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>)
-		<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_input</span>:<span class="ident">ident</span> $(, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span>:<span class="ident">ty</span>)<span class="kw-2">*</span><span class="op">|</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_expr</span>:<span class="ident">expr</span>;
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest0</span>:<span class="ident">tt</span>)<span class="op">*</span>
+	( @rest (<span class="macro-nonterminal">$parse_input</span>:ident, <span class="macro-nonterminal">$parse_expr</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr)
+		part_two = |<span class="macro-nonterminal">$part_input</span>:ident $(, <span class="macro-nonterminal">$param_name</span>:ident : <span class="macro-nonterminal">$param_type</span>:ty)<span class="kw-2">*</span>| <span class="macro-nonterminal">$part_expr</span>:expr;
+		$(<span class="macro-nonterminal">$rest0</span>:tt)*
 	) =&gt; {
-		<span class="kw">fn</span> <span class="ident">part_two</span> (<span class="op">&amp;</span> <span class="self">self</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+		<span class="kw">fn </span>part_two (&amp; <span class="self">self</span>, <span class="macro-nonterminal">$parse_input</span>: &amp; [&amp; str]) -&gt; GenResult &lt;String&gt; {
 			$(
-				<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_type</span> <span class="op">=</span>
-					<span class="self">self</span>.<span class="ident">params</span> [<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">param_name</span>)].<span class="ident">parse</span> ().<span class="ident">unwrap</span> ();
-			)<span class="op">*</span>
-			<span class="kw">let</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_input</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span> <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">part_expr</span> <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok</span> (<span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="ident">result</span>))
+				<span class="kw">let </span><span class="macro-nonterminal">$param_name</span>: <span class="macro-nonterminal">$param_type </span>=
+					<span class="self">self</span>.params [<span class="macro">stringify! </span>(<span class="macro-nonterminal">$param_name</span>)].parse ().unwrap ();
+			)*
+			<span class="kw">let </span><span class="macro-nonterminal">$part_input </span>= <span class="macro-nonterminal">$parse_expr </span><span class="question-mark">?</span>;
+			<span class="kw">let </span>result = <span class="macro-nonterminal">$part_expr </span><span class="question-mark">?</span>;
+			<span class="prelude-val">Ok </span>(<span class="macro">format! </span>(<span class="string">&quot;{}&quot;</span>, result))
 		}
-		<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span> <span class="op">+</span> <span class="number">1</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest0</span>)<span class="op">*</span> }
+		<span class="macro">puzzle_info! </span>{ @rest (<span class="macro-nonterminal">$parse_input</span>, <span class="macro-nonterminal">$parse_expr</span>, <span class="macro-nonterminal">$num_parts </span>+ <span class="number">1</span>) $(<span class="macro-nonterminal">$rest0</span>)* }
 	};
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>)
-		<span class="ident">commands</span> <span class="op">=</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>:<span class="ident">tt</span>)<span class="op">*</span> ];
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest3</span>:<span class="ident">tt</span>)<span class="op">*</span>
+	( @rest (<span class="macro-nonterminal">$parse_input</span>:ident, <span class="macro-nonterminal">$parse_expr</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr)
+		commands = [ $(<span class="macro-nonterminal">$commands</span>:tt)* ];
+		$(<span class="macro-nonterminal">$rest3</span>:tt)*
 	) =&gt; {
-		<span class="kw">fn</span> <span class="ident">commands</span> (<span class="op">&amp;</span> <span class="self">self</span>) -&gt; <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">::aoc_common::puzzle::PuzzleCommand</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">commands</span> <span class="op">=</span> <span class="ident">Vec::new</span> ();
-			<span class="macro">puzzle_info!</span> { @<span class="ident">commands</span> <span class="ident">commands</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>)<span class="op">*</span> }
-			<span class="ident">commands</span>
+		<span class="kw">fn </span>commands (&amp; <span class="self">self</span>) -&gt; Vec &lt;::aoc_common::puzzle::PuzzleCommand&gt; {
+			<span class="kw">let </span><span class="kw-2">mut </span>commands = Vec::new ();
+			<span class="macro">puzzle_info! </span>{ @commands commands $(<span class="macro-nonterminal">$commands</span>)* }
+			commands
 		}
-		<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest3</span>)<span class="op">*</span> }
+		<span class="macro">puzzle_info! </span>{ @rest (<span class="macro-nonterminal">$parse_input</span>, <span class="macro-nonterminal">$parse_expr</span>, <span class="macro-nonterminal">$num_parts</span>) $(<span class="macro-nonterminal">$rest3</span>)* }
 	};
-	( @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>:<span class="ident">expr</span>)
-		<span class="ident">params</span> <span class="op">=</span> [ $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">params</span>:<span class="ident">tt</span>)<span class="op">*</span> ];
-		$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span>
+	( @rest (<span class="macro-nonterminal">$parse_input</span>:ident, <span class="macro-nonterminal">$parse_expr</span>:expr, <span class="macro-nonterminal">$num_parts</span>:expr)
+		params = [ $(<span class="macro-nonterminal">$params</span>:tt)* ];
+		$(<span class="macro-nonterminal">$rest</span>:tt)*
 	) =&gt; {
-		<span class="kw">fn</span> <span class="ident">set_default_params</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) {
-			<span class="macro">puzzle_info!</span> { @<span class="ident">params</span> <span class="self">self</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">params</span>)<span class="op">*</span> }
+		<span class="kw">fn </span>set_default_params (&amp; <span class="kw-2">mut </span><span class="self">self</span>) {
+			<span class="macro">puzzle_info! </span>{ @params <span class="self">self </span>$(<span class="macro-nonterminal">$params</span>)* }
 		}
-		<span class="macro">puzzle_info!</span> { @<span class="ident">rest</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_input</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">parse_expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">num_parts</span>) $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
+		<span class="macro">puzzle_info! </span>{ @rest (<span class="macro-nonterminal">$parse_input</span>, <span class="macro-nonterminal">$parse_expr</span>, <span class="macro-nonterminal">$num_parts</span>) $(<span class="macro-nonterminal">$rest</span>)* }
 	};
 
-	( @<span class="ident">params</span> ) =&gt; {};
-	( @<span class="ident">params</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>:<span class="ident">ident</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">ident</span> : <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">expr</span> ; $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">self</span>.<span class="ident">set_param_real</span> (<span class="macro">stringify!</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>).<span class="ident">to_owned</span> (), <span class="macro">format!</span> (<span class="string">&quot;{}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">type</span>));
-		<span class="macro">puzzle_info!</span> { @<span class="macro-nonterminal">params</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
+	( @params ) =&gt; {};
+	( @params <span class="macro-nonterminal">$self</span>:ident <span class="macro-nonterminal">$name</span>:ident : <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty </span>= <span class="macro-nonterminal">$val</span>:expr ; $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
+		<span class="macro-nonterminal">$self</span>.set_param_real (<span class="macro">stringify! </span>(<span class="macro-nonterminal">$name</span>).to_owned (), <span class="macro">format! </span>(<span class="string">&quot;{}&quot;</span>, <span class="macro-nonterminal">$val </span><span class="kw">as </span><span class="macro-nonterminal">$</span><span class="kw">type</span>));
+		<span class="macro">puzzle_info! </span>{ @<span class="macro-nonterminal">params </span>$(<span class="macro-nonterminal">$rest</span>)* }
 	};
 
-	( @<span class="ident">commands</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>:<span class="ident">ident</span> ) =&gt; {};
-	( @<span class="ident">commands</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>:<span class="ident">ident</span> (
-		<span class="ident">name</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">literal</span> ;
-		<span class="ident">method</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method</span>:<span class="ident">expr</span> ;
+	( @commands <span class="macro-nonterminal">$commands</span>:ident ) =&gt; {};
+	( @commands <span class="macro-nonterminal">$commands</span>:ident (
+		name = <span class="macro-nonterminal">$name</span>:literal ;
+		method = <span class="macro-nonterminal">$method</span>:expr ;
 	) ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>.<span class="ident">push</span> (<span class="ident">::aoc_common::puzzle::PuzzleCommand::new</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method</span>));
+		<span class="macro-nonterminal">$commands</span>.push (::aoc_common::puzzle::PuzzleCommand::new (<span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$method</span>));
 	};
-	( @<span class="ident">commands</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>:<span class="ident">ident</span> (
-		<span class="ident">name</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>:<span class="ident">literal</span> ;
-		<span class="ident">method</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method</span>:<span class="ident">expr</span> ;
-	) , $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>:<span class="ident">tt</span>)<span class="op">*</span> ) =&gt; {
-		<span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span>.<span class="ident">push</span> (<span class="ident">::aoc_common::puzzle::PuzzleCommand::new</span> (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">method</span>));
-		<span class="macro">puzzle_info!</span> { @<span class="ident">commands</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">commands</span> $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>)<span class="op">*</span> }
+	( @commands <span class="macro-nonterminal">$commands</span>:ident (
+		name = <span class="macro-nonterminal">$name</span>:literal ;
+		method = <span class="macro-nonterminal">$method</span>:expr ;
+	) , $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
+		<span class="macro-nonterminal">$commands</span>.push (::aoc_common::puzzle::PuzzleCommand::new (<span class="macro-nonterminal">$name</span>, <span class="macro-nonterminal">$method</span>));
+		<span class="macro">puzzle_info! </span>{ @commands <span class="macro-nonterminal">$commands </span>$(<span class="macro-nonterminal">$rest</span>)* }
 	};
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_common" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_common" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

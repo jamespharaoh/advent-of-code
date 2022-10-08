@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-15/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_15/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_15/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_15/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-15/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_15/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_15/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_15/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -268,139 +268,153 @@
 <span id="268">268</span>
 <span id="269">269</span>
 <span id="270">270</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 15: Science for Hungry People</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 15: Science for Hungry People
+//!
+//! [https://adventofcode.com/2015/day/15](https://adventofcode.com/2015/day/15)
+//!
+//! # Input
+//!
+//! A list of ingredients in the following format, where `A`-`E` are integers:
+//!
+//! ```text
+//! Name: capacity A, durability B, flavor C, texture D, calories E
+//! ```
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Science for Hungry People&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2015</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">15</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::parse_input</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Science for Hungry People&quot;</span>;
+	year = <span class="number">2015</span>;
+	day = <span class="number">15</span>;
+	parse = |input| model::parse_input (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="doccomment">/// Logic for solving the puzzles.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="doccomment">/// Logic for solving the puzzles.
+///
+</span><span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Ingredient</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Ingredient;
+	<span class="kw">use </span>model::Input;
 
-	<span class="doccomment">/// Part one: Find the combination of ingredients which gives the maximum possible score.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// Uses [`find_start_ingredients`] to work out which ingredients to include as a minimum, and</span>
-	<span class="doccomment">/// [`calc_score`] to work out the score for a given combination of ingredients.</span>
-	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">all_ingrs</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="doccomment">/// Part one: Find the combination of ingredients which gives the maximum possible score.
+	///
+	/// Uses [`find_start_ingredients`] to work out which ingredients to include as a minimum, and
+	/// [`calc_score`] to work out the score for a given combination of ingredients.
+	///
+	</span><span class="kw">pub fn </span>part_one (all_ingrs: &amp; Input) -&gt; GenResult &lt;u64&gt; {
 
-		<span class="kw">let</span> <span class="ident">start_ingrs</span> <span class="op">=</span> <span class="ident">find_start_ingredients</span> (<span class="ident">all_ingrs</span>) <span class="question-mark">?</span>;
+		<span class="kw">let </span>start_ingrs = find_start_ingredients (all_ingrs) <span class="question-mark">?</span>;
 
-		<span class="comment">// keep adding one ingredient at a time, maximising the score each time, until we have the</span>
-		<span class="comment">// right number</span>
+		<span class="comment">// keep adding one ingredient at a time, maximising the score each time, until we have the
+		// right number
 
-		<span class="kw">let</span> <span class="ident">mixed_ingrs</span> <span class="op">=</span>
-			<span class="ident">iter::successors</span> (<span class="prelude-val">Some</span> (<span class="ident">start_ingrs</span>), <span class="op">|</span><span class="ident">ingrs</span><span class="op">|</span> <span class="prelude-val">Some</span> (<span class="ident">iter::empty</span> ()
-					.<span class="ident">chain</span> (<span class="ident">ingrs</span>.<span class="ident">iter_vals</span> ())
-					.<span class="ident">chain</span> (<span class="ident">iter::once</span> ((<span class="ident">all_ingrs</span>).<span class="ident">iter</span> ()
-						.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ingr</span><span class="op">|</span> (<span class="ident">ingr</span>, <span class="ident">calc_score</span> (
-							<span class="ident">ingrs</span>.<span class="ident">iter_vals</span> ().<span class="ident">chain</span> (<span class="ident">iter::once</span> (<span class="ident">ingr</span>)))))
-						.<span class="ident">max_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span>)
-						.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">ingr</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">ingr</span>)
-						.<span class="ident">unwrap</span> ()))
-					.<span class="ident">collect</span> ()))
-				.<span class="ident">find</span> (<span class="op">|</span><span class="ident">ingrs</span><span class="op">|</span> <span class="ident">ingrs</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="number">100</span>)
-				.<span class="ident">unwrap</span> ();
+		</span><span class="kw">let </span>mixed_ingrs =
+			iter::successors (<span class="prelude-val">Some </span>(start_ingrs), |ingrs| <span class="prelude-val">Some </span>(iter::empty ()
+					.chain (ingrs.iter_vals ())
+					.chain (iter::once ((all_ingrs).iter ()
+						.map (|ingr| (ingr, calc_score (
+							ingrs.iter_vals ().chain (iter::once (ingr)))))
+						.max_by_key (|&amp; (<span class="kw">_</span>, score)| score)
+						.map (|(ingr, <span class="kw">_</span>)| ingr)
+						.unwrap ()))
+					.collect ()))
+				.find (|ingrs| ingrs.len () == <span class="number">100</span>)
+				.unwrap ();
 
-		<span class="comment">// work out the final score</span>
+		<span class="comment">// work out the final score
 
-		<span class="kw">let</span> <span class="ident">max_score</span> <span class="op">=</span> <span class="ident">calc_score</span> (<span class="ident">mixed_ingrs</span>.<span class="ident">iter_vals</span> ());
-		<span class="prelude-val">Ok</span> (<span class="ident">max_score</span>)
+		</span><span class="kw">let </span>max_score = calc_score (mixed_ingrs.iter_vals ());
+		<span class="prelude-val">Ok </span>(max_score)
 
 	}
 
-	<span class="doccomment">/// Part two: Find the combination of ingredients which gives the maximum score and exactly 500</span>
-	<span class="doccomment">/// calories in total.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// This first iterates all combinations of ingredients which total 500 calories. This builds</span>
-	<span class="doccomment">/// up the number of each ingredient iteratively, starting with [0, ..., 0], then [0, ..., 1],</span>
-	<span class="doccomment">/// etc. At any point, if the number of calories exceeds 500 we short circuit to prevent</span>
-	<span class="doccomment">/// needless iteration.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// If the number of calories is exactly 500, and the number of ingredients is exactly 100, we</span>
-	<span class="doccomment">/// note the score, and once iteration is complete the highest score is returned.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// Uses [`calc_score`] to work out the score for a given combination of ingredients.</span>
-	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">ingrs</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">u64</span><span class="op">&gt;</span> {
+	<span class="doccomment">/// Part two: Find the combination of ingredients which gives the maximum score and exactly 500
+	/// calories in total.
+	///
+	/// This first iterates all combinations of ingredients which total 500 calories. This builds
+	/// up the number of each ingredient iteratively, starting with [0, ..., 0], then [0, ..., 1],
+	/// etc. At any point, if the number of calories exceeds 500 we short circuit to prevent
+	/// needless iteration.
+	///
+	/// If the number of calories is exactly 500, and the number of ingredients is exactly 100, we
+	/// note the score, and once iteration is complete the highest score is returned.
+	///
+	/// Uses [`calc_score`] to work out the score for a given combination of ingredients.
+	///
+	</span><span class="kw">pub fn </span>part_two (ingrs: &amp; Input) -&gt; GenResult &lt;u64&gt; {
 
-		<span class="kw">if</span> <span class="ident">ingrs</span>.<span class="ident">len</span> () <span class="op">&lt;</span> <span class="number">2</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Must have at least two ingredients&quot;</span>.<span class="ident">into</span> ()) }
+		<span class="kw">if </span>ingrs.len () &lt; <span class="number">2 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least two ingredients&quot;</span>.into ()) }
 
-		<span class="kw">let</span> <span class="ident">all_ingrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span>
-			<span class="ident">ingrs</span>.<span class="ident">iter</span> ().<span class="ident">cloned</span> ()
-				.<span class="ident">sorted_by_key</span> (<span class="op">|</span><span class="ident">ingr</span><span class="op">|</span> <span class="ident">cmp::Reverse</span> (<span class="ident">ingr</span>.<span class="ident">calories</span>))
-				.<span class="ident">collect</span> ();
+		<span class="kw">let </span>all_ingrs: Vec &lt;<span class="kw">_</span>&gt; =
+			ingrs.iter ().cloned ()
+				.sorted_by_key (|ingr| cmp::Reverse (ingr.calories))
+				.collect ();
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stack</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span> [];
-		<span class="kw">let</span> <span class="ident">ingr_combos</span> <span class="op">=</span> <span class="ident">iter::from_fn</span> (<span class="op">|</span><span class="op">|</span> {
+		<span class="kw">let </span><span class="kw-2">mut </span>stack: Vec &lt;i32&gt; = <span class="macro">vec! </span>[];
+		<span class="kw">let </span>ingr_combos = iter::from_fn (|| {
 
-			<span class="comment">// pop off the last element, it only has one possible value. or, if the stack isn&#39;t</span>
-			<span class="comment">// full this must be our first iteration and it&#39;s empty, so add a zero to start us off.</span>
+			<span class="comment">// pop off the last element, it only has one possible value. or, if the stack isn&#39;t
+			// full this must be our first iteration and it&#39;s empty, so add a zero to start us off.
 
-			<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">len</span> () <span class="op">==</span> <span class="ident">all_ingrs</span>.<span class="ident">len</span> () {
-				<span class="ident">stack</span>.<span class="ident">pop</span> ().<span class="ident">unwrap</span> ();
-			} <span class="kw">else</span> <span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">is_empty</span> () {
-				<span class="ident">stack</span>.<span class="ident">push</span> (<span class="number">0_i32</span>);
-			} <span class="kw">else</span> { <span class="macro">unreachable!</span> () }
+			</span><span class="kw">if </span>stack.len () == all_ingrs.len () {
+				stack.pop ().unwrap ();
+			} <span class="kw">else if </span>stack.is_empty () {
+				stack.push (<span class="number">0_i32</span>);
+			} <span class="kw">else </span>{ <span class="macro">unreachable! </span>() }
 
-			<span class="kw">loop</span> {
+			<span class="kw">loop </span>{
 
-				<span class="comment">// increment the ingredient counts</span>
+				<span class="comment">// increment the ingredient counts
 
-				<span class="op">*</span> <span class="ident">stack</span>.<span class="ident">last_mut</span> ().<span class="ident">unwrap</span> () <span class="op">+</span><span class="op">=</span> <span class="number">1_i32</span>;
+				</span>* stack.last_mut ().unwrap () += <span class="number">1_i32</span>;
 
-				<span class="comment">// short circuit if calories is over 500</span>
+				<span class="comment">// short circuit if calories is over 500
 
-				<span class="kw">let</span> <span class="ident">calories</span>: <span class="ident">i32</span> <span class="op">=</span>
-					<span class="ident">stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">enumerate</span> ()
-						.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">idx</span>, <span class="ident">num</span>)<span class="op">|</span> <span class="ident">all_ingrs</span> [<span class="ident">idx</span>].<span class="ident">calories</span> <span class="op">*</span> <span class="ident">num</span>)
-						.<span class="ident">sum</span> ();
+				</span><span class="kw">let </span>calories: i32 =
+					stack.iter ().copied ().enumerate ()
+						.map (|(idx, num)| all_ingrs [idx].calories * num)
+						.sum ();
 
-				<span class="kw">if</span> <span class="ident">calories</span> <span class="op">&gt;</span> <span class="number">500_i32</span> {
-					<span class="ident">stack</span>.<span class="ident">pop</span> ();
-					<span class="kw">if</span> <span class="ident">stack</span>.<span class="ident">is_empty</span> () { <span class="kw">return</span> <span class="prelude-val">None</span> }
+				<span class="kw">if </span>calories &gt; <span class="number">500_i32 </span>{
+					stack.pop ();
+					<span class="kw">if </span>stack.is_empty () { <span class="kw">return </span><span class="prelude-val">None </span>}
 					<span class="kw">continue</span>;
 				}
 
-				<span class="comment">// fill in rest of stack with zeros...</span>
+				<span class="comment">// fill in rest of stack with zeros...
 
-				<span class="kw">while</span> <span class="ident">stack</span>.<span class="ident">len</span> () <span class="op">+</span> <span class="number">1</span> <span class="op">&lt;</span> <span class="ident">all_ingrs</span>.<span class="ident">len</span> () {
-					<span class="ident">stack</span>.<span class="ident">push</span> (<span class="number">0_i32</span>);
+				</span><span class="kw">while </span>stack.len () + <span class="number">1 </span>&lt; all_ingrs.len () {
+					stack.push (<span class="number">0_i32</span>);
 				}
 
-				<span class="comment">// ...execpt for last place which we pick to get 100 ingredients total</span>
+				<span class="comment">// ...execpt for last place which we pick to get 100 ingredients total
 
-				<span class="kw">let</span> <span class="ident">num_final</span> <span class="op">=</span> <span class="number">100_i32</span> <span class="op">-</span> <span class="ident">stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">sum</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> ();
-				<span class="kw">if</span> <span class="ident">num_final</span> <span class="op">&lt;</span> <span class="number">0_i32</span> { <span class="kw">continue</span> }
-				<span class="kw">let</span> <span class="ident">calories</span> <span class="op">=</span> <span class="ident">calories</span> <span class="op">+</span> <span class="ident">num_final</span> <span class="op">*</span> <span class="ident">all_ingrs</span>.<span class="ident">last</span> ().<span class="ident">unwrap</span> ().<span class="ident">calories</span>;
+				</span><span class="kw">let </span>num_final = <span class="number">100_i32 </span>- stack.iter ().copied ().sum::&lt;i32&gt; ();
+				<span class="kw">if </span>num_final &lt; <span class="number">0_i32 </span>{ <span class="kw">continue </span>}
+				<span class="kw">let </span>calories = calories + num_final * all_ingrs.last ().unwrap ().calories;
 
-				<span class="comment">// if the total calories is exactly 500, return the list of ingredients</span>
+				<span class="comment">// if the total calories is exactly 500, return the list of ingredients
 
-				<span class="kw">if</span> <span class="ident">calories</span> <span class="op">==</span> <span class="number">500_i32</span> {
-					<span class="ident">stack</span>.<span class="ident">push</span> (<span class="ident">num_final</span>);
-					<span class="kw">return</span> <span class="prelude-val">Some</span> (
-						<span class="ident">stack</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">enumerate</span> ()
-							.<span class="ident">flat_map</span> (<span class="op">|</span>(<span class="ident">idx</span>, <span class="ident">num</span>)<span class="op">|</span>
-								<span class="ident">iter::repeat</span> (<span class="op">&amp;</span> <span class="ident">all_ingrs</span> [<span class="ident">idx</span>])
-									.<span class="ident">take</span> (<span class="ident">num</span>.<span class="ident">as_usize</span> ()))
-							.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> ()
+				</span><span class="kw">if </span>calories == <span class="number">500_i32 </span>{
+					stack.push (num_final);
+					<span class="kw">return </span><span class="prelude-val">Some </span>(
+						stack.iter ().copied ().enumerate ()
+							.flat_map (|(idx, num)|
+								iter::repeat (&amp; all_ingrs [idx])
+									.take (num.pan_usize ()))
+							.collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ()
 					)
 				}
 
@@ -408,135 +422,135 @@
 
 		});
 
-		<span class="comment">// go through the list and pick the highest score</span>
+		<span class="comment">// go through the list and pick the highest score
 
-		<span class="kw">let</span> <span class="ident">max_score</span> <span class="op">=</span> <span class="ident">ingr_combos</span>
-			.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ingrs</span><span class="op">|</span> <span class="ident">calc_score</span> (<span class="ident">ingrs</span>.<span class="ident">iter_vals</span> ()))
-			.<span class="ident">max</span> ()
-			.<span class="ident">ok_or</span> (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
+		</span><span class="kw">let </span>max_score = ingr_combos
+			.map (|ingrs| calc_score (ingrs.iter_vals ()))
+			.max ()
+			.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 
-		<span class="prelude-val">Ok</span> (<span class="ident">max_score</span>)
+		<span class="prelude-val">Ok </span>(max_score)
 
 	}
 
-	<span class="doccomment">/// Find a minimum number of ingredients to get a positive score.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// Goes through all combinations of ingredients totaling 1, then 2, etc, until it finds the</span>
-	<span class="doccomment">/// minimum number of ingredients needed for a positive score. It then returns the combination</span>
-	<span class="doccomment">/// which gives the max score for that number of ingredients.</span>
-	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">find_start_ingredients</span> (<span class="ident">all_ingrs</span>: <span class="op">&amp;</span> [<span class="ident">Ingredient</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Ingredient</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="prelude-val">Ok</span> ((<span class="number">1</span> ..<span class="op">=</span> <span class="number">100</span>)
-			.<span class="ident">find_map</span> (<span class="op">|</span><span class="ident">num</span><span class="op">|</span> <span class="ident">all_ingrs</span>.<span class="ident">iter</span> ()
-				.<span class="ident">combinations_with_replacement</span> (<span class="ident">num</span>)
-				.<span class="ident">map</span> (<span class="op">|</span><span class="ident">ingrs</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="op">&amp;</span> <span class="ident">Ingredient</span><span class="op">&gt;</span><span class="op">|</span> (<span class="ident">ingrs</span>.<span class="ident">clone</span> (),
-					<span class="ident">calc_score</span> (<span class="ident">ingrs</span>.<span class="ident">iter_vals</span> ())))
-				.<span class="ident">max_by_key</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span>)
-				.<span class="ident">filter</span> (<span class="op">|</span><span class="op">&amp;</span> (<span class="kw">_</span>, <span class="ident">score</span>)<span class="op">|</span> <span class="ident">score</span> <span class="op">&gt;</span> <span class="number">0</span>)
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">ingrs</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">ingrs</span>))
-			.<span class="ident">ok_or</span> (<span class="string">&quot;No solution_found&quot;</span>) <span class="question-mark">?</span>)
+	<span class="doccomment">/// Find a minimum number of ingredients to get a positive score.
+	///
+	/// Goes through all combinations of ingredients totaling 1, then 2, etc, until it finds the
+	/// minimum number of ingredients needed for a positive score. It then returns the combination
+	/// which gives the max score for that number of ingredients.
+	///
+	</span><span class="kw">pub fn </span>find_start_ingredients (all_ingrs: &amp; [Ingredient]) -&gt; GenResult &lt;Vec &lt;&amp; Ingredient&gt;&gt; {
+		<span class="prelude-val">Ok </span>((<span class="number">1 </span>..= <span class="number">100</span>)
+			.find_map (|num| all_ingrs.iter ()
+				.combinations_with_replacement (num)
+				.map (|ingrs: Vec &lt;&amp; Ingredient&gt;| (ingrs.clone (),
+					calc_score (ingrs.iter_vals ())))
+				.max_by_key (|&amp; (<span class="kw">_</span>, score)| score)
+				.filter (|&amp; (<span class="kw">_</span>, score)| score &gt; <span class="number">0</span>)
+				.map (|(ingrs, <span class="kw">_</span>)| ingrs))
+			.ok_or (<span class="string">&quot;No solution_found&quot;</span>) <span class="question-mark">?</span>)
 	}
 
-	<span class="doccomment">/// Works out the score for a given combination of ingredients.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// As per the puzzle description, this adds together each ingredient&#39;s value for capacity,</span>
-	<span class="doccomment">/// durability, flavour and texture, then multiplies them all together. If any total is below</span>
-	<span class="doccomment">/// zero, then the score is always zero.</span>
-	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">calc_score</span> <span class="op">&lt;</span><span class="lifetime">&#39;ing</span><span class="op">&gt;</span> (<span class="ident">ingrs</span>: <span class="kw">impl</span> <span class="ident">IntoIterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="op">&amp;</span> <span class="lifetime">&#39;ing</span> <span class="ident">Ingredient</span><span class="op">&gt;</span>) -&gt; <span class="ident">u64</span> {
-		<span class="kw">let</span> (<span class="ident">cap</span>, <span class="ident">dur</span>, <span class="ident">fla</span>, <span class="ident">tex</span>) <span class="op">=</span> <span class="ident">ingrs</span>.<span class="ident">into_iter</span> ()
-			.<span class="ident">fold</span> ((<span class="number">0_i32</span>, <span class="number">0_i32</span>, <span class="number">0_i32</span>, <span class="number">0_i32</span>), <span class="op">|</span><span class="ident">sums</span>, <span class="ident">ingr</span><span class="op">|</span> (
-				<span class="ident">sums</span>.<span class="number">0</span> <span class="op">+</span> <span class="ident">ingr</span>.<span class="ident">capacity</span>,
-				<span class="ident">sums</span>.<span class="number">1</span> <span class="op">+</span> <span class="ident">ingr</span>.<span class="ident">durability</span>,
-				<span class="ident">sums</span>.<span class="number">2</span> <span class="op">+</span> <span class="ident">ingr</span>.<span class="ident">flavour</span>,
-				<span class="ident">sums</span>.<span class="number">3</span> <span class="op">+</span> <span class="ident">ingr</span>.<span class="ident">texture</span>,
+	<span class="doccomment">/// Works out the score for a given combination of ingredients.
+	///
+	/// As per the puzzle description, this adds together each ingredient&#39;s value for capacity,
+	/// durability, flavour and texture, then multiplies them all together. If any total is below
+	/// zero, then the score is always zero.
+	///
+	</span><span class="kw">pub fn </span>calc_score &lt;<span class="lifetime">&#39;ing</span>&gt; (ingrs: <span class="kw">impl </span>IntoIterator &lt;Item = &amp; <span class="lifetime">&#39;ing </span>Ingredient&gt;) -&gt; u64 {
+		<span class="kw">let </span>(cap, dur, fla, tex) = ingrs.into_iter ()
+			.fold ((<span class="number">0_i32</span>, <span class="number">0_i32</span>, <span class="number">0_i32</span>, <span class="number">0_i32</span>), |sums, ingr| (
+				sums.<span class="number">0 </span>+ ingr.capacity,
+				sums.<span class="number">1 </span>+ ingr.durability,
+				sums.<span class="number">2 </span>+ ingr.flavour,
+				sums.<span class="number">3 </span>+ ingr.texture,
 			));
-		<span class="kw">if</span> <span class="ident">cap</span> <span class="op">&lt;</span> <span class="number">0_i32</span> <span class="op">|</span><span class="op">|</span> <span class="ident">dur</span> <span class="op">&lt;</span> <span class="number">0_i32</span> <span class="op">|</span><span class="op">|</span> <span class="ident">fla</span> <span class="op">&lt;</span> <span class="number">0_i32</span> <span class="op">|</span><span class="op">|</span> <span class="ident">tex</span> <span class="op">&lt;</span> <span class="number">0_i32</span> { <span class="kw">return</span> <span class="number">0</span> }
-		<span class="ident">cap</span>.<span class="ident">as_u64</span> () <span class="op">*</span> <span class="ident">dur</span>.<span class="ident">as_u64</span> () <span class="op">*</span> <span class="ident">fla</span>.<span class="ident">as_u64</span> () <span class="op">*</span> <span class="ident">tex</span>.<span class="ident">as_u64</span> ()
+		<span class="kw">if </span>cap &lt; <span class="number">0_i32 </span>|| dur &lt; <span class="number">0_i32 </span>|| fla &lt; <span class="number">0_i32 </span>|| tex &lt; <span class="number">0_i32 </span>{ <span class="kw">return </span><span class="number">0 </span>}
+		cap.pan_u64 () * dur.pan_u64 () * fla.pan_u64 () * tex.pan_u64 ()
 	}
 
 }
 
-<span class="doccomment">/// Representation of the puzzle input, etc.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="doccomment">/// Representation of the puzzle input, etc.
+///
+</span><span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Input</span> <span class="op">=</span> <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Ingredient</span><span class="op">&gt;</span>;
+	<span class="kw">pub type </span>Input = Vec &lt;Ingredient&gt;;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Ingredient</span> {
-		<span class="kw">pub</span> <span class="ident">name</span>: <span class="ident">String</span>,
-		<span class="kw">pub</span> <span class="ident">capacity</span>: <span class="ident">i32</span>,
-		<span class="kw">pub</span> <span class="ident">durability</span>: <span class="ident">i32</span>,
-		<span class="kw">pub</span> <span class="ident">flavour</span>: <span class="ident">i32</span>,
-		<span class="kw">pub</span> <span class="ident">texture</span>: <span class="ident">i32</span>,
-		<span class="kw">pub</span> <span class="ident">calories</span>: <span class="ident">i32</span>,
+	<span class="attribute">#[ derive (Clone, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub struct </span>Ingredient {
+		<span class="kw">pub </span>name: String,
+		<span class="kw">pub </span>capacity: i32,
+		<span class="kw">pub </span>durability: i32,
+		<span class="kw">pub </span>flavour: i32,
+		<span class="kw">pub </span>texture: i32,
+		<span class="kw">pub </span>calories: i32,
 	}
 
-	<span class="doccomment">/// Parse a list of ingredients and their properties, according to the defined format.</span>
-	<span class="doccomment">///</span>
-	<span class="doccomment">/// ```</span>
-	<span class="doccomment">/// # use aoc_2015_day_15::model::{ Ingredient, parse_input };</span>
-	<span class="doccomment">/// let ingrs = parse_input (&amp; [</span>
-	<span class="doccomment">///   &quot;Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8&quot;,</span>
-	<span class="doccomment">/// ]).unwrap ();</span>
-	<span class="doccomment">/// assert_eq! (ingrs.len (), 1);</span>
-	<span class="doccomment">/// assert_eq! (ingrs [0], Ingredient {</span>
-	<span class="doccomment">///   name: &quot;Butterscotch&quot;.to_string (),</span>
-	<span class="doccomment">///   capacity: -1,</span>
-	<span class="doccomment">///   durability: -2,</span>
-	<span class="doccomment">///   flavour: 6,</span>
-	<span class="doccomment">///   texture: 3,</span>
-	<span class="doccomment">///   calories: 8,</span>
-	<span class="doccomment">/// });</span>
-	<span class="doccomment">/// ```</span>
-	<span class="doccomment">///</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_input</span> (<span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Input</span><span class="op">&gt;</span> {
-		<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
-		<span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span>
-			<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-				<span class="ident">parser</span>.<span class="ident">set_ignore_whitespace</span> (<span class="bool-val">true</span>)
-					.<span class="ident">set_word_pred</span> (<span class="ident">char::is_alphanumeric</span>);
-				<span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">word</span> () <span class="question-mark">?</span>.<span class="ident">to_owned</span> ();
-				<span class="kw">let</span> <span class="ident">capacity</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;: capacity&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-				<span class="kw">let</span> <span class="ident">durability</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;, durability&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-				<span class="kw">let</span> <span class="ident">flavour</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;, flavor&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-				<span class="kw">let</span> <span class="ident">texture</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;, texture&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-				<span class="kw">let</span> <span class="ident">calories</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;, calories&quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-				<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-				<span class="prelude-val">Ok</span> (<span class="ident">Ingredient</span> { <span class="ident">name</span>, <span class="ident">capacity</span>, <span class="ident">durability</span>, <span class="ident">flavour</span>, <span class="ident">texture</span>, <span class="ident">calories</span> })
-			}).<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">char_idx</span><span class="op">|</span>
-				<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>, <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">char_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>)
+	<span class="doccomment">/// Parse a list of ingredients and their properties, according to the defined format.
+	///
+	/// ```
+	/// # use aoc_2015_day_15::model::{ Ingredient, parse_input };
+	/// let ingrs = parse_input (&amp; [
+	///   &quot;Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8&quot;,
+	/// ]).unwrap ();
+	/// assert_eq! (ingrs.len (), 1);
+	/// assert_eq! (ingrs [0], Ingredient {
+	///   name: &quot;Butterscotch&quot;.to_string (),
+	///   capacity: -1,
+	///   durability: -2,
+	///   flavour: 6,
+	///   texture: 3,
+	///   calories: 8,
+	/// });
+	/// ```
+	///
+	</span><span class="kw">pub fn </span>parse_input (input: &amp; [&amp; str]) -&gt; GenResult &lt;Input&gt; {
+		<span class="kw">use </span>parser::<span class="kw-2">*</span>;
+		input.iter ().enumerate ().map (|(line_idx, line)|
+			Parser::wrap (line, |parser| {
+				parser.set_ignore_whitespace (<span class="bool-val">true</span>)
+					.set_word_pred (char::is_alphanumeric);
+				<span class="kw">let </span>name = parser.word () <span class="question-mark">?</span>.to_owned ();
+				<span class="kw">let </span>capacity = parser.expect (<span class="string">&quot;: capacity&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+				<span class="kw">let </span>durability = parser.expect (<span class="string">&quot;, durability&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+				<span class="kw">let </span>flavour = parser.expect (<span class="string">&quot;, flavor&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+				<span class="kw">let </span>texture = parser.expect (<span class="string">&quot;, texture&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+				<span class="kw">let </span>calories = parser.expect (<span class="string">&quot;, calories&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+				parser.end () <span class="question-mark">?</span>;
+				<span class="prelude-val">Ok </span>(Ingredient { name, capacity, durability, flavour, texture, calories })
+			}).map_parse_err (|<span class="kw">_</span>, char_idx|
+				<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>, line_idx + <span class="number">1</span>, char_idx + <span class="number">1</span>, line)
 			)
-		).<span class="ident">collect</span> ()
+		).collect ()
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8&quot;</span>,
 		<span class="string">&quot;Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;62842880&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;62842880&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;57600000&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;57600000&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

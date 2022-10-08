@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-24/src/quick.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quick.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-24/quick.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>quick.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -285,294 +285,292 @@
 <span id="285">285</span>
 <span id="286">286</span>
 <span id="287">287</span>
-<span id="288">288</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Quick algorithm found by reverse engineering the input programme.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Quick start</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Call [`iterator`] to create an iterator over the valid solutions:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! # use aoc_2021_day_24::*;</span>
-<span class="doccomment">//! # let steps = [quick::Step { random: false, check: 0, increment: 0 }; 14];</span>
-<span class="doccomment">//! for solution in quick::iterator (&amp; steps, true) {</span>
-<span class="doccomment">//!   println! (&quot;{:?}&quot;, solution);</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Description</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Looking carefully at the provided programme, it seems to be the same 18 instructions repeated,</span>
-<span class="doccomment">//! once for every input character. There are only three that vary. Here&#39;s the template:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```text</span>
-<span class="doccomment">//!  1  inp w</span>
-<span class="doccomment">//!  2  mul x 0</span>
-<span class="doccomment">//!  3  add x z</span>
-<span class="doccomment">//!  4  mod x 26</span>
-<span class="doccomment">//!  5  div z (1 or 26)</span>
-<span class="doccomment">//!  6  add x (-16 to 13)</span>
-<span class="doccomment">//!  7  eql x w</span>
-<span class="doccomment">//!  8  eql x 0</span>
-<span class="doccomment">//!  9  mul y 0</span>
-<span class="doccomment">//! 10  add y 25</span>
-<span class="doccomment">//! 11  mul y x</span>
-<span class="doccomment">//! 12  add y 1</span>
-<span class="doccomment">//! 13  mul z y</span>
-<span class="doccomment">//! 14  mul y 0</span>
-<span class="doccomment">//! 15  mul y w</span>
-<span class="doccomment">//! 16  add y (3 to 15)</span>
-<span class="doccomment">//! 17  mul y x</span>
-<span class="doccomment">//! 18  add z y</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! So, the registers seem to be used as follows:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! * `w` --- The current input value. This is loaded in the first instruction and not modified</span>
-<span class="doccomment">//! again.</span>
-<span class="doccomment">//! * `x` --- Temporary value, the value from the previous step is discarded. This is set to `0` if</span>
-<span class="doccomment">//! the input value matches a calculation based on `z` and a parameter which varies for each step,</span>
-<span class="doccomment">//! or to `1` otherwise.</span>
-<span class="doccomment">//! * `y` --- Another temporary value, this is used to calculate values based on `x`, `w` and a</span>
-<span class="doccomment">//! parameter, and then used to update `z`. The value is carefully calculated to not update `z` if</span>
-<span class="doccomment">//! `x` is set to `0`, by setting it to `1` for a multiply or `0` for an add.</span>
-<span class="doccomment">//! * `z` --- An accumulator, which is kept between steps. This starts off at `0` and gets</span>
-<span class="doccomment">//! conditionally multiplied by 26, divided by 26, and added to.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! We can compile the differences in each step into a table of parameters. Since a divide by one</span>
-<span class="doccomment">//! is an identity operation, we reduce the first difference into a boolean, tracking whether we</span>
-<span class="doccomment">//! will divide of not. We will name the other two parameters `check` and `increment`, based on</span>
-<span class="doccomment">//! how they are used. So using the programme I was given as an example, we end up with the</span>
-<span class="doccomment">//! following:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! | Parameter   | 1    | 2    | 3    | 4    | 5    | 6     | 7    | 8     | 9     | 10   | 11   | 12   | 13   | 14    |</span>
-<span class="doccomment">//! |-------------|:----:|:----:|:----:|:----:|:----:|:-----:|:----:|:-----:|:-----:|:----:|:----:|:----:|:----:|:-----:|</span>
-<span class="doccomment">//! | `divide`    |      |      |      |      |      | yes   |      | yes   | yes   |      | yes  | yes  | yes  | yes   |</span>
-<span class="doccomment">//! | `check`     | `10` | `12` | `10` | `12` | `11` | `-16` | `10` | `-11` | `-13` | `13` | `-8` | `-1` | `-4` | `-14` |</span>
-<span class="doccomment">//! | `increment` | `12` | `7`  | `8`  | `8`  | `15` | `12`  | `8`  | `13`  | `3`   | `13` | `3`  | `9`  | `4`  | `13`  |</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! And we can descibe the algorithm for each step as code. Here we use `acc` to refer to the</span>
-<span class="doccomment">//! shared state stored in register `z`, and we expect the parameters for each step to be passed in</span>
-<span class="doccomment">//! a struct:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//! struct StepParams {</span>
-<span class="doccomment">//!     divide: bool,</span>
-<span class="doccomment">//!     check: i64,</span>
-<span class="doccomment">//!     increment: i64,</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! fn apply_step (params: &amp; StepParams, acc: &amp; mut i64, input: i64) {</span>
-<span class="doccomment">//!     if input == * acc % 26 + params.check { // instructions 2-4,6-8</span>
-<span class="doccomment">//!         if params.divide { * acc /= 26; }   // instruction 5</span>
-<span class="doccomment">//!     } else {</span>
-<span class="doccomment">//!         if ! params.divide { * acc *= 26; } // instructions 9-13</span>
-<span class="doccomment">//!         * acc += input + params.increment;  // instructions 14-18</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! We can either divide `acc` by 26, multiply it by 26 and add something, or just add something.</span>
-<span class="doccomment">//! Furthermore, in seven of our fourteen steps we always multiply, so to get this value down to</span>
-<span class="doccomment">//! zero we are going to have to make sure we divide on all seven of the other steps. The extra</span>
-<span class="doccomment">//! addition from increment will have to be removed as a rounding error from the division - this</span>
-<span class="doccomment">//! presumably is intended to reduce the total number of valid inputs.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Since we are deciding whether to divide based on a value derived from `acc` and `check`, we</span>
-<span class="doccomment">//! can simply calculate the correct value based on the previous digits. This reduces our problem</span>
-<span class="doccomment">//! from searching 9¹⁴ (twenty-three trillion) combinations, down to only 9⁷ (five million). What&#39;s</span>
-<span class="doccomment">//! more, we will often be able to shortcut the search if there is no matching next digit.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This leads to the algorithm implemented here. The steps are encoded in the [`Step`] struct, and</span>
-<span class="doccomment">//! the `steps_for` function reads an input programme and identifies the correct parameters for</span>
-<span class="doccomment">//! step. I inverted the `divide` parameter around and called it [`random`][Step::random] - this</span>
-<span class="doccomment">//! indicates that we should choose a random value for this input value, or in practice try all</span>
-<span class="doccomment">//! possible values. The `iterator` function returns an iterator over all of the valid inputs,</span>
-<span class="doccomment">//! actually 14 nested iterators plus a final call to `map` at the end to check the final sum, and</span>
-<span class="doccomment">//! to convert to match the function signature.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! The actual algorithm is implemented in the [`NextNumIter`] struct. This is an iterator adapter,</span>
-<span class="doccomment">//! which takes an iterator over partial solutions and provides the possible answers with the</span>
-<span class="doccomment">//! next digit included. If this is a `random` step, then this expands every `n`-digit entry into</span>
-<span class="doccomment">//! nine `n+1`-digit entries, one for each valid digit. Otherwise, it will either provide a single</span>
-<span class="doccomment">//! entry with the appropriate next digit, or no entries if the correct next digit is not in the</span>
-<span class="doccomment">//! valid range.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Performance</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! This shows the time for finding the answers for the puzzle, and for finding all valid codes,</span>
-<span class="doccomment">//! plus the peak memory usage, for each build version.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! | Version | Puzzle    | All        | Memory   |</span>
-<span class="doccomment">//! |:-------:|:---------:|:----------:|:--------:|</span>
-<span class="doccomment">//! | Debug   | 0.56 secs | 2.23 secs  | 2.88 MiB |</span>
-<span class="doccomment">//! | Release | 0.10 secs | 0.39 secs  | 2.20 MiB |</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Quick algorithm found by reverse engineering the input programme.
+//!
+//! # Quick start
+//!
+//! Call [`iterator`] to create an iterator over the valid solutions:
+//!
+//! ```
+//! # use aoc_2021_day_24::*;
+//! # let steps = [quick::Step { random: false, check: 0, increment: 0 }; 14];
+//! for solution in quick::iterator (&amp; steps, true) {
+//!   println! (&quot;{:?}&quot;, solution);
+//! }
+//! ```
+//!
+//! # Description
+//!
+//! Looking carefully at the provided programme, it seems to be the same 18 instructions repeated,
+//! once for every input character. There are only three that vary. Here&#39;s the template:
+//!
+//! ```text
+//!  1  inp w
+//!  2  mul x 0
+//!  3  add x z
+//!  4  mod x 26
+//!  5  div z (1 or 26)
+//!  6  add x (-16 to 13)
+//!  7  eql x w
+//!  8  eql x 0
+//!  9  mul y 0
+//! 10  add y 25
+//! 11  mul y x
+//! 12  add y 1
+//! 13  mul z y
+//! 14  mul y 0
+//! 15  mul y w
+//! 16  add y (3 to 15)
+//! 17  mul y x
+//! 18  add z y
+//! ```
+//!
+//! So, the registers seem to be used as follows:
+//!
+//!
+//! * `w` --- The current input value. This is loaded in the first instruction and not modified
+//! again.
+//! * `x` --- Temporary value, the value from the previous step is discarded. This is set to `0` if
+//! the input value matches a calculation based on `z` and a parameter which varies for each step,
+//! or to `1` otherwise.
+//! * `y` --- Another temporary value, this is used to calculate values based on `x`, `w` and a
+//! parameter, and then used to update `z`. The value is carefully calculated to not update `z` if
+//! `x` is set to `0`, by setting it to `1` for a multiply or `0` for an add.
+//! * `z` --- An accumulator, which is kept between steps. This starts off at `0` and gets
+//! conditionally multiplied by 26, divided by 26, and added to.
+//!
+//! We can compile the differences in each step into a table of parameters. Since a divide by one
+//! is an identity operation, we reduce the first difference into a boolean, tracking whether we
+//! will divide of not. We will name the other two parameters `check` and `increment`, based on
+//! how they are used. So using the programme I was given as an example, we end up with the
+//! following:
+//!
+//! | Parameter   | 1    | 2    | 3    | 4    | 5    | 6     | 7    | 8     | 9     | 10   | 11   | 12   | 13   | 14    |
+//! |-------------|:----:|:----:|:----:|:----:|:----:|:-----:|:----:|:-----:|:-----:|:----:|:----:|:----:|:----:|:-----:|
+//! | `divide`    |      |      |      |      |      | yes   |      | yes   | yes   |      | yes  | yes  | yes  | yes   |
+//! | `check`     | `10` | `12` | `10` | `12` | `11` | `-16` | `10` | `-11` | `-13` | `13` | `-8` | `-1` | `-4` | `-14` |
+//! | `increment` | `12` | `7`  | `8`  | `8`  | `15` | `12`  | `8`  | `13`  | `3`   | `13` | `3`  | `9`  | `4`  | `13`  |
+//!
+//! And we can descibe the algorithm for each step as code. Here we use `acc` to refer to the
+//! shared state stored in register `z`, and we expect the parameters for each step to be passed in
+//! a struct:
+//!
+//! ```
+//! struct StepParams {
+//!     divide: bool,
+//!     check: i64,
+//!     increment: i64,
+//! }
+//! fn apply_step (params: &amp; StepParams, acc: &amp; mut i64, input: i64) {
+//!     if input == * acc % 26 + params.check { // instructions 2-4,6-8
+//!         if params.divide { * acc /= 26; }   // instruction 5
+//!     } else {
+//!         if ! params.divide { * acc *= 26; } // instructions 9-13
+//!         * acc += input + params.increment;  // instructions 14-18
+//!     }
+//! }
+//! ```
+//!
+//! We can either divide `acc` by 26, multiply it by 26 and add something, or just add something.
+//! Furthermore, in seven of our fourteen steps we always multiply, so to get this value down to
+//! zero we are going to have to make sure we divide on all seven of the other steps. The extra
+//! addition from increment will have to be removed as a rounding error from the division - this
+//! presumably is intended to reduce the total number of valid inputs.
+//!
+//! Since we are deciding whether to divide based on a value derived from `acc` and `check`, we
+//! can simply calculate the correct value based on the previous digits. This reduces our problem
+//! from searching 9¹⁴ (twenty-three trillion) combinations, down to only 9⁷ (five million).
+//! What&#39;s more, we will often be able to shortcut the search if there is no matching next digit.
+//!
+//! This leads to the algorithm implemented here. The steps are encoded in the [`Step`] struct,
+//! and the `steps_for` function reads an input programme and identifies the correct parameters
+//! for each step. I inverted the `divide` parameter around and called it [`random`][Step::random]
+//! - this indicates that we should choose a random value for this input value, or in practice try
+//! all possible values. The `iterator` function returns an iterator over all of the valid inputs,
+//! actually 14 nested iterators plus a final call to `map` at the end to check the final sum, and
+//! to convert to match the function signature.
+//!
+//! The actual algorithm is implemented in the [`NextNumIter`] struct. This is an iterator
+//! adapter, which takes an iterator over partial solutions and provides the possible answers with
+//! the next digit included. If this is a `random` step, then this expands every `n`-digit entry
+//! into nine `n+1`-digit entries, one for each valid digit. Otherwise, it will either provide a
+//! single entry with the appropriate next digit, or no entries if the correct next digit is not
+//! in the valid range.
+//!
+//! # Performance
+//!
+//! This shows the time for finding the answers for the puzzle, and for finding all valid codes,
+//! plus the peak memory usage, for each build version.
+//!
+//! | Version | Puzzle    | All        | Memory   |
+//! |:-------:|:---------:|:----------:|:--------:|
+//! | Debug   | 0.56 secs | 2.23 secs  | 2.88 MiB |
+//! | Release | 0.10 secs | 0.39 secs  | 2.20 MiB |
 
-<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">machine::Instr</span>;
-<span class="kw">use</span> <span class="ident">machine::Reg</span>;
-<span class="kw">use</span> <span class="ident">machine::RegOrInt</span>;
-<span class="kw">use</span> <span class="ident">model::Input</span>;
-<span class="kw">use</span> <span class="ident">nums::IntConv</span>;
+</span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>machine::Instr;
+<span class="kw">use </span>machine::Reg;
+<span class="kw">use </span>machine::RegOrInt;
+<span class="kw">use </span>model::Input;
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Step</span> {
-	<span class="kw">pub</span> <span class="ident">random</span>: <span class="ident">bool</span>,
-	<span class="kw">pub</span> <span class="ident">check</span>: <span class="ident">i64</span>,
-	<span class="kw">pub</span> <span class="ident">increment</span>: <span class="ident">i64</span>,
+<span class="attribute">#[ derive (Clone, Copy, Debug) ]
+</span><span class="kw">pub struct </span>Step {
+	<span class="kw">pub </span>random: bool,
+	<span class="kw">pub </span>check: i64,
+	<span class="kw">pub </span>increment: i64,
 }
 
-<span class="kw">impl</span> <span class="ident">Step</span> {
+<span class="kw">impl </span>Step {
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">new</span> (<span class="ident">random</span>: <span class="ident">bool</span>, <span class="ident">check</span>: <span class="ident">i64</span>, <span class="ident">increment</span>: <span class="ident">i64</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">Self</span> { <span class="ident">random</span>, <span class="ident">check</span>, <span class="ident">increment</span> }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>new (random: bool, check: i64, increment: i64) -&gt; <span class="self">Self </span>{
+		<span class="self">Self </span>{ random, check, increment }
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve</span> (<span class="self">self</span>, <span class="ident">progress</span>: <span class="ident">i64</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">next</span> <span class="op">=</span> <span class="ident">progress</span> <span class="op">%</span> <span class="number">26</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">check</span>;
-		(<span class="number">1</span> ..<span class="op">=</span> <span class="number">9</span>).<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">next</span>).<span class="ident">then</span> (<span class="op">|</span><span class="op">|</span> <span class="ident">next</span>.<span class="ident">as_u8</span> ())
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>solve (<span class="self">self</span>, progress: i64) -&gt; <span class="prelude-ty">Option </span>&lt;u8&gt; {
+		<span class="kw">let </span>next = progress % <span class="number">26 </span>+ <span class="self">self</span>.check;
+		(<span class="number">1 </span>..= <span class="number">9</span>).contains (&amp; next).then (|| next.pan_u8 ())
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">incr</span> (<span class="self">self</span>, <span class="ident">progress</span>: <span class="ident">i64</span>, <span class="ident">next</span>: <span class="ident">u8</span>) -&gt; <span class="ident">i64</span> {
-		<span class="kw">if</span> <span class="self">self</span>.<span class="ident">random</span> {
-			<span class="ident">progress</span> <span class="op">*</span> <span class="number">26</span> <span class="op">+</span> <span class="ident">next</span>.<span class="ident">as_i64</span> () <span class="op">+</span> <span class="self">self</span>.<span class="ident">increment</span>
-		} <span class="kw">else</span> {
-			<span class="ident">progress</span> <span class="op">/</span> <span class="number">26</span>
-		}
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>incr (<span class="self">self</span>, progress: i64, next: u8) -&gt; i64 {
+		<span class="kw">if </span><span class="self">self</span>.random {
+			progress * <span class="number">26 </span>+ next.pan_i64 () + <span class="self">self</span>.increment
+		} <span class="kw">else </span>{
+			progress / <span class="number">26
+		</span>}
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">steps_for</span> (<span class="ident">prog</span>: <span class="op">&amp;</span> [<span class="ident">Instr</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>[<span class="ident">Step</span>; <span class="number">14</span>]<span class="op">&gt;</span> {
-	<span class="kw">if</span> <span class="ident">prog</span>.<span class="ident">len</span> () <span class="op">!</span><span class="op">=</span> <span class="number">14</span> <span class="op">*</span> <span class="number">18</span> { <span class="prelude-val">Err</span> (<span class="string">&quot;Programme is not the right length&quot;</span>) <span class="question-mark">?</span> }
-	<span class="prelude-val">Ok</span> (<span class="ident">prog</span>.<span class="ident">chunks</span> (<span class="number">18</span>).<span class="ident">enumerate</span> ().<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">chunk_idx</span>, <span class="ident">chunk</span>)<span class="op">|</span> {
-		<span class="kw">let</span> <span class="ident">err</span> <span class="op">=</span> <span class="op">|</span><span class="ident">line_idx</span><span class="op">|</span>
-			<span class="macro">format!</span> (<span class="string">&quot;Unable to generate quick steps for programme at line {}&quot;</span>,
-				<span class="ident">chunk_idx</span> <span class="op">*</span> <span class="number">18</span> <span class="op">+</span> <span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">into</span> ();
-		<span class="kw">let</span> <span class="ident">expect</span> <span class="op">=</span> <span class="op">|</span><span class="ident">line_idx</span>, <span class="ident">val</span><span class="op">|</span> -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span>()<span class="op">&gt;</span> {
-			<span class="kw">if</span> <span class="ident">chunk</span> [<span class="ident">line_idx</span>] <span class="op">==</span> <span class="ident">val</span> { <span class="prelude-val">Ok</span> (()) } <span class="kw">else</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="ident">line_idx</span>)) <span class="question-mark">?</span> }
+<span class="kw">pub fn </span>steps_for (prog: &amp; [Instr]) -&gt; GenResult &lt;[Step; <span class="number">14</span>]&gt; {
+	<span class="kw">if </span>prog.len () != <span class="number">14 </span>* <span class="number">18 </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;Programme is not the right length&quot;</span>) <span class="question-mark">? </span>}
+	<span class="prelude-val">Ok </span>(prog.chunks (<span class="number">18</span>).enumerate ().map (|(chunk_idx, chunk)| {
+		<span class="kw">let </span>err = |line_idx|
+			<span class="macro">format! </span>(<span class="string">&quot;Unable to generate quick steps for programme at line {}&quot;</span>,
+				chunk_idx * <span class="number">18 </span>+ line_idx + <span class="number">1</span>).into ();
+		<span class="kw">let </span>expect = |line_idx, val| -&gt; GenResult &lt;()&gt; {
+			<span class="kw">if </span>chunk [line_idx] == val { <span class="prelude-val">Ok </span>(()) } <span class="kw">else </span>{ <span class="prelude-val">Err </span>(err (line_idx)) <span class="question-mark">? </span>}
 		};
-		<span class="ident">expect</span> (<span class="number">0</span>, <span class="ident">Instr::Inp</span> (<span class="ident">Reg::W</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">1</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">0</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">2</span>, <span class="ident">Instr::Add</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::Z</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">3</span>, <span class="ident">Instr::Mod</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">26</span>))) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">random</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Instr::Div</span> (<span class="ident">Reg::Z</span>, <span class="ident">RegOrInt::Int</span> (<span class="ident">val</span>)) <span class="op">=</span> <span class="ident">chunk</span> [<span class="number">4</span>] {
-			<span class="kw">if</span> <span class="ident">val</span> <span class="op">==</span> <span class="number">26</span> { <span class="bool-val">false</span> } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">val</span> <span class="op">==</span> <span class="number">1</span> { <span class="bool-val">true</span> } <span class="kw">else</span> { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">4</span>)); }
-		} <span class="kw">else</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">4</span>)) <span class="question-mark">?</span> };
-		<span class="kw">let</span> <span class="ident">check</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Instr::Add</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::Int</span> (<span class="ident">check</span>)) <span class="op">=</span> <span class="ident">chunk</span> [<span class="number">5</span>] {
-			<span class="ident">check</span>
-		} <span class="kw">else</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">5</span>)) <span class="question-mark">?</span> };
-		<span class="ident">expect</span> (<span class="number">6</span>, <span class="ident">Instr::Eql</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::W</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">7</span>, <span class="ident">Instr::Eql</span> (<span class="ident">Reg::X</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">0</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">8</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">0</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">9</span>, <span class="ident">Instr::Add</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">25</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">10</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::X</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">11</span>, <span class="ident">Instr::Add</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">1</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">12</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::Z</span>, <span class="ident">RegOrInt::Y</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">13</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::Int</span> (<span class="number">0</span>))) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">14</span>, <span class="ident">Instr::Add</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::W</span>)) <span class="question-mark">?</span>;
-		<span class="kw">let</span> <span class="ident">increment</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Instr::Add</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::Int</span> (<span class="ident">increment</span>)) <span class="op">=</span> <span class="ident">chunk</span> [<span class="number">15</span>] {
-			<span class="ident">increment</span>
-		} <span class="kw">else</span> { <span class="prelude-val">Err</span> (<span class="ident">err</span> (<span class="number">15</span>)) <span class="question-mark">?</span> };
-		<span class="ident">expect</span> (<span class="number">16</span>, <span class="ident">Instr::Mul</span> (<span class="ident">Reg::Y</span>, <span class="ident">RegOrInt::X</span>)) <span class="question-mark">?</span>;
-		<span class="ident">expect</span> (<span class="number">17</span>, <span class="ident">Instr::Add</span> (<span class="ident">Reg::Z</span>, <span class="ident">RegOrInt::Y</span>)) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok</span> (<span class="ident">Step</span> { <span class="ident">random</span>, <span class="ident">check</span>, <span class="ident">increment</span> })
-	}).<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">Step</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>.<span class="ident">try_into</span> ().<span class="ident">unwrap</span> ())
+		expect (<span class="number">0</span>, Instr::Inp (Reg::W)) <span class="question-mark">?</span>;
+		expect (<span class="number">1</span>, Instr::Mul (Reg::X, RegOrInt::Int (<span class="number">0</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">2</span>, Instr::Add (Reg::X, RegOrInt::Z)) <span class="question-mark">?</span>;
+		expect (<span class="number">3</span>, Instr::Mod (Reg::X, RegOrInt::Int (<span class="number">26</span>))) <span class="question-mark">?</span>;
+		<span class="kw">let </span>random = <span class="kw">if let </span>Instr::Div (Reg::Z, RegOrInt::Int (val)) = chunk [<span class="number">4</span>] {
+			<span class="kw">if </span>val == <span class="number">26 </span>{ <span class="bool-val">false </span>} <span class="kw">else if </span>val == <span class="number">1 </span>{ <span class="bool-val">true </span>} <span class="kw">else </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(err (<span class="number">4</span>)); }
+		} <span class="kw">else </span>{ <span class="prelude-val">Err </span>(err (<span class="number">4</span>)) <span class="question-mark">? </span>};
+		<span class="kw">let </span>check = <span class="kw">if let </span>Instr::Add (Reg::X, RegOrInt::Int (check)) = chunk [<span class="number">5</span>] {
+			check
+		} <span class="kw">else </span>{ <span class="prelude-val">Err </span>(err (<span class="number">5</span>)) <span class="question-mark">? </span>};
+		expect (<span class="number">6</span>, Instr::Eql (Reg::X, RegOrInt::W)) <span class="question-mark">?</span>;
+		expect (<span class="number">7</span>, Instr::Eql (Reg::X, RegOrInt::Int (<span class="number">0</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">8</span>, Instr::Mul (Reg::Y, RegOrInt::Int (<span class="number">0</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">9</span>, Instr::Add (Reg::Y, RegOrInt::Int (<span class="number">25</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">10</span>, Instr::Mul (Reg::Y, RegOrInt::X)) <span class="question-mark">?</span>;
+		expect (<span class="number">11</span>, Instr::Add (Reg::Y, RegOrInt::Int (<span class="number">1</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">12</span>, Instr::Mul (Reg::Z, RegOrInt::Y)) <span class="question-mark">?</span>;
+		expect (<span class="number">13</span>, Instr::Mul (Reg::Y, RegOrInt::Int (<span class="number">0</span>))) <span class="question-mark">?</span>;
+		expect (<span class="number">14</span>, Instr::Add (Reg::Y, RegOrInt::W)) <span class="question-mark">?</span>;
+		<span class="kw">let </span>increment = <span class="kw">if let </span>Instr::Add (Reg::Y, RegOrInt::Int (increment)) = chunk [<span class="number">15</span>] {
+			increment
+		} <span class="kw">else </span>{ <span class="prelude-val">Err </span>(err (<span class="number">15</span>)) <span class="question-mark">? </span>};
+		expect (<span class="number">16</span>, Instr::Mul (Reg::Y, RegOrInt::X)) <span class="question-mark">?</span>;
+		expect (<span class="number">17</span>, Instr::Add (Reg::Z, RegOrInt::Y)) <span class="question-mark">?</span>;
+		<span class="prelude-val">Ok </span>(Step { random, check, increment })
+	}).collect::&lt;GenResult &lt;Vec &lt;Step&gt;&gt;&gt; () <span class="question-mark">?</span>.try_into ().unwrap ())
 }
 
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iterator</span> (<span class="ident">steps</span>: <span class="op">&amp;</span> [<span class="ident">Step</span>; <span class="number">14</span>], <span class="ident">reverse</span>: <span class="ident">bool</span>) -&gt; <span class="kw">impl</span> <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">Input</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;_</span> {
-	<span class="ident">NextNumIter::new</span> (<span class="ident">steps</span>, <span class="ident">reverse</span>).<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ()
-		.<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">nest</span> ().<span class="ident">filter_map</span> (<span class="op">|</span>(<span class="ident">nums</span>, <span class="ident">progress</span>)<span class="op">|</span> {
-			(<span class="ident">progress</span> <span class="op">==</span> <span class="number">0</span>).<span class="ident">then_some</span> ({
-				<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">answer</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">14</span>];
-				<span class="kw">for</span> <span class="ident">idx</span> <span class="kw">in</span> <span class="number">0</span> .. <span class="number">14</span> { <span class="ident">answer</span> [<span class="ident">idx</span>] <span class="op">=</span> <span class="ident">nums</span> [<span class="ident">idx</span>] }
-				<span class="ident">answer</span>
+<span class="kw">pub fn </span>iterator (steps: &amp; [Step; <span class="number">14</span>], reverse: bool) -&gt; <span class="kw">impl </span>Iterator &lt;Item = Input&gt; + <span class="lifetime">&#39;_ </span>{
+	NextNumIter::new (steps, reverse).nest ().nest ().nest ().nest ().nest ().nest ().nest ().nest ()
+		.nest ().nest ().nest ().nest ().nest ().filter_map (|(nums, progress)| {
+			(progress == <span class="number">0</span>).then_some ({
+				<span class="kw">let </span><span class="kw-2">mut </span>answer = [<span class="number">0</span>; <span class="number">14</span>];
+				<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. <span class="number">14 </span>{ answer [idx] = nums [idx] }
+				answer
 			})
 		})
 }
 
-<span class="kw">type</span> <span class="ident">TempAnswer</span> <span class="op">=</span> (<span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">14</span><span class="op">&gt;</span>, <span class="ident">i64</span>);
+<span class="kw">type </span>TempAnswer = (ArrayVec &lt;u8, <span class="number">14</span>&gt;, i64);
 
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">Nested</span><span class="op">&gt;</span> {
-	<span class="ident">Outer</span> {
-		<span class="ident">steps</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;stp</span> [<span class="ident">Step</span>; <span class="number">14</span>],
-		<span class="ident">nested</span>: <span class="ident">Nested</span>,
-		<span class="ident">reverse</span>: <span class="ident">bool</span>,
+<span class="kw">pub enum </span>NextNumIter &lt;<span class="lifetime">&#39;stp</span>, Nested&gt; {
+	Outer {
+		steps: &amp; <span class="lifetime">&#39;stp </span>[Step; <span class="number">14</span>],
+		nested: Nested,
+		reverse: bool,
 	},
-	<span class="ident">Inner</span> {
-		<span class="ident">steps</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;stp</span> [<span class="ident">Step</span>; <span class="number">14</span>],
-		<span class="ident">nested</span>: <span class="ident">Nested</span>,
-		<span class="ident">reverse</span>: <span class="ident">bool</span>,
-		<span class="ident">nums</span>: <span class="ident">ArrayVec</span> <span class="op">&lt;</span><span class="ident">u8</span>, <span class="number">14</span><span class="op">&gt;</span>,
-		<span class="ident">progress</span>: <span class="ident">i64</span>,
-		<span class="ident">next_iter</span>: <span class="ident">ops::RangeInclusive</span> <span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+	Inner {
+		steps: &amp; <span class="lifetime">&#39;stp </span>[Step; <span class="number">14</span>],
+		nested: Nested,
+		reverse: bool,
+		nums: ArrayVec &lt;u8, <span class="number">14</span>&gt;,
+		progress: i64,
+		next_iter: ops::RangeInclusive &lt;u8&gt;,
 	},
-	<span class="ident">Poison</span>,
+	Poison,
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span><span class="op">&gt;</span> <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">std::option::IntoIter</span> <span class="op">&lt;</span><span class="ident">TempAnswer</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">new</span> (
-		<span class="ident">steps</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;stp</span> [<span class="ident">Step</span>; <span class="number">14</span>],
-		<span class="ident">reverse</span>: <span class="ident">bool</span>,
-	) -&gt; <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">std::option::IntoIter</span> <span class="op">&lt;</span><span class="ident">TempAnswer</span><span class="op">&gt;</span><span class="op">&gt;</span> {
-		<span class="kw">let</span> <span class="ident">a</span>: <span class="ident">TempAnswer</span> <span class="op">=</span> (<span class="ident">ArrayVec::new</span> (), <span class="number">0</span>);
-		<span class="ident">NextNumIter::Outer</span> { <span class="ident">steps</span>, <span class="ident">nested</span>: <span class="prelude-val">Some</span> (<span class="ident">a</span>).<span class="ident">into_iter</span> (), <span class="ident">reverse</span> }
+<span class="kw">impl </span>&lt;<span class="lifetime">&#39;stp</span>&gt; NextNumIter &lt;<span class="lifetime">&#39;stp</span>, std::option::IntoIter &lt;TempAnswer&gt;&gt; {
+	<span class="kw">fn </span>new (
+		steps: &amp; <span class="lifetime">&#39;stp </span>[Step; <span class="number">14</span>],
+		reverse: bool,
+	) -&gt; NextNumIter &lt;<span class="lifetime">&#39;stp</span>, std::option::IntoIter &lt;TempAnswer&gt;&gt; {
+		<span class="kw">let </span>a: TempAnswer = (ArrayVec::new (), <span class="number">0</span>);
+		NextNumIter::Outer { steps, nested: <span class="prelude-val">Some </span>(a).into_iter (), reverse }
 	}
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">Nested</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">TempAnswer</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">Nested</span><span class="op">&gt;</span> {
-	<span class="kw">fn</span> <span class="ident">nest</span> (<span class="self">self</span>) -&gt; <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="self">Self</span><span class="op">&gt;</span> {
-		<span class="kw">match</span> <span class="op">&amp;</span> <span class="self">self</span> {
-			<span class="op">&amp;</span> <span class="ident">NextNumIter::Outer</span> { <span class="ident">steps</span>, <span class="ident">reverse</span>, .. } =&gt;
-				<span class="ident">NextNumIter::Outer</span> { <span class="ident">steps</span>, <span class="ident">nested</span>: <span class="self">self</span>, <span class="ident">reverse</span> },
-			<span class="op">&amp;</span> <span class="ident">NextNumIter::Inner</span> { .. } <span class="op">|</span> <span class="op">&amp;</span> <span class="ident">NextNumIter::Poison</span> =&gt; <span class="macro">panic!</span> (),
+<span class="kw">impl </span>&lt;<span class="lifetime">&#39;stp</span>, Nested: Iterator &lt;Item = TempAnswer&gt;&gt; NextNumIter &lt;<span class="lifetime">&#39;stp</span>, Nested&gt; {
+	<span class="kw">fn </span>nest (<span class="self">self</span>) -&gt; NextNumIter &lt;<span class="lifetime">&#39;stp</span>, <span class="self">Self</span>&gt; {
+		<span class="kw">match </span>&amp; <span class="self">self </span>{
+			&amp; NextNumIter::Outer { steps, reverse, .. } =&gt;
+				NextNumIter::Outer { steps, nested: <span class="self">self</span>, reverse },
+			&amp; NextNumIter::Inner { .. } | &amp; NextNumIter::Poison =&gt; <span class="macro">panic! </span>(),
 		}
 	}
 }
 
-<span class="kw">impl</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">Nested</span>: <span class="ident">Iterator</span> <span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">TempAnswer</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">NextNumIter</span> <span class="op">&lt;</span><span class="lifetime">&#39;stp</span>, <span class="ident">Nested</span><span class="op">&gt;</span> {
-	<span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">TempAnswer</span>;
-	<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::reversed_empty_ranges</span>) ]</span>
-	<span class="kw">fn</span> <span class="ident">next</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span> <span class="op">&lt;</span><span class="ident">TempAnswer</span><span class="op">&gt;</span> {
-		<span class="kw">loop</span> { <span class="kw">match</span> <span class="ident">mem::replace</span> (<span class="self">self</span>, <span class="ident">NextNumIter::Poison</span>) {
-			<span class="ident">NextNumIter::Outer</span> { <span class="ident">steps</span>, <span class="kw-2">mut</span> <span class="ident">nested</span>, <span class="ident">reverse</span> } =&gt; <span class="kw">match</span> <span class="ident">nested</span>.<span class="ident">next</span> () {
-				<span class="prelude-val">Some</span> ((<span class="ident">nums</span>, <span class="ident">progress</span>)) =&gt; {
-					<span class="kw">let</span> <span class="ident">step</span> <span class="op">=</span> <span class="ident">steps</span> [<span class="ident">nums</span>.<span class="ident">len</span> ()];
-					<span class="kw">let</span> <span class="ident">next_iter</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">step</span>.<span class="ident">random</span> {
-						<span class="number">1</span> ..<span class="op">=</span> <span class="number">9</span>
-					} <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">next</span>) <span class="op">=</span> <span class="ident">step</span>.<span class="ident">solve</span> (<span class="ident">progress</span>) {
-						<span class="ident">next</span> ..<span class="op">=</span> <span class="ident">next</span>
-					} <span class="kw">else</span> {
-						<span class="number">10</span> ..<span class="op">=</span> <span class="number">9</span>
-					};
-					<span class="op">*</span> <span class="self">self</span> <span class="op">=</span> <span class="ident">NextNumIter::Inner</span> { <span class="ident">steps</span>, <span class="ident">nested</span>, <span class="ident">reverse</span>, <span class="ident">nums</span>, <span class="ident">progress</span>, <span class="ident">next_iter</span> };
+<span class="kw">impl </span>&lt;<span class="lifetime">&#39;stp</span>, Nested: Iterator &lt;Item = TempAnswer&gt;&gt; Iterator <span class="kw">for </span>NextNumIter &lt;<span class="lifetime">&#39;stp</span>, Nested&gt; {
+	<span class="kw">type </span>Item = TempAnswer;
+	<span class="attribute">#[ allow (clippy::reversed_empty_ranges) ]
+	</span><span class="kw">fn </span>next (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;TempAnswer&gt; {
+		<span class="kw">loop </span>{ <span class="kw">match </span>mem::replace (<span class="self">self</span>, NextNumIter::Poison) {
+			NextNumIter::Outer { steps, <span class="kw-2">mut </span>nested, reverse } =&gt; <span class="kw">match </span>nested.next () {
+				<span class="prelude-val">Some </span>((nums, progress)) =&gt; {
+					<span class="kw">let </span>step = steps [nums.len ()];
+					<span class="kw">let </span>next_iter = <span class="kw">if </span>step.random {
+						<span class="number">1 </span>..= <span class="number">9
+					</span>} <span class="kw">else if let </span><span class="prelude-val">Some </span>(next) = step.solve (progress) {
+						next ..= next
+					} <span class="kw">else </span>{
+						<span class="number">10 </span>..= <span class="number">9
+					</span>};
+					* <span class="self">self </span>= NextNumIter::Inner { steps, nested, reverse, nums, progress, next_iter };
 					<span class="kw">continue</span>;
 				},
-				<span class="prelude-val">None</span> =&gt; {
-					<span class="kw">return</span> <span class="prelude-val">None</span>;
+				<span class="prelude-val">None </span>=&gt; {
+					<span class="kw">return </span><span class="prelude-val">None</span>;
 				},
 			},
-			<span class="ident">NextNumIter::Inner</span> { <span class="ident">steps</span>, <span class="ident">nested</span>, <span class="ident">reverse</span>, <span class="ident">nums</span>, <span class="ident">progress</span>, <span class="kw-2">mut</span> <span class="ident">next_iter</span> } =&gt; {
-				<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">next</span>) <span class="op">=</span> <span class="kw">if</span> <span class="ident">reverse</span> { <span class="ident">next_iter</span>.<span class="ident">next_back</span> () } <span class="kw">else</span> { <span class="ident">next_iter</span>.<span class="ident">next</span> () } {
-					<span class="kw">let</span> <span class="ident">step</span> <span class="op">=</span> <span class="ident">steps</span> [<span class="ident">nums</span>.<span class="ident">len</span> ()];
-					<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_nums</span> <span class="op">=</span> <span class="ident">nums</span>.<span class="ident">clone</span> ();
-					<span class="ident">new_nums</span>.<span class="ident">push</span> (<span class="ident">next</span>);
-					<span class="kw">let</span> <span class="ident">new_progress</span> <span class="op">=</span> <span class="ident">step</span>.<span class="ident">incr</span> (<span class="ident">progress</span>, <span class="ident">next</span>);
-					<span class="op">*</span> <span class="self">self</span> <span class="op">=</span> <span class="ident">NextNumIter::Inner</span> { <span class="ident">steps</span>, <span class="ident">nested</span>, <span class="ident">reverse</span>, <span class="ident">nums</span>, <span class="ident">progress</span>, <span class="ident">next_iter</span> };
-					<span class="kw">return</span> <span class="prelude-val">Some</span> ((<span class="ident">new_nums</span>, <span class="ident">new_progress</span>));
+			NextNumIter::Inner { steps, nested, reverse, nums, progress, <span class="kw-2">mut </span>next_iter } =&gt; {
+				<span class="kw">if let </span><span class="prelude-val">Some </span>(next) = <span class="kw">if </span>reverse { next_iter.next_back () } <span class="kw">else </span>{ next_iter.next () } {
+					<span class="kw">let </span>step = steps [nums.len ()];
+					<span class="kw">let </span><span class="kw-2">mut </span>new_nums = nums.clone ();
+					new_nums.push (next);
+					<span class="kw">let </span>new_progress = step.incr (progress, next);
+					* <span class="self">self </span>= NextNumIter::Inner { steps, nested, reverse, nums, progress, next_iter };
+					<span class="kw">return </span><span class="prelude-val">Some </span>((new_nums, new_progress));
 				}
-				<span class="op">*</span> <span class="self">self</span> <span class="op">=</span> <span class="ident">NextNumIter::Outer</span> { <span class="ident">steps</span>, <span class="ident">nested</span>, <span class="ident">reverse</span> };
+				* <span class="self">self </span>= NextNumIter::Outer { steps, nested, reverse };
 				<span class="kw">continue</span>;
 			},
-			<span class="ident">NextNumIter::Poison</span> =&gt; <span class="macro">panic!</span> (),
+			NextNumIter::Poison =&gt; <span class="macro">panic! </span>(),
 		} }
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

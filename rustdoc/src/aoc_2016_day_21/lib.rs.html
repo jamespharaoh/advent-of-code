@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-21/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_21/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_21/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_21/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-21/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_21/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_21/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_21/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -273,258 +273,256 @@
 <span id="273">273</span>
 <span id="274">274</span>
 <span id="275">275</span>
-<span id="276">276</span>
-</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 21: Scrambled Letters and Hash</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [https://adventofcode.com/2016/day/21](https://adventofcode.com/2016/day/21)</span>
+</pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 21: Scrambled Letters and Hash
+//!
+//! [https://adventofcode.com/2016/day/21](https://adventofcode.com/2016/day/21)
 
-<span class="attribute">#![ <span class="ident">allow</span> (<span class="ident">clippy::missing_inline_in_public_items</span>) ]</span>
+</span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
-<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
+</span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
-<span class="macro">puzzle_info!</span> {
-	<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;Scrambled Letters and Hash&quot;</span>;
-	<span class="ident">year</span> <span class="op">=</span> <span class="number">2016</span>;
-	<span class="ident">day</span> <span class="op">=</span> <span class="number">21</span>;
-	<span class="ident">parse</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">model::Input::parse</span> (<span class="ident">input</span>);
-	<span class="ident">part_one</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_one</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
-	<span class="ident">part_two</span> <span class="op">=</span> <span class="op">|</span><span class="ident">input</span><span class="op">|</span> <span class="ident">logic::part_two</span> (<span class="op">&amp;</span> <span class="ident">input</span>);
+<span class="macro">puzzle_info! </span>{
+	name = <span class="string">&quot;Scrambled Letters and Hash&quot;</span>;
+	year = <span class="number">2016</span>;
+	day = <span class="number">21</span>;
+	parse = |input| model::Input::parse (input);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">logic</span> {
+<span class="kw">pub mod </span>logic {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">model::Input</span>;
-	<span class="kw">use</span> <span class="ident">model::ScrambleOp</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>model::Input;
+	<span class="kw">use </span>model::ScrambleOp;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">enum</span> <span class="ident">Mode</span> { <span class="ident">Scramble</span>, <span class="ident">Unscramble</span> }
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	</span><span class="kw">enum </span>Mode { Scramble, Unscramble }
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_one</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">ops</span>, <span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">start_one</span>, <span class="ident">Mode::Scramble</span>)
+	<span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
+		calc_result (&amp; input.ops, &amp; input.start_one, Mode::Scramble)
 	}
 
-	<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">part_two</span> (<span class="ident">input</span>: <span class="op">&amp;</span> <span class="ident">Input</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-		<span class="ident">calc_result</span> (<span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">ops</span>, <span class="op">&amp;</span> <span class="ident">input</span>.<span class="ident">start_two</span>, <span class="ident">Mode::Unscramble</span>)
+	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
+		calc_result (&amp; input.ops, &amp; input.start_two, Mode::Unscramble)
 	}
 
-	<span class="kw">fn</span> <span class="ident">calc_result</span> (<span class="ident">ops</span>: <span class="op">&amp;</span> [<span class="ident">ScrambleOp</span>], <span class="ident">start</span>: <span class="op">&amp;</span> <span class="ident">str</span>, <span class="ident">mode</span>: <span class="ident">Mode</span>) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+	<span class="kw">fn </span>calc_result (ops: &amp; [ScrambleOp], start: &amp; str, mode: Mode) -&gt; GenResult &lt;String&gt; {
 
-		<span class="kw">use</span> <span class="ident">Mode</span>::{ <span class="ident">Scramble</span>, <span class="ident">Unscramble</span> };
-		<span class="kw">use</span> <span class="ident">ScrambleOp</span>::{ <span class="ident">Move</span>, <span class="ident">Reverse</span>, <span class="ident">RotChar</span>, <span class="ident">RotLeft</span>, <span class="ident">RotRight</span>, <span class="ident">SwapChars</span>, <span class="ident">SwapPosns</span> };
+		<span class="kw">use </span>Mode::{ Scramble, Unscramble };
+		<span class="kw">use </span>ScrambleOp::{ Move, Reverse, RotChar, RotLeft, RotRight, SwapChars, SwapPosns };
 
-		<span class="comment">// check password length</span>
+		<span class="comment">// check password length
 
-		<span class="kw">if</span> <span class="ident">start</span>.<span class="ident">is_empty</span> () {
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Password must have at least one character&quot;</span>.<span class="ident">into</span> ());
+		</span><span class="kw">if </span>start.is_empty () {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Password must have at least one character&quot;</span>.into ());
 		}
-		<span class="kw">if</span> <span class="ident">mode</span> <span class="op">==</span> <span class="ident">Unscramble</span> <span class="op">&amp;&amp;</span> <span class="ident">start</span>.<span class="ident">chars</span> ().<span class="ident">count</span> () <span class="op">!</span><span class="op">=</span> <span class="number">8</span> {
-			<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Can only unscramble password with length 8&quot;</span>.<span class="ident">into</span> ());
+		<span class="kw">if </span>mode == Unscramble &amp;&amp; start.chars ().count () != <span class="number">8 </span>{
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Can only unscramble password with length 8&quot;</span>.into ());
 		}
 
-		<span class="comment">// convert password to chars, allocate temp buffer</span>
+		<span class="comment">// convert password to chars, allocate temp buffer
 
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">start</span>.<span class="ident">chars</span> ().<span class="ident">collect</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state_temp</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">char</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span> (<span class="ident">state</span>.<span class="ident">len</span> ());
+		</span><span class="kw">let </span><span class="kw-2">mut </span>state: Vec &lt;char&gt; = start.chars ().collect ();
+		<span class="kw">let </span><span class="kw-2">mut </span>state_temp: Vec &lt;char&gt; = Vec::with_capacity (state.len ());
 
-		<span class="comment">// iterate over operations, in reverse order for unscramble</span>
+		<span class="comment">// iterate over operations, in reverse order for unscramble
 
-		<span class="kw">let</span> <span class="ident">ops_iter</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">mode</span> {
-			<span class="ident">Scramble</span> =&gt; <span class="ident">Either::Left</span> (<span class="ident">ops</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ()),
-			<span class="ident">Unscramble</span> =&gt; <span class="ident">Either::Right</span> (<span class="ident">ops</span>.<span class="ident">iter</span> ().<span class="ident">rev</span> ().<span class="ident">copied</span> ()),
+		</span><span class="kw">let </span>ops_iter = <span class="kw">match </span>mode {
+			Scramble =&gt; Either::Left (ops.iter ().copied ()),
+			Unscramble =&gt; Either::Right (ops.iter ().rev ().copied ()),
 		};
-		<span class="kw">for</span> <span class="ident">op</span> <span class="kw">in</span> <span class="ident">ops_iter</span> {
-			<span class="kw">match</span> (<span class="ident">mode</span>, <span class="ident">op</span>) {
-				(<span class="kw">_</span>, <span class="ident">SwapPosns</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>)) =&gt; {
-					<span class="kw">let</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">pos_0</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">let</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">pos_1</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">if</span> <span class="ident">pos_0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () <span class="op">|</span><span class="op">|</span> <span class="ident">pos_1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () {
-						<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Swap positions must be inside password&quot;</span>.<span class="ident">into</span> ());
+		<span class="kw">for </span>op <span class="kw">in </span>ops_iter {
+			<span class="kw">match </span>(mode, op) {
+				(<span class="kw">_</span>, SwapPosns (pos_0, pos_1)) =&gt; {
+					<span class="kw">let </span>pos_0 = pos_0.pan_usize ();
+					<span class="kw">let </span>pos_1 = pos_1.pan_usize ();
+					<span class="kw">if </span>pos_0 &gt;= state.len () || pos_1 &gt;= state.len () {
+						<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Swap positions must be inside password&quot;</span>.into ());
 					}
-					<span class="kw">let</span> <span class="ident">ch_0</span> <span class="op">=</span> <span class="ident">state</span> [<span class="ident">pos_0</span>];
-					<span class="kw">let</span> <span class="ident">ch_1</span> <span class="op">=</span> <span class="ident">state</span> [<span class="ident">pos_1</span>];
-					<span class="ident">state</span> [<span class="ident">pos_0</span>] <span class="op">=</span> <span class="ident">ch_1</span>;
-					<span class="ident">state</span> [<span class="ident">pos_1</span>] <span class="op">=</span> <span class="ident">ch_0</span>;
+					<span class="kw">let </span>ch_0 = state [pos_0];
+					<span class="kw">let </span>ch_1 = state [pos_1];
+					state [pos_0] = ch_1;
+					state [pos_1] = ch_0;
 				},
-				(<span class="kw">_</span>, <span class="ident">SwapChars</span> (<span class="ident">ch_0</span>, <span class="ident">ch_1</span>)) =&gt; {
-					<span class="kw">for</span> <span class="ident">ch</span> <span class="kw">in</span> <span class="ident">state</span>.<span class="ident">iter_mut</span> () {
-						<span class="op">*</span> <span class="ident">ch</span> <span class="op">=</span> <span class="kw">match</span> <span class="op">*</span> <span class="ident">ch</span> {
-							<span class="ident">ch</span> <span class="kw">if</span> <span class="ident">ch</span> <span class="op">==</span> <span class="ident">ch_0</span> =&gt; <span class="ident">ch_1</span>,
-							<span class="ident">ch</span> <span class="kw">if</span> <span class="ident">ch</span> <span class="op">==</span> <span class="ident">ch_1</span> =&gt; <span class="ident">ch_0</span>,
-							<span class="ident">ch</span> =&gt; <span class="ident">ch</span>,
+				(<span class="kw">_</span>, SwapChars (ch_0, ch_1)) =&gt; {
+					<span class="kw">for </span>ch <span class="kw">in </span>state.iter_mut () {
+						* ch = <span class="kw">match </span>* ch {
+							ch <span class="kw">if </span>ch == ch_0 =&gt; ch_1,
+							ch <span class="kw">if </span>ch == ch_1 =&gt; ch_0,
+							ch =&gt; ch,
 						}
 					}
 				},
-				(<span class="ident">Scramble</span>, <span class="ident">RotLeft</span> (<span class="ident">num</span>)) <span class="op">|</span> (<span class="ident">Unscramble</span>, <span class="ident">RotRight</span> (<span class="ident">num</span>)) =&gt; {
-					<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">num</span>.<span class="ident">as_usize</span> () <span class="op">%</span> <span class="ident">state</span>.<span class="ident">len</span> ();
-					<span class="ident">state_temp</span>.<span class="ident">clear</span> ();
-					<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">num</span>));
-					<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">take</span> (<span class="ident">num</span>));
-					<span class="ident">mem::swap</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state</span>, <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state_temp</span>);
+				(Scramble, RotLeft (num)) | (Unscramble, RotRight (num)) =&gt; {
+					<span class="kw">let </span>num = num.pan_usize () % state.len ();
+					state_temp.clear ();
+					state_temp.extend (state.iter_vals ().skip (num));
+					state_temp.extend (state.iter_vals ().take (num));
+					mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
 				},
-				(<span class="ident">Scramble</span>, <span class="ident">RotRight</span> (<span class="ident">num</span>)) <span class="op">|</span> (<span class="ident">Unscramble</span>, <span class="ident">RotLeft</span> (<span class="ident">num</span>)) =&gt; {
-					<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">num</span>.<span class="ident">as_usize</span> () <span class="op">%</span> <span class="ident">state</span>.<span class="ident">len</span> ();
-					<span class="ident">state_temp</span>.<span class="ident">clear</span> ();
-					<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">state</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="ident">num</span>));
-					<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">take</span> (<span class="ident">state</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="ident">num</span>));
-					<span class="ident">mem::swap</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state</span>, <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state_temp</span>);
+				(Scramble, RotRight (num)) | (Unscramble, RotLeft (num)) =&gt; {
+					<span class="kw">let </span>num = num.pan_usize () % state.len ();
+					state_temp.clear ();
+					state_temp.extend (state.iter_vals ().skip (state.len () - num));
+					state_temp.extend (state.iter_vals ().take (state.len () - num));
+					mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
 				},
-				(<span class="ident">Scramble</span>, <span class="ident">RotChar</span> (<span class="ident">ch</span>)) =&gt; {
-					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">position</span> (<span class="op">|</span><span class="ident">some_ch</span><span class="op">|</span> <span class="ident">some_ch</span> <span class="op">==</span> <span class="ident">ch</span>) {
-						<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> (<span class="kw">if</span> <span class="ident">pos</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">4</span> { <span class="number">2</span> } <span class="kw">else</span> { <span class="number">1</span> } <span class="op">+</span> <span class="ident">pos</span>) <span class="op">%</span> <span class="ident">state</span>.<span class="ident">len</span> ();
-						<span class="ident">state_temp</span>.<span class="ident">clear</span> ();
-						<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">state</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="ident">num</span>));
-						<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">take</span> (<span class="ident">state</span>.<span class="ident">len</span> () <span class="op">-</span> <span class="ident">num</span>));
-						<span class="ident">mem::swap</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state</span>, <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state_temp</span>);
+				(Scramble, RotChar (ch)) =&gt; {
+					<span class="kw">if let </span><span class="prelude-val">Some </span>(pos) = state.iter_vals ().position (|some_ch| some_ch == ch) {
+						<span class="kw">let </span>num = (<span class="kw">if </span>pos &gt;= <span class="number">4 </span>{ <span class="number">2 </span>} <span class="kw">else </span>{ <span class="number">1 </span>} + pos) % state.len ();
+						state_temp.clear ();
+						state_temp.extend (state.iter_vals ().skip (state.len () - num));
+						state_temp.extend (state.iter_vals ().take (state.len () - num));
+						mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
 					}
 				},
-				(<span class="ident">Unscramble</span>, <span class="ident">RotChar</span> (<span class="ident">ch</span>)) =&gt; {
-					<span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span> (<span class="ident">pos</span>) <span class="op">=</span> <span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">position</span> (<span class="op">|</span><span class="ident">some_ch</span><span class="op">|</span> <span class="ident">some_ch</span> <span class="op">==</span> <span class="ident">ch</span>) {
-						<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">pos</span> {
-							<span class="number">0</span> =&gt; <span class="number">1</span>, <span class="number">1</span> =&gt; <span class="number">1</span>, <span class="number">2</span> =&gt; <span class="number">6</span>, <span class="number">3</span> =&gt; <span class="number">2</span>,
-							<span class="number">4</span> =&gt; <span class="number">7</span>, <span class="number">5</span> =&gt; <span class="number">3</span>, <span class="number">6</span> =&gt; <span class="number">0</span>, <span class="number">7</span> =&gt; <span class="number">4</span>,
-							<span class="kw">_</span> =&gt; <span class="macro">unreachable!</span> (),
+				(Unscramble, RotChar (ch)) =&gt; {
+					<span class="kw">if let </span><span class="prelude-val">Some </span>(pos) = state.iter_vals ().position (|some_ch| some_ch == ch) {
+						<span class="kw">let </span>num = <span class="kw">match </span>pos {
+							<span class="number">0 </span>=&gt; <span class="number">1</span>, <span class="number">1 </span>=&gt; <span class="number">1</span>, <span class="number">2 </span>=&gt; <span class="number">6</span>, <span class="number">3 </span>=&gt; <span class="number">2</span>,
+							<span class="number">4 </span>=&gt; <span class="number">7</span>, <span class="number">5 </span>=&gt; <span class="number">3</span>, <span class="number">6 </span>=&gt; <span class="number">0</span>, <span class="number">7 </span>=&gt; <span class="number">4</span>,
+							<span class="kw">_ </span>=&gt; <span class="macro">unreachable! </span>(),
 						};
-						<span class="ident">state_temp</span>.<span class="ident">clear</span> ();
-						<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">skip</span> (<span class="ident">num</span>));
-						<span class="ident">state_temp</span>.<span class="ident">extend</span> (<span class="ident">state</span>.<span class="ident">iter_vals</span> ().<span class="ident">take</span> (<span class="ident">num</span>));
-						<span class="ident">mem::swap</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state</span>, <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">state_temp</span>);
+						state_temp.clear ();
+						state_temp.extend (state.iter_vals ().skip (num));
+						state_temp.extend (state.iter_vals ().take (num));
+						mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
 					}
 				},
-				(<span class="kw">_</span>, <span class="ident">Reverse</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>)) =&gt; {
-					<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">pos_0</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">pos_1</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">if</span> <span class="ident">pos_0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () <span class="op">|</span><span class="op">|</span> <span class="ident">pos_1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () {
-						<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Reverse range outside of password length&quot;</span>.<span class="ident">into</span> ());
+				(<span class="kw">_</span>, Reverse (pos_0, pos_1)) =&gt; {
+					<span class="kw">let </span><span class="kw-2">mut </span>pos_0 = pos_0.pan_usize ();
+					<span class="kw">let </span><span class="kw-2">mut </span>pos_1 = pos_1.pan_usize ();
+					<span class="kw">if </span>pos_0 &gt;= state.len () || pos_1 &gt;= state.len () {
+						<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Reverse range outside of password length&quot;</span>.into ());
 					}
-					<span class="kw">while</span> <span class="ident">pos_0</span> <span class="op">&lt;</span> <span class="ident">pos_1</span> {
-						<span class="kw">let</span> <span class="ident">ch_0</span> <span class="op">=</span> <span class="ident">state</span> [<span class="ident">pos_0</span>];
-						<span class="kw">let</span> <span class="ident">ch_1</span> <span class="op">=</span> <span class="ident">state</span> [<span class="ident">pos_1</span>];
-						<span class="ident">state</span> [<span class="ident">pos_0</span>] <span class="op">=</span> <span class="ident">ch_1</span>;
-						<span class="ident">state</span> [<span class="ident">pos_1</span>] <span class="op">=</span> <span class="ident">ch_0</span>;
-						<span class="ident">pos_0</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-						<span class="ident">pos_1</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+					<span class="kw">while </span>pos_0 &lt; pos_1 {
+						<span class="kw">let </span>ch_0 = state [pos_0];
+						<span class="kw">let </span>ch_1 = state [pos_1];
+						state [pos_0] = ch_1;
+						state [pos_1] = ch_0;
+						pos_0 += <span class="number">1</span>;
+						pos_1 -= <span class="number">1</span>;
 					}
 				},
-				(<span class="ident">Scramble</span>, <span class="ident">Move</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>)) <span class="op">|</span> (<span class="ident">Unscramble</span>, <span class="ident">Move</span> (<span class="ident">pos_1</span>, <span class="ident">pos_0</span>)) =&gt; {
-					<span class="kw">let</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">pos_0</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">let</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">pos_1</span>.<span class="ident">as_usize</span> ();
-					<span class="kw">if</span> <span class="ident">pos_0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () <span class="op">|</span><span class="op">|</span> <span class="ident">pos_1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">state</span>.<span class="ident">len</span> () {
-						<span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Move position outside of password length&quot;</span>.<span class="ident">into</span> ());
+				(Scramble, Move (pos_0, pos_1)) | (Unscramble, Move (pos_1, pos_0)) =&gt; {
+					<span class="kw">let </span>pos_0 = pos_0.pan_usize ();
+					<span class="kw">let </span>pos_1 = pos_1.pan_usize ();
+					<span class="kw">if </span>pos_0 &gt;= state.len () || pos_1 &gt;= state.len () {
+						<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Move position outside of password length&quot;</span>.into ());
 					}
-					<span class="kw">let</span> <span class="ident">ch</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">remove</span> (<span class="ident">pos_0</span>);
-					<span class="ident">state</span>.<span class="ident">insert</span> (<span class="ident">pos_1</span>, <span class="ident">ch</span>);
+					<span class="kw">let </span>ch = state.remove (pos_0);
+					state.insert (pos_1, ch);
 				},
 			}
 		}
 
-		<span class="comment">// collect back into string and return</span>
+		<span class="comment">// collect back into string and return
 
-		<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">into_iter</span> ().<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> ();
-		<span class="prelude-val">Ok</span> (<span class="ident">result</span>)
+		</span><span class="kw">let </span>result = state.into_iter ().collect::&lt;String&gt; ();
+		<span class="prelude-val">Ok </span>(result)
 
 	}
 
 }
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">model</span> {
+<span class="kw">pub mod </span>model {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="ident">parser</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Input</span> {
-		<span class="kw">pub</span> <span class="ident">ops</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="ident">ScrambleOp</span><span class="op">&gt;</span>,
-		<span class="kw">pub</span> <span class="ident">start_one</span>: <span class="ident">String</span>,
-		<span class="kw">pub</span> <span class="ident">start_two</span>: <span class="ident">String</span>,
+	<span class="attribute">#[ derive (Clone, Debug, Eq, PartialEq) ]
+	</span><span class="kw">pub struct </span>Input {
+		<span class="kw">pub </span>ops: Vec &lt;ScrambleOp&gt;,
+		<span class="kw">pub </span>start_one: String,
+		<span class="kw">pub </span>start_two: String,
 	}
 
-	<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Ord</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>) ]</span>
-	<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ScrambleOp</span> {
-		<span class="ident">SwapPosns</span> (<span class="ident">u32</span>, <span class="ident">u32</span>),
-		<span class="ident">SwapChars</span> (<span class="ident">char</span>, <span class="ident">char</span>),
-		<span class="ident">RotLeft</span> (<span class="ident">u32</span>),
-		<span class="ident">RotRight</span> (<span class="ident">u32</span>),
-		<span class="ident">RotChar</span> (<span class="ident">char</span>),
-		<span class="ident">Reverse</span> (<span class="ident">u32</span>, <span class="ident">u32</span>),
-		<span class="ident">Move</span> (<span class="ident">u32</span>, <span class="ident">u32</span>),
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>ScrambleOp {
+		SwapPosns (u32, u32),
+		SwapChars (char, char),
+		RotLeft (u32),
+		RotRight (u32),
+		RotChar (char),
+		Reverse (u32, u32),
+		Move (u32, u32),
 	}
 
-	<span class="kw">impl</span> <span class="ident">Input</span> {
+	<span class="kw">impl </span>Input {
 
-		<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span> (<span class="kw-2">mut</span> <span class="ident">input</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>]) -&gt; <span class="ident">GenResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="kw">let</span> <span class="ident">start_one</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">input</span>, <span class="string">&quot;START_ONE=&quot;</span>, <span class="string">&quot;abcdefgh&quot;</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">start_two</span> <span class="op">=</span> <span class="ident">parser::input_param</span> (<span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">input</span>, <span class="string">&quot;START_TWO=&quot;</span>, <span class="string">&quot;fbgdceah&quot;</span>) <span class="question-mark">?</span>;
-			<span class="kw">let</span> <span class="ident">ops</span>: <span class="ident">Vec</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">input</span>.<span class="ident">iter</span> ().<span class="ident">enumerate</span> ()
-				.<span class="ident">map</span> (<span class="op">|</span>(<span class="ident">line_idx</span>, <span class="ident">line</span>)<span class="op">|</span> {
-					<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">clippy::redundant_closure_for_method_calls</span>) ]</span>
-					<span class="ident">Parser::wrap</span> (<span class="ident">line</span>, <span class="op">|</span><span class="ident">parser</span><span class="op">|</span> <span class="ident">parser</span>.<span class="ident">item</span> ())
-						.<span class="ident">map_parse_err</span> (<span class="op">|</span><span class="ident">col_idx</span><span class="op">|</span>
-							<span class="macro">format!</span> (<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
-								<span class="ident">line_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">col_idx</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">line</span>))
+		<span class="kw">pub fn </span>parse (<span class="kw-2">mut </span>input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
+			<span class="kw">let </span>start_one = parser::input_param (&amp; <span class="kw-2">mut </span>input, <span class="string">&quot;START_ONE=&quot;</span>, <span class="string">&quot;abcdefgh&quot;</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span>start_two = parser::input_param (&amp; <span class="kw-2">mut </span>input, <span class="string">&quot;START_TWO=&quot;</span>, <span class="string">&quot;fbgdceah&quot;</span>) <span class="question-mark">?</span>;
+			<span class="kw">let </span>ops: Vec &lt;<span class="kw">_</span>&gt; = input.iter ().enumerate ()
+				.map (|(line_idx, line)| {
+					<span class="attribute">#[ allow (clippy::redundant_closure_for_method_calls) ]
+					</span>Parser::wrap (line, |parser| parser.item ())
+						.map_parse_err (|<span class="kw">_</span>, col_idx|
+							<span class="macro">format! </span>(<span class="string">&quot;Invalid input: line {}: col {}: {}&quot;</span>,
+								line_idx + <span class="number">1</span>, col_idx + <span class="number">1</span>, line))
 				})
-				.<span class="ident">collect</span>::<span class="op">&lt;</span><span class="ident">GenResult</span> <span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span><span class="op">&gt;</span> () <span class="question-mark">?</span>;
-			<span class="kw">if</span> <span class="ident">ops</span>.<span class="ident">is_empty</span> () { <span class="kw">return</span> <span class="prelude-val">Err</span> (<span class="string">&quot;Must have at least one scramble op&quot;</span>.<span class="ident">into</span> ()) }
-			<span class="prelude-val">Ok</span> (<span class="self">Self</span> { <span class="ident">ops</span>, <span class="ident">start_one</span>, <span class="ident">start_two</span> })
+				.collect::&lt;GenResult &lt;<span class="kw">_</span>&gt;&gt; () <span class="question-mark">?</span>;
+			<span class="kw">if </span>ops.is_empty () { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least one scramble op&quot;</span>.into ()) }
+			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ ops, start_one, start_two })
 		}
 
 	}
 
-	<span class="kw">impl</span> <span class="ident">FromParser</span> <span class="kw">for</span> <span class="ident">ScrambleOp</span> {
-		<span class="kw">fn</span> <span class="ident">from_parser</span> (<span class="ident">parser</span>: <span class="op">&amp;</span> <span class="kw-2">mut</span> <span class="ident">Parser</span>) -&gt; <span class="ident">ParseResult</span> <span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-			<span class="ident">parser</span>.<span class="ident">any</span> ()
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;swap position &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; with position &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::SwapPosns</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>))
+	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>ScrambleOp {
+		<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+			parser.any ()
+				.of (|parser| {
+					<span class="kw">let </span>pos_0 = parser.expect (<span class="string">&quot;swap position &quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>pos_1 = parser.expect (<span class="string">&quot; with position &quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::SwapPosns (pos_0, pos_1))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">ch_0</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;swap letter &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">expect_next</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">ch_1</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; with letter &quot;</span>) <span class="question-mark">?</span>.<span class="ident">expect_next</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::SwapChars</span> (<span class="ident">ch_0</span>, <span class="ident">ch_1</span>))
+				.of (|parser| {
+					<span class="kw">let </span>ch_0 = parser.expect (<span class="string">&quot;swap letter &quot;</span>) <span class="question-mark">?</span>.confirm ().expect_next () <span class="question-mark">?</span>;
+					<span class="kw">let </span>ch_1 = parser.expect (<span class="string">&quot; with letter &quot;</span>) <span class="question-mark">?</span>.expect_next () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::SwapChars (ch_0, ch_1))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rotate left &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="kw">if</span> <span class="ident">num</span> <span class="op">==</span> <span class="number">1</span> { <span class="string">&quot; step&quot;</span> } <span class="kw">else</span> { <span class="string">&quot; steps&quot;</span> }) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::RotLeft</span> (<span class="ident">num</span>))
+				.of (|parser| {
+					<span class="kw">let </span>num = parser.expect (<span class="string">&quot;rotate left &quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					parser.expect (<span class="kw">if </span>num == <span class="number">1 </span>{ <span class="string">&quot; step&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot; steps&quot; </span>}) <span class="question-mark">?</span>.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::RotLeft (num))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">num</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rotate right &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">expect</span> (<span class="kw">if</span> <span class="ident">num</span> <span class="op">==</span> <span class="number">1</span> { <span class="string">&quot; step&quot;</span> } <span class="kw">else</span> { <span class="string">&quot; steps&quot;</span> }) <span class="question-mark">?</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::RotRight</span> (<span class="ident">num</span>))
+				.of (|parser| {
+					<span class="kw">let </span>num = parser.expect (<span class="string">&quot;rotate right &quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					parser.expect (<span class="kw">if </span>num == <span class="number">1 </span>{ <span class="string">&quot; step&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot; steps&quot; </span>}) <span class="question-mark">?</span>.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::RotRight (num))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">ch</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;rotate based on position of letter &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ()
-						.<span class="ident">expect_next</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::RotChar</span> (<span class="ident">ch</span>))
+				.of (|parser| {
+					<span class="kw">let </span>ch = parser.expect (<span class="string">&quot;rotate based on position of letter &quot;</span>) <span class="question-mark">?</span>.confirm ()
+						.expect_next () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::RotChar (ch))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;reverse positions &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; through &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Reverse</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>))
+				.of (|parser| {
+					<span class="kw">let </span>pos_0 = parser.expect (<span class="string">&quot;reverse positions &quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>pos_1 = parser.expect (<span class="string">&quot; through &quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Reverse (pos_0, pos_1))
 				})
-				.<span class="ident">of</span> (<span class="op">|</span><span class="ident">parser</span><span class="op">|</span> {
-					<span class="kw">let</span> <span class="ident">pos_0</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot;move position &quot;</span>) <span class="question-mark">?</span>.<span class="ident">confirm</span> ().<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="kw">let</span> <span class="ident">pos_1</span> <span class="op">=</span> <span class="ident">parser</span>.<span class="ident">expect</span> (<span class="string">&quot; to position &quot;</span>) <span class="question-mark">?</span>.<span class="ident">int</span> () <span class="question-mark">?</span>;
-					<span class="ident">parser</span>.<span class="ident">end</span> () <span class="question-mark">?</span>;
-					<span class="prelude-val">Ok</span> (<span class="ident"><span class="self">Self</span>::Move</span> (<span class="ident">pos_0</span>, <span class="ident">pos_1</span>))
+				.of (|parser| {
+					<span class="kw">let </span>pos_0 = parser.expect (<span class="string">&quot;move position &quot;</span>) <span class="question-mark">?</span>.confirm ().int () <span class="question-mark">?</span>;
+					<span class="kw">let </span>pos_1 = parser.expect (<span class="string">&quot; to position &quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
+					parser.end () <span class="question-mark">?</span>;
+					<span class="prelude-val">Ok </span>(<span class="self">Self</span>::Move (pos_0, pos_1))
 				})
-				.<span class="ident">done</span> ()
+				.done ()
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">examples</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>examples {
 
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">const</span> <span class="ident">EXAMPLE</span>: <span class="op">&amp;</span> [<span class="op">&amp;</span> <span class="ident">str</span>] <span class="op">=</span> <span class="op">&amp;</span> [
+	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
 		<span class="string">&quot;START_ONE=abcde&quot;</span>,
 		<span class="string">&quot;START_TWO=fbdecgha&quot;</span>,
 		<span class="string">&quot;swap position 4 with position 0&quot;</span>,
@@ -537,18 +535,18 @@
 		<span class="string">&quot;rotate based on position of letter d&quot;</span>,
 	];
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_one</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;decab&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_one</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_one () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;decab&quot;</span>, puzzle.part_one (EXAMPLE));
 	}
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">part_two</span> () {
-		<span class="kw">let</span> <span class="ident">puzzle</span> <span class="op">=</span> <span class="ident">puzzle_metadata</span> ();
-		<span class="macro">assert_eq_ok!</span> (<span class="string">&quot;abcdefgh&quot;</span>, <span class="ident">puzzle</span>.<span class="ident">part_two</span> (<span class="ident">EXAMPLE</span>));
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>part_two () {
+		<span class="kw">let </span>puzzle = puzzle_metadata ();
+		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;abcdefgh&quot;</span>, puzzle.part_two (EXAMPLE));
 	}
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

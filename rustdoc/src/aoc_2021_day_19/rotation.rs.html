@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-19/src/rotation.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rotation.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_19/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2021/day-19/rotation.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>rotation.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2021_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2021_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2021_day_19/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -350,352 +350,358 @@
 <span id="350">350</span>
 <span id="351">351</span>
 <span id="352">352</span>
-</pre><pre class="rust"><code><span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">model::Pos</span>;
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+</pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="kw">use </span>model::Pos;
 
-<span class="attribute">#[ <span class="ident">derive</span> (<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Debug</span>, <span class="ident">Eq</span>, <span class="ident">Hash</span>, <span class="ident">PartialEq</span>) ]</span>
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Rotation</span> {
-	<span class="prelude-val">None</span>, <span class="ident">Clockwise</span>, <span class="ident">CounterClockwise</span>, <span class="ident">UpsideDown</span>,
-	<span class="ident">Up</span>, <span class="ident">ClockwiseUp</span>, <span class="ident">CounterClockwiseUp</span>, <span class="ident">UpsideDownUp</span>,
-	<span class="ident">Down</span>, <span class="ident">ClockwiseDown</span>, <span class="ident">CounterClockwiseDown</span>, <span class="ident">UpsideDownDown</span>,
-	<span class="ident">Left</span>, <span class="ident">ClockwiseLeft</span>, <span class="ident">CounterClockwiseLeft</span>, <span class="ident">UpsideDownLeft</span>,
-	<span class="ident">Right</span>, <span class="ident">ClockwiseRight</span>, <span class="ident">CounterClockwiseRight</span>, <span class="ident">UpsideDownRight</span>,
-	<span class="ident">Around</span>, <span class="ident">ClockwiseAround</span>, <span class="ident">CounterClockwiseAround</span>, <span class="ident">UpsideDownAround</span>,
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, PartialEq) ]
+</span><span class="kw">pub enum </span>Rotation {
+	<span class="prelude-val">None</span>, Clockwise, CounterClockwise, UpsideDown,
+	Up, ClockwiseUp, CounterClockwiseUp, UpsideDownUp,
+	Down, ClockwiseDown, CounterClockwiseDown, UpsideDownDown,
+	Left, ClockwiseLeft, CounterClockwiseLeft, UpsideDownLeft,
+	Right, ClockwiseRight, CounterClockwiseRight, UpsideDownRight,
+	Around, ClockwiseAround, CounterClockwiseAround, UpsideDownAround,
 }
 
-<span class="attribute">#[ <span class="ident">allow</span> (<span class="ident">dead_code</span>) ]</span>
-<span class="kw">impl</span> <span class="ident">Rotation</span> {
+<span class="attribute">#[ allow (dead_code) ]
+</span><span class="kw">impl </span>Rotation {
 
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ALL</span>: <span class="op">&amp;</span> <span class="lifetime">&#39;static</span> [<span class="self">Self</span>; <span class="number">24</span>] <span class="op">=</span> <span class="op">&amp;</span> [
-		<span class="ident"><span class="self">Self</span>::None</span>, <span class="ident"><span class="self">Self</span>::Clockwise</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwise</span>, <span class="ident"><span class="self">Self</span>::UpsideDown</span>,
-		<span class="ident"><span class="self">Self</span>::Up</span>, <span class="ident"><span class="self">Self</span>::ClockwiseUp</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span>, <span class="ident"><span class="self">Self</span>::UpsideDownUp</span>,
-		<span class="ident"><span class="self">Self</span>::Down</span>, <span class="ident"><span class="self">Self</span>::ClockwiseDown</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span>, <span class="ident"><span class="self">Self</span>::UpsideDownDown</span>,
-		<span class="ident"><span class="self">Self</span>::Left</span>, <span class="ident"><span class="self">Self</span>::ClockwiseLeft</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span>, <span class="ident"><span class="self">Self</span>::UpsideDownLeft</span>,
-		<span class="ident"><span class="self">Self</span>::Right</span>, <span class="ident"><span class="self">Self</span>::ClockwiseRight</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span>, <span class="ident"><span class="self">Self</span>::UpsideDownRight</span>,
-		<span class="ident"><span class="self">Self</span>::Around</span>, <span class="ident"><span class="self">Self</span>::ClockwiseAround</span>,
-		<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span>, <span class="ident"><span class="self">Self</span>::UpsideDownAround</span>,
+	<span class="kw">pub const </span>ALL: &amp; <span class="lifetime">&#39;static </span>[<span class="self">Self</span>; <span class="number">24</span>] = &amp; [
+		<span class="self">Self</span>::None, <span class="self">Self</span>::Clockwise,
+		<span class="self">Self</span>::CounterClockwise, <span class="self">Self</span>::UpsideDown,
+		<span class="self">Self</span>::Up, <span class="self">Self</span>::ClockwiseUp,
+		<span class="self">Self</span>::CounterClockwiseUp, <span class="self">Self</span>::UpsideDownUp,
+		<span class="self">Self</span>::Down, <span class="self">Self</span>::ClockwiseDown,
+		<span class="self">Self</span>::CounterClockwiseDown, <span class="self">Self</span>::UpsideDownDown,
+		<span class="self">Self</span>::Left, <span class="self">Self</span>::ClockwiseLeft,
+		<span class="self">Self</span>::CounterClockwiseLeft, <span class="self">Self</span>::UpsideDownLeft,
+		<span class="self">Self</span>::Right, <span class="self">Self</span>::ClockwiseRight,
+		<span class="self">Self</span>::CounterClockwiseRight, <span class="self">Self</span>::UpsideDownRight,
+		<span class="self">Self</span>::Around, <span class="self">Self</span>::ClockwiseAround,
+		<span class="self">Self</span>::CounterClockwiseAround, <span class="self">Self</span>::UpsideDownAround,
 	];
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">idx</span> (<span class="self">self</span>) -&gt; <span class="ident">usize</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="number">0</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="number">1</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="number">2</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="number">3</span>,
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="number">4</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="number">5</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="number">6</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="number">7</span>,
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="number">8</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="number">9</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="number">10</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="number">11</span>,
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="number">12</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="number">13</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="number">14</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="number">15</span>,
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="number">16</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="number">17</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="number">18</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="number">19</span>,
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="number">20</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="number">21</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="number">22</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="number">23</span>,
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>idx (<span class="self">self</span>) -&gt; usize {
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; <span class="number">0</span>,
+			<span class="self">Self</span>::Clockwise =&gt; <span class="number">1</span>,
+			<span class="self">Self</span>::CounterClockwise =&gt; <span class="number">2</span>,
+			<span class="self">Self</span>::UpsideDown =&gt; <span class="number">3</span>,
+			<span class="self">Self</span>::Up =&gt; <span class="number">4</span>,
+			<span class="self">Self</span>::ClockwiseUp =&gt; <span class="number">5</span>,
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; <span class="number">6</span>,
+			<span class="self">Self</span>::UpsideDownUp =&gt; <span class="number">7</span>,
+			<span class="self">Self</span>::Down =&gt; <span class="number">8</span>,
+			<span class="self">Self</span>::ClockwiseDown =&gt; <span class="number">9</span>,
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; <span class="number">10</span>,
+			<span class="self">Self</span>::UpsideDownDown =&gt; <span class="number">11</span>,
+			<span class="self">Self</span>::Left =&gt; <span class="number">12</span>,
+			<span class="self">Self</span>::ClockwiseLeft =&gt; <span class="number">13</span>,
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; <span class="number">14</span>,
+			<span class="self">Self</span>::UpsideDownLeft =&gt; <span class="number">15</span>,
+			<span class="self">Self</span>::Right =&gt; <span class="number">16</span>,
+			<span class="self">Self</span>::ClockwiseRight =&gt; <span class="number">17</span>,
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; <span class="number">18</span>,
+			<span class="self">Self</span>::UpsideDownRight =&gt; <span class="number">19</span>,
+			<span class="self">Self</span>::Around =&gt; <span class="number">20</span>,
+			<span class="self">Self</span>::ClockwiseAround =&gt; <span class="number">21</span>,
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; <span class="number">22</span>,
+			<span class="self">Self</span>::UpsideDownAround =&gt; <span class="number">23</span>,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">apply</span> (<span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">Pos</span>) -&gt; <span class="ident">Pos</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span> },
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">z</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="ident">pos</span>.<span class="ident">x</span> },
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">y</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span> },
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="ident">pos</span>.<span class="ident">x</span>, <span class="ident">y</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">y</span>, <span class="ident">z</span>: <span class="op">-</span> <span class="ident">pos</span>.<span class="ident">z</span> },
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>apply (<span class="self">self</span>, pos: Pos) -&gt; Pos {
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; Pos { x: pos.x, y: pos.y, z: pos.z },
+			<span class="self">Self</span>::Clockwise =&gt; Pos { x: - pos.y, y: pos.x, z: pos.z },
+			<span class="self">Self</span>::CounterClockwise =&gt; Pos { x: pos.y, y: - pos.x, z: pos.z },
+			<span class="self">Self</span>::UpsideDown =&gt; Pos { x: - pos.x, y: - pos.y, z: pos.z },
+			<span class="self">Self</span>::Up =&gt; Pos { x: pos.x, y: - pos.z, z: pos.y },
+			<span class="self">Self</span>::ClockwiseUp =&gt; Pos { x: pos.z, y: pos.x, z: pos.y },
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; Pos { x: - pos.z, y: - pos.x, z: pos.y },
+			<span class="self">Self</span>::UpsideDownUp =&gt; Pos { x: - pos.x, y: pos.z, z: pos.y },
+			<span class="self">Self</span>::Down =&gt; Pos { x: pos.x, y: pos.z, z: - pos.y },
+			<span class="self">Self</span>::ClockwiseDown =&gt; Pos { x: - pos.z, y: pos.x, z: - pos.y },
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; Pos { x: pos.z, y: - pos.x, z: - pos.y },
+			<span class="self">Self</span>::UpsideDownDown =&gt; Pos { x: - pos.x, y: - pos.z, z: - pos.y },
+			<span class="self">Self</span>::Left =&gt; Pos { x: pos.z, y: pos.y, z: - pos.x },
+			<span class="self">Self</span>::ClockwiseLeft =&gt; Pos { x: - pos.y, y: pos.z, z: - pos.x },
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; Pos { x: pos.y, y: - pos.z, z: - pos.x },
+			<span class="self">Self</span>::UpsideDownLeft =&gt; Pos { x: - pos.z, y: - pos.y, z: - pos.x },
+			<span class="self">Self</span>::Right =&gt; Pos { x: - pos.z, y: pos.y, z: pos.x },
+			<span class="self">Self</span>::ClockwiseRight =&gt; Pos { x: - pos.y, y: - pos.z, z: pos.x },
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; Pos { x: pos.y, y: pos.z, z: pos.x },
+			<span class="self">Self</span>::UpsideDownRight =&gt; Pos { x: pos.z, y: - pos.y, z: pos.x },
+			<span class="self">Self</span>::Around =&gt; Pos { x: - pos.x, y: pos.y, z: - pos.z },
+			<span class="self">Self</span>::ClockwiseAround =&gt; Pos { x: - pos.y, y: - pos.x, z: - pos.z },
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; Pos { x: pos.y, y: pos.x, z: - pos.z },
+			<span class="self">Self</span>::UpsideDownAround =&gt; Pos { x: pos.x, y: - pos.y, z: - pos.z },
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">left</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident"><span class="self">Self</span>::Left</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownRight</span>,
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwise</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::Clockwise</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident"><span class="self">Self</span>::Around</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownUp</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownDown</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDown</span>,
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident"><span class="self">Self</span>::None</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::Up</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::Down</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownAround</span>,
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident"><span class="self">Self</span>::Right</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownLeft</span>,
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>left (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; <span class="self">Self</span>::Left,
+			<span class="self">Self</span>::Clockwise =&gt; <span class="self">Self</span>::ClockwiseUp,
+			<span class="self">Self</span>::CounterClockwise =&gt; <span class="self">Self</span>::CounterClockwiseDown,
+			<span class="self">Self</span>::UpsideDown =&gt; <span class="self">Self</span>::UpsideDownRight,
+			<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::CounterClockwiseLeft,
+			<span class="self">Self</span>::ClockwiseUp =&gt; <span class="self">Self</span>::CounterClockwiseAround,
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; <span class="self">Self</span>::CounterClockwise,
+			<span class="self">Self</span>::UpsideDownUp =&gt; <span class="self">Self</span>::CounterClockwiseRight,
+			<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::ClockwiseLeft,
+			<span class="self">Self</span>::ClockwiseDown =&gt; <span class="self">Self</span>::Clockwise,
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; <span class="self">Self</span>::ClockwiseAround,
+			<span class="self">Self</span>::UpsideDownDown =&gt; <span class="self">Self</span>::ClockwiseRight,
+			<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::Around,
+			<span class="self">Self</span>::ClockwiseLeft =&gt; <span class="self">Self</span>::UpsideDownUp,
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; <span class="self">Self</span>::UpsideDownDown,
+			<span class="self">Self</span>::UpsideDownLeft =&gt; <span class="self">Self</span>::UpsideDown,
+			<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::None,
+			<span class="self">Self</span>::ClockwiseRight =&gt; <span class="self">Self</span>::Up,
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; <span class="self">Self</span>::Down,
+			<span class="self">Self</span>::UpsideDownRight =&gt; <span class="self">Self</span>::UpsideDownAround,
+			<span class="self">Self</span>::Around =&gt; <span class="self">Self</span>::Right,
+			<span class="self">Self</span>::ClockwiseAround =&gt; <span class="self">Self</span>::CounterClockwiseUp,
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; <span class="self">Self</span>::ClockwiseDown,
+			<span class="self">Self</span>::UpsideDownAround =&gt; <span class="self">Self</span>::UpsideDownLeft,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">around</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">left</span> ().<span class="ident">left</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>around (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.left ().left ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">right</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">left</span> ().<span class="ident">left</span> ().<span class="ident">left</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>right (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.left ().left ().left ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">clockwise</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident"><span class="self">Self</span>::Clockwise</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDown</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::None</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwise</span>,
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownUp</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::Up</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownDown</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::Down</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownLeft</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::Left</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownRight</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::Right</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownAround</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::Around</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span>,
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>clockwise (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; <span class="self">Self</span>::Clockwise,
+			<span class="self">Self</span>::Clockwise =&gt; <span class="self">Self</span>::UpsideDown,
+			<span class="self">Self</span>::CounterClockwise =&gt; <span class="self">Self</span>::None,
+			<span class="self">Self</span>::UpsideDown =&gt; <span class="self">Self</span>::CounterClockwise,
+			<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::ClockwiseUp,
+			<span class="self">Self</span>::ClockwiseUp =&gt; <span class="self">Self</span>::UpsideDownUp,
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; <span class="self">Self</span>::Up,
+			<span class="self">Self</span>::UpsideDownUp =&gt; <span class="self">Self</span>::CounterClockwiseUp,
+			<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::ClockwiseDown,
+			<span class="self">Self</span>::ClockwiseDown =&gt; <span class="self">Self</span>::UpsideDownDown,
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; <span class="self">Self</span>::Down,
+			<span class="self">Self</span>::UpsideDownDown =&gt; <span class="self">Self</span>::CounterClockwiseDown,
+			<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::ClockwiseLeft,
+			<span class="self">Self</span>::ClockwiseLeft =&gt; <span class="self">Self</span>::UpsideDownLeft,
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; <span class="self">Self</span>::Left,
+			<span class="self">Self</span>::UpsideDownLeft =&gt; <span class="self">Self</span>::CounterClockwiseLeft,
+			<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::ClockwiseRight,
+			<span class="self">Self</span>::ClockwiseRight =&gt; <span class="self">Self</span>::UpsideDownRight,
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; <span class="self">Self</span>::Right,
+			<span class="self">Self</span>::UpsideDownRight =&gt; <span class="self">Self</span>::CounterClockwiseRight,
+			<span class="self">Self</span>::Around =&gt; <span class="self">Self</span>::ClockwiseAround,
+			<span class="self">Self</span>::ClockwiseAround =&gt; <span class="self">Self</span>::UpsideDownAround,
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; <span class="self">Self</span>::Around,
+			<span class="self">Self</span>::UpsideDownAround =&gt; <span class="self">Self</span>::CounterClockwiseAround,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">upside_down</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>upside_down (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.clockwise ().clockwise ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">counter_clockwise</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>counter_clockwise (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.clockwise ().clockwise ().clockwise ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">up</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident"><span class="self">Self</span>::Up</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownDown</span>,
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownAround</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownRight</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownLeft</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDown</span>,
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident"><span class="self">Self</span>::None</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::Right</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::Left</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident"><span class="self">Self</span>::Around</span>,
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::Clockwise</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwise</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownUp</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident"><span class="self">Self</span>::Down</span>,
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>up (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; <span class="self">Self</span>::Up,
+			<span class="self">Self</span>::Clockwise =&gt; <span class="self">Self</span>::ClockwiseRight,
+			<span class="self">Self</span>::CounterClockwise =&gt; <span class="self">Self</span>::CounterClockwiseLeft,
+			<span class="self">Self</span>::UpsideDown =&gt; <span class="self">Self</span>::UpsideDownDown,
+			<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::UpsideDownAround,
+			<span class="self">Self</span>::ClockwiseUp =&gt; <span class="self">Self</span>::UpsideDownRight,
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; <span class="self">Self</span>::UpsideDownLeft,
+			<span class="self">Self</span>::UpsideDownUp =&gt; <span class="self">Self</span>::UpsideDown,
+			<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::None,
+			<span class="self">Self</span>::ClockwiseDown =&gt; <span class="self">Self</span>::Right,
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; <span class="self">Self</span>::Left,
+			<span class="self">Self</span>::UpsideDownDown =&gt; <span class="self">Self</span>::Around,
+			<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::ClockwiseUp,
+			<span class="self">Self</span>::ClockwiseLeft =&gt; <span class="self">Self</span>::Clockwise,
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; <span class="self">Self</span>::CounterClockwiseAround,
+			<span class="self">Self</span>::UpsideDownLeft =&gt; <span class="self">Self</span>::ClockwiseDown,
+			<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::CounterClockwiseUp,
+			<span class="self">Self</span>::ClockwiseRight =&gt; <span class="self">Self</span>::ClockwiseAround,
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; <span class="self">Self</span>::CounterClockwise,
+			<span class="self">Self</span>::UpsideDownRight =&gt; <span class="self">Self</span>::CounterClockwiseDown,
+			<span class="self">Self</span>::Around =&gt; <span class="self">Self</span>::UpsideDownUp,
+			<span class="self">Self</span>::ClockwiseAround =&gt; <span class="self">Self</span>::ClockwiseLeft,
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; <span class="self">Self</span>::CounterClockwiseRight,
+			<span class="self">Self</span>::UpsideDownAround =&gt; <span class="self">Self</span>::Down,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">flip</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">up</span> ().<span class="ident">up</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>flip (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.up ().up ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">down</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="self">self</span>.<span class="ident">up</span> ().<span class="ident">up</span> ().<span class="ident">up</span> ()
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>down (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="self">self</span>.up ().up ().up ()
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">rev</span> (<span class="self">self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident"><span class="self">Self</span>::None</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwise</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident"><span class="self">Self</span>::Clockwise</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDown</span>,
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident"><span class="self">Self</span>::Down</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownUp</span>,
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident"><span class="self">Self</span>::Up</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseRight</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownDown</span>,
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident"><span class="self">Self</span>::Right</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownLeft</span>,
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident"><span class="self">Self</span>::Left</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseUp</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownRight</span>,
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident"><span class="self">Self</span>::Around</span>,
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::ClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span>,
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident"><span class="self">Self</span>::UpsideDownAround</span>,
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>rev (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; <span class="self">Self</span>::None,
+			<span class="self">Self</span>::Clockwise =&gt; <span class="self">Self</span>::CounterClockwise,
+			<span class="self">Self</span>::CounterClockwise =&gt; <span class="self">Self</span>::Clockwise,
+			<span class="self">Self</span>::UpsideDown =&gt; <span class="self">Self</span>::UpsideDown,
+			<span class="self">Self</span>::Up =&gt; <span class="self">Self</span>::Down,
+			<span class="self">Self</span>::ClockwiseUp =&gt; <span class="self">Self</span>::CounterClockwiseRight,
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; <span class="self">Self</span>::ClockwiseLeft,
+			<span class="self">Self</span>::UpsideDownUp =&gt; <span class="self">Self</span>::UpsideDownUp,
+			<span class="self">Self</span>::Down =&gt; <span class="self">Self</span>::Up,
+			<span class="self">Self</span>::ClockwiseDown =&gt; <span class="self">Self</span>::CounterClockwiseLeft,
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; <span class="self">Self</span>::ClockwiseRight,
+			<span class="self">Self</span>::UpsideDownDown =&gt; <span class="self">Self</span>::UpsideDownDown,
+			<span class="self">Self</span>::Left =&gt; <span class="self">Self</span>::Right,
+			<span class="self">Self</span>::ClockwiseLeft =&gt; <span class="self">Self</span>::CounterClockwiseUp,
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; <span class="self">Self</span>::ClockwiseDown,
+			<span class="self">Self</span>::UpsideDownLeft =&gt; <span class="self">Self</span>::UpsideDownLeft,
+			<span class="self">Self</span>::Right =&gt; <span class="self">Self</span>::Left,
+			<span class="self">Self</span>::ClockwiseRight =&gt; <span class="self">Self</span>::CounterClockwiseDown,
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; <span class="self">Self</span>::ClockwiseUp,
+			<span class="self">Self</span>::UpsideDownRight =&gt; <span class="self">Self</span>::UpsideDownRight,
+			<span class="self">Self</span>::Around =&gt; <span class="self">Self</span>::Around,
+			<span class="self">Self</span>::ClockwiseAround =&gt; <span class="self">Self</span>::ClockwiseAround,
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; <span class="self">Self</span>::CounterClockwiseAround,
+			<span class="self">Self</span>::UpsideDownAround =&gt; <span class="self">Self</span>::UpsideDownAround,
 		}
 	}
 
-	<span class="attribute">#[ <span class="ident">inline</span> ]</span>
-	<span class="attribute">#[ <span class="ident">must_use</span> ]</span>
-	<span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">combine</span> (<span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>) -&gt; <span class="self">Self</span> {
-		<span class="kw">match</span> <span class="self">self</span> {
-			<span class="ident"><span class="self">Self</span>::None</span> =&gt; <span class="ident">other</span>,
-			<span class="ident"><span class="self">Self</span>::Clockwise</span> =&gt; <span class="ident">other</span>.<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwise</span> =&gt; <span class="ident">other</span>.<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDown</span> =&gt; <span class="ident">other</span>.<span class="ident">upside_down</span> (),
-			<span class="ident"><span class="self">Self</span>::Up</span> =&gt; <span class="ident">other</span>.<span class="ident">up</span> (),
-			<span class="ident"><span class="self">Self</span>::ClockwiseUp</span> =&gt; <span class="ident">other</span>.<span class="ident">up</span> ().<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseUp</span> =&gt; <span class="ident">other</span>.<span class="ident">up</span> ().<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDownUp</span> =&gt; <span class="ident">other</span>.<span class="ident">up</span> ().<span class="ident">upside_down</span> (),
-			<span class="ident"><span class="self">Self</span>::Down</span> =&gt; <span class="ident">other</span>.<span class="ident">down</span> (),
-			<span class="ident"><span class="self">Self</span>::ClockwiseDown</span> =&gt; <span class="ident">other</span>.<span class="ident">down</span> ().<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseDown</span> =&gt; <span class="ident">other</span>.<span class="ident">down</span> ().<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDownDown</span> =&gt; <span class="ident">other</span>.<span class="ident">down</span> ().<span class="ident">upside_down</span> (),
-			<span class="ident"><span class="self">Self</span>::Left</span> =&gt; <span class="ident">other</span>.<span class="ident">left</span> (),
-			<span class="ident"><span class="self">Self</span>::ClockwiseLeft</span> =&gt; <span class="ident">other</span>.<span class="ident">left</span> ().<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseLeft</span> =&gt; <span class="ident">other</span>.<span class="ident">left</span> ().<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDownLeft</span> =&gt; <span class="ident">other</span>.<span class="ident">left</span> ().<span class="ident">upside_down</span> (),
-			<span class="ident"><span class="self">Self</span>::Right</span> =&gt; <span class="ident">other</span>.<span class="ident">right</span> (),
-			<span class="ident"><span class="self">Self</span>::ClockwiseRight</span> =&gt; <span class="ident">other</span>.<span class="ident">right</span> ().<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseRight</span> =&gt; <span class="ident">other</span>.<span class="ident">right</span> ().<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDownRight</span> =&gt; <span class="ident">other</span>.<span class="ident">right</span> ().<span class="ident">upside_down</span> (),
-			<span class="ident"><span class="self">Self</span>::Around</span> =&gt; <span class="ident">other</span>.<span class="ident">around</span> (),
-			<span class="ident"><span class="self">Self</span>::ClockwiseAround</span> =&gt; <span class="ident">other</span>.<span class="ident">around</span> ().<span class="ident">clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::CounterClockwiseAround</span> =&gt; <span class="ident">other</span>.<span class="ident">around</span> ().<span class="ident">counter_clockwise</span> (),
-			<span class="ident"><span class="self">Self</span>::UpsideDownAround</span> =&gt; <span class="ident">other</span>.<span class="ident">around</span> ().<span class="ident">upside_down</span> (),
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub const fn </span>combine (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="self">Self </span>{
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::None =&gt; other,
+			<span class="self">Self</span>::Clockwise =&gt; other.clockwise (),
+			<span class="self">Self</span>::CounterClockwise =&gt; other.counter_clockwise (),
+			<span class="self">Self</span>::UpsideDown =&gt; other.upside_down (),
+			<span class="self">Self</span>::Up =&gt; other.up (),
+			<span class="self">Self</span>::ClockwiseUp =&gt; other.up ().clockwise (),
+			<span class="self">Self</span>::CounterClockwiseUp =&gt; other.up ().counter_clockwise (),
+			<span class="self">Self</span>::UpsideDownUp =&gt; other.up ().upside_down (),
+			<span class="self">Self</span>::Down =&gt; other.down (),
+			<span class="self">Self</span>::ClockwiseDown =&gt; other.down ().clockwise (),
+			<span class="self">Self</span>::CounterClockwiseDown =&gt; other.down ().counter_clockwise (),
+			<span class="self">Self</span>::UpsideDownDown =&gt; other.down ().upside_down (),
+			<span class="self">Self</span>::Left =&gt; other.left (),
+			<span class="self">Self</span>::ClockwiseLeft =&gt; other.left ().clockwise (),
+			<span class="self">Self</span>::CounterClockwiseLeft =&gt; other.left ().counter_clockwise (),
+			<span class="self">Self</span>::UpsideDownLeft =&gt; other.left ().upside_down (),
+			<span class="self">Self</span>::Right =&gt; other.right (),
+			<span class="self">Self</span>::ClockwiseRight =&gt; other.right ().clockwise (),
+			<span class="self">Self</span>::CounterClockwiseRight =&gt; other.right ().counter_clockwise (),
+			<span class="self">Self</span>::UpsideDownRight =&gt; other.right ().upside_down (),
+			<span class="self">Self</span>::Around =&gt; other.around (),
+			<span class="self">Self</span>::ClockwiseAround =&gt; other.around ().clockwise (),
+			<span class="self">Self</span>::CounterClockwiseAround =&gt; other.around ().counter_clockwise (),
+			<span class="self">Self</span>::UpsideDownAround =&gt; other.around ().upside_down (),
 		}
 	}
 
 }
 
-<span class="attribute">#[ <span class="ident">cfg</span> (<span class="ident">test</span>) ]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
+<span class="attribute">#[ cfg (test) ]
+</span><span class="kw">mod </span>tests {
 
-	<span class="kw">use</span> <span class="ident">aoc_common</span>::<span class="kw-2">*</span>;
-	<span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+	<span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="attribute">#[ <span class="ident">test</span> ]</span>
-	<span class="kw">fn</span> <span class="ident">test_rotation</span> () {
-		<span class="kw">let</span> <span class="ident">base</span> <span class="op">=</span> <span class="ident">Pos</span> { <span class="ident">x</span>: <span class="number">1</span>, <span class="ident">y</span>: <span class="number">2</span>, <span class="ident">z</span>: <span class="number">3</span> };
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Pos</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen_left</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Rotation</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen_up</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Rotation</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">seen_clockwise</span>: <span class="ident">HashSet</span> <span class="op">&lt;</span><span class="ident">Rotation</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">HashSet::new</span> ();
-		<span class="kw">fn</span> <span class="ident">right_handed</span> (<span class="ident">pos</span>: <span class="ident">Pos</span>) -&gt; <span class="ident">bool</span> {
-			<span class="kw">let</span> <span class="ident">sign</span> <span class="op">=</span> <span class="kw">match</span> (<span class="ident">pos</span>.<span class="ident">x</span>.<span class="ident">abs</span> (), <span class="ident">pos</span>.<span class="ident">y</span>.<span class="ident">abs</span> (), <span class="ident">pos</span>.<span class="ident">z</span>.<span class="ident">abs</span> ()) {
-				(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) =&gt; <span class="number">1</span>,
-				(<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>) =&gt; <span class="number">1</span>,
-				(<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>) =&gt; <span class="number">1</span>,
-				(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>) =&gt; <span class="op">-</span><span class="number">1</span>,
-				(<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>) =&gt; <span class="op">-</span><span class="number">1</span>,
-				(<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>) =&gt; <span class="op">-</span><span class="number">1</span>,
-				<span class="kw">_</span> =&gt; <span class="macro">panic!</span> (),
-			} <span class="op">*</span> <span class="ident">pos</span>.<span class="ident">x</span>.<span class="ident">signum</span> () <span class="op">*</span> <span class="ident">pos</span>.<span class="ident">y</span>.<span class="ident">signum</span> () <span class="op">*</span> <span class="ident">pos</span>.<span class="ident">z</span>.<span class="ident">signum</span> ();
-			<span class="ident">sign</span> <span class="op">&gt;</span> <span class="number">0</span>
+	<span class="attribute">#[ test ]
+	</span><span class="kw">fn </span>test_rotation () {
+		<span class="kw">let </span>base = Pos { x: <span class="number">1</span>, y: <span class="number">2</span>, z: <span class="number">3 </span>};
+		<span class="kw">let </span><span class="kw-2">mut </span>seen: HashSet &lt;Pos&gt; = HashSet::new ();
+		<span class="kw">let </span><span class="kw-2">mut </span>seen_left: HashSet &lt;Rotation&gt; = HashSet::new ();
+		<span class="kw">let </span><span class="kw-2">mut </span>seen_up: HashSet &lt;Rotation&gt; = HashSet::new ();
+		<span class="kw">let </span><span class="kw-2">mut </span>seen_clockwise: HashSet &lt;Rotation&gt; = HashSet::new ();
+		<span class="kw">fn </span>right_handed (pos: Pos) -&gt; bool {
+			<span class="kw">let </span>sign = <span class="kw">match </span>(pos.x.abs (), pos.y.abs (), pos.z.abs ()) {
+				(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) | (<span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>) | (<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>) =&gt; <span class="number">1</span>,
+				(<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>) | (<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>) | (<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>) =&gt; -<span class="number">1</span>,
+				<span class="kw">_ </span>=&gt; <span class="macro">panic! </span>(),
+			} * pos.x.signum () * pos.y.signum () * pos.z.signum ();
+			<span class="number">0 </span>&lt; sign
 		}
-		<span class="kw">for</span> <span class="ident">rotate</span> <span class="kw">in</span> <span class="ident">Rotation::ALL</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-			<span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">apply</span> (<span class="ident">base</span>);
-			<span class="macro">assert!</span> (<span class="ident">right_handed</span> (<span class="ident">result</span>));
-			<span class="macro">assert!</span> (<span class="op">!</span> <span class="ident">seen</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">result</span>), <span class="string">&quot;Duplicated rotation {:?}&quot;</span>, <span class="ident">result</span>);
-			<span class="ident">seen</span>.<span class="ident">insert</span> (<span class="ident">result</span>);
-			<span class="kw">let</span> <span class="ident">rotate_left</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">left</span> ();
-			<span class="macro">assert!</span> (<span class="op">!</span> <span class="ident">seen_left</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">rotate_left</span>), <span class="string">&quot;Duplicated rotation left {:?}&quot;</span>, <span class="ident">rotate_left</span>);
-			<span class="ident">seen_left</span>.<span class="ident">insert</span> (<span class="ident">rotate_left</span>);
-			<span class="kw">let</span> <span class="ident">rotate_up</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">up</span> ();
-			<span class="macro">assert!</span> (<span class="op">!</span> <span class="ident">seen_up</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">rotate_up</span>), <span class="string">&quot;Duplicated rotation up {:?}&quot;</span>, <span class="ident">rotate_up</span>);
-			<span class="ident">seen_up</span>.<span class="ident">insert</span> (<span class="ident">rotate_up</span>);
-			<span class="kw">let</span> <span class="ident">rotate_clockwise</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">clockwise</span> ();
-			<span class="macro">assert!</span> (<span class="op">!</span> <span class="ident">seen_clockwise</span>.<span class="ident">contains</span> (<span class="op">&amp;</span> <span class="ident">rotate_clockwise</span>), <span class="string">&quot;Duplicated rotation clockwise {:?}&quot;</span>, <span class="ident">rotate_clockwise</span>);
-			<span class="ident">seen_clockwise</span>.<span class="ident">insert</span> (<span class="ident">rotate_clockwise</span>);
-			<span class="kw">let</span> <span class="ident">rotate_four_lefts</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">left</span> ().<span class="ident">left</span> ().<span class="ident">left</span> ().<span class="ident">left</span> ();
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate_four_lefts</span>, <span class="string">&quot;Four lefts from {:?} arrives at {:?}&quot;</span>, <span class="ident">rotate</span>, <span class="ident">rotate_four_lefts</span>);
-			<span class="kw">let</span> <span class="ident">rotate_four_ups</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">up</span> ().<span class="ident">up</span> ().<span class="ident">up</span> ().<span class="ident">up</span> ();
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate_four_ups</span>, <span class="string">&quot;Four ups from {:?} arrives at {:?}&quot;</span>, <span class="ident">rotate</span>, <span class="ident">rotate_four_ups</span>);
-			<span class="kw">let</span> <span class="ident">rotate_four_clockwises</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ().<span class="ident">clockwise</span> ();
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate_four_clockwises</span>, <span class="string">&quot;Four clockwises from {:?} arrives at {:?}&quot;</span>, <span class="ident">rotate</span>, <span class="ident">rotate_four_clockwises</span>);
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate</span>.<span class="ident">up</span> ().<span class="ident">right</span> ().<span class="ident">down</span> ().<span class="ident">counter_clockwise</span> ());
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate</span>.<span class="ident">flip</span> ().<span class="ident">around</span> ().<span class="ident">upside_down</span> ());
-			<span class="kw">let</span> <span class="ident">rotate_two_revs</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">rev</span> ().<span class="ident">rev</span> ();
-			<span class="macro">assert_eq!</span> (<span class="ident">rotate</span>, <span class="ident">rotate_two_revs</span>, <span class="string">&quot;Two reverses of {:?} arrives at {:?}&quot;</span>, <span class="ident">rotate</span>, <span class="ident">rotate_two_revs</span>);
-			<span class="kw">let</span> <span class="ident">pos_forward_rev</span> <span class="op">=</span> <span class="ident">rotate</span>.<span class="ident">rev</span> ().<span class="ident">apply</span> (<span class="ident">rotate</span>.<span class="ident">apply</span> (<span class="ident">base</span>));
-			<span class="macro">assert_eq!</span> (<span class="ident">base</span>, <span class="ident">pos_forward_rev</span>, <span class="string">&quot;Applying forward and reverse to {:?} arrives at {:?}&quot;</span>, <span class="ident">base</span>, <span class="ident">pos_forward_rev</span>);
-			<span class="kw">for</span> <span class="ident">other</span> <span class="kw">in</span> <span class="ident">Rotation::ALL</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> () {
-				<span class="kw">let</span> <span class="ident">pos_apply_twice</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">apply</span> (<span class="ident">rotate</span>.<span class="ident">apply</span> (<span class="ident">base</span>));
-				<span class="kw">let</span> <span class="ident">pos_combine</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">combine</span> (<span class="ident">rotate</span>).<span class="ident">apply</span> (<span class="ident">base</span>);
-				<span class="macro">assert_eq!</span> (<span class="ident">pos_apply_twice</span>, <span class="ident">pos_combine</span>,
-					<span class="string">&quot;Applying {:?} then {:?} gives {:?} but combining then applying gives {:?}&quot;</span>,
-					<span class="ident">rotate</span>, <span class="ident">other</span>, <span class="ident">pos_apply_twice</span>, <span class="ident">pos_combine</span>);
-				<span class="kw">for</span> <span class="ident">other_base</span> <span class="kw">in</span> <span class="ident">Rotation::ALL</span>.<span class="ident">iter</span> ().<span class="ident">copied</span> ().<span class="ident">map</span> (<span class="op">|</span><span class="ident">rot</span><span class="op">|</span> <span class="ident">rot</span>.<span class="ident">apply</span> (<span class="ident">base</span>)) {
-					<span class="kw">if</span> <span class="ident">other</span>.<span class="ident">apply</span> (<span class="ident">other_base</span>) <span class="op">!</span><span class="op">=</span> <span class="ident">result</span> { <span class="kw">continue</span> }
-					<span class="macro">assert_eq!</span> (<span class="ident">other</span>.<span class="ident">rev</span> ().<span class="ident">combine</span> (<span class="ident">rotate</span>).<span class="ident">apply</span> (<span class="ident">base</span>), <span class="ident">other_base</span>);
+		<span class="kw">for </span>rotate <span class="kw">in </span>Rotation::ALL.iter ().copied () {
+			<span class="kw">let </span>result = rotate.apply (base);
+			<span class="macro">assert! </span>(right_handed (result));
+			<span class="macro">assert! </span>(! seen.contains (&amp; result), <span class="string">&quot;Duplicated rotation {:?}&quot;</span>, result);
+			seen.insert (result);
+			<span class="kw">let </span>rotate_left = rotate.left ();
+			<span class="macro">assert! </span>(! seen_left.contains (&amp; rotate_left),
+				<span class="string">&quot;Duplicated rotation left {rotate_left:?}&quot;</span>);
+			seen_left.insert (rotate_left);
+			<span class="kw">let </span>rotate_up = rotate.up ();
+			<span class="macro">assert! </span>(! seen_up.contains (&amp; rotate_up), <span class="string">&quot;Duplicated rotation up {rotate_up:?}&quot;</span>);
+			seen_up.insert (rotate_up);
+			<span class="kw">let </span>rotate_clockwise = rotate.clockwise ();
+			<span class="macro">assert! </span>(! seen_clockwise.contains (&amp; rotate_clockwise),
+				<span class="string">&quot;Duplicated rotation clockwise {rotate_clockwise:?}&quot;</span>);
+			seen_clockwise.insert (rotate_clockwise);
+			<span class="kw">let </span>rotate_four_lefts = rotate.left ().left ().left ().left ();
+			<span class="macro">assert_eq! </span>(rotate, rotate_four_lefts,
+				<span class="string">&quot;Four lefts from {rotate:?} arrives at {rotate_four_lefts:?}&quot;</span>);
+			<span class="kw">let </span>rotate_four_ups = rotate.up ().up ().up ().up ();
+			<span class="macro">assert_eq! </span>(rotate, rotate_four_ups,
+				<span class="string">&quot;Four ups from {rotate:?} arrives at {rotate_four_ups:?}&quot;</span>);
+			<span class="kw">let </span>rotate_four_clockwises = rotate.clockwise ().clockwise ().clockwise ().clockwise ();
+			<span class="macro">assert_eq! </span>(rotate, rotate_four_clockwises,
+				<span class="string">&quot;Four clockwises from {rotate:?} arrives at {rotate_four_clockwises:?}&quot;</span>);
+			<span class="macro">assert_eq! </span>(rotate, rotate.up ().right ().down ().counter_clockwise ());
+			<span class="macro">assert_eq! </span>(rotate, rotate.flip ().around ().upside_down ());
+			<span class="kw">let </span>rotate_two_revs = rotate.rev ().rev ();
+			<span class="macro">assert_eq! </span>(rotate, rotate_two_revs,
+				<span class="string">&quot;Two reverses of {rotate:?} arrives at {rotate_two_revs:?}&quot;</span>);
+			<span class="kw">let </span>pos_forward_rev = rotate.rev ().apply (rotate.apply (base));
+			<span class="macro">assert_eq! </span>(base, pos_forward_rev,
+				<span class="string">&quot;Applying forward and reverse to {rotate:?} arrives at {pos_forward_rev:?}&quot;</span>);
+			<span class="kw">for </span>other <span class="kw">in </span>Rotation::ALL.iter ().copied () {
+				<span class="kw">let </span>pos_apply_twice = other.apply (rotate.apply (base));
+				<span class="kw">let </span>pos_combine = other.combine (rotate).apply (base);
+				<span class="macro">assert_eq! </span>(pos_apply_twice, pos_combine,
+					<span class="string">&quot;Applying {rotate:?} then {other:?} gives {pos_apply_twice:?} but combining \
+					then applying gives {pos_combine:?}&quot;</span>);
+				<span class="kw">for </span>other_base <span class="kw">in </span>Rotation::ALL.iter ().copied ().map (|rot| rot.apply (base)) {
+					<span class="kw">if </span>other.apply (other_base) != result { <span class="kw">continue </span>}
+					<span class="macro">assert_eq! </span>(other.rev ().combine (rotate).apply (base), other_base);
 				}
 			}
 		}
@@ -703,4 +709,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.65.0-nightly (34a6cae28 2022-08-09)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>

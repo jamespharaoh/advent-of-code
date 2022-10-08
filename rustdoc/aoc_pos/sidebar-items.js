@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Dir2d",""],["DirGeo",""],["Turn2d",""]],"struct":[["PosGeo",""],["PosRowCol",""],["PosXY",""],["PosXYZ",""],["PosYX",""]],"trait":[["Coord",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["AxisRowCol",""],["AxisWXYZ",""],["AxisXY",""],["AxisXYZ",""],["AxisXYZT",""],["AxisXYZW",""],["Dir2d",""],["DirGeo",""],["DirGeoHexLat",""],["Turn2d",""],["TurnHex",""]],"struct":[["PosGeo",""],["PosGeoHexLat",""],["PosRowCol",""],["PosWXYZ",""],["PosXY",""],["PosXYZ",""],["PosXYZT",""],["PosXYZW",""],["PosYX",""]],"trait":[["GenAxis",""],["GenPos",""]]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":[["CoreNext",""],["GameNext",""],["Tile",""]],"struct":[["Core",""],["Game",""]],"type":[["Coord",""],["Cpu",""],["Grid",""],["Pos",""],["RunResult",""],["Val",""]]};
