@@ -1,0 +1,5 @@
+param_0 = "NUM_STEPS=100\x0a"
+
+misc_dot = "."
+misc_hash = "#"
+misc_newline = "\x0a"

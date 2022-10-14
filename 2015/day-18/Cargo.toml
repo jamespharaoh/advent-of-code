@@ -15,18 +15,20 @@
 	aoc-grid = { path = "../../common/grid" }
 	aoc-pos = { path = "../../common/pos" }
 
-[lib]
-
-	doctest = false
-	crate-type = [ "rlib", "dylib" ]
-
 [build-dependencies]
 
 	aoc-codegen = { path = "../../misc/codegen" }
 
+[lib]
+
+	path = "lib.rs"
+	doctest = false
+	crate-type = [ "rlib", "dylib" ]
+
 [[bin]]
 
 	name = "aoc-2015-day-18"
+	path = "main.rs"
 	test = false
 	doctest = false
 	bench = false
