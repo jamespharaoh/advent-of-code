@@ -50,7 +50,8 @@ fn calc_result (
 		dir = dir + turn;
 		nodes.set (pos, next_state);
 		if count { num_infected += 1; }
-		pos = (pos + (dir, 1)) ?;
+		let dir_one = (dir, 1);
+		pos = chk! (pos + dir_one) ?;
 	}
 	Ok (num_infected)
 }

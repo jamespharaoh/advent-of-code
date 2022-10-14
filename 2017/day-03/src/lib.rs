@@ -64,7 +64,8 @@ pub mod logic {
 				rem = stride;
 			}
 			rem -= 1;
-			pos = (pos + (dir, 1)).ok () ?;
+			let dir_one = (dir, 1);
+			pos = chk! (pos + dir_one).ok () ?;
 			Some (next_pos)
 		})
 	}

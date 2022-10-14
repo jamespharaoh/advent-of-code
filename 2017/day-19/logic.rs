@@ -51,7 +51,8 @@ pub fn route_iter (
 
 		if matches! (tile, Tile::Vert | Tile::Horiz | Tile::Letter (_)) {
 			let last_pos = pos;
-			pos = (pos + (dir, 1)).ok () ?;
+			let dir_one = (dir, 1);
+			pos = chk! (pos + dir_one).ok () ?;
 			return Some ((last_pos, tile));
 		}
 
@@ -59,7 +60,8 @@ pub fn route_iter (
 
 		for turn in [ Turn::Left, Turn::Right ].iter ().copied () {
 			let next_dir = dir + turn;
-			let next_pos = ok_or! (pos + (next_dir, 1), continue);
+			let next_dir_one = (next_dir, 1);
+			let next_pos = ok_or! (chk! (pos + next_dir_one), continue);
 			if matches! (input.grid.get (next_pos),
 					Some (Tile::Vert | Tile::Horiz | Tile::Letter (_))) {
 				dir = next_dir;

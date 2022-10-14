@@ -822,12 +822,12 @@ mod dim_2 {
 
 		}
 
-		impl <Val: Int> Add <(Dir2d, Val)> for PosRowCol <Val> {
+		impl <Val: Int> TryAdd <(Dir2d, Val)> for PosRowCol <Val> {
 
-			type Output = NumResult <Self>;
+			type Output = Self;
 
 			#[ inline ]
-			fn add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
+			fn try_add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
 				let mut result = self;
 				match dir {
 					Dir2d::Up => result.row = Val::sub_2 (result.row, dist) ?,
