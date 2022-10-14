@@ -68,7 +68,7 @@ pub mod logic {
 	) -> GenResult <String> {
 		let mut code = String::new ();
 		for line in steps.iter () {
-			for step in line.iter_vals () {
+			for & step in line {
 				let new_pos = (pos + (step, 1)) ?;
 				if digits (new_pos).is_some () { pos = new_pos; }
 			}

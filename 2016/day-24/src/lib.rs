@@ -121,7 +121,7 @@ pub mod logic {
 
 		// check start exists
 
-		if ! nums.iter_vals ().any (|(num, _)| num == 0_u8) {
+		if ! nums.iter ().any (|& (num, _)| num == 0_u8) {
 			return Err ("No starting position".into ());
 		}
 

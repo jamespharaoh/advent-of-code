@@ -5,7 +5,7 @@ use model::VHexDir;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	let final_pos =
-		posns_iter (input.steps.iter_vals ())
+		posns_iter (input.steps.iter ().copied ())
 			.last ()
 			.unwrap_or (Pos::ZERO);
 	Ok (calc_dist (final_pos))
@@ -13,7 +13,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
 	Ok (
-		posns_iter (input.steps.iter_vals ())
+		posns_iter (input.steps.iter ().copied ())
 			.map (calc_dist)
 			.max ()
 			.unwrap_or (0)

@@ -1,5 +1,5 @@
 use aoc_inpstr::*;
-use aoc_misc::*;
+use aoc_misc::prelude::*;
 use aoc_nums as nums;
 
 use nums::IntConv;

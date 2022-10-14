@@ -45,8 +45,8 @@ pub mod logic {
 		let mut seq = 1 + (input.num_elves) % 2;
 		while elves.len () > 3 {
 			let next_seq = (seq + elves.len ().pan_u32 ()) % 3;
-			elves = elves.iter_vals ()
-				.scan (seq, |state, elf| {
+			elves = elves.iter ()
+				.scan (seq, |state, & elf| {
 					let seq = * state;
 					* state += 1;
 					if * state == 3 { * state = 0; }

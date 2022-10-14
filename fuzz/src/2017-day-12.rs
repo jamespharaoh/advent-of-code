@@ -144,9 +144,9 @@ mod mutator {
 			let pipe_0 = & input.pipes.choose (rng) ?;
 			let pipe_1 = & input.pipes.choose (rng) ?;
 			let mut villages: Vec <Village> =
-				[ pipe_0.left, pipe_1.left ].iter_vals ()
-					.chain (pipe_0.right.iter_vals ())
-					.chain (pipe_1.right.iter_vals ())
+				[ pipe_0.left, pipe_1.left ].iter ().copied ()
+					.chain (pipe_0.right.iter ().copied ())
+					.chain (pipe_1.right.iter ().copied ())
 					.sorted ()
 					.dedup ()
 					.collect ();
@@ -164,7 +164,7 @@ mod mutator {
 			let pipe = & input.pipes.choose (rng) ?;
 			let mut villages_0: Vec <Village> =
 				iter::once (pipe.left)
-					.chain (pipe.right.iter_vals ())
+					.chain (pipe.right.iter ().copied ())
 					.sorted ()
 					.dedup ()
 					.collect ();

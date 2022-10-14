@@ -45,10 +45,10 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	}
 	Ok (
 		iter::empty ()
-			.chain (left.iter_vals ())
-			.chain (iter::once (cur))
-			.chain (right.iter_vals ())
-			.filter (|& val| val == Slot::One)
+			.chain (left.iter ())
+			.chain (iter::once (& cur))
+			.chain (right.iter ())
+			.filter (|&& val| val == Slot::One)
 			.count ()
 			.pan_u32 ()
 	)

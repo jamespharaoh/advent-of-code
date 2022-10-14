@@ -17,7 +17,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		},
 	];
 
-	let mut data_iter = input.data.iter_vals ();
+	let mut data_iter = input.data.iter ().copied ();
 	let mut metadata_sum: u32 = 0;
 
 	while ! stack.is_empty () {
@@ -64,7 +64,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let mut data = input.data.clone ();
 	data.push (1);
 
-	let mut data_iter = data.iter_vals ();
+	let mut data_iter = data.iter ().copied ();
 
 	let value = loop {
 		let frame = stack.last_mut ().unwrap ();

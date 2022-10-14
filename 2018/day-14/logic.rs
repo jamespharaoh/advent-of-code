@@ -24,10 +24,10 @@ pub fn part_one (input: & Input) -> GenResult <String> {
 		while recipes.len () <= idx_1 { idx_1 -= recipes.len (); }
 	}
 	Ok (
-		recipes.iter_vals ()
+		recipes.iter ()
 			.skip (num_recipes.pan_usize ())
 			.take (10)
-			.map (|recipe| char::from_digit (recipe.pan_u32 (), 10).unwrap ())
+			.map (|& recipe| char::from_digit (recipe.pan_u32 (), 10).unwrap ())
 			.collect ()
 	)
 }

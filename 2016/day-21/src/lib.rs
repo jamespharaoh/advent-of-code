@@ -82,36 +82,36 @@ pub mod logic {
 				(Scramble, RotLeft (num)) | (Unscramble, RotRight (num)) => {
 					let num = num.pan_usize () % state.len ();
 					state_temp.clear ();
-					state_temp.extend (state.iter_vals ().skip (num));
-					state_temp.extend (state.iter_vals ().take (num));
+					state_temp.extend (state.iter ().skip (num).copied ());
+					state_temp.extend (state.iter ().take (num).copied ());
 					mem::swap (& mut state, & mut state_temp);
 				},
 				(Scramble, RotRight (num)) | (Unscramble, RotLeft (num)) => {
 					let num = num.pan_usize () % state.len ();
 					state_temp.clear ();
-					state_temp.extend (state.iter_vals ().skip (state.len () - num));
-					state_temp.extend (state.iter_vals ().take (state.len () - num));
+					state_temp.extend (state.iter ().skip (state.len () - num).copied ());
+					state_temp.extend (state.iter ().take (state.len () - num).copied ());
 					mem::swap (& mut state, & mut state_temp);
 				},
 				(Scramble, RotChar (ch)) => {
-					if let Some (pos) = state.iter_vals ().position (|some_ch| some_ch == ch) {
+					if let Some (pos) = state.iter ().position (|& some_ch| some_ch == ch) {
 						let num = (if pos >= 4 { 2 } else { 1 } + pos) % state.len ();
 						state_temp.clear ();
-						state_temp.extend (state.iter_vals ().skip (state.len () - num));
-						state_temp.extend (state.iter_vals ().take (state.len () - num));
+						state_temp.extend (state.iter ().skip (state.len () - num).copied ());
+						state_temp.extend (state.iter ().take (state.len () - num).copied ());
 						mem::swap (& mut state, & mut state_temp);
 					}
 				},
 				(Unscramble, RotChar (ch)) => {
-					if let Some (pos) = state.iter_vals ().position (|some_ch| some_ch == ch) {
+					if let Some (pos) = state.iter ().position (|& some_ch| some_ch == ch) {
 						let num = match pos {
 							0 => 1, 1 => 1, 2 => 6, 3 => 2,
 							4 => 7, 5 => 3, 6 => 0, 7 => 4,
 							_ => unreachable! (),
 						};
 						state_temp.clear ();
-						state_temp.extend (state.iter_vals ().skip (num));
-						state_temp.extend (state.iter_vals ().take (num));
+						state_temp.extend (state.iter ().skip (num).copied ());
+						state_temp.extend (state.iter ().take (num).copied ());
 						mem::swap (& mut state, & mut state_temp);
 					}
 				},

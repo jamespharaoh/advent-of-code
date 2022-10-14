@@ -97,8 +97,8 @@ pub mod logic {
 		let mut events: Vec <Event> = Vec::new ();
 		while let Some (from_bot) = todo.pop () {
 			let from_bot_state = bots.get_mut (& from_bot).unwrap ();
-			let low_chip = from_bot_state.chips.iter_vals ().min ().unwrap ();
-			let high_chip = from_bot_state.chips.iter_vals ().max ().unwrap ();
+			let & low_chip = from_bot_state.chips.iter ().min ().unwrap ();
+			let & high_chip = from_bot_state.chips.iter ().max ().unwrap ();
 			from_bot_state.chips.clear ();
 			let (low_target, high_target) = from_bot_state.gives.unwrap ();
 			for (chip, target) in [(low_chip, low_target), (high_chip, high_target)] {

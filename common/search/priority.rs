@@ -17,7 +17,7 @@
 /// directly, of course.
 ///
 /// ```
-/// # use aoc_misc::*;
+/// # use aoc_misc::prelude::*;
 /// # use aoc_search::*;
 /// // set up a data structure with a map of connected nodes and the distance between them
 /// let nodes: HashMap <& str, Vec <(& str, u64)>> = {

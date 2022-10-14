@@ -19,6 +19,6 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let dots = logic::fold_multi (& input.folds, input.dots.iter ().copied ());
-	print! ("{}", ocr::DrawDots (dots.iter_vals ().map (|Pos { y, x }| (y, x))));
+	print! ("{}", ocr::DrawDots (dots.iter ().map (|& Pos { y, x }| (y, x))));
 	Ok (())
 }

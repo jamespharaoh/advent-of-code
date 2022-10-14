@@ -25,7 +25,7 @@ pub mod logic {
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		let mut dir = Dir::North;
 		let mut pos = Pos::ZERO;
-		for (turn, dist) in input.steps.iter_vals () {
+		for & (turn, dist) in & input.steps {
 			dir = dir + turn;
 			pos = (pos + (dir, dist)) ?;
 		}
@@ -39,7 +39,7 @@ pub mod logic {
 		let mut seen = HashSet::new ();
 		let mut twice = None;
 		seen.insert (pos);
-		'OUTER: for (turn, dist) in input.steps.iter_vals () {
+		'OUTER: for & (turn, dist) in & input.steps {
 			dir = dir + turn;
 			for _ in 0_i32 .. dist {
 				pos = (pos + (dir, 1_i32)) ?;

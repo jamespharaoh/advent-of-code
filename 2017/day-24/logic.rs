@@ -52,7 +52,7 @@ fn bridges_iter (input: & Input) -> impl Iterator <Item = Components> + '_ {
 	let mut seen = HashSet::new ();
 	iter::from_fn (move || {
 		let (comps, port) = some_or! (todo.pop (), return None);
-		for (next_idx, next) in input.comps.iter_vals ().enumerate () {
+		for (next_idx, & next) in input.comps.iter ().enumerate () {
 			if port != next.port_0 && port != next.port_1 { continue }
 			let next_mask = 1 << next_idx;
 			if comps & next_mask != 0 { continue }
@@ -68,7 +68,7 @@ fn bridges_iter (input: & Input) -> impl Iterator <Item = Components> + '_ {
 
 fn strength (input: & Input, comps: Components) -> u32 {
 	let mut total = 0;
-	for (comp_idx, comp) in input.comps.iter_vals ().enumerate () {
+	for (comp_idx, & comp) in input.comps.iter ().enumerate () {
 		let comp_mask = 1 << comp_idx;
 		if comps & comp_mask == 0 { continue }
 		total += comp.port_0.pan_u32 () + comp.port_1.pan_u32 ();

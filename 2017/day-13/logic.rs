@@ -50,7 +50,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 		// check the pattern for times which also match inactive layers
 
-		for offset in repeat.iter_vals () {
+		for & offset in repeat.iter () {
 			let time = u32::add_2 (base_time, offset) ?;
 			if layers.iter ().skip (layer_idx)
 					.all (|layer| (time + layer.offset) % layer.period != 0) {

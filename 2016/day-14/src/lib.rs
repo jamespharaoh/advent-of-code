@@ -76,16 +76,16 @@ pub mod logic {
 	}
 
 	fn find_triple (hash: & [u8; 32]) -> Option <u8> {
-		hash.iter_vals ()
+		hash.iter ()
 			.tuple_windows::<(_, _, _)> ()
-			.filter (|& (a, b, c)| a == b && a == c)
-			.map (|(a, _, _)| a)
+			.filter (|& (& a, & b, & c)| a == b && a == c)
+			.map (|(& a, _, _)| a)
 			.next ()
 	}
 
 	fn has_quintuple (hash: & [u8; 32], ch_0: u8) -> bool {
-		hash.iter_vals ()
-			.fold ((false, 0_u32), |(matched, count), ch_1|
+		hash.iter ()
+			.fold ((false, 0_u32), |(matched, count), & ch_1|
 				if matched || (ch_0 == ch_1 && count == 4){ (true, 0) }
 				else if ch_0 == ch_1 { (false, count + 1) }
 				else { (false, 0) }

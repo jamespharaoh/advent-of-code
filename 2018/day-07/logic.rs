@@ -6,7 +6,7 @@ use input::Input;
 pub fn part_one (input: & Input) -> GenResult <String> {
 
 	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
-	for (before, after) in input.deps.iter_vals () {
+	for & (before, after) in input.deps.iter () {
 		deps.entry (before).or_insert_with (HashSet::new);
 		deps.entry (after).or_insert_with (HashSet::new).insert (before);
 	}
@@ -32,7 +32,7 @@ pub fn part_one (input: & Input) -> GenResult <String> {
 pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
-	for (before, after) in input.deps.iter_vals () {
+	for & (before, after) in input.deps.iter () {
 		deps.entry (before).or_insert_with (HashSet::new);
 		deps.entry (after).or_insert_with (HashSet::new).insert (before);
 	}
@@ -50,7 +50,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			|| ! queue.is_empty ()
 			|| workers.iter ().any (Option::is_some) {
 
-		for next_step in remaining.iter_vals ()
+		for & next_step in remaining.iter ()
 				.filter (|step| deps [step].iter ().all (|dep| completed.contains (dep))) {
 			queue.insert (next_step);
 		}

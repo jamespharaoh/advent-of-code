@@ -1,8 +1,7 @@
 //! Iterative search algorithms for solutions in a problem space
 
-use aoc_grid::GridPos;
 use aoc_grid::prelude::*;
-use aoc_misc::*;
+use aoc_misc::prelude::*;
 use aoc_nums::NumResult;
 
 pub mod pairs_map;
@@ -19,5 +18,7 @@ pub use priority::*;
 pub mod prelude {
 	pub use crate::pairs_map::PairsMap;
 	pub use crate::permutations::PermutationsHelper;
+	pub use crate::priority::PrioritySearchAdder;
+	pub use crate::priority::PrioritySearch;
 }
 

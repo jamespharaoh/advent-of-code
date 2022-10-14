@@ -42,7 +42,7 @@ pub mod logic {
 	fn calc_result (input: & Input) -> GridBuf <Vec <bool>, Pos, 2> {
 		let mut grid: GridBuf <Vec <bool>, Pos, 2> =
 			GridBuf::new_size (Pos::new (input.height, input.width));
-		for step in input.steps.iter_vals () {
+		for & step in input.steps.iter () {
 			match step {
 				Step::Rect { width, height } => {
 					for row in 0 .. height {
@@ -111,7 +111,7 @@ pub mod model {
 					}).map_parse_err (|_, col_idx| format! (
 						"Invalid input: line {}: col {}: {}", line_idx + 1, col_idx + 1, line)))
 				.collect::<GenResult <Vec <Step>>> () ?;
-			if steps.iter_vals ().any (|step|
+			if steps.iter ().any (|& step|
 					match step {
 						Step::Rect { width: step_width, height: step_height } =>
 							step_width >= width || step_height >= height,

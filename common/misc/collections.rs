@@ -1,4 +1,4 @@
-use super::*;
+use super::prelude::*;
 
 #[ cfg (not (fuzzing)) ]
 //pub use std_hash::*;

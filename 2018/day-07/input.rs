@@ -32,7 +32,7 @@ impl Input {
 impl Display for Input {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
-		for (before, after) in self.deps.iter_vals () {
+		for & (before, after) in self.deps.iter () {
 			write! (formatter,
 				"Step {before} must be finished before step {after} can begin.\n") ?;
 		}

@@ -17,7 +17,7 @@ pub fn calculate_rounds (input: & [u8], num_rounds: u32) -> [u8; 16] {
 #[ inline ]
 #[ must_use ]
 pub fn calc_sparse (
-	input_iter: impl Iterator <Item = u8> + Clone,
+	input_iter: impl IntoIterator <Item = u8> + Clone,
 	num_rounds: u32,
 ) -> [u8; 256] {
 

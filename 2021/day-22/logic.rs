@@ -68,7 +68,7 @@ fn calc_result (steps: & [Step]) -> GenResult <i64> {
 		if step.state {
 			buffer.push ((step.cube, true));
 		}
-		for (core_cube, core_state) in core.iter_vals () {
+		for & (core_cube, core_state) in core.iter () {
 			if let Some (intersect) = core_cube.intersect (step.cube) {
 				buffer.push ((intersect, ! core_state));
 			}
@@ -79,8 +79,8 @@ fn calc_result (steps: & [Step]) -> GenResult <i64> {
 		}
 	}
 	Ok (
-		core.iter_vals ()
-			.map (|(cube, state)| cube.volume () * if state { 1 } else { -1 })
+		core.iter ()
+			.map (|& (cube, state)| cube.volume () * if state { 1 } else { -1 })
 			.sum::<i64> ()
 	)
 }

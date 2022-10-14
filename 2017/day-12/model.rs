@@ -43,8 +43,8 @@ impl Grouper {
 		let mut state = State::default ();
 
 		for (left, right) in input.pipes.iter ()
-			.flat_map (|pipe| pipe.right.iter_vals ()
-				.map (|right| (pipe.left, right))) {
+			.flat_map (|pipe| pipe.right.iter ()
+				.map (|& right| (pipe.left, right))) {
 			let left_group = state.resolve (left);
 			let right_group = state.resolve (right);
 			let new_group = cmp::min (left_group, right_group);
@@ -54,8 +54,8 @@ impl Grouper {
 
 		let villages = mem::take (& mut state.villages);
 		let data: BTreeSet <(Village, Village)> =
-			villages.iter_vals ()
-				.map (|village| (state.resolve (village), village))
+			villages.iter ()
+				.map (|& village| (state.resolve (village), village))
 				.collect ();
 
 		Self { data, reverse: state.reverse }

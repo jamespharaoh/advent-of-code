@@ -63,8 +63,8 @@ impl Generator {
 	pub fn build (input: & Input) -> GenResult <Self> {
 		let mut rules = [None; 32];
 		for input_rule in input.rules.iter () {
-			let rule_idx = input_rule.from.iter_vals ()
-				.fold (0, |state, item| (state << 1_u32) | item.as_usize ());
+			let rule_idx = input_rule.from.iter ()
+				.fold (0, |state, & item| (state << 1_u32) | item.as_usize ());
 			let rule = & mut rules [rule_idx];
 			if rule.is_some () { return Err ("Duplicated rule".into ()) }
 			* rule = Some (input_rule.to);
@@ -89,7 +89,7 @@ impl Generator {
 		let mut start = state.start - 2;
 		let mut data = Vec::new ();
 		let mut prev = 0_u8;
-		for byte in state.data.iter_vals ().chain (iter::once (0)) {
+		for & byte in state.data.iter ().chain (iter::once (& 0)) {
 			let idx = (prev.pan_usize () & 0x0f) << 8_u32 | byte.pan_usize ();
 			assert! (idx < 4096);
 			let next = self.bit_rules [idx];

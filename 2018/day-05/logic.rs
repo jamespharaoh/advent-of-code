@@ -26,8 +26,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		.map (move |remove_ch| {
 			buffer.clear ();
 			let mut last_char_opt: Option <char> = None;
-			for ch in polymer.iter_vals ()
-					.filter (|ch| ch.to_ascii_lowercase () != remove_ch) {
+			for & ch in polymer.iter ()
+					.filter (|& ch| ch.to_ascii_lowercase () != remove_ch) {
 				if let Some (last_char) = last_char_opt {
 					if last_char.to_ascii_lowercase () == ch.to_ascii_lowercase ()
 							&& last_char.is_ascii_lowercase () != ch.is_ascii_lowercase () {

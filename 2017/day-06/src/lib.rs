@@ -34,7 +34,7 @@ pub mod logic {
 	fn calc_result (input: & Input) -> GenResult <(u32, u32)> {
 		let mut banks = input.banks.clone ();
 		if banks.len () < 2 { return Err ("Must have at least two banks".into ()) }
-		if banks.iter_vals ().any (|val| val > 24) {
+		if banks.iter ().any (|& val| val > 24) {
 			return Err ("Max size of memory in one bank is 24".into ());
 		}
 		let mut seen: HashMap <Banks, u32> = HashMap::new ();
@@ -42,9 +42,9 @@ pub mod logic {
 			if let Some (prev_cycle) = seen.insert (banks.clone (), cycle) {
 				return Ok ((prev_cycle, cycle));
 			}
-			let (mut idx, val) = banks.iter_vals ()
+			let (mut idx, & val) = banks.iter ()
 				.enumerate ()
-				.max_by_key (|& (idx, val)| (val, cmp::Reverse (idx)))
+				.max_by_key (|& (idx, & val)| (val, cmp::Reverse (idx)))
 				.unwrap ();
 			banks [idx] = 0;
 			for _ in 0 .. val {

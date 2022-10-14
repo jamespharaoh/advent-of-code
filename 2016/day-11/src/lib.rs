@@ -52,7 +52,7 @@ pub mod logic {
 			if state.is_done () { return Ok (steps) }
 			next_states.clear ();
 			state.next_states (& mut next_states);
-			for next_state in next_states.iter_vals () {
+			for & next_state in next_states.iter () {
 				if ! seen.insert (next_state) { continue }
 				todo.push_back ((next_state, steps + 1));
 			}
@@ -117,7 +117,7 @@ pub mod logic {
 			for name_idx_0 in 0 .. self.comps_len.pan_usize () {
 				for comp_idx_0 in 0 .. 2 {
 					if self.comps [name_idx_0] [comp_idx_0] != self.elevator { continue }
-					for next_floor in next_floors.iter_vals () {
+					for & next_floor in next_floors.iter () {
 						let mut next_state = * self;
 						next_state.elevator = next_floor;
 						next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
@@ -130,7 +130,7 @@ pub mod logic {
 						for comp_idx_1 in 0 .. 2 {
 							if self.comps [name_idx_1] [comp_idx_1] != self.elevator { continue }
 							if (name_idx_0, comp_idx_0) >= (name_idx_1, comp_idx_1) { continue }
-							for next_floor in next_floors.iter_vals () {
+							for & next_floor in next_floors.iter () {
 								let mut next_state = * self;
 								next_state.elevator = next_floor;
 								next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
@@ -165,7 +165,7 @@ pub mod logic {
 
 		fn compact (& self) -> StateCompact {
 			let mut data = 0_u64;
-			for [gen, chip] in self.comps.iter_vals ().rev () {
+			for & [ gen, chip ] in self.comps.iter ().rev () {
 				debug_assert! ((1 ..= 4).contains (& gen));
 				data <<= 2_u32;
 				data |= chip.pan_u64 () - 1;
@@ -191,13 +191,15 @@ pub mod logic {
 			data >>= 2_u32;
 			let comps_len = (data & 0x7).pan_u8 ();
 			data >>= 3_u32;
-			let comps = (0_u32 .. 7_u32).map (|_| {
-				let gen = (data & 0x3).pan_u8 () + 1;
-				data >>= 2_u32;
-				let chip = (data & 0x3).pan_u8 () + 1;
-				data >>= 2_u32;
-				[gen, chip]
-			}).collect_array ().unwrap ();
+			let comps = (0_u32 .. 7_u32)
+				.map (|_| {
+					let gen = (data & 0x3).pan_u8 () + 1;
+					data >>= 2_u32;
+					let chip = (data & 0x3).pan_u8 () + 1;
+					data >>= 2_u32;
+					[gen, chip]
+				})
+				.array ();
 			debug_assert! (data == 0);
 			State { comps, comps_len, elevator }
 		}
@@ -355,7 +357,7 @@ mod tools {
 				let mut items = Vec::new ();
 				for (name, [gen, chip]) in
 					names.iter ()
-						.zip (comps.iter_vals ())
+						.zip (comps.iter ().copied ())
 						.take (args.num_comps) {
 					if gen == floor {
 						items.push (format! ("{} generator", name));

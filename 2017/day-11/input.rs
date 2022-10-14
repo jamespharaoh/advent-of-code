@@ -26,7 +26,7 @@ impl Display for Input {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		Display::fmt (& self.params, formatter) ?;
 		for item in Itertools::intersperse (
-				self.steps.iter_vals ().map (Either::Left),
+				self.steps.iter ().copied ().map (Either::Left),
 				Either::Right (",")) {
 			write! (formatter, "{}", item) ?;
 		}

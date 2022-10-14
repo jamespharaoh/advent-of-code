@@ -76,8 +76,8 @@ pub mod logic {
 			password [pos] = Some (ch);
 		}
 		let password =
-			password.iter_vals ()
-				.map (Option::unwrap)
+			password.iter ()
+				.map (|& ch| ch.unwrap ())
 				.collect ();
 		Ok (password)
 	}

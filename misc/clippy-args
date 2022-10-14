@@ -131,7 +131,7 @@
 --deny clippy::fn_to_numeric_cast_any
 --deny clippy::fn_to_numeric_cast_with_truncation
 --deny clippy::for_kv_map
---deny clippy::for_loops_over_fallibles
+--deny for_loops_over_fallibles
 --deny clippy::forget_copy
 --deny clippy::forget_non_drop
 --deny clippy::forget_ref
@@ -253,7 +253,7 @@
 --deny clippy::mismatched_target_os
 --deny clippy::mismatching_type_param_order
 --deny clippy::misrefactored_assign_op
---deny clippy::missing_const_for_fn
+--allow clippy::missing_const_for_fn
 --allow clippy::missing_docs_in_private_items
 --deny clippy::missing_enforced_import_renames
 --allow clippy::missing_errors_doc

@@ -2,7 +2,7 @@ use std::fmt::{ self, Debug };
 use std::ops::{ Add, Neg, Rem, Sub };
 
 use aoc_checked::checked as chk;
-use aoc_misc::*;
+use aoc_misc::prelude::*;
 use aoc_nums as nums;
 use nums::Int;
 use nums::IntSigned;

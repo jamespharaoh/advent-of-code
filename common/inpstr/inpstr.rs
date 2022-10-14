@@ -1,4 +1,4 @@
-use aoc_misc::*;
+use aoc_misc::prelude::*;
 
 #[ derive (Clone) ]
 pub enum InpStr <'inp> {

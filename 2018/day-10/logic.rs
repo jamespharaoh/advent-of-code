@@ -37,7 +37,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 	let mut step = 0x10000_u32;
 	loop {
 		points_temp.clear ();
-		for new_point in points.iter_vals ().map (|point| point.offset (step.pan_i32 ())) {
+		for new_point in points.iter ().map (|& point| point.offset (step.pan_i32 ())) {
 			points_temp.push (new_point ?);
 		}
 		let (next_y, next_x) = calc_size (& points_temp) ?;
@@ -45,8 +45,8 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 			if step == 1 { break }
 			if num_iters >= step {
 				points_temp.clear ();
-				for new_point in points.iter_vals ()
-						.map (|point| point.offset (- step.pan_i32 ())) {
+				for new_point in points.iter ()
+						.map (|& point| point.offset (- step.pan_i32 ())) {
 					points_temp.push (new_point ?);
 				}
 				mem::swap (& mut points, & mut points_temp);
@@ -60,12 +60,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 		(size_y, size_x) = (next_y, next_x);
 		num_iters = u32::add_2 (num_iters, step) ?;
 	}
-	let posns: Vec <(Coord, Coord)> =
-		points.iter ()
-			.map (|& point| (point.pos.y, point.pos.x))
-			.sorted ()
-			.dedup ()
-			.collect ();
-	let message = ocr::read_dots (posns.iter_vals ()) ?;
+	let message = ocr::read_dots (points.iter ()
+		.map (|& point| (point.pos.y, point.pos.x))) ?;
 	Ok ((message, num_iters))
 }

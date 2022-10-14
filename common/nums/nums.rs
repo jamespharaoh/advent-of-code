@@ -23,7 +23,7 @@ use std::str::FromStr;
 
 pub type NumResult <Val> = Result <Val, Overflow>;
 
-#[ derive (Debug, Eq, PartialEq) ]
+#[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]
 pub struct Overflow;
 
 impl Display for Overflow {

@@ -7,7 +7,7 @@ pub type Grid = GridBuf <Vec <bool>, Pos, 2>;
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (
 		calc_hashes (input).iter ()
-			.map (|hash| hash.iter_vals ()
+			.map (|hash| hash.iter ().copied ()
 				.map (u8::count_ones)
 				.sum::<u32> ())
 			.sum ()
@@ -19,8 +19,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	// calculate hashes and construct a grid
 
 	let grid = Grid::wrap_size (
-		calc_hashes (input).iter_vals ()
-			.flat_map (move |hash| -> [bool; 128] {
+		calc_hashes (input).iter ()
+			.flat_map (move |& hash| -> [bool; 128] {
 				array::from_fn (|addr| {
 					let idx = addr >> 3_u32;
 					let mask = 0x80 >> (addr & 0x7);

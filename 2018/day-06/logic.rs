@@ -11,14 +11,14 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 	// work out size
 
-	let height = input.posns.iter_vals ().map (|pos| pos.y + 1_i32).max ().unwrap ();
-	let width = input.posns.iter_vals ().map (|pos| pos.x + 1_i32).max ().unwrap ();
+	let height = input.posns.iter ().map (|& pos| pos.y + 1_i32).max ().unwrap ();
+	let width = input.posns.iter ().map (|& pos| pos.x + 1_i32).max ().unwrap ();
 
 	// initialize grid
 
 	let mut grid = Grid::new_size (Pos::new (height, width));
 	let mut next_id: u8 = 1;
-	for pos in input.posns.iter_vals () {
+	for & pos in input.posns.iter () {
 		if next_id == u8::MAX { panic! () }
 		grid.set (pos, next_id);
 		next_id += 1;
@@ -27,12 +27,12 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	// spread out one square at a time
 
 	let mut todo: Vec <(Pos, u8)> =
-		input.posns.iter_vals ()
-			.flat_map (|pos| {
+		input.posns.iter ()
+			.flat_map (|& pos| {
 				let val = grid.get (pos).unwrap ();
-				pos.adjacent_4 ().iter_vals ()
-					.filter (|& adj_pos| grid.get (adj_pos).map_or (false, |val| val == 0))
-					.map (|adj_pos| (adj_pos, val))
+				pos.adjacent_4 ().iter ()
+					.filter (|&& adj_pos| grid.get (adj_pos).map_or (false, |val| val == 0))
+					.map (|& adj_pos| (adj_pos, val))
 					.collect::<ArrayVec <(Pos, u8), 4>> ()
 			})
 			.collect ();
@@ -50,7 +50,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			adj_vals.clear ();
 			adj_vals.extend (group_iter.map (|(_, val)| val));
 			let first = adj_vals [0];
-			if adj_vals.iter_vals ().all (|adj_val| adj_val == first) {
+			if adj_vals.iter ().all (|& adj_val| adj_val == first) {
 				let new_val = adj_vals [0];
 				grid.set (pos, new_val);
 				for adj_pos in pos.adjacent_4 () {
@@ -88,7 +88,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 	// find largest remaining area
 
-	Ok (areas.iter_vals ().max ().unwrap ())
+	Ok (areas.into_iter ().max ().unwrap ())
 
 }
 
@@ -98,8 +98,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 	// work out size
 
-	let height = input.posns.iter_vals ().map (|pos| pos.y + 1_i32).max ().unwrap ();
-	let width = input.posns.iter_vals ().map (|pos| pos.x + 1_i32).max ().unwrap ();
+	let height = input.posns.iter ().map (|& pos| pos.y + 1_i32).max ().unwrap ();
+	let width = input.posns.iter ().map (|& pos| pos.x + 1_i32).max ().unwrap ();
 
 	// work out horizontal/vertical distances separately
 
@@ -123,10 +123,10 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			}
 			dists
 		}
-		let dists_fwd = calc_one_way (posns.iter_vals (), 0_i32 .. size);
-		let dists_rev = calc_one_way (posns.iter_vals ().rev (), (0_i32 .. size).rev ());
-		dists_fwd.iter_vals ().zip (dists_rev.iter_vals ().rev ())
-			.map (|(fwd, rev)| fwd + rev)
+		let dists_fwd = calc_one_way (posns.iter ().copied (), 0_i32 .. size);
+		let dists_rev = calc_one_way (posns.iter ().rev ().copied (), (0_i32 .. size).rev ());
+		dists_fwd.iter ().zip (dists_rev.iter ().rev ())
+			.map (|(& fwd, & rev)| fwd + rev)
 			.collect ()
 	}
 
@@ -136,9 +136,9 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	// sum separate distances to get totals and count how many are in range
 
 	let mut area = 0_u32;
-	for dist_x in dists_x.iter_vals () {
+	for & dist_x in dists_x.iter () {
 		if dist_x > input.params.dist_two { continue }
-		for dist_y in dists_y.iter_vals () {
+		for & dist_y in dists_y.iter () {
 			if dist_x + dist_y > input.params.dist_two { continue }
 			area += 1;
 		}
@@ -151,8 +151,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 fn sanity_check (input: & Input) -> GenResult <()> {
 	if input.posns.is_empty () { return Err ("Must have at least one position".into ()) }
 	if input.posns.len () > 50 { return Err ("Refusing to handle more than 50 points".into ()) }
-	if input.posns.iter_vals ()
-			.any (|pos| ! (0_i32 ..= 399_i32).contains (& pos.x)
+	if input.posns.iter ()
+			.any (|& pos| ! (0_i32 ..= 399_i32).contains (& pos.x)
 				|| ! (0_i32 ..= 399_i32).contains (& pos.y)) {
 		return Err ("Refusing to handle positions not between 0 and 399".into ());
 	}

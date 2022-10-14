@@ -22,10 +22,10 @@ pub mod logic {
 
 	pub fn part_one (input: & Input) -> GenResult <u32> {
 		Ok (
-			input.digits.iter_vals ()
+			input.digits.iter ()
 				.circular_tuple_windows::<(_, _)> ()
-				.filter (|& (digit_0, digit_1)| digit_0 == digit_1)
-				.map (|(digit, _)| digit.pan_u32 ())
+				.filter (|& (& digit_0, & digit_1)| digit_0 == digit_1)
+				.map (|(& digit, _)| digit.pan_u32 ())
 				.sum::<u32> ()
 		)
 	}
@@ -35,10 +35,10 @@ pub mod logic {
 			return Err ("Must have an even number of digits".into ());
 		}
 		Ok (
-			input.digits.iter_vals ().take (input.digits.len () / 2)
-				.zip (input.digits.iter_vals ().skip (input.digits.len () / 2))
-				.filter (|& (digit_0, digit_1)| digit_0 == digit_1)
-				.map (|(digit, _)| digit.pan_u32 () * 2)
+			input.digits.iter ().take (input.digits.len () / 2)
+				.zip (input.digits.iter ().skip (input.digits.len () / 2))
+				.filter (|& (& digit_0, & digit_1)| digit_0 == digit_1)
+				.map (|(& digit, _)| digit.pan_u32 () * 2)
 				.sum::<u32> ()
 		)
 	}

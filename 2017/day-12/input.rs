@@ -45,7 +45,7 @@ impl Display for InputPipe {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		write! (formatter, "{} <-> ", self.left) ?;
 		for right in Itertools::intersperse (
-				self.right.iter_vals ().map (Either::Left),
+				self.right.iter ().copied ().map (Either::Left),
 				Either::Right (", ")) {
 			write! (formatter, "{}", right) ?;
 		}

@@ -4,7 +4,7 @@ use std::slice::Iter as SliceIter;
 
 use aoc_bitvec as bitvec;
 use aoc_checked::checked as chk;
-use aoc_misc::*;
+use aoc_misc::prelude::*;
 use aoc_nums as nums;
 use aoc_parser::*;
 
