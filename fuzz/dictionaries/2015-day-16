@@ -1,0 +1,16 @@
+sue_0 = "Sue "
+sue_1 = ": "
+sue_2 = ", "
+
+attr_0 = "children: "
+attr_1 = "cats: "
+attr_2 = "samoyeds: "
+attr_3 = "pomeranians: "
+attr_4 = "akitas: "
+attr_5 = "vizslas: "
+attr_6 = "goldfish: "
+attr_7 = "trees: "
+attr_8 = "cars: "
+attr_9 = "perfumes: "
+
+misc_newline = "\x0a"
