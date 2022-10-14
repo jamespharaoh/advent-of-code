@@ -6,65 +6,15 @@
 
 use aoc_common::*;
 
+pub mod input;
+pub mod logic;
+
 puzzle_info! {
 	name = "Let It Snow";
 	year = 2015;
 	day = 25;
-	parse = |input| model::Input::parse (input [0]);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
-}
-
-/// Logic for solving the puzzles.
-///
-pub mod logic {
-
-	use super::*;
-	use model::Input;
-	use nums::Int;
-
-	pub fn part_one (input: & Input) -> GenResult <u64> {
-		let diag_num = u64::add_2 (input.row, input.col) ?;
-		let diag_seq = u64::mul_2 (diag_num, u64::add_2 (diag_num, 1) ?) ? / 2;
-		let mut cell_seq = u64::add_2 (diag_seq, input.col) ?;
-		let mut code: u64 = 20_151_125;
-		let mut mul = 252_533;
-		while cell_seq != 0 {
-			if cell_seq & 1 == 1 { code = code * mul % 33_554_393; }
-			cell_seq >>= 1_i32;
-			mul = mul * mul % 33_554_393;
-		}
-		Ok (code)
-	}
-
-}
-
-/// Representation of the puzzle input, etc.
-///
-pub mod model {
-
-	use super::*;
-
-	#[ derive (Clone, Debug) ]
-	pub struct Input {
-		pub row: u64,
-		pub col: u64,
-	}
-
-	impl Input {
-		pub fn parse (input: & str) -> GenResult <Self> {
-			Parser::wrap (input, |parser| {
-				let row: u64 = parser
-					.expect ("To continue, please consult the code grid in the manual.  ") ?
-					.expect ("Enter the code at row ") ?
-					.int () ?;
-				let col: u64 = parser.expect (", column ") ?.int () ?;
-				parser.expect (".") ?.end () ?;
-				if row < 1 || col < 1 { Err ("Row and column start at one") ?; }
-				Ok (Self { row: row - 1, col: col - 1 })
-			}).map_parse_err (|_, col_idx| format! ("Invalid input: col {}: {}", col_idx + 1, input))
-		}
-	}
-
 }
 
 #[ cfg (test) ]
