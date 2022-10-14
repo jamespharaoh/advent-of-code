@@ -1,12 +1,15 @@
 #![ no_main ]
 
-use aoc_2015::day_24::*;
 use libfuzzer_sys::fuzz_target;
 
+use aoc_2015::day_24::*;
+use aoc_common::*;
+use input::Input;
+
 fuzz_target! (|input_str: & str| {
-	let input_lines: Vec <& str> = input_str.trim ().split ('\n').collect ();
-	if let Ok (input) = model::Input::parse (& input_lines) {
-		let _ = logic::part_one (input.clone ());
-		let _ = logic::part_two (input);
+	let input_vec: Vec <& str> = input_str.trim_end ().split ('\n').collect ();
+	if let Ok (input) = Input::parse_from_lines (& input_vec) {
+		let _ = logic::part_one (& input);
+		let _ = logic::part_two (& input);
 	}
 });
