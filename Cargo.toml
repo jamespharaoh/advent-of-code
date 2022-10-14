@@ -62,7 +62,9 @@
 	opt-level = 1
 	package.aoc-2015-day-04 = { opt-level = 2 }
 	package.aoc-2016-day-14 = { opt-level = 2 }
-	package.aoc-md5 = { opt-level = 2 }
+	package.aoc-2018-cpu = { opt-level = 3 }
+	package.aoc-2018-day-21 = { opt-level = 3 }
+	package.aoc-md5 = { opt-level = 3 }
 	package.clap = { codegen-units = 256 }
 	rpath = true
 
