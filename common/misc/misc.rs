@@ -7,6 +7,7 @@ mod result {
 	pub use crate::prelude::*;
 
 	pub use crate::ok_or;
+	pub use crate::assert_is_err;
 	pub use crate::assert_is_ok;
 	pub use crate::assert_eq_ok;
 	pub use crate::assert_err;
@@ -67,6 +68,14 @@ mod result {
 	macro_rules! assert_err {
 		( $expect:expr , $actual:expr ) => {
 			assert_eq! ($expect, $actual.unwrap_err ().to_string ());
+		};
+	}
+
+	#[ macro_export ]
+	macro_rules! assert_is_err {
+		( $actual:expr ) => {
+			let actual = $actual;
+			assert! (actual.is_err (), "Expected Err (_) but got {actual:?}");
 		};
 	}
 

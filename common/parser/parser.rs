@@ -567,6 +567,23 @@ impl <'inp> Parser <'inp> {
 		Ok (result)
 	}
 
+	#[ allow (clippy::string_slice) ]
+	#[ inline ]
+	pub fn take_exactly (& mut self, num_chars: u32) -> ParseResult <InpStr <'inp>> {
+		let (num_bytes, num_chars_found) =
+			self.input_line.chars ()
+				.take (num_chars.pan_usize ())
+				.fold ((0_u32, 0_u32), |(num_bytes, num_chars), ch|
+					(num_bytes + ch.len_utf8 ().qck_u32 (), num_chars + 1));
+		if num_chars_found < num_chars { return Err (self.err ()) }
+		let result = InpStr::borrow (& self.input_line [ .. num_bytes.qck_usize ()]);
+		self.input_line = & self.input_line [num_bytes.qck_usize () .. ];
+		self.col_idx += num_chars;
+		self.byte_idx += num_bytes.pan_u32 ();
+		Ok (result)
+	}
+		
+
 	#[ inline ]
 	pub fn opt_fn <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> Output
 		where
