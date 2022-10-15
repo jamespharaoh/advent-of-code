@@ -75,3 +75,13 @@ impl <'inp> FromParser <'inp> for Rc <str> {
 	}
 
 }
+
+impl <'inp> FromParser <'inp> for String {
+
+	#[ inline ]
+	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
+		let inp_str = parser.take_rest ();
+		Ok (Self::from (& * inp_str))
+	}
+
+}

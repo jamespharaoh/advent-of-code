@@ -255,12 +255,6 @@ macro_rules! parse {
 		$parser.skip_whitespace ( .. ) ?;
 	};
 
-	/*( @nest input_lifetime = $input_life:lifetime; $decl:tt = [ $($parse:tt)* ] ) => {
-		|parser: & mut Parser <$life>| {
-			parse! (parser, $($parse)*);
-			Ok ($decl)
-		}
-	};*/
 	( @nest input_lifetime = $input_life:lifetime; $($var:tt)* ) => {
 		|parser: & mut Parser <$input_life>| {
 			let parser = parser.any ();
@@ -275,7 +269,7 @@ macro_rules! parse {
 			parser.done ()
 		}
 	};
-	( @nest_var $parser:ident $var:ident = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+	( @nest_var $parser:ident $var:ident $( if ($cond:expr) )? = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
 			Ok ($var)

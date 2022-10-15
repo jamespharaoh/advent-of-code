@@ -232,9 +232,11 @@ macro_rules! display {
 		}
 	};
 
-	( @nest_var $formatter:ident $val:ident $name:ident = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & $name = $val {
-			display! ($formatter, $($display)*);
+	( @nest_var $formatter:ident $val:ident $name:ident $( if ($cond:expr) )? = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		display! { @opt_if [$(! $cond)?]
+			if let & $name = $val {
+				display! ($formatter, $($display)*);
+			}
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
@@ -275,6 +277,13 @@ macro_rules! display {
 	};
 	( @nest_ref ( $($item:tt),* ) ) => {
 		( $(display! (@nest_ref $item)),* )
+	};
+
+	( @opt_if [$cond:expr] $($body:tt)* ) => {
+		if $cond { $($body)* }
+	};
+	( @opt_if [] $($body:tt)* ) => {
+		$($body)*
 	};
 
 }

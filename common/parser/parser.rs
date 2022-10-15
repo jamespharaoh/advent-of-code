@@ -731,7 +731,7 @@ macro_rules! input_params {
 							default.$member_name) ?;
 					::aoc_common::parser::check_range::<$member_type, _> (
 						& $member_prefix [ .. $member_prefix.len () - 1],
-						$member_name,
+						& $member_name,
 						$member_range) ?;
 				)*
 				Ok (Self { $( $member_name, )* })
@@ -778,7 +778,7 @@ macro_rules! input_params {
 					}).done ().unwrap_or (default.$member_name);
 					::aoc_common::parser::check_range::<$member_type, _> (
 						& $member_prefix [ .. $member_prefix.len () - 1],
-						$member_name,
+						& $member_name,
 						$member_range) ?;
 				)*
 				Ok (Self { $( $member_name, )* })
@@ -791,17 +791,17 @@ macro_rules! input_params {
 #[ inline ]
 pub fn check_range <Val: Debug + Display + Ord, Rng: Debug + RangeBounds <Val>> (
 	name: & str,
-	val: Val,
+	val: & Val,
 	range: Rng,
 ) -> GenResult <()> {
-	if range.contains (& val) { return Ok (()) }
+	if range.contains (val) { return Ok (()) }
 	Err (check_range_error (name, val, range).into ())
 }
 
 #[ allow (clippy::missing_inline_in_public_items) ]
 pub fn check_range_error <Val: Debug + Display + Ord, Rng: Debug + RangeBounds <Val>> (
 	name: & str,
-	val: Val,
+	val: & Val,
 	range: Rng,
 ) -> String {
 	match (range.start_bound (), range.end_bound ()) {
