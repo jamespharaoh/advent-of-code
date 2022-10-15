@@ -15,5 +15,5 @@
 
 [lib]
 
-	path = "src/lib.rs"
+	path = "lib.rs"
 	crate-type = [ "rlib", "dylib" ]

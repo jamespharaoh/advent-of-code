@@ -1,16 +1,4 @@
-//! Advent of Code 2016: CPU
-//!
-//! CPU used in the following puzzles:
-//! - [https://adventofcode.com/2016/day/12](https://adventofcode.com/2016/day/12)
-//! - [https://adventofcode.com/2016/day/23](https://adventofcode.com/2016/day/23)
-//! - [https://adventofcode.com/2016/day/25](https://adventofcode.com/2016/day/25)
-
-#![ allow (clippy::missing_inline_in_public_items) ]
-
-use aoc_common::*;
-use parser::FromParser;
-use parser::ParseResult;
-use parser::Parser;
+use super::*;
 
 #[ derive (Default) ]
 pub struct Cpu {
@@ -25,6 +13,7 @@ pub struct Cpu {
 
 impl Cpu {
 
+	#[ inline ]
 	const fn load (& self, arg: Arg) -> i32 {
 		match arg {
 			Arg::RegA => self.reg_a,
@@ -35,6 +24,7 @@ impl Cpu {
 		}
 	}
 
+	#[ inline ]
 	fn store (& mut self, arg: Arg, val: i32) {
 		match arg {
 			Arg::RegA => self.reg_a = val,
@@ -45,6 +35,7 @@ impl Cpu {
 		}
 	}
 
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn exec (& mut self) -> GenResult <Option <i32>> {
 		while self.next.qck_usize () < self.instrs.len () {
 			if self.limit == 0 { return Err ("Reached ops limit".into ()) }
@@ -194,97 +185,4 @@ impl Cpu {
 
 	}
 
-}
-
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum Instr {
-	Cpy (Arg, Arg),
-	Inc (Arg),
-	Dec (Arg),
-	Jnz (Arg, Arg),
-	Tgl (Arg),
-	Out (Arg),
-}
-
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum Arg { RegA, RegB, RegC, RegD, Imm (i32) }
-
-impl Instr {
-
-	#[ must_use ]
-	pub const fn is_v1 (& self) -> bool {
-		use Instr::{ Cpy, Dec, Inc, Jnz };
-		matches! (* self, Cpy (_, _) | Inc (_) | Dec (_) | Jnz (_, _))
-	}
-
-	#[ must_use ]
-	pub const fn is_v2 (& self) -> bool {
-		use Instr::{ Cpy, Dec, Inc, Jnz, Tgl };
-		matches! (* self, Cpy (_, _) | Inc (_) | Dec (_) | Jnz (_, _) | Tgl (_))
-	}
-
-	#[ must_use ]
-	pub const fn is_v3 (& self) -> bool {
-		use Instr::{ Cpy, Dec, Inc, Jnz, Out };
-		matches! (* self, Cpy (_, _) | Inc (_) | Dec (_) | Jnz (_, _) | Out (_))
-	}
-
-}
-
-impl <'inp> FromParser <'inp> for Instr {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parser.any ()
-			.of (|parser| {
-				let arg_0 = parser.expect ("cpy ") ?.confirm ().item () ?;
-				let arg_1 = parser.expect (" ") ?.item () ?;
-				parser.end () ?;
-				Ok (Self::Cpy (arg_0, arg_1))
-			})
-			.of (|parser| {
-				let arg = parser.expect ("inc ") ?.confirm ().item () ?;
-				parser.end () ?;
-				Ok (Self::Inc (arg))
-			})
-			.of (|parser| {
-				let arg = parser.expect ("dec ") ?.confirm ().item () ?;
-				parser.end () ?;
-				Ok (Self::Dec (arg))
-			})
-			.of (|parser| {
-				let arg_0 = parser.expect ("jnz ") ?.confirm ().item () ?;
-				let arg_1 = parser.expect (" ") ?.confirm ().item () ?;
-				parser.end () ?;
-				Ok (Self::Jnz (arg_0, arg_1))
-			})
-			.of (|parser| {
-				let arg = parser.expect ("tgl ") ?.confirm ().item () ?;
-				parser.end () ?;
-				Ok (Self::Tgl (arg))
-			})
-			.of (|parser| {
-				let arg = parser.expect ("out ") ?.confirm ().item () ?;
-				parser.end () ?;
-				Ok (Self::Out (arg))
-			})
-			.done ()
-	}
-}
-
-impl Arg {
-	#[ must_use ]
-	pub const fn is_reg (& self) -> bool {
-		matches! (* self, Self::RegA | Self::RegB | Self::RegC | Self::RegD)
-	}
-}
-
-impl <'inp> FromParser <'inp> for Arg {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parser.any ()
-			.of (|parser| { parser.expect ("a") ?; Ok (Self::RegA) })
-			.of (|parser| { parser.expect ("b") ?; Ok (Self::RegB) })
-			.of (|parser| { parser.expect ("c") ?; Ok (Self::RegC) })
-			.of (|parser| { parser.expect ("d") ?; Ok (Self::RegD) })
-			.of (|parser| { let val = parser.int () ?; Ok (Self::Imm (val)) })
-			.done ()
-	}
 }
