@@ -28,7 +28,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2015_day_24":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2015_day_25":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2016":["",[],["lib.rs"]],\
-"aoc_2016_cpu":["",[],["lib.rs"]],\
+"aoc_2016_cpu":["",[],["cpu.rs","instr.rs","lib.rs"]],\
 "aoc_2016_day_01":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2016_day_02":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2016_day_03":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
@@ -40,7 +40,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2016_day_09":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2016_day_10":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2016_day_11":["",[],["input.rs","lib.rs","logic.rs","model.rs","tools.rs"]],\
-"aoc_2016_day_12":["",[],["lib.rs"]],\
+"aoc_2016_day_12":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2016_day_13":["",[],["lib.rs"]],\
 "aoc_2016_day_14":["",[],["lib.rs"]],\
 "aoc_2016_day_15":["",[],["lib.rs"]],\
