@@ -10,17 +10,28 @@ for arg in "$@"; do
 	esac
 done
 
+function repeat {
+	local num="$1"
+	local src="$2"
+	local result=""
+	local foo
+	for foo in $(eval "echo {1..$num}"); do echo -n "$src"; done
+}
+
 function header {
 	local colour="$1"
 	local message="$2"
 	local shade_fg=$(tput setaf $colour)
 	local shade_bg=$(tput setab $colour)
 	local normal=$(tput sgr0)
+	local fill_top=$(repeat $((COLUMNS - 4)) '▄')
+	local fill_middle=$(repeat $((COLUMNS - 4)) ' ')
+	local fill_bottom=$(repeat $((COLUMNS - 4)) '▀')
 	printf '\n'
-	printf '  %s▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄%s\n' "$shade_fg" "$normal"
-	printf '  %s                                                                            %s\r' "$shade_bg" "$normal"
+	printf '  %s%s%s\n' "$shade_fg" "$fill_top" "$normal"
+	printf '  %s%s%s\r' "$shade_bg" "$fill_middle" "$normal"
 	printf '  %s  %s%s\n' "$shade_bg" "$message" "$normal"
-	printf '  %s▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀%s\n' "$shade_fg" "$normal"
+	printf '  %s%s%s\n' "$shade_fg" "$fill_bottom" "$normal"
 	printf '\n'
 }
 
