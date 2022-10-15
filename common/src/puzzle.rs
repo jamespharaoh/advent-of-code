@@ -114,7 +114,7 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 			// handle missing part
 
 			if puzzle.num_parts () < part_idx + 1 {
-				print! ("{:len$}", "", len = answer_lens [part_idx] + 7);
+				print! ("{:len$} ", "", len = answer_lens [part_idx] + 6);
 				continue;
 			}
 
@@ -149,7 +149,7 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 
 			// print result
 
-			print! ("{result:len$}", len = answer_lens [part_idx] + 2);
+			print! ("{result:len$} ", len = answer_lens [part_idx] + 1);
 
 		}
 
