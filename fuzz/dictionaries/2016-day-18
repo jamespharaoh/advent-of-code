@@ -1,5 +1,5 @@
-param_0="NUM_ROWS_ONE=10"
-param_1="NUM_ROWS_TWO=100"
+param_0 = "NUM_ROWS_ONE=10\x0a"
+param_1 = "NUM_ROWS_TWO=100\x0a"
 
-char_0="^"
-char_1="."
+char_0 = "^"
+char_1 = "."
