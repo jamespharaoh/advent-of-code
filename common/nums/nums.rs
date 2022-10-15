@@ -1,3 +1,8 @@
+#![ allow (clippy::as_conversions) ]
+#![ allow (clippy::default_numeric_fallback) ]
+#![ allow (clippy::inline_always) ]
+#![ allow (clippy::wrong_self_convention) ]
+
 use std::error::Error;
 use std::fmt;
 use std::fmt::Debug;
@@ -20,6 +25,8 @@ use std::ops::ShrAssign;
 use std::ops::Sub;
 use std::ops::SubAssign;
 use std::str::FromStr;
+
+pub use crate::bits::*;
 
 pub type NumResult <Val> = Result <Val, Overflow>;
 
@@ -251,61 +258,42 @@ macro_rules! prim_int {
 
 			const BITS: u32 = $signed::BITS;
 
-			#[ allow (clippy::default_numeric_fallback) ]
 			const ZERO: $signed = 0;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const ONE: $signed = 1;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const TWO: $signed = 2;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const THREE: $signed = 3;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const FOUR: $signed = 4;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const FIVE: $signed = 5;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const SIX: $signed = 6;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const SEVEN: $signed = 7;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const EIGHT: $signed = 8;
-
-			#[ allow (clippy::default_numeric_fallback) ]
 			const NINE: $signed = 9;
 
 			const MIN: $signed = $signed::MIN;
 			const MAX: $signed = $signed::MAX;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn unsigned_abs (self) -> $unsigned { $signed::unsigned_abs (self) }
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn signum (self) -> $signed { $signed::signum (self) }
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn signed_diff (self, other: Self) -> NumResult <$signed> {
 				$signed::checked_sub (self, other).ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn unsigned_diff (self, other: Self) -> NumResult <$unsigned> {
 				(other <= self).then (|| $signed::abs_diff (self, other)).ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn add_signed (self, other: $signed) -> NumResult <$signed> {
 				$signed::checked_add (self, other).ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn sub_signed (self, other: $signed) -> NumResult <$signed> {
 				$signed::checked_sub (self, other).ok_or (Overflow)
 			}
@@ -356,15 +344,15 @@ macro_rules! prim_int {
 			const MIN: $unsigned = $unsigned::MIN;
 			const MAX: $unsigned = $unsigned::MAX;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn unsigned_abs (self) -> $unsigned { self }
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn signum (self) -> $signed {
 				if self > 0 { Self::Signed::ONE } else { Self::Signed::ZERO }
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn signed_diff (self, other: Self) -> NumResult <$signed> {
 				if other < self {
 					(self - other).try_into ().ok ().ok_or (Overflow)
@@ -373,12 +361,12 @@ macro_rules! prim_int {
 				}
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn unsigned_diff (self, other: Self) -> NumResult <$unsigned> {
 				$unsigned::checked_sub (self, other).ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn add_signed (self, other: $signed) -> NumResult <$unsigned> {
 				if other >= Self::Signed::ZERO {
 					$unsigned::checked_add (self, $signed::unsigned_abs (other)).ok_or (Overflow)
@@ -387,7 +375,7 @@ macro_rules! prim_int {
 				}
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn sub_signed (self, other: $signed) -> NumResult <$unsigned> {
 				if other >= Self::Signed::ZERO {
 					$unsigned::checked_sub (self, $signed::unsigned_abs (other)).ok_or (Overflow)
@@ -425,12 +413,12 @@ macro_rules! prim_int {
 
 		impl IntOpsSafe for $signed {
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn safe_add (self, arg: $signed) -> $signed {
 				$signed::checked_add (self, arg).unwrap ()
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn safe_sub (self, arg: $signed) -> $signed {
 				$signed::checked_sub (self, arg).unwrap ()
 			}
@@ -439,12 +427,12 @@ macro_rules! prim_int {
 
 		impl IntOpsSafe for $unsigned {
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn safe_add (self, arg: $unsigned) -> $unsigned {
 				$unsigned::checked_add (self, arg).unwrap ()
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn safe_sub (self, arg: $unsigned) -> $unsigned {
 				$unsigned::checked_sub (self, arg).unwrap ()
 			}
@@ -462,290 +450,262 @@ macro_rules! prim_int {
 
 		impl IntConv for $signed {
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_char (val: char) -> NumResult <Self> {
 				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_u8 (val: u8) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_usize (val: usize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_isize (val: isize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_char (self) -> NumResult <char> {
 				self.to_u32 () ?.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i8 (self) -> NumResult <i8> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i16 (self) -> NumResult <i16> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i32 (self) -> NumResult <i32> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i64 (self) -> NumResult <i64> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i128 (self) -> NumResult <i128> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_isize (self) -> NumResult <isize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u8 (self) -> NumResult <u8> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u16 (self) -> NumResult <u16> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u32 (self) -> NumResult <u32> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u64 (self) -> NumResult <u64> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u128 (self) -> NumResult <u128> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_usize (self) -> NumResult <usize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_f32 (self) -> f32 { self as f32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_f64 (self) -> f64 { self as f64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i8 (self) -> i8 { self as i8 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i16 (self) -> i16 { self as i16 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i32 (self) -> i32 { self as i32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i64 (self) -> i64 { self as i64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i128 (self) -> i128 { self as i128 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_isize (self) -> isize { self as isize }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u8 (self) -> u8 { self as u8 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u16 (self) -> u16 { self as u16 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u32 (self) -> u32 { self as u32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u64 (self) -> u64 { self as u64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u128 (self) -> u128 { self as u128 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_usize (self) -> usize { self as usize }
 
 		}
 
 		impl IntConv for $unsigned {
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_char (val: char) -> NumResult <Self> {
 				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_u8 (val: u8) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_usize (val: usize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn from_isize (val: isize) -> NumResult <Self> {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_char (self) -> NumResult <char> {
 				self.to_u32 () ?.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i8 (self) -> NumResult <i8> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i16 (self) -> NumResult <i16> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i32 (self) -> NumResult <i32> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i64 (self) -> NumResult <i64> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_i128 (self) -> NumResult <i128> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_isize (self) -> NumResult <isize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u8 (self) -> NumResult <u8> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u16 (self) -> NumResult <u16> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u32 (self) -> NumResult <u32> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u64 (self) -> NumResult <u64> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_u128 (self) -> NumResult <u128> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn to_usize (self) -> NumResult <usize> {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_f32 (self) -> f32 { self as f32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_f64 (self) -> f64 { self as f64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i8 (self) -> i8 { self as i8 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i16 (self) -> i16 { self as i16 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i32 (self) -> i32 { self as i32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i64 (self) -> i64 { self as i64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_i128 (self) -> i128 { self as i128 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_isize (self) -> isize { self as isize }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u8 (self) -> u8 { self as u8 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u16 (self) -> u16 { self as u16 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u32 (self) -> u32 { self as u32 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u64 (self) -> u64 { self as u64 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_u128 (self) -> u128 { self as u128 }
 
-			#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			#[ inline (always) ]
 			fn qck_usize (self) -> usize { self as usize }
 
 		}
@@ -753,7 +713,7 @@ macro_rules! prim_int {
 		impl TryAdd <Self> for $signed {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_add (self, arg: Self) -> NumResult <Self> {
 				self.checked_add (arg).ok_or (Overflow)
 			}
@@ -763,7 +723,7 @@ macro_rules! prim_int {
 		impl TryAdd <Self> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_add (self, arg: Self) -> NumResult <Self> {
 				self.checked_add (arg).ok_or (Overflow)
 			}
@@ -773,7 +733,7 @@ macro_rules! prim_int {
 		impl TryAdd <$signed> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_add (self, arg: $signed) -> NumResult <Self> {
 				self.add_signed (arg)
 			}
@@ -783,7 +743,7 @@ macro_rules! prim_int {
 		impl TryDiv <Self> for $signed {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_div (self, arg: Self) -> NumResult <Self> {
 				self.checked_div (arg).ok_or (Overflow)
 			}
@@ -793,7 +753,7 @@ macro_rules! prim_int {
 		impl TryDiv <Self> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_div (self, arg: Self) -> NumResult <Self> {
 				self.checked_div (arg).ok_or (Overflow)
 			}
@@ -803,7 +763,7 @@ macro_rules! prim_int {
 		impl TryMul <Self> for $signed {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_mul (self, arg: Self) -> NumResult <Self> {
 				self.checked_mul (arg).ok_or (Overflow)
 			}
@@ -813,7 +773,7 @@ macro_rules! prim_int {
 		impl TryMul <Self> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_mul (self, arg: Self) -> NumResult <Self> {
 				self.checked_mul (arg).ok_or (Overflow)
 			}
@@ -823,7 +783,7 @@ macro_rules! prim_int {
 		impl TryRem <Self> for $signed {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_rem (self, arg: Self) -> NumResult <Self> {
 				self.checked_rem (arg).ok_or (Overflow)
 			}
@@ -833,7 +793,7 @@ macro_rules! prim_int {
 		impl TryRem <Self> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_rem (self, arg: Self) -> NumResult <Self> {
 				self.checked_rem (arg).ok_or (Overflow)
 			}
@@ -843,7 +803,7 @@ macro_rules! prim_int {
 		impl TrySub <Self> for $signed {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_sub (self, arg: Self) -> NumResult <Self> {
 				self.checked_sub (arg).ok_or (Overflow)
 			}
@@ -853,15 +813,35 @@ macro_rules! prim_int {
 		impl TrySub <Self> for $unsigned {
 			type Output = Self;
 
-			#[ inline ]
+			#[ inline (always) ]
 			fn try_sub (self, arg: Self) -> NumResult <Self> {
 				self.checked_sub (arg).ok_or (Overflow)
 			}
 
 		}
 
+		quick_from! ($unsigned, u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+		quick_from! ($signed, u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+
 	};
 
+}
+
+macro_rules! quick_from {
+	( $target:ident, $( $source:ident ),* ) => {
+		$(
+
+			impl QuickFrom <$source> for $target {
+
+				#[ inline (always) ]
+				fn quick_from (arg: $source) -> Self {
+					arg as $target
+				}
+
+			}
+
+		)*
+	};
 }
 
 prim_int! (i8, u8, 8);
@@ -904,64 +884,49 @@ impl <Val> IntOps for Val where Val: IntOpsRust + IntOpsSafe + IntOpsTry {}
 
 pub trait IntConv: Sized {
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_f32 (self) -> f32 { self.to_f32 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_f64 (self) -> f64 { self.to_f64 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_i8 (self) -> i8 { self.to_i8 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_i16 (self) -> i16 { self.to_i16 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_i32 (self) -> i32 { self.to_i32 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_i64 (self) -> i64 { self.to_i64 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_i128 (self) -> i128 { self.to_i128 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_isize (self) -> isize { self.to_isize ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_u8 (self) -> u8 { self.to_u8 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_u16 (self) -> u16 { self.to_u16 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_u32 (self) -> u32 { self.to_u32 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_u64 (self) -> u64 { self.to_u64 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_u128 (self) -> u128 { self.to_u128 ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_usize (self) -> usize { self.to_usize ().unwrap () }
 
-	#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn pan_char (self) -> char { self.to_char ().unwrap () }
 
 	fn qck_f32 (self) -> f32;
@@ -999,7 +964,7 @@ pub trait IntConv: Sized {
 	///
 	/// Returns `Err (Overflow)` if the result can't be represented
 	///
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_f32 (self) -> NumResult <f32> { self.to_u16 ().map (Into::into) }
 
 	/// Safely convert to [`f64`]
@@ -1008,7 +973,7 @@ pub trait IntConv: Sized {
 	///
 	/// Returns `Err (Overflow)` if the result can't be represented
 	///
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_f64 (self) -> NumResult <f64> { self.to_u32 ().map (Into::into) }
 
 	/// Safely convert to [`i8`]
@@ -1113,145 +1078,214 @@ pub trait IntConv: Sized {
 
 impl IntConv for char {
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn from_char (val: char) -> NumResult <Self> {
 		Ok (val)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn from_u8 (val: u8) -> NumResult <Self> {
 		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn from_usize (val: usize) -> NumResult <Self> {
 		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn from_isize (val: isize) -> NumResult <Self> {
 		val.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_char (self) -> NumResult <char> {
 		Ok (self)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_i8 (self) -> NumResult <i8> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_i16 (self) -> NumResult <i16> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_i32 (self) -> NumResult <i32> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_i64 (self) -> NumResult <i64> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_i128 (self) -> NumResult <i128> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_isize (self) -> NumResult <isize> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_u8 (self) -> NumResult <u8> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_u16 (self) -> NumResult <u16> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_u32 (self) -> NumResult <u32> {
 		self.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always)]
 	fn to_u64 (self) -> NumResult <u64> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_u128 (self) -> NumResult <u128> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ inline ]
+	#[ inline (always) ]
 	fn to_usize (self) -> NumResult <usize> {
 		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
 	}
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_f32 (self) -> f32 { self.qck_u32 ().qck_f32 () }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_f64 (self) -> f64 { self.qck_u32 ().qck_f64 () }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_i8 (self) -> i8 { self as i8 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_i16 (self) -> i16 { self as i16 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_i32 (self) -> i32 { self as i32 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_i64 (self) -> i64 { self as i64 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_i128 (self) -> i128 { self as i128 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_isize (self) -> isize { self as isize }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_u8 (self) -> u8 { self as u8 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_u16 (self) -> u16 { self as u16 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_u32 (self) -> u32 { self as u32 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_u64 (self) -> u64 { self as u64 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_u128 (self) -> u128 { self as u128 }
 
-	#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	#[ inline (always) ]
 	fn qck_usize (self) -> usize { self as usize }
 
 }
+
+pub trait QuickFrom <Other> {
+	fn quick_from (other: Other) -> Self;
+}
+
+pub trait QuickInto <Other> {
+	fn quick_into (self) -> Other;
+}
+
+impl <From, To> QuickInto <To> for From where To: QuickFrom <From> {
+	#[ inline (always) ]
+	fn quick_into (self) -> To {
+		To::quick_from (self)
+	}
+}
+
+mod bits {
+
+	use super::*;
+
+	pub struct BitPusher <Data: Int> {
+		data: Data,
+		bits: u32,
+	}
+
+	impl <Data: Int> BitPusher <Data> {
+
+		#[ inline (always) ]
+		#[ must_use ]
+		pub fn new () -> Self {
+			Self { data: Data::ZERO, bits: 0 }
+		}
+
+		#[ inline (always) ]
+		pub fn push <Val: Int + QuickInto <Data>> (& mut self, val: Val, bits: u32) {
+			debug_assert! (self.bits + bits <= Data::BITS);
+			self.data <<= bits;
+			self.data |= val.quick_into ();
+			self.bits += bits;
+		}
+
+		#[ inline (always) ]
+		pub fn finish (self) -> Data {
+			self.data << (Data::BITS - self.bits)
+		}
+
+	}
+
+	impl <Data: Int> Default for BitPusher <Data> {
+
+		#[ inline (always) ]
+		fn default () -> Self {
+			Self::new ()
+		}
+
+	}
+
+	pub struct BitPopper <Data: Int> {
+		data: Data,
+		bits: u32,
+	}
+
+	impl <Data: Int> BitPopper <Data> {
+
+		#[ inline (always) ]
+		pub fn new (data: Data) -> Self {
+			Self { data, bits: Data::BITS }
+		}
+
+		#[ inline (always) ]
+		pub fn pop <Val: Int + QuickFrom <Data>> (& mut self, bits: u32) -> Val {
+			debug_assert! (bits <= Val::BITS);
+			debug_assert! (bits <= self.bits);
+			let result = (self.data >> (Data::BITS - bits)).quick_into ();
+			self.data <<= bits;
+			self.bits -= bits;
+			result
+		}
+
+	}
+
+}
+

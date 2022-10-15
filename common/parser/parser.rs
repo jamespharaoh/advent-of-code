@@ -9,6 +9,7 @@ mod display;
 mod enums;
 mod from_parser;
 mod parse;
+mod structs;
 
 pub use delim::*;
 pub use display::IntoIteratorDisplayDelim;
@@ -298,7 +299,6 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ allow (clippy::string_slice) ]
-	#[ inline ]
 	fn int_str (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let num_digits =
@@ -314,7 +314,6 @@ impl <'inp> Parser <'inp> {
 	}
 
 	#[ allow (clippy::string_slice) ]
-	#[ inline ]
 	fn uint_str (& mut self) -> & str {
 		if self.ignore_whitespace { self.skip_whitespace ( .. ).unwrap (); }
 		let num_digits =
@@ -392,8 +391,8 @@ impl <'inp> Parser <'inp> {
 
 	/// Consume any whitespace from the start of the remaining input
 	///
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	#[ allow (clippy::string_slice) ]
-	#[ inline ]
 	pub fn skip_whitespace (& mut self, range: impl RangeBounds <u32>) -> ParseResult <& mut Self> {
 		let saved = * self;
 		let num_spaces =
@@ -567,8 +566,8 @@ impl <'inp> Parser <'inp> {
 		Ok (result)
 	}
 
+	#[ allow (clippy::missing_inline_in_public_items) ]
 	#[ allow (clippy::string_slice) ]
-	#[ inline ]
 	pub fn take_exactly (& mut self, num_chars: u32) -> ParseResult <InpStr <'inp>> {
 		let (num_bytes, num_chars_found) =
 			self.input_line.chars ()
@@ -739,6 +738,7 @@ macro_rules! input_params {
 		}
 
 		impl $struct_name {
+			#[ inline ]
 			pub fn parse (input: & mut & [& str]) -> ::aoc_common::GenResult <Self> {
 				use ::aoc_common::parser as parser;
 				use ::std::ops::Bound as Bound;
@@ -761,6 +761,7 @@ macro_rules! input_params {
 		}
 
 		impl ::std::default::Default for $struct_name {
+			#[ inline ]
 			fn default () -> Self {
 				Self {
 					$( $member_name: $member_default, )*
@@ -769,6 +770,7 @@ macro_rules! input_params {
 		}
 
 		impl ::std::fmt::Display for $struct_name {
+			#[ inline ]
 			fn fmt (
 				& self,
 				formatter: & mut ::std::fmt::Formatter,
@@ -784,6 +786,7 @@ macro_rules! input_params {
 		}
 
 		impl <'inp> FromParser <'inp> for $struct_name {
+			#[ inline ]
 			fn from_parser (parser: & mut Parser <'inp>) -> ::aoc_common::parser::ParseResult <Self> {
 				use ::aoc_common::parser as parser;
 				use ::std::ops::Bound as Bound;
@@ -837,78 +840,4 @@ pub fn check_range_error <Val: Debug + Display + Ord, Rng: Debug + RangeBounds <
 		_ =>
 			format! ("{name} is out of acceptable range: {range:?}"),
 	}
-}
-
-#[ macro_export ]
-macro_rules! struct_parser {
-
-	( < $($rest:tt)* ) => {
-		struct_parser! (@outer 'inp [] < $($rest)*);
-	};
-
-	( $first:ident $($rest:tt)* ) => {
-		struct_parser! (@outer 'inp [] $first $($rest)*);
-	};
-
-	(
-		@outer $inp_life_old:tt [$($param_decl:tt)*]
-		input_lifetime = $inp_life:tt;
-		$($rest:tt)*
-	) => {
-		struct_parser! (@outer $inp_life [$($param_decl)*] $($rest)*);
-	};
-		
-	(
-		@outer $inp_life:tt [$($param_decl_old:tt)*]
-		params = { $($param_decl:tt)* }
-		$($rest:tt)*
-	) => {
-		struct_parser! (@outer $inp_life [$($param_decl)*] $($rest)*);
-	};
-		
-	(
-		@outer $inp_life:tt [$($param_decl:tt)*]
-		$name:ident
-		$( < $($param:tt),* > )?
-		{ $($fields:tt)* }
-		= [ $($args:tt)* ]
-	) => {
-		struct_parser! (
-			@main $name $inp_life
-			[ $($param_decl)* ]
-			[ $( $($param),* )? ]
-			[ { $($fields)* } ]
-			[ $($args)* ]);
-	};
-
-	(
-		@outer $inp_life:tt [$($param_decl:tt)*]
-		$name:ident
-		$( < $($param:tt),* > )?
-		( $($fields:tt)* )
-		= [ $($args:tt)* ]
-	) => {
-		struct_parser! (
-			@main $name $inp_life
-			[ $( $($param_decl)* )? ]
-			[ $($param),* ]
-			[ ( $($fields)* ) ]
-			[ $($args)* ]);
-	};
-
-	(
-		@main $name:ident $inp_life:tt
-		[ $($param_decl:tt)* ]
-		[ $($param:tt)* ]
-		[ $($fields:tt)* ]
-		[ $($args:tt)* ]
-	) => {
-		impl <$inp_life, $($param_decl)*> FromParser <$inp_life> for $name <$($param)*> {
-			fn from_parser (parser: & mut Parser <$inp_life>) -> ParseResult <Self> {
-				parse! (parser, $($args)*);
-				Ok (Self $($fields)*)
-			}
-		}
-	};
-
 }

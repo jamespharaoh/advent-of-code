@@ -18,12 +18,16 @@ mod prelude {
 	pub use aoc_inpstr::InpStr;
 	pub use aoc_parser as parser;
 
+	pub use crate::nums::BitPopper;
+	pub use crate::nums::BitPusher;
 	pub use crate::nums::Int;
 	pub use crate::nums::IntConv;
 	pub use crate::nums::IntSigned;
 	pub use crate::nums::IntUnsigned;
 	pub use crate::nums::NumResult;
 	pub use crate::nums::Overflow;
+	pub use crate::nums::QuickFrom;
+	pub use crate::nums::QuickInto;
 	pub use crate::nums::TryAdd;
 	pub use crate::nums::TryAddAssign;
 	pub use crate::nums::TryDiv;
