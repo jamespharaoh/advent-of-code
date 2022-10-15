@@ -205,6 +205,9 @@ macro_rules! parse {
 			.delim_fn ("\n", $parse)
 			.collect ();
 	};
+	( @item $parser:expr, @lines $name:ident = (|$arg:ident| { $($body:tt)* }, $rng_0:literal ..= $rng_1:literal) ) => {
+		todo! ();
+	};
 	( @item $parser:expr, @lines $item_name:ident { $($nest:tt)* } ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", parse! (@nest $($nest)*))
