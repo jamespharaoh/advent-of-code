@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-06/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2018_day_06/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_06/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_06/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-06/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_06/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_06/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -171,14 +171,14 @@
 
 	<span class="comment">// work out size
 
-	</span><span class="kw">let </span>height = input.posns.iter_vals ().map (|pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
-	<span class="kw">let </span>width = input.posns.iter_vals ().map (|pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
+	</span><span class="kw">let </span>height = input.posns.iter ().map (|&amp; pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
+	<span class="kw">let </span>width = input.posns.iter ().map (|&amp; pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
 
 	<span class="comment">// initialize grid
 
 	</span><span class="kw">let </span><span class="kw-2">mut </span>grid = Grid::new_size (Pos::new (height, width));
 	<span class="kw">let </span><span class="kw-2">mut </span>next_id: u8 = <span class="number">1</span>;
-	<span class="kw">for </span>pos <span class="kw">in </span>input.posns.iter_vals () {
+	<span class="kw">for </span>&amp; pos <span class="kw">in </span>input.posns.iter () {
 		<span class="kw">if </span>next_id == u8::MAX { <span class="macro">panic! </span>() }
 		grid.set (pos, next_id);
 		next_id += <span class="number">1</span>;
@@ -187,12 +187,12 @@
 	<span class="comment">// spread out one square at a time
 
 	</span><span class="kw">let </span><span class="kw-2">mut </span>todo: Vec &lt;(Pos, u8)&gt; =
-		input.posns.iter_vals ()
-			.flat_map (|pos| {
+		input.posns.iter ()
+			.flat_map (|&amp; pos| {
 				<span class="kw">let </span>val = grid.get (pos).unwrap ();
-				pos.adjacent_4 ().iter_vals ()
-					.filter (|&amp; adj_pos| grid.get (adj_pos).map_or (<span class="bool-val">false</span>, |val| val == <span class="number">0</span>))
-					.map (|adj_pos| (adj_pos, val))
+				pos.adjacent_4 ().iter ()
+					.filter (|&amp;&amp; adj_pos| grid.get (adj_pos).map_or (<span class="bool-val">false</span>, |val| val == <span class="number">0</span>))
+					.map (|&amp; adj_pos| (adj_pos, val))
 					.collect::&lt;ArrayVec &lt;(Pos, u8), <span class="number">4</span>&gt;&gt; ()
 			})
 			.collect ();
@@ -210,7 +210,7 @@
 			adj_vals.clear ();
 			adj_vals.extend (group_iter.map (|(<span class="kw">_</span>, val)| val));
 			<span class="kw">let </span>first = adj_vals [<span class="number">0</span>];
-			<span class="kw">if </span>adj_vals.iter_vals ().all (|adj_val| adj_val == first) {
+			<span class="kw">if </span>adj_vals.iter ().all (|&amp; adj_val| adj_val == first) {
 				<span class="kw">let </span>new_val = adj_vals [<span class="number">0</span>];
 				grid.set (pos, new_val);
 				<span class="kw">for </span>adj_pos <span class="kw">in </span>pos.adjacent_4 () {
@@ -248,7 +248,7 @@
 
 	<span class="comment">// find largest remaining area
 
-	</span><span class="prelude-val">Ok </span>(areas.iter_vals ().max ().unwrap ())
+	</span><span class="prelude-val">Ok </span>(areas.into_iter ().max ().unwrap ())
 
 }
 
@@ -258,8 +258,8 @@
 
 	<span class="comment">// work out size
 
-	</span><span class="kw">let </span>height = input.posns.iter_vals ().map (|pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
-	<span class="kw">let </span>width = input.posns.iter_vals ().map (|pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
+	</span><span class="kw">let </span>height = input.posns.iter ().map (|&amp; pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
+	<span class="kw">let </span>width = input.posns.iter ().map (|&amp; pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
 
 	<span class="comment">// work out horizontal/vertical distances separately
 
@@ -283,10 +283,10 @@
 			}
 			dists
 		}
-		<span class="kw">let </span>dists_fwd = calc_one_way (posns.iter_vals (), <span class="number">0_i32 </span>.. size);
-		<span class="kw">let </span>dists_rev = calc_one_way (posns.iter_vals ().rev (), (<span class="number">0_i32 </span>.. size).rev ());
-		dists_fwd.iter_vals ().zip (dists_rev.iter_vals ().rev ())
-			.map (|(fwd, rev)| fwd + rev)
+		<span class="kw">let </span>dists_fwd = calc_one_way (posns.iter ().copied (), <span class="number">0_i32 </span>.. size);
+		<span class="kw">let </span>dists_rev = calc_one_way (posns.iter ().rev ().copied (), (<span class="number">0_i32 </span>.. size).rev ());
+		dists_fwd.iter ().zip (dists_rev.iter ().rev ())
+			.map (|(&amp; fwd, &amp; rev)| fwd + rev)
 			.collect ()
 	}
 
@@ -296,9 +296,9 @@
 	<span class="comment">// sum separate distances to get totals and count how many are in range
 
 	</span><span class="kw">let </span><span class="kw-2">mut </span>area = <span class="number">0_u32</span>;
-	<span class="kw">for </span>dist_x <span class="kw">in </span>dists_x.iter_vals () {
+	<span class="kw">for </span>&amp; dist_x <span class="kw">in </span>dists_x.iter () {
 		<span class="kw">if </span>dist_x &gt; input.params.dist_two { <span class="kw">continue </span>}
-		<span class="kw">for </span>dist_y <span class="kw">in </span>dists_y.iter_vals () {
+		<span class="kw">for </span>&amp; dist_y <span class="kw">in </span>dists_y.iter () {
 			<span class="kw">if </span>dist_x + dist_y &gt; input.params.dist_two { <span class="kw">continue </span>}
 			area += <span class="number">1</span>;
 		}
@@ -311,12 +311,12 @@
 <span class="kw">fn </span>sanity_check (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">if </span>input.posns.is_empty () { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least one position&quot;</span>.into ()) }
 	<span class="kw">if </span>input.posns.len () &gt; <span class="number">50 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to handle more than 50 points&quot;</span>.into ()) }
-	<span class="kw">if </span>input.posns.iter_vals ()
-			.any (|pos| ! (<span class="number">0_i32 </span>..= <span class="number">399_i32</span>).contains (&amp; pos.x)
+	<span class="kw">if </span>input.posns.iter ()
+			.any (|&amp; pos| ! (<span class="number">0_i32 </span>..= <span class="number">399_i32</span>).contains (&amp; pos.x)
 				|| ! (<span class="number">0_i32 </span>..= <span class="number">399_i32</span>).contains (&amp; pos.y)) {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to handle positions not between 0 and 399&quot;</span>.into ());
 	}
 	<span class="prelude-val">Ok </span>(())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>

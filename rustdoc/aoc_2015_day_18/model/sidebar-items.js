@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input",""]],"type":[["Coord",""],["Input",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["Light",""]],"type":[["Coord",""],["Grid",""],["Pos",""]]};

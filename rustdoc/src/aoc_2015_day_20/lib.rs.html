@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-20/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2015_day_20/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_20/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_20/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-20/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_20/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_20/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -22,105 +22,6 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
-<span id="86">86</span>
-<span id="87">87</span>
-<span id="88">88</span>
-<span id="89">89</span>
-<span id="90">90</span>
-<span id="91">91</span>
-<span id="92">92</span>
-<span id="93">93</span>
-<span id="94">94</span>
-<span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
-<span id="98">98</span>
-<span id="99">99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2015: Day 20: Infinite Elves and Infinite Houses
 //!
 //! [https://adventofcode.com/2015/day/20](https://adventofcode.com/2015/day/20)
@@ -129,120 +30,21 @@
 
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
+<span class="kw">mod </span>examples;
+<span class="kw">pub mod </span>input;
+<span class="kw">pub mod </span>logic;
+
+<span class="kw">pub mod </span>model {
+	<span class="kw">pub type </span>Val = u32;
+}
+
 <span class="macro">puzzle_info! </span>{
 	name = <span class="string">&quot;Infinite Elves and Infinite Houses&quot;</span>;
 	year = <span class="number">2015</span>;
 	day = <span class="number">20</span>;
-	parse = |input| input [<span class="number">0</span>].parse::&lt;u32&gt; ();
-	part_one = |input| logic::part_one (input);
-	part_two = |input| logic::part_two (input);
-}
-
-<span class="doccomment">/// Logic for solving the puzzles.
-///
-</span><span class="kw">pub mod </span>logic {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-	<span class="kw">use </span>nums::{ Int, IntConv, NumResult };
-
-	<span class="kw">pub type </span>Val = u32;
-
-	<span class="kw">pub fn </span>part_one (input: Val) -&gt; GenResult &lt;Val&gt; {
-		<span class="prelude-val">Ok </span>(calc_result (input, <span class="number">10</span>, Val::MAX) <span class="question-mark">?</span>)
-	}
-
-	<span class="kw">pub fn </span>part_two (input: Val) -&gt; GenResult &lt;Val&gt; {
-		<span class="prelude-val">Ok </span>(calc_result (input, <span class="number">11</span>, <span class="number">50</span>) <span class="question-mark">?</span>)
-	}
-
-	<span class="kw">pub fn </span>calc_result (input: Val, mul: Val, lim: Val) -&gt; NumResult &lt;Val&gt; {
-
-		<span class="kw">let </span><span class="kw-2">mut </span>divs = Vec::new ();
-		<span class="kw">let </span><span class="kw-2">mut </span>extend_sqrt = Val::ONE;
-		<span class="kw">let </span><span class="kw-2">mut </span>extend = Val::ONE;
-
-		<span class="kw">for </span>house <span class="kw">in </span>Val::ONE .. {
-			<span class="kw">let </span><span class="kw-2">mut </span>total = Val::ZERO;
-
-			<span class="comment">// decrement all the values in `divs`, or if they are at zero then include the
-			// corresponding &quot;elf&quot; and its complement in the total and reset to the elf&#39;s number
-			// minus one
-
-			</span><span class="kw">let </span><span class="kw-2">mut </span>div = Val::ZERO;
-			<span class="kw">for </span>next <span class="kw">in </span>divs.iter_mut () {
-				div = Val::add_2 (div, Val::ONE) <span class="question-mark">?</span>;
-				<span class="kw">if </span>* next == Val::ZERO {
-					* next = Val::sub_2 (div, <span class="number">1</span>) <span class="question-mark">?</span>;
-					<span class="kw">let </span>comp =
-						<span class="kw">if </span>div == Val::ONE { house }
-						<span class="kw">else if </span>div == <span class="number">2 </span>{ house &gt;&gt; <span class="number">1_i32 </span>}
-						<span class="kw">else </span>{ Val::div_2 (house, div) <span class="question-mark">? </span>};
-					<span class="kw">if </span>comp &lt;= lim {
-						total = Val::add_2 (total, Val::mul_2 (div, mul) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-					}
-					<span class="kw">if </span>comp != div &amp;&amp; div &lt;= lim {
-						total = Val::add_2 (total, Val::mul_2 (comp, mul) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-					}
-				} <span class="kw">else </span>{
-					* next = Val::sub_2 (* next, Val::ONE) <span class="question-mark">?</span>;
-				}
-			}
-
-			<span class="comment">// once the house square root reaches a new integer we add it to divs, also we have to
-			// include the corresponding elf in our total
-
-			</span><span class="kw">if </span>house == extend {
-				<span class="kw">if </span>divs.is_empty () {
-					divs.push (Val::ZERO);
-				} <span class="kw">else </span>{
-					divs.push (Val::from_usize (divs.len ()) <span class="question-mark">?</span>);
-				}
-				total = Val::add_2 (total, Val::mul_2 (extend_sqrt, mul) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-				extend_sqrt = Val::add_2 (extend_sqrt, Val::ONE) <span class="question-mark">?</span>;
-				extend = Val::mul_2 (extend_sqrt, extend_sqrt) <span class="question-mark">?</span>;
-			}
-
-			<span class="comment">// return when we find a solution
-
-			</span><span class="kw">if </span>total &gt;= input { <span class="kw">return </span><span class="prelude-val">Ok </span>(house) }
-
-		}
-
-		<span class="macro">unreachable! </span>();
-
-	}
-
-}
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>tests {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;1&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;10&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;100&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;48&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;1000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;360&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;10000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;3120&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;100000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;27720&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;1000000&quot; </span>]));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;1&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;1&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;10&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;100&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;36&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;1000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;336&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;10000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;2880&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;100000&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;25200&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;1000000&quot; </span>]));
-	}
-
+	parse = |lines| input::Input::parse_from_lines (lines);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_20" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_20" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>

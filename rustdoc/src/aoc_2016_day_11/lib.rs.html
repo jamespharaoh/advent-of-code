@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-11/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../aoc_2016_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a><h2 class="location"></h2></nav><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_11/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-11/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_11/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -439,6 +439,8 @@
 <span id="439">439</span>
 <span id="440">440</span>
 <span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 11: Radioisotope Thermoelectric Generators
 //!
 //! [https://adventofcode.com/2016/day/11](https://adventofcode.com/2016/day/11)
@@ -493,7 +495,7 @@
 			<span class="kw">if </span>state.is_done () { <span class="kw">return </span><span class="prelude-val">Ok </span>(steps) }
 			next_states.clear ();
 			state.next_states (&amp; <span class="kw-2">mut </span>next_states);
-			<span class="kw">for </span>next_state <span class="kw">in </span>next_states.iter_vals () {
+			<span class="kw">for </span>&amp; next_state <span class="kw">in </span>next_states.iter () {
 				<span class="kw">if </span>! seen.insert (next_state) { <span class="kw">continue </span>}
 				todo.push_back ((next_state, steps + <span class="number">1</span>));
 			}
@@ -558,7 +560,7 @@
 			<span class="kw">for </span>name_idx_0 <span class="kw">in </span><span class="number">0 </span>.. <span class="self">self</span>.comps_len.pan_usize () {
 				<span class="kw">for </span>comp_idx_0 <span class="kw">in </span><span class="number">0 </span>.. <span class="number">2 </span>{
 					<span class="kw">if </span><span class="self">self</span>.comps [name_idx_0] [comp_idx_0] != <span class="self">self</span>.elevator { <span class="kw">continue </span>}
-					<span class="kw">for </span>next_floor <span class="kw">in </span>next_floors.iter_vals () {
+					<span class="kw">for </span>&amp; next_floor <span class="kw">in </span>next_floors.iter () {
 						<span class="kw">let </span><span class="kw-2">mut </span>next_state = * <span class="self">self</span>;
 						next_state.elevator = next_floor;
 						next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
@@ -571,7 +573,7 @@
 						<span class="kw">for </span>comp_idx_1 <span class="kw">in </span><span class="number">0 </span>.. <span class="number">2 </span>{
 							<span class="kw">if </span><span class="self">self</span>.comps [name_idx_1] [comp_idx_1] != <span class="self">self</span>.elevator { <span class="kw">continue </span>}
 							<span class="kw">if </span>(name_idx_0, comp_idx_0) &gt;= (name_idx_1, comp_idx_1) { <span class="kw">continue </span>}
-							<span class="kw">for </span>next_floor <span class="kw">in </span>next_floors.iter_vals () {
+							<span class="kw">for </span>&amp; next_floor <span class="kw">in </span>next_floors.iter () {
 								<span class="kw">let </span><span class="kw-2">mut </span>next_state = * <span class="self">self</span>;
 								next_state.elevator = next_floor;
 								next_state.comps [name_idx_0] [comp_idx_0] = next_floor;
@@ -606,7 +608,7 @@
 
 		<span class="kw">fn </span>compact (&amp; <span class="self">self</span>) -&gt; StateCompact {
 			<span class="kw">let </span><span class="kw-2">mut </span>data = <span class="number">0_u64</span>;
-			<span class="kw">for </span>[gen, chip] <span class="kw">in </span><span class="self">self</span>.comps.iter_vals ().rev () {
+			<span class="kw">for </span>&amp; [ gen, chip ] <span class="kw">in </span><span class="self">self</span>.comps.iter ().rev () {
 				<span class="macro">debug_assert! </span>((<span class="number">1 </span>..= <span class="number">4</span>).contains (&amp; gen));
 				data &lt;&lt;= <span class="number">2_u32</span>;
 				data |= chip.pan_u64 () - <span class="number">1</span>;
@@ -632,13 +634,15 @@
 			data &gt;&gt;= <span class="number">2_u32</span>;
 			<span class="kw">let </span>comps_len = (data &amp; <span class="number">0x7</span>).pan_u8 ();
 			data &gt;&gt;= <span class="number">3_u32</span>;
-			<span class="kw">let </span>comps = (<span class="number">0_u32 </span>.. <span class="number">7_u32</span>).map (|<span class="kw">_</span>| {
-				<span class="kw">let </span>gen = (data &amp; <span class="number">0x3</span>).pan_u8 () + <span class="number">1</span>;
-				data &gt;&gt;= <span class="number">2_u32</span>;
-				<span class="kw">let </span>chip = (data &amp; <span class="number">0x3</span>).pan_u8 () + <span class="number">1</span>;
-				data &gt;&gt;= <span class="number">2_u32</span>;
-				[gen, chip]
-			}).collect_array ().unwrap ();
+			<span class="kw">let </span>comps = (<span class="number">0_u32 </span>.. <span class="number">7_u32</span>)
+				.map (|<span class="kw">_</span>| {
+					<span class="kw">let </span>gen = (data &amp; <span class="number">0x3</span>).pan_u8 () + <span class="number">1</span>;
+					data &gt;&gt;= <span class="number">2_u32</span>;
+					<span class="kw">let </span>chip = (data &amp; <span class="number">0x3</span>).pan_u8 () + <span class="number">1</span>;
+					data &gt;&gt;= <span class="number">2_u32</span>;
+					[gen, chip]
+				})
+				.array ();
 			<span class="macro">debug_assert! </span>(data == <span class="number">0</span>);
 			State { comps, comps_len, elevator }
 		}
@@ -796,7 +800,7 @@
 				<span class="kw">let </span><span class="kw-2">mut </span>items = Vec::new ();
 				<span class="kw">for </span>(name, [gen, chip]) <span class="kw">in
 					</span>names.iter ()
-						.zip (comps.iter_vals ())
+						.zip (comps.iter ().copied ())
 						.take (args.num_comps) {
 					<span class="kw">if </span>gen == floor {
 						items.push (<span class="macro">format! </span>(<span class="string">&quot;{} generator&quot;</span>, name));
@@ -881,4 +885,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (8b0c05d9a 2022-10-07)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["parse_input","Parse a list of ingredients and their properties, according to the defined format."]],"struct":[["Ingredient",""]],"type":[["Input",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Ingredient",""],["Recipe",""]]};

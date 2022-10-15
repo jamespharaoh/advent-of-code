@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["part_one",""],["part_two",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["combos","Iterate over combinations of provided container given a specific total."],["part_one",""],["part_two",""]]};

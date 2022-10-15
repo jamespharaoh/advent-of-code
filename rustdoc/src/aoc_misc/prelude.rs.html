@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `common/misc/prelude.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>prelude.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_misc/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_misc/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+</pre><pre class="rust"><code><span class="kw">pub use </span>arrayvec::ArrayVec;
+<span class="kw">pub use </span><span class="kw">crate</span>::array_vec::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::collections::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::default::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::deref::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::error::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::iter::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::option::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="kw">crate</span>::result::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>itertools;
+<span class="kw">pub use </span>itertools::Either;
+<span class="kw">pub use </span>itertools::EitherOrBoth;
+<span class="kw">pub use </span>itertools::Itertools;
+<span class="kw">pub use </span>itertools::MultiPeek;
+<span class="kw">pub use </span>itertools::izip;
+<span class="kw">pub use </span>std::array;
+<span class="kw">pub use </span>std::borrow::Borrow;
+<span class="kw">pub use </span>std::borrow::BorrowMut;
+<span class="kw">pub use </span>std::borrow::Cow;
+<span class="kw">pub use </span>std::cell::Cell;
+<span class="kw">pub use </span>std::cell::RefCell;
+<span class="kw">pub use </span>std::cmp;
+<span class="kw">pub use </span>std::cmp::Ordering;
+<span class="kw">pub use </span>std::collections::BinaryHeap;
+<span class="kw">pub use </span>std::collections::BTreeMap;
+<span class="kw">pub use </span>std::collections::BTreeSet;
+<span class="kw">pub use </span>std::collections::VecDeque;
+<span class="kw">pub use </span>std::collections::btree_map::Entry <span class="kw">as </span>BTreeEntry;
+<span class="kw">pub use </span>std::collections::btree_map::Iter <span class="kw">as </span>BTreeIter;
+<span class="kw">pub use </span>std::collections::btree_map::IterMut <span class="kw">as </span>BTreeIterMut;
+<span class="kw">pub use </span>std::collections::btree_map::Keys <span class="kw">as </span>BTreeKeys;
+<span class="kw">pub use </span>std::collections::btree_map::Values <span class="kw">as </span>BTreeValues;
+<span class="kw">pub use </span>std::collections::hash_map::DefaultHasher;
+<span class="kw">pub use </span>std::collections::hash_map::Entry <span class="kw">as </span>HashMapEntry;
+<span class="kw">pub use </span>std::collections::hash_map::RandomState <span class="kw">as </span>RandomHasher;
+<span class="kw">pub use </span>std::convert::Infallible;
+<span class="kw">pub use </span>std::error::Error;
+<span class="kw">pub use </span>std::ffi::OsString;
+<span class="kw">pub use </span>std::fmt;
+<span class="kw">pub use </span>std::fmt::Debug;
+<span class="kw">pub use </span>std::fmt::Display;
+<span class="kw">pub use </span>std::fmt::Write <span class="kw">as _</span>;
+<span class="kw">pub use </span>std::fs;
+<span class="kw">pub use </span>std::hash;
+<span class="kw">pub use </span>std::hash::BuildHasher;
+<span class="kw">pub use </span>std::hash::BuildHasherDefault;
+<span class="kw">pub use </span>std::hash::Hash;
+<span class="kw">pub use </span>std::hash::Hasher;
+<span class="kw">pub use </span>std::iter;
+<span class="kw">pub use </span>std::iter::FusedIterator;
+<span class="kw">pub use </span>std::iter::Peekable;
+<span class="kw">pub use </span>std::io;
+<span class="kw">pub use </span>std::marker::PhantomData;
+<span class="kw">pub use </span>std::mem;
+<span class="kw">pub use </span>std::num::ParseIntError;
+<span class="kw">pub use </span>std::ops;
+<span class="kw">pub use </span>std::ops::Add;
+<span class="kw">pub use </span>std::ops::AddAssign;
+<span class="kw">pub use </span>std::ops::BitAnd;
+<span class="kw">pub use </span>std::ops::BitAndAssign;
+<span class="kw">pub use </span>std::ops::BitOr;
+<span class="kw">pub use </span>std::ops::BitOrAssign;
+<span class="kw">pub use </span>std::ops::Bound;
+<span class="kw">pub use </span>std::ops::Bound::Included;
+<span class="kw">pub use </span>std::ops::Bound::Excluded;
+<span class="kw">pub use </span>std::ops::Bound::Unbounded;
+<span class="kw">pub use </span>std::ops::Deref;
+<span class="kw">pub use </span>std::ops::DerefMut;
+<span class="kw">pub use </span>std::ops::Div;
+<span class="kw">pub use </span>std::ops::Index;
+<span class="kw">pub use </span>std::ops::IndexMut;
+<span class="kw">pub use </span>std::ops::Mul;
+<span class="kw">pub use </span>std::ops::Neg;
+<span class="kw">pub use </span>std::ops::Range;
+<span class="kw">pub use </span>std::ops::RangeBounds;
+<span class="kw">pub use </span>std::ops::RangeInclusive;
+<span class="kw">pub use </span>std::ops::Rem;
+<span class="kw">pub use </span>std::ops::Shl;
+<span class="kw">pub use </span>std::ops::ShlAssign;
+<span class="kw">pub use </span>std::ops::Shr;
+<span class="kw">pub use </span>std::ops::ShrAssign;
+<span class="kw">pub use </span>std::ops::Sub;
+<span class="kw">pub use </span>std::path::Path;
+<span class="kw">pub use </span>std::rc::Rc;
+<span class="kw">pub use </span>std::rc::Weak <span class="kw">as </span>RcWeak;
+<span class="kw">pub use </span>std::slice;
+<span class="kw">pub use </span>std::slice::Iter <span class="kw">as </span>SliceIter;
+<span class="kw">pub use </span>std::slice::IterMut <span class="kw">as </span>SliceIterMut;
+<span class="kw">pub use </span>std::str;
+<span class="kw">pub use </span>std::str::Chars;
+<span class="kw">pub use </span>std::str::FromStr;
+<span class="kw">pub use </span>std::sync::Arc;
+<span class="kw">pub use </span>std::sync::Condvar;
+<span class="kw">pub use </span>std::sync::Mutex;
+<span class="kw">pub use </span>std::sync::atomic::AtomicUsize;
+<span class="kw">pub use </span>std::sync::atomic::Ordering <span class="kw">as </span>AtomicOrdering;
+<span class="kw">pub use </span>std::thread;
+<span class="kw">pub use </span>std::thread::JoinHandle;
+<span class="kw">pub use </span>std::time;
+<span class="kw">pub use </span>std::vec::IntoIter <span class="kw">as </span>VecIntoIter;
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_misc" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>
