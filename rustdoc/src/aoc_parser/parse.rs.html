@@ -410,6 +410,19 @@
 <span id="410">410</span>
 <span id="411">411</span>
 <span id="412">412</span>
+<span id="413">413</span>
+<span id="414">414</span>
+<span id="415">415</span>
+<span id="416">416</span>
+<span id="417">417</span>
+<span id="418">418</span>
+<span id="419">419</span>
+<span id="420">420</span>
+<span id="421">421</span>
+<span id="422">422</span>
+<span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
 </pre><pre class="rust"><code><span class="attribute">#[ macro_export ]
 </span><span class="macro">macro_rules! </span>parse {
 	( <span class="macro-nonterminal">$parser</span>:expr, $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
@@ -532,6 +545,12 @@
 			</span>.repeat (<span class="macro">parse! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>))
 			.collect ();
 	};
+	( @item <span class="macro-nonterminal">$parser</span>:expr, @collect_max <span class="macro-nonterminal">$max</span>:literal <span class="macro-nonterminal">$name</span>:ident ) =&gt; {
+		<span class="kw">let </span><span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$parser
+			</span>.repeat (Parser::item)
+			.take (<span class="macro-nonterminal">$max</span>)
+			.collect ();
+	};
 	( @item <span class="macro-nonterminal">$parser</span>:expr, @collect_some <span class="macro-nonterminal">$item_name</span>:ident ) =&gt; {
 		<span class="kw">let </span><span class="kw-2">mut </span>temp_iter = <span class="macro-nonterminal">$parser</span>.repeat (Parser::item);
 		<span class="kw">let </span><span class="macro-nonterminal">$item_name </span>= <span class="kw">match </span>temp_iter.next () {
@@ -544,6 +563,13 @@
 			</span>.repeat (Parser::item)
 			.collect ();
 		<span class="kw">if </span><span class="macro-nonterminal">$item_name</span>.is_empty () { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro-nonterminal">$parser</span>.err ()) }
+	};
+	( @item <span class="macro-nonterminal">$parser</span>:expr, @collect_some_max <span class="macro-nonterminal">$max</span>:literal <span class="macro-nonterminal">$item_name</span>:ident ) =&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>temp_iter = <span class="macro-nonterminal">$parser</span>.repeat (Parser::item).take (<span class="macro-nonterminal">$max</span>);
+		<span class="kw">let </span><span class="macro-nonterminal">$item_name </span>= <span class="kw">match </span>temp_iter.next () {
+			<span class="prelude-val">Some </span>(first) =&gt; iter::once (first).chain (temp_iter).collect (),
+			<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro-nonterminal">$parser</span>.err ()),
+		};
 	};
 	( @item <span class="macro-nonterminal">$parser</span>:expr, @delim <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$item_name</span>:ident ) =&gt; {
 		<span class="kw">let </span><span class="macro-nonterminal">$item_name </span>= <span class="macro-nonterminal">$parser
