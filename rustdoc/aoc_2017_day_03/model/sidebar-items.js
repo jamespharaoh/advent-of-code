@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Input",""]],"type":[["Value",""]]};
+window.SIDEBAR_ITEMS = {"type":[["Coord",""],["Dir",""],["Pos",""],["Turn",""]]};
