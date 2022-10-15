@@ -34,12 +34,14 @@ from_parser_impl! (i16, int);
 from_parser_impl! (i32, int);
 from_parser_impl! (i64, int);
 from_parser_impl! (i128, int);
+from_parser_impl! (isize, int);
 
 from_parser_impl! (u8, uint);
 from_parser_impl! (u16, uint);
 from_parser_impl! (u32, uint);
 from_parser_impl! (u64, uint);
 from_parser_impl! (u128, uint);
+from_parser_impl! (usize, uint);
 
 from_parser_impl! (char, expect_next);
 

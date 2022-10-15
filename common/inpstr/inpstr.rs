@@ -38,6 +38,15 @@ impl <'inp> InpStr <'inp> {
 		}
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub fn as_str (& self) -> & str {
+		match * self {
+			Self::Borrow (val) => val,
+			Self::RefCount (ref val) => val,
+		}
+	}
+
 }
 
 impl <'inp> Debug for InpStr <'inp> {
