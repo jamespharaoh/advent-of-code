@@ -10,6 +10,24 @@ for arg in "$@"; do
 	esac
 done
 
+function header {
+	local colour="$1"
+	local message="$2"
+	local shade_fg=$(tput setaf $colour)
+	local shade_bg=$(tput setab $colour)
+	local normal=$(tput sgr0)
+	printf '\n'
+	printf '  %s▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄%s\n' "$shade_fg" "$normal"
+	printf '  %s                                                                            %s\r' "$shade_bg" "$normal"
+	printf '  %s  %s%s\n' "$shade_bg" "$message" "$normal"
+	printf '  %s▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀%s\n' "$shade_fg" "$normal"
+	printf '\n'
+}
+
+function header_purple {
+	header "55" "$1"
+}
+
 # find the repo
 
 if [[ -d .git ]]; then
@@ -44,11 +62,9 @@ if [[ ! "$force" ]] && git diff --cached --quiet; then
 	exit 0
 fi
 if [[ ! "$force" ]] && ! git diff --quiet; then
-	printf "################################### WARNING ###################################\n"
-	printf "\n"
+	header_purple "WARNING: Pending changes"
 	git status
-	printf "###############################################################################\n"
-	printf "\n"
+	header_purple "WARNING: Pending changes"
 	for secs in {5..1}; do
 		printf "Waiting for $secs seconds..." >&2
 		sleep 1
@@ -89,21 +105,29 @@ cd "$work_dir"
 
 export RUSTDOCFLAGS="--deny warnings"
 
+header_purple "Running: cargo clippy"
 cargo clippy --frozen --workspace --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
+
+header_purple "Running: cargo doc"
 cargo doc --frozen --workspace --profile pre-commit
+
+header_purple "Running: cargo test"
 cargo test --frozen --workspace --profile pre-commit
 
 for year in {2015..2021}; do
+	header_purple "Running: cargo run --package aoc-$year"
 	cargo run --frozen --profile pre-commit --package "aoc-$year"
 done
 
 (
+	header_purple "Running: cargo fuzz build"
 	cd fuzz
 	cargo fuzz build --dev
 )
 
 # clean up
 
+header_purple "Cleaning up"
 cd "$root_dir"
 rm --recursive --force "$work_dir"
 
