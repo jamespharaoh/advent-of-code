@@ -70,7 +70,7 @@
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>check_rules: bool = (<span class="string">&quot;CHECK_RULES=&quot;</span>, <span class="bool-val">true</span>, (<span class="bool-val">false </span>..= <span class="bool-val">true</span>)),
+		<span class="kw">pub </span>check_rules: bool = (<span class="string">&quot;CHECK_RULES=&quot;</span>, <span class="bool-val">true</span>, .. ),
 	}
 }
 
