@@ -39,7 +39,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2016_day_08":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2016_day_09":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2016_day_10":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
-"aoc_2016_day_11":["",[],["lib.rs"]],\
+"aoc_2016_day_11":["",[],["input.rs","lib.rs","logic.rs","model.rs","tools.rs"]],\
 "aoc_2016_day_12":["",[],["lib.rs"]],\
 "aoc_2016_day_13":["",[],["lib.rs"]],\
 "aoc_2016_day_14":["",[],["lib.rs"]],\
@@ -201,7 +201,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_nums":["",[],["nums.rs"]],\
 "aoc_ocr":["",[],["ocr.rs"]],\
 "aoc_parallel":["",[],["parallel.rs"]],\
-"aoc_parser":["",[],["delim.rs","display.rs","enums.rs","from_parser.rs","parse.rs","parser.rs"]],\
+"aoc_parser":["",[],["delim.rs","display.rs","enums.rs","from_parser.rs","parse.rs","parser.rs","structs.rs"]],\
 "aoc_pos":["",[],["pos.rs"]],\
 "aoc_search":["",[],["pairs_map.rs","permutations.rs","priority.rs","search.rs"]],\
 "arrayvec":["",[],["array_string.rs","arrayvec.rs","arrayvec_impl.rs","char.rs","errors.rs","lib.rs","utils.rs"]],\

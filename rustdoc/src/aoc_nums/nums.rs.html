@@ -1255,7 +1255,46 @@
 <span id="1255">1255</span>
 <span id="1256">1256</span>
 <span id="1257">1257</span>
-</pre><pre class="rust"><code><span class="kw">use </span>std::error::Error;
+<span id="1258">1258</span>
+<span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+<span id="1271">1271</span>
+<span id="1272">1272</span>
+<span id="1273">1273</span>
+<span id="1274">1274</span>
+<span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
+<span id="1290">1290</span>
+<span id="1291">1291</span>
+</pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::as_conversions) ]
+#![ allow (clippy::default_numeric_fallback) ]
+#![ allow (clippy::inline_always) ]
+#![ allow (clippy::wrong_self_convention) ]
+
+</span><span class="kw">use </span>std::error::Error;
 <span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::fmt::Debug;
 <span class="kw">use </span>std::fmt::Display;
@@ -1277,6 +1316,8 @@
 <span class="kw">use </span>std::ops::Sub;
 <span class="kw">use </span>std::ops::SubAssign;
 <span class="kw">use </span>std::str::FromStr;
+
+<span class="kw">pub use </span><span class="kw">crate</span>::bits::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>NumResult &lt;Val&gt; = <span class="prelude-ty">Result </span>&lt;Val, Overflow&gt;;
 
@@ -1508,61 +1549,42 @@
 
 			<span class="kw">const </span>BITS: u32 = <span class="macro-nonterminal">$signed::BITS</span>;
 
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>ZERO: <span class="macro-nonterminal">$signed </span>= <span class="number">0</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>ONE: <span class="macro-nonterminal">$signed </span>= <span class="number">1</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>TWO: <span class="macro-nonterminal">$signed </span>= <span class="number">2</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>THREE: <span class="macro-nonterminal">$signed </span>= <span class="number">3</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>FOUR: <span class="macro-nonterminal">$signed </span>= <span class="number">4</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>FIVE: <span class="macro-nonterminal">$signed </span>= <span class="number">5</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>SIX: <span class="macro-nonterminal">$signed </span>= <span class="number">6</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>SEVEN: <span class="macro-nonterminal">$signed </span>= <span class="number">7</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>EIGHT: <span class="macro-nonterminal">$signed </span>= <span class="number">8</span>;
-
-			<span class="attribute">#[ allow (clippy::default_numeric_fallback) ]
-			</span><span class="kw">const </span>NINE: <span class="macro-nonterminal">$signed </span>= <span class="number">9</span>;
+			<span class="kw">const </span>ZERO: <span class="macro-nonterminal">$signed </span>= <span class="number">0</span>;
+			<span class="kw">const </span>ONE: <span class="macro-nonterminal">$signed </span>= <span class="number">1</span>;
+			<span class="kw">const </span>TWO: <span class="macro-nonterminal">$signed </span>= <span class="number">2</span>;
+			<span class="kw">const </span>THREE: <span class="macro-nonterminal">$signed </span>= <span class="number">3</span>;
+			<span class="kw">const </span>FOUR: <span class="macro-nonterminal">$signed </span>= <span class="number">4</span>;
+			<span class="kw">const </span>FIVE: <span class="macro-nonterminal">$signed </span>= <span class="number">5</span>;
+			<span class="kw">const </span>SIX: <span class="macro-nonterminal">$signed </span>= <span class="number">6</span>;
+			<span class="kw">const </span>SEVEN: <span class="macro-nonterminal">$signed </span>= <span class="number">7</span>;
+			<span class="kw">const </span>EIGHT: <span class="macro-nonterminal">$signed </span>= <span class="number">8</span>;
+			<span class="kw">const </span>NINE: <span class="macro-nonterminal">$signed </span>= <span class="number">9</span>;
 
 			<span class="kw">const </span>MIN: <span class="macro-nonterminal">$signed </span>= <span class="macro-nonterminal">$signed::MIN</span>;
 			<span class="kw">const </span>MAX: <span class="macro-nonterminal">$signed </span>= <span class="macro-nonterminal">$signed::MAX</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>unsigned_abs (<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$unsigned </span>{ <span class="macro-nonterminal">$signed::unsigned_abs </span>(<span class="self">self</span>) }
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>signum (<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$signed </span>{ <span class="macro-nonterminal">$signed::signum </span>(<span class="self">self</span>) }
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>signed_diff (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$signed</span>&gt; {
 				<span class="macro-nonterminal">$signed::checked_sub </span>(<span class="self">self</span>, other).ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>unsigned_diff (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$unsigned</span>&gt; {
 				(other &lt;= <span class="self">self</span>).then (|| <span class="macro-nonterminal">$signed::abs_diff </span>(<span class="self">self</span>, other)).ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>add_signed (<span class="self">self</span>, other: <span class="macro-nonterminal">$signed</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$signed</span>&gt; {
 				<span class="macro-nonterminal">$signed::checked_add </span>(<span class="self">self</span>, other).ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>sub_signed (<span class="self">self</span>, other: <span class="macro-nonterminal">$signed</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$signed</span>&gt; {
 				<span class="macro-nonterminal">$signed::checked_sub </span>(<span class="self">self</span>, other).ok_or (Overflow)
 			}
@@ -1613,15 +1635,15 @@
 			<span class="kw">const </span>MIN: <span class="macro-nonterminal">$unsigned </span>= <span class="macro-nonterminal">$unsigned::MIN</span>;
 			<span class="kw">const </span>MAX: <span class="macro-nonterminal">$unsigned </span>= <span class="macro-nonterminal">$unsigned::MAX</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>unsigned_abs (<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$unsigned </span>{ <span class="self">self </span>}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>signum (<span class="self">self</span>) -&gt; <span class="macro-nonterminal">$signed </span>{
 				<span class="kw">if </span><span class="self">self </span>&gt; <span class="number">0 </span>{ <span class="self">Self</span>::Signed::ONE } <span class="kw">else </span>{ <span class="self">Self</span>::Signed::ZERO }
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>signed_diff (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$signed</span>&gt; {
 				<span class="kw">if </span>other &lt; <span class="self">self </span>{
 					(<span class="self">self </span>- other).try_into ().ok ().ok_or (Overflow)
@@ -1630,12 +1652,12 @@
 				}
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>unsigned_diff (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$unsigned</span>&gt; {
 				<span class="macro-nonterminal">$unsigned::checked_sub </span>(<span class="self">self</span>, other).ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>add_signed (<span class="self">self</span>, other: <span class="macro-nonterminal">$signed</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$unsigned</span>&gt; {
 				<span class="kw">if </span>other &gt;= <span class="self">Self</span>::Signed::ZERO {
 					<span class="macro-nonterminal">$unsigned::checked_add </span>(<span class="self">self</span>, <span class="macro-nonterminal">$signed::unsigned_abs </span>(other)).ok_or (Overflow)
@@ -1644,7 +1666,7 @@
 				}
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>sub_signed (<span class="self">self</span>, other: <span class="macro-nonterminal">$signed</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$unsigned</span>&gt; {
 				<span class="kw">if </span>other &gt;= <span class="self">Self</span>::Signed::ZERO {
 					<span class="macro-nonterminal">$unsigned::checked_sub </span>(<span class="self">self</span>, <span class="macro-nonterminal">$signed::unsigned_abs </span>(other)).ok_or (Overflow)
@@ -1682,12 +1704,12 @@
 
 		<span class="kw">impl </span>IntOpsSafe <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>safe_add (<span class="self">self</span>, arg: <span class="macro-nonterminal">$signed</span>) -&gt; <span class="macro-nonterminal">$signed </span>{
 				<span class="macro-nonterminal">$signed::checked_add </span>(<span class="self">self</span>, arg).unwrap ()
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>safe_sub (<span class="self">self</span>, arg: <span class="macro-nonterminal">$signed</span>) -&gt; <span class="macro-nonterminal">$signed </span>{
 				<span class="macro-nonterminal">$signed::checked_sub </span>(<span class="self">self</span>, arg).unwrap ()
 			}
@@ -1696,12 +1718,12 @@
 
 		<span class="kw">impl </span>IntOpsSafe <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>safe_add (<span class="self">self</span>, arg: <span class="macro-nonterminal">$unsigned</span>) -&gt; <span class="macro-nonterminal">$unsigned </span>{
 				<span class="macro-nonterminal">$unsigned::checked_add </span>(<span class="self">self</span>, arg).unwrap ()
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>safe_sub (<span class="self">self</span>, arg: <span class="macro-nonterminal">$unsigned</span>) -&gt; <span class="macro-nonterminal">$unsigned </span>{
 				<span class="macro-nonterminal">$unsigned::checked_sub </span>(<span class="self">self</span>, arg).unwrap ()
 			}
@@ -1719,290 +1741,262 @@
 
 		<span class="kw">impl </span>IntConv <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_char (val: char) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_u8 (val: u8) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_usize (val: usize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_isize (val: isize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_char (<span class="self">self</span>) -&gt; NumResult &lt;char&gt; {
 				<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i8 (<span class="self">self</span>) -&gt; NumResult &lt;i8&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i16 (<span class="self">self</span>) -&gt; NumResult &lt;i16&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i32 (<span class="self">self</span>) -&gt; NumResult &lt;i32&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i64 (<span class="self">self</span>) -&gt; NumResult &lt;i64&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i128 (<span class="self">self</span>) -&gt; NumResult &lt;i128&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_isize (<span class="self">self</span>) -&gt; NumResult &lt;isize&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u8 (<span class="self">self</span>) -&gt; NumResult &lt;u8&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u16 (<span class="self">self</span>) -&gt; NumResult &lt;u16&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u32 (<span class="self">self</span>) -&gt; NumResult &lt;u32&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u64 (<span class="self">self</span>) -&gt; NumResult &lt;u64&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u128 (<span class="self">self</span>) -&gt; NumResult &lt;u128&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_usize (<span class="self">self</span>) -&gt; NumResult &lt;usize&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_f32 (<span class="self">self</span>) -&gt; f32 { <span class="self">self </span><span class="kw">as </span>f32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_f64 (<span class="self">self</span>) -&gt; f64 { <span class="self">self </span><span class="kw">as </span>f64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i8 (<span class="self">self</span>) -&gt; i8 { <span class="self">self </span><span class="kw">as </span>i8 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i16 (<span class="self">self</span>) -&gt; i16 { <span class="self">self </span><span class="kw">as </span>i16 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i32 (<span class="self">self</span>) -&gt; i32 { <span class="self">self </span><span class="kw">as </span>i32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i64 (<span class="self">self</span>) -&gt; i64 { <span class="self">self </span><span class="kw">as </span>i64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i128 (<span class="self">self</span>) -&gt; i128 { <span class="self">self </span><span class="kw">as </span>i128 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_isize (<span class="self">self</span>) -&gt; isize { <span class="self">self </span><span class="kw">as </span>isize }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u8 (<span class="self">self</span>) -&gt; u8 { <span class="self">self </span><span class="kw">as </span>u8 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u16 (<span class="self">self</span>) -&gt; u16 { <span class="self">self </span><span class="kw">as </span>u16 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u32 (<span class="self">self</span>) -&gt; u32 { <span class="self">self </span><span class="kw">as </span>u32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u64 (<span class="self">self</span>) -&gt; u64 { <span class="self">self </span><span class="kw">as </span>u64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u128 (<span class="self">self</span>) -&gt; u128 { <span class="self">self </span><span class="kw">as </span>u128 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_usize (<span class="self">self</span>) -&gt; usize { <span class="self">self </span><span class="kw">as </span>usize }
 
 		}
 
 		<span class="kw">impl </span>IntConv <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_char (val: char) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.qck_u32 ().try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_u8 (val: u8) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_usize (val: usize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>from_isize (val: isize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				val.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_char (<span class="self">self</span>) -&gt; NumResult &lt;char&gt; {
 				<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i8 (<span class="self">self</span>) -&gt; NumResult &lt;i8&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i16 (<span class="self">self</span>) -&gt; NumResult &lt;i16&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i32 (<span class="self">self</span>) -&gt; NumResult &lt;i32&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i64 (<span class="self">self</span>) -&gt; NumResult &lt;i64&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_i128 (<span class="self">self</span>) -&gt; NumResult &lt;i128&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_isize (<span class="self">self</span>) -&gt; NumResult &lt;isize&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u8 (<span class="self">self</span>) -&gt; NumResult &lt;u8&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u16 (<span class="self">self</span>) -&gt; NumResult &lt;u16&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u32 (<span class="self">self</span>) -&gt; NumResult &lt;u32&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u64 (<span class="self">self</span>) -&gt; NumResult &lt;u64&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_u128 (<span class="self">self</span>) -&gt; NumResult &lt;u128&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>to_usize (<span class="self">self</span>) -&gt; NumResult &lt;usize&gt; {
 				<span class="self">self</span>.try_into ().ok ().ok_or (Overflow)
 			}
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_f32 (<span class="self">self</span>) -&gt; f32 { <span class="self">self </span><span class="kw">as </span>f32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_f64 (<span class="self">self</span>) -&gt; f64 { <span class="self">self </span><span class="kw">as </span>f64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i8 (<span class="self">self</span>) -&gt; i8 { <span class="self">self </span><span class="kw">as </span>i8 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i16 (<span class="self">self</span>) -&gt; i16 { <span class="self">self </span><span class="kw">as </span>i16 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i32 (<span class="self">self</span>) -&gt; i32 { <span class="self">self </span><span class="kw">as </span>i32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i64 (<span class="self">self</span>) -&gt; i64 { <span class="self">self </span><span class="kw">as </span>i64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_i128 (<span class="self">self</span>) -&gt; i128 { <span class="self">self </span><span class="kw">as </span>i128 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_isize (<span class="self">self</span>) -&gt; isize { <span class="self">self </span><span class="kw">as </span>isize }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u8 (<span class="self">self</span>) -&gt; u8 { <span class="self">self </span><span class="kw">as </span>u8 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u16 (<span class="self">self</span>) -&gt; u16 { <span class="self">self </span><span class="kw">as </span>u16 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u32 (<span class="self">self</span>) -&gt; u32 { <span class="self">self </span><span class="kw">as </span>u32 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u64 (<span class="self">self</span>) -&gt; u64 { <span class="self">self </span><span class="kw">as </span>u64 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_u128 (<span class="self">self</span>) -&gt; u128 { <span class="self">self </span><span class="kw">as </span>u128 }
 
-			<span class="attribute">#[ allow (clippy::as_conversions) ]
-			#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>qck_usize (<span class="self">self</span>) -&gt; usize { <span class="self">self </span><span class="kw">as </span>usize }
 
 		}
@@ -2010,7 +2004,7 @@
 		<span class="kw">impl </span>TryAdd &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_add (arg).ok_or (Overflow)
 			}
@@ -2020,7 +2014,7 @@
 		<span class="kw">impl </span>TryAdd &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_add (arg).ok_or (Overflow)
 			}
@@ -2030,7 +2024,7 @@
 		<span class="kw">impl </span>TryAdd &lt;<span class="macro-nonterminal">$signed</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, arg: <span class="macro-nonterminal">$signed</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.add_signed (arg)
 			}
@@ -2040,7 +2034,7 @@
 		<span class="kw">impl </span>TryDiv &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_div (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_div (arg).ok_or (Overflow)
 			}
@@ -2050,7 +2044,7 @@
 		<span class="kw">impl </span>TryDiv &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_div (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_div (arg).ok_or (Overflow)
 			}
@@ -2060,7 +2054,7 @@
 		<span class="kw">impl </span>TryMul &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_mul (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_mul (arg).ok_or (Overflow)
 			}
@@ -2070,7 +2064,7 @@
 		<span class="kw">impl </span>TryMul &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_mul (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_mul (arg).ok_or (Overflow)
 			}
@@ -2080,7 +2074,7 @@
 		<span class="kw">impl </span>TryRem &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_rem (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_rem (arg).ok_or (Overflow)
 			}
@@ -2090,7 +2084,7 @@
 		<span class="kw">impl </span>TryRem &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_rem (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_rem (arg).ok_or (Overflow)
 			}
@@ -2100,7 +2094,7 @@
 		<span class="kw">impl </span>TrySub &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$signed </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_sub (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_sub (arg).ok_or (Overflow)
 			}
@@ -2110,15 +2104,35 @@
 		<span class="kw">impl </span>TrySub &lt;<span class="self">Self</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
 			<span class="kw">type </span>Output = <span class="self">Self</span>;
 
-			<span class="attribute">#[ inline ]
+			<span class="attribute">#[ inline (always) ]
 			</span><span class="kw">fn </span>try_sub (<span class="self">self</span>, arg: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="self">self</span>.checked_sub (arg).ok_or (Overflow)
 			}
 
 		}
 
+		<span class="macro">quick_from! </span>(<span class="macro-nonterminal">$unsigned</span>, u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+		<span class="macro">quick_from! </span>(<span class="macro-nonterminal">$signed</span>, u8, u16, u32, u64, u128, usize, i8, i16, i32, i64, i128, isize);
+
 	};
 
+}
+
+<span class="macro">macro_rules! </span>quick_from {
+	( <span class="macro-nonterminal">$target</span>:ident, $( <span class="macro-nonterminal">$source</span>:ident ),* ) =&gt; {
+		$(
+
+			<span class="kw">impl </span>QuickFrom &lt;<span class="macro-nonterminal">$source</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$target </span>{
+
+				<span class="attribute">#[ inline (always) ]
+				</span><span class="kw">fn </span>quick_from (arg: <span class="macro-nonterminal">$source</span>) -&gt; <span class="self">Self </span>{
+					arg <span class="kw">as </span><span class="macro-nonterminal">$target
+				</span>}
+
+			}
+
+		)*
+	};
 }
 
 <span class="macro">prim_int! </span>(i8, u8, <span class="number">8</span>);
@@ -2161,64 +2175,49 @@
 
 <span class="kw">pub trait </span>IntConv: Sized {
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_f32 (<span class="self">self</span>) -&gt; f32 { <span class="self">self</span>.to_f32 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_f64 (<span class="self">self</span>) -&gt; f64 { <span class="self">self</span>.to_f64 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_i8 (<span class="self">self</span>) -&gt; i8 { <span class="self">self</span>.to_i8 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_i16 (<span class="self">self</span>) -&gt; i16 { <span class="self">self</span>.to_i16 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_i32 (<span class="self">self</span>) -&gt; i32 { <span class="self">self</span>.to_i32 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_i64 (<span class="self">self</span>) -&gt; i64 { <span class="self">self</span>.to_i64 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_i128 (<span class="self">self</span>) -&gt; i128 { <span class="self">self</span>.to_i128 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_isize (<span class="self">self</span>) -&gt; isize { <span class="self">self</span>.to_isize ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_u8 (<span class="self">self</span>) -&gt; u8 { <span class="self">self</span>.to_u8 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_u16 (<span class="self">self</span>) -&gt; u16 { <span class="self">self</span>.to_u16 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_u32 (<span class="self">self</span>) -&gt; u32 { <span class="self">self</span>.to_u32 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_u64 (<span class="self">self</span>) -&gt; u64 { <span class="self">self</span>.to_u64 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_u128 (<span class="self">self</span>) -&gt; u128 { <span class="self">self</span>.to_u128 ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_usize (<span class="self">self</span>) -&gt; usize { <span class="self">self</span>.to_usize ().unwrap () }
 
-	<span class="attribute">#[ allow (clippy::wrong_self_convention) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>pan_char (<span class="self">self</span>) -&gt; char { <span class="self">self</span>.to_char ().unwrap () }
 
 	<span class="kw">fn </span>qck_f32 (<span class="self">self</span>) -&gt; f32;
@@ -2256,7 +2255,7 @@
 	///
 	/// Returns `Err (Overflow)` if the result can&#39;t be represented
 	///
-	</span><span class="attribute">#[ inline ]
+	</span><span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_f32 (<span class="self">self</span>) -&gt; NumResult &lt;f32&gt; { <span class="self">self</span>.to_u16 ().map (Into::into) }
 
 	<span class="doccomment">/// Safely convert to [`f64`]
@@ -2265,7 +2264,7 @@
 	///
 	/// Returns `Err (Overflow)` if the result can&#39;t be represented
 	///
-	</span><span class="attribute">#[ inline ]
+	</span><span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_f64 (<span class="self">self</span>) -&gt; NumResult &lt;f64&gt; { <span class="self">self</span>.to_u32 ().map (Into::into) }
 
 	<span class="doccomment">/// Safely convert to [`i8`]
@@ -2370,147 +2369,216 @@
 
 <span class="kw">impl </span>IntConv <span class="kw">for </span>char {
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>from_char (val: char) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 		<span class="prelude-val">Ok </span>(val)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>from_u8 (val: u8) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 		val.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>from_usize (val: usize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 		val.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>from_isize (val: isize) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 		val.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_char (<span class="self">self</span>) -&gt; NumResult &lt;char&gt; {
 		<span class="prelude-val">Ok </span>(<span class="self">self</span>)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_i8 (<span class="self">self</span>) -&gt; NumResult &lt;i8&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_i16 (<span class="self">self</span>) -&gt; NumResult &lt;i16&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_i32 (<span class="self">self</span>) -&gt; NumResult &lt;i32&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_i64 (<span class="self">self</span>) -&gt; NumResult &lt;i64&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_i128 (<span class="self">self</span>) -&gt; NumResult &lt;i128&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_isize (<span class="self">self</span>) -&gt; NumResult &lt;isize&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_u8 (<span class="self">self</span>) -&gt; NumResult &lt;u8&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_u16 (<span class="self">self</span>) -&gt; NumResult &lt;u16&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_u32 (<span class="self">self</span>) -&gt; NumResult &lt;u32&gt; {
 		<span class="self">self</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always)]
 	</span><span class="kw">fn </span>to_u64 (<span class="self">self</span>) -&gt; NumResult &lt;u64&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_u128 (<span class="self">self</span>) -&gt; NumResult &lt;u128&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>to_usize (<span class="self">self</span>) -&gt; NumResult &lt;usize&gt; {
 		<span class="self">self</span>.to_u32 () <span class="question-mark">?</span>.try_into ().map_err (|_err| Overflow)
 	}
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_f32 (<span class="self">self</span>) -&gt; f32 { <span class="self">self</span>.qck_u32 ().qck_f32 () }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_f64 (<span class="self">self</span>) -&gt; f64 { <span class="self">self</span>.qck_u32 ().qck_f64 () }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_i8 (<span class="self">self</span>) -&gt; i8 { <span class="self">self </span><span class="kw">as </span>i8 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_i16 (<span class="self">self</span>) -&gt; i16 { <span class="self">self </span><span class="kw">as </span>i16 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_i32 (<span class="self">self</span>) -&gt; i32 { <span class="self">self </span><span class="kw">as </span>i32 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_i64 (<span class="self">self</span>) -&gt; i64 { <span class="self">self </span><span class="kw">as </span>i64 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_i128 (<span class="self">self</span>) -&gt; i128 { <span class="self">self </span><span class="kw">as </span>i128 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_isize (<span class="self">self</span>) -&gt; isize { <span class="self">self </span><span class="kw">as </span>isize }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_u8 (<span class="self">self</span>) -&gt; u8 { <span class="self">self </span><span class="kw">as </span>u8 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_u16 (<span class="self">self</span>) -&gt; u16 { <span class="self">self </span><span class="kw">as </span>u16 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_u32 (<span class="self">self</span>) -&gt; u32 { <span class="self">self </span><span class="kw">as </span>u32 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_u64 (<span class="self">self</span>) -&gt; u64 { <span class="self">self </span><span class="kw">as </span>u64 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_u128 (<span class="self">self</span>) -&gt; u128 { <span class="self">self </span><span class="kw">as </span>u128 }
 
-	<span class="attribute">#[ allow (clippy::as_conversions) ]
-	#[ inline ]
+	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>qck_usize (<span class="self">self</span>) -&gt; usize { <span class="self">self </span><span class="kw">as </span>usize }
 
 }
+
+<span class="kw">pub trait </span>QuickFrom &lt;Other&gt; {
+	<span class="kw">fn </span>quick_from (other: Other) -&gt; <span class="self">Self</span>;
+}
+
+<span class="kw">pub trait </span>QuickInto &lt;Other&gt; {
+	<span class="kw">fn </span>quick_into (<span class="self">self</span>) -&gt; Other;
+}
+
+<span class="kw">impl </span>&lt;From, To&gt; QuickInto &lt;To&gt; <span class="kw">for </span>From <span class="kw">where </span>To: QuickFrom &lt;From&gt; {
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>quick_into (<span class="self">self</span>) -&gt; To {
+		To::quick_from (<span class="self">self</span>)
+	}
+}
+
+<span class="kw">mod </span>bits {
+
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+	<span class="kw">pub struct </span>BitPusher &lt;Data: Int&gt; {
+		data: Data,
+		bits: u32,
+	}
+
+	<span class="kw">impl </span>&lt;Data: Int&gt; BitPusher &lt;Data&gt; {
+
+		<span class="attribute">#[ inline (always) ]
+		#[ must_use ]
+		</span><span class="kw">pub fn </span>new () -&gt; <span class="self">Self </span>{
+			<span class="self">Self </span>{ data: Data::ZERO, bits: <span class="number">0 </span>}
+		}
+
+		<span class="attribute">#[ inline (always) ]
+		</span><span class="kw">pub fn </span>push &lt;Val: Int + QuickInto &lt;Data&gt;&gt; (&amp; <span class="kw-2">mut </span><span class="self">self</span>, val: Val, bits: u32) {
+			<span class="macro">debug_assert! </span>(<span class="self">self</span>.bits + bits &lt;= Data::BITS);
+			<span class="self">self</span>.data &lt;&lt;= bits;
+			<span class="self">self</span>.data |= val.quick_into ();
+			<span class="self">self</span>.bits += bits;
+		}
+
+		<span class="attribute">#[ inline (always) ]
+		</span><span class="kw">pub fn </span>finish (<span class="self">self</span>) -&gt; Data {
+			<span class="self">self</span>.data &lt;&lt; (Data::BITS - <span class="self">self</span>.bits)
+		}
+
+	}
+
+	<span class="kw">impl </span>&lt;Data: Int&gt; Default <span class="kw">for </span>BitPusher &lt;Data&gt; {
+
+		<span class="attribute">#[ inline (always) ]
+		</span><span class="kw">fn </span>default () -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>::new ()
+		}
+
+	}
+
+	<span class="kw">pub struct </span>BitPopper &lt;Data: Int&gt; {
+		data: Data,
+		bits: u32,
+	}
+
+	<span class="kw">impl </span>&lt;Data: Int&gt; BitPopper &lt;Data&gt; {
+
+		<span class="attribute">#[ inline (always) ]
+		</span><span class="kw">pub fn </span>new (data: Data) -&gt; <span class="self">Self </span>{
+			<span class="self">Self </span>{ data, bits: Data::BITS }
+		}
+
+		<span class="attribute">#[ inline (always) ]
+		</span><span class="kw">pub fn </span>pop &lt;Val: Int + QuickFrom &lt;Data&gt;&gt; (&amp; <span class="kw-2">mut </span><span class="self">self</span>, bits: u32) -&gt; Val {
+			<span class="macro">debug_assert! </span>(bits &lt;= Val::BITS);
+			<span class="macro">debug_assert! </span>(bits &lt;= <span class="self">self</span>.bits);
+			<span class="kw">let </span>result = (<span class="self">self</span>.data &gt;&gt; (Data::BITS - bits)).quick_into ();
+			<span class="self">self</span>.data &lt;&lt;= bits;
+			<span class="self">self</span>.bits -= bits;
+			result
+		}
+
+	}
+
+}
+
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_nums" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>

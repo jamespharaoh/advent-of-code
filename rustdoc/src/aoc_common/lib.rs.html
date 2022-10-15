@@ -37,6 +37,10 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Common functionality used in all puzzle solutions
 
 </span><span class="kw">use </span>clap::ArgMatches;
@@ -57,12 +61,16 @@
 	<span class="kw">pub use </span>aoc_inpstr::InpStr;
 	<span class="kw">pub use </span>aoc_parser <span class="kw">as </span>parser;
 
+	<span class="kw">pub use </span><span class="kw">crate</span>::nums::BitPopper;
+	<span class="kw">pub use </span><span class="kw">crate</span>::nums::BitPusher;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::Int;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::IntConv;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::IntSigned;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::IntUnsigned;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::NumResult;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::Overflow;
+	<span class="kw">pub use </span><span class="kw">crate</span>::nums::QuickFrom;
+	<span class="kw">pub use </span><span class="kw">crate</span>::nums::QuickInto;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::TryAdd;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::TryAddAssign;
 	<span class="kw">pub use </span><span class="kw">crate</span>::nums::TryDiv;
