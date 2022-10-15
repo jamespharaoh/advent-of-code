@@ -9,7 +9,7 @@ pub struct Input {
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct InputParams {
-		pub grid_size: i16 = ("GRID_SIZE=", 300, (2_i16 .. )),
+		pub grid_size: i16 = ("GRID_SIZE=", 300, 2 .. ),
 	}
 }
 

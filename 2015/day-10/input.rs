@@ -17,7 +17,7 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub num_iters_one: u32 = ("NUM_ITERS_ONE=", 40, (1_u32 .. )),
-		pub num_iters_two: u32 = ("NUM_ITERS_TWO=", 50, (1_u32 .. )),
+		pub num_iters_one: u32 = ("NUM_ITERS_ONE=", 40, 1 .. ),
+		pub num_iters_two: u32 = ("NUM_ITERS_TWO=", 50, 1 .. ),
 	}
 }

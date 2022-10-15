@@ -11,7 +11,7 @@ pub struct Input {
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct InputParams {
-		pub check_rules: bool = ("CHECK_RULES=", true, (false ..= true)),
+		pub check_rules: bool = ("CHECK_RULES=", true, .. ),
 	}
 }
 

@@ -9,8 +9,8 @@ pub struct Input <'inp> {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub num_rounds: u32 = ("NUM_ROUNDS=", 64, (1_u32 ..= 64)),
-		pub num_rows: u32 = ("NUM_ROWS=", 128, (1_u32 ..= 128)),
+		pub num_rounds: u32 = ("NUM_ROUNDS=", 64, 1 ..= 64),
+		pub num_rows: u32 = ("NUM_ROWS=", 128, 1 ..= 128),
 	}
 }
 

@@ -751,52 +751,10 @@ macro_rules! input_params {
 							input,
 							$member_prefix,
 							default.$member_name) ?;
-					if ! $member_range.contains (& $member_name) {
-						match ($member_range.start_bound (), $member_range.end_bound ()) {
-							(Bound::Included (start), Bound::Included (end)) =>
-								return Result::Err (format! (
-									"{} must be between {} and {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									end,
-									$member_name,
-								).into ()),
-							(Bound::Included (start), Bound::Unbounded) =>
-								return Result::Err (format! (
-									"{} must be at least {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									$member_name,
-								).into ()),
-							(Bound::Excluded (start), Bound::Unbounded) =>
-								return Result::Err (format! (
-									"{} must be more than {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									$member_name,
-								).into ()),
-							(Bound::Unbounded, Bound::Included (end)) =>
-								return Result::Err (format! (
-									"{} must be at most {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									end,
-									$member_name,
-								).into ()),
-							(Bound::Unbounded, Bound::Excluded (end)) =>
-								return Result::Err (format! (
-									"{} must be less than {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									end,
-									$member_name,
-								).into ()),
-							_ =>
-								return Result::Err (format! (
-									"{} is out of acceptable range: {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									$member_name,
-								).into ()),
-						}
-					}
+					::aoc_common::parser::check_range::<$member_type, _> (
+						& $member_prefix [ .. $member_prefix.len () - 1],
+						$member_name,
+						$member_range) ?;
 				)*
 				Ok (Self { $( $member_name, )* })
 			}
@@ -837,58 +795,48 @@ macro_rules! input_params {
 						parse! (parser, $member_prefix, val, "\n");
 						Ok (val)
 					}).done ().unwrap_or (default.$member_name);
-					if ! $member_range.contains (& $member_name) {
-						match ($member_range.start_bound (), $member_range.end_bound ()) {
-							(Bound::Included (start), Bound::Included (end)) =>
-								return Result::Err (format! (
-									"{} must be between {} and {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									end,
-									$member_name,
-								).into ()),
-							(Bound::Included (start), Bound::Unbounded) =>
-								return Result::Err (format! (
-									"{} must be at least {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									$member_name,
-								).into ()),
-							(Bound::Excluded (start), Bound::Unbounded) =>
-								return Result::Err (format! (
-									"{} must be more than {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									start,
-									$member_name,
-								).into ()),
-							(Bound::Unbounded, Bound::Included (end)) =>
-								return Result::Err (format! (
-									"{} must be at most {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									end,
-									$member_name,
-								).into ()),
-							(Bound::Unbounded, Bound::Excluded (end)) =>
-								return Result::Err (format! (
-									"{} must be less than {}, but was {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									end,
-									$member_name,
-								).into ()),
-							_ =>
-								return Result::Err (format! (
-									"{} is out of acceptable range: {}",
-									& $member_prefix [0 .. $member_prefix.len () - 1],
-									$member_name,
-								).into ()),
-						}
-					}
+					::aoc_common::parser::check_range::<$member_type, _> (
+						& $member_prefix [ .. $member_prefix.len () - 1],
+						$member_name,
+						$member_range) ?;
 				)*
 				Ok (Self { $( $member_name, )* })
 			}
 		}
 
 	};
+}
+
+#[ inline ]
+pub fn check_range <Val: Debug + Display + Ord, Rng: Debug + RangeBounds <Val>> (
+	name: & str,
+	val: Val,
+	range: Rng,
+) -> GenResult <()> {
+	if range.contains (& val) { return Ok (()) }
+	Err (check_range_error (name, val, range).into ())
+}
+
+#[ allow (clippy::missing_inline_in_public_items) ]
+pub fn check_range_error <Val: Debug + Display + Ord, Rng: Debug + RangeBounds <Val>> (
+	name: & str,
+	val: Val,
+	range: Rng,
+) -> String {
+	match (range.start_bound (), range.end_bound ()) {
+		(Bound::Included (start), Bound::Included (end)) =>
+			format! ("{name} must be between {start} and {end}, but was {val}"),
+		(Bound::Included (start), Bound::Unbounded) =>
+			format! ("{name} must be at least {start}, but was {val}"),
+		(Bound::Excluded (start), Bound::Unbounded) =>
+			format! ("{name} must be more than {start}, but was {val}"),
+		(Bound::Unbounded, Bound::Included (end)) =>
+			format! ("{name} must be at most {end}, but was {val}"),
+		(Bound::Unbounded, Bound::Excluded (end)) =>
+			format! ("{name} must be less than {end}, but was {val}"),
+		_ =>
+			format! ("{name} is out of acceptable range: {range:?}"),
+	}
 }
 
 #[ macro_export ]

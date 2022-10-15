@@ -10,7 +10,7 @@ pub struct Input {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub dist_two: u32 = ("DIST_TWO=", 10_000_u32, (1_u32 ..= 100_000)),
+		pub dist_two: u32 = ("DIST_TWO=", 10_000_u32, 1 ..= 100_000),
 	}
 }
 

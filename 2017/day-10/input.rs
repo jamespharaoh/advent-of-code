@@ -9,7 +9,7 @@ pub struct Input <'inp> {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub rounds_two: u32 = ("ROUNDS_TWO=", 64, (1_u32 ..= 64)),
+		pub rounds_two: u32 = ("ROUNDS_TWO=", 64, 1 ..= 64),
 	}
 }
 
