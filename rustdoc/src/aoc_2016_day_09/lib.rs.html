@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-09/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_09/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_09/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2016/day-09/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2016_day_09/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2016_day_09/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><button type="button">?</button></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -40,199 +40,47 @@
 <span id="40">40</span>
 <span id="41">41</span>
 <span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
-<span id="86">86</span>
-<span id="87">87</span>
-<span id="88">88</span>
-<span id="89">89</span>
-<span id="90">90</span>
-<span id="91">91</span>
-<span id="92">92</span>
-<span id="93">93</span>
-<span id="94">94</span>
-<span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
-<span id="98">98</span>
-<span id="99">99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
-<span id="106">106</span>
-<span id="107">107</span>
-<span id="108">108</span>
-<span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2016: Day 9: Explosives in Cyberspace
 //!
 //! [https://adventofcode.com/2016/day/9](https://adventofcode.com/2016/day/9)
+//!
+//! # Input
+//!
+//! A stream of capital letters or repetition markers in the form `(2x3)`, where `2` is the length
+//! and `3` is the number of repetitions.
+//!
+//! # Part one
+//!
+//! Determine the uncompressed length, assuming the repetitions apply to the compressed stream
+//! directly, without recursively expanding nested repetitions inside the repeated portion.
+//!
+//! # Part two
+//!
+//! Same as part one but recursively expanded nested repeated sections.
+//!
+//! # Algorithm
+//!
+//! For part one we simply count letters directly, or count `len × num` for repeated sections,
+//! skipping the appropiate amount of data from the stream.
+//!
+//! For part two, we keep a stack of repeated sections, along with the number of repetitions at
+//! the current level, and the position in the stream where each repeated section ends.
 
 </span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
+<span class="kw">mod </span>examples;
+<span class="kw">pub mod </span>input;
+<span class="kw">pub mod </span>logic;
+
 <span class="macro">puzzle_info! </span>{
 	name = <span class="string">&quot;Explosives in Cyberspace&quot;</span>;
 	year = <span class="number">2016</span>;
 	day = <span class="number">9</span>;
-	part_one = |input| logic::part_one (input [<span class="number">0</span>]);
-	part_two = |input| logic::part_two (input [<span class="number">0</span>]);
-}
-
-<span class="kw">pub mod </span>logic {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">pub fn </span>part_one (input: &amp; str) -&gt; GenResult &lt;usize&gt; {
-		<span class="kw">let </span>sum = Parser::wrap (input, |parser| {
-			<span class="kw">let </span><span class="kw-2">mut </span>sum = <span class="number">0_usize</span>;
-			<span class="kw">while </span>parser.peek ().is_some () {
-				<span class="kw">if </span>parser.peek ().unwrap () == <span class="string">&#39;(&#39; </span>{
-					<span class="kw">let </span>len: usize = parser.expect (<span class="string">&quot;(&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
-					<span class="kw">let </span>num: usize = parser.expect (<span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
-					parser.expect (<span class="string">&quot;)&quot;</span>) <span class="question-mark">?</span>;
-					<span class="kw">for _ in </span><span class="number">0 </span>.. len {
-						parser.expect_next () <span class="question-mark">?</span>;
-						sum = usize::add_2 (sum, num) <span class="question-mark">?</span>;
-					}
-				} <span class="kw">else </span>{
-					parser.expect_next () <span class="question-mark">?</span>;
-					sum += <span class="number">1</span>;
-				}
-			}
-			<span class="prelude-val">Ok </span>(sum)
-		}).map_parse_err (|<span class="kw">_</span>, col_idx|
-			<span class="macro">format! </span>(<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, col_idx + <span class="number">1</span>, input)) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(sum)
-	}
-
-	<span class="kw">pub fn </span>part_two (input: &amp; str) -&gt; GenResult &lt;usize&gt; {
-		<span class="kw">let </span>sum = Parser::wrap (input, |parser| {
-			<span class="kw">let </span><span class="kw-2">mut </span>sum = <span class="number">0</span>;
-			<span class="kw">while let </span><span class="prelude-val">Some </span>(ch) = parser.next () {
-				<span class="kw">if </span>ch == <span class="string">&#39;(&#39; </span>{
-					<span class="kw">let </span>len: usize = parser.int () <span class="question-mark">?</span>;
-					<span class="kw">let </span>num: usize = parser.expect (<span class="string">&quot;x&quot;</span>) <span class="question-mark">?</span>.int () <span class="question-mark">?</span>;
-					parser.expect (<span class="string">&quot;)&quot;</span>) <span class="question-mark">?</span>;
-					<span class="kw">let </span>byte_len = parser.peek_rest ().chars ()
-						.take (len)
-						.map (char::len_utf8)
-						.sum ();
-					sum = usize::add_2 (sum,
-						usize::mul_2 (num,
-							part_two (
-								<span class="attribute">#[ allow (clippy::string_slice) ]
-								</span>&amp; parser.peek_rest () [<span class="number">0 </span>.. byte_len],
-							) <span class="question-mark">?</span>,
-						) <span class="question-mark">?</span>,
-					) <span class="question-mark">?</span>;
-					<span class="kw">for _ in </span><span class="number">0 </span>.. len { parser.next ().ok_or_else (|| parser.err ()) <span class="question-mark">?</span>; }
-				} <span class="kw">else </span>{
-					sum += <span class="number">1</span>;
-				}
-			}
-			<span class="prelude-val">Ok </span>(sum)
-		}).map_parse_err (|<span class="kw">_</span>, col_idx|
-			<span class="macro">format! </span>(<span class="string">&quot;Invalid input: col {}: {}&quot;</span>, col_idx + <span class="number">1</span>, input)) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(sum)
-	}
-
-}
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const </span>EXAMPLES_ONE: &amp; [&amp; str] = &amp; [
-		<span class="string">&quot;ADVENT&quot;</span>,
-		<span class="string">&quot;A(1x5)BC&quot;</span>,
-		<span class="string">&quot;(3x3)XYZ&quot;</span>,
-		<span class="string">&quot;A(2x2)BCD(2x2)EFG&quot;</span>,
-		<span class="string">&quot;(6x1)(1x3)A&quot;</span>,
-		<span class="string">&quot;X(8x2)(3x3)ABCY&quot;</span>,
-	];
-
-	<span class="kw">const </span>EXAMPLES_TWO: &amp; [&amp; str] = &amp; [
-		<span class="string">&quot;(3x3)XYZ&quot;</span>,
-		<span class="string">&quot;X(8x2)(3x3)ABCY&quot;</span>,
-		<span class="string">&quot;(27x12)(20x12)(13x14)(7x10)(1x12)A&quot;</span>,
-		<span class="string">&quot;(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN&quot;</span>,
-	];
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">0</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;7&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">1</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;9&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">2</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;11&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">3</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;6&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">4</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;18&quot;</span>, puzzle.part_one (&amp; [&amp; EXAMPLES_ONE [<span class="number">5</span>]]));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;9&quot;</span>, puzzle.part_two (&amp; [&amp; EXAMPLES_TWO [<span class="number">0</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;20&quot;</span>, puzzle.part_two (&amp; [&amp; EXAMPLES_TWO [<span class="number">1</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;241920&quot;</span>, puzzle.part_two (&amp; [&amp; EXAMPLES_TWO [<span class="number">2</span>]]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;445&quot;</span>, puzzle.part_two (&amp; [&amp; EXAMPLES_TWO [<span class="number">3</span>]]));
-	}
-
+	parse = |lines| input::Input::parse_from_lines (lines);
+	part_one = |input| logic::part_one (&amp; input);
+	part_two = |input| logic::part_two (&amp; input);
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (bf15a9e52 2022-10-14)" ></div></body></html>
