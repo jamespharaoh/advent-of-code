@@ -161,6 +161,11 @@ macro_rules! parse {
 			.delim_fn ($delim, $parse)
 			.collect ();
 	};
+	( @item $parser:expr, @delim $delim:literal $name:ident = ($rng_0:literal .. ) ) => {
+		let $name = $parser
+			.delim_fn ($delim, |parser| parser.item_range ($rng_0 .. ))
+			.collect ();
+	};
 	( @item $parser:expr, @delim $delim:literal $name:ident = ($rng_0:literal .. $rng_1:literal) ) => {
 		let $name = $parser
 			.delim_fn ($delim, |parser| parser.item_range ($rng_0 .. $rng_1))
