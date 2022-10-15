@@ -139,7 +139,15 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim_with ("", display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @collect_max $max:literal $field:ident $(,$($rest:tt)*)? ) => {
+		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
+		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+	( $formatter:ident, @collect_some_max $max:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};

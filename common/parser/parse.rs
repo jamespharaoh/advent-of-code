@@ -120,6 +120,12 @@ macro_rules! parse {
 			.repeat (parse! (@nest $($nest)*))
 			.collect ();
 	};
+	( @item $parser:expr, @collect_max $max:literal $name:ident ) => {
+		let $name = $parser
+			.repeat (Parser::item)
+			.take ($max)
+			.collect ();
+	};
 	( @item $parser:expr, @collect_some $item_name:ident ) => {
 		let mut temp_iter = $parser.repeat (Parser::item);
 		let $item_name = match temp_iter.next () {
@@ -132,6 +138,13 @@ macro_rules! parse {
 			.repeat (Parser::item)
 			.collect ();
 		if $item_name.is_empty () { return Err ($parser.err ()) }
+	};
+	( @item $parser:expr, @collect_some_max $max:literal $item_name:ident ) => {
+		let mut temp_iter = $parser.repeat (Parser::item).take ($max);
+		let $item_name = match temp_iter.next () {
+			Some (first) => iter::once (first).chain (temp_iter).collect (),
+			None => return Err ($parser.err ()),
+		};
 	};
 	( @item $parser:expr, @delim $delim:literal $item_name:ident ) => {
 		let $item_name = $parser

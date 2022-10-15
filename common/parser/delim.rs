@@ -147,3 +147,25 @@ impl Display for ParseWhitespace {
 	}
 
 }
+
+pub struct ParserRepeat <
+	'par,
+	'inp,
+	Output,
+	ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> ,
+> {
+	parser: & 'par mut Parser <'inp>,
+	parse_fn: ParseFn,
+}
+
+impl <'par, 'inp, Output, ParseFn> Iterator for ParserRepeat <'par, 'inp, Output, ParseFn>
+		where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+
+	type Item = Output;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <Output> {
+		self.parser.any ().of (& mut self.parse_fn).done ().ok ()
+	}
+
+}
