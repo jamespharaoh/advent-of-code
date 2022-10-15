@@ -35,8 +35,14 @@ function header {
 	printf '\n'
 }
 
-function header_purple {
-	header "55" "$1"
+function header_warning {
+	header "88" "WARNING: $1"
+}
+
+declare steps=0
+function header_step {
+	let steps="steps + 1"
+	header "55" "Step $steps: $1"
 }
 
 # find the repo
@@ -73,9 +79,9 @@ if [[ ! "$force" ]] && git diff --cached --quiet; then
 	exit 0
 fi
 if [[ ! "$force" ]] && ! git diff --quiet; then
-	header_purple "WARNING: Pending changes"
+	header_warning "Pending changes"
 	git status
-	header_purple "WARNING: Pending changes"
+	header_warning "Pending changes"
 	for secs in {5..1}; do
 		printf "Waiting for $secs seconds..." >&2
 		sleep 1
@@ -116,29 +122,29 @@ cd "$work_dir"
 
 export RUSTDOCFLAGS="--deny warnings"
 
-header_purple "Running: cargo clippy"
+header_step "cargo clippy"
 cargo clippy --frozen --workspace --profile pre-commit -- $(cat "$root_dir/misc/clippy-args")
 
-header_purple "Running: cargo doc"
+header_step "cargo doc"
 cargo doc --frozen --workspace --profile pre-commit
 
-header_purple "Running: cargo test"
+header_step "cargo test"
 cargo test --frozen --workspace --profile pre-commit
 
 for year in {2015..2021}; do
-	header_purple "Running: cargo run --package aoc-$year"
+	header_step "cargo run --package aoc-$year"
 	cargo run --frozen --profile pre-commit --package "aoc-$year"
 done
 
 (
-	header_purple "Running: cargo fuzz build"
+	header_step "cargo fuzz build"
 	cd fuzz
 	cargo fuzz build --dev
 )
 
 # clean up
 
-header_purple "Cleaning up"
+header_step "(cleaning up)"
 cd "$root_dir"
 rm --recursive --force "$work_dir"
 
