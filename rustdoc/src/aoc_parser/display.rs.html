@@ -368,6 +368,15 @@
 <span id="368">368</span>
 <span id="369">369</span>
 <span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
+<span id="376">376</span>
+<span id="377">377</span>
+<span id="378">378</span>
+<span id="379">379</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>DisplayDelim &lt;Delim, Inner&gt; {
@@ -602,9 +611,11 @@
 		}
 	};
 
-	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name</span>:ident = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
-			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name</span>:ident $( <span class="kw">if </span>(<span class="macro-nonterminal">$cond</span>:expr) )<span class="question-mark">? </span>= [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="macro">display! </span>{ @opt_if [$(! <span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>]
+			<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
+				<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+			}
 		}
 		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
@@ -645,6 +656,13 @@
 	</span>};
 	( @nest_ref ( $(<span class="macro-nonterminal">$item</span>:tt),* ) ) =&gt; {
 		( $(<span class="macro">display! </span>(@nest_ref <span class="macro-nonterminal">$item</span>)),* )
+	};
+
+	( @opt_if [<span class="macro-nonterminal">$cond</span>:expr] $(<span class="macro-nonterminal">$body</span>:tt)* ) =&gt; {
+		<span class="kw">if </span><span class="macro-nonterminal">$cond </span>{ $(<span class="macro-nonterminal">$body</span>)* }
+	};
+	( @opt_if [] $(<span class="macro-nonterminal">$body</span>:tt)* ) =&gt; {
+		$(<span class="macro-nonterminal">$body</span>)*
 	};
 
 }

@@ -1552,7 +1552,7 @@
 							default.<span class="macro-nonterminal">$member_name</span>) <span class="question-mark">?</span>;
 					::aoc_common::parser::check_range::&lt;<span class="macro-nonterminal">$member_type</span>, <span class="kw">_</span>&gt; (
 						&amp; <span class="macro-nonterminal">$member_prefix </span>[ .. <span class="macro-nonterminal">$member_prefix</span>.len () - <span class="number">1</span>],
-						<span class="macro-nonterminal">$member_name</span>,
+						&amp; <span class="macro-nonterminal">$member_name</span>,
 						<span class="macro-nonterminal">$member_range</span>) <span class="question-mark">?</span>;
 				)*
 				<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ $( <span class="macro-nonterminal">$member_name</span>, )* })
@@ -1599,7 +1599,7 @@
 					}).done ().unwrap_or (default.<span class="macro-nonterminal">$member_name</span>);
 					::aoc_common::parser::check_range::&lt;<span class="macro-nonterminal">$member_type</span>, <span class="kw">_</span>&gt; (
 						&amp; <span class="macro-nonterminal">$member_prefix </span>[ .. <span class="macro-nonterminal">$member_prefix</span>.len () - <span class="number">1</span>],
-						<span class="macro-nonterminal">$member_name</span>,
+						&amp; <span class="macro-nonterminal">$member_name</span>,
 						<span class="macro-nonterminal">$member_range</span>) <span class="question-mark">?</span>;
 				)*
 				<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ $( <span class="macro-nonterminal">$member_name</span>, )* })
@@ -1612,17 +1612,17 @@
 <span class="attribute">#[ inline ]
 </span><span class="kw">pub fn </span>check_range &lt;Val: Debug + Display + Ord, Rng: Debug + RangeBounds &lt;Val&gt;&gt; (
 	name: &amp; str,
-	val: Val,
+	val: &amp; Val,
 	range: Rng,
 ) -&gt; GenResult &lt;()&gt; {
-	<span class="kw">if </span>range.contains (&amp; val) { <span class="kw">return </span><span class="prelude-val">Ok </span>(()) }
+	<span class="kw">if </span>range.contains (val) { <span class="kw">return </span><span class="prelude-val">Ok </span>(()) }
 	<span class="prelude-val">Err </span>(check_range_error (name, val, range).into ())
 }
 
 <span class="attribute">#[ allow (clippy::missing_inline_in_public_items) ]
 </span><span class="kw">pub fn </span>check_range_error &lt;Val: Debug + Display + Ord, Rng: Debug + RangeBounds &lt;Val&gt;&gt; (
 	name: &amp; str,
-	val: Val,
+	val: &amp; Val,
 	range: Rng,
 ) -&gt; String {
 	<span class="kw">match </span>(range.start_bound (), range.end_bound ()) {

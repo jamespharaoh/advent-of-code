@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":[["apply","Apply the provided [`ScrambleOp`], in the provided [`Mode`], to the provided [`State`]."],["move_shift",""],["reverse",""],["rotate",""],["rotate_char_scramble",""],["rotate_char_unscramble",""],["swap_chars",""],["swap_posns",""]]};

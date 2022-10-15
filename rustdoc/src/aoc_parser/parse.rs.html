@@ -417,12 +417,6 @@
 <span id="417">417</span>
 <span id="418">418</span>
 <span id="419">419</span>
-<span id="420">420</span>
-<span id="421">421</span>
-<span id="422">422</span>
-<span id="423">423</span>
-<span id="424">424</span>
-<span id="425">425</span>
 </pre><pre class="rust"><code><span class="attribute">#[ macro_export ]
 </span><span class="macro">macro_rules! </span>parse {
 	( <span class="macro-nonterminal">$parser</span>:expr, $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
@@ -680,13 +674,7 @@
 		<span class="macro-nonterminal">$parser</span>.skip_whitespace ( .. ) <span class="question-mark">?</span>;
 	};
 
-	<span class="comment">/*( @nest input_lifetime = $input_life:lifetime; $decl:tt = [ $($parse:tt)* ] ) =&gt; {
-		|parser: &amp; mut Parser &lt;$life&gt;| {
-			parse! (parser, $($parse)*);
-			Ok ($decl)
-		}
-	};*/
-	</span>( @nest input_lifetime = <span class="macro-nonterminal">$input_life</span>:lifetime; $(<span class="macro-nonterminal">$var</span>:tt)* ) =&gt; {
+	( @nest input_lifetime = <span class="macro-nonterminal">$input_life</span>:lifetime; $(<span class="macro-nonterminal">$var</span>:tt)* ) =&gt; {
 		|parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="macro-nonterminal">$input_life</span>&gt;| {
 			<span class="kw">let </span>parser = parser.any ();
 			<span class="macro">parse! </span>(@nest_var parser $(<span class="macro-nonterminal">$var</span>)<span class="kw-2">*</span>);
@@ -700,7 +688,7 @@
 			parser.done ()
 		}
 	};
-	( @nest_var <span class="macro-nonterminal">$parser</span>:ident <span class="macro-nonterminal">$var</span>:ident = [ $(<span class="macro-nonterminal">$parse</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	( @nest_var <span class="macro-nonterminal">$parser</span>:ident <span class="macro-nonterminal">$var</span>:ident $( <span class="kw">if </span>(<span class="macro-nonterminal">$cond</span>:expr) )<span class="question-mark">? </span>= [ $(<span class="macro-nonterminal">$parse</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="kw">let </span><span class="macro-nonterminal">$parser </span>= <span class="macro-nonterminal">$parser</span>.of (|parser| {
 			<span class="macro">parse! </span>(parser, $(<span class="macro-nonterminal">$parse</span>)<span class="kw-2">*</span>);
 			<span class="prelude-val">Ok </span>(<span class="macro-nonterminal">$var</span>)

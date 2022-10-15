@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["ScrambleOp",""]],"struct":[["Input",""]]};
+window.SIDEBAR_ITEMS = {"enum":[["Mode",""]],"type":[["State",""]]};
