@@ -680,7 +680,7 @@
 			<span class="comment">// handle missing part
 
 			</span><span class="kw">if </span>puzzle.num_parts () &lt; part_idx + <span class="number">1 </span>{
-				<span class="macro">print! </span>(<span class="string">&quot;{:len$}&quot;</span>, <span class="string">&quot;&quot;</span>, len = answer_lens [part_idx] + <span class="number">7</span>);
+				<span class="macro">print! </span>(<span class="string">&quot;{:len$} &quot;</span>, <span class="string">&quot;&quot;</span>, len = answer_lens [part_idx] + <span class="number">6</span>);
 				<span class="kw">continue</span>;
 			}
 
@@ -715,7 +715,7 @@
 
 			<span class="comment">// print result
 
-			</span><span class="macro">print! </span>(<span class="string">&quot;{result:len$}&quot;</span>, len = answer_lens [part_idx] + <span class="number">2</span>);
+			</span><span class="macro">print! </span>(<span class="string">&quot;{result:len$} &quot;</span>, len = answer_lens [part_idx] + <span class="number">1</span>);
 
 		}
 
