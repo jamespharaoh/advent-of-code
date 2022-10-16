@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Input",""]],"type":[["Banks",""]]};
+window.SIDEBAR_ITEMS = {"type":[["Banks",""]]};
