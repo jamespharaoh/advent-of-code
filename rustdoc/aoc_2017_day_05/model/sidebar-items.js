@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Input",""]],"type":[["Tramp",""]]};
+window.SIDEBAR_ITEMS = {"type":[["Tramp",""]]};
