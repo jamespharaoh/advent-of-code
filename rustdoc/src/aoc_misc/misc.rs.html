@@ -193,6 +193,14 @@
 <span id="193">193</span>
 <span id="194">194</span>
 <span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
 </pre><pre class="rust"><code><span class="kw">mod </span>collections;
 <span class="kw">mod </span>iter;
 <span class="kw">pub mod </span>prelude;
@@ -202,6 +210,7 @@
 	<span class="kw">pub use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
 
 	<span class="kw">pub use </span><span class="kw">crate</span>::ok_or;
+	<span class="kw">pub use </span><span class="kw">crate</span>::ok_or_else;
 	<span class="kw">pub use </span><span class="kw">crate</span>::assert_is_err;
 	<span class="kw">pub use </span><span class="kw">crate</span>::assert_is_ok;
 	<span class="kw">pub use </span><span class="kw">crate</span>::assert_eq_ok;
@@ -235,6 +244,13 @@
 	</span><span class="macro">macro_rules! </span>ok_or {
 		( <span class="macro-nonterminal">$val</span>:expr, <span class="macro-nonterminal">$if_err</span>:expr $(,)<span class="question-mark">? </span>) =&gt; {
 			<span class="kw">match </span>(<span class="macro-nonterminal">$val</span>) { <span class="prelude-val">Ok </span>(val) =&gt; val, <span class="prelude-val">Err </span>(<span class="kw">_</span>) =&gt; <span class="macro-nonterminal">$if_err </span>}
+		};
+	}
+
+	<span class="attribute">#[ macro_export ]
+	</span><span class="macro">macro_rules! </span>ok_or_else {
+		( <span class="macro-nonterminal">$val</span>:expr, |<span class="macro-nonterminal">$arg</span>:ident| <span class="macro-nonterminal">$if_err</span>:expr $(,)<span class="question-mark">? </span>) =&gt; {
+			<span class="kw">match </span>(<span class="macro-nonterminal">$val</span>) { <span class="prelude-val">Ok </span>(val) =&gt; val, <span class="prelude-val">Err </span>(<span class="macro-nonterminal">$arg</span>) =&gt; <span class="macro-nonterminal">$if_err </span>}
 		};
 	}
 

@@ -163,9 +163,6 @@
 <span id="163">163</span>
 <span id="164">164</span>
 <span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -188,9 +185,9 @@
 	<span class="kw">let </span>enhancer = Enhancer::build (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>state = State::default ();
 	<span class="kw">for _ in </span><span class="number">0 </span>.. num_iters {
-		state = enhancer.next (&amp; state);
+		state = enhancer.next (&amp; state) <span class="question-mark">?</span>;
 	}
-	<span class="prelude-val">Ok </span>(state.num_active ())
+	<span class="prelude-val">Ok </span>(state.num_active () <span class="question-mark">?</span>)
 }
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -252,39 +249,50 @@
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ two_to_three, three_to_four })
 	}
 
-	<span class="kw">fn </span>next (&amp; <span class="self">self</span>, prev: &amp; State) -&gt; State {
-		<span class="kw">match </span>* prev {
-			State::ThreeByThree (<span class="kw-2">ref </span>old_counts) =&gt; {
-				<span class="kw">let </span><span class="kw-2">mut </span>new_counts = Vec::new ();
-				<span class="kw">for </span>(old_square, old_count) <span class="kw">in </span>old_counts.iter ().copied () {
-					<span class="kw">let </span>new_square = <span class="self">self</span>.three_to_four [old_square.idx ()];
-					new_counts.push ((new_square, old_count));
-				}
-				State::FourByFour (State::merge_counts (new_counts))
-			},
-			State::FourByFour (<span class="kw-2">ref </span>old_counts) =&gt; {
-				<span class="kw">let </span><span class="kw-2">mut </span>new_counts = Vec::new ();
-				<span class="kw">for </span>(old_square, old_count) <span class="kw">in </span>old_counts.iter ().copied () {
-					<span class="kw">let </span>new_square = SixBySix::join (
-						old_square.split ()
-							.map (|old_square| <span class="self">self</span>.two_to_three [old_square.idx ()]));
-					new_counts.push ((new_square, old_count));
-				}
-				State::SixBySix (State::merge_counts (new_counts))
-			},
-			State::SixBySix (<span class="kw-2">ref </span>old_counts) =&gt; {
-				<span class="kw">let </span><span class="kw-2">mut </span>new_counts = Vec::new ();
-				<span class="kw">for </span>(old_square, old_count) <span class="kw">in </span>old_counts.iter ().copied () {
-					<span class="kw">for </span>old_square <span class="kw">in </span>old_square.split () {
-						<span class="kw">let </span>new_square = <span class="self">self</span>.two_to_three [old_square.idx ()];
-						new_counts.push ((new_square, old_count));
-					}
-				}
-				State::ThreeByThree (State::merge_counts (new_counts))
-			},
-		}
+	<span class="kw">fn </span>next (&amp; <span class="self">self</span>, prev: &amp; State) -&gt; NumResult &lt;State&gt; {
+		<span class="prelude-val">Ok </span>(<span class="kw">match </span>* prev {
+
+			State::ThreeByThree (<span class="kw-2">ref </span>counts) =&gt;
+				State::FourByFour (merge_counts (
+					counts.iter ().map (|&amp; (square, count)|
+						(<span class="self">self</span>.three_to_four [square.idx ()], count))) <span class="question-mark">?</span>),
+
+			State::FourByFour (<span class="kw-2">ref </span>counts) =&gt;
+				State::SixBySix (merge_counts (
+					counts.iter ().map (|&amp; (square, count)| (
+						SixBySix::join (square.split ().map (|square|
+							<span class="self">self</span>.two_to_three [square.idx ()])),
+						count))) <span class="question-mark">?</span>),
+
+			State::SixBySix (<span class="kw-2">ref </span>counts) =&gt;
+				State::ThreeByThree (merge_counts (
+					counts.iter ().flat_map (|&amp; (square, count)| square.split ().map (|square|
+						(<span class="self">self</span>.two_to_three [square.idx ()], count)))) <span class="question-mark">?</span>),
+
+		})
 	}
 
+}
+
+<span class="kw">fn </span>merge_counts &lt;Square: Copy + Ord&gt; (
+	counts: <span class="kw">impl </span>Iterator &lt;Item = (Square, u64)&gt;,
+) -&gt; NumResult &lt;Vec &lt;(Square, u64)&gt;&gt; {
+	counts.into_iter ()
+		.sorted ()
+		.map (<span class="prelude-val">Ok</span>)
+		.coalesce (|left, right| {
+			<span class="kw">let </span>left = <span class="macro">ok_or_else! </span>(left, |err| <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Err </span>(err)));
+			<span class="kw">let </span>right = <span class="macro">ok_or_else! </span>(right, |err| <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Err </span>(err)));
+			<span class="kw">if </span>left.<span class="number">0 </span>== right.<span class="number">0 </span>{
+				<span class="prelude-val">Ok </span>(<span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, Overflow&gt; ((
+					left.<span class="number">0</span>,
+					<span class="macro">ok_or_else! </span>(<span class="macro">chk! </span>(left.<span class="number">1 </span>+ right.<span class="number">1</span>), |err| <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Err </span>(err))),
+				)))
+			} <span class="kw">else </span>{
+				<span class="prelude-val">Err </span>((<span class="prelude-val">Ok </span>(left), <span class="prelude-val">Ok </span>(right)))
+			}
+		})
+		.try_collect ()
 }
 
 <span class="attribute">#[ derive (Debug) ]
@@ -296,40 +304,26 @@
 
 <span class="kw">impl </span>State {
 
-	<span class="kw">fn </span>merge_counts &lt;Square: Copy + Ord&gt; (
-		<span class="kw-2">mut </span>counts: Vec &lt;(Square, u64)&gt;,
-	) -&gt; Vec &lt;(Square, u64)&gt; {
-		counts.sort ();
-		counts.iter ().copied ()
-			.coalesce (|left, right|
-				<span class="kw">if </span>left.<span class="number">0 </span>== right.<span class="number">0 </span>{
-					<span class="prelude-val">Ok </span>((left.<span class="number">0</span>, left.<span class="number">1 </span>+ right.<span class="number">1</span>))
-				} <span class="kw">else </span>{
-					<span class="prelude-val">Err </span>((left, right))
-				})
-			.collect ()
-	}
-
 	<span class="kw">fn </span>default () -&gt; <span class="self">Self </span>{
 		<span class="self">Self</span>::ThreeByThree (<span class="macro">vec! </span>[
 			(ThreeByThree::try_from (<span class="number">0x1e2</span>).unwrap (), <span class="number">1</span>),
 		])
 	}
 
-	<span class="kw">fn </span>num_active (&amp; <span class="self">self</span>) -&gt; u64 {
+	<span class="kw">fn </span>num_active (&amp; <span class="self">self</span>) -&gt; NumResult &lt;u64&gt; {
 		<span class="kw">match </span>* <span class="self">self </span>{
 			<span class="self">Self</span>::ThreeByThree (<span class="kw-2">ref </span>counts) =&gt;
 				counts.iter ()
-					.map (|&amp; (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|&amp; (square, count)| <span class="macro">chk! </span>(square.num_active () * count))
+					.try_fold (<span class="number">0</span>, |sum, item| { <span class="kw">let </span>item = item <span class="question-mark">?</span>; <span class="macro">chk! </span>(sum + item) }),
 			<span class="self">Self</span>::FourByFour (<span class="kw-2">ref </span>counts) =&gt;
 				counts.iter ()
-					.map (|&amp; (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|&amp; (square, count)| <span class="macro">chk! </span>(square.num_active () * count))
+					.try_fold (<span class="number">0</span>, |sum, item| { <span class="kw">let </span>item = item <span class="question-mark">?</span>; <span class="macro">chk! </span>(sum + item) }),
 			<span class="self">Self</span>::SixBySix (<span class="kw-2">ref </span>counts) =&gt;
 				counts.iter ()
-					.map (|&amp; (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|&amp; (square, count)| <span class="macro">chk! </span>(square.num_active () * count))
+					.try_fold (<span class="number">0</span>, |sum, item| { <span class="kw">let </span>item = item <span class="question-mark">?</span>; <span class="macro">chk! </span>(sum + item) }),
 		}
 	}
 
