@@ -229,6 +229,13 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	///
 	fn sub_2 (arg_0: Self, arg_1: Self) -> NumResult <Self>;
 
+	fn gen_count_ones (self) -> u32;
+
+	#[ inline (always) ]
+	fn check_bit (self, bit: u32) -> bool {
+		self & (Self::ONE << bit) != Self::ZERO
+	}
+
 }
 
 pub trait IntOpsTry: Sized +
@@ -323,6 +330,11 @@ macro_rules! prim_int {
 				$signed::checked_sub (arg_0, arg_1).ok_or (Overflow)
 			}
 
+			#[ inline (always) ]
+			fn gen_count_ones (self) -> u32 {
+				self.count_ones ()
+			}
+
 		}
 
 		impl Int for $unsigned {
@@ -407,6 +419,11 @@ macro_rules! prim_int {
 			#[ inline ]
 			fn sub_2 (arg_0: $unsigned, arg_1: $unsigned) -> NumResult <$unsigned> {
 				$unsigned::checked_sub (arg_0, arg_1).ok_or (Overflow)
+			}
+
+			#[ inline (always) ]
+			fn gen_count_ones (self) -> u32 {
+				self.count_ones ()
 			}
 
 		}

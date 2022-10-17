@@ -55,7 +55,7 @@ impl Enhancer {
 				},
 				InputRule::ThreeToFour (from, to) => {
 					let mut from = ThreeByThree::try_from (from).unwrap ();
-					let to = FourByFour::from (to);
+					let to = FourByFour::try_from (to).unwrap ();
 					if input.params.check_rules && three_to_four_found [from.idx ()] {
 						return Err (format! ("Duplicated rule: {from}").into ());
 					}
