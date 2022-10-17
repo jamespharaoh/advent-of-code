@@ -317,74 +317,6 @@
 <span id="317">317</span>
 <span id="318">318</span>
 <span id="319">319</span>
-<span id="320">320</span>
-<span id="321">321</span>
-<span id="322">322</span>
-<span id="323">323</span>
-<span id="324">324</span>
-<span id="325">325</span>
-<span id="326">326</span>
-<span id="327">327</span>
-<span id="328">328</span>
-<span id="329">329</span>
-<span id="330">330</span>
-<span id="331">331</span>
-<span id="332">332</span>
-<span id="333">333</span>
-<span id="334">334</span>
-<span id="335">335</span>
-<span id="336">336</span>
-<span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
-<span id="361">361</span>
-<span id="362">362</span>
-<span id="363">363</span>
-<span id="364">364</span>
-<span id="365">365</span>
-<span id="366">366</span>
-<span id="367">367</span>
-<span id="368">368</span>
-<span id="369">369</span>
-<span id="370">370</span>
-<span id="371">371</span>
-<span id="372">372</span>
-<span id="373">373</span>
-<span id="374">374</span>
-<span id="375">375</span>
-<span id="376">376</span>
-<span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>DisplayDelim &lt;Delim, Inner&gt; {
@@ -481,7 +413,7 @@
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$nest</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="macro">display! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>) (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
+		<span class="macro">display! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>) (<span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 
@@ -601,6 +533,9 @@
 			display_fn (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		}
 	};
+	( <span class="macro-nonterminal">$formatter</span>:ident, @parse <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$rest</span>:tt)* } $(,$(rest:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">let _ </span>= <span class="macro-nonterminal">$field</span>;
+	};
 	( <span class="macro-nonterminal">$formatter</span>:ident, @skip <span class="macro-nonterminal">$display</span>:literal $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="macro-nonterminal">$formatter</span>.write_str (<span class="macro-nonterminal">$display</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
@@ -620,6 +555,18 @@
 			::std::result::Result::Ok (())
 		}
 	};
+	( @nest <span class="kw">type </span>= <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span>; $(<span class="macro-nonterminal">$nest</span>:tt)* ) =&gt; {
+		|val: &amp; <span class="macro-nonterminal">$</span><span class="kw">type</span>, <span class="macro-nonterminal">formatter</span>: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter| {
+			<span class="macro">display! </span>(@nest_var formatter val $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
+			::std::result::Result::Ok (())
+		}
+	};
+	( @nest input_lifetime = <span class="macro-nonterminal">$input_life</span>:lifetime; <span class="kw">type </span>= <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span>; $(<span class="macro-nonterminal">$nest</span>:tt)* ) =&gt; {
+		|val: &amp; <span class="macro-nonterminal">$</span><span class="kw">type</span>, <span class="macro-nonterminal">formatter</span>: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter| {
+			<span class="macro">display! </span>(@nest_var formatter val $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
+			::std::result::Result::Ok (())
+		}
+	};
 	( @nest $(<span class="macro-nonterminal">$nest</span>:tt)* ) =&gt; {
 		|val, formatter: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter| {
 			<span class="macro">display! </span>(@nest_var formatter val $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
@@ -627,10 +574,17 @@
 		}
 	};
 
+	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$lit</span>:literal = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">if let </span>&amp; lit = <span class="macro-nonterminal">$val </span>{
+			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		}
+		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
+	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name</span>:ident $( <span class="kw">if </span>(<span class="macro-nonterminal">$cond</span>:expr) )<span class="question-mark">? </span>= [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="macro">display! </span>{ @opt_if [$(! <span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>]
-			<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
+		<span class="kw">if let </span><span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
+			<span class="macro">display! </span>{ @opt_if [$(<span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>]
 				<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+				<span class="kw">return </span><span class="prelude-val">Ok </span>(());
 			}
 		}
 		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
@@ -679,96 +633,6 @@
 	};
 	( @opt_if [] $(<span class="macro-nonterminal">$body</span>:tt)* ) =&gt; {
 		$(<span class="macro-nonterminal">$body</span>)*
-	};
-
-}
-
-<span class="attribute">#[ macro_export ]
-</span><span class="macro">macro_rules! </span>enum_display {
-
-	( <span class="macro-nonterminal">$enum_name</span>:ident $( &lt;$(<span class="macro-nonterminal">$param</span>:tt),<span class="kw-2">*</span>&gt; )<span class="question-mark">?</span>, $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
-		<span class="kw">impl </span>$( &lt;$(<span class="macro-nonterminal">$param</span>),<span class="kw-2">*</span>&gt; )<span class="question-mark">? </span>::std::fmt::Display <span class="kw">for </span><span class="macro-nonterminal">$enum_name </span>$(&lt;$(<span class="macro-nonterminal">$param</span>),<span class="kw-2">*</span>&gt;)<span class="question-mark">? </span>{
-			<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter) -&gt; ::std::fmt::Result {
-				<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="self">self</span>, formatter, $(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>);
-				<span class="macro">panic! </span>(<span class="string">&quot;Unhandled variant {}::{:?}&quot;</span>, <span class="macro">stringify! </span>(<span class="macro-nonterminal">$enum_name</span>), <span class="self">self</span>);
-			}
-		}
-	};
-
-	( @variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident $(,)<span class="question-mark">? </span>) =&gt; {};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident { $(<span class="macro-nonterminal">$var_fields</span>:tt)* } = |<span class="macro-nonterminal">$var_arg</span>:ident| { $(<span class="macro-nonterminal">$var_body</span>:tt)* }
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>{ $(<span class="macro-nonterminal">$var_fields</span>)* } = <span class="macro-nonterminal">$self </span>{
-			<span class="kw">let </span><span class="macro-nonterminal">$var_arg </span>= <span class="macro-nonterminal">$formatter</span>;
-			<span class="kw">return </span>(|| -&gt; ::std::fmt::Result { $(<span class="macro-nonterminal">$var_body</span>)<span class="kw-2">*</span>; <span class="prelude-val">Ok </span>(()) }) ();
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
-	};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident ( $(<span class="macro-nonterminal">$var_fields</span>:tt)* ) = |<span class="macro-nonterminal">$var_arg</span>:ident| { $(<span class="macro-nonterminal">$var_body</span>:tt)* }
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>( $(<span class="macro-nonterminal">$var_fields</span>)* ) = <span class="macro-nonterminal">$self </span>{
-			<span class="kw">let </span><span class="macro-nonterminal">$var_arg </span>= &amp; <span class="kw-2">mut </span><span class="macro-nonterminal">$formatter</span>;
-			$(<span class="macro-nonterminal">$var_body</span>)*
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
-	};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident = |<span class="macro-nonterminal">$var_arg</span>:ident| { $(<span class="macro-nonterminal">$var_body</span>:tt)* }
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>= <span class="macro-nonterminal">$self </span>{
-			<span class="kw">let </span><span class="macro-nonterminal">$var_arg </span>= &amp; <span class="kw-2">mut </span><span class="macro-nonterminal">$formatter</span>;
-			$(<span class="macro-nonterminal">$var_body</span>)*
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
-	};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident { $(<span class="macro-nonterminal">$var_fields</span>:tt)* } = [ $(<span class="macro-nonterminal">$var_arg</span>:tt)* ]
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>{ $(<span class="macro-nonterminal">$var_fields</span>)* } = <span class="macro-nonterminal">$self </span>{
-			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$var_arg</span>)<span class="kw-2">*</span>);
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
-	};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident ( $(<span class="macro-nonterminal">$var_fields</span>:tt)* ) = [ $(<span class="macro-nonterminal">$var_arg</span>:tt)* ]
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>( $(<span class="macro-nonterminal">$var_fields</span>)* ) = <span class="macro-nonterminal">$self </span>{
-			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$var_arg</span>)<span class="kw-2">*</span>);
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
-	};
-
-	(
-		@variants <span class="macro-nonterminal">$enum_name</span>:ident, <span class="macro-nonterminal">$self</span>:ident, <span class="macro-nonterminal">$formatter</span>:ident,
-		<span class="macro-nonterminal">$var_name</span>:ident = [ $(<span class="macro-nonterminal">$var_arg</span>:tt)* ]
-		$(, $(<span class="macro-nonterminal">$rest</span>:tt)* )<span class="question-mark">?
-	</span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$enum_name</span>::<span class="macro-nonterminal">$var_name </span>= <span class="macro-nonterminal">$self </span>{
-			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$var_arg</span>)<span class="kw-2">*</span>);
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-		};
-		<span class="macro">enum_display! </span>(@variants <span class="macro-nonterminal">$enum_name</span>, <span class="macro-nonterminal">$self</span>, <span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 
 }

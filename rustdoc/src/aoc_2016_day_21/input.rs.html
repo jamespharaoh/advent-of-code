@@ -46,12 +46,6 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data structures to model the puzzle input
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -76,16 +70,10 @@
 			<span class="string">&quot;swap letter &quot;</span>, ch_0, <span class="string">&quot; with letter &quot;</span>, ch_1,
 		],
 		RotLeft (num: u32) = [
-			<span class="string">&quot;rotate left &quot;</span>, num {
-				num <span class="kw">if </span>(* num != <span class="number">1</span>) = [ num, <span class="string">&quot; steps&quot; </span>],
-				num <span class="kw">if </span>(* num == <span class="number">1</span>) = [ num, <span class="string">&quot; step&quot; </span>],
-			},
+			<span class="string">&quot;rotate left &quot;</span>, num { <span class="number">1 </span>= [ <span class="string">&quot;1 step&quot; </span>], num = [ num, <span class="string">&quot; steps&quot; </span>] },
 		],
 		RotRight (num: u32) = [
-			<span class="string">&quot;rotate right &quot;</span>, num {
-				num <span class="kw">if </span>(* num != <span class="number">1</span>) = [ num, <span class="string">&quot; steps&quot; </span>],
-				num <span class="kw">if </span>(* num == <span class="number">1</span>) = [ num, <span class="string">&quot; step&quot; </span>],
-			},
+			<span class="string">&quot;rotate right &quot;</span>, num { <span class="number">1 </span>= [ <span class="string">&quot;1 step&quot; </span>], num = [ num, <span class="string">&quot; steps&quot; </span>] },
 		],
 		RotChar (ch: char) = [
 			<span class="string">&quot;rotate based on position of letter &quot;</span>, ch,
