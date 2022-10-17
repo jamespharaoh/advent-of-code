@@ -20,9 +20,9 @@ fn calc_result (input: & Input, num_iters: u32) -> GenResult <u64> {
 	let enhancer = Enhancer::build (input) ?;
 	let mut state = State::default ();
 	for _ in 0 .. num_iters {
-		state = enhancer.next (& state);
+		state = enhancer.next (& state) ?;
 	}
-	Ok (state.num_active ())
+	Ok (state.num_active () ?)
 }
 
 #[ derive (Clone, Debug) ]
@@ -84,39 +84,50 @@ impl Enhancer {
 		Ok (Self { two_to_three, three_to_four })
 	}
 
-	fn next (& self, prev: & State) -> State {
-		match * prev {
-			State::ThreeByThree (ref old_counts) => {
-				let mut new_counts = Vec::new ();
-				for (old_square, old_count) in old_counts.iter ().copied () {
-					let new_square = self.three_to_four [old_square.idx ()];
-					new_counts.push ((new_square, old_count));
-				}
-				State::FourByFour (State::merge_counts (new_counts))
-			},
-			State::FourByFour (ref old_counts) => {
-				let mut new_counts = Vec::new ();
-				for (old_square, old_count) in old_counts.iter ().copied () {
-					let new_square = SixBySix::join (
-						old_square.split ()
-							.map (|old_square| self.two_to_three [old_square.idx ()]));
-					new_counts.push ((new_square, old_count));
-				}
-				State::SixBySix (State::merge_counts (new_counts))
-			},
-			State::SixBySix (ref old_counts) => {
-				let mut new_counts = Vec::new ();
-				for (old_square, old_count) in old_counts.iter ().copied () {
-					for old_square in old_square.split () {
-						let new_square = self.two_to_three [old_square.idx ()];
-						new_counts.push ((new_square, old_count));
-					}
-				}
-				State::ThreeByThree (State::merge_counts (new_counts))
-			},
-		}
+	fn next (& self, prev: & State) -> NumResult <State> {
+		Ok (match * prev {
+
+			State::ThreeByThree (ref counts) =>
+				State::FourByFour (merge_counts (
+					counts.iter ().map (|& (square, count)|
+						(self.three_to_four [square.idx ()], count))) ?),
+
+			State::FourByFour (ref counts) =>
+				State::SixBySix (merge_counts (
+					counts.iter ().map (|& (square, count)| (
+						SixBySix::join (square.split ().map (|square|
+							self.two_to_three [square.idx ()])),
+						count))) ?),
+
+			State::SixBySix (ref counts) =>
+				State::ThreeByThree (merge_counts (
+					counts.iter ().flat_map (|& (square, count)| square.split ().map (|square|
+						(self.two_to_three [square.idx ()], count)))) ?),
+
+		})
 	}
 
+}
+
+fn merge_counts <Square: Copy + Ord> (
+	counts: impl Iterator <Item = (Square, u64)>,
+) -> NumResult <Vec <(Square, u64)>> {
+	counts.into_iter ()
+		.sorted ()
+		.map (Ok)
+		.coalesce (|left, right| {
+			let left = ok_or_else! (left, |err| return Ok (Err (err)));
+			let right = ok_or_else! (right, |err| return Ok (Err (err)));
+			if left.0 == right.0 {
+				Ok (Ok::<_, Overflow> ((
+					left.0,
+					ok_or_else! (chk! (left.1 + right.1), |err| return Ok (Err (err))),
+				)))
+			} else {
+				Err ((Ok (left), Ok (right)))
+			}
+		})
+		.try_collect ()
 }
 
 #[ derive (Debug) ]
@@ -128,40 +139,26 @@ enum State {
 
 impl State {
 
-	fn merge_counts <Square: Copy + Ord> (
-		mut counts: Vec <(Square, u64)>,
-	) -> Vec <(Square, u64)> {
-		counts.sort ();
-		counts.iter ().copied ()
-			.coalesce (|left, right|
-				if left.0 == right.0 {
-					Ok ((left.0, left.1 + right.1))
-				} else {
-					Err ((left, right))
-				})
-			.collect ()
-	}
-
 	fn default () -> Self {
 		Self::ThreeByThree (vec! [
 			(ThreeByThree::try_from (0x1e2).unwrap (), 1),
 		])
 	}
 
-	fn num_active (& self) -> u64 {
+	fn num_active (& self) -> NumResult <u64> {
 		match * self {
 			Self::ThreeByThree (ref counts) =>
 				counts.iter ()
-					.map (|& (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|& (square, count)| chk! (square.num_active () * count))
+					.try_fold (0, |sum, item| { let item = item ?; chk! (sum + item) }),
 			Self::FourByFour (ref counts) =>
 				counts.iter ()
-					.map (|& (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|& (square, count)| chk! (square.num_active () * count))
+					.try_fold (0, |sum, item| { let item = item ?; chk! (sum + item) }),
 			Self::SixBySix (ref counts) =>
 				counts.iter ()
-					.map (|& (square, count)| square.num_active () * count)
-					.sum (),
+					.map (|& (square, count)| chk! (square.num_active () * count))
+					.try_fold (0, |sum, item| { let item = item ?; chk! (sum + item) }),
 		}
 	}
 

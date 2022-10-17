@@ -6,70 +6,31 @@ pub struct Input {
 	pub params: InputParams,
 }
 
-input_params! {
-	#[ derive (Clone, Debug) ]
-	pub struct InputParams {
-		pub iters_one: u32 = ("ITERS_ONE=", 5, 1_u32 ..),
-		pub iters_two: u32 = ("ITERS_TWO=", 18, 1_u32 ..),
-		pub check_rules: bool = ("CHECK_RULES=", true, false ..= true),
+struct_parser_display! {
+	Input { rules, params } = [ params, @lines rules ]
+}
+
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+	pub enum InputRule {
+		TwoToThree (from: u8, to: u16) = [ from = parse_pixels_2, " => ", to = parse_pixels_3 ],
+		ThreeToFour (from: u16, to: u16) = [ from = parse_pixels_3, " => ", to = parse_pixels_4 ],
 	}
 }
 
-impl Input {
-	pub fn parse (input: & [& str]) -> GenResult <Self> {
-		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, @lines rules);
-			Ok (Self { rules, params })
-		})
-	}
+pub fn parse_pixels_2 (parser: & mut Parser) -> ParseResult <u8> {
+	parse_pixels (parser, 2).map (u64::pan_u8)
 }
 
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		Display::fmt (& self.params, formatter) ?;
-		for rule in self.rules.iter () {
-			write! (formatter, "{}\n", rule) ?;
-		}
-		Ok (())
-	}
+pub fn parse_pixels_3 (parser: & mut Parser) -> ParseResult <u16> {
+	parse_pixels (parser, 3).map (u64::pan_u16)
 }
 
-#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-pub enum InputRule {
-	TwoToThree (u8, u16),
-	ThreeToFour (u16, u16),
+pub fn parse_pixels_4 (parser: & mut Parser) -> ParseResult <u16> {
+	parse_pixels (parser, 4).map (u64::pan_u16)
 }
 
-impl Display for InputRule {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::TwoToThree (from, to) => write! (formatter, "{} => {}\n", from, to) ?,
-			Self::ThreeToFour (from, to) => write! (formatter, "{} => {}\n", from, to) ?,
-		}
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for InputRule {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parser.any ()
-			.of (|parser| {
-				let from = parse_pixels (parser, 2) ?;
-				parse! (parser, @confirm, " => ");
-				let to = parse_pixels (parser, 3) ?;
-				Ok (Self::TwoToThree (from.pan_u8 (), to.pan_u16 ()))
-			})
-			.of (|parser| {
-				let from = parse_pixels (parser, 3) ?;
-				parse! (parser, @confirm, " => ");
-				let to = parse_pixels (parser, 4) ?;
-				Ok (Self::ThreeToFour (from.pan_u16 (), to.pan_u16 ()))
-			})
-			.done ()
-	}
-}
-
-pub fn parse_pixels (parser: & mut Parser <'_>, size: usize) -> ParseResult <u64> {
+pub fn parse_pixels (parser: & mut Parser, size: usize) -> ParseResult <u64> {
 	let mut val = 0_u64;
 	let new_bit = (1_u64 << ((size * size) - 1)).pan_u64 ();
 	for row in 0 .. size {
@@ -83,7 +44,20 @@ pub fn parse_pixels (parser: & mut Parser <'_>, size: usize) -> ParseResult <u64
 	Ok (val)
 }
 
-parse_display_enum! {
-	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum InputPixel { Off = ".", On = "#" }
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Default, Eq, PartialEq) ]
+	pub enum InputPixel {
+		#[ default ]
+		Off = [ "." ],
+		On = [ "#" ],
+	}
+}
+
+input_params! {
+	#[ derive (Clone, Debug) ]
+	pub struct InputParams {
+		pub iters_one: u32 = ("ITERS_ONE=", 5, 1_u32 ..),
+		pub iters_two: u32 = ("ITERS_TWO=", 18, 1_u32 ..),
+		pub check_rules: bool = ("CHECK_RULES=", true, false ..= true),
+	}
 }

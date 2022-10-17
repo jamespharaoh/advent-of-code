@@ -7,6 +7,7 @@ mod result {
 	pub use crate::prelude::*;
 
 	pub use crate::ok_or;
+	pub use crate::ok_or_else;
 	pub use crate::assert_is_err;
 	pub use crate::assert_is_ok;
 	pub use crate::assert_eq_ok;
@@ -40,6 +41,13 @@ mod result {
 	macro_rules! ok_or {
 		( $val:expr, $if_err:expr $(,)? ) => {
 			match ($val) { Ok (val) => val, Err (_) => $if_err }
+		};
+	}
+
+	#[ macro_export ]
+	macro_rules! ok_or_else {
+		( $val:expr, |$arg:ident| $if_err:expr $(,)? ) => {
+			match ($val) { Ok (val) => val, Err ($arg) => $if_err }
 		};
 	}
 
