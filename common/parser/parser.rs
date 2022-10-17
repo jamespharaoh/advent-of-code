@@ -669,22 +669,6 @@ pub fn input_param <Val: FromStr, Def: Into <Val>> (
 	)
 }
 
-/// Utility method to parse an optional parameter from the start of an input
-///
-#[ inline ]
-pub fn input_param_opt <Val: FromStr> (
-	input: & mut & [& str],
-	prefix: & str,
-) -> GenResult <Option <Val>>
-		where Val::Err: Error + 'static {
-	Ok (
-		if let Some (val) = input [0].strip_prefix (prefix) {
-			* input = & (* input) [1 .. ];
-			Some (val.parse () ?)
-		} else { None }
-	)
-}
-
 /// Utility method to prepend parameters to an example
 ///
 #[ inline ]

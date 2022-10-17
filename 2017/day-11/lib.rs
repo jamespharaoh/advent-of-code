@@ -6,6 +6,7 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
 pub mod model;
@@ -14,32 +15,7 @@ puzzle_info! {
 	name = "Hex Ed";
 	year = 2017;
 	day = 11;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("3", puzzle.part_one (& [ "ne,ne,ne" ]));
-		assert_eq_ok! ("0", puzzle.part_one (& [ "ne,ne,sw,sw" ]));
-		assert_eq_ok! ("2", puzzle.part_one (& [ "ne,ne,s,s" ]));
-		assert_eq_ok! ("3", puzzle.part_one (& [ "se,sw,se,sw,sw" ]));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("3", puzzle.part_two (& [ "ne,ne,ne" ]));
-		assert_eq_ok! ("2", puzzle.part_two (& [ "ne,ne,sw,sw" ]));
-		assert_eq_ok! ("2", puzzle.part_two (& [ "ne,ne,s,s" ]));
-		assert_eq_ok! ("3", puzzle.part_two (& [ "se,sw,se,sw,sw" ]));
-	}
-
 }
