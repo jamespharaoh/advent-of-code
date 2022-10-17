@@ -18,18 +18,6 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -38,28 +26,16 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	Input &lt;<span class="lifetime">&#39;inp</span>&gt; { key, params } = [ params, key ]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
 		<span class="kw">pub </span>num_rounds: u32 = (<span class="string">&quot;NUM_ROUNDS=&quot;</span>, <span class="number">64</span>, <span class="number">1 </span>..= <span class="number">64</span>),
 		<span class="kw">pub </span>num_rows: u32 = (<span class="string">&quot;NUM_ROWS=&quot;</span>, <span class="number">128</span>, <span class="number">1 </span>..= <span class="number">128</span>),
-	}
-}
-
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">pub fn </span>parse (input: &amp; <span class="lifetime">&#39;inp </span>[&amp; <span class="lifetime">&#39;inp </span>str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params, key);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ key, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Display <span class="kw">for </span>Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="macro">write! </span>(formatter, <span class="string">&quot;{}\n&quot;</span>, <span class="self">self</span>.key) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(())
 	}
 }
 </code></pre></div>
