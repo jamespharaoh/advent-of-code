@@ -18,7 +18,12 @@ pub struct InputStep {
 
 struct_parser_display! {
 	InputStep { state, cube } = [
-		state { true = [ "on" ], false = [ "off" ] }, " ",
+		state {
+			//state if (* state == true) = [ "on", @parse state { true } ],
+			//state if (* state == false) = [ "off", @parse state { false } ],
+			true = [ "on" ],
+			false = [ "off" ],
+		}, " ",
 		cube,
 	]
 }

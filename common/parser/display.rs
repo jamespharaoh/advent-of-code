@@ -94,7 +94,7 @@ macro_rules! display {
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
-		display! (@nest $($nest)*) (& $field, $formatter) ?;
+		display! (@nest $($nest)*) ($field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 
@@ -214,6 +214,9 @@ macro_rules! display {
 			display_fn (& $field, $formatter) ?;
 		}
 	};
+	( $formatter:ident, @parse $field:ident { $($rest:tt)* } $(,$(rest:tt)*)? ) => {
+		let _ = $field;
+	};
 	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
 		$formatter.write_str ($display) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -233,6 +236,18 @@ macro_rules! display {
 			::std::result::Result::Ok (())
 		}
 	};
+	( @nest type = $type:ty; $($nest:tt)* ) => {
+		|val: & $type, formatter: & mut ::std::fmt::Formatter| {
+			display! (@nest_var formatter val $($nest)*);
+			::std::result::Result::Ok (())
+		}
+	};
+	( @nest input_lifetime = $input_life:lifetime; type = $type:ty; $($nest:tt)* ) => {
+		|val: & $type, formatter: & mut ::std::fmt::Formatter| {
+			display! (@nest_var formatter val $($nest)*);
+			::std::result::Result::Ok (())
+		}
+	};
 	( @nest $($nest:tt)* ) => {
 		|val, formatter: & mut ::std::fmt::Formatter| {
 			display! (@nest_var formatter val $($nest)*);
@@ -240,10 +255,17 @@ macro_rules! display {
 		}
 	};
 
+	( @nest_var $formatter:ident $val:ident $lit:literal = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		if let & lit = $val {
+			display! ($formatter, $($display)*);
+		}
+		display! (@nest_var $formatter $val $($($rest)*)?);
+	};
 	( @nest_var $formatter:ident $val:ident $name:ident $( if ($cond:expr) )? = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		display! { @opt_if [$(! $cond)?]
-			if let & $name = $val {
+		if let $name = $val {
+			display! { @opt_if [$($cond)?]
 				display! ($formatter, $($display)*);
+				return Ok (());
 			}
 		}
 		display! (@nest_var $formatter $val $($($rest)*)?);
@@ -292,96 +314,6 @@ macro_rules! display {
 	};
 	( @opt_if [] $($body:tt)* ) => {
 		$($body)*
-	};
-
-}
-
-#[ macro_export ]
-macro_rules! enum_display {
-
-	( $enum_name:ident $( <$($param:tt),*> )?, $($rest:tt)* ) => {
-		impl $( <$($param),*> )? ::std::fmt::Display for $enum_name $(<$($param),*>)? {
-			fn fmt (& self, formatter: & mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-				enum_display! (@variants $enum_name, self, formatter, $($rest)*);
-				panic! ("Unhandled variant {}::{:?}", stringify! ($enum_name), self);
-			}
-		}
-	};
-
-	( @variants $enum_name:ident, $self:ident, $formatter:ident $(,)? ) => {};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident { $($var_fields:tt)* } = |$var_arg:ident| { $($var_body:tt)* }
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name { $($var_fields)* } = $self {
-			let $var_arg = $formatter;
-			return (|| -> ::std::fmt::Result { $($var_body)*; Ok (()) }) ();
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
-	};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident ( $($var_fields:tt)* ) = |$var_arg:ident| { $($var_body:tt)* }
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name ( $($var_fields)* ) = $self {
-			let $var_arg = & mut $formatter;
-			$($var_body)*
-			return Ok (());
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
-	};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident = |$var_arg:ident| { $($var_body:tt)* }
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name = $self {
-			let $var_arg = & mut $formatter;
-			$($var_body)*
-			return Ok (());
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
-	};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident { $($var_fields:tt)* } = [ $($var_arg:tt)* ]
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name { $($var_fields)* } = $self {
-			display! ($formatter, $($var_arg)*);
-			return Ok (());
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
-	};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident ( $($var_fields:tt)* ) = [ $($var_arg:tt)* ]
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name ( $($var_fields)* ) = $self {
-			display! ($formatter, $($var_arg)*);
-			return Ok (());
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
-	};
-
-	(
-		@variants $enum_name:ident, $self:ident, $formatter:ident,
-		$var_name:ident = [ $($var_arg:tt)* ]
-		$(, $($rest:tt)* )?
-	) => {
-		if let $enum_name::$var_name = $self {
-			display! ($formatter, $($var_arg)*);
-			return Ok (());
-		};
-		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
 	};
 
 }

@@ -22,16 +22,10 @@ enum_decl_parser_display! {
 			"swap letter ", ch_0, " with letter ", ch_1,
 		],
 		RotLeft (num: u32) = [
-			"rotate left ", num {
-				num if (* num != 1) = [ num, " steps" ],
-				num if (* num == 1) = [ num, " step" ],
-			},
+			"rotate left ", num { 1 = [ "1 step" ], num = [ num, " steps" ] },
 		],
 		RotRight (num: u32) = [
-			"rotate right ", num {
-				num if (* num != 1) = [ num, " steps" ],
-				num if (* num == 1) = [ num, " step" ],
-			},
+			"rotate right ", num { 1 = [ "1 step" ], num = [ num, " steps" ] },
 		],
 		RotChar (ch: char) = [
 			"rotate based on position of letter ", ch,

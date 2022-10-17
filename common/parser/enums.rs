@@ -7,6 +7,96 @@ macro_rules! enum_parser_display {
 }
 
 #[ macro_export ]
+macro_rules! enum_display {
+
+	( $enum_name:ident $( <$($param:tt),*> )?, $($rest:tt)* ) => {
+		impl $( <$($param),*> )? ::std::fmt::Display for $enum_name $(<$($param),*>)? {
+			fn fmt (& self, formatter: & mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+				enum_display! (@variants $enum_name, self, formatter, $($rest)*);
+				panic! ("Unhandled variant {}::{:?}", stringify! ($enum_name), self);
+			}
+		}
+	};
+
+	( @variants $enum_name:ident, $self:ident, $formatter:ident $(,)? ) => {};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident { $($var_fields:tt)* } = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name { $($var_fields)* } = $self {
+			let $var_arg = $formatter;
+			return (|| -> ::std::fmt::Result { $($var_body)*; Ok (()) }) ();
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident ( $($var_fields:tt)* ) = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name ( $($var_fields)* ) = $self {
+			let $var_arg = & mut $formatter;
+			$($var_body)*
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident = |$var_arg:ident| { $($var_body:tt)* }
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name = $self {
+			let $var_arg = & mut $formatter;
+			$($var_body)*
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident { $($var_fields:tt)* } = [ $($var_arg:tt)* ]
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name { $($var_fields)* } = $self {
+			display! ($formatter, $($var_arg)*);
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident ( $($var_fields:tt)* ) = [ $($var_arg:tt)* ]
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name ( $($var_fields)* ) = $self {
+			display! ($formatter, $($var_arg)*);
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+	(
+		@variants $enum_name:ident, $self:ident, $formatter:ident,
+		$var_name:ident = [ $($var_arg:tt)* ]
+		$(, $($rest:tt)* )?
+	) => {
+		if let $enum_name::$var_name = $self {
+			display! ($formatter, $($var_arg)*);
+			return Ok (());
+		};
+		enum_display! (@variants $enum_name, $self, $formatter, $($($rest)*)?);
+	};
+
+}
+
+#[ macro_export ]
 macro_rules! parse_display_enum {
 
 	( $(

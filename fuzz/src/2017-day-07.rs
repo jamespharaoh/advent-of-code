@@ -5,16 +5,17 @@ use libfuzzer_sys::fuzz_target;
 use libfuzzer_sys::fuzzer_mutate;
 use rand::prelude::*;
 
-use aoc_common::*;
 use aoc_2017::day_07::*;
+use aoc_common::*;
 use input::Input;
+use input::InputParams;
 
 const PROB_CUSTOM_FIRST: f64 = 0.7;
 const PROB_BUILTIN_AFTER: f64 = 0.3;
 
 fuzz_target! (|input_str: & str| {
-	let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-	if let Ok (input) = Input::parse (& input_vec) {
+	let input_vec: Vec <& str> = input_str.trim_end ().split ('\n').collect ();
+	if let Ok (input) = Input::parse_from_lines (& input_vec) {
 		let _ = logic::part_one (& input);
 		let _ = logic::part_two (& input);
 	}
@@ -54,7 +55,7 @@ mod mutator {
 
 			let input_str = str::from_utf8 (& data [ .. size]).ok () ?;
 			let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-			let input = Input::parse (& input_vec).ok () ?;
+			let input = Input::parse_from_lines (& input_vec).ok () ?;
 
 			let output_dat = if rng.gen_bool (0.3) {
 				let mut output_dat = input;
@@ -63,15 +64,13 @@ mod mutator {
 			} else {
 				let mut root = ProgInfo::build (& input).ok () ?;
 				mutate_model (& mut root, rng);
-				let mut output_dat = Input { progs: Vec::new () };
+				let mut output_dat = Input { progs: Vec::new (), params: InputParams::default () };
 				root.write_input (& mut output_dat.progs);
 				output_dat.progs.shuffle (rng);
 				output_dat
 			};
 
-			let mut output_str = String::new ();
-			output_dat.write_str (& mut output_str).unwrap ();
-			output_str
+			output_dat.to_string ()
 
 		};
 
@@ -181,6 +180,7 @@ mod mutator {
 			// remove a random prog
 
 			0 => {
+				if input.progs.is_empty () { return }
 				let idx = rng.gen_range (0 .. input.progs.len ());
 				input.progs.remove (idx);
 			},
@@ -188,7 +188,7 @@ mod mutator {
 			// insert a random prog
 
 			1 => {
-				let idx = rng.gen_range (0 .. input.progs.len ());
+				let idx = rng.gen_range (0 ..= input.progs.len ());
 				input.progs.insert (idx, make_input_prog (rng));
 			},
 

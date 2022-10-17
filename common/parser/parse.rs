@@ -65,7 +65,7 @@ macro_rules! parse {
 		let $name = $parse ($parser) ?;
 	};
 	( @item $parser:expr, $item_name:ident { $($nest:tt)* } ) => {
-		let $item_name = parse! (@nest $($nest)*) ($parser) ?;
+		let $item_name = $parser.nest (parse! (@nest $($nest)*)) ?;
 	};
 	( @item $parser:expr, ($($item_name:ident),*) = $item_parse:ident ) => {
 		let ($($item_name),*) = $item_parse ($parser) ?;
@@ -253,6 +253,9 @@ macro_rules! parse {
 	( @item $parser:expr, @confirm ) => {
 		$parser.confirm ();
 	};
+	( @item $parser:expr, @parse $name:ident { $($body:tt)* } ) => {
+		let $name = { $($body)* };
+	};
 	( @item $parser:expr, @skip ) => {
 		$parser.skip_whitespace ( .. ) ?;
 	};
@@ -260,6 +263,20 @@ macro_rules! parse {
 		$parser.skip_whitespace ( .. ) ?;
 	};
 
+	( @nest input_lifetime = $input_life:lifetime; type = $type:ty; $($rest:tt)* ) => {
+		|parser: & mut Parser <$input_life>| {
+			let parser = parser.any ();
+			parse! (@nest_var parser $($rest)*);
+			parser.done ()
+		}
+	};
+	( @nest type = $type:ty; $($rest:tt)* ) => {
+		|parser: & mut Parser| {
+			let parser = parser.any ();
+			parse! (@nest_var parser $($rest)*);
+			parser.done ()
+		}
+	};
 	( @nest input_lifetime = $input_life:lifetime; $($var:tt)* ) => {
 		|parser: & mut Parser <$input_life>| {
 			let parser = parser.any ();
@@ -273,6 +290,14 @@ macro_rules! parse {
 			parse! (@nest_var parser $($var)*);
 			parser.done ()
 		}
+	};
+
+	( @nest_var $parser:ident $lit:literal = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+		let $parser = $parser.of (|parser| {
+			parse! (parser, $($parse)*);
+			Ok ($lit)
+		});
+		parse! (@nest_var $parser $($($rest)*)?);
 	};
 	( @nest_var $parser:ident $var:ident $( if ($cond:expr) )? = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
