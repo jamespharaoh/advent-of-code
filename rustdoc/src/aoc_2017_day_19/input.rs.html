@@ -17,49 +17,9 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
-<span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-<span class="kw">use </span>model::Coord;
 <span class="kw">use </span>model::Grid;
-<span class="kw">use </span>model::Pos;
-<span class="kw">use </span>model::Tile;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input {
@@ -67,47 +27,13 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { grid, params } = [ params, grid ]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-	}
-}
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params);
-			<span class="kw">let </span>tiles_temp: Vec &lt;Vec &lt;Tile&gt;&gt; = parser
-				.delim_fn (<span class="string">&quot;\n&quot;</span>, |parser| <span class="prelude-val">Ok </span>(parser.repeat (Parser::item).collect ()))
-				.collect ();
-			<span class="kw">let </span>rows = tiles_temp.len ();
-			<span class="kw">if </span>! (<span class="number">1 </span>..= <span class="number">256</span>).contains (&amp; rows) {
-				<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have between 1 and 256 rows&quot;</span>.into ());
-			}
-			<span class="kw">let </span>cols = tiles_temp.iter ().map (Vec::len).max ().unwrap ();
-			<span class="kw">if </span>! (<span class="number">1 </span>..= <span class="number">256</span>).contains (&amp; cols) {
-				<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have between 1 and 256 cols&quot;</span>.into ());
-			}
-			<span class="kw">let </span>tiles: Vec &lt;Tile&gt; =
-				tiles_temp.iter ()
-					.flat_map (|row_data| row_data.iter ().copied ()
-						.chain (iter::repeat (Tile::Empty))
-						.take (cols))
-					.collect ();
-			<span class="kw">let </span>grid_size = Pos::new (
-				Coord::from_usize (rows).unwrap (),
-				Coord::from_usize (cols).unwrap ());
-			<span class="kw">let </span>grid = Grid::wrap_size (tiles, grid_size);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ grid, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.grid.print (|tile| tile.as_char ())) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(())
 	}
 }
 </code></pre></div>

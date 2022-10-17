@@ -26,34 +26,6 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = u8;
@@ -62,53 +34,25 @@
 <span class="kw">pub type </span>Pos = pos::PosRowCol &lt;Coord&gt;;
 <span class="kw">pub type </span>Turn = pos::Turn2d;
 
-<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-</span><span class="kw">pub enum </span>Tile {
-	Empty,
-	Horiz,
-	Vert,
-	Corner,
-	Letter (u8),
-}
-
-<span class="kw">impl </span>Tile {
-
-	<span class="attribute">#[ must_use ]
-	</span><span class="kw">pub fn </span>as_char (&amp; <span class="self">self</span>) -&gt; char {
-		<span class="kw">match </span>* <span class="self">self </span>{
-			<span class="self">Self</span>::Empty =&gt; <span class="string">&#39; &#39;</span>,
-			<span class="self">Self</span>::Horiz =&gt; <span class="string">&#39;-&#39;</span>,
-			<span class="self">Self</span>::Vert =&gt; <span class="string">&#39;|&#39;</span>,
-			<span class="self">Self</span>::Corner =&gt; <span class="string">&#39;+&#39;</span>,
-			<span class="self">Self</span>::Letter (asc) =&gt; asc.pan_char (),
-		}
-	}
-
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Tile {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		formatter.write_char (<span class="self">self</span>.as_char ())
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, PartialEq) ]
+	</span><span class="kw">pub enum </span>Tile {
+		<span class="attribute">#[ default ]
+		</span>Empty = [ <span class="string">&quot; &quot; </span>],
+		Horiz = [ <span class="string">&quot;-&quot; </span>],
+		Vert = [ <span class="string">&quot;|&quot; </span>],
+		Corner = [ <span class="string">&quot;+&quot; </span>],
+		Letter (asc: u8) = [ asc = (letter_parse, letter_display) ],
 	}
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Tile {
-	<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-		parser.any ()
-			.of (|parser| {
-				<span class="kw">let </span>ch = parser.expect_next () <span class="question-mark">?</span>;
-				<span class="kw">let </span>tile = <span class="kw">match </span>ch {
-					<span class="string">&#39; &#39; </span>=&gt; <span class="self">Self</span>::Empty,
-					<span class="string">&#39;-&#39; </span>=&gt; <span class="self">Self</span>::Horiz,
-					<span class="string">&#39;|&#39; </span>=&gt; <span class="self">Self</span>::Vert,
-					<span class="string">&#39;+&#39; </span>=&gt; <span class="self">Self</span>::Corner,
-					<span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39; </span>=&gt; <span class="self">Self</span>::Letter (ch.pan_u8 ()),
-					<span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ()),
-				};
-				<span class="prelude-val">Ok </span>(tile)
-			})
-			.done ()
-	}
+<span class="kw">fn </span>letter_parse (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;u8&gt; {
+	<span class="kw">if </span>! <span class="macro">matches! </span>(parser.peek (), <span class="prelude-val">Some </span>(<span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>)) { <span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ()) }
+	<span class="prelude-val">Ok </span>(parser.next ().unwrap ().pan_u8 ())
+}
+
+<span class="kw">fn </span>letter_display (letter: &amp; u8, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+	formatter.write_char (letter.pan_char ())
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
