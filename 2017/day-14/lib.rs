@@ -16,7 +16,7 @@ puzzle_info! {
 	name = "Disk Defragmentation";
 	year = 2017;
 	day = 14;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }
