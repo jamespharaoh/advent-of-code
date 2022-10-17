@@ -6,36 +6,20 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
-pub mod model;
 
 puzzle_info! {
 	name = "Packet Scanners";
 	year = 2017;
 	day = 13;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }
 
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [ "0: 3", "1: 2", "4: 4", "6: 4" ];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("24", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("10", puzzle.part_two (EXAMPLE));
-	}
-
+pub mod model {
+	pub type LayerDepth = u8;
+	pub type LayerRange = u8;
 }
