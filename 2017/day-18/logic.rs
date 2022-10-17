@@ -75,7 +75,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 #[ derive (Debug, Default, Eq, PartialEq) ]
 enum ProgramState {
-	#[default] Okay,
+	#[ default ]
+	Okay,
 	Waiting,
 	Halted,
 }
