@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["FourByFour",""],["SixBySix",""],["ThreeByThree",""],["TwoByTwo",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Square",""]],"type":[["FourByFour",""],["SixBySix",""],["ThreeByThree",""],["TwoByTwo",""]]};

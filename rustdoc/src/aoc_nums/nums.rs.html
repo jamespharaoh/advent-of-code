@@ -1289,6 +1289,23 @@
 <span id="1289">1289</span>
 <span id="1290">1290</span>
 <span id="1291">1291</span>
+<span id="1292">1292</span>
+<span id="1293">1293</span>
+<span id="1294">1294</span>
+<span id="1295">1295</span>
+<span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
 </pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::as_conversions) ]
 #![ allow (clippy::default_numeric_fallback) ]
 #![ allow (clippy::inline_always) ]
@@ -1520,6 +1537,13 @@
 	///
 	</span><span class="kw">fn </span>sub_2 (arg_0: <span class="self">Self</span>, arg_1: <span class="self">Self</span>) -&gt; NumResult &lt;<span class="self">Self</span>&gt;;
 
+	<span class="kw">fn </span>gen_count_ones (<span class="self">self</span>) -&gt; u32;
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>check_bit (<span class="self">self</span>, bit: u32) -&gt; bool {
+		<span class="self">self </span>&amp; (<span class="self">Self</span>::ONE &lt;&lt; bit) != <span class="self">Self</span>::ZERO
+	}
+
 }
 
 <span class="kw">pub trait </span>IntOpsTry: Sized +
@@ -1614,6 +1638,11 @@
 				<span class="macro-nonterminal">$signed::checked_sub </span>(arg_0, arg_1).ok_or (Overflow)
 			}
 
+			<span class="attribute">#[ inline (always) ]
+			</span><span class="kw">fn </span>gen_count_ones (<span class="self">self</span>) -&gt; u32 {
+				<span class="self">self</span>.count_ones ()
+			}
+
 		}
 
 		<span class="kw">impl </span>Int <span class="kw">for </span><span class="macro-nonterminal">$unsigned </span>{
@@ -1698,6 +1727,11 @@
 			<span class="attribute">#[ inline ]
 			</span><span class="kw">fn </span>sub_2 (arg_0: <span class="macro-nonterminal">$unsigned</span>, arg_1: <span class="macro-nonterminal">$unsigned</span>) -&gt; NumResult &lt;<span class="macro-nonterminal">$unsigned</span>&gt; {
 				<span class="macro-nonterminal">$unsigned::checked_sub </span>(arg_0, arg_1).ok_or (Overflow)
+			}
+
+			<span class="attribute">#[ inline (always) ]
+			</span><span class="kw">fn </span>gen_count_ones (<span class="self">self</span>) -&gt; u32 {
+				<span class="self">self</span>.count_ones ()
 			}
 
 		}

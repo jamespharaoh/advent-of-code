@@ -220,7 +220,7 @@
 				},
 				InputRule::ThreeToFour (from, to) =&gt; {
 					<span class="kw">let </span><span class="kw-2">mut </span>from = ThreeByThree::try_from (from).unwrap ();
-					<span class="kw">let </span>to = FourByFour::from (to);
+					<span class="kw">let </span>to = FourByFour::try_from (to).unwrap ();
 					<span class="kw">if </span>input.params.check_rules &amp;&amp; three_to_four_found [from.idx ()] {
 						<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Duplicated rule: {from}&quot;</span>).into ());
 					}

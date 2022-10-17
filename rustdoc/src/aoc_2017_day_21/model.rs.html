@@ -131,286 +131,138 @@
 <span id="131">131</span>
 <span id="132">132</span>
 <span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
-<span id="162">162</span>
-<span id="163">163</span>
-<span id="164">164</span>
-<span id="165">165</span>
-<span id="166">166</span>
-<span id="167">167</span>
-<span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-<span class="kw">pub use </span>squares::TwoByTwo;
-<span class="kw">pub use </span>squares::ThreeByThree;
-<span class="kw">pub use </span>squares::FourByFour;
-<span class="kw">pub use </span>squares::SixBySix;
+<span class="kw">pub type </span>TwoByTwo = Square &lt;u8, <span class="number">2</span>&gt;;
+<span class="kw">pub type </span>ThreeByThree = Square &lt;u16, <span class="number">3</span>&gt;;
+<span class="kw">pub type </span>FourByFour = Square &lt;u16, <span class="number">4</span>&gt;;
+<span class="kw">pub type </span>SixBySix = Square &lt;u64, <span class="number">6</span>&gt;;
 
-<span class="kw">mod </span>squares {
+<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">pub struct </span>Square &lt;Val: Int, <span class="kw">const </span>SIZE: u32&gt; {
+	val: Val,
+}
 
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="kw">impl </span>&lt;Val: Int, <span class="kw">const </span>SIZE: u32&gt; Square &lt;Val, SIZE&gt; {
 
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, PartialEq) ]
-	</span><span class="kw">pub struct </span>TwoByTwo { val: u8 }
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
+		<span class="self">self</span>.val.pan_usize ()
+	}
 
-	<span class="kw">impl </span>TwoByTwo {
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>num_active (<span class="self">self</span>) -&gt; u64 {
+		<span class="self">self</span>.val.gen_count_ones ().pan_u64 ()
+	}
 
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>rotate (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-			<span class="kw">let </span><span class="kw-2">mut </span>next = <span class="number">0</span>;
-			<span class="kw">for </span>bit <span class="kw">in </span>[ <span class="number">1_u32</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">2 </span>].iter ().copied () {
-				next &gt;&gt;= <span class="number">1_u32</span>;
-				<span class="kw">if </span>(<span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit)) != <span class="number">0 </span>{ next |= <span class="number">0x08</span>; }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>rotate (<span class="self">self</span>) -&gt; <span class="self">Self </span><span class="kw">where </span>Val: From &lt;bool&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>val = Val::ZERO;
+		<span class="kw">for </span>col <span class="kw">in </span><span class="number">0 </span>.. SIZE {
+			<span class="kw">for </span>row <span class="kw">in </span>(<span class="number">0 </span>.. SIZE).rev () {
+				val = (val &lt;&lt; <span class="number">1</span>) | Val::from (<span class="self">self</span>.val.check_bit (row * SIZE + col));
 			}
-			<span class="self">Self </span>{ val: next }
 		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
-			<span class="self">self</span>.val.pan_usize ()
-		}
-
+		<span class="macro">assert! </span>(val.pan_u32 () &lt; <span class="number">1 </span>&lt;&lt; (SIZE * SIZE));
+		<span class="self">Self </span>{ val }
 	}
 
-	<span class="kw">impl </span>Display <span class="kw">for </span>TwoByTwo {
-		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{:01x}&quot;</span>, <span class="self">self</span>.val) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
-	}
-
-	<span class="kw">impl </span>TryFrom &lt;u8&gt; <span class="kw">for </span>TwoByTwo {
-		<span class="kw">type </span>Error = ();
-		<span class="kw">fn </span>try_from (val: u8) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
-			<span class="kw">if </span>val &gt; <span class="number">0xf </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(()) }
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ val })
-		}
-	}
-
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub struct </span>ThreeByThree { val: u16 }
-
-	<span class="kw">impl </span>ThreeByThree {
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
-			<span class="self">self</span>.val.pan_usize ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>num_active (<span class="self">self</span>) -&gt; u64 {
-			<span class="self">self</span>.val.count_ones ().pan_u64 ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>rotate (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-			<span class="kw">let </span><span class="kw-2">mut </span>next = <span class="number">0</span>;
-			<span class="kw">for </span>bit <span class="kw">in </span>[ <span class="number">2_u32</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">7</span>, <span class="number">0</span>, <span class="number">3</span>, <span class="number">6 </span>].iter ().copied () {
-				next &gt;&gt;= <span class="number">1_u32</span>;
-				<span class="kw">if </span>(<span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit)) != <span class="number">0 </span>{ next |= <span class="number">0x100</span>; }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>flip (<span class="self">self</span>) -&gt; <span class="self">Self </span><span class="kw">where </span>Val: From &lt;bool&gt; {
+		<span class="kw">let </span><span class="kw-2">mut </span>val = Val::ZERO;
+		<span class="kw">for </span>row <span class="kw">in </span>(<span class="number">0 </span>.. SIZE).rev () {
+			<span class="kw">for </span>col <span class="kw">in </span><span class="number">0 </span>.. SIZE {
+				val = (val &lt;&lt; <span class="number">1</span>) | Val::from (<span class="self">self</span>.val.check_bit (row * SIZE + col));
 			}
-			<span class="self">Self </span>{ val: next }
 		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>flip (<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-			<span class="kw">let </span><span class="kw-2">mut </span>next = <span class="number">0</span>;
-			<span class="kw">for </span>bit <span class="kw">in </span>[ <span class="number">2_u32</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6 </span>].iter ().copied () {
-				next &gt;&gt;= <span class="number">1_u32</span>;
-				<span class="kw">if </span>(<span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit)) != <span class="number">0 </span>{ next |= <span class="number">0x100</span>; }
-			}
-			<span class="self">Self </span>{ val: next }
-
-		}
-
+		<span class="macro">assert! </span>(val.pan_u32 () &lt; <span class="number">1 </span>&lt;&lt; (SIZE * SIZE));
+		<span class="self">Self </span>{ val }
 	}
 
-	<span class="kw">impl </span>Display <span class="kw">for </span>ThreeByThree {
-		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{:03x}&quot;</span>, <span class="self">self</span>.val) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
-	}
+}
 
-	<span class="kw">impl </span>TryFrom &lt;u16&gt; <span class="kw">for </span>ThreeByThree {
-		<span class="kw">type </span>Error = ();
-		<span class="kw">fn </span>try_from (val: u16) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
-			<span class="kw">if </span>val &gt; <span class="number">0x1ff </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(()) }
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ val })
-		}
-	}
+<span class="kw">impl </span>Square &lt;u16, <span class="number">4</span>&gt; {
 
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub struct </span>FourByFour { val: u16 }
-
-	<span class="kw">impl </span>FourByFour {
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
-			<span class="self">self</span>.val.pan_usize ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>num_active (<span class="self">self</span>) -&gt; u64 {
-			<span class="self">self</span>.val.count_ones ().pan_u64 ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>split (<span class="self">self</span>) -&gt; [TwoByTwo; <span class="number">4</span>] {
-			[ [<span class="number">0_u32</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">7</span>], [<span class="number">8</span>, <span class="number">9</span>, <span class="number">12</span>, <span class="number">13</span>], [<span class="number">10</span>, <span class="number">11</span>, <span class="number">14</span>, <span class="number">15</span>] ].map (|bits| {
-				<span class="kw">let </span><span class="kw-2">mut </span>val = <span class="number">0</span>;
-				<span class="kw">for </span>bit <span class="kw">in </span>bits.iter ().copied () {
-					val &gt;&gt;= <span class="number">1_u32</span>;
-					<span class="kw">if </span><span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8</span>; }
-				}
-				TwoByTwo::try_from (val).unwrap ()
-			})
-		}
-
-	}
-
-	<span class="kw">impl </span>Display <span class="kw">for </span>FourByFour {
-		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{:04x}&quot;</span>, <span class="self">self</span>.val) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
-	}
-
-	<span class="kw">impl </span>From &lt;u16&gt; <span class="kw">for </span>FourByFour {
-		<span class="kw">fn </span>from (val: u16) -&gt; <span class="self">Self </span>{
-			<span class="self">Self </span>{ val }
-		}
-	}
-
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialOrd, PartialEq) ]
-	</span><span class="kw">pub struct </span>SixBySix { val: u64 }
-
-	<span class="kw">impl </span>SixBySix {
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
-			<span class="self">self</span>.val.pan_usize ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>num_active (<span class="self">self</span>) -&gt; u64 {
-			<span class="self">self</span>.val.count_ones ().pan_u64 ()
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>split (<span class="self">self</span>) -&gt; [TwoByTwo; <span class="number">9</span>] {
-			[
-				[<span class="number">0_u32</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">7</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">9</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">11</span>],
-				[<span class="number">12</span>, <span class="number">13</span>, <span class="number">18</span>, <span class="number">19</span>], [<span class="number">14</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">21</span>], [<span class="number">16</span>, <span class="number">17</span>, <span class="number">22</span>, <span class="number">23</span>],
-				[<span class="number">24</span>, <span class="number">25</span>, <span class="number">30</span>, <span class="number">31</span>], [<span class="number">26</span>, <span class="number">27</span>, <span class="number">32</span>, <span class="number">33</span>], [<span class="number">28</span>, <span class="number">29</span>, <span class="number">34</span>, <span class="number">35</span>],
-			].map (|bits| {
-				<span class="kw">let </span><span class="kw-2">mut </span>val = <span class="number">0</span>;
-				<span class="kw">for </span>bit <span class="kw">in </span>bits.iter ().copied () {
-					val &gt;&gt;= <span class="number">1_u32</span>;
-					<span class="kw">if </span><span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8</span>; }
-				}
-				TwoByTwo::try_from (val).unwrap ()
-			})
-		}
-
-		<span class="attribute">#[ must_use ]
-		</span><span class="kw">pub fn </span>join (squares: [ThreeByThree; <span class="number">4</span>]) -&gt; <span class="self">Self </span>{
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>split (<span class="self">self</span>) -&gt; [TwoByTwo; <span class="number">4</span>] {
+		[ [<span class="number">0_u32</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">7</span>], [<span class="number">8</span>, <span class="number">9</span>, <span class="number">12</span>, <span class="number">13</span>], [<span class="number">10</span>, <span class="number">11</span>, <span class="number">14</span>, <span class="number">15</span>] ].map (|bits| {
 			<span class="kw">let </span><span class="kw-2">mut </span>val = <span class="number">0</span>;
-			<span class="kw">for </span>(square_idx, bit) <span class="kw">in </span>[
-				(<span class="number">0</span>, <span class="number">0_u32</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>),
-				(<span class="number">0</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">4</span>), (<span class="number">0</span>, <span class="number">5</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">5</span>),
-				(<span class="number">0</span>, <span class="number">6</span>), (<span class="number">0</span>, <span class="number">7</span>), (<span class="number">0</span>, <span class="number">8</span>), (<span class="number">1</span>, <span class="number">6</span>), (<span class="number">1</span>, <span class="number">7</span>), (<span class="number">1</span>, <span class="number">8</span>),
-				(<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">0</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">2</span>),
-				(<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">2</span>, <span class="number">5</span>), (<span class="number">3</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">3</span>, <span class="number">5</span>),
-				(<span class="number">2</span>, <span class="number">6</span>), (<span class="number">2</span>, <span class="number">7</span>), (<span class="number">2</span>, <span class="number">8</span>), (<span class="number">3</span>, <span class="number">6</span>), (<span class="number">3</span>, <span class="number">7</span>), (<span class="number">3</span>, <span class="number">8</span>),
-			].iter ().copied () {
+			<span class="kw">for </span>bit <span class="kw">in </span>bits.iter ().copied () {
 				val &gt;&gt;= <span class="number">1_u32</span>;
-				<span class="kw">if </span>squares [square_idx].val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8_0000_0000</span>; }
+				<span class="kw">if </span><span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8</span>; }
 			}
-			<span class="self">Self </span>{ val }
-		}
-
+			TwoByTwo::try_from (val).unwrap ()
+		})
 	}
 
-	<span class="kw">impl </span>Display <span class="kw">for </span>SixBySix {
-		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{:09x}&quot;</span>, <span class="self">self</span>.val) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
+}
+
+<span class="kw">impl </span>Square &lt;u64, <span class="number">6</span>&gt; {
+
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>split (<span class="self">self</span>) -&gt; [TwoByTwo; <span class="number">9</span>] {
+		[
+			[<span class="number">0_u32</span>, <span class="number">1</span>, <span class="number">6</span>, <span class="number">7</span>], [<span class="number">2</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">9</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">10</span>, <span class="number">11</span>],
+			[<span class="number">12</span>, <span class="number">13</span>, <span class="number">18</span>, <span class="number">19</span>], [<span class="number">14</span>, <span class="number">15</span>, <span class="number">20</span>, <span class="number">21</span>], [<span class="number">16</span>, <span class="number">17</span>, <span class="number">22</span>, <span class="number">23</span>],
+			[<span class="number">24</span>, <span class="number">25</span>, <span class="number">30</span>, <span class="number">31</span>], [<span class="number">26</span>, <span class="number">27</span>, <span class="number">32</span>, <span class="number">33</span>], [<span class="number">28</span>, <span class="number">29</span>, <span class="number">34</span>, <span class="number">35</span>],
+		].map (|bits| {
+			<span class="kw">let </span><span class="kw-2">mut </span>val = <span class="number">0</span>;
+			<span class="kw">for </span>bit <span class="kw">in </span>bits.iter ().copied () {
+				val &gt;&gt;= <span class="number">1_u32</span>;
+				<span class="kw">if </span><span class="self">self</span>.val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8</span>; }
+			}
+			TwoByTwo::try_from (val).unwrap ()
+		})
 	}
 
-	<span class="kw">impl </span>From &lt;u64&gt; <span class="kw">for </span>SixBySix {
-		<span class="kw">fn </span>from (val: u64) -&gt; <span class="self">Self </span>{
-			<span class="self">Self </span>{ val }
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>join (squares: [ThreeByThree; <span class="number">4</span>]) -&gt; <span class="self">Self </span>{
+		<span class="kw">let </span><span class="kw-2">mut </span>val = <span class="number">0</span>;
+		<span class="kw">for </span>(square_idx, bit) <span class="kw">in </span>[
+			(<span class="number">0</span>, <span class="number">0_u32</span>), (<span class="number">0</span>, <span class="number">1</span>), (<span class="number">0</span>, <span class="number">2</span>), (<span class="number">1</span>, <span class="number">0</span>), (<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>),
+			(<span class="number">0</span>, <span class="number">3</span>), (<span class="number">0</span>, <span class="number">4</span>), (<span class="number">0</span>, <span class="number">5</span>), (<span class="number">1</span>, <span class="number">3</span>), (<span class="number">1</span>, <span class="number">4</span>), (<span class="number">1</span>, <span class="number">5</span>),
+			(<span class="number">0</span>, <span class="number">6</span>), (<span class="number">0</span>, <span class="number">7</span>), (<span class="number">0</span>, <span class="number">8</span>), (<span class="number">1</span>, <span class="number">6</span>), (<span class="number">1</span>, <span class="number">7</span>), (<span class="number">1</span>, <span class="number">8</span>),
+			(<span class="number">2</span>, <span class="number">0</span>), (<span class="number">2</span>, <span class="number">1</span>), (<span class="number">2</span>, <span class="number">2</span>), (<span class="number">3</span>, <span class="number">0</span>), (<span class="number">3</span>, <span class="number">1</span>), (<span class="number">3</span>, <span class="number">2</span>),
+			(<span class="number">2</span>, <span class="number">3</span>), (<span class="number">2</span>, <span class="number">4</span>), (<span class="number">2</span>, <span class="number">5</span>), (<span class="number">3</span>, <span class="number">3</span>), (<span class="number">3</span>, <span class="number">4</span>), (<span class="number">3</span>, <span class="number">5</span>),
+			(<span class="number">2</span>, <span class="number">6</span>), (<span class="number">2</span>, <span class="number">7</span>), (<span class="number">2</span>, <span class="number">8</span>), (<span class="number">3</span>, <span class="number">6</span>), (<span class="number">3</span>, <span class="number">7</span>), (<span class="number">3</span>, <span class="number">8</span>),
+		].iter ().copied () {
+			val &gt;&gt;= <span class="number">1_u32</span>;
+			<span class="kw">if </span>squares [square_idx].val &amp; (<span class="number">1 </span>&lt;&lt; bit) != <span class="number">0 </span>{ val |= <span class="number">0x8_0000_0000</span>; }
 		}
+		<span class="self">Self </span>{ val }
 	}
 
+}
+
+<span class="kw">impl </span>&lt;Val: Int, <span class="kw">const </span>SIZE: u32&gt; Display <span class="kw">for </span>Square &lt;Val, SIZE&gt; {
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.val)
+	}
+}
+
+<span class="kw">impl </span>&lt;<span class="kw">const </span>SIZE: u32&gt; TryFrom &lt;u8&gt; <span class="kw">for </span>Square &lt;u8, SIZE&gt; {
+	<span class="kw">type </span>Error = ();
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>try_from (val: u8) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
+		<span class="kw">if </span><span class="number">1 </span>&lt;&lt; (SIZE * SIZE) &lt;= val.pan_u32 () { <span class="kw">return </span><span class="prelude-val">Err </span>(()) }
+		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ val })
+	}
+}
+
+<span class="kw">impl </span>&lt;<span class="kw">const </span>SIZE: u32&gt; TryFrom &lt;u16&gt; <span class="kw">for </span>Square &lt;u16, SIZE&gt; {
+	<span class="kw">type </span>Error = ();
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>try_from (val: u16) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
+		<span class="kw">if </span><span class="number">1 </span>&lt;&lt; (SIZE * SIZE) &lt;= val.pan_u32 () { <span class="kw">return </span><span class="prelude-val">Err </span>(()) }
+		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ val })
+	}
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
