@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Layer",""]],"type":[["LayerDepth",""],["LayerRange",""]]};
+window.SIDEBAR_ITEMS = {"type":[["LayerDepth",""],["LayerRange",""]]};
