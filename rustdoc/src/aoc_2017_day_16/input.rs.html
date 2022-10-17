@@ -17,23 +17,6 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
-<span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>model::Step;
 
@@ -43,31 +26,14 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { steps, params } = [ params, @delim <span class="string">&quot;,&quot; </span>steps ]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
 		<span class="kw">pub </span>reps_two: u64 = (<span class="string">&quot;REPS_TWO=&quot;</span>, <span class="number">1_000_000_000</span>, <span class="number">2_u64 </span>.. ),
-	}
-}
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params, @delim <span class="string">&quot;,&quot; </span>steps);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ steps, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="kw">for </span>item <span class="kw">in </span>Itertools::intersperse (
-				<span class="self">self</span>.steps.iter ().map (Either::Left),
-				Either::Right (<span class="string">&quot;,&quot;</span>)) {
-			Display::fmt (&amp; item, formatter) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok </span>(())
 	}
 }
 </code></pre></div>
