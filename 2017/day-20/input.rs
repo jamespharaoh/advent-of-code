@@ -7,27 +7,12 @@ pub struct Input {
 	pub params: InputParams,
 }
 
+struct_parser_display! {
+	Input { particles, params } = [ params, @lines particles ]
+}
+
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-	}
-}
-
-impl Input {
-	pub fn parse (input: & [& str]) -> GenResult <Self> {
-		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, @lines particles);
-			Ok (Self { particles, params })
-		})
-	}
-}
-
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		Display::fmt (& self.params, formatter) ?;
-		for particle in self.particles.iter () {
-			write! (formatter, "{}\n", particle) ?;
-		}
-		Ok (())
 	}
 }
