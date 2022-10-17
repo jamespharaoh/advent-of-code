@@ -37,29 +37,7 @@
 <span id="37">37</span>
 <span id="38">38</span>
 <span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-<span class="kw">pub use </span>particle::Particle;
 
 <span class="kw">pub type </span>Axis = pos::AxisXYZ;
 <span class="kw">pub type </span>Coord = i16;
@@ -69,52 +47,34 @@
 <span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 </span><span class="kw">pub enum </span>Aspect { Pos, Vel, Acc }
 
-<span class="kw">mod </span>particle {
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+</span><span class="kw">pub struct </span>Particle {
+	<span class="kw">pub </span>pos: Pos,
+	<span class="kw">pub </span>vel: Pos,
+	<span class="kw">pub </span>acc: Pos,
+}
 
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+<span class="macro">struct_parser_display! </span>{
+	Particle {
+		pos: Pos { x: pos_x, y: pos_y, z: pos_z },
+		vel: Pos { x: vel_x, y: vel_y, z: vel_z },
+		acc: Pos { x: acc_x, y: acc_y, z: acc_z },
+	} = [
+		<span class="string">&quot;p=&lt;&quot;</span>, pos_x, <span class="string">&quot;,&quot;</span>, pos_y, <span class="string">&quot;,&quot;</span>, pos_z, <span class="string">&quot;&gt;, &quot;</span>,
+		<span class="string">&quot;v=&lt;&quot;</span>, vel_x, <span class="string">&quot;,&quot;</span>, vel_y, <span class="string">&quot;,&quot;</span>, vel_z, <span class="string">&quot;&gt;, &quot;</span>,
+		<span class="string">&quot;a=&lt;&quot;</span>, acc_x, <span class="string">&quot;,&quot;</span>, acc_y, <span class="string">&quot;,&quot;</span>, acc_z, <span class="string">&quot;&gt;&quot;</span>,
+	]
+}
 
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	</span><span class="kw">pub struct </span>Particle {
-		<span class="kw">pub </span>pos: Pos,
-		<span class="kw">pub </span>vel: Pos,
-		<span class="kw">pub </span>acc: Pos,
-	}
-
-	<span class="kw">impl </span>Display <span class="kw">for </span>Particle {
-		<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter,
-				<span class="string">&quot;p=&lt;{},{},{}&gt;, v=&lt;{},{},{}&gt;, a=&lt;{},{},{}&gt;&quot;</span>,
-				<span class="self">self</span>.pos.x, <span class="self">self</span>.pos.y, <span class="self">self</span>.pos.z,
-				<span class="self">self</span>.vel.x, <span class="self">self</span>.vel.y, <span class="self">self</span>.vel.z,
-				<span class="self">self</span>.acc.x, <span class="self">self</span>.acc.y, <span class="self">self</span>.acc.z) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
+<span class="kw">impl </span>Index &lt;Aspect&gt; <span class="kw">for </span>Particle {
+	<span class="kw">type </span>Output = Pos;
+	<span class="kw">fn </span>index (&amp; <span class="self">self</span>, aspect: Aspect) -&gt; &amp; Pos {
+		<span class="kw">match </span>aspect {
+			Aspect::Pos =&gt; &amp; <span class="self">self</span>.pos,
+			Aspect::Vel =&gt; &amp; <span class="self">self</span>.vel,
+			Aspect::Acc =&gt; &amp; <span class="self">self</span>.acc,
 		}
 	}
-
-	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Particle {
-		<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-			<span class="macro">parse! </span>(parser,
-				<span class="string">&quot;p=&lt;&quot;</span>, pos_x, <span class="string">&quot;,&quot;</span>, pos_y, <span class="string">&quot;,&quot;</span>, pos_z, <span class="string">&quot;&gt;, &quot;</span>,
-				<span class="string">&quot;v=&lt;&quot;</span>, vel_x, <span class="string">&quot;,&quot;</span>, vel_y, <span class="string">&quot;,&quot;</span>, vel_z, <span class="string">&quot;&gt;, &quot;</span>,
-				<span class="string">&quot;a=&lt;&quot;</span>, acc_x, <span class="string">&quot;,&quot;</span>, acc_y, <span class="string">&quot;,&quot;</span>, acc_z, <span class="string">&quot;&gt;&quot;</span>);
-			<span class="kw">let </span>pos = Pos { x: pos_x, y: pos_y, z: pos_z };
-			<span class="kw">let </span>vel = Pos { x: vel_x, y: vel_y, z: vel_z };
-			<span class="kw">let </span>acc = Pos { x: acc_x, y: acc_y, z: acc_z };
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ pos, vel, acc })
-		}
-	}
-
-	<span class="kw">impl </span>Index &lt;Aspect&gt; <span class="kw">for </span>Particle {
-		<span class="kw">type </span>Output = Pos;
-		<span class="kw">fn </span>index (&amp; <span class="self">self</span>, aspect: Aspect) -&gt; &amp; Pos {
-			<span class="kw">match </span>aspect {
-				Aspect::Pos =&gt; &amp; <span class="self">self</span>.pos,
-				Aspect::Vel =&gt; &amp; <span class="self">self</span>.vel,
-				Aspect::Acc =&gt; &amp; <span class="self">self</span>.acc,
-			}
-		}
-	}
-
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_20" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
