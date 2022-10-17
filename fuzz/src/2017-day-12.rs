@@ -11,7 +11,7 @@ use input::Input;
 
 fuzz_target! (|input_str: & str| {
 	let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-	if let Ok (input) = Input::parse (& input_vec) {
+	if let Ok (input) = Input::parse_from_lines (& input_vec) {
 		let _ = logic::part_one (& input);
 		let _ = logic::part_two (& input);
 	}
@@ -38,7 +38,6 @@ mod mutator {
 
 	use super::*;
 	use input::InputPipe;
-	use input::MAX_PIPES;
 	use model::Village;
 
 	pub fn main (
@@ -52,7 +51,7 @@ mod mutator {
 
 		let input_str = str::from_utf8 (& data [0 .. size]).ok () ?;
 		let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-		let mut input = Input::parse (& input_vec).ok () ?;
+		let mut input = Input::parse_from_lines (& input_vec).ok () ?;
 
 		// apply a random transform
 
@@ -112,7 +111,7 @@ mod mutator {
 
 		pub fn add (input: & mut Input, rng: & mut StdRng) -> Option <()> {
 			let left = rng.gen_range (0 ..= 199);
-			let right_len = rng.gen_range (0 ..= MAX_PIPES);
+			let right_len = rng.gen_range (0 ..= 8);
 			let right =
 				iter::from_fn (|| Some (rng.gen_range (0 ..= 199)))
 					.take (right_len)
@@ -150,7 +149,7 @@ mod mutator {
 					.sorted ()
 					.dedup ()
 					.collect ();
-			if ! (2 ..= MAX_PIPES + 1).contains (& villages.len ()) { return None }
+			if ! (2 ..= 9).contains (& villages.len ()) { return None }
 			let left_idx = rng.gen_range (0 .. villages.len ());
 			let left = villages.remove (left_idx);
 			villages.shuffle (rng);
