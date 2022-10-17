@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":[["MAX_PIPES",""]],"struct":[["Input",""],["InputParams",""],["InputPipe",""]],"type":[["InputPipes",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Input",""],["InputParams",""],["InputPipe",""]],"type":[["InputPipes",""]]};
