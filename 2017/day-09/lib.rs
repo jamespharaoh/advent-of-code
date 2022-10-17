@@ -13,7 +13,7 @@ puzzle_info! {
 	name = "Stream Processing";
 	year = 2017;
 	day = 9;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }
