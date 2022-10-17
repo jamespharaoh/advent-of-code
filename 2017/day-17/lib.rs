@@ -38,6 +38,7 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
 
@@ -45,30 +46,7 @@ puzzle_info! {
 	name = "Spinlock";
 	year = 2017;
 	day = 17;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		"123",
-	];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("698", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("29108944", puzzle.part_two (EXAMPLE));
-	}
-
 }
