@@ -16,36 +16,7 @@ puzzle_info! {
 	name = "A Series of Tubes";
 	year = 2017;
 	day = 19;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		"     |          ",
-		"     |  +--+    ",
-		"     A  |  C    ",
-		" F---|----E|--+ ",
-		"     |  |  |  D ",
-		"     +B-+  +--+ ",
-		"                ",
-	];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("ABCDEF", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("38", puzzle.part_two (EXAMPLE));
-	}
-
 }
