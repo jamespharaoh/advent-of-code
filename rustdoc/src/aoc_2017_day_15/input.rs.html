@@ -22,24 +22,6 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -49,37 +31,19 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { start_a, start_b, params } = [
+		params,
+		<span class="string">&quot;Generator A starts with &quot;</span>, start_a, <span class="string">&quot;\n&quot;</span>,
+		<span class="string">&quot;Generator B starts with &quot;</span>, start_b,
+	]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>reps_one: u32 = (<span class="string">&quot;REPS_ONE=&quot;</span>, <span class="number">40_000_000</span>, <span class="number">0_u32 </span>.. ),
-		<span class="kw">pub </span>reps_two: u32 = (<span class="string">&quot;REPS_TWO=&quot;</span>, <span class="number">5_000_000</span>, <span class="number">0_u32 </span>.. ),
-	}
-}
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params,
-				<span class="string">&quot;Generator A starts with &quot;</span>, start_a, <span class="string">&quot;\n&quot;</span>,
-				<span class="string">&quot;Generator B starts with &quot;</span>, start_b);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ start_a, start_b, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="macro">write! </span>(formatter,
-			<span class="macro">concat! </span>(
-				<span class="string">&quot;Generator A starts with {start_a}\n&quot;</span>,
-				<span class="string">&quot;Generator B starts with {start_b}\n&quot;</span>,
-			),
-			start_a = <span class="self">self</span>.start_a,
-			start_b = <span class="self">self</span>.start_b,
-		) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(())
+		<span class="kw">pub </span>reps_one: u32 = (<span class="string">&quot;REPS_ONE=&quot;</span>, <span class="number">40_000_000</span>, <span class="number">0 </span>.. ),
+		<span class="kw">pub </span>reps_two: u32 = (<span class="string">&quot;REPS_TWO=&quot;</span>, <span class="number">5_000_000</span>, <span class="number">0 </span>.. ),
 	}
 }
 </code></pre></div>
