@@ -1,4 +1,5 @@
 use super::*;
+
 use cpu::Cpu;
 use cpu::Val;
 use input::Input;

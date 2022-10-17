@@ -9,14 +9,24 @@ pub struct Cpu <'inp> {
 	next: usize,
 }
 
-parse_display_enum! {
-
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum ChkOp { GtrEq = ">=", LsrEq = "<=", Eq = "==", NotEq = "!=", Gtr = ">", Lsr = "<" }
+	pub enum ChkOp {
+		GtrEq = [ ">=" ],
+		LsrEq = [ "<=" ],
+		Eq = [ "==" ],
+		NotEq = [ "!=" ],
+		Gtr = [ ">" ],
+		Lsr = [ "<" ],
+	}
+}
 
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum DstOp { Inc = "inc", Dec = "dec" }
-
+	pub enum DstOp {
+		Inc = [ "inc" ],
+		Dec = [ "dec" ],
+	}
 }
 
 #[ derive (Clone, Debug, Eq, PartialEq) ]
@@ -27,6 +37,19 @@ pub struct Instr <'inp> {
 	pub chk_reg: InpStr <'inp>,
 	pub chk_op: ChkOp,
 	pub chk_amt: Val,
+}
+
+struct_parser_display! {
+	input_lifetime = 'inp;
+	Instr <'inp> { dst_reg, dst_op, dst_amt, chk_reg, chk_op, chk_amt } = [
+		@str dst_reg = (|ch| { ch.is_ascii_lowercase () }, 1 ..= 8), " ",
+		dst_op, " ",
+		dst_amt, " ",
+		"if ",
+		@str chk_reg = (|ch| { ch.is_ascii_lowercase () }, 1 ..= 8), " ",
+		chk_op, " ",
+		chk_amt,
+	]
 }
 
 impl <'inp> Cpu <'inp> {
@@ -89,27 +112,4 @@ impl <'inp> Cpu <'inp> {
 		self.regs.insert (name.clone (), val);
 	}
 
-}
-
-impl <'inp> Display for Instr <'inp> {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter, "{} {} {} if {} {} {}",
-			self.dst_reg, self.dst_op, self.dst_amt,
-			self.chk_reg, self.chk_op, self.chk_amt) ?;
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for Instr <'inp> {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		let dst_reg = parser.word () ?.into ();
-		let dst_op = parser.item () ?;
-		let dst_amt = parser.int () ?;
-		parser.expect_word ("if") ?;
-		let chk_reg = parser.word () ?.into ();
-		let chk_op = parser.item () ?;
-		let chk_amt = parser.int () ?;
-		parser.end () ?;
-		Ok (Instr { dst_reg, dst_op, dst_amt, chk_reg, chk_op, chk_amt })
-	}
 }
