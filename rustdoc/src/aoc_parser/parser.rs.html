@@ -803,22 +803,6 @@
 <span id="803">803</span>
 <span id="804">804</span>
 <span id="805">805</span>
-<span id="806">806</span>
-<span id="807">807</span>
-<span id="808">808</span>
-<span id="809">809</span>
-<span id="810">810</span>
-<span id="811">811</span>
-<span id="812">812</span>
-<span id="813">813</span>
-<span id="814">814</span>
-<span id="815">815</span>
-<span id="816">816</span>
-<span id="817">817</span>
-<span id="818">818</span>
-<span id="819">819</span>
-<span id="820">820</span>
-<span id="821">821</span>
 </pre><pre class="rust"><code><span class="kw">use </span>aoc_inpstr::<span class="kw-2">*</span>;
 <span class="kw">use </span>aoc_misc::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>aoc_nums <span class="kw">as </span>nums;
@@ -1487,22 +1471,6 @@
 				val.parse () <span class="question-mark">?
 			</span>} <span class="kw">else </span>{ default.into () }
 		} <span class="kw">else </span>{ default.into () }
-	)
-}
-
-<span class="doccomment">/// Utility method to parse an optional parameter from the start of an input
-///
-</span><span class="attribute">#[ inline ]
-</span><span class="kw">pub fn </span>input_param_opt &lt;Val: FromStr&gt; (
-	input: &amp; <span class="kw-2">mut </span>&amp; [&amp; str],
-	prefix: &amp; str,
-) -&gt; GenResult &lt;<span class="prelude-ty">Option </span>&lt;Val&gt;&gt;
-		<span class="kw">where </span>Val::Err: Error + <span class="lifetime">&#39;static </span>{
-	<span class="prelude-val">Ok </span>(
-		<span class="kw">if let </span><span class="prelude-val">Some </span>(val) = input [<span class="number">0</span>].strip_prefix (prefix) {
-			* input = &amp; (* input) [<span class="number">1 </span>.. ];
-			<span class="prelude-val">Some </span>(val.parse () <span class="question-mark">?</span>)
-		} <span class="kw">else </span>{ <span class="prelude-val">None </span>}
 	)
 }
 
