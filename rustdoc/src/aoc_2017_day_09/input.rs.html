@@ -16,26 +16,22 @@
 <span id="16">16</span>
 <span id="17">17</span>
 <span id="18">18</span>
-<span id="19">19</span>
-<span id="20">20</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
 	<span class="kw">pub </span>input: InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;,
+	<span class="kw">pub </span>params: InputParams,
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; <span class="lifetime">&#39;inp </span>str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		<span class="kw">if </span>input.len () != <span class="number">1 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Input must be exactly one line&quot;</span>.into ()) }
-		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ input: InpStr::borrow (input [<span class="number">0</span>]) })
-	}
+<span class="macro">struct_parser_display! </span>{
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	Input &lt;<span class="lifetime">&#39;inp</span>&gt; { input, params } = [ params, input ]
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Display <span class="kw">for </span>Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="macro">write! </span>(formatter, <span class="string">&quot;{}\n&quot;</span>, <span class="self">self</span>.input) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(())
+<span class="macro">input_params! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
+	</span><span class="kw">pub struct </span>InputParams {
 	}
 }
 </code></pre></div>
