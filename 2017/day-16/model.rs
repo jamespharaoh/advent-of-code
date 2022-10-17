@@ -213,49 +213,13 @@ mod step {
 
 	use super::*;
 
-	#[ derive (Copy, Clone, Debug) ]
-	pub enum Step {
-		Spin (Pos),
-		Exchange (Pos, Pos),
-		Partner (Prog, Prog),
-	}
-
-	impl Display for Step {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			match * self {
-				Self::Spin (pos) => write! (formatter, "s{}", pos) ?,
-				Self::Exchange (pos_0, pos_1) => write! (formatter, "x{}/{}", pos_0, pos_1) ?,
-				Self::Partner (prg_0, prg_1) => write! (formatter, "p{}/{}", prg_0, prg_1) ?,
-			}
-			Ok (())
+	enum_decl_parser_display! {
+		#[ derive (Copy, Clone, Debug) ]
+		pub enum Step {
+			Spin (pos: Pos) = [ "s", pos ],
+			Exchange (pos_0: Pos, pos_1: Pos) = [ "x", pos_0, "/", pos_1 ],
+			Partner (prg_0: Prog, prg_1: Prog) = [ "p", prg_0, "/", prg_1 ],
 		}
-
-	}
-
-	impl <'inp> FromParser <'inp> for Step {
-
-		#[ inline ]
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			parser.any ()
-				.of (|parser| {
-					let pos = parser.expect ("s") ?.confirm ().item () ?;
-					Ok (Self::Spin (pos))
-				})
-				.of (|parser| {
-					let pos_0 = parser.expect ("x") ?.confirm ().item () ?;
-					let pos_1 = parser.expect ("/") ?.item () ?;
-					Ok (Self::Exchange (pos_0, pos_1))
-				})
-				.of (|parser| {
-					let prg_0 = parser.expect ("p") ?.confirm ().item () ?;
-					let prg_1 = parser.expect ("/") ?.item () ?;
-					Ok (Self::Partner (prg_0, prg_1))
-				})
-				.done ()
-		}
-
 	}
 
 }

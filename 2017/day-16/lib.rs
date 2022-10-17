@@ -35,6 +35,7 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
 pub mod model;
@@ -43,30 +44,7 @@ puzzle_info! {
 	name = "Permutation Promenade";
 	year = 2017;
 	day = 16;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		"s1,x3/4,pe/b",
-	];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("paedcbfghijklmno", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("ghidjklmnopabcef", puzzle.part_two (EXAMPLE));
-	}
-
 }
