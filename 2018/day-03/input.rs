@@ -1,5 +1,7 @@
 use super::*;
-use model::Claim;
+
+use model::Coord;
+use model::Id;
 
 #[ derive (Clone, Debug) ]
 pub struct Input {
@@ -7,27 +9,27 @@ pub struct Input {
 	pub params: InputParams,
 }
 
+struct_parser_display! {
+	Input { claims, params } = [ params, @lines claims ]
+}
+
+#[ derive (Clone, Copy, Debug) ]
+pub struct Claim {
+	pub id: Id,
+	pub left: Coord,
+	pub top: Coord,
+	pub width: Coord,
+	pub height: Coord,
+}
+
+struct_parser_display! {
+	Claim { id, left, top, width, height } = [
+		"#", id, " @ ", left, ",", top, ": ", width, "x", height,
+	]
+}
+
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-	}
-}
-
-impl Input {
-	pub fn parse (input: & [& str]) -> GenResult <Self> {
-		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, @lines claims);
-			Ok (Self { claims, params })
-		})
-	}
-}
-
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		Display::fmt (& self.params, formatter) ?;
-		for claim in self.claims.iter () {
-			write! (formatter, "{}\n", claim) ?;
-		}
-		Ok (())
 	}
 }

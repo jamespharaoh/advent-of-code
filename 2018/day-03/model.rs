@@ -1,32 +1,31 @@
 use super::*;
 
+use input::Input;
+
 pub type Coord = u16;
 pub type Id = u32;
 pub type Pos = pos::PosYX <Coord>;
 
-#[ derive (Clone, Copy, Debug) ]
+#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 pub struct Claim {
 	pub id: Id,
 	pub square: Square,
 }
 
-impl Display for Claim {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter,
-			"#{id} @ {left},{top}: {width}x{height}",
-			id = self.id,
-			left = self.square.left (),
-			top = self.square.top (),
-			width = self.square.width (),
-			height = self.square.height ())
-	}
-}
-
-impl <'inp> FromParser <'inp> for Claim {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, "#", id, " @ ", left, ",", top, ": ", width, "x", height);
-		let square = Square::new_size (left, top, width, height).ok_or_else (|| parser.err ()) ?;
-		Ok (Self { id, square })
+impl Claim {
+	pub fn build_vec (input: & Input) -> GenResult <Vec <Self>> {
+		let mut result = Vec::new ();
+		let mut ids = HashSet::new ();
+		for claim in & input.claims {
+			if ! ids.insert (claim.id) {
+				return Err (format! ("Duplicated claim id: {}", claim.id).into ());
+			}
+			result.push (Self {
+				id: claim.id,
+				square: Square::new_size (claim.left, claim.top, claim.width, claim.height) ?,
+			});
+		}
+		Ok (result)
 	}
 }
 
@@ -41,19 +40,23 @@ pub struct Square {
 impl Square {
 
 	#[ inline ]
-	#[ must_use ]
-	pub const fn new (left: Coord, top: Coord, right: Coord, bottom: Coord) -> Option <Self> {
-		if right <= left || bottom <= top { return None }
-		Some (Self { left, top, right, bottom })
+	pub fn new (left: Coord, top: Coord, right: Coord, bottom: Coord) -> GenResult <Self> {
+		if right <= left || bottom <= top {
+			return Err (format! ("Invalid square: left={left} top={top} right={right} \
+				bottom={bottom}").into ());
+		}
+		Ok (Self { left, top, right, bottom })
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn new_size (left: Coord, top: Coord, width: Coord, height: Coord) -> Option <Self> {
-		if width == 0 || height == 0 { return None }
-		let right = Coord::add_2 (left, width).ok () ?;
-		let bottom = Coord::add_2 (top, height).ok () ?;
-		Some (Self { left, top, right, bottom })
+	pub fn new_size (left: Coord, top: Coord, width: Coord, height: Coord) -> GenResult <Self> {
+		if width == 0 || height == 0 {
+			return Err (format! ("Invalid square: left={left} top={top} width={width} \
+				height={height}").into ());
+		}
+		let right = chk! (left + width) ?;
+		let bottom = chk! (top + height) ?;
+		Ok (Self { left, top, right, bottom })
 	}
 
 	#[ inline ]

@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {

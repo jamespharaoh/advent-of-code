@@ -1,12 +1,13 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Claim;
 use model::Square;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
-	let claims = sanitise (input) ?;
+	let claims = Claim::build_vec (input) ?;
 	if claims.is_empty () { return Ok (0) }
 	const NUM_SPLITS: u32 = 16;
 	let calc_split = |low: u16, high: u16, idx: u32|
@@ -17,7 +18,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	let mut squares_xy: Vec <Square> = Vec::new ();
 	let mut count_overlaps = CountOverlaps::default ();
 	for part_x in 0 .. NUM_SPLITS {
-		let bound = some_or! (Square::new (
+		let bound = ok_or! (Square::new (
 			calc_split (bound.left (), bound.right (), part_x),
 			bound.top (),
 			calc_split (bound.left (), bound.right (), part_x + 1),
@@ -27,7 +28,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		squares_x.extend (claims.iter ()
 			.filter_map (|claim| Square::overlap (bound, claim.square)));
 		for part_y in 0 .. NUM_SPLITS {
-			let bound = some_or! (Square::new (
+			let bound = ok_or! (Square::new (
 				bound.left (),
 				calc_split (bound.top (), bound.bottom (), part_y),
 				bound.right (),
@@ -69,7 +70,7 @@ impl CountOverlaps {
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
-	let mut included = sanitise (input) ?;
+	let mut included = Claim::build_vec (input) ?;
 	let mut included_temp = Vec::new ();
 	let mut excluded: Vec <Claim> = Vec::new ();
 	while let Some (claim_0) = included.pop () {
@@ -91,15 +92,4 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		mem::swap (& mut included, & mut included_temp);
 	}
 	Err ("No solution found".into ())
-}
-
-fn sanitise (input: & Input) -> GenResult <Vec <Claim>> {
-	let mut claims = input.claims.clone ();
-	claims.sort_by_key (|claim| claim.id);
-	if let Some ((claim, _)) = claims.iter ()
-			.tuple_windows::<(_, _)> ()
-			.find (|& (left, right)| left.id == right.id) {
-		return Err (format! ("Duplicated claim id: {}", claim.id).into ());
-	}
-	Ok (claims)
 }
