@@ -8,6 +8,7 @@ use aoc_common::*;
 use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
+mod examples;
 pub mod input;
 pub mod logic;
 pub mod model;
@@ -16,39 +17,7 @@ puzzle_info! {
 	name = "Settlers of The North Pole";
 	year = 2018;
 	day = 18;
-	parse = |input_lines| input::Input::parse_from_lines (input_lines);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		".#.#...|#.",
-		".....#|##|",
-		".|..|...#.",
-		"..|#.....#",
-		"#.#|||#|#|",
-		"...#.||...",
-		".|....|...",
-		"||...#|.#|",
-		"|.||||..|.",
-		"...#.|..|.",
-	];
-
-	#[ test ]
-	fn test_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("1147", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn test_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("0", puzzle.part_two (EXAMPLE));
-	}
-
 }
