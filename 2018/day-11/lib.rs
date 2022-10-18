@@ -7,9 +7,9 @@
 use aoc_common::*;
 use aoc_grid::prelude::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
-pub mod model;
 
 puzzle_info! {
 	name = "Chronal Charge";
@@ -20,23 +20,10 @@ puzzle_info! {
 	part_two = |input| logic::part_two (& input);
 }
 
-#[ cfg (test) ]
-mod examples {
-
+pub mod model {
 	use super::*;
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("33,45", puzzle.part_one (& [ "18" ]));
-		assert_eq_ok! ("21,61", puzzle.part_one (& [ "42" ]));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("90,269,16", puzzle.part_two (& [ "18" ]));
-		assert_eq_ok! ("232,251,12", puzzle.part_two (& [ "42" ]));
-	}
-
+	pub type Coord = i16;
+	pub type Grid = GridBuf <Vec <Power>, Pos, 2>;
+	pub type Power = i32;
+	pub type Pos = aoc_pos::PosYX <Coord>;
 }
