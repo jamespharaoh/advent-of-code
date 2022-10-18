@@ -4,30 +4,32 @@ pub type Coord = i16;
 pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 
 	#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
 	pub enum Tile {
 		#[ default ]
-		DrySand = ".",
-		WetSand = "|",
-		Water = "~",
-		Clay = "#",
+		DrySand = [ "." ],
+		WetSand = [ "|" ],
+		Water = [ "~" ],
+		Clay = [ "#" ],
 	}
 
 }
 
-#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-pub enum ClayRange {
-	Horiz { y: Coord, x_start: Coord, x_end: Coord },
-	Vert { x: Coord, y_start: Coord, y_end: Coord },
-}
+enum_decl_parser_display! {
 
-enum_parser_display! (
-	ClayRange,
-	Horiz { y, x_start, x_end } = [ "y=", y, ", x=", x_start, "..", x_end ],
-	Vert { x, y_start, y_end } = [ "x=", x, ", y=", y_start, "..", y_end ],
-);
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum ClayRange {
+		Horiz { y: Coord, x_start: Coord, x_end: Coord } = [
+			"y=", y, ", x=", x_start, "..", x_end,
+		],
+		Vert { x: Coord, y_start: Coord, y_end: Coord } = [
+			"x=", x, ", y=", y_start, "..", y_end,
+		],
+	}
+
+}
 
 impl ClayRange {
 
