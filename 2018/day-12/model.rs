@@ -3,15 +3,13 @@
 use super::*;
 use input::Input;
 
-parse_display_enum! {
-
+enum_decl_parser_display! {
 	/// Simple enum to represent the state of a pot
 	///
 	/// This represents a plant pot, and determines whether it contains a [`Plant`] or is [`Empty`].
 	///
 	#[ derive (Clone, Copy, Debug) ]
-	pub enum Pot { Empty = ".", Plant = "#" }
-
+	pub enum Pot { Empty = [ "." ], Plant = [ "#" ] }
 }
 
 impl Pot {
