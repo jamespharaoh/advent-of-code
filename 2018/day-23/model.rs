@@ -10,10 +10,7 @@ pub struct Nanobot {
 }
 
 struct_parser_display! {
-	Nanobot {
-		pos: Pos { x, y, z },
-		radius,
-	} = [
+	Nanobot { pos: Pos { x, y, z }, radius } = [
 		"pos=<", x, ",", y, ",", z, ">, ",
 		"r=", radius,
 	]
@@ -76,11 +73,7 @@ pub struct CoordRange {
 impl CoordRange {
 
 	pub fn new (pos: Pos, radius: Coord, sign: Pos) -> NumResult <Self> {
-		let base = Coord::add_3 (
-			Coord::mul_2 (pos.x, sign.x) ?,
-			Coord::mul_2 (pos.y, sign.y) ?,
-			Coord::mul_2 (pos.z, sign.z) ?,
-		) ?;
+		let base = chk! (pos.x * sign.x + pos.y * sign.y + pos.z * sign.z) ?;
 		Ok (Self {
 			start: Coord::sub_2 (base, radius) ?,
 			end: Coord::add_3 (base, radius, Coord::ONE) ?,

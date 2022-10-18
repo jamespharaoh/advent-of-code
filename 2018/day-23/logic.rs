@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Coord;
 use model::Pos;
@@ -77,9 +78,7 @@ fn sanity_check (input: & Input) -> GenResult <()> {
 }
 
 fn get_dist (pos_0: Pos, pos_1: Pos) -> NumResult <Coord> {
-	Coord::add_3 (
-		Coord::sub_2 (pos_0.x, pos_1.x) ?.abs (),
-		Coord::sub_2 (pos_0.y, pos_1.y) ?.abs (),
-		Coord::sub_2 (pos_0.z, pos_1.z) ?.abs (),
-	)
+	chk! (chk! (pos_0.x - pos_1.x) ?.abs (),
+		+ chk! (pos_0.y - pos_1.y) ?.abs (),
+		+ chk! (pos_0.z - pos_1.z) ?.abs ())
 }
