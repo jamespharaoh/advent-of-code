@@ -6,36 +6,20 @@
 
 use aoc_common::*;
 
+mod examples;
 pub mod input;
 pub mod logic;
-pub mod model;
 
 puzzle_info! {
 	name = "Electromagnetic Moat";
 	year = 2017;
 	day = 24;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }
 
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [ "0/2", "2/2", "2/3", "3/4", "3/5", "0/1", "10/1", "9/10" ];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("31", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("19", puzzle.part_two (EXAMPLE));
-	}
-
+pub mod model {
+	pub type Components = u64;
+	pub type Port = u16;
 }

@@ -1,12 +1,13 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Components;
 use model::Port;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
-	sanity_check (input) ?;
+	check_input (input) ?;
 	Ok (
 		bridges_iter (input)
 			.map (|comps| strength (input, comps))
@@ -16,7 +17,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
-	sanity_check (input) ?;
+	check_input (input) ?;
 	let longest =
 		bridges_iter (input)
 			.map (Components::count_ones)
@@ -31,7 +32,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	)
 }
 
-fn sanity_check (input: & Input) -> GenResult <()> {
+fn check_input (input: & Input) -> GenResult <()> {
 	let mut comps = input.comps.clone ();
 	if comps.len () > Components::BITS.pan_usize () {
 		return Err ("Too many components".into ());
