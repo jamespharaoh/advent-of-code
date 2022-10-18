@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
@@ -86,11 +87,11 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			data_iter.by_ref ()
 				.take (frame.num_metadata.pan_usize ())
 				.map (|idx| {
-					let idx = usize::sub_2 (idx.pan_usize (), 1) ?;
+					let idx = chk! (idx.pan_usize () - 1) ?;
 					Ok::<_, Overflow> (frame.child_values.get (idx).copied ())
 				})
 				.flatten_ok ()
-				.fold_ok (0, |sum, item| sum + item) ?
+				.try_fold (0, |sum, item| { let item = item ?; chk! (sum + item) }) ?
 		};
 		stack.pop ();
 		if let Some (frame) = stack.last_mut () {
