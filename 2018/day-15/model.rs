@@ -6,10 +6,16 @@ pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type SeenGrid = GridBuf <Vec <bool>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 
 	#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
-	pub enum Tile { #[default] Open = ".", Cavern = "#", Goblin = "G", Elf = "E" }
+	pub enum Tile {
+		#[ default ]
+		Open = [ "." ],
+		Cavern = [ "#" ],
+		Goblin = [ "G" ],
+		Elf = [ "E" ],
+	}
 
 }
 
