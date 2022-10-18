@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use cpu::Cpu;
 use cpu::Instr;
 use cpu::Val;

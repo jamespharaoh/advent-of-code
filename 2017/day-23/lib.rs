@@ -35,6 +35,7 @@
 use aoc_common::*;
 use aoc_2017_cpu as cpu;
 
+mod examples;
 pub mod input;
 pub mod logic;
 
@@ -42,34 +43,7 @@ puzzle_info! {
 	name = "Coprocessor Conflagration";
 	year = 2017;
 	day = 23;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		"add a 10",
-		"set h 1",
-		"mul h a",
-		"sub a 1",
-		"jnz a -2",
-	];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("10", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("39916800", puzzle.part_two (EXAMPLE));
-	}
-
 }
