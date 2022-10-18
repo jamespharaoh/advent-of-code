@@ -1,13 +1,42 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
+use input::Dir;
 use input::Input;
-use model::Dir;
-use model::Slot;
-use model::State;
+use input::Slot;
+use input::State;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
-//println! ("{input}");
+	let states = get_states (input) ?;
+	let mut left = Vec::new ();
+	let mut right = Vec::new ();
+	let mut cur = Slot::Zero;
+	let mut state_id = input.begin_state;
+	for _ in 0 .. input.num_steps {
+		let state = & states [& state_id];
+		let (write, dir, new_state_id) = match cur {
+			Slot::Zero => (state.false_write, state.false_dir, state.false_state),
+			Slot::One => (state.true_write, state.true_dir, state.true_state),
+		};
+		match dir {
+			Dir::Left => { right.push (write); cur = left.pop ().unwrap_or (Slot::Zero); },
+			Dir::Right => { left.push (write); cur = right.pop ().unwrap_or (Slot::Zero); },
+		}
+		state_id = new_state_id;
+	}
+	Ok (
+		iter::empty ()
+			.chain (left.iter ())
+			.chain (iter::once (& cur))
+			.chain (right.iter ())
+			.filter (|&& val| val == Slot::One)
+			.count ()
+			.pan_u32 ()
+	)
+}
+
+fn get_states (input: & Input) -> GenResult <HashMap <char, State>> {
 	let states: HashMap <char, State> =
 		input.states.iter ().copied ()
 			.map (|state| (state.id, state))
@@ -21,35 +50,5 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 			.find (|& (_, dst_id)| ! states.contains_key (& dst_id)) {
 		return Err (format! ("State {src_id} points to nonexistent state {dst_id}").into ());
 	}
-	let mut left = Vec::new ();
-	let mut right = Vec::new ();
-	let mut cur = Slot::Zero;
-	let mut state_id = input.begin_state;
-	for _ in 0 .. input.num_steps {
-		let state = & states [& state_id];
-		let (write, dir, new_state_id) = match cur {
-			Slot::Zero => (state.false_write, state.false_dir, state.false_state),
-			Slot::One => (state.true_write, state.true_dir, state.true_state),
-		};
-		match dir {
-			Dir::Left => {
-				right.push (write);
-				cur = left.pop ().unwrap_or (Slot::Zero);
-			},
-			Dir::Right => {
-				left.push (write);
-				cur = right.pop ().unwrap_or (Slot::Zero);
-			},
-		}
-		state_id = new_state_id;
-	}
-	Ok (
-		iter::empty ()
-			.chain (left.iter ())
-			.chain (iter::once (& cur))
-			.chain (right.iter ())
-			.filter (|&& val| val == Slot::One)
-			.count ()
-			.pan_u32 ()
-	)
+	Ok (states)
 }

@@ -11,7 +11,7 @@ use input::Input;
 
 fuzz_target! (|input_str: & str| {
 	let input_vec: Vec <& str> = input_str.trim_end ().split ('\n').collect ();
-	if let Ok (mut input) = Input::parse (& input_vec) {
+	if let Ok (mut input) = Input::parse_from_lines (& input_vec) {
 		input.num_steps = cmp::min (input.num_steps, 1_000_000);
 		let _ = logic::part_one (& input);
 	}
@@ -37,9 +37,10 @@ fuzz_mutator! (|data: & mut [u8], size: usize, max_size: usize, seed: u32| {
 mod mutator {
 
 	use super::*;
-	use model::Dir;
-	use model::Slot;
-	use model::State;
+
+	use input::Dir;
+	use input::Slot;
+	use input::State;
 
 	pub fn main (
 		data: & mut [u8],
@@ -52,7 +53,7 @@ mod mutator {
 
 		let input_str = str::from_utf8 (& data [0 .. size]).ok () ?;
 		let input_vec: Vec <& str> = input_str.trim ().split ('\n').collect ();
-		let mut input = Input::parse (& input_vec).ok () ?;
+		let mut input = Input::parse_from_lines (& input_vec).ok () ?;
 
 		// apply a random transform
 
