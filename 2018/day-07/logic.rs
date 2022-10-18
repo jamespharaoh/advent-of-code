@@ -5,11 +5,7 @@ use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <String> {
 
-	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
-	for & (before, after) in input.deps.iter () {
-		deps.entry (before).or_insert_with (HashSet::new);
-		deps.entry (after).or_insert_with (HashSet::new).insert (before);
-	}
+	let deps = get_deps (input);
 
 	let mut remaining: HashSet <char> = deps.keys ().copied ().collect ();
 	let mut completed: HashSet <char> = HashSet::new ();
@@ -31,28 +27,26 @@ pub fn part_one (input: & Input) -> GenResult <String> {
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
 
-	let mut deps: HashMap <char, HashSet <char>> = HashMap::new ();
-	for & (before, after) in input.deps.iter () {
-		deps.entry (before).or_insert_with (HashSet::new);
-		deps.entry (after).or_insert_with (HashSet::new).insert (before);
-	}
+	let deps = get_deps (input);
 
 	let mut remaining: HashSet <char> = deps.keys ().copied ().collect ();
 	let mut completed: HashSet <char> = HashSet::new ();
 	let mut queue: HashSet <char> = HashSet::new ();
 	let mut workers: Vec <Option <(char, u32)>> =
-		iter::repeat (None)
-			.take (input.params.num_workers.pan_usize ())
-			.collect ();
+		vec! [None; input.params.num_workers.pan_usize ()];
 	let mut elapsed: u32 = 0;
+	let mut newly_completed = true;
 
 	while ! remaining.is_empty ()
 			|| ! queue.is_empty ()
 			|| workers.iter ().any (Option::is_some) {
 
-		for & next_step in remaining.iter ()
-				.filter (|step| deps [step].iter ().all (|dep| completed.contains (dep))) {
-			queue.insert (next_step);
+		if newly_completed {
+			for & next_step in remaining.iter ()
+					.filter (|step| deps [step].iter ().all (|dep| completed.contains (dep))) {
+				queue.insert (next_step);
+			}
+			newly_completed = false;
 		}
 
 		for worker in workers.iter_mut ().filter (|worker| worker.is_none ()) {
@@ -75,10 +69,20 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			if worker.1 > 0 { continue }
 			completed.insert (worker.0);
 			* worker_opt = None;
+			newly_completed = true;
 		}
 
 	}
 
 	Ok (elapsed)
 
+}
+
+fn get_deps (input: & Input) -> HashMap <char, Vec <char>> {
+	let mut deps: HashMap <char, Vec <char>> = HashMap::new ();
+	for & (before, after) in input.deps.iter () {
+		deps.entry (before).or_insert_with (Vec::new);
+		deps.entry (after).or_insert_with (Vec::new).push (before);
+	}
+	deps
 }
