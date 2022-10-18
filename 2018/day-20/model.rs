@@ -12,26 +12,26 @@ mod room {
 
 	use super::*;
 
-	parse_display_enum! {
+	enum_decl_parser_display! {
 		#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		pub enum Room {
 			#[ default ]
-			None = "  ",
-			North = "┸ ",
-			South = "┰ ",
-			NorthSouth = "┃ ",
-			East = "━━",
-			NorthEast = "┗━",
-			SouthEast = "┏━",
-			NorthSouthEast = "┣━",
-			West = "━ ",
-			NorthWest = "┛ ",
-			SouthWest = "┓ ",
-			NorthSouthWest = "┫ ",
-			EastWest = "━━",
-			NorthEastWest = "┻━",
-			SouthEastWest = "┳━",
-			NorthSouthEastWest = "╋━",
+			None = [ "  " ],
+			North = [ "┸ " ],
+			South = [ "┰ " ],
+			NorthSouth = [ "┃ " ],
+			East = [ "━━" ],
+			NorthEast = [ "┗━" ],
+			SouthEast = [ "┏━" ],
+			NorthSouthEast = [ "┣━" ],
+			West = [ "━ " ],
+			NorthWest = [ "┛ " ],
+			SouthWest = [ "┓ " ],
+			NorthSouthWest = [ "┫ " ],
+			EastWest = [ "━━" ],
+			NorthEastWest = [ "┻━" ],
+			SouthEastWest = [ "┳━" ],
+			NorthSouthEastWest = [ "╋━" ],
 		}
 	}
 
@@ -118,14 +118,16 @@ mod dir {
 
 	use super::*;
 
-	parse_display_enum! {
+	enum_decl_parser_display! {
+
 		#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 		pub enum RouteDir {
-			North = "N",
-			South = "S",
-			East = "E",
-			West = "W",
+			North = [ "N" ],
+			South = [ "S" ],
+			East = [ "E" ],
+			West = [ "W" ],
 		}
+
 	}
 
 	impl RouteDir {
@@ -164,7 +166,9 @@ mod dir {
 #[ derive (Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 pub struct RouteRegex (RouteRegexString);
 
-struct_parser_display! (RouteRegex (string) = [ "^", string, "$" ]);
+struct_parser_display! {
+	RouteRegex (string) = [ "^", string, "$" ]
+}
 
 impl Deref for RouteRegex {
 	type Target = RouteRegexString;
@@ -183,16 +187,20 @@ impl Deref for RouteRegexString {
 	}
 }
 
-struct_parser_display! (RouteRegexString (items) = [ @collect items ]);
-
-#[ derive (Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-pub enum RouteRegexItem {
-	Span (Rc <[RouteDir]>),
-	Branch (Rc <[RouteRegexString]>),
+struct_parser_display! {
+	RouteRegexString (items) = [ @collect items ]
 }
 
-enum_parser_display! {
-	RouteRegexItem,
-	Branch (branches) = [ "(", @confirm, @delim "|" branches, ")" ],
-	Span (dirs) = [ @confirm, @collect_some dirs ],
+enum_decl_parser_display! {
+
+	#[ derive (Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum RouteRegexItem {
+		Branch (branches: Rc <[RouteRegexString]>) = [
+			"(", @confirm, @delim "|" branches, ")",
+		],
+		Span (dirs: Rc <[RouteDir]>) = [
+			@confirm, @collect_some dirs,
+		],
+	}
+
 }
