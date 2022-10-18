@@ -39,43 +39,10 @@ puzzle_info! {
 	name = "Chronal Conversion";
 	year = 2018;
 	day = 21;
-	parse = |input_lines| input::Input::parse_from_lines (input_lines);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 	commands = [
 		( name = "analyse"; method = analyser::run; ),
 	];
-}
-
-#[ cfg (test) ]
-mod examples {
-
-	use super::*;
-
-	const EXAMPLE: & [& str] = & [
-		"#ip 5",
-		"seti 9 0 1",
-		"addi 1 1 1", // incr
-		"eqri 1 20 2",
-		"addr 5 2 5",
-		"addi 5 2 5", // goto check
-		"seti 9 0 1",
-		"seti 0 0 5", // goto incr
-		"eqrr 1 0 2", // check
-		"addr 5 2 5",
-		"seti 0 0 5", // goto incr
-	];
-
-	#[ test ]
-	fn part_one () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("10", puzzle.part_one (EXAMPLE));
-	}
-
-	#[ test ]
-	fn part_two () {
-		let puzzle = puzzle_metadata ();
-		assert_eq_ok! ("19", puzzle.part_two (EXAMPLE));
-	}
-
 }
