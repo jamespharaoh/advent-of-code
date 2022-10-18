@@ -9,9 +9,9 @@ pub struct Input {
 	pub params: InputParams,
 }
 
-struct_parser_display! (Input { ip, instrs, params } = [
-	params, "#ip ", ip, "\n", @lines instrs,
-]);
+struct_parser_display! {
+	Input { ip, instrs, params } = [ params, "#ip ", ip, "\n", @lines instrs ]
+}
 
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
