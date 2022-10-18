@@ -8,20 +8,21 @@ pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 pub type Turn = pos::Turn2d;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 
 	#[ derive (Clone, Copy, Debug, Default) ]
 	pub enum Tile {
-		#[default] Empty = " ",
-		Vert = "|",
-		Horiz = "-",
-		Crossing = "+",
-		CornerFwd = "/",
-		CornerBck = "\\",
-		CartUp = "^",
-		CartDown = "v",
-		CartLeft = "<",
-		CartRight = ">",
+		#[ default ]
+		Empty = [ " " ],
+		Vert = [ "|" ],
+		Horiz = [ "-" ],
+		Crossing = [ "+" ],
+		CornerFwd = [ "/" ],
+		CornerBck = [ "\\" ],
+		CartUp = [ "^" ],
+		CartDown = [ "v" ],
+		CartLeft = [ "<" ],
+		CartRight = [ ">" ],
 	}
 
 }
