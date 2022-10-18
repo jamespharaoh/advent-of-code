@@ -6,13 +6,13 @@ pub type Grid = GridBuf <Vec <Node>, Pos, 2>;
 pub type Pos = aoc_pos::PosRowCol <Coord>;
 pub type Turn = aoc_pos::Turn2d;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, PartialEq) ]
 	pub enum Node {
 		#[ default ]
-		Clean = ".",
-		Weakened = "W",
-		Infected = "#",
-		Flagged = "F",
+		Clean = [ "." ],
+		Weakened = [ "W" ],
+		Infected = [ "#" ],
+		Flagged = [ "F" ],
 	}
 }

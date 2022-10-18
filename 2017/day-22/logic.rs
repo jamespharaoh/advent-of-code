@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Dir;
 use model::Grid;
@@ -37,7 +38,10 @@ fn calc_result (
 	num_bursts: u32,
 	state_fn: impl Fn (Node) -> (Turn, Node, bool),
 ) -> GenResult <u64> {
-	let mut nodes = input.nodes.clone ();
+	let mut nodes = input.nodes.translate (
+		Pos::new (
+			- input.nodes.size ().row / 2,
+			- input.nodes.size ().col / 2)) ?;
 	let mut pos = Pos::ZERO;
 	let mut dir = Dir::Up;
 	let mut num_infected = 0;
