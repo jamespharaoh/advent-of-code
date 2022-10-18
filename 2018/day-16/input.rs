@@ -9,21 +9,13 @@ pub struct Input {
 	pub params: InputParams,
 }
 
-impl <'inp> FromParser <'inp> for Input {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, params, @delim "\n\n" samples, "\n\n\n\n", @lines instrs);
-		Ok (Self { samples, instrs, params })
-	}
-}
-
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter,
-			"{params}{samples}\n\n\n\n{instrs}\n",
-			params = self.params,
-			samples = (& self.samples).display_delim ("\n\n"),
-			instrs = (& self.instrs).display_delim ("\n"))
-	}
+struct_parser_display! {
+	Input { samples, instrs, params } = [
+		params,
+		@delim "\n\n" samples,
+		"\n\n\n\n",
+		@lines instrs,
+	]
 }
 
 input_params! {

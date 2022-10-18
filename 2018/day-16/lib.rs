@@ -15,7 +15,7 @@ puzzle_info! {
 	name = "Chronal Classification";
 	year = 2018;
 	day = 16;
-	parse = |input_lines| input::Input::parse_from_lines (input_lines);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }
