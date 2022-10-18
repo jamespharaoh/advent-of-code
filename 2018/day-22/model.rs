@@ -5,13 +5,15 @@ pub type Grid = GridBuf <Vec <Region>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 pub type Val = u32;
 
-parse_display_enum! {
+enum_decl_parser_display! {
+
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Region {
-		Rocky = ".",
-		Wet = "=",
-		Narrow = "|",
+		Rocky = [ "." ],
+		Wet = [ "=" ],
+		Narrow = [ "|" ],
 	}
+
 }
 
 impl Region {
