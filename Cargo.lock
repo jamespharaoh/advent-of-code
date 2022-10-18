@@ -878,7 +878,6 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
- "aoc-grid",
  "aoc-pos",
 ]
 

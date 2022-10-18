@@ -1,8 +1,9 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
+use input::Event;
 use input::Input;
-use model::Event;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	let guard_min_sleep = analyse (input) ?;

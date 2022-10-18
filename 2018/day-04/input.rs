@@ -1,5 +1,7 @@
 use super::*;
-use model::Entry;
+
+use model::Date;
+use model::HourMinute;
 
 #[ derive (Clone, Debug) ]
 pub struct Input {
@@ -7,27 +9,32 @@ pub struct Input {
 	pub params: InputParams,
 }
 
+struct_parser_display! {
+	Input { entries, params } = [ params, @lines entries ]
+}
+
+#[ derive (Clone, Copy, Debug) ]
+pub struct Entry {
+	pub date: Date,
+	pub time: HourMinute,
+	pub event: Event,
+}
+
+struct_parser_display! {
+	Entry { date, time, event } = [ "[", date, " ", time, "] ", event ]
+}
+
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug) ]
+	pub enum Event {
+		BeginsShift (id: u32) = [ "Guard #", id, " begins shift" ],
+		FallsAsleep = [ "falls asleep" ],
+		WakesUp = [ "wakes up" ],
+	}
+}
+
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-	}
-}
-
-impl Input {
-	pub fn parse (input: & [& str]) -> GenResult <Self> {
-		Parser::wrap_lines (input, |parser| {
-			parse! (parser, params, @lines entries);
-			Ok (Self { entries, params })
-		})
-	}
-}
-
-impl Display for Input {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		Display::fmt (& self.params, formatter) ?;
-		for entry in self.entries.iter () {
-			write! (formatter, "{}\n", entry) ?;
-		}
-		Ok (())
 	}
 }

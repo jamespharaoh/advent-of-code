@@ -1,137 +1,78 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
-use model::Grid;
+use model::Coord;
 use model::Pos;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 
-	sanity_check (input) ?;
+	check_input (input) ?;
 
 	// work out size
 
-	let height = input.posns.iter ().map (|& pos| pos.y + 1_i32).max ().unwrap ();
-	let width = input.posns.iter ().map (|& pos| pos.x + 1_i32).max ().unwrap ();
+	let (start, end) = input.posns.iter ()
+		.fold (None, |state: Option <(Pos, Pos)>, & pos| state
+			.map (|(start, end)| (
+				Pos::new (cmp::min (start.y, pos.y), cmp::min (start.x, pos.x)),
+				Pos::new (cmp::max (end.y, pos.y), cmp::max (end.x, pos.x)),
+			))
+			.or (Some ((pos, pos))))
+		.unwrap ();
 
-	// initialize grid
+	// work out area sizes, excluding any which touch the sides
 
-	let mut grid = Grid::new_size (Pos::new (height, width));
-	let mut next_id: u8 = 1;
-	for & pos in input.posns.iter () {
-		if next_id == u8::MAX { panic! () }
-		grid.set (pos, next_id);
-		next_id += 1;
-	}
-
-	// spread out one square at a time
-
-	let mut todo: Vec <(Pos, u8)> =
-		input.posns.iter ()
-			.flat_map (|& pos| {
-				let val = grid.get (pos).unwrap ();
-				pos.adjacent_4 ().iter ()
-					.filter (|&& adj_pos| grid.get (adj_pos).map_or (false, |val| val == 0))
-					.map (|& adj_pos| (adj_pos, val))
-					.collect::<ArrayVec <(Pos, u8), 4>> ()
-			})
-			.collect ();
-
-	let mut todo_next: Vec <(Pos, u8)> = Vec::new ();
-	let mut adj_vals: Vec <u8> = Vec::new ();
-
-	loop {
-		todo.sort ();
-		let mut progress = false;
-		let temp = todo.drain ( .. ).group_by (|& (pos, _)| pos);
-		for (pos, group_iter) in temp.into_iter () {
-			let val = some_or! (grid.get (pos), continue);
-			if val != 0 { continue }
-			adj_vals.clear ();
-			adj_vals.extend (group_iter.map (|(_, val)| val));
-			let first = adj_vals [0];
-			if adj_vals.iter ().all (|& adj_val| adj_val == first) {
-				let new_val = adj_vals [0];
-				grid.set (pos, new_val);
-				for adj_pos in pos.adjacent_4 () {
-					if let Some (adj_val) = grid.get (adj_pos) {
-						if adj_val == 0 { todo_next.push ((adj_pos, new_val)); }
-					}
-				}
+	let mut areas = vec! [0_u32; input.posns.len ()];
+	for y in start.y ..= end.y {
+		for x in start.x ..= end.x {
+			let pos = Pos::new (y, x);
+			let (_, close_idx) = input.posns.iter ().enumerate ()
+				.fold ((u16::MAX, usize::MAX), |(close_dist, close_idx), (inp_idx, inp_pos)| {
+					let dist = inp_pos.y.abs_diff (pos.y) + inp_pos.x.abs_diff (pos.x);
+					#[ allow (clippy::comparison_chain) ] // this is significantly quicker
+					if dist < close_dist { (dist, inp_idx) }
+					else if close_dist == dist { (close_dist, usize::MAX) }
+					else { (close_dist, close_idx) }
+				});
+			if close_idx == usize::MAX { continue }
+			if areas [close_idx] == u32::MAX { continue }
+			if y == start.y || y == end.y || x == start.x || x == end.x {
+				areas [close_idx] = u32::MAX;
 			} else {
-				grid.set (pos, u8::MAX);
+				areas [close_idx] += 1;
 			}
-			progress = true;
 		}
-		if ! progress { break }
-		drop (temp);
-		mem::swap (& mut todo, & mut todo_next);
 	}
 
-	// measure size of areas
+	// find largest area
 
-	let mut areas = [0_u32; 256];
-
-	for value in grid.values () {
-		if value == 0 || value == u8::MAX { continue }
-		areas [value.pan_usize ()] += 1;
-	}
-
-	// remove areas which reach the edge
-
-	for (_, val) in grid.iter ()
-		.filter (|& (pos, _)|
-			pos.x == 0_i32 || pos.x == width - 1_i32
-				|| pos.y == 0_i32 || pos.y == height - 1_i32) {
-		areas [val.pan_usize ()] = 0;
-	}
-
-	// find largest remaining area
-
-	Ok (areas.into_iter ().max ().unwrap ())
+	Ok (
+		areas.into_iter ()
+			.filter (|& area| area != u32::MAX)
+			.max ()
+			.ok_or ("No solution found") ?
+	)
 
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
 
-	sanity_check (input) ?;
+	check_input (input) ?;
 
 	// work out size
 
-	let height = input.posns.iter ().map (|& pos| pos.y + 1_i32).max ().unwrap ();
-	let width = input.posns.iter ().map (|& pos| pos.x + 1_i32).max ().unwrap ();
+	let height = input.posns.iter ().map (|& pos| pos.y + Coord::ONE).max ().unwrap ();
+	let width = input.posns.iter ().map (|& pos| pos.x + Coord::ONE).max ().unwrap ();
 
 	// work out horizontal/vertical distances separately
 
-	fn calc_axis_dists (posns_iter: impl Iterator <Item = i32>, size: i32) -> Vec <u32> {
-		let posns: Vec <i32> = posns_iter.sorted ().collect ();
-		fn calc_one_way (
-			posns_iter: impl Iterator <Item = i32>,
-			range: impl Iterator <Item = i32>,
-		) -> Vec <u32> {
-			let mut num_points = 0;
-			let mut cur_dist = 0;
-			let mut posns_iter = posns_iter.peekable ();
-			let mut dists: Vec <u32> = Vec::new ();
-			for pos in range {
-				cur_dist += num_points;
-				dists.push (cur_dist);
-				while posns_iter.peek () == Some (& pos) {
-					posns_iter.next ().unwrap ();
-					num_points += 1;
-				}
-			}
-			dists
-		}
-		let dists_fwd = calc_one_way (posns.iter ().copied (), 0_i32 .. size);
-		let dists_rev = calc_one_way (posns.iter ().rev ().copied (), (0_i32 .. size).rev ());
-		dists_fwd.iter ().zip (dists_rev.iter ().rev ())
-			.map (|(& fwd, & rev)| fwd + rev)
-			.collect ()
-	}
-
-	let dists_x = calc_axis_dists (input.posns.iter ().map (|pos| pos.x), width);
-	let dists_y = calc_axis_dists (input.posns.iter ().map (|pos| pos.y), height);
+	let dists_x = calc_axis_dists (
+		input.posns.iter ().map (|pos| pos.x.pan_i32 ()),
+		width.pan_i32 ());
+	let dists_y = calc_axis_dists (
+		input.posns.iter ().map (|pos| pos.y.pan_i32 ()),
+		height.pan_i32 ());
 
 	// sum separate distances to get totals and count how many are in range
 
@@ -148,13 +89,36 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 
 }
 
-fn sanity_check (input: & Input) -> GenResult <()> {
+fn calc_axis_dists (posns_iter: impl Iterator <Item = i32>, size: i32) -> Vec <u32> {
+	let posns: Vec <i32> = posns_iter.sorted ().collect ();
+	let dists_fwd = calc_one_way (posns.iter ().copied (), 0_i32 .. size);
+	let dists_rev = calc_one_way (posns.iter ().rev ().copied (), (0_i32 .. size).rev ());
+	dists_fwd.iter ().zip (dists_rev.iter ().rev ())
+		.map (|(& fwd, & rev)| fwd + rev)
+		.collect ()
+}
+
+fn calc_one_way (
+	posns_iter: impl Iterator <Item = i32>,
+	range: impl Iterator <Item = i32>,
+) -> Vec <u32> {
+	let mut num_points = 0;
+	let mut cur_dist = 0;
+	let mut posns_iter = posns_iter.peekable ();
+	let mut dists: Vec <u32> = Vec::new ();
+	for pos in range {
+		cur_dist += num_points;
+		dists.push (cur_dist);
+		while posns_iter.peek () == Some (& pos) {
+			posns_iter.next ().unwrap ();
+			num_points += 1;
+		}
+	}
+	dists
+}
+
+fn check_input (input: & Input) -> GenResult <()> {
 	if input.posns.is_empty () { return Err ("Must have at least one position".into ()) }
 	if input.posns.len () > 50 { return Err ("Refusing to handle more than 50 points".into ()) }
-	if input.posns.iter ()
-			.any (|& pos| ! (0_i32 ..= 399_i32).contains (& pos.x)
-				|| ! (0_i32 ..= 399_i32).contains (& pos.y)) {
-		return Err ("Refusing to handle positions not between 0 and 399".into ());
-	}
 	Ok (())
 }

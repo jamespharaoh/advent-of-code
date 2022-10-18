@@ -56,6 +56,34 @@ impl <Pos, const DIMS: usize> GridCursor <Pos, DIMS>
 		GridCursorWalk { cur: self, offset, done: false }
 	}
 
+	#[ inline ]
+	#[ must_use ]
+	pub fn compact (self) -> GridCursorCompact <Pos, DIMS> {
+		GridCursorCompact { native: self.native, idx: self.idx }
+	}
+
+}
+
+#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+pub struct GridCursorCompact <Pos, const DIMS: usize> {
+	native: Pos,
+	idx: usize,
+}
+
+impl <Pos, const DIMS: usize> GridCursorCompact <Pos, DIMS>
+	where Pos: GridPos <DIMS> {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn expand (self, grid: impl GridView <Pos, DIMS>) -> GridCursor <Pos, DIMS> {
+		GridCursor {
+			start: grid.start (),
+			size: grid.size (),
+			native: self.native,
+			idx: self.idx,
+		}
+	}
+
 }
 
 pub struct GridCursorWalk <Pos, const DIMS: usize>

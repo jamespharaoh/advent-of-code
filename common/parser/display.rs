@@ -214,6 +214,8 @@ macro_rules! display {
 			display_fn (& $field, $formatter) ?;
 		}
 	};
+	( $formatter:ident, @parse $(|$arg:ident|)? { $($rest:tt)* } $(,$(rest:tt)*)? ) => {
+	};
 	( $formatter:ident, @parse $field:ident { $($rest:tt)* } $(,$(rest:tt)*)? ) => {
 		let _ = $field;
 	};

@@ -253,6 +253,12 @@ macro_rules! parse {
 	( @item $parser:expr, @confirm ) => {
 		$parser.confirm ();
 	};
+	( @item $parser:expr, @parse { $($body:tt)* } ) => {
+		{ $($body)* }
+	};
+	( @item $parser:expr, @parse |$arg:ident| { $($body:tt)* } ) => {
+		{ let $arg = $parser; $($body)* }
+	};
 	( @item $parser:expr, @parse $name:ident { $($body:tt)* } ) => {
 		let $name = { $($body)* };
 	};
