@@ -277,17 +277,19 @@ struct CheckedItem (Vec <TokenTree>);
 impl CheckedItem {
 	fn parse (iter: & mut TokenIter) -> Self {
 		let mut tokens = Vec::new ();
+		let mut first = true;
 		loop {
 			const ARITH_CHARS: [char; 5] = ['+', '-', '*', '/', '%'];
 			match iter.peek () {
 				Some (& TokenTree::Punct (ref punct))
-						if ARITH_CHARS.contains (& punct.as_char ()) => {
+						if ! first && ARITH_CHARS.contains (& punct.as_char ()) => {
 					assert! (! tokens.is_empty ());
 					return Self (tokens);
 				},
 				None => return Self (tokens),
 				_ => tokens.push (iter.next ().unwrap ()),
 			}
+			first = false;
 		}
 	}
 }

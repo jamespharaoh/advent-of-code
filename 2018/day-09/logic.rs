@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
@@ -21,9 +22,9 @@ fn play (input: & Input) -> NumResult <u32> {
 	) {
 		if marble % 23 == 0 {
 			let score = & mut scores [player.pan_usize ()];
-			* score = u32::add_2 (* score, marble) ?;
+			* score = chk! (* score + marble) ?;
 			circle.rotate_right (7);
-			* score = u32::add_2 (* score, circle.pop_front ().unwrap ()) ?;
+			* score = chk! (* score + circle.pop_front ().unwrap ()) ?;
 		} else {
 			circle.rotate_left (2 % circle.len ());
 			circle.push_front (marble);
@@ -39,7 +40,7 @@ mod tests {
 
 	#[ test ]
 	fn play () {
-		for (expected, input) in vec! [
+		for (expected, input) in [
 			(8317, Input { num_players: 10, last_marble: 1618, params: default () }),
 			(146373, Input { num_players: 13, last_marble: 7999, params: default () }),
 			(2764, Input { num_players: 17, last_marble: 1104, params: default () }),
