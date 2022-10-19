@@ -35,62 +35,42 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
-<span id="43">43</span>
-<span id="44">44</span>
-<span id="45">45</span>
-<span id="46">46</span>
-<span id="47">47</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span><span class="kw-2">mut </span>result = String::new ();
-	<span class="kw">for </span>ch <span class="kw">in </span>input.polymer.chars () {
-		<span class="kw">if let </span><span class="prelude-val">Some </span>(last_char) = result.chars ().last () {
-			<span class="kw">if </span>last_char.to_ascii_lowercase () == ch.to_ascii_lowercase ()
-					&amp;&amp; last_char.is_ascii_lowercase () != ch.is_ascii_lowercase () {
+	<span class="prelude-val">Ok </span>(reduce (input.polymer.chars ()).len ().pan_u32 ())
+}
+
+<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+	<span class="kw">let </span>polymer = reduce (input.polymer.chars ());
+	<span class="prelude-val">Ok </span>(
+		(<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>)
+			.map (|remove_ch| (remove_ch, remove_ch.to_ascii_uppercase ()))
+			.map (|(remove_ch_lower, remove_ch_upper)| polymer.iter ().copied ()
+				.filter (<span class="kw">move </span>|&amp; ch| ch != remove_ch_lower &amp;&amp; ch != remove_ch_upper))
+			.map (|polymer_chars| reduce (polymer_chars))
+			.map (|polymer| polymer.len ().pan_u32 ())
+			.min ()
+			.unwrap ()
+	)
+}
+
+<span class="kw">pub fn </span>reduce (polymer: <span class="kw">impl </span>IntoIterator &lt;Item = char&gt;) -&gt; Vec &lt;char&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>result: Vec &lt;char&gt; = Vec::new ();
+	<span class="kw">for </span>next_ch <span class="kw">in </span>polymer {
+		<span class="kw">if let </span><span class="prelude-val">Some </span>(last_ch) = result.last () {
+			<span class="kw">if </span>last_ch.pan_u32 ().abs_diff (next_ch.pan_u32 ()) == <span class="string">&#39;a&#39;</span>.pan_u32 () - <span class="string">&#39;A&#39;</span>.pan_u32 () {
 				result.pop ();
 				<span class="kw">continue</span>;
 			}
 		}
-		result.push (ch);
+		result.push (next_ch);
 	}
-	<span class="prelude-val">Ok </span>(result.len ().pan_u32 ())
-}
-
-<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span><span class="kw-2">mut </span>polymer: Vec &lt;char&gt; = Vec::with_capacity (input.polymer.len ());
-	polymer.extend (input.polymer.chars ());
-	<span class="kw">let </span><span class="kw-2">mut </span>buffer: Vec &lt;char&gt; = Vec::with_capacity (polymer.len ());
-	<span class="kw">let </span>shortest = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>)
-		.map (<span class="kw">move </span>|remove_ch| {
-			buffer.clear ();
-			<span class="kw">let </span><span class="kw-2">mut </span>last_char_opt: <span class="prelude-ty">Option </span>&lt;char&gt; = <span class="prelude-val">None</span>;
-			<span class="kw">for </span>&amp; ch <span class="kw">in </span>polymer.iter ()
-					.filter (|&amp; ch| ch.to_ascii_lowercase () != remove_ch) {
-				<span class="kw">if let </span><span class="prelude-val">Some </span>(last_char) = last_char_opt {
-					<span class="kw">if </span>last_char.to_ascii_lowercase () == ch.to_ascii_lowercase ()
-							&amp;&amp; last_char.is_ascii_lowercase () != ch.is_ascii_lowercase () {
-						buffer.pop ();
-						last_char_opt = buffer.last ().copied ();
-						<span class="kw">continue</span>;
-					}
-				}
-				buffer.push (ch);
-				last_char_opt = <span class="prelude-val">Some </span>(ch);
-			}
-			buffer.len ().pan_u32 ()
-		})
-		.min ()
-		.unwrap ();
-	<span class="prelude-val">Ok </span>(shortest)
+	result
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

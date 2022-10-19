@@ -25,6 +25,12 @@
 <span id="25">25</span>
 <span id="26">26</span>
 <span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = u8;
@@ -33,10 +39,16 @@
 <span class="kw">pub type </span>SeenGrid = GridBuf &lt;Vec &lt;bool&gt;, Pos, <span class="number">2</span>&gt;;
 <span class="kw">pub type </span>Pos = pos::PosYX &lt;Coord&gt;;
 
-<span class="macro">parse_display_enum! </span>{
+<span class="macro">enum_decl_parser_display! </span>{
 
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub enum </span>Tile { <span class="attribute">#[default] </span>Open = <span class="string">&quot;.&quot;</span>, Cavern = <span class="string">&quot;#&quot;</span>, Goblin = <span class="string">&quot;G&quot;</span>, Elf = <span class="string">&quot;E&quot; </span>}
+	</span><span class="kw">pub enum </span>Tile {
+		<span class="attribute">#[ default ]
+		</span>Open = [ <span class="string">&quot;.&quot; </span>],
+		Cavern = [ <span class="string">&quot;#&quot; </span>],
+		Goblin = [ <span class="string">&quot;G&quot; </span>],
+		Elf = [ <span class="string">&quot;E&quot; </span>],
+	}
 
 }
 
@@ -53,4 +65,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

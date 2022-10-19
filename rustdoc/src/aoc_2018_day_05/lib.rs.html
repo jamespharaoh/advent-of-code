@@ -38,14 +38,53 @@
 <span id="38">38</span>
 <span id="39">39</span>
 <span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2018: Day 5: Alchemical Reduction
 //!
 //! [https://adventofcode.com/2018/day/05](https://adventofcode.com/2018/day/05)
+//!
+//! # Input
+//!
+//! A single line containing a string of mixed case ASCII letters.
+//!
+//! # Part one
+//!
+//! The string represents a &quot;polymer&quot; where each letter is a &quot;unit&quot;. A lowercase letter and its
+//! uppercase equivalent represent the same unit &quot;type&quot; with different polarity. Whenever these
+//! are adjacent, they &quot;react&quot; and are removed from the string. Apply these rules until there are
+//! no adjacent units which can react, and return the number of remaining units.
+//!
+//! # Part two
+//!
+//! Remove all units of exactly one type, regardless of polarity, to produce the shortest possible
+//! resulting polymer, and return its length.
+//!
+//! # Algorithm
+//!
+//! We build up the result string one character at a time, always comparing the last char in the
+//! result to the next one in the input. Whenever these form a pair, we skip the next char from
+//! the input and remove the last one from the output. In this way, we can produce the result in a
+//! single pass.
+//!
+//! For part two, we first reduce the polymer the same as part one. We then try every letter from
+//! `a` to `z`, seeing how much we can further reduce the polymer. This works because the
+//! reduction process works the same in whatever order. By first reducing the initial input as
+//! much as possible we reduce the amount of work that has to be done for each letter in the
+//! second part of the process.
 
 </span><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
+<span class="kw">mod </span>examples;
 <span class="kw">pub mod </span>input;
 <span class="kw">pub mod </span>logic;
 
@@ -53,30 +92,9 @@
 	name = <span class="string">&quot;Alchemical Reduction&quot;</span>;
 	year = <span class="number">2018</span>;
 	day = <span class="number">5</span>;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (&amp; input);
 	part_two = |input| logic::part_two (&amp; input);
 }
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [ <span class="string">&quot;dabAcCaCBAcCcaDA&quot; </span>];
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;10&quot;</span>, puzzle.part_one (EXAMPLE));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;4&quot;</span>, puzzle.part_two (EXAMPLE));
-	}
-
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

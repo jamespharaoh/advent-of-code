@@ -52,30 +52,17 @@
 <span id="52">52</span>
 <span id="53">53</span>
 <span id="54">54</span>
-<span id="55">55</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>input::Dir;
 <span class="kw">use </span>input::Input;
-<span class="kw">use </span>model::Dir;
-<span class="kw">use </span>model::Slot;
-<span class="kw">use </span>model::State;
+<span class="kw">use </span>input::Slot;
+<span class="kw">use </span>input::State;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-<span class="comment">//println! (&quot;{input}&quot;);
-	</span><span class="kw">let </span>states: HashMap &lt;char, State&gt; =
-		input.states.iter ().copied ()
-			.map (|state| (state.id, state))
-			.collect ();
-	<span class="kw">if </span>! states.contains_key (&amp; input.begin_state) {
-		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Start state {} does not exist&quot;</span>, input.begin_state).into ());
-	}
-	<span class="kw">if let </span><span class="prelude-val">Some </span>((src_id, dst_id)) =
-		input.states.iter ()
-			.flat_map (|state| [ (state.id, state.true_state), (state.id, state.false_state) ])
-			.find (|&amp; (<span class="kw">_</span>, dst_id)| ! states.contains_key (&amp; dst_id)) {
-		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;State {src_id} points to nonexistent state {dst_id}&quot;</span>).into ());
-	}
+	<span class="kw">let </span>states = get_states (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>left = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>right = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>cur = Slot::Zero;
@@ -87,14 +74,8 @@
 			Slot::One =&gt; (state.true_write, state.true_dir, state.true_state),
 		};
 		<span class="kw">match </span>dir {
-			Dir::Left =&gt; {
-				right.push (write);
-				cur = left.pop ().unwrap_or (Slot::Zero);
-			},
-			Dir::Right =&gt; {
-				left.push (write);
-				cur = right.pop ().unwrap_or (Slot::Zero);
-			},
+			Dir::Left =&gt; { right.push (write); cur = left.pop ().unwrap_or (Slot::Zero); },
+			Dir::Right =&gt; { left.push (write); cur = right.pop ().unwrap_or (Slot::Zero); },
 		}
 		state_id = new_state_id;
 	}
@@ -108,5 +89,22 @@
 			.pan_u32 ()
 	)
 }
+
+<span class="kw">fn </span>get_states (input: &amp; Input) -&gt; GenResult &lt;HashMap &lt;char, State&gt;&gt; {
+	<span class="kw">let </span>states: HashMap &lt;char, State&gt; =
+		input.states.iter ().copied ()
+			.map (|state| (state.id, state))
+			.collect ();
+	<span class="kw">if </span>! states.contains_key (&amp; input.begin_state) {
+		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Start state {} does not exist&quot;</span>, input.begin_state).into ());
+	}
+	<span class="kw">if let </span><span class="prelude-val">Some </span>((src_id, dst_id)) =
+		input.states.iter ()
+			.flat_map (|state| [ (state.id, state.true_state), (state.id, state.false_state) ])
+			.find (|&amp; (<span class="kw">_</span>, dst_id)| ! states.contains_key (&amp; dst_id)) {
+		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;State {src_id} points to nonexistent state {dst_id}&quot;</span>).into ());
+	}
+	<span class="prelude-val">Ok </span>(states)
+}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

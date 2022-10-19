@@ -51,9 +51,11 @@
 <span id="51">51</span>
 <span id="52">52</span>
 <span id="53">53</span>
+<span id="54">54</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
@@ -74,9 +76,9 @@
 	) {
 		<span class="kw">if </span>marble % <span class="number">23 </span>== <span class="number">0 </span>{
 			<span class="kw">let </span>score = &amp; <span class="kw-2">mut </span>scores [player.pan_usize ()];
-			* score = u32::add_2 (* score, marble) <span class="question-mark">?</span>;
+			* score = <span class="macro">chk! </span>(* score + marble) <span class="question-mark">?</span>;
 			circle.rotate_right (<span class="number">7</span>);
-			* score = u32::add_2 (* score, circle.pop_front ().unwrap ()) <span class="question-mark">?</span>;
+			* score = <span class="macro">chk! </span>(* score + circle.pop_front ().unwrap ()) <span class="question-mark">?</span>;
 		} <span class="kw">else </span>{
 			circle.rotate_left (<span class="number">2 </span>% circle.len ());
 			circle.push_front (marble);
@@ -92,7 +94,7 @@
 
 	<span class="attribute">#[ test ]
 	</span><span class="kw">fn </span>play () {
-		<span class="kw">for </span>(expected, input) <span class="kw">in </span><span class="macro">vec! </span>[
+		<span class="kw">for </span>(expected, input) <span class="kw">in </span>[
 			(<span class="number">8317</span>, Input { num_players: <span class="number">10</span>, last_marble: <span class="number">1618</span>, params: default () }),
 			(<span class="number">146373</span>, Input { num_players: <span class="number">13</span>, last_marble: <span class="number">7999</span>, params: default () }),
 			(<span class="number">2764</span>, Input { num_players: <span class="number">17</span>, last_marble: <span class="number">1104</span>, params: default () }),
@@ -105,4 +107,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

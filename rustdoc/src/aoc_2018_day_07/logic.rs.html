@@ -82,6 +82,10 @@
 <span id="82">82</span>
 <span id="83">83</span>
 <span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -89,11 +93,7 @@
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
 
-	<span class="kw">let </span><span class="kw-2">mut </span>deps: HashMap &lt;char, HashSet &lt;char&gt;&gt; = HashMap::new ();
-	<span class="kw">for </span>&amp; (before, after) <span class="kw">in </span>input.deps.iter () {
-		deps.entry (before).or_insert_with (HashSet::new);
-		deps.entry (after).or_insert_with (HashSet::new).insert (before);
-	}
+	<span class="kw">let </span>deps = get_deps (input);
 
 	<span class="kw">let </span><span class="kw-2">mut </span>remaining: HashSet &lt;char&gt; = deps.keys ().copied ().collect ();
 	<span class="kw">let </span><span class="kw-2">mut </span>completed: HashSet &lt;char&gt; = HashSet::new ();
@@ -115,28 +115,26 @@
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 
-	<span class="kw">let </span><span class="kw-2">mut </span>deps: HashMap &lt;char, HashSet &lt;char&gt;&gt; = HashMap::new ();
-	<span class="kw">for </span>&amp; (before, after) <span class="kw">in </span>input.deps.iter () {
-		deps.entry (before).or_insert_with (HashSet::new);
-		deps.entry (after).or_insert_with (HashSet::new).insert (before);
-	}
+	<span class="kw">let </span>deps = get_deps (input);
 
 	<span class="kw">let </span><span class="kw-2">mut </span>remaining: HashSet &lt;char&gt; = deps.keys ().copied ().collect ();
 	<span class="kw">let </span><span class="kw-2">mut </span>completed: HashSet &lt;char&gt; = HashSet::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>queue: HashSet &lt;char&gt; = HashSet::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>workers: Vec &lt;<span class="prelude-ty">Option </span>&lt;(char, u32)&gt;&gt; =
-		iter::repeat (<span class="prelude-val">None</span>)
-			.take (input.params.num_workers.pan_usize ())
-			.collect ();
+		<span class="macro">vec! </span>[<span class="prelude-val">None</span>; input.params.num_workers.pan_usize ()];
 	<span class="kw">let </span><span class="kw-2">mut </span>elapsed: u32 = <span class="number">0</span>;
+	<span class="kw">let </span><span class="kw-2">mut </span>newly_completed = <span class="bool-val">true</span>;
 
 	<span class="kw">while </span>! remaining.is_empty ()
 			|| ! queue.is_empty ()
 			|| workers.iter ().any (Option::is_some) {
 
-		<span class="kw">for </span>&amp; next_step <span class="kw">in </span>remaining.iter ()
-				.filter (|step| deps [step].iter ().all (|dep| completed.contains (dep))) {
-			queue.insert (next_step);
+		<span class="kw">if </span>newly_completed {
+			<span class="kw">for </span>&amp; next_step <span class="kw">in </span>remaining.iter ()
+					.filter (|step| deps [step].iter ().all (|dep| completed.contains (dep))) {
+				queue.insert (next_step);
+			}
+			newly_completed = <span class="bool-val">false</span>;
 		}
 
 		<span class="kw">for </span>worker <span class="kw">in </span>workers.iter_mut ().filter (|worker| worker.is_none ()) {
@@ -159,6 +157,7 @@
 			<span class="kw">if </span>worker.<span class="number">1 </span>&gt; <span class="number">0 </span>{ <span class="kw">continue </span>}
 			completed.insert (worker.<span class="number">0</span>);
 			* worker_opt = <span class="prelude-val">None</span>;
+			newly_completed = <span class="bool-val">true</span>;
 		}
 
 	}
@@ -166,5 +165,14 @@
 	<span class="prelude-val">Ok </span>(elapsed)
 
 }
+
+<span class="kw">fn </span>get_deps (input: &amp; Input) -&gt; HashMap &lt;char, Vec &lt;char&gt;&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>deps: HashMap &lt;char, Vec &lt;char&gt;&gt; = HashMap::new ();
+	<span class="kw">for </span>&amp; (before, after) <span class="kw">in </span>input.deps.iter () {
+		deps.entry (before).or_insert_with (Vec::new);
+		deps.entry (after).or_insert_with (Vec::new).push (before);
+	}
+	deps
+}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

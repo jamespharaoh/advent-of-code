@@ -31,8 +31,12 @@
 <span id="31">31</span>
 <span id="32">32</span>
 <span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<span class="kw">use </span>model::Claim;
+
+<span class="kw">use </span>model::Coord;
+<span class="kw">use </span>model::Id;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input {
@@ -40,29 +44,29 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { claims, params } = [ params, @lines claims ]
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug) ]
+</span><span class="kw">pub struct </span>Claim {
+	<span class="kw">pub </span>id: Id,
+	<span class="kw">pub </span>left: Coord,
+	<span class="kw">pub </span>top: Coord,
+	<span class="kw">pub </span>width: Coord,
+	<span class="kw">pub </span>height: Coord,
+}
+
+<span class="macro">struct_parser_display! </span>{
+	Claim { id, left, top, width, height } = [
+		<span class="string">&quot;#&quot;</span>, id, <span class="string">&quot; @ &quot;</span>, left, <span class="string">&quot;,&quot;</span>, top, <span class="string">&quot;: &quot;</span>, width, <span class="string">&quot;x&quot;</span>, height,
+	]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
 	}
 }
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params, @lines claims);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ claims, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="kw">for </span>claim <span class="kw">in </span><span class="self">self</span>.claims.iter () {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}\n&quot;</span>, claim) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok </span>(())
-	}
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

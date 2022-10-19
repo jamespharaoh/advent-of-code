@@ -22,17 +22,17 @@
 <span class="kw">pub type </span>Grid = GridBuf &lt;Vec &lt;Tile&gt;, Pos, <span class="number">2</span>&gt;;
 <span class="kw">pub type </span>Pos = pos::PosYX &lt;Coord&gt;;
 
-<span class="macro">parse_display_enum! </span>{
+<span class="macro">enum_decl_parser_display! </span>{
 
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	</span><span class="kw">pub enum </span>Tile {
 		<span class="attribute">#[ default ]
-		</span>Open = <span class="string">&quot;.&quot;</span>,
-		Tree = <span class="string">&quot;|&quot;</span>,
-		Yard = <span class="string">&quot;#&quot;</span>,
+		</span>Open = [ <span class="string">&quot;.&quot; </span>],
+		Tree = [ <span class="string">&quot;|&quot; </span>],
+		Yard = [ <span class="string">&quot;#&quot; </span>],
 	}
 
 }
 
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_18" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_18" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

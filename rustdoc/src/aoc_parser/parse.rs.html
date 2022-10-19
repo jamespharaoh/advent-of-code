@@ -447,6 +447,12 @@
 <span id="447">447</span>
 <span id="448">448</span>
 <span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
 </pre><pre class="rust"><code><span class="attribute">#[ macro_export ]
 </span><span class="macro">macro_rules! </span>parse {
 	( <span class="macro-nonterminal">$parser</span>:expr, $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
@@ -702,6 +708,12 @@
 	( @item <span class="macro-nonterminal">$parser</span>:expr, @confirm ) =&gt; {
 		<span class="macro-nonterminal">$parser</span>.confirm ();
 	};
+	( @item <span class="macro-nonterminal">$parser</span>:expr, @parse { $(<span class="macro-nonterminal">$body</span>:tt)* } ) =&gt; {
+		{ $(<span class="macro-nonterminal">$body</span>)* }
+	};
+	( @item <span class="macro-nonterminal">$parser</span>:expr, @parse |<span class="macro-nonterminal">$arg</span>:ident| { $(<span class="macro-nonterminal">$body</span>:tt)* } ) =&gt; {
+		{ <span class="kw">let </span><span class="macro-nonterminal">$arg </span>= <span class="macro-nonterminal">$parser</span>; $(<span class="macro-nonterminal">$body</span>)* }
+	};
 	( @item <span class="macro-nonterminal">$parser</span>:expr, @parse <span class="macro-nonterminal">$name</span>:ident { $(<span class="macro-nonterminal">$body</span>:tt)* } ) =&gt; {
 		<span class="kw">let </span><span class="macro-nonterminal">$name </span>= { $(<span class="macro-nonterminal">$body</span>)* };
 	};
@@ -897,4 +909,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_parser" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_parser" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

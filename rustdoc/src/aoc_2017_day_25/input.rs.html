@@ -53,8 +53,18 @@
 <span id="53">53</span>
 <span id="54">54</span>
 <span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<span class="kw">use </span>model::State;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input {
@@ -64,49 +74,61 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { begin_state, num_steps, states, params } = [
+		params,
+		<span class="string">&quot;Begin in state &quot;</span>, begin_state = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;Perform a diagnostic checksum after &quot;</span>, num_steps, <span class="string">&quot; steps.\n&quot;</span>,
+		<span class="string">&quot;\n&quot;</span>,
+		@delim <span class="string">&quot;\n\n&quot; </span>states,
+	]
+}
+
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Dir {
+		Left = [ <span class="string">&quot;left&quot; </span>],
+		Right = [ <span class="string">&quot;right&quot; </span>],
+	}
+}
+
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Slot {
+		Zero = [ <span class="string">&quot;0&quot; </span>],
+		One = [ <span class="string">&quot;1&quot; </span>],
+	}
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">pub struct </span>State {
+	<span class="kw">pub </span>id: char,
+	<span class="kw">pub </span>false_write: Slot,
+	<span class="kw">pub </span>false_dir: Dir,
+	<span class="kw">pub </span>false_state: char,
+	<span class="kw">pub </span>true_write: Slot,
+	<span class="kw">pub </span>true_dir: Dir,
+	<span class="kw">pub </span>true_state: char,
+}
+
+<span class="macro">struct_parser_display! </span>{
+	State { id, false_write, false_dir, false_state, true_write, true_dir, true_state } = [
+		<span class="string">&quot;In state &quot;</span>, id, <span class="string">&quot;:\n&quot;</span>,
+		<span class="string">&quot;  If the current value is 0:\n&quot;</span>,
+		<span class="string">&quot;    - Write the value &quot;</span>, false_write, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;    - Move one slot to the &quot;</span>, false_dir, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;    - Continue with state &quot;</span>, false_state = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;  If the current value is 1:\n&quot;</span>,
+		<span class="string">&quot;    - Write the value &quot;</span>, true_write, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;    - Move one slot to the &quot;</span>, true_dir, <span class="string">&quot;.\n&quot;</span>,
+		<span class="string">&quot;    - Continue with state &quot;</span>, true_state = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot;.&quot;</span>,
+	]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
 	}
 }
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params);
-			<span class="kw">let </span>parse_state_id = |parser: &amp; <span class="kw-2">mut </span>Parser| {
-				<span class="kw">match </span>parser.next () {
-					<span class="prelude-val">Some </span>(ch @ <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>) =&gt; <span class="prelude-val">Ok </span>(ch),
-					<span class="kw">_ </span>=&gt; <span class="prelude-val">Err </span>(parser.err ()),
-				}
-			};
-			<span class="macro">parse! </span>(parser,
-				<span class="string">&quot;Begin in state &quot;</span>, begin_state = parse_state_id, <span class="string">&quot;.\n&quot;</span>,
-				<span class="string">&quot;Perform a diagnostic checksum after &quot;</span>, num_steps, <span class="string">&quot; steps.\n&quot;</span>,
-				<span class="string">&quot;\n&quot;</span>,
-				@delim <span class="string">&quot;\n\n&quot; </span>states);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ begin_state, num_steps, states, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="macro">write! </span>(formatter,
-			<span class="macro">concat! </span>(
-				<span class="string">&quot;Begin in state {begin_state}.\n&quot;</span>,
-				<span class="string">&quot;Perform a diagnostic checksum after {num_steps} steps.\n&quot;</span>,
-			),
-			begin_state = <span class="self">self</span>.begin_state,
-			num_steps = <span class="self">self</span>.num_steps,
-		) <span class="question-mark">?</span>;
-		<span class="kw">for </span>state <span class="kw">in </span><span class="self">self</span>.states.iter () {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;\n&quot;</span>) <span class="question-mark">?</span>;
-			Display::fmt (state, formatter) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok </span>(())
-	}
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

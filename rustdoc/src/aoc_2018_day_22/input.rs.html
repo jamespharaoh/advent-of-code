@@ -23,7 +23,11 @@
 <span id="23">23</span>
 <span id="24">24</span>
 <span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>model::Pos;
 <span class="kw">use </span>model::Val;
 
@@ -34,19 +38,21 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
-<span class="macro">struct_parser_display! </span>(Input { depth, target: Pos { y: target_y, x: target_x }, params } = [
-	params, <span class="string">&quot;depth: &quot;</span>, depth, <span class="string">&quot;\ntarget: &quot;</span>, target_x, <span class="string">&quot;,&quot;</span>, target_y,
-]);
+<span class="macro">struct_parser_display! </span>{
+	Input { depth, target: Pos { y: target_y, x: target_x }, params } = [
+		params, <span class="string">&quot;depth: &quot;</span>, depth, <span class="string">&quot;\ntarget: &quot;</span>, target_x, <span class="string">&quot;,&quot;</span>, target_y,
+	]
+}
 
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>modulo: u32 = (<span class="string">&quot;MODULO=&quot;</span>, <span class="number">20183</span>, <span class="number">3_u32 </span>.. ),
-		<span class="kw">pub </span>top_factor: u32 = (<span class="string">&quot;TOP_FACTOR=&quot;</span>, <span class="number">16_807</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>left_factor: u32 = (<span class="string">&quot;LEFT_FACTOR=&quot;</span>, <span class="number">48_271</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>max_mins: u32 = (<span class="string">&quot;MAX_MINS=&quot;</span>, <span class="number">2000</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>max_target: i16 = (<span class="string">&quot;MAX_TARGET=&quot;</span>, <span class="number">1000</span>, <span class="number">1_i16 </span>.. ),
+		<span class="kw">pub </span>modulo: u32 = (<span class="string">&quot;MODULO=&quot;</span>, <span class="number">20183</span>, <span class="number">3 </span>.. ),
+		<span class="kw">pub </span>top_factor: u32 = (<span class="string">&quot;TOP_FACTOR=&quot;</span>, <span class="number">16_807</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>left_factor: u32 = (<span class="string">&quot;LEFT_FACTOR=&quot;</span>, <span class="number">48_271</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>max_mins: u32 = (<span class="string">&quot;MAX_MINS=&quot;</span>, <span class="number">2000</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>max_target: i16 = (<span class="string">&quot;MAX_TARGET=&quot;</span>, <span class="number">1000</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

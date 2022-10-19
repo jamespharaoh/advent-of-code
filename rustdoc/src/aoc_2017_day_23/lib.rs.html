@@ -47,32 +47,6 @@
 <span id="47">47</span>
 <span id="48">48</span>
 <span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2017: Day 23: Coprocessor Conflagration
 //!
 //! [https://adventofcode.com/2017/day/23](https://adventofcode.com/2017/day/23)
@@ -110,6 +84,7 @@
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 <span class="kw">use </span>aoc_2017_cpu <span class="kw">as </span>cpu;
 
+<span class="kw">mod </span>examples;
 <span class="kw">pub mod </span>input;
 <span class="kw">pub mod </span>logic;
 
@@ -117,36 +92,9 @@
 	name = <span class="string">&quot;Coprocessor Conflagration&quot;</span>;
 	year = <span class="number">2017</span>;
 	day = <span class="number">23</span>;
-	parse = |input| input::Input::parse (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (&amp; input);
 	part_two = |input| logic::part_two (&amp; input);
 }
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
-		<span class="string">&quot;add a 10&quot;</span>,
-		<span class="string">&quot;set h 1&quot;</span>,
-		<span class="string">&quot;mul h a&quot;</span>,
-		<span class="string">&quot;sub a 1&quot;</span>,
-		<span class="string">&quot;jnz a -2&quot;</span>,
-	];
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;10&quot;</span>, puzzle.part_one (EXAMPLE));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;39916800&quot;</span>, puzzle.part_two (EXAMPLE));
-	}
-
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

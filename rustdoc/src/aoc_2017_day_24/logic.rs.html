@@ -75,15 +75,17 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
+<span id="78">78</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::Components;
 <span class="kw">use </span>model::Port;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(
 		bridges_iter (input)
 			.map (|comps| strength (input, comps))
@@ -93,7 +95,7 @@
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span>longest =
 		bridges_iter (input)
 			.map (Components::count_ones)
@@ -108,7 +110,7 @@
 	)
 }
 
-<span class="kw">fn </span>sanity_check (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
+<span class="kw">fn </span>check_input (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">let </span><span class="kw-2">mut </span>comps = input.comps.clone ();
 	<span class="kw">if </span>comps.len () &gt; Components::BITS.pan_usize () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Too many components&quot;</span>.into ());
@@ -153,4 +155,4 @@
 	total
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

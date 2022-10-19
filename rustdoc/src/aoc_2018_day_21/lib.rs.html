@@ -46,39 +46,6 @@
 <span id="46">46</span>
 <span id="47">47</span>
 <span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
-<span id="51">51</span>
-<span id="52">52</span>
-<span id="53">53</span>
-<span id="54">54</span>
-<span id="55">55</span>
-<span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
-<span id="59">59</span>
-<span id="60">60</span>
-<span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2018: Day 21: Chronal Conversion
 //!
 //! [https://adventofcode.com/2018/day/21](https://adventofcode.com/2018/day/21)
@@ -120,45 +87,12 @@
 	name = <span class="string">&quot;Chronal Conversion&quot;</span>;
 	year = <span class="number">2018</span>;
 	day = <span class="number">21</span>;
-	parse = |input_lines| input::Input::parse_from_lines (input_lines);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (&amp; input);
 	part_two = |input| logic::part_two (&amp; input);
 	commands = [
 		( name = <span class="string">&quot;analyse&quot;</span>; method = analyser::run; ),
 	];
 }
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
-		<span class="string">&quot;#ip 5&quot;</span>,
-		<span class="string">&quot;seti 9 0 1&quot;</span>,
-		<span class="string">&quot;addi 1 1 1&quot;</span>, <span class="comment">// incr
-		</span><span class="string">&quot;eqri 1 20 2&quot;</span>,
-		<span class="string">&quot;addr 5 2 5&quot;</span>,
-		<span class="string">&quot;addi 5 2 5&quot;</span>, <span class="comment">// goto check
-		</span><span class="string">&quot;seti 9 0 1&quot;</span>,
-		<span class="string">&quot;seti 0 0 5&quot;</span>, <span class="comment">// goto incr
-		</span><span class="string">&quot;eqrr 1 0 2&quot;</span>, <span class="comment">// check
-		</span><span class="string">&quot;addr 5 2 5&quot;</span>,
-		<span class="string">&quot;seti 0 0 5&quot;</span>, <span class="comment">// goto incr
-	</span>];
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;10&quot;</span>, puzzle.part_one (EXAMPLE));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;19&quot;</span>, puzzle.part_two (EXAMPLE));
-	}
-
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

@@ -107,9 +107,11 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
+<span id="110">110</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
@@ -195,11 +197,11 @@
 			data_iter.by_ref ()
 				.take (frame.num_metadata.pan_usize ())
 				.map (|idx| {
-					<span class="kw">let </span>idx = usize::sub_2 (idx.pan_usize (), <span class="number">1</span>) <span class="question-mark">?</span>;
+					<span class="kw">let </span>idx = <span class="macro">chk! </span>(idx.pan_usize () - <span class="number">1</span>) <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, Overflow&gt; (frame.child_values.get (idx).copied ())
 				})
 				.flatten_ok ()
-				.fold_ok (<span class="number">0</span>, |sum, item| sum + item) <span class="question-mark">?
+				.try_fold (<span class="number">0</span>, |sum, item| { <span class="kw">let </span>item = item <span class="question-mark">?</span>; <span class="macro">chk! </span>(sum + item) }) <span class="question-mark">?
 		</span>};
 		stack.pop ();
 		<span class="kw">if let </span><span class="prelude-val">Some </span>(frame) = stack.last_mut () {
@@ -217,4 +219,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

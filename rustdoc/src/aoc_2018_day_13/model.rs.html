@@ -41,6 +41,7 @@
 <span id="41">41</span>
 <span id="42">42</span>
 <span id="43">43</span>
+<span id="44">44</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data representation and algorithms used to solve the puzzle
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -51,20 +52,21 @@
 <span class="kw">pub type </span>Pos = pos::PosYX &lt;Coord&gt;;
 <span class="kw">pub type </span>Turn = pos::Turn2d;
 
-<span class="macro">parse_display_enum! </span>{
+<span class="macro">enum_decl_parser_display! </span>{
 
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Default) ]
 	</span><span class="kw">pub enum </span>Tile {
-		<span class="attribute">#[default] </span>Empty = <span class="string">&quot; &quot;</span>,
-		Vert = <span class="string">&quot;|&quot;</span>,
-		Horiz = <span class="string">&quot;-&quot;</span>,
-		Crossing = <span class="string">&quot;+&quot;</span>,
-		CornerFwd = <span class="string">&quot;/&quot;</span>,
-		CornerBck = <span class="string">&quot;\\&quot;</span>,
-		CartUp = <span class="string">&quot;^&quot;</span>,
-		CartDown = <span class="string">&quot;v&quot;</span>,
-		CartLeft = <span class="string">&quot;&lt;&quot;</span>,
-		CartRight = <span class="string">&quot;&gt;&quot;</span>,
+		<span class="attribute">#[ default ]
+		</span>Empty = [ <span class="string">&quot; &quot; </span>],
+		Vert = [ <span class="string">&quot;|&quot; </span>],
+		Horiz = [ <span class="string">&quot;-&quot; </span>],
+		Crossing = [ <span class="string">&quot;+&quot; </span>],
+		CornerFwd = [ <span class="string">&quot;/&quot; </span>],
+		CornerBck = [ <span class="string">&quot;\\&quot; </span>],
+		CartUp = [ <span class="string">&quot;^&quot; </span>],
+		CartDown = [ <span class="string">&quot;v&quot; </span>],
+		CartLeft = [ <span class="string">&quot;&lt;&quot; </span>],
+		CartRight = [ <span class="string">&quot;&gt;&quot; </span>],
 	}
 
 }
@@ -85,4 +87,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

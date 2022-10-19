@@ -157,22 +157,18 @@
 <span id="157">157</span>
 <span id="158">158</span>
 <span id="159">159</span>
-<span id="160">160</span>
-<span id="161">161</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data representation and algorithms used to solve the puzzle
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>input::Input;
 
-<span class="macro">parse_display_enum! </span>{
-
+<span class="macro">enum_decl_parser_display! </span>{
 	<span class="doccomment">/// Simple enum to represent the state of a pot
 	///
 	/// This represents a plant pot, and determines whether it contains a [`Plant`] or is [`Empty`].
 	///
 	</span><span class="attribute">#[ derive (Clone, Copy, Debug) ]
-	</span><span class="kw">pub enum </span>Pot { Empty = <span class="string">&quot;.&quot;</span>, Plant = <span class="string">&quot;#&quot; </span>}
-
+	</span><span class="kw">pub enum </span>Pot { Empty = [ <span class="string">&quot;.&quot; </span>], Plant = [ <span class="string">&quot;#&quot; </span>] }
 }
 
 <span class="kw">impl </span>Pot {
@@ -321,4 +317,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_12" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_12" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

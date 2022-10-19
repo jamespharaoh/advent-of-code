@@ -27,19 +27,6 @@
 <span id="27">27</span>
 <span id="28">28</span>
 <span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2018: Day 11: Chronal Charge
 //!
 //! [https://adventofcode.com/2018/day/11](https://adventofcode.com/2018/day/11)
@@ -49,9 +36,9 @@
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 <span class="kw">use </span>aoc_grid::prelude::<span class="kw-2">*</span>;
 
+<span class="kw">mod </span>examples;
 <span class="kw">pub mod </span>input;
 <span class="kw">pub mod </span>logic;
-<span class="kw">pub mod </span>model;
 
 <span class="macro">puzzle_info! </span>{
 	name = <span class="string">&quot;Chronal Charge&quot;</span>;
@@ -62,25 +49,12 @@
 	part_two = |input| logic::part_two (&amp; input);
 }
 
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
+<span class="kw">pub mod </span>model {
 	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;33,45&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;18&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;21,61&quot;</span>, puzzle.part_one (&amp; [ <span class="string">&quot;42&quot; </span>]));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;90,269,16&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;18&quot; </span>]));
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;232,251,12&quot;</span>, puzzle.part_two (&amp; [ <span class="string">&quot;42&quot; </span>]));
-	}
-
+	<span class="kw">pub type </span>Coord = i16;
+	<span class="kw">pub type </span>Grid = GridBuf &lt;Vec &lt;Power&gt;, Pos, <span class="number">2</span>&gt;;
+	<span class="kw">pub type </span>Power = i32;
+	<span class="kw">pub type </span>Pos = aoc_pos::PosYX &lt;Coord&gt;;
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

@@ -24,15 +24,15 @@
 <span class="kw">pub type </span>Pos = aoc_pos::PosRowCol &lt;Coord&gt;;
 <span class="kw">pub type </span>Turn = aoc_pos::Turn2d;
 
-<span class="macro">parse_display_enum! </span>{
+<span class="macro">enum_decl_parser_display! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, PartialEq) ]
 	</span><span class="kw">pub enum </span>Node {
 		<span class="attribute">#[ default ]
-		</span>Clean = <span class="string">&quot;.&quot;</span>,
-		Weakened = <span class="string">&quot;W&quot;</span>,
-		Infected = <span class="string">&quot;#&quot;</span>,
-		Flagged = <span class="string">&quot;F&quot;</span>,
+		</span>Clean = [ <span class="string">&quot;.&quot; </span>],
+		Weakened = [ <span class="string">&quot;W&quot; </span>],
+		Infected = [ <span class="string">&quot;#&quot; </span>],
+		Flagged = [ <span class="string">&quot;F&quot; </span>],
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

@@ -32,6 +32,8 @@
 <span id="32">32</span>
 <span id="33">33</span>
 <span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = i16;
@@ -39,13 +41,15 @@
 <span class="kw">pub type </span>Pos = aoc_pos::PosYX &lt;Coord&gt;;
 <span class="kw">pub type </span>Val = u32;
 
-<span class="macro">parse_display_enum! </span>{
+<span class="macro">enum_decl_parser_display! </span>{
+
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	</span><span class="kw">pub enum </span>Region {
-		Rocky = <span class="string">&quot;.&quot;</span>,
-		Wet = <span class="string">&quot;=&quot;</span>,
-		Narrow = <span class="string">&quot;|&quot;</span>,
+		Rocky = [ <span class="string">&quot;.&quot; </span>],
+		Wet = [ <span class="string">&quot;=&quot; </span>],
+		Narrow = [ <span class="string">&quot;|&quot; </span>],
 	}
+
 }
 
 <span class="kw">impl </span>Region {
@@ -67,4 +71,4 @@
 	Neither,
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

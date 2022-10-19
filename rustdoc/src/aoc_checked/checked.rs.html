@@ -356,6 +356,8 @@
 <span id="356">356</span>
 <span id="357">357</span>
 <span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
 </pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::wildcard_enum_match_arm) ]
 
 </span><span class="kw">extern crate </span>proc_macro;
@@ -635,17 +637,19 @@ left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked
 <span class="kw">impl </span>CheckedItem {
 	<span class="kw">fn </span>parse (iter: &amp; <span class="kw-2">mut </span>TokenIter) -&gt; <span class="self">Self </span>{
 		<span class="kw">let </span><span class="kw-2">mut </span>tokens = Vec::new ();
+		<span class="kw">let </span><span class="kw-2">mut </span>first = <span class="bool-val">true</span>;
 		<span class="kw">loop </span>{
 			<span class="kw">const </span>ARITH_CHARS: [char; <span class="number">5</span>] = [<span class="string">&#39;+&#39;</span>, <span class="string">&#39;-&#39;</span>, <span class="string">&#39;*&#39;</span>, <span class="string">&#39;/&#39;</span>, <span class="string">&#39;%&#39;</span>];
 			<span class="kw">match </span>iter.peek () {
 				<span class="prelude-val">Some </span>(&amp; TokenTree::Punct (<span class="kw-2">ref </span>punct))
-						<span class="kw">if </span>ARITH_CHARS.contains (&amp; punct.as_char ()) =&gt; {
+						<span class="kw">if </span>! first &amp;&amp; ARITH_CHARS.contains (&amp; punct.as_char ()) =&gt; {
 					<span class="macro">assert! </span>(! tokens.is_empty ());
 					<span class="kw">return </span><span class="self">Self </span>(tokens);
 				},
 				<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="self">Self </span>(tokens),
 				<span class="kw">_ </span>=&gt; tokens.push (iter.next ().unwrap ()),
 			}
+			first = <span class="bool-val">false</span>;
 		}
 	}
 }
@@ -715,4 +719,4 @@ macro_rules! checked_eval {
 }
 */
 </span></code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_checked" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_checked" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

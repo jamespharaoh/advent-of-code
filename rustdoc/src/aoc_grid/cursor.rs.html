@@ -297,6 +297,34 @@
 <span id="297">297</span>
 <span id="298">298</span>
 <span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
@@ -353,6 +381,34 @@
 		offset: GridOffset &lt;Pos, DIMS&gt;,
 	) -&gt; GridCursorWalk &lt;Pos, DIMS&gt; {
 		GridCursorWalk { cur: <span class="self">self</span>, offset, done: <span class="bool-val">false </span>}
+	}
+
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>compact (<span class="self">self</span>) -&gt; GridCursorCompact &lt;Pos, DIMS&gt; {
+		GridCursorCompact { native: <span class="self">self</span>.native, idx: <span class="self">self</span>.idx }
+	}
+
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">pub struct </span>GridCursorCompact &lt;Pos, <span class="kw">const </span>DIMS: usize&gt; {
+	native: Pos,
+	idx: usize,
+}
+
+<span class="kw">impl </span>&lt;Pos, <span class="kw">const </span>DIMS: usize&gt; GridCursorCompact &lt;Pos, DIMS&gt;
+	<span class="kw">where </span>Pos: GridPos &lt;DIMS&gt; {
+
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>expand (<span class="self">self</span>, grid: <span class="kw">impl </span>GridView &lt;Pos, DIMS&gt;) -&gt; GridCursor &lt;Pos, DIMS&gt; {
+		GridCursor {
+			start: grid.start (),
+			size: grid.size (),
+			native: <span class="self">self</span>.native,
+			idx: <span class="self">self</span>.idx,
+		}
 	}
 
 }
@@ -597,4 +653,4 @@ impl &lt;&#39;grid, Storage, Pos, const DIMS: usize&gt; Debug for GridCursorMut 
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_grid" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_grid" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

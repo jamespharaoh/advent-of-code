@@ -317,6 +317,8 @@
 <span id="317">317</span>
 <span id="318">318</span>
 <span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>DisplayDelim &lt;Delim, Inner&gt; {
@@ -533,6 +535,8 @@
 			display_fn (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		}
 	};
+	( <span class="macro-nonterminal">$formatter</span>:ident, @parse $(|<span class="macro-nonterminal">$arg</span>:ident|)<span class="question-mark">? </span>{ $(<span class="macro-nonterminal">$rest</span>:tt)* } $(,$(rest:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	};
 	( <span class="macro-nonterminal">$formatter</span>:ident, @parse <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$rest</span>:tt)* } $(,$(rest:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="kw">let _ </span>= <span class="macro-nonterminal">$field</span>;
 	};
@@ -637,4 +641,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_parser" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_parser" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

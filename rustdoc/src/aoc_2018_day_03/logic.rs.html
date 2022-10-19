@@ -93,25 +93,16 @@
 <span id="93">93</span>
 <span id="94">94</span>
 <span id="95">95</span>
-<span id="96">96</span>
-<span id="97">97</span>
-<span id="98">98</span>
-<span id="99">99</span>
-<span id="100">100</span>
-<span id="101">101</span>
-<span id="102">102</span>
-<span id="103">103</span>
-<span id="104">104</span>
-<span id="105">105</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::Claim;
 <span class="kw">use </span>model::Square;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span>claims = sanitise (input) <span class="question-mark">?</span>;
+	<span class="kw">let </span>claims = Claim::build_vec (input) <span class="question-mark">?</span>;
 	<span class="kw">if </span>claims.is_empty () { <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="number">0</span>) }
 	<span class="kw">const </span>NUM_SPLITS: u32 = <span class="number">16</span>;
 	<span class="kw">let </span>calc_split = |low: u16, high: u16, idx: u32|
@@ -122,7 +113,7 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>squares_xy: Vec &lt;Square&gt; = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>count_overlaps = CountOverlaps::default ();
 	<span class="kw">for </span>part_x <span class="kw">in </span><span class="number">0 </span>.. NUM_SPLITS {
-		<span class="kw">let </span>bound = <span class="macro">some_or! </span>(Square::new (
+		<span class="kw">let </span>bound = <span class="macro">ok_or! </span>(Square::new (
 			calc_split (bound.left (), bound.right (), part_x),
 			bound.top (),
 			calc_split (bound.left (), bound.right (), part_x + <span class="number">1</span>),
@@ -132,7 +123,7 @@
 		squares_x.extend (claims.iter ()
 			.filter_map (|claim| Square::overlap (bound, claim.square)));
 		<span class="kw">for </span>part_y <span class="kw">in </span><span class="number">0 </span>.. NUM_SPLITS {
-			<span class="kw">let </span>bound = <span class="macro">some_or! </span>(Square::new (
+			<span class="kw">let </span>bound = <span class="macro">ok_or! </span>(Square::new (
 				bound.left (),
 				calc_split (bound.top (), bound.bottom (), part_y),
 				bound.right (),
@@ -174,7 +165,7 @@
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span><span class="kw-2">mut </span>included = sanitise (input) <span class="question-mark">?</span>;
+	<span class="kw">let </span><span class="kw-2">mut </span>included = Claim::build_vec (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>included_temp = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>excluded: Vec &lt;Claim&gt; = Vec::new ();
 	<span class="kw">while let </span><span class="prelude-val">Some </span>(claim_0) = included.pop () {
@@ -197,16 +188,5 @@
 	}
 	<span class="prelude-val">Err </span>(<span class="string">&quot;No solution found&quot;</span>.into ())
 }
-
-<span class="kw">fn </span>sanitise (input: &amp; Input) -&gt; GenResult &lt;Vec &lt;Claim&gt;&gt; {
-	<span class="kw">let </span><span class="kw-2">mut </span>claims = input.claims.clone ();
-	claims.sort_by_key (|claim| claim.id);
-	<span class="kw">if let </span><span class="prelude-val">Some </span>((claim, <span class="kw">_</span>)) = claims.iter ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.find (|&amp; (left, right)| left.id == right.id) {
-		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Duplicated claim id: {}&quot;</span>, claim.id).into ());
-	}
-	<span class="prelude-val">Ok </span>(claims)
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

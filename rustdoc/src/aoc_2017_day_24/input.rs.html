@@ -27,12 +27,9 @@
 <span id="27">27</span>
 <span id="28">28</span>
 <span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<span class="kw">use </span>model::Component;
+
+<span class="kw">use </span>model::Port;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input {
@@ -40,29 +37,24 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
+<span class="macro">struct_parser_display! </span>{
+	Input { comps, params } = [ params, @lines comps ]
+}
+
+<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+</span><span class="kw">pub struct </span>Component {
+	<span class="kw">pub </span>port_0: Port,
+	<span class="kw">pub </span>port_1: Port,
+}
+
+<span class="macro">struct_parser_display! </span>{
+	Component { port_0, port_1 } = [ port_0, <span class="string">&quot;/&quot;</span>, port_1 ]
+}
+
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
 	}
 }
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params, @lines comps);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ comps, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="kw">for </span>comp <span class="kw">in </span><span class="self">self</span>.comps.iter () {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}\n&quot;</span>, comp) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok </span>(())
-	}
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

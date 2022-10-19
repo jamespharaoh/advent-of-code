@@ -23,28 +23,22 @@
 <span id="23">23</span>
 <span id="24">24</span>
 <span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
 </span><span class="kw">pub struct </span>Input {
 	<span class="kw">pub </span>deps: Vec &lt;(char, char)&gt;,
 	<span class="kw">pub </span>params: InputParams,
+}
+
+<span class="macro">struct_parser_display! </span>{
+	Input { deps, params } = [
+		params,
+		@lines deps { (before, after) = [
+			<span class="string">&quot;Step &quot;</span>, before = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; must be finished before &quot;</span>,
+			<span class="string">&quot;step &quot;</span>, after = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; can begin.&quot;</span>,
+		] },
+	]
 }
 
 <span class="macro">input_params! </span>{
@@ -54,31 +48,5 @@
 		<span class="kw">pub </span>extra_time: u32 = (<span class="string">&quot;EXTRA_TIME=&quot;</span>, <span class="number">60</span>, <span class="number">0_u32 </span>..= <span class="number">60</span>),
 	}
 }
-
-<span class="kw">impl </span>Input {
-	<span class="kw">pub fn </span>parse (input: &amp; [&amp; str]) -&gt; GenResult &lt;<span class="self">Self</span>&gt; {
-		<span class="kw">let </span>parse_dep = |parser: &amp; <span class="kw-2">mut </span>Parser| {
-			<span class="macro">parse! </span>(parser,
-				<span class="string">&quot;Step &quot;</span>, before = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; must be finished before step &quot;</span>,
-				after = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; can begin.&quot;</span>);
-			<span class="prelude-val">Ok </span>((before, after))
-		};
-		Parser::wrap_lines (input, |parser| {
-			<span class="macro">parse! </span>(parser, params, @lines deps = parse_dep);
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ deps, params })
-		})
-	}
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Input {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		Display::fmt (&amp; <span class="self">self</span>.params, formatter) <span class="question-mark">?</span>;
-		<span class="kw">for </span>&amp; (before, after) <span class="kw">in </span><span class="self">self</span>.deps.iter () {
-			<span class="macro">write! </span>(formatter,
-				<span class="string">&quot;Step {before} must be finished before step {after} can begin.\n&quot;</span>) <span class="question-mark">?</span>;
-		}
-		<span class="prelude-val">Ok </span>(())
-	}
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

@@ -122,176 +122,81 @@
 <span id="122">122</span>
 <span id="123">123</span>
 <span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
-<span id="140">140</span>
-<span id="141">141</span>
-<span id="142">142</span>
-<span id="143">143</span>
-<span id="144">144</span>
-<span id="145">145</span>
-<span id="146">146</span>
-<span id="147">147</span>
-<span id="148">148</span>
-<span id="149">149</span>
-<span id="150">150</span>
-<span id="151">151</span>
-<span id="152">152</span>
-<span id="153">153</span>
-<span id="154">154</span>
-<span id="155">155</span>
-<span id="156">156</span>
-<span id="157">157</span>
-<span id="158">158</span>
-<span id="159">159</span>
-<span id="160">160</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
-<span class="kw">use </span>model::Grid;
+<span class="kw">use </span>model::Coord;
 <span class="kw">use </span>model::Pos;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 
 	<span class="comment">// work out size
 
-	</span><span class="kw">let </span>height = input.posns.iter ().map (|&amp; pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
-	<span class="kw">let </span>width = input.posns.iter ().map (|&amp; pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
+	</span><span class="kw">let </span>(start, end) = input.posns.iter ()
+		.fold (<span class="prelude-val">None</span>, |state: <span class="prelude-ty">Option </span>&lt;(Pos, Pos)&gt;, &amp; pos| state
+			.map (|(start, end)| (
+				Pos::new (cmp::min (start.y, pos.y), cmp::min (start.x, pos.x)),
+				Pos::new (cmp::max (end.y, pos.y), cmp::max (end.x, pos.x)),
+			))
+			.or (<span class="prelude-val">Some </span>((pos, pos))))
+		.unwrap ();
 
-	<span class="comment">// initialize grid
+	<span class="comment">// work out area sizes, excluding any which touch the sides
 
-	</span><span class="kw">let </span><span class="kw-2">mut </span>grid = Grid::new_size (Pos::new (height, width));
-	<span class="kw">let </span><span class="kw-2">mut </span>next_id: u8 = <span class="number">1</span>;
-	<span class="kw">for </span>&amp; pos <span class="kw">in </span>input.posns.iter () {
-		<span class="kw">if </span>next_id == u8::MAX { <span class="macro">panic! </span>() }
-		grid.set (pos, next_id);
-		next_id += <span class="number">1</span>;
-	}
-
-	<span class="comment">// spread out one square at a time
-
-	</span><span class="kw">let </span><span class="kw-2">mut </span>todo: Vec &lt;(Pos, u8)&gt; =
-		input.posns.iter ()
-			.flat_map (|&amp; pos| {
-				<span class="kw">let </span>val = grid.get (pos).unwrap ();
-				pos.adjacent_4 ().iter ()
-					.filter (|&amp;&amp; adj_pos| grid.get (adj_pos).map_or (<span class="bool-val">false</span>, |val| val == <span class="number">0</span>))
-					.map (|&amp; adj_pos| (adj_pos, val))
-					.collect::&lt;ArrayVec &lt;(Pos, u8), <span class="number">4</span>&gt;&gt; ()
-			})
-			.collect ();
-
-	<span class="kw">let </span><span class="kw-2">mut </span>todo_next: Vec &lt;(Pos, u8)&gt; = Vec::new ();
-	<span class="kw">let </span><span class="kw-2">mut </span>adj_vals: Vec &lt;u8&gt; = Vec::new ();
-
-	<span class="kw">loop </span>{
-		todo.sort ();
-		<span class="kw">let </span><span class="kw-2">mut </span>progress = <span class="bool-val">false</span>;
-		<span class="kw">let </span>temp = todo.drain ( .. ).group_by (|&amp; (pos, <span class="kw">_</span>)| pos);
-		<span class="kw">for </span>(pos, group_iter) <span class="kw">in </span>temp.into_iter () {
-			<span class="kw">let </span>val = <span class="macro">some_or! </span>(grid.get (pos), <span class="kw">continue</span>);
-			<span class="kw">if </span>val != <span class="number">0 </span>{ <span class="kw">continue </span>}
-			adj_vals.clear ();
-			adj_vals.extend (group_iter.map (|(<span class="kw">_</span>, val)| val));
-			<span class="kw">let </span>first = adj_vals [<span class="number">0</span>];
-			<span class="kw">if </span>adj_vals.iter ().all (|&amp; adj_val| adj_val == first) {
-				<span class="kw">let </span>new_val = adj_vals [<span class="number">0</span>];
-				grid.set (pos, new_val);
-				<span class="kw">for </span>adj_pos <span class="kw">in </span>pos.adjacent_4 () {
-					<span class="kw">if let </span><span class="prelude-val">Some </span>(adj_val) = grid.get (adj_pos) {
-						<span class="kw">if </span>adj_val == <span class="number">0 </span>{ todo_next.push ((adj_pos, new_val)); }
-					}
-				}
+	</span><span class="kw">let </span><span class="kw-2">mut </span>areas = <span class="macro">vec! </span>[<span class="number">0_u32</span>; input.posns.len ()];
+	<span class="kw">for </span>y <span class="kw">in </span>start.y ..= end.y {
+		<span class="kw">for </span>x <span class="kw">in </span>start.x ..= end.x {
+			<span class="kw">let </span>pos = Pos::new (y, x);
+			<span class="kw">let </span>(<span class="kw">_</span>, close_idx) = input.posns.iter ().enumerate ()
+				.fold ((u16::MAX, usize::MAX), |(close_dist, close_idx), (inp_idx, inp_pos)| {
+					<span class="kw">let </span>dist = inp_pos.y.abs_diff (pos.y) + inp_pos.x.abs_diff (pos.x);
+					<span class="attribute">#[ allow (clippy::comparison_chain) ] </span><span class="comment">// this is significantly quicker
+					</span><span class="kw">if </span>dist &lt; close_dist { (dist, inp_idx) }
+					<span class="kw">else if </span>close_dist == dist { (close_dist, usize::MAX) }
+					<span class="kw">else </span>{ (close_dist, close_idx) }
+				});
+			<span class="kw">if </span>close_idx == usize::MAX { <span class="kw">continue </span>}
+			<span class="kw">if </span>areas [close_idx] == u32::MAX { <span class="kw">continue </span>}
+			<span class="kw">if </span>y == start.y || y == end.y || x == start.x || x == end.x {
+				areas [close_idx] = u32::MAX;
 			} <span class="kw">else </span>{
-				grid.set (pos, u8::MAX);
+				areas [close_idx] += <span class="number">1</span>;
 			}
-			progress = <span class="bool-val">true</span>;
 		}
-		<span class="kw">if </span>! progress { <span class="kw">break </span>}
-		drop (temp);
-		mem::swap (&amp; <span class="kw-2">mut </span>todo, &amp; <span class="kw-2">mut </span>todo_next);
 	}
 
-	<span class="comment">// measure size of areas
+	<span class="comment">// find largest area
 
-	</span><span class="kw">let </span><span class="kw-2">mut </span>areas = [<span class="number">0_u32</span>; <span class="number">256</span>];
-
-	<span class="kw">for </span>value <span class="kw">in </span>grid.values () {
-		<span class="kw">if </span>value == <span class="number">0 </span>|| value == u8::MAX { <span class="kw">continue </span>}
-		areas [value.pan_usize ()] += <span class="number">1</span>;
-	}
-
-	<span class="comment">// remove areas which reach the edge
-
-	</span><span class="kw">for </span>(<span class="kw">_</span>, val) <span class="kw">in </span>grid.iter ()
-		.filter (|&amp; (pos, <span class="kw">_</span>)|
-			pos.x == <span class="number">0_i32 </span>|| pos.x == width - <span class="number">1_i32
-				</span>|| pos.y == <span class="number">0_i32 </span>|| pos.y == height - <span class="number">1_i32</span>) {
-		areas [val.pan_usize ()] = <span class="number">0</span>;
-	}
-
-	<span class="comment">// find largest remaining area
-
-	</span><span class="prelude-val">Ok </span>(areas.into_iter ().max ().unwrap ())
+	</span><span class="prelude-val">Ok </span>(
+		areas.into_iter ()
+			.filter (|&amp; area| area != u32::MAX)
+			.max ()
+			.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?
+	</span>)
 
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 
 	<span class="comment">// work out size
 
-	</span><span class="kw">let </span>height = input.posns.iter ().map (|&amp; pos| pos.y + <span class="number">1_i32</span>).max ().unwrap ();
-	<span class="kw">let </span>width = input.posns.iter ().map (|&amp; pos| pos.x + <span class="number">1_i32</span>).max ().unwrap ();
+	</span><span class="kw">let </span>height = input.posns.iter ().map (|&amp; pos| pos.y + Coord::ONE).max ().unwrap ();
+	<span class="kw">let </span>width = input.posns.iter ().map (|&amp; pos| pos.x + Coord::ONE).max ().unwrap ();
 
 	<span class="comment">// work out horizontal/vertical distances separately
 
-	</span><span class="kw">fn </span>calc_axis_dists (posns_iter: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;, size: i32) -&gt; Vec &lt;u32&gt; {
-		<span class="kw">let </span>posns: Vec &lt;i32&gt; = posns_iter.sorted ().collect ();
-		<span class="kw">fn </span>calc_one_way (
-			posns_iter: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;,
-			range: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;,
-		) -&gt; Vec &lt;u32&gt; {
-			<span class="kw">let </span><span class="kw-2">mut </span>num_points = <span class="number">0</span>;
-			<span class="kw">let </span><span class="kw-2">mut </span>cur_dist = <span class="number">0</span>;
-			<span class="kw">let </span><span class="kw-2">mut </span>posns_iter = posns_iter.peekable ();
-			<span class="kw">let </span><span class="kw-2">mut </span>dists: Vec &lt;u32&gt; = Vec::new ();
-			<span class="kw">for </span>pos <span class="kw">in </span>range {
-				cur_dist += num_points;
-				dists.push (cur_dist);
-				<span class="kw">while </span>posns_iter.peek () == <span class="prelude-val">Some </span>(&amp; pos) {
-					posns_iter.next ().unwrap ();
-					num_points += <span class="number">1</span>;
-				}
-			}
-			dists
-		}
-		<span class="kw">let </span>dists_fwd = calc_one_way (posns.iter ().copied (), <span class="number">0_i32 </span>.. size);
-		<span class="kw">let </span>dists_rev = calc_one_way (posns.iter ().rev ().copied (), (<span class="number">0_i32 </span>.. size).rev ());
-		dists_fwd.iter ().zip (dists_rev.iter ().rev ())
-			.map (|(&amp; fwd, &amp; rev)| fwd + rev)
-			.collect ()
-	}
-
-	<span class="kw">let </span>dists_x = calc_axis_dists (input.posns.iter ().map (|pos| pos.x), width);
-	<span class="kw">let </span>dists_y = calc_axis_dists (input.posns.iter ().map (|pos| pos.y), height);
+	</span><span class="kw">let </span>dists_x = calc_axis_dists (
+		input.posns.iter ().map (|pos| pos.x.pan_i32 ()),
+		width.pan_i32 ());
+	<span class="kw">let </span>dists_y = calc_axis_dists (
+		input.posns.iter ().map (|pos| pos.y.pan_i32 ()),
+		height.pan_i32 ());
 
 	<span class="comment">// sum separate distances to get totals and count how many are in range
 
@@ -308,15 +213,38 @@
 
 }
 
-<span class="kw">fn </span>sanity_check (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
+<span class="kw">fn </span>calc_axis_dists (posns_iter: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;, size: i32) -&gt; Vec &lt;u32&gt; {
+	<span class="kw">let </span>posns: Vec &lt;i32&gt; = posns_iter.sorted ().collect ();
+	<span class="kw">let </span>dists_fwd = calc_one_way (posns.iter ().copied (), <span class="number">0_i32 </span>.. size);
+	<span class="kw">let </span>dists_rev = calc_one_way (posns.iter ().rev ().copied (), (<span class="number">0_i32 </span>.. size).rev ());
+	dists_fwd.iter ().zip (dists_rev.iter ().rev ())
+		.map (|(&amp; fwd, &amp; rev)| fwd + rev)
+		.collect ()
+}
+
+<span class="kw">fn </span>calc_one_way (
+	posns_iter: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;,
+	range: <span class="kw">impl </span>Iterator &lt;Item = i32&gt;,
+) -&gt; Vec &lt;u32&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>num_points = <span class="number">0</span>;
+	<span class="kw">let </span><span class="kw-2">mut </span>cur_dist = <span class="number">0</span>;
+	<span class="kw">let </span><span class="kw-2">mut </span>posns_iter = posns_iter.peekable ();
+	<span class="kw">let </span><span class="kw-2">mut </span>dists: Vec &lt;u32&gt; = Vec::new ();
+	<span class="kw">for </span>pos <span class="kw">in </span>range {
+		cur_dist += num_points;
+		dists.push (cur_dist);
+		<span class="kw">while </span>posns_iter.peek () == <span class="prelude-val">Some </span>(&amp; pos) {
+			posns_iter.next ().unwrap ();
+			num_points += <span class="number">1</span>;
+		}
+	}
+	dists
+}
+
+<span class="kw">fn </span>check_input (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">if </span>input.posns.is_empty () { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least one position&quot;</span>.into ()) }
 	<span class="kw">if </span>input.posns.len () &gt; <span class="number">50 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to handle more than 50 points&quot;</span>.into ()) }
-	<span class="kw">if </span>input.posns.iter ()
-			.any (|&amp; pos| ! (<span class="number">0_i32 </span>..= <span class="number">399_i32</span>).contains (&amp; pos.x)
-				|| ! (<span class="number">0_i32 </span>..= <span class="number">399_i32</span>).contains (&amp; pos.y)) {
-		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Refusing to handle positions not between 0 and 399&quot;</span>.into ());
-	}
 	<span class="prelude-val">Ok </span>(())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

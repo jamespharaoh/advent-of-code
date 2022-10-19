@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Event",""]],"struct":[["Date",""],["Entry",""],["HourMinute",""]]};
+window.SIDEBAR_ITEMS = {"struct":[["Date",""],["HourMinute",""]]};

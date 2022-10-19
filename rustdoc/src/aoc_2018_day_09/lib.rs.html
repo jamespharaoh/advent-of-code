@@ -18,28 +18,6 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
-<span id="34">34</span>
-<span id="35">35</span>
-<span id="36">36</span>
-<span id="37">37</span>
-<span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2018: Day 9: Marble Mania
 //!
 //! [https://adventofcode.com/2018/day/09](https://adventofcode.com/2018/day/09)
@@ -48,6 +26,7 @@
 
 </span><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
+<span class="kw">mod </span>examples;
 <span class="kw">pub mod </span>input;
 <span class="kw">pub mod </span>logic;
 
@@ -55,32 +34,9 @@
 	name = <span class="string">&quot;Marble Mania&quot;</span>;
 	year = <span class="number">2018</span>;
 	day = <span class="number">9</span>;
-	parse = |input_lines| input::Input::parse_from_lines (input_lines);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (&amp; input);
 	part_two = |input| logic::part_two (&amp; input);
 }
-
-<span class="attribute">#[ cfg (test) ]
-</span><span class="kw">mod </span>examples {
-
-	<span class="kw">use super</span>::<span class="kw-2">*</span>;
-
-	<span class="kw">const </span>EXAMPLE: &amp; [&amp; str] = &amp; [
-		<span class="string">&quot;9 players; last marble is worth 25 points&quot;</span>,
-	];
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_one () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;32&quot;</span>, puzzle.part_one (EXAMPLE));
-	}
-
-	<span class="attribute">#[ test ]
-	</span><span class="kw">fn </span>part_two () {
-		<span class="kw">let </span>puzzle = puzzle_metadata ();
-		<span class="macro">assert_eq_ok! </span>(<span class="string">&quot;22563&quot;</span>, puzzle.part_two (EXAMPLE));
-	}
-
-}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (b8b5caee0 2022-10-16)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
