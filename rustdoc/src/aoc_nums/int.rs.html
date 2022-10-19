@@ -292,6 +292,16 @@
 <span id="292">292</span>
 <span id="293">293</span>
 <span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>std::ops::Bound;
@@ -359,6 +369,16 @@
 	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>check_bit (<span class="self">self</span>, bit: u32) -&gt; bool {
 		<span class="self">self </span>&amp; (<span class="self">Self</span>::ONE &lt;&lt; bit) != <span class="self">Self</span>::ZERO
+	}
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>bit_set_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, bit: u32) {
+		* <span class="self">self </span>|= <span class="self">Self</span>::ONE &lt;&lt; bit;
+	}
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>bit_clear_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, bit: u32) {
+		* <span class="self">self </span>&amp;= ! (<span class="self">Self</span>::ONE &lt;&lt; bit);
 	}
 
 	<span class="attribute">#[ inline (always) ]

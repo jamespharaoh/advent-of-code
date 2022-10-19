@@ -330,6 +330,8 @@
 <span id="330">330</span>
 <span id="331">331</span>
 <span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>std::ops::Add;
@@ -340,6 +342,7 @@
 <span class="kw">use </span>std::ops::BitOrAssign;
 <span class="kw">use </span>std::ops::Div;
 <span class="kw">use </span>std::ops::Mul;
+<span class="kw">use </span>std::ops::Not;
 <span class="kw">use </span>std::ops::Rem;
 <span class="kw">use </span>std::ops::Shl;
 <span class="kw">use </span>std::ops::ShlAssign;
@@ -356,15 +359,16 @@
 
 <span class="kw">pub trait </span>IntOpsRust: Sized + Add &lt;Output = <span class="self">Self</span>&gt; + AddAssign + BitAnd &lt;Output = <span class="self">Self</span>&gt;
 	+ BitAndAssign + BitOr &lt;Output = <span class="self">Self</span>&gt; + BitOrAssign + Div &lt;Output = <span class="self">Self</span>&gt;
-	+ Mul &lt;Output = <span class="self">Self</span>&gt; + Rem &lt;Output = <span class="self">Self</span>&gt; + Shl &lt;u32, Output = <span class="self">Self</span>&gt; + ShlAssign &lt;u32&gt;
-	+ Shr &lt;u32, Output = <span class="self">Self</span>&gt; + ShrAssign &lt;u32&gt; + Sub &lt;Output = <span class="self">Self</span>&gt; + SubAssign {
+	+ Mul &lt;Output = <span class="self">Self</span>&gt; + Not &lt;Output = <span class="self">Self</span>&gt; + Rem &lt;Output = <span class="self">Self</span>&gt; + Shl &lt;u32, Output = <span class="self">Self</span>&gt;
+	+ ShlAssign &lt;u32&gt; + Shr &lt;u32, Output = <span class="self">Self</span>&gt; + ShrAssign &lt;u32&gt; + Sub &lt;Output = <span class="self">Self</span>&gt;
+	+ SubAssign {
 }
 
 <span class="kw">impl </span>&lt;Val&gt; IntOpsRust <span class="kw">for </span>Val <span class="kw">where </span>Val: Sized + Add &lt;Output = <span class="self">Self</span>&gt; + AddAssign
 	+ BitAnd &lt;Output = <span class="self">Self</span>&gt; + BitAndAssign + BitOr &lt;Output = <span class="self">Self</span>&gt; + BitOrAssign
-	+ Div &lt;Output = <span class="self">Self</span>&gt; + Mul &lt;Output = <span class="self">Self</span>&gt; + Rem &lt;Output = <span class="self">Self</span>&gt; + Shl &lt;u32, Output = <span class="self">Self</span>&gt;
-	+ ShlAssign &lt;u32&gt; + Shr &lt;u32, Output = <span class="self">Self</span>&gt; + ShrAssign &lt;u32&gt; + Sub &lt;Output = <span class="self">Self</span>&gt;
-	+ SubAssign {
+	+ Div &lt;Output = <span class="self">Self</span>&gt; + Mul &lt;Output = <span class="self">Self</span>&gt; + Not &lt;Output = <span class="self">Self</span>&gt; + Rem &lt;Output = <span class="self">Self</span>&gt;
+	+ Shl &lt;u32, Output = <span class="self">Self</span>&gt; + ShlAssign &lt;u32&gt; + Shr &lt;u32, Output = <span class="self">Self</span>&gt; + ShrAssign &lt;u32&gt;
+	+ Sub &lt;Output = <span class="self">Self</span>&gt; + SubAssign {
 }
 
 <span class="kw">pub trait </span>IntOpsSafe: Sized {

@@ -18,18 +18,54 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-<span class="kw">use </span>model::Display;
-
 <span class="attribute">#[ derive (Clone, Debug) ]
-</span><span class="kw">pub struct </span>Input {
-	<span class="kw">pub </span>displays: Vec &lt;Display&gt;,
+</span><span class="kw">pub struct </span>Input &lt;<span class="lifetime">&#39;inp</span>&gt; {
+	<span class="kw">pub </span>displays: Vec &lt;InputDisplay &lt;<span class="lifetime">&#39;inp</span>&gt;&gt;,
 	<span class="kw">pub </span>params: InputParams,
 }
 
 <span class="macro">struct_parser_display! </span>{
-	Input { displays, params } = [ params, @lines displays ]
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	Input &lt;<span class="lifetime">&#39;inp</span>&gt; { displays, params } = [ params, @lines displays ]
+}
+
+<span class="attribute">#[ derive (Clone, Debug) ]
+</span><span class="kw">pub struct </span>InputDisplay &lt;<span class="lifetime">&#39;inp</span>&gt; {
+	<span class="kw">pub </span>samples: [InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;; <span class="number">10</span>],
+	<span class="kw">pub </span>value: [InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;; <span class="number">4</span>],
+}
+
+<span class="macro">struct_parser_display! </span>{
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	InputDisplay &lt;<span class="lifetime">&#39;inp</span>&gt; { samples, value } = [
+		@array_delim <span class="string">&quot; &quot; </span>samples {
+			digit = [ @str digit = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;g&#39;</span>, <span class="number">1 </span>..= <span class="number">7</span>) ],
+		},
+		<span class="string">&quot; | &quot;</span>,
+		@array_delim <span class="string">&quot; &quot; </span>value {
+			digit = [ @str digit = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;g&#39;</span>, <span class="number">1 </span>..= <span class="number">7</span>) ],
+		},
+	]
 }
 
 <span class="macro">input_params! </span>{

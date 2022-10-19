@@ -67,26 +67,6 @@
 <span id="67">67</span>
 <span id="68">68</span>
 <span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
-<span id="86">86</span>
-<span id="87">87</span>
-<span id="88">88</span>
-<span id="89">89</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -106,28 +86,18 @@
 	<span class="kw">pub </span>contains: Vec &lt;InputNumBags &lt;<span class="lifetime">&#39;inp</span>&gt;&gt;,
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Display <span class="kw">for </span>InputBagContains &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="kw">let </span>&amp; <span class="self">Self </span>{ <span class="kw-2">ref </span>colour, <span class="kw-2">ref </span>contains } = <span class="self">self</span>;
-		<span class="macro">display! </span>(formatter, colour, <span class="string">&quot; bags contain &quot;</span>);
-		<span class="kw">if </span><span class="self">self</span>.contains.is_empty () {
-			<span class="macro">display! </span>(formatter, <span class="string">&quot;no other bags.&quot;</span>);
-		} <span class="kw">else </span>{
-			<span class="macro">display! </span>(formatter, @delim <span class="string">&quot;, &quot; </span>contains, <span class="string">&quot;.&quot;</span>);
-		}
-		<span class="prelude-val">Ok </span>(())
-	}
-}
-
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>InputBagContains &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-		<span class="macro">parse! </span>(parser, colour = parse_colour, <span class="string">&quot; bags contain &quot;</span>);
-		<span class="kw">let </span>contains = parser.any ()
-			.of (|parser| { <span class="macro">parse! </span>(parser, @delim <span class="string">&quot;, &quot; </span>contains, <span class="string">&quot;.&quot;</span>); <span class="prelude-val">Ok </span>(contains) })
-			.of (|parser| { <span class="macro">parse! </span>(parser, <span class="string">&quot;no other bags.&quot;</span>); <span class="prelude-val">Ok </span>(Vec::new ()) })
-			.done () <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ colour, contains })
-	}
+<span class="macro">struct_parser_display! </span>{
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	InputBagContains &lt;<span class="lifetime">&#39;inp</span>&gt; { colour, contains } = [
+		colour = parse_colour, <span class="string">&quot; bags contain &quot;</span>, contains {
+			<span class="kw">type </span>= Vec &lt;InputNumBags&gt;;
+			contains <span class="kw">if </span>(contains.is_empty ()) = [
+				<span class="string">&quot;no other bags&quot;</span>,
+				@parse contains { Vec::new () },
+			],
+			contains = [ @delim <span class="string">&quot;, &quot; </span>contains ],
+		}, <span class="string">&quot;.&quot;</span>,
+	]
 }
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -136,25 +106,15 @@
 	<span class="kw">pub </span>colour: InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;,
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; Display <span class="kw">for </span>InputNumBags &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="macro">write! </span>(formatter,
-			<span class="string">&quot;{num} {colour} {noun}&quot;</span>,
-			num = <span class="self">self</span>.num,
-			colour = <span class="self">self</span>.colour,
-			noun = <span class="kw">if </span><span class="self">self</span>.num != <span class="number">1 </span>{ <span class="string">&quot;bags&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot;bag&quot; </span>})
-	}
-}
-
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>InputNumBags &lt;<span class="lifetime">&#39;inp</span>&gt; {
-	<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-		<span class="macro">parse! </span>(parser, num, <span class="string">&quot; &quot;</span>, colour = parse_colour, <span class="string">&quot; &quot;</span>);
-		parser.any ()
-			.of (|parser| { parser.expect (<span class="string">&quot;bags&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok </span>(()) })
-			.of (|parser| { parser.expect (<span class="string">&quot;bag&quot;</span>) <span class="question-mark">?</span>; <span class="prelude-val">Ok </span>(()) })
-			.done () <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ num, colour })
-	}
+<span class="macro">struct_parser_display! </span>{
+	input_lifetime = <span class="lifetime">&#39;inp</span>;
+	InputNumBags &lt;<span class="lifetime">&#39;inp</span>&gt; { num, colour } = [
+		(num, colour) {
+			<span class="kw">type </span>= (&amp; u32, &amp; InpStr);
+			(num, colour) <span class="kw">if </span>(* num != <span class="number">1</span>) = [ num, <span class="string">&quot; &quot;</span>, colour = parse_colour, <span class="string">&quot; bags&quot; </span>],
+			(num, colour) = [ num, <span class="string">&quot; &quot;</span>, colour = parse_colour, <span class="string">&quot; bag&quot; </span>],
+		},
+	]
 }
 
 <span class="kw">fn </span>parse_colour &lt;<span class="lifetime">&#39;inp</span>&gt; (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;&gt; {
@@ -172,8 +132,8 @@
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>max_iters_one: u32 = (<span class="string">&quot;MAX_ITERS_ONE=&quot;</span>, <span class="number">200</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>max_iters_two: u32 = (<span class="string">&quot;MAX_ITERS_TWO=&quot;</span>, <span class="number">100</span>, <span class="number">1_u32 </span>.. ),
+		<span class="kw">pub </span>max_iters_one: u32 = (<span class="string">&quot;MAX_ITERS_ONE=&quot;</span>, <span class="number">200</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>max_iters_two: u32 = (<span class="string">&quot;MAX_ITERS_TWO=&quot;</span>, <span class="number">100</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>

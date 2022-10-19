@@ -168,6 +168,8 @@
 <span id="168">168</span>
 <span id="169">169</span>
 <span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
@@ -175,8 +177,9 @@
 <span class="kw">use </span>model::Display;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+	<span class="kw">let </span>displays = Display::build_vec (&amp; input.displays) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(
-		input.displays.iter ()
+		displays.iter ()
 			.flat_map (|display| display.value.iter ().copied ()
 				.map (Digit::num_segments))
 			.filter (|&amp; num_segments| <span class="macro">matches! </span>(num_segments, <span class="number">2 </span>| <span class="number">3 </span>| <span class="number">4 </span>| <span class="number">7</span>))
@@ -186,10 +189,11 @@
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+	<span class="kw">let </span>displays = Display::build_vec (&amp; input.displays) <span class="question-mark">?</span>;
 	<span class="kw">if </span>input.params.use_solver {
-		solver::part_two (input)
+		solver::part_two (&amp; displays)
 	} <span class="kw">else </span>{
-		bits::part_two (input)
+		bits::part_two (&amp; displays)
 	}
 }
 
@@ -207,8 +211,8 @@
 
 	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {	
-		input.displays.iter ()
+	<span class="kw">pub fn </span>part_two (displays: &amp; [Display]) -&gt; GenResult &lt;u32&gt; {	
+		displays.iter ()
 			.map (|&amp; display| decode_display (display))
 			.try_fold (<span class="number">0_u32</span>, |sum, val| <span class="prelude-val">Ok </span>(sum + val <span class="question-mark">?</span>.pan_u32 ()))
 	}
@@ -218,14 +222,14 @@
 	}
 
 	<span class="kw">fn </span>get_digits (display: Display) -&gt; GenResult &lt;[u8; <span class="number">10</span>]&gt; {
-		<span class="kw">let </span><span class="kw-2">mut </span>temp = display.digits.map (Digit::num_segments);
+		<span class="kw">let </span><span class="kw-2">mut </span>temp = display.samples.map (Digit::num_segments);
 		temp.sort ();
 		<span class="kw">if </span>temp != [<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>] {
 			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;No solution found&quot;</span>.into ());
 		}
 		<span class="kw">let </span>[<span class="kw-2">mut </span>segs_acf, <span class="kw-2">mut </span>segs_bcdf, <span class="kw-2">mut </span>segs_bcef, <span class="kw-2">mut </span>segs_cde, <span class="kw-2">mut </span>segs_cf] = [<span class="number">0</span>; <span class="number">5</span>];
 		<span class="kw">let </span>segs_abcdefg = <span class="number">0x7f</span>;
-		<span class="kw">for </span>&amp; digit <span class="kw">in </span>&amp; display.digits {
+		<span class="kw">for </span>&amp; digit <span class="kw">in </span>&amp; display.samples {
 			<span class="kw">match </span>digit.num_segments () {
 				<span class="number">2 </span>=&gt; segs_cf = digit.on (),
 				<span class="number">3 </span>=&gt; segs_acf = digit.on (),
@@ -264,15 +268,15 @@
 	<span class="kw">use super</span>::<span class="kw-2">*</span>;
 	<span class="kw">use </span><span class="kw">crate</span>::solver::<span class="kw-2">*</span>;
 
-	<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {	
+	<span class="kw">pub fn </span>part_two (displays: &amp; [Display]) -&gt; GenResult &lt;u32&gt; {	
 		<span class="kw">let </span>solver = DigitsSolver::build ();
-		input.displays.iter ()
+		displays.iter ()
 			.map (|&amp; display| decode_display (&amp; solver, display))
 			.try_fold (<span class="number">0_u32</span>, |sum, val| <span class="prelude-val">Ok </span>(sum + val <span class="question-mark">?</span>.pan_u32 ()))
 	}
 
 	<span class="kw">fn </span>decode_display (solver: &amp; DigitsSolver, display: Display) -&gt; GenResult &lt;u16&gt; {
-		decode_value (display, solver.solve (display.digits) <span class="question-mark">?</span>)
+		decode_value (display, solver.solve (display.samples) <span class="question-mark">?</span>)
 	}
 
 	<span class="kw">pub struct </span>DigitsSolver {

@@ -95,7 +95,7 @@
 <span class="macro">struct_parser_display! </span>{
 	Date { year, month, day } = [
 		year = <span class="number">1 </span>..= <span class="number">9999</span>, <span class="string">&quot;-&quot;</span>, month = <span class="number">1 </span>..= <span class="number">12</span>, <span class="string">&quot;-&quot;</span>, day = <span class="number">1 </span>..= <span class="number">31</span>,
-		@parse |parser| {	
+		@parse |parser| {
 			<span class="kw">if </span>Date::days_in_month (year, month) &lt; day {
 				<span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ())
 			}

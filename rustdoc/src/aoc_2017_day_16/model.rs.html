@@ -166,63 +166,6 @@
 <span id="166">166</span>
 <span id="167">167</span>
 <span id="168">168</span>
-<span id="169">169</span>
-<span id="170">170</span>
-<span id="171">171</span>
-<span id="172">172</span>
-<span id="173">173</span>
-<span id="174">174</span>
-<span id="175">175</span>
-<span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub use </span>line::Line;
@@ -238,6 +181,10 @@
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">pub struct </span>Pos { id: u8 }
 
+	<span class="macro">struct_parser_display! </span>{
+		Pos { id } = [ id = <span class="number">0 </span>.. <span class="number">16 </span>]
+	}
+
 	<span class="kw">impl </span>Pos {
 
 		<span class="attribute">#[ inline ]
@@ -248,28 +195,7 @@
 
 	}
 
-	<span class="kw">impl </span>Display <span class="kw">for </span>Pos {
-
-		<span class="attribute">#[ inline ]
-		</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.id) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
-
-	}
-
 	<span class="kw">impl </span>LineItem <span class="kw">for </span>Pos {
-	}
-
-	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Pos {
-
-		<span class="attribute">#[ inline ]
-		</span><span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-			<span class="kw">let </span>id = parser.uint () <span class="question-mark">?</span>;
-			<span class="kw">if </span>! (<span class="number">0 </span>..= <span class="number">15</span>).contains (&amp; id) { <span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ()) }
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ id })
-		}
-
 	}
 
 	<span class="kw">impl </span>TryFrom &lt;u8&gt; <span class="kw">for </span>Pos {
@@ -293,6 +219,14 @@
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	</span><span class="kw">pub struct </span>Prog { id: u8 }
 
+	<span class="macro">struct_parser_display! </span>{
+		Prog { id } = [
+			@display { <span class="kw">let </span>id = (id + <span class="string">b&#39;a&#39;</span>).pan_char (); },
+			id = <span class="string">&#39;a&#39; </span>..= <span class="string">&#39;p&#39;</span>,
+			@parse { <span class="kw">let </span>id = id.pan_u8 () - <span class="string">b&#39;a&#39;</span>; },
+		]
+	}
+
 	<span class="kw">impl </span>Prog {
 
 		<span class="attribute">#[ inline ]
@@ -301,57 +235,9 @@
 			<span class="self">self</span>.id.pan_usize ()
 		}
 
-		<span class="attribute">#[ inline ]
-		#[ must_use ]
-		</span><span class="kw">pub fn </span>as_char (<span class="self">self</span>) -&gt; char {
-			<span class="kw">match </span><span class="self">self</span>.id {
-				<span class="number">0x00 </span>=&gt; <span class="string">&#39;a&#39;</span>, <span class="number">0x01 </span>=&gt; <span class="string">&#39;b&#39;</span>, <span class="number">0x02 </span>=&gt; <span class="string">&#39;c&#39;</span>, <span class="number">0x03 </span>=&gt; <span class="string">&#39;d&#39;</span>,
-				<span class="number">0x04 </span>=&gt; <span class="string">&#39;e&#39;</span>, <span class="number">0x05 </span>=&gt; <span class="string">&#39;f&#39;</span>, <span class="number">0x06 </span>=&gt; <span class="string">&#39;g&#39;</span>, <span class="number">0x07 </span>=&gt; <span class="string">&#39;h&#39;</span>,
-				<span class="number">0x08 </span>=&gt; <span class="string">&#39;i&#39;</span>, <span class="number">0x09 </span>=&gt; <span class="string">&#39;j&#39;</span>, <span class="number">0x0a </span>=&gt; <span class="string">&#39;k&#39;</span>, <span class="number">0x0b </span>=&gt; <span class="string">&#39;l&#39;</span>,
-				<span class="number">0x0c </span>=&gt; <span class="string">&#39;m&#39;</span>, <span class="number">0x0d </span>=&gt; <span class="string">&#39;n&#39;</span>, <span class="number">0x0e </span>=&gt; <span class="string">&#39;o&#39;</span>, <span class="number">0x0f </span>=&gt; <span class="string">&#39;p&#39;</span>,
-				<span class="kw">_ </span>=&gt; <span class="macro">unreachable! </span>(),
-			}
-		}
-
-	}
-
-	<span class="kw">impl </span>Display <span class="kw">for </span>Prog {
-
-		<span class="attribute">#[ inline ]
-		</span><span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-			formatter.write_char (<span class="self">self</span>.as_char ()) <span class="question-mark">?</span>;
-			<span class="prelude-val">Ok </span>(())
-		}
-
-	}
-
-	<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Prog {
-
-		<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-			<span class="self">Self</span>::try_from (parser.expect_next () <span class="question-mark">?</span>).map_err (|_err| parser.err ())
-		}
-
 	}
 
 	<span class="kw">impl </span>LineItem <span class="kw">for </span>Prog {
-	}
-
-	<span class="kw">impl </span>TryFrom &lt;char&gt; <span class="kw">for </span>Prog {
-
-		<span class="kw">type </span>Error = ();
-
-		<span class="attribute">#[ inline ]
-		</span><span class="kw">fn </span>try_from (ch: char) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
-			<span class="kw">let </span>id = <span class="kw">match </span>ch {
-				<span class="string">&#39;a&#39; </span>=&gt; <span class="number">0x00</span>, <span class="string">&#39;b&#39; </span>=&gt; <span class="number">0x01</span>, <span class="string">&#39;c&#39; </span>=&gt; <span class="number">0x02</span>, <span class="string">&#39;d&#39; </span>=&gt; <span class="number">0x03</span>,
-				<span class="string">&#39;e&#39; </span>=&gt; <span class="number">0x04</span>, <span class="string">&#39;f&#39; </span>=&gt; <span class="number">0x05</span>, <span class="string">&#39;g&#39; </span>=&gt; <span class="number">0x06</span>, <span class="string">&#39;h&#39; </span>=&gt; <span class="number">0x07</span>,
-				<span class="string">&#39;i&#39; </span>=&gt; <span class="number">0x08</span>, <span class="string">&#39;j&#39; </span>=&gt; <span class="number">0x09</span>, <span class="string">&#39;k&#39; </span>=&gt; <span class="number">0x0a</span>, <span class="string">&#39;l&#39; </span>=&gt; <span class="number">0x0b</span>,
-				<span class="string">&#39;m&#39; </span>=&gt; <span class="number">0x0c</span>, <span class="string">&#39;n&#39; </span>=&gt; <span class="number">0x0d</span>, <span class="string">&#39;o&#39; </span>=&gt; <span class="number">0x0e</span>, <span class="string">&#39;p&#39; </span>=&gt; <span class="number">0x0f</span>,
-				<span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(()),
-			};
-			<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ id })
-		}
-
 	}
 
 	<span class="kw">impl </span>TryFrom &lt;u8&gt; <span class="kw">for </span>Prog {

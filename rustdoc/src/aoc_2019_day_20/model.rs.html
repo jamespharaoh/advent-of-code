@@ -59,29 +59,6 @@
 <span id="59">59</span>
 <span id="60">60</span>
 <span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
-<span id="73">73</span>
-<span id="74">74</span>
-<span id="75">75</span>
-<span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
-<span id="79">79</span>
-<span id="80">80</span>
-<span id="81">81</span>
-<span id="82">82</span>
-<span id="83">83</span>
-<span id="84">84</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = i8;
@@ -89,37 +66,14 @@
 <span class="kw">pub type </span>Grid = GridBuf &lt;Vec &lt;Tile&gt;, Pos, <span class="number">2</span>&gt;;
 <span class="kw">pub type </span>Pos = pos::PosYX &lt;Coord&gt;;
 
-<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-</span><span class="kw">pub enum </span>Tile {
-	<span class="attribute">#[ default ]
-	</span>Empty,
-	Passage,
-	Wall,
-	Letter (char),
-}
-
-<span class="kw">impl </span>Display <span class="kw">for </span>Tile {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="kw">match </span>* <span class="self">self </span>{
-			<span class="self">Self</span>::Empty =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot; &quot;</span>),
-			<span class="self">Self</span>::Passage =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;.&quot;</span>),
-			<span class="self">Self</span>::Wall =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;#&quot;</span>),
-			<span class="self">Self</span>::Letter (ch) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, ch),
-		}
-	}
-}
-
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Tile {
-	<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
-		<span class="kw">let </span>val = <span class="kw">match </span>parser.peek ().ok_or_else (|| parser.err ()) <span class="question-mark">? </span>{
-			<span class="string">&#39; &#39; </span>=&gt; <span class="self">Self</span>::Empty,
-			<span class="string">&#39;.&#39; </span>=&gt; <span class="self">Self</span>::Passage,
-			<span class="string">&#39;#&#39; </span>=&gt; <span class="self">Self</span>::Wall,
-			ch @ <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39; </span>=&gt; <span class="self">Self</span>::Letter (ch),
-			<span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(parser.err ()),
-		};
-		parser.expect_next () <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>(val)
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Tile {
+		<span class="attribute">#[ default ]
+		</span>Empty = [ <span class="string">&quot; &quot; </span>],
+		Passage = [ <span class="string">&quot;.&quot; </span>],
+		Wall = [ <span class="string">&quot;#&quot; </span>],
+		Letter (ch: char) = [ ch = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39; </span>],
 	}
 }
 

@@ -63,19 +63,38 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>input::InputDisplay;
 
 <span class="attribute">#[ derive (Clone, Copy, Debug) ]
 </span><span class="kw">pub struct </span>Display {
-	<span class="kw">pub </span>digits: [Digit; <span class="number">10</span>],
+	<span class="kw">pub </span>samples: [Digit; <span class="number">10</span>],
 	<span class="kw">pub </span>value: [Digit; <span class="number">4</span>],
 }
 
-<span class="macro">struct_parser_display! </span>{
-	Display { digits, value } = [ @array_delim <span class="string">&quot; &quot; </span>digits, <span class="string">&quot; | &quot;</span>, @array_delim <span class="string">&quot; &quot; </span>value ]
+<span class="kw">impl </span>Display {
+	<span class="kw">pub fn </span>build_vec (displays: &amp; [InputDisplay]) -&gt; GenResult &lt;Vec &lt;<span class="self">Self</span>&gt;&gt; {
+		displays.iter ()
+			.map (|display| {
+				<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
+					samples: display.samples.iter ()
+						.map (|src| src.parse ())
+						.try_array ()
+						.unwrap (),
+					value: display.value.iter ()
+						.map (|src| src.parse ())
+						.try_array ()
+						.unwrap (),
+				})
+			})
+			.collect ()
+	}
 }
 
-<span class="attribute">#[ derive (Clone, Copy, Debug) ]
+<span class="attribute">#[ derive (Clone, Copy, Debug, Default) ]
 </span><span class="kw">pub struct </span>Digit {
 	<span class="kw">pub </span>segments: u8,
 }
@@ -102,30 +121,15 @@
 
 }
 
-<span class="kw">impl </span>&lt;<span class="lifetime">&#39;inp</span>&gt; FromParser &lt;<span class="lifetime">&#39;inp</span>&gt; <span class="kw">for </span>Digit {
-	<span class="kw">fn </span>from_parser (parser: &amp; <span class="kw-2">mut </span>Parser &lt;<span class="lifetime">&#39;inp</span>&gt;) -&gt; ParseResult &lt;<span class="self">Self</span>&gt; {
+<span class="kw">impl </span>FromStr <span class="kw">for </span>Digit {
+	<span class="kw">type </span><span class="prelude-val">Err </span>= ();
+	<span class="kw">fn </span>from_str (src: &amp; str) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, ()&gt; {
 		<span class="kw">let </span><span class="kw-2">mut </span>segments = <span class="number">0_u8</span>;
-		<span class="kw">let </span>err = parser.err ();
-		<span class="kw">let </span>rest = parser.take_rest_while (|ch| (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;g&#39;</span>).contains (&amp; ch), <span class="number">2 </span>..= <span class="number">7</span>) <span class="question-mark">?</span>;
-		<span class="kw">for </span>ch <span class="kw">in </span>rest.chars () {
-			<span class="kw">let </span>bit = <span class="number">1 </span>&lt;&lt; (ch.pan_u32 () - <span class="string">&#39;a&#39;</span>.pan_u32 ());
-			<span class="kw">if </span>segments &amp; bit != <span class="number">0 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(err) }
-			segments |= bit;
+		<span class="kw">for </span>ch <span class="kw">in </span>src.chars () {
+			<span class="kw">if </span>! (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;g&#39;</span>).contains (&amp; ch) { <span class="kw">return </span><span class="prelude-val">Err </span>(()) }
+			segments.bit_set_assign (ch.pan_u32 () - <span class="string">&#39;a&#39;</span>.pan_u32 ());
 		}
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ segments })
-	}
-}
-
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>Digit {
-	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="kw">let </span><span class="kw-2">mut </span>segments = <span class="self">self</span>.segments;
-		<span class="kw">let </span><span class="kw-2">mut </span>ch = <span class="string">&#39;a&#39;</span>;
-		<span class="kw">for _ in </span><span class="number">0_u32 </span>.. <span class="number">7 </span>{
-			<span class="kw">if </span>segments &amp; <span class="number">1 </span>!= <span class="number">0 </span>{ formatter.write_char (ch) <span class="question-mark">?</span>; }
-			segments &gt;&gt;= <span class="number">1_u32</span>;
-			ch = (ch.pan_u32 () + <span class="number">1</span>).pan_char ();
-		}
-		<span class="prelude-val">Ok </span>(())
 	}
 }
 </code></pre></div>
