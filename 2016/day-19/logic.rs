@@ -13,7 +13,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		if ! take && odd { rem = (rem + 1) / 2; } else { rem /= 2; }
 		if take { first_with += sep; }
 		if odd { take = ! take; }
-		sep = u32::mul_2 (sep, 2) ?;
+		sep = chk! (sep * 2) ?;
 	}
 	Ok (first_with + 1)
 }

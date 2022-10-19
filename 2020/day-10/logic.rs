@@ -27,7 +27,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 		for (next_idx, & next) in sequence [idx + 1 .. ].iter ().enumerate () {
 			let next_idx = idx + 1 + next_idx;
 			if cur + 3 < next { break }
-			work [next_idx] = Int::add_2 (work [next_idx], num) ?;
+			work [next_idx] = chk! (work [next_idx] + num) ?;
 		}
 	}
 	Ok (* work.last ().unwrap ())

@@ -78,7 +78,7 @@ impl ScannerArranger {
 				})));
 		if self.original_scanners.is_empty () { return Ok (false) }
 		self.unplaced_scanners = self.original_scanners.iter ()
-			.map (|scanner| Ok (Rc::new (UnplacedScanner {
+			.map (|scanner| Ok::<_, Overflow> (Rc::new (UnplacedScanner {
 				original: Rc::clone (scanner),
 				hashes: self.calc_scanner_hashes (& scanner.beacons, UNPLACED_ROTATIONS) ?,
 			})))

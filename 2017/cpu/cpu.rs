@@ -196,28 +196,16 @@ mod logic {
 					self.store_dst (dst, self.load_src (src));
 				},
 				Instr::Add (dst, src) => {
-					self.store_dst (dst, Val::add_2 (
-						self.load_dst (dst),
-						self.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) ?);
+					self.store_dst (dst, chk! (self.load_dst (dst) + self.load_src (src)) ?);
 				},
 				Instr::Sub (dst, src) => {
-					self.store_dst (dst, Val::sub_2 (
-						self.load_dst (dst),
-						self.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) ?);
+					self.store_dst (dst, chk! (self.load_dst (dst) - self.load_src (src)) ?);
 				},
 				Instr::Mul (dst, src) => {
-					self.store_dst (dst, Val::mul_2 (
-						self.load_dst (dst),
-						self.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) ?);
+					self.store_dst (dst, chk! (self.load_dst (dst) * self.load_src (src)) ?);
 				},
 				Instr::Mod (dst, src) => {
-					self.store_dst (dst, Val::rem_2 (
-						self.load_dst (dst),
-						self.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) ?);
+					self.store_dst (dst, chk! (self.load_dst (dst) % self.load_src (src)) ?);
 				},
 				Instr::Rcv (dst) => {
 					let data = self.input.pop_front ().ok_or (CpuError::Receive) ?;
@@ -320,6 +308,13 @@ mod logic {
 	}
 
 	impl Error for CpuError {
+	}
+
+	impl From <Overflow> for CpuError {
+		#[ inline ]
+		fn from (_overflow: Overflow) -> Self {
+			Self::Overflow
+		}
 	}
 
 }

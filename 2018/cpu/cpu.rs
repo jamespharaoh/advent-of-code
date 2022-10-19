@@ -123,8 +123,8 @@ impl Op {
 	) -> CpuResult <Val> {
 		use CpuError::Overflow as ErrNum;
 		Ok (match * self {
-			Self::Add => Val::add_2 (val_a ?, val_b ?).ok ().ok_or (ErrNum) ?,
-			Self::Mul => Val::mul_2 (val_a ?, val_b ?).ok ().ok_or (ErrNum) ?,
+			Self::Add => chk! (val_a ? + val_b ?).ok ().ok_or (ErrNum) ?,
+			Self::Mul => chk! (val_a ? * val_b ?).ok ().ok_or (ErrNum) ?,
 			Self::Ban => val_a ? & val_b ?,
 			Self::Bor => val_a ? | val_b ?,
 			Self::Set => val_a ?,

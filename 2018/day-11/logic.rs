@@ -104,12 +104,6 @@ fn calc_power (input: & Input, pos: Pos) -> Option <Power> {
 		return None;
 	}
 	let rack_id = pos.x.pan_i32 () + 10_i32;
-	let power_level = Power::mul_2 (
-		Power::add_2 (
-			Power::mul_2 (rack_id, pos.y.pan_i32 ()).ok () ?,
-			input.serial,
-		).ok () ?,
-		rack_id,
-	).ok () ?;
+	let power_level = chk! ((rack_id * pos.y.pan_i32 () + input.serial) * rack_id).ok () ?;
 	Some ((power_level % 1000_i32) / 100_i32 - 5_i32)
 }

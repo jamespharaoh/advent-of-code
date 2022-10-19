@@ -7,6 +7,7 @@ use aoc_nums as nums;
 use nums::Int;
 use nums::IntSigned;
 use nums::NumResult;
+use nums::Overflow;
 use nums::TryAdd;
 use nums::TryMul;
 use nums::TrySub;
@@ -57,14 +58,14 @@ macro_rules! pos_decl {
 				#[ inline ]
 				pub fn $neg (self, num: Val) -> NumResult <Self> {
 					let mut result = self;
-					result.$field = Val::sub_2 (result.$field, num) ?;
+					result.$field = chk! (result.$field - num) ?;
 					Ok (result)
 				}
 
 				#[ inline ]
 				pub fn $pos (self, num: Val) -> NumResult <Self> {
 					let mut result = self;
-					result.$field = Val::add_2 (result.$field, num) ?;
+					result.$field = chk! (result.$field + num) ?;
 					Ok (result)
 				}
 
@@ -493,10 +494,10 @@ mod dim_2 {
 			fn try_add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
 				let mut result = self;
 				match dir {
-					Dir2d::Up => result.y = Val::sub_2 (result.y, dist) ?,
-					Dir2d::Down => result.y = Val::add_2 (result.y, dist) ?,
-					Dir2d::Left => result.x = Val::sub_2 (result.x, dist) ?,
-					Dir2d::Right => result.x = Val::add_2 (result.x, dist) ?,
+					Dir2d::Up => result.y = chk! (result.y - dist) ?,
+					Dir2d::Down => result.y = chk! (result.y + dist) ?,
+					Dir2d::Left => result.x = chk! (result.x - dist) ?,
+					Dir2d::Right => result.x = chk! (result.x + dist) ?,
 				}
 				Ok (result)
 			}
@@ -600,10 +601,10 @@ mod dim_2 {
 			fn add (self, (dir, dist): (DirGeo, Val)) -> NumResult <Self> {
 				let mut result = self;
 				match dir {
-					DirGeo::North => result.n = Val::add_2 (result.n, dist) ?,
-					DirGeo::South => result.n = Val::sub_2 (result.n, dist) ?,
-					DirGeo::East => result.e = Val::add_2 (result.e, dist) ?,
-					DirGeo::West => result.e = Val::sub_2 (result.e, dist) ?,
+					DirGeo::North => result.n = chk! (result.n + dist) ?,
+					DirGeo::South => result.n = chk! (result.n - dist) ?,
+					DirGeo::East => result.e = chk! (result.e + dist) ?,
+					DirGeo::West => result.e = chk! (result.e - dist) ?,
 				}
 				Ok (result)
 			}
@@ -830,10 +831,10 @@ mod dim_2 {
 			fn try_add (self, (dir, dist): (Dir2d, Val)) -> NumResult <Self> {
 				let mut result = self;
 				match dir {
-					Dir2d::Up => result.row = Val::sub_2 (result.row, dist) ?,
-					Dir2d::Down => result.row = Val::add_2 (result.row, dist) ?,
-					Dir2d::Left => result.col = Val::sub_2 (result.col, dist) ?,
-					Dir2d::Right => result.col = Val::add_2 (result.col, dist) ?,
+					Dir2d::Up => result.row = chk! (result.row - dist) ?,
+					Dir2d::Down => result.row = chk! (result.row + dist) ?,
+					Dir2d::Left => result.col = chk! (result.col - dist) ?,
+					Dir2d::Right => result.col = chk! (result.col + dist) ?,
 				}
 				Ok (result)
 			}

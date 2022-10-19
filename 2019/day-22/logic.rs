@@ -42,7 +42,7 @@ fn shuffle_to_operation (shuffle: Shuffle, deck_size: u64) -> GenResult <Operati
 		},
 		Shuffle::Cut (arg) => {
 			let arg = if 0_i32 <= arg {
-				u64::sub_2 (deck_size, arg.pan_u64 ()) ?
+				chk! (deck_size - arg.pan_u64 ()) ?
 			} else {
 				arg.unsigned_abs ().pan_u64 ()
 			};

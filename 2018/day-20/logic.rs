@@ -25,7 +25,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 		for dir in grid.get (pos).unwrap ().doors () {
 			let adj_pos = (pos + (dir, 1)).unwrap ();
 			if ! seen.insert (adj_pos) { continue }
-			todo.push ((adj_pos, u32::add_2 (dist, 1) ?));
+			todo.push ((adj_pos, chk! (dist + 1_u32) ?));
 		}
 	}
 	Ok (furthest)
@@ -43,7 +43,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		for dir in grid.get (pos).unwrap ().doors () {
 			let adj_pos = (pos + (dir, 1)).unwrap ();
 			if ! seen.insert (adj_pos) { continue }
-			todo.push ((adj_pos, u32::add_2 (dist, 1) ?));
+			todo.push ((adj_pos, chk! (dist + 1_u32) ?));
 		}
 	}
 	Ok (num_far_rooms)
@@ -78,7 +78,7 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 				for (sub_branch_idx, sub_branch) in branches.iter ().enumerate () {
 					let sub_branch_idx = sub_branch_idx.to_u8 () ?;
 					let mut stack = stack.clone ();
-					stack.push ((string.clone (), start_pos, branch_idx, u8::add_2 (string_idx, 1) ?));
+					stack.push ((string.clone (), start_pos, branch_idx, chk! (string_idx + 1_u8) ?));
 					stack.push ((sub_branch.clone (), pos, sub_branch_idx, 0));
 					if seen.insert ((pos, make_seen_indexes (& stack))) {
 						todo.push ((pos, stack));
@@ -92,7 +92,7 @@ fn gen_grid (input: & Input) -> GenResult <Grid> {
 					if grid.get (pos).is_none () { grid_resize (& mut grid, dir) ?; }
 					* grid.get_mut (pos).unwrap () |= dir.rev ();
 				}
-				stack.push ((string, start_pos, branch_idx, u8::add_2 (string_idx, 1) ?));
+				stack.push ((string, start_pos, branch_idx, chk! (string_idx + 1_u8) ?));
 				if seen.insert ((pos, make_seen_indexes (& stack))) {
 					todo.push ((pos, stack));
 				}

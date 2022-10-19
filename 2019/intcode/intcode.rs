@@ -83,59 +83,57 @@ impl <Val: Int> Machine <Val> {
 				.ok_or (RunResult::Instr (Val::ZERO, Val::ZERO)) ?;
 			match opcode.instr {
 				Instr::Add => {
-					self.param_set (opcode, 2, Val::add_2 (
-						self.param_get (opcode, 0) ?,
-						self.param_get (opcode, 1) ?,
-					) ?) ?;
-					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
+					let param_0 = self.param_get (opcode, 0) ?;
+					let param_1 = self.param_get (opcode, 1) ?;
+					self.param_set (opcode, 2, chk! (param_0 + param_1) ?) ?;
+					self.pos = chk! (self.pos + Val::FOUR) ?;
 				},
 				Instr::Multiply => {
-					self.param_set (opcode, 2, Val::mul_2 (
-						self.param_get (opcode, 0) ?,
-						self.param_get (opcode, 1) ?,
-					) ?) ?;
-					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
+					let param_0 = self.param_get (opcode, 0) ?;
+					let param_1 = self.param_get (opcode, 1) ?;
+					self.param_set (opcode, 2, chk! (param_0 * param_1) ?) ?;
+					self.pos = chk! (self.pos + Val::FOUR) ?;
 				},
 				Instr::Input => {
 					if let Some (value) = self.input_buffer.pop_front () {
 						self.param_set (opcode, 0, value) ?;
-						self.pos = Val::add_2 (self.pos, Val::TWO) ?;
+						self.pos = chk! (self.pos + Val::TWO) ?;
 					} else {
 						return Ok (RunResult::Input);
 					}
 				},
 				Instr::Output => {
 					let value = self.param_get (opcode, 0) ?;
-					self.pos = Val::add_2 (self.pos, Val::TWO) ?;
+					self.pos = chk! (self.pos + Val::TWO) ?;
 					return Ok (RunResult::Output (value));
 				},
 				Instr::JumpIfTrue => {
 					if self.param_get (opcode, 0) ? != Val::ZERO {
 						self.pos = self.param_get (opcode, 1) ?;
 					} else {
-						self.pos = Val::add_2 (self.pos, Val::THREE) ?;
+						self.pos = chk! (self.pos + Val::THREE) ?;
 					}
 				},
 				Instr::JumpIfFalse => {
 					if self.param_get (opcode, 0) ? == Val::ZERO {
 						self.pos = self.param_get (opcode, 1) ?;
 					} else {
-						self.pos = Val::add_2 (self.pos, Val::THREE) ?;
+						self.pos = chk! (self.pos + Val::THREE) ?;
 					}
 				},
 				Instr::LessThan => {
 					let value = self.param_get (opcode, 0) ? < self.param_get (opcode, 1) ?;
 					self.param_set (opcode, 2, if value { Val::ONE } else { Val::ZERO }) ?;
-					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
+					self.pos = chk! (self.pos + Val::FOUR) ?;
 				},
 				Instr::Equals => {
 					let value = self.param_get (opcode, 0) ? == self.param_get (opcode, 1) ?;
 					self.param_set (opcode, 2, if value { Val::ONE } else { Val::ZERO }) ?;
-					self.pos = Val::add_2 (self.pos, Val::FOUR) ?;
+					self.pos = chk! (self.pos + Val::FOUR) ?;
 				},
 				Instr::AdjustRelBase => {
-					self.rel = Val::add_2 (self.rel, self.param_get (opcode, 0) ?) ?;
-					self.pos = Val::add_2 (self.pos, Val::TWO) ?;
+					self.rel = chk! (self.rel + self.param_get (opcode, 0) ?) ?;
+					self.pos = chk! (self.pos + Val::TWO) ?;
 				},
 				Instr::Halt => return Ok (RunResult::Halt),
 			}
@@ -144,7 +142,7 @@ impl <Val: Int> Machine <Val> {
 
 	#[ inline ]
 	fn param_raw (& self, num: u8) -> Result <Val, RunResult <Val>> {
-		let addr = Val::add_3 (self.pos, Val::ONE, Val::from_u8 (num).unwrap ()) ?;
+		let addr = chk! (self.pos + Val::ONE + Val::from_u8 (num).unwrap ()) ?;
 		self.mem_get_real (addr)
 	}
 
@@ -154,7 +152,7 @@ impl <Val: Int> Machine <Val> {
 		match opcode.modes [num.qck_usize ()] {
 			Mode::Position => self.mem_get_real (raw),
 			Mode::Immediate => Ok (raw),
-			Mode::Relative => self.mem_get_real (Val::add_2 (raw, self.rel) ?),
+			Mode::Relative => self.mem_get_real (chk! (raw + self.rel) ?),
 		}
 	}
 

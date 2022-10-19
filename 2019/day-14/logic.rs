@@ -18,7 +18,7 @@ pub fn part_two (input: & Input) -> GenResult <Qty> {
 	let order = calc_order (& reactions, & dependencies) ?;
 	let mut max: Qty = 1;
 	while calc_ore (& reactions, & order, max) ? <= input.params.num_ore {
-		max = Qty::mul_2 (max, 2) ?;
+		max = chk! (max * 2) ?;
 	}
 	let mut min: Qty = max / 2;
 	while max - min != 1 {
@@ -110,12 +110,10 @@ fn calc_ore (reactions: & Reactions, order: & Order, num_fuel: Qty) -> GenResult
 		let reaction = & reactions [output_chemical];
 		let needed_qty = * quantities.get (output_chemical).ok_or ("No solution found") ?;
 		if needed_qty == Qty::ZERO { continue }
-		let reaction_times = Qty::div_2 (
-			Qty::sub_2 (Qty::add_2 (needed_qty, reaction.output.qty) ?, 1) ?,
-			reaction.output.qty) ?;
+		let reaction_times = chk! ((needed_qty + reaction.output.qty - 1) / reaction.output.qty) ?;
 		for input in & reaction.inputs {
 			let entry = quantities.entry (input.chem.clone ()).or_insert (0);
-			* entry = Qty::add_2 (* entry, Qty::mul_2 (input.qty, reaction_times) ?) ?;
+			* entry = chk! (* entry + input.qty * reaction_times) ?;
 		}
 	}
 	Ok (quantities.get (& InpStr::borrow ("ORE")).copied ().ok_or ("No solution found") ?)

@@ -7,13 +7,7 @@ pub struct Input {
 }
 
 struct_parser_display! {
-	Input {
-		module_masses,
-		params,
-	} = [
-		params,
-		@lines module_masses,
-	]
+	Input { module_masses, params } = [ params, @lines module_masses ]
 }
 
 input_params! {

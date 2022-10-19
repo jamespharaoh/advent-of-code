@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Cpu;
 use model::Val;

@@ -1,9 +1,9 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Axis;
-use model::Coord;
 use model::Energy;
 use model::Moon;
 use model::MoonAxis;
@@ -26,9 +26,9 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 	let repeat_z = calc_axis_repeat (input, Axis::Z) ?;
 	if repeat_x.0 != 0 || repeat_y.0 != 0 || repeat_z.0 != 0 { panic! () }
 	let mut result = 1_u64;
-	result = calc_lcm (result, repeat_x.1);
-	result = calc_lcm (result, repeat_y.1);
-	result = calc_lcm (result, repeat_z.1);
+	result = u64::lcm (result, repeat_x.1);
+	result = u64::lcm (result, repeat_y.1);
+	result = u64::lcm (result, repeat_z.1);
 	Ok (result)
 }
 
@@ -48,14 +48,12 @@ fn calc_axis_repeat (input: & Input, axis: Axis) -> GenResult <(u64, u64)> {
 				if idx_0 == idx_1 { continue }
 				let moon_0 = & moons [idx_0];
 				let moon_1 = & moons [idx_1];
-				moons [idx_0].vel = Coord::add_2 (
-					moon_0.vel,
-					Coord::sub_2 (moon_1.pos, moon_0.pos) ?.signum (),
-				) ?;
+				moons [idx_0].vel =
+					chk! (moon_0.vel + chk! (moon_1.pos - moon_0.pos) ?.signum ()) ?;
 			};
 		}
 		for moon in moons.iter_mut () {
-			moon.pos = Coord::add_2 (moon.pos, moon.vel) ?;
+			moon.pos = chk! (moon.pos + moon.vel) ?;
 		}
 		tick += 1;
 	}
@@ -79,18 +77,4 @@ fn tick (moons: & mut Vec <Moon>) -> GenResult <()> {
 		moon.pos = moon.pos.try_add (moon.vel) ?;
 	}
 	Ok (())
-}
-
-fn calc_lcm <Val: Int> (num_0: Val, num_1: Val) -> Val {
-	let gcd = calc_gcd (num_0, num_1);
-	num_0 * num_1 / gcd
-}
-
-fn calc_gcd <Val: Int> (mut num_0: Val, mut num_1: Val) -> Val {
-	loop {
-		let rem = num_0 % num_1;
-		if rem == Val::ZERO { return num_1 }
-		num_0 = num_1;
-		num_1 = rem;
-	}
 }

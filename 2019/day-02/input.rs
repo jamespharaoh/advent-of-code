@@ -9,18 +9,12 @@ pub struct Input {
 }
 
 struct_parser_display! {
-	Input {
-		data,
-		params,
-	} = [
-		params,
-		@delim "," data,
-	]
+	Input { data, params } = [ params, @delim "," data ]
 }
 
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub max_ops: u32 = ("MAX_OPS=", 100, 1_u32 ..),
+		pub max_ops: u32 = ("MAX_OPS=", 100, 1 .. ),
 	}
 }

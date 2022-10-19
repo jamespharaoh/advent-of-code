@@ -26,11 +26,9 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 	let offset =
 		input.data.iter ().copied ()
 			.take (input.params.offset_digits.pan_usize ())
-			.try_fold (0, |sum, item| u32::add_2 (u32::mul_2 (sum, 10) ?, item.pan_u32 ())) ?;
-	let signal_len = usize::sub_2 (
-		input.data.len () * input.params.num_reps.pan_usize (),
-		offset.pan_usize (),
-	) ?;
+			.try_fold (0, |sum, item| chk! (sum * 10_u32 + item.pan_u32 ())) ?;
+	let signal_len =
+		chk! (input.data.len () * input.params.num_reps.pan_usize () - offset.pan_usize ()) ?;
 	if signal_len < input.params.result_digits.pan_usize () {
 		return Err ("Not enough signal data".into ());
 	}

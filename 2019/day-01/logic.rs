@@ -7,7 +7,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (
 		input.module_masses.iter ().copied ()
 			.map (|mass| if 6 < mass { mass / 3 - 2 } else { 0 })
-			.try_fold (0, u32::add_2) ?
+			.try_sum::<u32> () ?
 	)
 }
 
@@ -24,6 +24,6 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				}
 				sum
 			})
-			.try_fold (0, u32::add_2) ?
+			.try_fold (0, |sum, item| chk! (sum + item)) ?
 	)
 }

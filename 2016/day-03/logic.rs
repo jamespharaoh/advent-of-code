@@ -1,10 +1,9 @@
 use super::*;
 
 use input::Input;
-use model::Side;
 
 pub fn part_one (input: & Input) -> GenResult <usize> {
-	sanity_check (input) ?;
+	check_input (input) ?;
 	let num_possible =
 		input.triangles.iter ()
 			.map (|& (a, b, c)| [a, b, c])
@@ -15,7 +14,7 @@ pub fn part_one (input: & Input) -> GenResult <usize> {
 }
 
 pub fn part_two (input: & Input) -> GenResult <usize> {
-	sanity_check (input) ?;
+	check_input (input) ?;
 	let num_possible =
 		input.triangles.iter ()
 			.tuples::<(_, _, _)> ()
@@ -29,9 +28,9 @@ pub fn part_two (input: & Input) -> GenResult <usize> {
 	Ok (num_possible)
 }
 
-fn sanity_check (input: & Input) -> GenResult <()> {
+fn check_input (input: & Input) -> GenResult <()> {
 	if input.triangles.iter ()
-			.any (|& (a, b, c)| Side::add_3 (a, b, c).is_err ()) {
+			.any (|& (a, b, c)| chk! (a + b + c).is_err ()) {
 		return Err ("Overflow".into ());
 	}
 	Ok (())

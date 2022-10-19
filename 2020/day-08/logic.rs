@@ -45,8 +45,8 @@ fn run (instrs: & [Instr]) -> GenResult <(Val, Val)> {
 		let instr_idx = pos.pan_usize ();
 		if ! seen.insert (instr_idx) { break }
 		let instr = instrs [instr_idx];
-		if instr.op == Op::Acc { acc = Val::add_2 (acc, instr.arg) ?; }
-		pos = Val::add_2 (pos, if instr.op == Op::Jmp { instr.arg } else { Val::ONE }) ?;
+		if instr.op == Op::Acc { acc = chk! (acc + instr.arg) ?; }
+		chk! (pos += if instr.op == Op::Jmp { instr.arg } else { Val::ONE }) ?;
 	}
 	Ok ((pos, acc))
 }

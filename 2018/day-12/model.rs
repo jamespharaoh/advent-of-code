@@ -92,7 +92,7 @@ impl Generator {
 			assert! (idx < 4096);
 			let next = self.bit_rules [idx];
 			if next == 0 && data.is_empty () {
-				start = Int::add_2 (start, 8) ?;
+				start = chk! (start + 8) ?;
 			} else {
 				data.push (next);
 			}

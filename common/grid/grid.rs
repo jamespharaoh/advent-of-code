@@ -20,6 +20,7 @@ use nums::TryAdd;
 use nums::TryAddAssign;
 use nums::TryMul;
 use nums::TrySub;
+use nums::TrySubAssign;
 
 mod buf;
 mod cursor;

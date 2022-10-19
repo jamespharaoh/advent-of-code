@@ -49,13 +49,13 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			return Err ("Giving up after max iters".into ());
 		}
 		num_iters += 1;
-		total_bags = u32::add_2 (total_bags, this_num_bags) ?;
+		total_bags = chk! (total_bags + this_num_bags) ?;
 		for & (ref contains_colour, contains_num_bags) in
 			direct_contents.get (& this_colour)
 				.ok_or_else (|| format! ("No rules for {this_colour} bags")) ? {
 			todo.push ((
 				contains_colour.clone (),
-				u32::mul_2 (this_num_bags, contains_num_bags) ?,
+				chk! (this_num_bags * contains_num_bags) ?,
 			));
 		}
 	}

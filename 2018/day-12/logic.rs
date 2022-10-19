@@ -33,15 +33,12 @@ fn calc_result (input: & Input, num_iters: u64) -> GenResult <i64> {
 		// simple maths
 
 		if let Some (& (prev_iters, prev_start)) = cache.get (& state.data) {
-			let loop_iters = u64::sub_2 (cur_iters, prev_iters) ?;
-			let rem_iters = u64::sub_2 (num_iters, cur_iters) ?;
+			let loop_iters = chk! (cur_iters - prev_iters) ?;
+			let rem_iters = chk! (num_iters - cur_iters) ?;
 			if loop_iters <= rem_iters {
-				let reps = u64::div_2 (rem_iters, loop_iters) ?;
-				state.start = i64::add_2 (state.start, Int::mul_2 (
-					Int::sub_2 (state.start, prev_start) ?,
-					reps.pan_i64 (),
-				) ?) ?;
-				cur_iters = Int::add_2 (cur_iters, Int::mul_2 (reps, loop_iters) ?) ?;
+				let reps = chk! (rem_iters / loop_iters) ?;
+				state.start = chk! (state.start + (state.start - prev_start) * reps.pan_i64 ()) ?;
+				cur_iters = chk! (cur_iters + reps * loop_iters) ?;
 			}
 		}
 
@@ -54,15 +51,15 @@ fn calc_result (input: & Input, num_iters: u64) -> GenResult <i64> {
 
 	// calculate the answer from the final state and return
 
-	Ok (
-		state.iter ()
-			.map (|(pos, pot)| {
-				Ok (match pot {
-					Pot::Empty => 0,
-					Pot::Plant => pos.to_i64 () ?,
-				})
+	let result = state.iter ()
+		.map (|(pos, pot)| {
+			Ok (match pot {
+				Pot::Empty => 0,
+				Pot::Plant => pos.to_i64 () ?,
 			})
-			.fold (Ok (0), |sum, item| Int::add_2 (sum ?, item ?)) ?
-	)
+		})
+		.try_fold (0, |sum, item| { chk! (sum + item ?) }) ?;
+
+	Ok (result)
 
 }

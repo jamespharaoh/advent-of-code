@@ -3,7 +3,6 @@
 use super::*;
 
 use input::Input;
-use nums::Int;
 
 pub fn part_one (input: & Input) -> GenResult <u64> {
 	calc_result::<3> (input)
@@ -40,8 +39,7 @@ fn calc_result <const PILES: usize> (input: & Input) -> GenResult <u64> {
 
 	let total_weight: u32 =
 		weights.iter ().copied ()
-			.fold (Ok (0), |sum, item| sum
-				.and_then (|sum| u32::add_2 (sum, item))) ?;
+			.try_fold (0, |sum, item| chk! (sum + item)) ?;
 	let want_pile_weight = total_weight / PILES.pan_u32 ();
 	if want_pile_weight * PILES.pan_u32 () != total_weight {
 		Err (format! ("Total weight is not a multiple of {}", PILES)) ?;
@@ -103,8 +101,7 @@ fn calc_result <const PILES: usize> (input: & Input) -> GenResult <u64> {
 			let quantum_0 =
 				stack [0].iter ().copied ()
 					.map (|idx| weights [idx].pan_u64 ())
-					.fold (Ok (1), |prod, item| prod
-						.and_then (|prod| u64::mul_2 (prod, item))) ?;
+					.try_fold (1, |prod, item| chk! (prod * item)) ?;
 			if max_quantum_0 <= quantum_0 { continue }
 		}
 
@@ -126,8 +123,7 @@ fn calc_result <const PILES: usize> (input: & Input) -> GenResult <u64> {
 				max_quantum_0 =
 					stack [0].iter ().copied ()
 						.map (|idx| weights [idx].pan_u64 ())
-						.fold (Ok (1), |prod, item| prod
-							.and_then (|prod| u64::mul_2 (prod, item))) ?;
+						.try_fold (1, |prod, item| chk! (prod * item)) ?;
 				shortcircuit = true;
 			}
 			continue;

@@ -25,9 +25,9 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 				}
 				Ok::<_, nums::Overflow> ((
 					idx,
-					Coord::add_3 (part.acc.x, part.acc.y, part.acc.z) ?,
-					Coord::add_3 (part.vel.x, part.vel.y, part.vel.z) ?,
-					Coord::add_3 (part.pos.x, part.pos.y, part.pos.z) ?,
+					chk! (part.acc.x + part.acc.y + part.acc.z) ?,
+					chk! (part.vel.x + part.vel.y + part.vel.z) ?,
+					chk! (part.pos.x + part.pos.y + part.pos.z) ?,
 				))
 			})
 			.fold_ok (None, |min: Option <(usize, Coord, Coord, Coord)>, item| min
@@ -71,11 +71,11 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 }
 
 fn next (mut part: Particle) -> NumResult <Particle> {
-	part.vel.x = Coord::add_2 (part.vel.x, part.acc.x) ?;
-	part.vel.y = Coord::add_2 (part.vel.y, part.acc.y) ?;
-	part.vel.z = Coord::add_2 (part.vel.z, part.acc.z) ?;
-	part.pos.x = Coord::add_2 (part.pos.x, part.vel.x) ?;
-	part.pos.y = Coord::add_2 (part.pos.y, part.vel.y) ?;
-	part.pos.z = Coord::add_2 (part.pos.z, part.vel.z) ?;
+	part.vel.x = chk! (part.vel.x + part.acc.x) ?;
+	part.vel.y = chk! (part.vel.y + part.acc.y) ?;
+	part.vel.z = chk! (part.vel.z + part.acc.z) ?;
+	part.pos.x = chk! (part.pos.x + part.vel.x) ?;
+	part.pos.y = chk! (part.pos.y + part.vel.y) ?;
+	part.pos.z = chk! (part.pos.z + part.vel.z) ?;
 	Ok (part)
 }

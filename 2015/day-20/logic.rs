@@ -28,21 +28,21 @@ pub fn calc_result (target: Val, mul: Val, lim: Val) -> NumResult <Val> {
 
 		let mut div = Val::ZERO;
 		for next in divs.iter_mut () {
-			div = Val::add_2 (div, Val::ONE) ?;
+			div = chk! (div + Val::ONE) ?;
 			if * next == Val::ZERO {
-				* next = Val::sub_2 (div, 1) ?;
+				* next = chk! (div - 1) ?;
 				let comp =
 					if div == Val::ONE { house }
 					else if div == 2 { house >> 1_i32 }
-					else { Val::div_2 (house, div) ? };
+					else { chk! (house / div) ? };
 				if comp <= lim {
-					total = Val::add_2 (total, Val::mul_2 (div, mul) ?) ?;
+					chk! (total += div * mul) ?;
 				}
 				if comp != div && div <= lim {
-					total = Val::add_2 (total, Val::mul_2 (comp, mul) ?) ?;
+					chk! (total += comp * mul) ?;
 				}
 			} else {
-				* next = Val::sub_2 (* next, Val::ONE) ?;
+				chk! (* next -= Val::ONE) ?;
 			}
 		}
 
@@ -55,9 +55,9 @@ pub fn calc_result (target: Val, mul: Val, lim: Val) -> NumResult <Val> {
 			} else {
 				divs.push (Val::from_usize (divs.len ()) ?);
 			}
-			total = Val::add_2 (total, Val::mul_2 (extend_sqrt, mul) ?) ?;
-			extend_sqrt = Val::add_2 (extend_sqrt, Val::ONE) ?;
-			extend = Val::mul_2 (extend_sqrt, extend_sqrt) ?;
+			total = chk! (total + extend_sqrt * mul) ?;
+			extend_sqrt = chk! (extend_sqrt + Val::ONE) ?;
+			extend = chk! (extend_sqrt * extend_sqrt) ?;
 		}
 
 		// return when we find a solution

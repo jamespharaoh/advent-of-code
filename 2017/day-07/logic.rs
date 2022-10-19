@@ -19,10 +19,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				.into_option ()
 				.ok_or ("No solution found") ?;
 		if min_weight == max_weight {
-			return Ok (u32::sub_2 (
-				u32::add_2 (cur.prog_weight, target_weight) ?,
-				cur.total_weight,
-			) ?);
+			return Ok (chk! (cur.prog_weight + target_weight - cur.total_weight) ?);
 		}
 		let num_min =
 			cur.holds.iter ()

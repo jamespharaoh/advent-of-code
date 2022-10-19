@@ -43,8 +43,8 @@ impl Cpu {
 			#[ allow (clippy::match_on_vec_items) ]
 			match self.instrs [self.next.qck_usize ()] {
 				Instr::Cpy (src, dst) => self.store (dst, self.load (src)),
-				Instr::Inc (reg) => self.store (reg, i32::add_2 (self.load (reg), 1_i32) ?),
-				Instr::Dec (reg) => self.store (reg, i32::sub_2 (self.load (reg), 1_i32) ?),
+				Instr::Inc (reg) => self.store (reg, chk! (self.load (reg) + 1_i32) ?),
+				Instr::Dec (reg) => self.store (reg, chk! (self.load (reg) - 1_i32) ?),
 				Instr::Jnz (src, dst) => { self.jnz (src, dst) ?; continue }
 				Instr::Tgl (dst) => {
 					let idx = u32::add_signed (self.next, self.load (dst)) ?;
@@ -94,7 +94,7 @@ impl Cpu {
 					Instr::Dec (arg),
 					Instr::Jnz (arg_0, Arg::Imm (-2_i32)),
 				] if arg == arg_0 && dst != arg && arg.is_reg () && dst.is_reg () => {
-					self.store (dst, i32::add_2 (self.load (dst), self.load (arg)) ?);
+					self.store (dst, chk! (self.load (dst) + self.load (arg)) ?);
 					self.store (arg, 0);
 					return Ok (());
 				},
@@ -113,10 +113,7 @@ impl Cpu {
 					Instr::Dec (arg_0),
 					Instr::Jnz (Arg::Imm (1_i32), Arg::Imm (-4_i32)),
 				] if arg == arg_0 && arg != dst && arg.is_reg () && dst.is_reg () => {
-					self.store (dst, i32::sub_2 (
-						self.load (dst),
-						self.load (arg),
-					) ?);
+					self.store (dst, chk! (self.load (dst) - self.load (arg)) ?);
 					self.store (arg, 0);
 				},
 				_ => (),
@@ -137,10 +134,7 @@ impl Cpu {
 				] if tmp == tmp_0 && tmp == tmp_1 && ctr == ctr_0 && arg != tmp && arg != dst
 						&& arg != ctr && tmp != dst && tmp != ctr && dst != ctr && dst.is_reg ()
 						&& tmp.is_reg () && ctr.is_reg () => {
-					self.store (dst, i32::add_2 (
-						self.load (dst),
-						i32::mul_2 (self.load (arg), self.load (ctr)) ?,
-					) ?);
+					self.store (dst, chk! (self.load (dst) + self.load (arg) * self.load (ctr)) ?);
 					self.store (tmp, 0);
 					self.store (ctr, 0);
 					return Ok (());
@@ -164,10 +158,7 @@ impl Cpu {
 					Instr::Jnz (Arg::Imm (1_i32), Arg::Imm (-7_i32)),
 				] if rem != mul && rem != out && mul != out && mul == mul_0 && rem == rem_0
 						&& rem == rem_1 && rem.is_reg () && mul.is_reg () && out.is_reg () => {
-					self.store (out, i32::add_2 (
-						self.load (out),
-						i32::div_2 (self.load (mul), div) ?,
-					) ?);
+					self.store (out, chk! (self.load (out) + self.load (mul) / div) ?);
 					let rem_val = self.load (mul) % div;
 					self.store (rem, if rem_val == 0 { div } else { rem_val });
 					self.store (mul, 0);

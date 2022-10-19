@@ -116,15 +116,14 @@ fn choose_targets (
 			def_groups.iter ().copied ()
 				.filter (|& (_, def_group)|
 					! def_group.has_immunity (att_group.attack_type))
-				.map (|(def_idx, def_group)| Ok ((
-					def_idx,
-					def_group,
-					if def_group.has_weakness (att_group.attack_type) {
+				.map (|(def_idx, def_group)| {
+					let damage = if def_group.has_weakness (att_group.attack_type) {
 						chk! (att_group.effective_power () * 2) ?
 					} else {
 						att_group.effective_power ()
-					}
-				)))
+					};
+					Ok ((def_idx, def_group, damage))
+				})
 				.max_ok_by_key (|& (_, def_group, damage)| (
 					damage,
 					def_group.effective_power (),

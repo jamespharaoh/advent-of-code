@@ -3,27 +3,17 @@ use model::Pos;
 
 #[ derive (Clone, Debug) ]
 pub struct Input {
-	pub coords: Vec <InputCoord>,
+	pub coords: Vec <Pos>,
 	pub params: InputParams,
 }
 
 struct_parser_display! {
-	Input {
-		coords,
+	Input { coords, params } = [
 		params,
-	} = [
-		params,
-		@lines coords,
+		@lines coords {
+			Pos { x, y, z, t } = [ x, ",", y, ",", z, ",", t ],
+		},
 	]
-}
-
-#[ derive (Clone, Copy, Debug) ]
-pub struct InputCoord {
-	pub coord: Pos,
-}
-
-struct_parser_display! {
-	InputCoord { coord: Pos { x, y, z, t } } = [ x, ",", y, ",", z, ",", t ]
 }
 
 input_params! {

@@ -11,20 +11,10 @@ use proc_macro::Span;
 use proc_macro::TokenStream;
 use proc_macro::TokenTree;
 use proc_macro::token_stream::IntoIter as TokenStreamIter;
-use std::iter;
 use std::iter::Peekable;
 use std::vec::IntoIter as VecIter;
 
 type TokenIter = Peekable <TokenStreamIter>;
-
-/*
-top = item arith-assign expr
-item = non-arithmetic +
-expr = item | expr arith expr | (expr)
-
-item -> Ok (item)
-left.op (right) => left.and_then (|left| right.and_then (|right| left.checked_op (right)))
-*/
 
 #[proc_macro]
 pub fn checked (tokens: TokenStream) -> TokenStream {
@@ -65,78 +55,50 @@ impl From <CheckedTop> for TokenStream {
 	fn from (top: CheckedTop) -> Self {
 		match top {
 			CheckedTop::Expr (expr) => expr.into (),
-			CheckedTop::Assign (left, punct_0, punct_1, right) => {
+			CheckedTop::Assign (left, punct_0, _punct_1, right) => {
 				let fn_name = match punct_0.as_char () {
-					'+' => "try_add",
-					'/' => "try_div",
-					'*' => "try_mul",
-					'%' => "try_rem",
-					'-' => "try_sub",
+					'+' => "try_add_assign",
+					'/' => "try_div_assign",
+					'*' => "try_mul_assign",
+					'%' => "try_rem_assign",
+					'-' => "try_sub_assign",
 					_ => unreachable! (),
 				};
 				[
 					// {
-					//   let __val: Result <_, Overflow> =
-					//     $right.and_then (|__right| $left.$fn_name (__right));
-					//   if let Ok (__val) == __val {
-					//     $left $punct_1 __val;
-					//   } else {
-					//     Err (Overflow)
+					//   match $right {
+					//     Ok (__right) => ($left).$fn_name (__right),
+					//     Err (__err) => Err (__err),
 					//   }
 					// }
 					TokenTree::Group (Group::new (Delimiter::Brace, [
-						TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
-						TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (':', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("Result", Span::mixed_site ())),
-						TokenTree::Punct (Punct::new ('<', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("_", Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (',', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
-						TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
-						TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
-						TokenTree::Group (Group::new (Delimiter::None, right.into ())),
-						TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("and_then", Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-							TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-							TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
-							TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-							TokenTree::Group (Group::new (Delimiter::None, (& left).into ())),
+						TokenTree::Ident (Ident::new ("match", Span::mixed_site ())),
+						right.into (),
+						TokenTree::Group (Group::new (Delimiter::Brace, [
+							TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
+							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+							TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, left.into ())),
 							TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
 							TokenTree::Ident (Ident::new (fn_name, Span::mixed_site ())),
 							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
 								TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
 							].into_iter ().collect ())),
-						].into_iter ().collect ())),
-						TokenTree::Punct (Punct::new (';', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("if", Span::mixed_site ())),
-						TokenTree::Ident (Ident::new ("let", Span::mixed_site ())),
-						TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-							TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-						].into_iter ().collect ())),
-						TokenTree::Punct (Punct::new ('=', Spacing::Alone)),
-						TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Brace, iter::empty ()
-							.chain (left.into_iter ())
-							.chain ([
-								TokenTree::Punct (punct_1),
-								TokenTree::Ident (Ident::new ("__val", Span::mixed_site ())),
-								TokenTree::Punct (Punct::new (';', Spacing::Alone)),
-								TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
-								TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-									TokenTree::Group (Group::new (Delimiter::Parenthesis,
-										Self::new ())),
-								].into_iter ().collect ())),
-							].into_iter ())
-							.collect ())),
-						TokenTree::Ident (Ident::new ("else", Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Brace, [
+							TokenTree::Punct (Punct::new (',', Spacing::Alone)),
 							TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
 							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-								TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
+								TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
 							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+							TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+							TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
+							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new (',', Spacing::Alone)),
 						].into_iter ().collect ())),
 					].into_iter ().collect ()))
 				].into_iter ().collect ()
@@ -229,11 +191,18 @@ impl From <CheckedExpr> for TokenStream {
 
 impl From <& CheckedExpr> for TokenStream {
 	fn from (expr: & CheckedExpr) -> Self {
-		let (fn_name, left, punct, right) = match * expr {
+		let (fn_name, left, _punct, right) = match * expr {
 			CheckedExpr::Item (ref item) => {
-				// Ok ($item)
+				// Ok::<_, Overflow> ($item)
 				return [
 					TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (':', Spacing::Joint)),
+					TokenTree::Punct (Punct::new (':', Spacing::Alone)),
+					TokenTree::Punct (Punct::new ('<', Spacing::Alone)),
+					TokenTree::Ident (Ident::new ("_", Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (',', Spacing::Alone)),
+					TokenTree::Ident (Ident::new ("Overflow", Span::mixed_site ())),
+					TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
 					TokenTree::Group (Group::new (Delimiter::Parenthesis, item.into ())),
 				].into_iter ().collect ();
 			},
@@ -244,30 +213,76 @@ impl From <& CheckedExpr> for TokenStream {
 			CheckedExpr::Sub (ref left, ref punct, ref right) => ("try_sub", left, punct, right),
 		};
 		[
-			// $left.and_then (|__left| $right.and_then (|__right| __left.$fn_name (__right)))
-			TokenTree::Group (Group::new (Delimiter::None, left.into ())),
-			TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
-			TokenTree::Ident (Ident::new ("and_then", punct.span ())),
-			TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-				TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-				TokenTree::Ident (Ident::new ("__left", punct.span ())),
-				TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-				TokenTree::Group (Group::new (Delimiter::None, right.into ())),
-				TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
-				TokenTree::Ident (Ident::new ("and_then", punct.span ())),
+			// match $left {
+			//   Ok (__left) => match $right {
+			//     Ok (__right) => __left.$fn_name (__right),
+			//     Err (__err) => Err (__err),
+			//   },
+			//   Err (__err) => Err (__err),
+			// }
+			TokenTree::Ident (Ident::new ("match", Span::mixed_site ())),
+			left.into (),
+			TokenTree::Group (Group::new (Delimiter::Brace, [
+				TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
 				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-					TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("__right", punct.span ())),
-					TokenTree::Punct (Punct::new ('|', Spacing::Alone)),
-					TokenTree::Ident (Ident::new ("__left", punct.span ())),
-					TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
-					TokenTree::Ident (Ident::new (fn_name, punct.span ())),
-					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-						TokenTree::Ident (Ident::new ("__right", punct.span ())),
-					].into_iter ().collect ())),
+					TokenTree::Ident (Ident::new ("__left", Span::mixed_site ())),
 				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+				TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+				TokenTree::Ident (Ident::new ("match", Span::mixed_site ())),
+				right.into (),
+				TokenTree::Group (Group::new (Delimiter::Brace, [
+					TokenTree::Ident (Ident::new ("Ok", Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+					TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+					TokenTree::Ident (Ident::new ("__left", Span::mixed_site ())),
+					TokenTree::Punct (Punct::new ('.', Spacing::Alone)),
+					TokenTree::Ident (Ident::new (fn_name, Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new ("__right", Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (',', Spacing::Alone)),
+					TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+					TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+					TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (',', Spacing::Alone)),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (',', Spacing::Alone)),
+				TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+					TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new ('=', Spacing::Joint)),
+				TokenTree::Punct (Punct::new ('>', Spacing::Alone)),
+				TokenTree::Ident (Ident::new ("Err", Span::mixed_site ())),
+				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+					TokenTree::Ident (Ident::new ("__err", Span::mixed_site ())),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (',', Spacing::Alone)),
 			].into_iter ().collect ())),
 		].into_iter ().collect ()
+	}
+}
+
+impl From <CheckedExpr> for TokenTree {
+	fn from (expr: CheckedExpr) -> Self {
+		Self::Group (Group::new (Delimiter::None, expr.into ()))
+	}
+}
+
+impl From <& Box <CheckedExpr>> for TokenTree {
+	fn from (expr: & Box <CheckedExpr>) -> Self {
+		Self::Group (Group::new (Delimiter::None, expr.into ()))
 	}
 }
 
@@ -315,46 +330,8 @@ impl From <& CheckedItem> for TokenStream {
 	}
 }
 
-/*
-#[ macro_export ]
-macro_rules! checked {
-	( $left:tt += $right:tt ) => {
-		(|| { $left = $left.try_add (checked_eval! ($right) ?) ?; Ok::<_, Overflow> (()) }) ()
-	};
-	( $left:tt /= $right:tt ) => {
-		(|| { $left = $left.try_div (checked_eval! ($right) ?) ?; Ok::<_, Overflow> (()) }) ()
-	};
-	( $left:tt *= $right:tt ) => {
-		(|| { $left = $left.try_mul (checked_eval! ($right) ?) ?; Ok::<_, Overflow> (()) }) ()
-	};
-	( $left:tt %= $right:tt ) => {
-		(|| { $left = $left.try_rem (checked_eval! ($right) ?) ?; Ok::<_, Overflow> (()) }) ()
-	};
-	( $left:tt -= $right:tt ) => {
-		(|| { $left = $left.try_sub (checked_eval! ($right) ?) ?; Ok::<_, Overflow> (()) }) ()
-	};
-	( $($arg:tt)* ) => { (|| checked_eval! ($($arg)*)) () };
+impl From <CheckedItem> for TokenTree {
+	fn from (item: CheckedItem) -> Self {
+		Self::Group (Group::new (Delimiter::None, item.into ()))
+	}
 }
-
-#[ macro_export ]
-macro_rules! checked_eval {
-	( $arg:ident ) => { Ok::<_, Overflow> ($arg) };
-	( ( $($args:tt)* ) ) => { checked_eval! ($($args)*) };
-	( $left:tt . $right:ident ) => { Ok::<_, Overflow> (checked_eval! ($left) ?.$right) };
-	( $left_0:tt + $($right:tt)* ) => {
-		checked_eval! ($left_0) ?.try_add (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt / $($right:tt)* ) => {
-		checked_eval! ($left_0) ?.try_div (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt * $($right:tt)* ) => {
-		checked_eval! ($left_0) ?.try_mul (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt % $($right:tt)* ) => {
-		checked_eval! ($left_0) ?.try_rem (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt - $($right:tt)* ) => {
-		checked_eval! ($left_0) ?.try_sub (checked_eval! ($($right)*) ?)
-	};
-}
-*/

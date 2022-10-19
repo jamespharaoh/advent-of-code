@@ -5,7 +5,6 @@ use model::Action;
 use model::Coord;
 use model::Step;
 use model::Steps;
-use nums::Int;
 
 pub type ModeFn = fn (Action, u8) -> NumResult <u8>;
 
@@ -30,9 +29,9 @@ fn mode_fn_one (action: Action, old_active: u8) -> NumResult <u8> {
 
 fn mode_fn_two (action: Action, old_active: u8) -> NumResult <u8> {
 	Ok (match action {
-		Action::On => u8::add_2 (old_active, 1) ?,
+		Action::On => chk! (old_active + 1_u8) ?,
 		Action::Off => u8::saturating_sub (old_active, 1),
-		Action::Toggle => u8::add_2 (old_active, 2) ?,
+		Action::Toggle => chk! (old_active + 2_u8) ?,
 	})
 }
 
@@ -128,11 +127,8 @@ fn calc_result (steps: & [Step], mode_fn: ModeFn) -> GenResult <u32> {
 			row_data.iter ().copied ()
 				.tuple_windows::<(_, _)> ()
 				.map (|((start, val), (end, _))|
-					Int::mul_2 (
-						Int::sub_2 (end, start) ?.pan_u32 (),
-						val.pan_u32 (),
-					))
-				.fold (Ok (0), |sum, val| Int::add_2 (sum ?, val ?)) ?;
+					chk! (chk! (end - start) ?.pan_u32 () * val.pan_u32 ()))
+				.try_fold (0, |sum, val| chk! (sum + val ?)) ?;
 		assert! (row_data.last ().copied ().map_or (0, |(_, val)| val) == 0);
 	}
 	Ok (sum)

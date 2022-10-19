@@ -21,14 +21,14 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 			Ok ((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
 			|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| Ok ((
 				cmp::min (min_y, point.pos.y),
-				cmp::max (max_y, Coord::add_2 (point.pos.y, Coord::ONE) ?),
+				cmp::max (max_y, chk! (point.pos.y + Coord::ONE) ?),
 				cmp::min (min_x, point.pos.x),
-				cmp::max (max_x, Coord::add_2 (point.pos.x, Coord::ONE) ?),
+				cmp::max (max_x, chk! (point.pos.x + Coord::ONE) ?),
 			))))
 	}
 	fn calc_size (points: & [Point]) -> NumResult <(Coord, Coord)> {
 		let (min_y, max_y, min_x, max_x) = calc_range (points) ?;
-		Ok ((Coord::sub_2 (max_y, min_y) ?, Coord::sub_2 (max_x, min_x) ?))
+		Ok ((chk! (max_y - min_y) ?, chk! (max_x - min_x) ?))
 	}
 	let mut points = input.points.clone ();
 	let mut points_temp = Vec::new ();
@@ -58,7 +58,7 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 		}
 		mem::swap (& mut points, & mut points_temp);
 		(size_y, size_x) = (next_y, next_x);
-		num_iters = u32::add_2 (num_iters, step) ?;
+		num_iters = chk! (num_iters + step) ?;
 	}
 	let message = ocr::read_dots (points.iter ()
 		.map (|& point| (point.pos.y, point.pos.x))) ?;

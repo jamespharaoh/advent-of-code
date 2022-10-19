@@ -75,8 +75,8 @@ impl CoordRange {
 	pub fn new (pos: Pos, radius: Coord, sign: Pos) -> NumResult <Self> {
 		let base = chk! (pos.x * sign.x + pos.y * sign.y + pos.z * sign.z) ?;
 		Ok (Self {
-			start: Coord::sub_2 (base, radius) ?,
-			end: Coord::add_3 (base, radius, Coord::ONE) ?,
+			start: chk! (base - radius) ?,
+			end: chk! (base + radius + Coord::ONE) ?,
 		})
 	}
 
