@@ -14,6 +14,7 @@ struct_parser_display! {
 	Input { triangles, params } = [
 		params,
 		@lines triangles {
+			type = Triangle;
 			(a, b, c) = [ @skip "", a, @skip " ", b, @skip " ", c ],
 		}
 	]

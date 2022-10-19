@@ -11,6 +11,7 @@ enum_decl_parser_display! {
 		],
 		Object (items: Vec <(InpStr <'inp>, Json <'inp>)>) = [
 			"{", @confirm, @delim "," items {
+				type = (InpStr, Json);
 				(key, value) = [
 					"\"", @str key = (|ch| { ch != '"' }, .. ), "\":", value,
 				],

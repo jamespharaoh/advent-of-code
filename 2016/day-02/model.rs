@@ -12,6 +12,7 @@ pub struct Button {
 struct_parser_display! {
 	Button { steps } = [
 		@collect steps {
+			type = Dir;
 			Dir::Up = [ "U" ],
 			Dir::Down = [ "D" ],
 			Dir::Left = [ "L" ],

@@ -13,7 +13,10 @@ struct_parser_display! {
 		params,
 		@str template = (|ch| { ch.is_ascii_uppercase () }, 1 .. ), "\n",
 		"\n",
-		@lines rules { ((left, right), insert) = [ left, right, " -> ", insert ] },
+		@lines rules {
+			type = ((char, char), char);
+			((left, right), insert) = [ left, right, " -> ", insert ],
+		},
 	]
 }
 

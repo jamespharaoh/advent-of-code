@@ -15,8 +15,10 @@ struct_parser_display! {
 	Input { steps, params } = [
 		params,
 		@delim ", " steps {
+			type = (Turn, Coord);
 			(turn, dist) = [
 				turn {
+					type = Turn;
 					Turn::Left = [ "L" ],
 					Turn::Right = [ "R" ],
 				},

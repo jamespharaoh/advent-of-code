@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Group;
 use model::Val;
@@ -51,7 +52,7 @@ fn calc_result (input: & Input, boost: u32) -> GenResult <(u32, u32)> {
 	let mut num_rounds = 0;
 	loop {
 		if num_rounds == input.params.max_rounds { return Err ("Max rounds exceeded".into ()) }
-		let progress = one_round (& mut immune_system, & mut infection);
+		let progress = one_round (& mut immune_system, & mut infection) ?;
 		if ! progress { break }
 		num_rounds += 1;
 	}
@@ -60,14 +61,14 @@ fn calc_result (input: & Input, boost: u32) -> GenResult <(u32, u32)> {
 	Ok ((num_0, num_1))
 }
 
-fn one_round (left: & mut Vec <Group>, right: & mut Vec <Group>) -> bool {
+fn one_round (left: & mut Vec <Group>, right: & mut Vec <Group>) -> NumResult <bool> {
 	#[ derive (Clone, Copy, Debug) ]
 	enum Side { Left, Right }
 	use Side::{ Left, Right };
 	let attacks: Vec <(Side, usize, usize)> = iter::empty ()
-		.chain (choose_targets (left, right).into_iter ()
+		.chain (choose_targets (left, right) ?.into_iter ()
 			.map (|(att_idx, def_idx)| (Left, att_idx, def_idx)))
-		.chain (choose_targets (right, left).into_iter ()
+		.chain (choose_targets (right, left) ?.into_iter ()
 			.map (|(att_idx, def_idx)| (Right, att_idx, def_idx)))
 		.sorted_by_key (|& (side, att_idx, _)|
 			cmp::Reverse (match side {
@@ -92,13 +93,13 @@ fn one_round (left: & mut Vec <Group>, right: & mut Vec <Group>) -> bool {
 	}
 	left.retain (|group| group.num_units > 0);
 	right.retain (|group| group.num_units > 0);
-	progress
+	Ok (progress)
 }
 
 fn choose_targets (
 	att_groups: & [Group],
 	def_groups: & [Group],
-) -> Vec <(usize, usize)> {
+) -> NumResult <Vec <(usize, usize)>> {
 	let mut result = Vec::new ();
 	let att_groups: Vec <(usize, & Group)> =
 		att_groups.iter ()
@@ -111,28 +112,27 @@ fn choose_targets (
 			.enumerate ()
 			.collect ();
 	for (att_idx, att_group) in att_groups.iter ().copied () {
-		if let Some (def_idx) =
+		if let Some ((def_idx, _, _)) =
 			def_groups.iter ().copied ()
 				.filter (|& (_, def_group)|
 					! def_group.has_immunity (att_group.attack_type))
-				.map (|(def_idx, def_group)| (
+				.map (|(def_idx, def_group)| Ok ((
 					def_idx,
 					def_group,
 					if def_group.has_weakness (att_group.attack_type) {
-						att_group.effective_power () * 2
+						chk! (att_group.effective_power () * 2) ?
 					} else {
 						att_group.effective_power ()
 					}
-				))
-				.max_by_key (|& (_, def_group, damage)| (
+				)))
+				.max_ok_by_key (|& (_, def_group, damage)| (
 					damage,
 					def_group.effective_power (),
 					def_group.initiative,
-				))
-				.map (|(def_idx, _, _)| def_idx) {
+				)) ? {
 			result.push ((att_idx, def_idx));
 			def_groups.retain (|& (idx, _)| idx != def_idx);
 		}
 	}
-	result
+	Ok (result)
 }

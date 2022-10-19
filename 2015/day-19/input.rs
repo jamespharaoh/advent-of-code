@@ -12,6 +12,7 @@ struct_parser_display! {
 	Input <'inp> { replacements, medicine, params } = [
 		params,
 		@lines replacements {
+			type = (InpStr, InpStr);
 			(from, to) = [
 				@str from = (|ch| { ch.is_ascii_alphabetic () }, 1 .. ),
 				" => ",

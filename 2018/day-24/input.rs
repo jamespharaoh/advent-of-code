@@ -9,11 +9,7 @@ pub struct Input {
 }
 
 struct_parser_display! {
-	Input {
-		immune_system,
-		infection,
-		params,
-	} = [
+	Input { immune_system, infection, params } = [
 		params,
 		"Immune System:\n",
 		@lines immune_system, "\n",
@@ -26,7 +22,7 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct InputParams {
-		pub max_rounds: u32 = ("MAX_ROUNDS=", 5_000, 1_u32 .. ),
-		pub max_boost: u32 = ("MAX_BOOST=", 2_048, 1_u32 .. ),
+		pub max_rounds: u32 = ("MAX_ROUNDS=", 5_000, 1 .. ),
+		pub max_boost: u32 = ("MAX_BOOST=", 2_048, 1 .. ),
 	}
 }

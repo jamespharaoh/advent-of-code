@@ -13,7 +13,7 @@ pub struct Fold {
 struct_parser_display! {
 	Fold { axis, val } = [
 		"fold along ",
-		axis { Axis::X = [ "x" ], Axis::Y = [ "y" ] },
+		axis { type = Axis; Axis::X = [ "x" ], Axis::Y = [ "y" ] },
 		"=",
 		val,
 	]

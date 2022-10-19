@@ -9,7 +9,7 @@ pub struct Input {
 struct_parser_display! {
 	Input { deps, params } = [
 		params,
-		@lines deps { (before, after) = [
+		@lines deps { type = (char, char); (before, after) = [
 			"Step ", before = 'A' ..= 'Z', " must be finished before ",
 			"step ", after = 'A' ..= 'Z', " can begin.",
 		] },

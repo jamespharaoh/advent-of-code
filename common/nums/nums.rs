@@ -3,6 +3,7 @@
 #![ allow (clippy::inline_always) ]
 #![ allow (clippy::wrong_self_convention) ]
 
+use std::cmp;
 use std::error::Error;
 use std::fmt;
 use std::fmt::Debug;
@@ -14,9 +15,11 @@ use std::ops::BitAnd;
 use std::ops::BitAndAssign;
 use std::ops::BitOr;
 use std::ops::BitOrAssign;
+use std::ops::Bound;
 use std::ops::Div;
 use std::ops::Mul;
 use std::ops::Neg;
+use std::ops::RangeBounds;
 use std::ops::Rem;
 use std::ops::Shl;
 use std::ops::ShlAssign;
@@ -234,6 +237,35 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	#[ inline (always) ]
 	fn check_bit (self, bit: u32) -> bool {
 		self & (Self::ONE << bit) != Self::ZERO
+	}
+
+	#[ inline (always) ]
+	fn bound_start_assign (& mut self, other: Self) {
+		* self = cmp::max (* self, other);
+	}
+
+	#[ inline (always) ]
+	fn bound_end_assign (& mut self, other: Self) {
+		* self = cmp::min (* self, other);
+	}
+
+	#[ inline (always) ]
+	fn bounds_assign (& mut self, bounds: impl RangeBounds <Self>) {
+		let start = match bounds.start_bound () {
+			Bound::Included (& bound) => Some (bound),
+			Bound::Excluded (& bound) => Some (bound + Self::ONE),
+			Bound::Unbounded => None,
+		};
+		let end = match bounds.end_bound () {
+			Bound::Included (& bound) => Some (bound),
+			Bound::Excluded (& bound) => Some (bound - Self::ONE),
+			Bound::Unbounded => None,
+		};
+		if let (Some (start), Some (end)) = (start, end) {
+			assert! (start <= end);
+		}
+		if let Some (start) = start { self.bound_start_assign (start); }
+		if let Some (end) = end { self.bound_end_assign (end); }
 	}
 
 }

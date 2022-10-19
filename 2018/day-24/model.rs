@@ -6,11 +6,42 @@ pub type Val = u32;
 pub struct Group {
 	pub num_units: Val,
 	pub hit_points: Val,
-	pub weaknesses: ArrayVec <AttackType, 4>,
-	pub immunities: ArrayVec <AttackType, 4>,
+	pub weaknesses: Vec <AttackType>,
+	pub immunities: Vec <AttackType>,
 	pub attack_damage: Val,
 	pub attack_type: AttackType,
 	pub initiative: Val,
+}
+
+struct_parser_display! {
+	Group { num_units, hit_points, weaknesses, immunities, attack_damage, attack_type, initiative } = [
+		num_units, " units each with ", hit_points, " hit points ",
+		(weaknesses, immunities) {
+			display_type = (& [AttackType], & [AttackType]);
+			(weaknesses, immunities) if (! weaknesses.is_empty () && ! immunities.is_empty ()) = [
+				"(weak to ", @delim ", " weaknesses, "; ",
+				"immune to ", @delim ", " immunities, ") ",
+			],
+			(weaknesses, immunities) if (false) = [
+				"(immune to ", @delim ", " immunities, "; ",
+				"weak to ", @delim ", " weaknesses, ") ",
+			],
+			(weaknesses, immunities) if (! weaknesses.is_empty ()) = [
+				"(weak to ", @delim ", " weaknesses, ") ",
+				@parse immunities { Vec::new () },
+			],
+			(weaknesses, immunities) if (! immunities.is_empty ()) = [
+				@parse weaknesses { Vec::new () },
+				"(immune to ", @delim ", " immunities, ") ",
+			],
+			(weaknesses, immunities) = [
+				@parse weaknesses { Vec::new () },
+				@parse immunities { Vec::new () },
+			],
+		},
+		"with an attack that does ", attack_damage, " ", attack_type, " damage ",
+		"at initiative ", initiative,
+	]
 }
 
 impl Group {
@@ -30,85 +61,6 @@ impl Group {
 		self.immunities.contains (& attack_type)
 	}
 
-}
-
-impl Display for Group {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter,
-			"{num_units} units each with {hit_points} hit points ",
-			num_units = self.num_units,
-			hit_points = self.hit_points) ?;
-		if ! self.weaknesses.is_empty () && ! self.immunities.is_empty () {
-			write! (formatter,
-				"(weak to {weaknesses}; immune to {immunities}) ",
-				weaknesses = (& self.weaknesses).display_delim (", "),
-				immunities = (& self.immunities).display_delim (", ")) ?;
-		} else if ! self.weaknesses.is_empty () {
-			write! (formatter,
-				"(weak to {weaknesses}) ",
-				weaknesses = (& self.weaknesses).display_delim (", ")) ?;
-		} else if ! self.immunities.is_empty () {
-			write! (formatter,
-				"(immune to {immunities}) ",
-				immunities = (& self.immunities).display_delim (", ")) ?;
-		}
-		write! (formatter,
-			"with an attack that does {attack_damage} {attack_type} damage at initiative {initiative}",
-			attack_damage = self.attack_damage,
-			attack_type = self.attack_type,
-			initiative = self.initiative) ?;
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for Group {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, num_units, " units each with ", hit_points, " hit points ");
-		let (weaknesses, immunities): (Vec <AttackType>, Vec <AttackType>) = parser.any ()
-			.of (|parser| {
-				parse! (parser, "(weak to ", @delim ", " weaknesses, ") ");
-				Ok ((weaknesses, Vec::new ()))
-			})
-			.of (|parser| {
-				parse! (parser, "(immune to ", @delim ", " immunities, ") ");
-				Ok ((Vec::new (), immunities))
-			})
-			.of (|parser| {
-				parse! (parser,
-					"(weak to ", @delim ", " weaknesses, "; ",
-					"immune to ", @delim ", " immunities, ") ",
-				);
-				Ok ((weaknesses, immunities))
-			})
-			.of (|parser| {
-				parse! (parser,
-					"(immune to ", @delim ", " immunities, "; ",
-					"weak to ", @delim ", " weaknesses, ") ",
-				);
-				Ok ((weaknesses, immunities))
-			})
-			.of (|_parser| {
-				Ok ((Vec::new (), Vec::new ()))
-			})
-			.done () ?;
-		if weaknesses.len () > 4 { return Err (parser.err ()) }
-		let weaknesses = weaknesses.into_iter ().sorted ().dedup ().collect ();
-		if immunities.len () > 4 { return Err (parser.err ()) }
-		let immunities = immunities.into_iter ().sorted ().dedup ().collect ();
-		parse! (parser,
-			"with an attack that does ", attack_damage, " ", attack_type, " damage ",
-			"at initiative ", initiative,
-		);
-		Ok (Self {
-			num_units,
-			hit_points,
-			weaknesses,
-			immunities,
-			attack_damage,
-			attack_type,
-			initiative,
-		})
-	}
 }
 
 parse_display_enum! {

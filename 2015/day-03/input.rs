@@ -12,6 +12,7 @@ struct_parser_display! {
 	Input { moves, params } = [
 		params,
 		@collect moves {
+			type = Dir;
 			Dir::North = [ "^" ],
 			Dir::South = [ "v" ],
 			Dir::East = [ ">" ],

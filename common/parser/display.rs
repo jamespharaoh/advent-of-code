@@ -81,6 +81,8 @@ macro_rules! display {
 
 	( $formatter:ident $(,)? ) => {};
 
+	// field
+
 	( $formatter:ident, $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -97,6 +99,12 @@ macro_rules! display {
 		display! (@nest $($nest)*) ($field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, $field:ident = $range:expr $(,$($rest:tt)*)? ) => {
+		::std::fmt::Display::fmt (& $field, $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
+
+	// (tuple, ...)
 
 	( $formatter:ident, ($($field:ident),*) = $display:path $(,$($rest:tt)*)? ) => {
 		$display (& ($($field),*), $formatter) ?;
@@ -106,26 +114,38 @@ macro_rules! display {
 		$display (& ($($field),*), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
-	( $formatter:ident, $field:ident = $range:expr $(,$($rest:tt)*)? ) => {
-		::std::fmt::Display::fmt (& $field, $formatter) ?;
+	( $formatter:ident, ($($field:ident),*) { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
+		display! (@nest $($nest)*) (& ($($field),*), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, $expect:literal $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt ($expect, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @array
+
 	( $formatter:ident, @array $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @array_delim
+
 	( $formatter:ident, @array_delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @char
+
 	( $formatter:ident, @char $field:ident = |$arg:ident| { $($parse:tt)* } $(,$($rest:tt)*)? ) => {
 		$formatter.write_char (* $field) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @collect
+
 	( $formatter:ident, @collect $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -143,10 +163,16 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim_with ("", display_fn), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @collect_max
+
 	( $formatter:ident, @collect_max $max:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @collect_some
+
 	( $formatter:ident, @collect_some $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -214,10 +240,12 @@ macro_rules! display {
 			display_fn (& $field, $formatter) ?;
 		}
 	};
-	( $formatter:ident, @parse $(|$arg:ident|)? { $($rest:tt)* } $(,$(rest:tt)*)? ) => {
+	( $formatter:ident, @parse $(|$arg:ident|)? { $($body:tt)* } $(,$($rest:tt)*)? ) => {
+		display! ($formatter, $($($rest)*)?);
 	};
-	( $formatter:ident, @parse $field:ident { $($rest:tt)* } $(,$(rest:tt)*)? ) => {
+	( $formatter:ident, @parse $field:ident { $($body:tt)* } $(,$($rest:tt)*)? ) => {
 		let _ = $field;
+		display! ($formatter, $($($rest)*)?);
 	};
 	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
 		$formatter.write_str ($display) ?;
@@ -244,6 +272,12 @@ macro_rules! display {
 			::std::result::Result::Ok (())
 		}
 	};
+	( @nest display_type = $type:ty; $($nest:tt)* ) => {
+		|val: & $type, formatter: & mut ::std::fmt::Formatter| {
+			display! (@nest_var formatter val $($nest)*);
+			::std::result::Result::Ok (())
+		}
+	};
 	( @nest input_lifetime = $input_life:lifetime; type = $type:ty; $($nest:tt)* ) => {
 		|val: & $type, formatter: & mut ::std::fmt::Formatter| {
 			display! (@nest_var formatter val $($nest)*);
@@ -264,58 +298,54 @@ macro_rules! display {
 		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $name:ident $( if ($cond:expr) )? = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let $name = $val {
-			display! { @opt_if [$($cond)?]
-				display! ($formatter, $($display)*);
-				return Ok (());
-			}
+		if let ($name, true) = ($val, display! (@opt_cond $($cond)?)) {
+			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $name_0:ident::$name_1:ident = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & $name_0::$name_1 = $val {
+		if let $name_0::$name_1 = $val {
 			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $name:ident: $type:ty = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & $name = $val {
+		if let $name = $val {
 			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
-	( @nest_var $formatter:ident $val:ident ( $($item:tt),* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & ( $(display! (@nest_ref $item)),* ) = $val {
+	( @nest_var $formatter:ident $val:ident ( $($item:tt),* ) $( if ($cond:expr) )? = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
+		if let (($($item),*), true) = ($val, display! (@opt_cond $($cond)?)) {
 			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $var:ident ( $($decl:tt)* ) = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
-		if let & $var ($($decl)*) = $val {
+		if let $var ($($decl)*) = $val {
 			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $var:ident { $($decl:tt)* } = [ $($display:tt)* ] $(,$($rest:tt)*)? ) => {
 		if let & $var { $($decl)* } = $val {
 			display! ($formatter, $($display)*);
+		} else {
+			display! (@nest_var $formatter $val $($($rest)*)?);
 		}
-		display! (@nest_var $formatter $val $($($rest)*)?);
 	};
 	( @nest_var $formatter:ident $val:ident $(,)? ) => { };
 
-	( @nest_ref $item:ident ) => {
-		ref $item
+	( @opt_cond $cond:expr ) => {
+		$cond
 	};
-	( @nest_ref ( $($item:tt),* ) ) => {
-		( $(display! (@nest_ref $item)),* )
-	};
-
-	( @opt_if [$cond:expr] $($body:tt)* ) => {
-		if $cond { $($body)* }
-	};
-	( @opt_if [] $($body:tt)* ) => {
-		$($body)*
+	( @opt_cond ) => {
+		true
 	};
 
 }

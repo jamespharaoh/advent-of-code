@@ -24,6 +24,26 @@ pub trait IteratorExt: Iterator {
 		Ok (result)
 	}
 
+	#[ inline ]
+	fn max_ok_by_key <Item, Error, Key, KeyFn> (mut self, mut key_fn: KeyFn) -> Result <Option <Item>, Error>
+		where
+			Key: Ord,
+			KeyFn: FnMut (& Item) -> Key,
+			Self: Sized + Iterator <Item = Result <Item, Error>> {
+		let (mut max_key, mut max_item) = if let Some (item) = self.next () {
+			let item = item ?;
+			(key_fn (& item), item)
+		} else { return Ok (None) };
+		for item in self {
+			let item = item ?;
+			let key = key_fn (& item);
+			if key <= max_key { continue }
+			max_key = key;
+			max_item = item;
+		}
+		Ok (Some (max_item))
+	}
+
 }
 
 impl <SomeIter: Iterator> IteratorExt for SomeIter {}

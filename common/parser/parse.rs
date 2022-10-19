@@ -67,11 +67,14 @@ macro_rules! parse {
 	( @item $parser:expr, $item_name:ident { $($nest:tt)* } ) => {
 		let $item_name = $parser.nest (parse! (@nest $($nest)*)) ?;
 	};
-	( @item $parser:expr, ($($item_name:ident),*) = $item_parse:ident ) => {
-		let ($($item_name),*) = $item_parse ($parser) ?;
+	( @item $parser:expr, ($($name:ident),*) = $item_parse:ident ) => {
+		let ($($name),*) = $item_parse ($parser) ?;
 	};
 	( @item $parser:expr, ($($name:ident),*) = ($parse:ident, $display:ident) ) => {
 		let ($($name),*) = $parse ($parser) ?;
+	};
+	( @item $parser:expr, ($($name:ident),*) { $($nest:tt)* } ) => {
+		let ($($name),*) = $parser.nest (parse! (@nest $($nest)*)) ?;
 	};
 	( @item $parser:expr, $item_name:ident = $item_range:expr ) => {
 		let $item_name = $parser.item_range ($item_range) ?;
@@ -290,6 +293,13 @@ macro_rules! parse {
 			parser.done ()
 		}
 	};
+	( @nest display_type = $display_type:ty; $($var:tt)* ) => {
+		|parser: & mut Parser| {
+			let parser = parser.any ();
+			parse! (@nest_var parser $($var)*);
+			parser.done ()
+		}
+	};
 	( @nest $($var:tt)* ) => {
 		|parser: & mut Parser| {
 			let parser = parser.any ();
@@ -326,7 +336,7 @@ macro_rules! parse {
 		});
 		parse! (@nest_var $parser $($($rest)*)?);
 	};
-	( @nest_var $parser:ident ( $($decl:tt)* ) = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
+	( @nest_var $parser:ident ( $($decl:tt)* ) $( if ($cond:expr) )? = [ $($parse:tt)* ] $(,$($rest:tt)*)? ) => {
 		let $parser = $parser.of (|parser| {
 			parse! (parser, $($parse)*);
 			Ok (( $($decl)* ))

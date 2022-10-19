@@ -1,3 +1,5 @@
+#![ allow (clippy::inline_always) ]
+
 mod collections;
 mod iter;
 pub mod prelude;
@@ -20,7 +22,7 @@ mod result {
 	}
 
 	impl <Val> ResultEither <Val> for Result <Val, Val> {
-		#[ inline ]
+		#[ inline (always) ]
 		#[ must_use ]
 		fn either (self) -> Val {
 			match self { Ok (val) => val, Err (val) => val }
@@ -28,12 +30,23 @@ mod result {
 	}
 
 	#[ allow (clippy::missing_const_for_fn) ]
-	#[ inline ]
+	#[ inline (always) ]
 	#[ must_use ]
 	pub fn ok_or_err <Val> (result: Result <Val, Val>) -> Val {
 		match result {
 			Ok (val) => val,
 			Err (val) => val,
+		}
+	}
+
+	pub trait ResultMapRef <Val, Error: Copy> {
+		fn map_ref <Out> (& self, map_fn: impl FnMut (& Val) -> Out) -> Result <Out, Error>;
+	}
+
+	impl <Val, Error: Copy> ResultMapRef <Val, Error> for Result <Val, Error> {
+		#[ inline (always) ]
+		fn map_ref <Out> (& self, map_fn: impl FnMut (& Val) -> Out) -> Result <Out, Error> {
+			self.as_ref ().map_err (|& err| err).map (map_fn)
 		}
 	}
 
@@ -99,7 +112,7 @@ mod error {
 
 mod default {
 
-	#[ inline ]
+	#[ inline (always) ]
 	#[ must_use ]
 	pub fn default <T: Default> () -> T {
 		Default::default ()
@@ -162,6 +175,7 @@ mod deref {
 
 			impl $(<$($struct_param),*>)? ::std::ops::Deref for $struct_name $(<$($struct_param),*>)? {
 				type Target = $field_type;
+				#[ inline ]
 				fn deref (& self) -> & $field_type {
 					& self.$field_name
 				}
@@ -186,12 +200,14 @@ mod deref {
 
 			impl $(<$($struct_param),*>)? ::std::ops::Deref for $struct_name $(<$($struct_param),*>)? {
 				type Target = $field_type;
+				#[ inline ]
 				fn deref (& self) -> & $field_type {
 					& self.$field_name
 				}
 			}
 
 			impl $(<$($struct_param),*>)? ::std::ops::DerefMut for $struct_name $(<$($struct_param),*>)? {
+				#[ inline ]
 				fn deref_mut (& mut self) -> & mut $field_type {
 					& mut self.$field_name
 				}

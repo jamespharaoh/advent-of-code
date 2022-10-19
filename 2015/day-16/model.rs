@@ -13,6 +13,7 @@ struct_parser_display! {
 	AuntSue { number, attrs } = [
 		"Sue ", number, ": ",
 		@delim ", " attrs {
+			type = (Attr, u8);
 			(attr, num) = [ attr, ": ", num ],
 		},
 	]

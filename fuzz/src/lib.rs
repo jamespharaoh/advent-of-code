@@ -124,3 +124,21 @@ macro_rules! aoc_fuzz_mutator {
 	};
 
 }
+
+#[ macro_export ]
+macro_rules! pick_one {
+	( $rng:expr, $($expr:expr),+ $(,)? ) => {
+		{
+			let mut sel = $rng.gen_range (0 .. pick_one! (@count $($expr),+));
+			loop {
+				$(
+					if sel == 0 { break $expr }
+					sel -= 1;
+				)+
+				unreachable! ();
+			}
+		}
+	};
+	( @count $expr:expr ) => { 1 };
+	( @count $expr:expr, $($rest:expr),+ ) => { 1 + pick_one! (@count $($rest),+) };
+}

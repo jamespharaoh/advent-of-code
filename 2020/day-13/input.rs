@@ -12,6 +12,7 @@ struct_parser_display! {
 		params,
 		earliest, "\n",
 		@delim "," bus_ids {
+			type = Option <u32>;
 			Some (bus_id) = [ bus_id ],
 			None = [ "x" ],
 		}
