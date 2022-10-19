@@ -135,7 +135,6 @@
 <span id="135">135</span>
 <span id="136">136</span>
 <span id="137">137</span>
-<span id="138">138</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -254,15 +253,14 @@
 			def_groups.iter ().copied ()
 				.filter (|&amp; (<span class="kw">_</span>, def_group)|
 					! def_group.has_immunity (att_group.attack_type))
-				.map (|(def_idx, def_group)| <span class="prelude-val">Ok </span>((
-					def_idx,
-					def_group,
-					<span class="kw">if </span>def_group.has_weakness (att_group.attack_type) {
+				.map (|(def_idx, def_group)| {
+					<span class="kw">let </span>damage = <span class="kw">if </span>def_group.has_weakness (att_group.attack_type) {
 						<span class="macro">chk! </span>(att_group.effective_power () * <span class="number">2</span>) <span class="question-mark">?
 					</span>} <span class="kw">else </span>{
 						att_group.effective_power ()
-					}
-				)))
+					};
+					<span class="prelude-val">Ok </span>((def_idx, def_group, damage))
+				})
 				.max_ok_by_key (|&amp; (<span class="kw">_</span>, def_group, damage)| (
 					damage,
 					def_group.effective_power (),

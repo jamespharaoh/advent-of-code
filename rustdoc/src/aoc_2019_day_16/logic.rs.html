@@ -74,8 +74,6 @@
 <span id="74">74</span>
 <span id="75">75</span>
 <span id="76">76</span>
-<span id="77">77</span>
-<span id="78">78</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -104,11 +102,9 @@
 	<span class="kw">let </span>offset =
 		input.data.iter ().copied ()
 			.take (input.params.offset_digits.pan_usize ())
-			.try_fold (<span class="number">0</span>, |sum, item| u32::add_2 (u32::mul_2 (sum, <span class="number">10</span>) <span class="question-mark">?</span>, item.pan_u32 ())) <span class="question-mark">?</span>;
-	<span class="kw">let </span>signal_len = usize::sub_2 (
-		input.data.len () * input.params.num_reps.pan_usize (),
-		offset.pan_usize (),
-	) <span class="question-mark">?</span>;
+			.try_fold (<span class="number">0</span>, |sum, item| <span class="macro">chk! </span>(sum * <span class="number">10_u32 </span>+ item.pan_u32 ())) <span class="question-mark">?</span>;
+	<span class="kw">let </span>signal_len =
+		<span class="macro">chk! </span>(input.data.len () * input.params.num_reps.pan_usize () - offset.pan_usize ()) <span class="question-mark">?</span>;
 	<span class="kw">if </span>signal_len &lt; input.params.result_digits.pan_usize () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Not enough signal data&quot;</span>.into ());
 	}

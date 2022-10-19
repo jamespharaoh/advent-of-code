@@ -517,11 +517,6 @@
 <span id="517">517</span>
 <span id="518">518</span>
 <span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
 </pre><pre class="rust"><code><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
 <span class="kw">pub use </span>logic::Cpu;
@@ -720,28 +715,16 @@
 					<span class="self">self</span>.store_dst (dst, <span class="self">self</span>.load_src (src));
 				},
 				Instr::Add (dst, src) =&gt; {
-					<span class="self">self</span>.store_dst (dst, Val::add_2 (
-						<span class="self">self</span>.load_dst (dst),
-						<span class="self">self</span>.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store_dst (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load_dst (dst) + <span class="self">self</span>.load_src (src)) <span class="question-mark">?</span>);
 				},
 				Instr::Sub (dst, src) =&gt; {
-					<span class="self">self</span>.store_dst (dst, Val::sub_2 (
-						<span class="self">self</span>.load_dst (dst),
-						<span class="self">self</span>.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store_dst (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load_dst (dst) - <span class="self">self</span>.load_src (src)) <span class="question-mark">?</span>);
 				},
 				Instr::Mul (dst, src) =&gt; {
-					<span class="self">self</span>.store_dst (dst, Val::mul_2 (
-						<span class="self">self</span>.load_dst (dst),
-						<span class="self">self</span>.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store_dst (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load_dst (dst) * <span class="self">self</span>.load_src (src)) <span class="question-mark">?</span>);
 				},
 				Instr::Mod (dst, src) =&gt; {
-					<span class="self">self</span>.store_dst (dst, Val::rem_2 (
-						<span class="self">self</span>.load_dst (dst),
-						<span class="self">self</span>.load_src (src),
-					).ok ().ok_or (CpuError::Overflow) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store_dst (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load_dst (dst) % <span class="self">self</span>.load_src (src)) <span class="question-mark">?</span>);
 				},
 				Instr::Rcv (dst) =&gt; {
 					<span class="kw">let </span>data = <span class="self">self</span>.input.pop_front ().ok_or (CpuError::Receive) <span class="question-mark">?</span>;
@@ -844,6 +827,13 @@
 	}
 
 	<span class="kw">impl </span>Error <span class="kw">for </span>CpuError {
+	}
+
+	<span class="kw">impl </span>From &lt;Overflow&gt; <span class="kw">for </span>CpuError {
+		<span class="attribute">#[ inline ]
+		</span><span class="kw">fn </span>from (_overflow: Overflow) -&gt; <span class="self">Self </span>{
+			<span class="self">Self</span>::Overflow
+		}
 	}
 
 }

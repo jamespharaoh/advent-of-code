@@ -177,15 +177,6 @@
 <span id="177">177</span>
 <span id="178">178</span>
 <span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Default) ]
@@ -231,8 +222,8 @@
 			<span class="attribute">#[ allow (clippy::match_on_vec_items) ]
 			</span><span class="kw">match </span><span class="self">self</span>.instrs [<span class="self">self</span>.next.qck_usize ()] {
 				Instr::Cpy (src, dst) =&gt; <span class="self">self</span>.store (dst, <span class="self">self</span>.load (src)),
-				Instr::Inc (reg) =&gt; <span class="self">self</span>.store (reg, i32::add_2 (<span class="self">self</span>.load (reg), <span class="number">1_i32</span>) <span class="question-mark">?</span>),
-				Instr::Dec (reg) =&gt; <span class="self">self</span>.store (reg, i32::sub_2 (<span class="self">self</span>.load (reg), <span class="number">1_i32</span>) <span class="question-mark">?</span>),
+				Instr::Inc (reg) =&gt; <span class="self">self</span>.store (reg, <span class="macro">chk! </span>(<span class="self">self</span>.load (reg) + <span class="number">1_i32</span>) <span class="question-mark">?</span>),
+				Instr::Dec (reg) =&gt; <span class="self">self</span>.store (reg, <span class="macro">chk! </span>(<span class="self">self</span>.load (reg) - <span class="number">1_i32</span>) <span class="question-mark">?</span>),
 				Instr::Jnz (src, dst) =&gt; { <span class="self">self</span>.jnz (src, dst) <span class="question-mark">?</span>; <span class="kw">continue </span>}
 				Instr::Tgl (dst) =&gt; {
 					<span class="kw">let </span>idx = u32::add_signed (<span class="self">self</span>.next, <span class="self">self</span>.load (dst)) <span class="question-mark">?</span>;
@@ -282,7 +273,7 @@
 					Instr::Dec (arg),
 					Instr::Jnz (arg_0, Arg::Imm (-<span class="number">2_i32</span>)),
 				] <span class="kw">if </span>arg == arg_0 &amp;&amp; dst != arg &amp;&amp; arg.is_reg () &amp;&amp; dst.is_reg () =&gt; {
-					<span class="self">self</span>.store (dst, i32::add_2 (<span class="self">self</span>.load (dst), <span class="self">self</span>.load (arg)) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load (dst) + <span class="self">self</span>.load (arg)) <span class="question-mark">?</span>);
 					<span class="self">self</span>.store (arg, <span class="number">0</span>);
 					<span class="kw">return </span><span class="prelude-val">Ok </span>(());
 				},
@@ -301,10 +292,7 @@
 					Instr::Dec (arg_0),
 					Instr::Jnz (Arg::Imm (<span class="number">1_i32</span>), Arg::Imm (-<span class="number">4_i32</span>)),
 				] <span class="kw">if </span>arg == arg_0 &amp;&amp; arg != dst &amp;&amp; arg.is_reg () &amp;&amp; dst.is_reg () =&gt; {
-					<span class="self">self</span>.store (dst, i32::sub_2 (
-						<span class="self">self</span>.load (dst),
-						<span class="self">self</span>.load (arg),
-					) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load (dst) - <span class="self">self</span>.load (arg)) <span class="question-mark">?</span>);
 					<span class="self">self</span>.store (arg, <span class="number">0</span>);
 				},
 				<span class="kw">_ </span>=&gt; (),
@@ -325,10 +313,7 @@
 				] <span class="kw">if </span>tmp == tmp_0 &amp;&amp; tmp == tmp_1 &amp;&amp; ctr == ctr_0 &amp;&amp; arg != tmp &amp;&amp; arg != dst
 						&amp;&amp; arg != ctr &amp;&amp; tmp != dst &amp;&amp; tmp != ctr &amp;&amp; dst != ctr &amp;&amp; dst.is_reg ()
 						&amp;&amp; tmp.is_reg () &amp;&amp; ctr.is_reg () =&gt; {
-					<span class="self">self</span>.store (dst, i32::add_2 (
-						<span class="self">self</span>.load (dst),
-						i32::mul_2 (<span class="self">self</span>.load (arg), <span class="self">self</span>.load (ctr)) <span class="question-mark">?</span>,
-					) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store (dst, <span class="macro">chk! </span>(<span class="self">self</span>.load (dst) + <span class="self">self</span>.load (arg) * <span class="self">self</span>.load (ctr)) <span class="question-mark">?</span>);
 					<span class="self">self</span>.store (tmp, <span class="number">0</span>);
 					<span class="self">self</span>.store (ctr, <span class="number">0</span>);
 					<span class="kw">return </span><span class="prelude-val">Ok </span>(());
@@ -352,10 +337,7 @@
 					Instr::Jnz (Arg::Imm (<span class="number">1_i32</span>), Arg::Imm (-<span class="number">7_i32</span>)),
 				] <span class="kw">if </span>rem != mul &amp;&amp; rem != out &amp;&amp; mul != out &amp;&amp; mul == mul_0 &amp;&amp; rem == rem_0
 						&amp;&amp; rem == rem_1 &amp;&amp; rem.is_reg () &amp;&amp; mul.is_reg () &amp;&amp; out.is_reg () =&gt; {
-					<span class="self">self</span>.store (out, i32::add_2 (
-						<span class="self">self</span>.load (out),
-						i32::div_2 (<span class="self">self</span>.load (mul), div) <span class="question-mark">?</span>,
-					) <span class="question-mark">?</span>);
+					<span class="self">self</span>.store (out, <span class="macro">chk! </span>(<span class="self">self</span>.load (out) + <span class="self">self</span>.load (mul) / div) <span class="question-mark">?</span>);
 					<span class="kw">let </span>rem_val = <span class="self">self</span>.load (mul) % div;
 					<span class="self">self</span>.store (rem, <span class="kw">if </span>rem_val == <span class="number">0 </span>{ div } <span class="kw">else </span>{ rem_val });
 					<span class="self">self</span>.store (mul, <span class="number">0</span>);

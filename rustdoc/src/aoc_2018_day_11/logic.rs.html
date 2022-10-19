@@ -107,12 +107,6 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
-<span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -219,13 +213,7 @@
 		<span class="kw">return </span><span class="prelude-val">None</span>;
 	}
 	<span class="kw">let </span>rack_id = pos.x.pan_i32 () + <span class="number">10_i32</span>;
-	<span class="kw">let </span>power_level = Power::mul_2 (
-		Power::add_2 (
-			Power::mul_2 (rack_id, pos.y.pan_i32 ()).ok () <span class="question-mark">?</span>,
-			input.serial,
-		).ok () <span class="question-mark">?</span>,
-		rack_id,
-	).ok () <span class="question-mark">?</span>;
+	<span class="kw">let </span>power_level = <span class="macro">chk! </span>((rack_id * pos.y.pan_i32 () + input.serial) * rack_id).ok () <span class="question-mark">?</span>;
 	<span class="prelude-val">Some </span>((power_level % <span class="number">1000_i32</span>) / <span class="number">100_i32 </span>- <span class="number">5_i32</span>)
 }
 </code></pre></div>

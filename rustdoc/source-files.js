@@ -111,7 +111,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2018_day_25":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2019":["",[],["lib.rs"]],\
 "aoc_2019_day_01":["",[],["input.rs","lib.rs","logic.rs"]],\
-"aoc_2019_day_02":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
+"aoc_2019_day_02":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2019_day_03":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
 "aoc_2019_day_04":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_2019_day_05":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
@@ -198,7 +198,7 @@ var sourcesIndex = JSON.parse('{\
 "aoc_list":["",[],["list.rs"]],\
 "aoc_md5":["",[],["md5.rs"]],\
 "aoc_misc":["",[],["collections.rs","iter.rs","misc.rs","prelude.rs"]],\
-"aoc_nums":["",[],["nums.rs"]],\
+"aoc_nums":["",[],["bits.rs","conv.rs","int.rs","iter.rs","nums.rs","ops.rs"]],\
 "aoc_ocr":["",[],["ocr.rs"]],\
 "aoc_parallel":["",[],["parallel.rs"]],\
 "aoc_parser":["",[],["delim.rs","display.rs","enums.rs","from_parser.rs","parse.rs","parser.rs","structs.rs"]],\

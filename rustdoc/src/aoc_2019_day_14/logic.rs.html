@@ -118,8 +118,6 @@
 <span id="118">118</span>
 <span id="119">119</span>
 <span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -140,7 +138,7 @@
 	<span class="kw">let </span>order = calc_order (&amp; reactions, &amp; dependencies) <span class="question-mark">?</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>max: Qty = <span class="number">1</span>;
 	<span class="kw">while </span>calc_ore (&amp; reactions, &amp; order, max) <span class="question-mark">? </span>&lt;= input.params.num_ore {
-		max = Qty::mul_2 (max, <span class="number">2</span>) <span class="question-mark">?</span>;
+		max = <span class="macro">chk! </span>(max * <span class="number">2</span>) <span class="question-mark">?</span>;
 	}
 	<span class="kw">let </span><span class="kw-2">mut </span>min: Qty = max / <span class="number">2</span>;
 	<span class="kw">while </span>max - min != <span class="number">1 </span>{
@@ -232,12 +230,10 @@
 		<span class="kw">let </span>reaction = &amp; reactions [output_chemical];
 		<span class="kw">let </span>needed_qty = * quantities.get (output_chemical).ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 		<span class="kw">if </span>needed_qty == Qty::ZERO { <span class="kw">continue </span>}
-		<span class="kw">let </span>reaction_times = Qty::div_2 (
-			Qty::sub_2 (Qty::add_2 (needed_qty, reaction.output.qty) <span class="question-mark">?</span>, <span class="number">1</span>) <span class="question-mark">?</span>,
-			reaction.output.qty) <span class="question-mark">?</span>;
+		<span class="kw">let </span>reaction_times = <span class="macro">chk! </span>((needed_qty + reaction.output.qty - <span class="number">1</span>) / reaction.output.qty) <span class="question-mark">?</span>;
 		<span class="kw">for </span>input <span class="kw">in </span>&amp; reaction.inputs {
 			<span class="kw">let </span>entry = quantities.entry (input.chem.clone ()).or_insert (<span class="number">0</span>);
-			* entry = Qty::add_2 (* entry, Qty::mul_2 (input.qty, reaction_times) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
+			* entry = <span class="macro">chk! </span>(* entry + input.qty * reaction_times) <span class="question-mark">?</span>;
 		}
 	}
 	<span class="prelude-val">Ok </span>(quantities.get (&amp; InpStr::borrow (<span class="string">&quot;ORE&quot;</span>)).copied ().ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>)

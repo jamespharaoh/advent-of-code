@@ -74,7 +74,7 @@
 		<span class="kw">for </span>(next_idx, &amp; next) <span class="kw">in </span>sequence [idx + <span class="number">1 </span>.. ].iter ().enumerate () {
 			<span class="kw">let </span>next_idx = idx + <span class="number">1 </span>+ next_idx;
 			<span class="kw">if </span>cur + <span class="number">3 </span>&lt; next { <span class="kw">break </span>}
-			work [next_idx] = Int::add_2 (work [next_idx], num) <span class="question-mark">?</span>;
+			work [next_idx] = <span class="macro">chk! </span>(work [next_idx] + num) <span class="question-mark">?</span>;
 		}
 	}
 	<span class="prelude-val">Ok </span>(* work.last ().unwrap ())

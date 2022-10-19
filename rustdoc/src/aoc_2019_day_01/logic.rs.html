@@ -36,7 +36,7 @@
 	<span class="prelude-val">Ok </span>(
 		input.module_masses.iter ().copied ()
 			.map (|mass| <span class="kw">if </span><span class="number">6 </span>&lt; mass { mass / <span class="number">3 </span>- <span class="number">2 </span>} <span class="kw">else </span>{ <span class="number">0 </span>})
-			.try_fold (<span class="number">0</span>, u32::add_2) <span class="question-mark">?
+			.try_sum::&lt;u32&gt; () <span class="question-mark">?
 	</span>)
 }
 
@@ -53,7 +53,7 @@
 				}
 				sum
 			})
-			.try_fold (<span class="number">0</span>, u32::add_2) <span class="question-mark">?
+			.try_fold (<span class="number">0</span>, |sum, item| <span class="macro">chk! </span>(sum + item)) <span class="question-mark">?
 	</span>)
 }
 </code></pre></div>

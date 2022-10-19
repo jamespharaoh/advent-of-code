@@ -149,7 +149,7 @@
 		<span class="comment">// check the pattern for times which also match inactive layers
 
 		</span><span class="kw">for </span>&amp; offset <span class="kw">in </span>repeat.iter () {
-			<span class="kw">let </span>time = u32::add_2 (base_time, offset) <span class="question-mark">?</span>;
+			<span class="kw">let </span>time = <span class="macro">chk! </span>(base_time + offset) <span class="question-mark">?</span>;
 			<span class="kw">if </span>layers.iter ().skip (layer_idx)
 					.all (|layer| (time + layer.offset) % layer.period != <span class="number">0</span>) {
 				<span class="kw">return </span><span class="prelude-val">Ok </span>(time)
@@ -158,7 +158,7 @@
 
 		<span class="comment">// advance time period for next application of repeating pattern
 
-		</span>base_time = u32::add_2 (base_time, period) <span class="question-mark">?</span>;
+		</span>base_time = <span class="macro">chk! </span>(base_time + period) <span class="question-mark">?</span>;
 
 	}
 

@@ -112,13 +112,13 @@
 			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max iters&quot;</span>.into ());
 		}
 		num_iters += <span class="number">1</span>;
-		total_bags = u32::add_2 (total_bags, this_num_bags) <span class="question-mark">?</span>;
+		total_bags = <span class="macro">chk! </span>(total_bags + this_num_bags) <span class="question-mark">?</span>;
 		<span class="kw">for </span>&amp; (<span class="kw-2">ref </span>contains_colour, contains_num_bags) <span class="kw">in
 			</span>direct_contents.get (&amp; this_colour)
 				.ok_or_else (|| <span class="macro">format! </span>(<span class="string">&quot;No rules for {this_colour} bags&quot;</span>)) <span class="question-mark">? </span>{
 			todo.push ((
 				contains_colour.clone (),
-				u32::mul_2 (this_num_bags, contains_num_bags) <span class="question-mark">?</span>,
+				<span class="macro">chk! </span>(this_num_bags * contains_num_bags) <span class="question-mark">?</span>,
 			));
 		}
 	}

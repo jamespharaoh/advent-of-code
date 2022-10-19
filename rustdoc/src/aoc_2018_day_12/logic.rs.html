@@ -63,9 +63,6 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -101,15 +98,12 @@
 		// simple maths
 
 		</span><span class="kw">if let </span><span class="prelude-val">Some </span>(&amp; (prev_iters, prev_start)) = cache.get (&amp; state.data) {
-			<span class="kw">let </span>loop_iters = u64::sub_2 (cur_iters, prev_iters) <span class="question-mark">?</span>;
-			<span class="kw">let </span>rem_iters = u64::sub_2 (num_iters, cur_iters) <span class="question-mark">?</span>;
+			<span class="kw">let </span>loop_iters = <span class="macro">chk! </span>(cur_iters - prev_iters) <span class="question-mark">?</span>;
+			<span class="kw">let </span>rem_iters = <span class="macro">chk! </span>(num_iters - cur_iters) <span class="question-mark">?</span>;
 			<span class="kw">if </span>loop_iters &lt;= rem_iters {
-				<span class="kw">let </span>reps = u64::div_2 (rem_iters, loop_iters) <span class="question-mark">?</span>;
-				state.start = i64::add_2 (state.start, Int::mul_2 (
-					Int::sub_2 (state.start, prev_start) <span class="question-mark">?</span>,
-					reps.pan_i64 (),
-				) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-				cur_iters = Int::add_2 (cur_iters, Int::mul_2 (reps, loop_iters) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
+				<span class="kw">let </span>reps = <span class="macro">chk! </span>(rem_iters / loop_iters) <span class="question-mark">?</span>;
+				state.start = <span class="macro">chk! </span>(state.start + (state.start - prev_start) * reps.pan_i64 ()) <span class="question-mark">?</span>;
+				cur_iters = <span class="macro">chk! </span>(cur_iters + reps * loop_iters) <span class="question-mark">?</span>;
 			}
 		}
 
@@ -122,16 +116,16 @@
 
 	<span class="comment">// calculate the answer from the final state and return
 
-	</span><span class="prelude-val">Ok </span>(
-		state.iter ()
-			.map (|(pos, pot)| {
-				<span class="prelude-val">Ok </span>(<span class="kw">match </span>pot {
-					Pot::Empty =&gt; <span class="number">0</span>,
-					Pot::Plant =&gt; pos.to_i64 () <span class="question-mark">?</span>,
-				})
+	</span><span class="kw">let </span>result = state.iter ()
+		.map (|(pos, pot)| {
+			<span class="prelude-val">Ok </span>(<span class="kw">match </span>pot {
+				Pot::Empty =&gt; <span class="number">0</span>,
+				Pot::Plant =&gt; pos.to_i64 () <span class="question-mark">?</span>,
 			})
-			.fold (<span class="prelude-val">Ok </span>(<span class="number">0</span>), |sum, item| Int::add_2 (sum <span class="question-mark">?</span>, item <span class="question-mark">?</span>)) <span class="question-mark">?
-	</span>)
+		})
+		.try_fold (<span class="number">0</span>, |sum, item| { <span class="macro">chk! </span>(sum + item <span class="question-mark">?</span>) }) <span class="question-mark">?</span>;
+
+	<span class="prelude-val">Ok </span>(result)
 
 }
 </code></pre></div>

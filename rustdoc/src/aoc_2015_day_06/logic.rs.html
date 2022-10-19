@@ -232,10 +232,6 @@
 <span id="232">232</span>
 <span id="233">233</span>
 <span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
-<span id="237">237</span>
-<span id="238">238</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
@@ -243,7 +239,6 @@
 <span class="kw">use </span>model::Coord;
 <span class="kw">use </span>model::Step;
 <span class="kw">use </span>model::Steps;
-<span class="kw">use </span>nums::Int;
 
 <span class="kw">pub type </span>ModeFn = <span class="kw">fn </span>(Action, u8) -&gt; NumResult &lt;u8&gt;;
 
@@ -268,9 +263,9 @@
 
 <span class="kw">fn </span>mode_fn_two (action: Action, old_active: u8) -&gt; NumResult &lt;u8&gt; {
 	<span class="prelude-val">Ok </span>(<span class="kw">match </span>action {
-		Action::On =&gt; u8::add_2 (old_active, <span class="number">1</span>) <span class="question-mark">?</span>,
+		Action::On =&gt; <span class="macro">chk! </span>(old_active + <span class="number">1_u8</span>) <span class="question-mark">?</span>,
 		Action::Off =&gt; u8::saturating_sub (old_active, <span class="number">1</span>),
-		Action::Toggle =&gt; u8::add_2 (old_active, <span class="number">2</span>) <span class="question-mark">?</span>,
+		Action::Toggle =&gt; <span class="macro">chk! </span>(old_active + <span class="number">2_u8</span>) <span class="question-mark">?</span>,
 	})
 }
 
@@ -366,11 +361,8 @@
 			row_data.iter ().copied ()
 				.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
 				.map (|((start, val), (end, <span class="kw">_</span>))|
-					Int::mul_2 (
-						Int::sub_2 (end, start) <span class="question-mark">?</span>.pan_u32 (),
-						val.pan_u32 (),
-					))
-				.fold (<span class="prelude-val">Ok </span>(<span class="number">0</span>), |sum, val| Int::add_2 (sum <span class="question-mark">?</span>, val <span class="question-mark">?</span>)) <span class="question-mark">?</span>;
+					<span class="macro">chk! </span>(<span class="macro">chk! </span>(end - start) <span class="question-mark">?</span>.pan_u32 () * val.pan_u32 ()))
+				.try_fold (<span class="number">0</span>, |sum, val| <span class="macro">chk! </span>(sum + val <span class="question-mark">?</span>)) <span class="question-mark">?</span>;
 		<span class="macro">assert! </span>(row_data.last ().copied ().map_or (<span class="number">0</span>, |(<span class="kw">_</span>, val)| val) == <span class="number">0</span>);
 	}
 	<span class="prelude-val">Ok </span>(sum)

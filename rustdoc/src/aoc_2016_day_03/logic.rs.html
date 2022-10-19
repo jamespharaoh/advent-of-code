@@ -35,14 +35,12 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
-<span id="38">38</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
-<span class="kw">use </span>model::Side;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;usize&gt; {
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span>num_possible =
 		input.triangles.iter ()
 			.map (|&amp; (a, b, c)| [a, b, c])
@@ -53,7 +51,7 @@
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;usize&gt; {
-	sanity_check (input) <span class="question-mark">?</span>;
+	check_input (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span>num_possible =
 		input.triangles.iter ()
 			.tuples::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
@@ -67,9 +65,9 @@
 	<span class="prelude-val">Ok </span>(num_possible)
 }
 
-<span class="kw">fn </span>sanity_check (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
+<span class="kw">fn </span>check_input (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">if </span>input.triangles.iter ()
-			.any (|&amp; (a, b, c)| Side::add_3 (a, b, c).is_err ()) {
+			.any (|&amp; (a, b, c)| <span class="macro">chk! </span>(a + b + c).is_err ()) {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Overflow&quot;</span>.into ());
 	}
 	<span class="prelude-val">Ok </span>(())

@@ -112,7 +112,7 @@
 		},
 		Shuffle::Cut (arg) =&gt; {
 			<span class="kw">let </span>arg = <span class="kw">if </span><span class="number">0_i32 </span>&lt;= arg {
-				u64::sub_2 (deck_size, arg.pan_u64 ()) <span class="question-mark">?
+				<span class="macro">chk! </span>(deck_size - arg.pan_u64 ()) <span class="question-mark">?
 			</span>} <span class="kw">else </span>{
 				arg.unsigned_abs ().pan_u64 ()
 			};

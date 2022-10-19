@@ -106,9 +106,9 @@
 				}
 				<span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, nums::Overflow&gt; ((
 					idx,
-					Coord::add_3 (part.acc.x, part.acc.y, part.acc.z) <span class="question-mark">?</span>,
-					Coord::add_3 (part.vel.x, part.vel.y, part.vel.z) <span class="question-mark">?</span>,
-					Coord::add_3 (part.pos.x, part.pos.y, part.pos.z) <span class="question-mark">?</span>,
+					<span class="macro">chk! </span>(part.acc.x + part.acc.y + part.acc.z) <span class="question-mark">?</span>,
+					<span class="macro">chk! </span>(part.vel.x + part.vel.y + part.vel.z) <span class="question-mark">?</span>,
+					<span class="macro">chk! </span>(part.pos.x + part.pos.y + part.pos.z) <span class="question-mark">?</span>,
 				))
 			})
 			.fold_ok (<span class="prelude-val">None</span>, |min: <span class="prelude-ty">Option </span>&lt;(usize, Coord, Coord, Coord)&gt;, item| min
@@ -152,12 +152,12 @@
 }
 
 <span class="kw">fn </span>next (<span class="kw-2">mut </span>part: Particle) -&gt; NumResult &lt;Particle&gt; {
-	part.vel.x = Coord::add_2 (part.vel.x, part.acc.x) <span class="question-mark">?</span>;
-	part.vel.y = Coord::add_2 (part.vel.y, part.acc.y) <span class="question-mark">?</span>;
-	part.vel.z = Coord::add_2 (part.vel.z, part.acc.z) <span class="question-mark">?</span>;
-	part.pos.x = Coord::add_2 (part.pos.x, part.vel.x) <span class="question-mark">?</span>;
-	part.pos.y = Coord::add_2 (part.pos.y, part.vel.y) <span class="question-mark">?</span>;
-	part.pos.z = Coord::add_2 (part.pos.z, part.vel.z) <span class="question-mark">?</span>;
+	part.vel.x = <span class="macro">chk! </span>(part.vel.x + part.acc.x) <span class="question-mark">?</span>;
+	part.vel.y = <span class="macro">chk! </span>(part.vel.y + part.acc.y) <span class="question-mark">?</span>;
+	part.vel.z = <span class="macro">chk! </span>(part.vel.z + part.acc.z) <span class="question-mark">?</span>;
+	part.pos.x = <span class="macro">chk! </span>(part.pos.x + part.vel.x) <span class="question-mark">?</span>;
+	part.pos.y = <span class="macro">chk! </span>(part.pos.y + part.vel.y) <span class="question-mark">?</span>;
+	part.pos.z = <span class="macro">chk! </span>(part.pos.z + part.vel.z) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(part)
 }
 </code></pre></div>

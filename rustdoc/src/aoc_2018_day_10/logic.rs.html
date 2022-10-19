@@ -87,14 +87,14 @@
 			<span class="prelude-val">Ok </span>((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
 			|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| <span class="prelude-val">Ok </span>((
 				cmp::min (min_y, point.pos.y),
-				cmp::max (max_y, Coord::add_2 (point.pos.y, Coord::ONE) <span class="question-mark">?</span>),
+				cmp::max (max_y, <span class="macro">chk! </span>(point.pos.y + Coord::ONE) <span class="question-mark">?</span>),
 				cmp::min (min_x, point.pos.x),
-				cmp::max (max_x, Coord::add_2 (point.pos.x, Coord::ONE) <span class="question-mark">?</span>),
+				cmp::max (max_x, <span class="macro">chk! </span>(point.pos.x + Coord::ONE) <span class="question-mark">?</span>),
 			))))
 	}
 	<span class="kw">fn </span>calc_size (points: &amp; [Point]) -&gt; NumResult &lt;(Coord, Coord)&gt; {
 		<span class="kw">let </span>(min_y, max_y, min_x, max_x) = calc_range (points) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>((Coord::sub_2 (max_y, min_y) <span class="question-mark">?</span>, Coord::sub_2 (max_x, min_x) <span class="question-mark">?</span>))
+		<span class="prelude-val">Ok </span>((<span class="macro">chk! </span>(max_y - min_y) <span class="question-mark">?</span>, <span class="macro">chk! </span>(max_x - min_x) <span class="question-mark">?</span>))
 	}
 	<span class="kw">let </span><span class="kw-2">mut </span>points = input.points.clone ();
 	<span class="kw">let </span><span class="kw-2">mut </span>points_temp = Vec::new ();
@@ -124,7 +124,7 @@
 		}
 		mem::swap (&amp; <span class="kw-2">mut </span>points, &amp; <span class="kw-2">mut </span>points_temp);
 		(size_y, size_x) = (next_y, next_x);
-		num_iters = u32::add_2 (num_iters, step) <span class="question-mark">?</span>;
+		num_iters = <span class="macro">chk! </span>(num_iters + step) <span class="question-mark">?</span>;
 	}
 	<span class="kw">let </span>message = ocr::read_dots (points.iter ()
 		.map (|&amp; point| (point.pos.y, point.pos.x))) <span class="question-mark">?</span>;

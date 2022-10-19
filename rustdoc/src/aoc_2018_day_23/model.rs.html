@@ -187,8 +187,8 @@
 	<span class="kw">pub fn </span>new (pos: Pos, radius: Coord, sign: Pos) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 		<span class="kw">let </span>base = <span class="macro">chk! </span>(pos.x * sign.x + pos.y * sign.y + pos.z * sign.z) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
-			start: Coord::sub_2 (base, radius) <span class="question-mark">?</span>,
-			end: Coord::add_3 (base, radius, Coord::ONE) <span class="question-mark">?</span>,
+			start: <span class="macro">chk! </span>(base - radius) <span class="question-mark">?</span>,
+			end: <span class="macro">chk! </span>(base + radius + Coord::ONE) <span class="question-mark">?</span>,
 		})
 	}
 

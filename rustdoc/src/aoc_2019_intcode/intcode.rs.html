@@ -346,8 +346,6 @@
 <span id="346">346</span>
 <span id="347">347</span>
 <span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
 </pre><pre class="rust"><code><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Mem &lt;Val&gt; = Vec &lt;Val&gt;;
@@ -433,59 +431,57 @@
 				.ok_or (RunResult::Instr (Val::ZERO, Val::ZERO)) <span class="question-mark">?</span>;
 			<span class="kw">match </span>opcode.instr {
 				Instr::Add =&gt; {
-					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, Val::add_2 (
-						<span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>,
-						<span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>,
-					) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::FOUR) <span class="question-mark">?</span>;
+					<span class="kw">let </span>param_0 = <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>;
+					<span class="kw">let </span>param_1 = <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
+					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, <span class="macro">chk! </span>(param_0 + param_1) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::FOUR) <span class="question-mark">?</span>;
 				},
 				Instr::Multiply =&gt; {
-					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, Val::mul_2 (
-						<span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>,
-						<span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>,
-					) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::FOUR) <span class="question-mark">?</span>;
+					<span class="kw">let </span>param_0 = <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>;
+					<span class="kw">let </span>param_1 = <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
+					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, <span class="macro">chk! </span>(param_0 * param_1) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::FOUR) <span class="question-mark">?</span>;
 				},
 				Instr::Input =&gt; {
 					<span class="kw">if let </span><span class="prelude-val">Some </span>(value) = <span class="self">self</span>.input_buffer.pop_front () {
 						<span class="self">self</span>.param_set (opcode, <span class="number">0</span>, value) <span class="question-mark">?</span>;
-						<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::TWO) <span class="question-mark">?</span>;
+						<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::TWO) <span class="question-mark">?</span>;
 					} <span class="kw">else </span>{
 						<span class="kw">return </span><span class="prelude-val">Ok </span>(RunResult::Input);
 					}
 				},
 				Instr::Output =&gt; {
 					<span class="kw">let </span>value = <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::TWO) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::TWO) <span class="question-mark">?</span>;
 					<span class="kw">return </span><span class="prelude-val">Ok </span>(RunResult::Output (value));
 				},
 				Instr::JumpIfTrue =&gt; {
 					<span class="kw">if </span><span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">? </span>!= Val::ZERO {
 						<span class="self">self</span>.pos = <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
 					} <span class="kw">else </span>{
-						<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::THREE) <span class="question-mark">?</span>;
+						<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::THREE) <span class="question-mark">?</span>;
 					}
 				},
 				Instr::JumpIfFalse =&gt; {
 					<span class="kw">if </span><span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">? </span>== Val::ZERO {
 						<span class="self">self</span>.pos = <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
 					} <span class="kw">else </span>{
-						<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::THREE) <span class="question-mark">?</span>;
+						<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::THREE) <span class="question-mark">?</span>;
 					}
 				},
 				Instr::LessThan =&gt; {
 					<span class="kw">let </span>value = <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">? </span>&lt; <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
 					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, <span class="kw">if </span>value { Val::ONE } <span class="kw">else </span>{ Val::ZERO }) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::FOUR) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::FOUR) <span class="question-mark">?</span>;
 				},
 				Instr::Equals =&gt; {
 					<span class="kw">let </span>value = <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">? </span>== <span class="self">self</span>.param_get (opcode, <span class="number">1</span>) <span class="question-mark">?</span>;
 					<span class="self">self</span>.param_set (opcode, <span class="number">2</span>, <span class="kw">if </span>value { Val::ONE } <span class="kw">else </span>{ Val::ZERO }) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::FOUR) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::FOUR) <span class="question-mark">?</span>;
 				},
 				Instr::AdjustRelBase =&gt; {
-					<span class="self">self</span>.rel = Val::add_2 (<span class="self">self</span>.rel, <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
-					<span class="self">self</span>.pos = Val::add_2 (<span class="self">self</span>.pos, Val::TWO) <span class="question-mark">?</span>;
+					<span class="self">self</span>.rel = <span class="macro">chk! </span>(<span class="self">self</span>.rel + <span class="self">self</span>.param_get (opcode, <span class="number">0</span>) <span class="question-mark">?</span>) <span class="question-mark">?</span>;
+					<span class="self">self</span>.pos = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::TWO) <span class="question-mark">?</span>;
 				},
 				Instr::Halt =&gt; <span class="kw">return </span><span class="prelude-val">Ok </span>(RunResult::Halt),
 			}
@@ -494,7 +490,7 @@
 
 	<span class="attribute">#[ inline ]
 	</span><span class="kw">fn </span>param_raw (&amp; <span class="self">self</span>, num: u8) -&gt; <span class="prelude-ty">Result </span>&lt;Val, RunResult &lt;Val&gt;&gt; {
-		<span class="kw">let </span>addr = Val::add_3 (<span class="self">self</span>.pos, Val::ONE, Val::from_u8 (num).unwrap ()) <span class="question-mark">?</span>;
+		<span class="kw">let </span>addr = <span class="macro">chk! </span>(<span class="self">self</span>.pos + Val::ONE + Val::from_u8 (num).unwrap ()) <span class="question-mark">?</span>;
 		<span class="self">self</span>.mem_get_real (addr)
 	}
 
@@ -504,7 +500,7 @@
 		<span class="kw">match </span>opcode.modes [num.qck_usize ()] {
 			Mode::Position =&gt; <span class="self">self</span>.mem_get_real (raw),
 			Mode::Immediate =&gt; <span class="prelude-val">Ok </span>(raw),
-			Mode::Relative =&gt; <span class="self">self</span>.mem_get_real (Val::add_2 (raw, <span class="self">self</span>.rel) <span class="question-mark">?</span>),
+			Mode::Relative =&gt; <span class="self">self</span>.mem_get_real (<span class="macro">chk! </span>(raw + <span class="self">self</span>.rel) <span class="question-mark">?</span>),
 		}
 	}
 

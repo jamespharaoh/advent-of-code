@@ -97,8 +97,8 @@
 		<span class="kw">let </span>instr_idx = pos.pan_usize ();
 		<span class="kw">if </span>! seen.insert (instr_idx) { <span class="kw">break </span>}
 		<span class="kw">let </span>instr = instrs [instr_idx];
-		<span class="kw">if </span>instr.op == Op::Acc { acc = Val::add_2 (acc, instr.arg) <span class="question-mark">?</span>; }
-		pos = Val::add_2 (pos, <span class="kw">if </span>instr.op == Op::Jmp { instr.arg } <span class="kw">else </span>{ Val::ONE }) <span class="question-mark">?</span>;
+		<span class="kw">if </span>instr.op == Op::Acc { acc = <span class="macro">chk! </span>(acc + instr.arg) <span class="question-mark">?</span>; }
+		<span class="macro">chk! </span>(pos += <span class="kw">if </span>instr.op == Op::Jmp { instr.arg } <span class="kw">else </span>{ Val::ONE }) <span class="question-mark">?</span>;
 	}
 	<span class="prelude-val">Ok </span>((pos, acc))
 }

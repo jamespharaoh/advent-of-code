@@ -61,7 +61,7 @@
 		<span class="kw">if </span>! take &amp;&amp; odd { rem = (rem + <span class="number">1</span>) / <span class="number">2</span>; } <span class="kw">else </span>{ rem /= <span class="number">2</span>; }
 		<span class="kw">if </span>take { first_with += sep; }
 		<span class="kw">if </span>odd { take = ! take; }
-		sep = u32::mul_2 (sep, <span class="number">2</span>) <span class="question-mark">?</span>;
+		sep = <span class="macro">chk! </span>(sep * <span class="number">2</span>) <span class="question-mark">?</span>;
 	}
 	<span class="prelude-val">Ok </span>(first_with + <span class="number">1</span>)
 }

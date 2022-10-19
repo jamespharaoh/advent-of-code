@@ -251,7 +251,7 @@
 			<span class="macro">assert! </span>(idx &lt; <span class="number">4096</span>);
 			<span class="kw">let </span>next = <span class="self">self</span>.bit_rules [idx];
 			<span class="kw">if </span>next == <span class="number">0 </span>&amp;&amp; data.is_empty () {
-				start = Int::add_2 (start, <span class="number">8</span>) <span class="question-mark">?</span>;
+				start = <span class="macro">chk! </span>(start + <span class="number">8</span>) <span class="question-mark">?</span>;
 			} <span class="kw">else </span>{
 				data.push (next);
 			}

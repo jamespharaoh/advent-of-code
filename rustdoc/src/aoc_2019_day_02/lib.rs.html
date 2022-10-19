@@ -19,6 +19,13 @@
 <span id="19">19</span>
 <span id="20">20</span>
 <span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Advent of Code 2019: Day 2: 1202 Program Alarm
 //!
 //! [https://adventofcode.com/2019/day/02](https://adventofcode.com/2019/day/02)
@@ -30,15 +37,22 @@
 
 <span class="kw">pub mod </span>input;
 <span class="kw">pub mod </span>logic;
-<span class="kw">pub mod </span>model;
 
 <span class="macro">puzzle_info! </span>{
 	name = <span class="string">&quot;1202 Program Alarm&quot;</span>;
 	year = <span class="number">2019</span>;
 	day = <span class="number">2</span>;
-	parse = |input| input::Input::parse_from_lines (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (&amp; input);
 	part_two = |input| logic::part_two (&amp; input);
+}
+
+<span class="kw">pub mod </span>model {
+	<span class="kw">use super</span>::<span class="kw-2">*</span>;
+	<span class="kw">pub type </span>Cpu = intcode::Machine &lt;Val&gt;;
+	<span class="kw">pub type </span>Mem = intcode::Mem &lt;Val&gt;;
+	<span class="kw">pub type </span>RunResult = intcode::RunResult &lt;Val&gt;;
+	<span class="kw">pub type </span>Val = i32;
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_02" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

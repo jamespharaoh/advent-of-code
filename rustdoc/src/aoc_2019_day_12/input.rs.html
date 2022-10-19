@@ -24,14 +24,8 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
-<span id="27">27</span>
-<span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
-<span id="33">33</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>model::Pos;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -40,28 +34,20 @@
 	<span class="kw">pub </span>params: InputParams,
 }
 
-<span class="macro">struct_display! </span>{
-	Input { moons, params } = [ params, @lines moons = display_moon ]
-}
-
-<span class="kw">fn </span>display_moon (moon: &amp; Pos, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-	<span class="macro">write! </span>(formatter, <span class="string">&quot;&lt;x={x}, y={y}, z={z}&gt;&quot;</span>, x = moon.x, y = moon.y, z = moon.z)
-}
-
-<span class="macro">struct_parser! </span>{
-	Input { moons, params } = [ params, @lines moons = parse_moon ]
-}
-
-<span class="kw">fn </span>parse_moon (parser: &amp; <span class="kw-2">mut </span>Parser) -&gt; ParseResult &lt;Pos&gt; {
-	<span class="macro">parse! </span>(parser, <span class="string">&quot;&lt;x=&quot;</span>, x, <span class="string">&quot;, y=&quot;</span>, y, <span class="string">&quot;, z=&quot;</span>, z, <span class="string">&quot;&gt;&quot;</span>);
-	<span class="prelude-val">Ok </span>(Pos { x, y, z })
+<span class="macro">struct_parser_display! </span>{
+	Input { moons, params } = [
+		params,
+		@lines moons {
+			Pos { x, y, z } = [ <span class="string">&quot;&lt;x=&quot;</span>, x, <span class="string">&quot;, y=&quot;</span>, y, <span class="string">&quot;, z=&quot;</span>, z, <span class="string">&quot;&gt;&quot; </span>],
+		},
+	]
 }
 
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>num_steps_one: u32 = (<span class="string">&quot;NUM_STEPS_ONE=&quot;</span>, <span class="number">1000</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>num_steps_two: u32 = (<span class="string">&quot;NUM_STEPS_TWO=&quot;</span>, <span class="number">500_000</span>, <span class="number">1_u32 </span>.. ),
+		<span class="kw">pub </span>num_steps_one: u32 = (<span class="string">&quot;NUM_STEPS_ONE=&quot;</span>, <span class="number">1000</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>num_steps_two: u32 = (<span class="string">&quot;NUM_STEPS_TWO=&quot;</span>, <span class="number">500_000</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>

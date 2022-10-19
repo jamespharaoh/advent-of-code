@@ -335,29 +335,6 @@
 <span id="335">335</span>
 <span id="336">336</span>
 <span id="337">337</span>
-<span id="338">338</span>
-<span id="339">339</span>
-<span id="340">340</span>
-<span id="341">341</span>
-<span id="342">342</span>
-<span id="343">343</span>
-<span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
-<span id="352">352</span>
-<span id="353">353</span>
-<span id="354">354</span>
-<span id="355">355</span>
-<span id="356">356</span>
-<span id="357">357</span>
-<span id="358">358</span>
-<span id="359">359</span>
-<span id="360">360</span>
 </pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::wildcard_enum_match_arm) ]
 
 </span><span class="kw">extern crate </span>proc_macro;
@@ -371,22 +348,12 @@
 <span class="kw">use </span>proc_macro::TokenStream;
 <span class="kw">use </span>proc_macro::TokenTree;
 <span class="kw">use </span>proc_macro::token_stream::IntoIter <span class="kw">as </span>TokenStreamIter;
-<span class="kw">use </span>std::iter;
 <span class="kw">use </span>std::iter::Peekable;
 <span class="kw">use </span>std::vec::IntoIter <span class="kw">as </span>VecIter;
 
 <span class="kw">type </span>TokenIter = Peekable &lt;TokenStreamIter&gt;;
 
-<span class="comment">/*
-top = item arith-assign expr
-item = non-arithmetic +
-expr = item | expr arith expr | (expr)
-
-item -&gt; Ok (item)
-left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked_op (right)))
-*/
-
-</span><span class="attribute">#[proc_macro]
+<span class="attribute">#[proc_macro]
 </span><span class="kw">pub fn </span>checked (tokens: TokenStream) -&gt; TokenStream {
 	<span class="kw">let </span><span class="kw-2">mut </span>iter = tokens.into_iter ().peekable ();
 	CheckedTop::parse (&amp; <span class="kw-2">mut </span>iter).into ()
@@ -425,78 +392,50 @@ left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked
 	<span class="kw">fn </span>from (top: CheckedTop) -&gt; <span class="self">Self </span>{
 		<span class="kw">match </span>top {
 			CheckedTop::Expr (expr) =&gt; expr.into (),
-			CheckedTop::Assign (left, punct_0, punct_1, right) =&gt; {
+			CheckedTop::Assign (left, punct_0, _punct_1, right) =&gt; {
 				<span class="kw">let </span>fn_name = <span class="kw">match </span>punct_0.as_char () {
-					<span class="string">&#39;+&#39; </span>=&gt; <span class="string">&quot;try_add&quot;</span>,
-					<span class="string">&#39;/&#39; </span>=&gt; <span class="string">&quot;try_div&quot;</span>,
-					<span class="string">&#39;*&#39; </span>=&gt; <span class="string">&quot;try_mul&quot;</span>,
-					<span class="string">&#39;%&#39; </span>=&gt; <span class="string">&quot;try_rem&quot;</span>,
-					<span class="string">&#39;-&#39; </span>=&gt; <span class="string">&quot;try_sub&quot;</span>,
+					<span class="string">&#39;+&#39; </span>=&gt; <span class="string">&quot;try_add_assign&quot;</span>,
+					<span class="string">&#39;/&#39; </span>=&gt; <span class="string">&quot;try_div_assign&quot;</span>,
+					<span class="string">&#39;*&#39; </span>=&gt; <span class="string">&quot;try_mul_assign&quot;</span>,
+					<span class="string">&#39;%&#39; </span>=&gt; <span class="string">&quot;try_rem_assign&quot;</span>,
+					<span class="string">&#39;-&#39; </span>=&gt; <span class="string">&quot;try_sub_assign&quot;</span>,
 					<span class="kw">_ </span>=&gt; <span class="macro">unreachable! </span>(),
 				};
 				[
 					<span class="comment">// {
-					//   let __val: Result &lt;_, Overflow&gt; =
-					//     $right.and_then (|__right| $left.$fn_name (__right));
-					//   if let Ok (__val) == __val {
-					//     $left $punct_1 __val;
-					//   } else {
-					//     Err (Overflow)
+					//   match $right {
+					//     Ok (__right) =&gt; ($left).$fn_name (__right),
+					//     Err (__err) =&gt; Err (__err),
 					//   }
 					// }
 					</span>TokenTree::Group (Group::new (Delimiter::Brace, [
-						TokenTree::Ident (Ident::new (<span class="string">&quot;let&quot;</span>, Span::mixed_site ())),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;__val&quot;</span>, Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;:&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;Result&quot;</span>, Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;&lt;&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;_&quot;</span>, Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;Overflow&quot;</span>, Span::mixed_site ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Alone)),
-						TokenTree::Group (Group::new (Delimiter::None, right.into ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;and_then&quot;</span>, Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-							TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-							TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, Span::mixed_site ())),
-							TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-							TokenTree::Group (Group::new (Delimiter::None, (&amp; left).into ())),
+						TokenTree::Ident (Ident::new (<span class="string">&quot;match&quot;</span>, Span::mixed_site ())),
+						right.into (),
+						TokenTree::Group (Group::new (Delimiter::Brace, [
+							TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, Span::mixed_site ())),
+							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+							TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, left.into ())),
 							TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
 							TokenTree::Ident (Ident::new (fn_name, Span::mixed_site ())),
 							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
 								TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, Span::mixed_site ())),
 							].into_iter ().collect ())),
-						].into_iter ().collect ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;;&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;if&quot;</span>, Span::mixed_site ())),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;let&quot;</span>, Span::mixed_site ())),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-							TokenTree::Ident (Ident::new (<span class="string">&quot;__val&quot;</span>, Span::mixed_site ())),
-						].into_iter ().collect ())),
-						TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Alone)),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;__val&quot;</span>, Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Brace, iter::empty ()
-							.chain (left.into_iter ())
-							.chain ([
-								TokenTree::Punct (punct_1),
-								TokenTree::Ident (Ident::new (<span class="string">&quot;__val&quot;</span>, Span::mixed_site ())),
-								TokenTree::Punct (Punct::new (<span class="string">&#39;;&#39;</span>, Spacing::Alone)),
-								TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
-								TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-									TokenTree::Group (Group::new (Delimiter::Parenthesis,
-										<span class="self">Self</span>::new ())),
-								].into_iter ().collect ())),
-							].into_iter ())
-							.collect ())),
-						TokenTree::Ident (Ident::new (<span class="string">&quot;else&quot;</span>, Span::mixed_site ())),
-						TokenTree::Group (Group::new (Delimiter::Brace, [
+							TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
 							TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
 							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-								TokenTree::Ident (Ident::new (<span class="string">&quot;Overflow&quot;</span>, Span::mixed_site ())),
+								TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
 							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+							TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+							TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
+							TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+								TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
+							].into_iter ().collect ())),
+							TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
 						].into_iter ().collect ())),
 					].into_iter ().collect ()))
 				].into_iter ().collect ()
@@ -589,11 +528,18 @@ left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked
 
 <span class="kw">impl </span>From &lt;&amp; CheckedExpr&gt; <span class="kw">for </span>TokenStream {
 	<span class="kw">fn </span>from (expr: &amp; CheckedExpr) -&gt; <span class="self">Self </span>{
-		<span class="kw">let </span>(fn_name, left, punct, right) = <span class="kw">match </span>* expr {
+		<span class="kw">let </span>(fn_name, left, _punct, right) = <span class="kw">match </span>* expr {
 			CheckedExpr::Item (<span class="kw-2">ref </span>item) =&gt; {
-				<span class="comment">// Ok ($item)
+				<span class="comment">// Ok::&lt;_, Overflow&gt; ($item)
 				</span><span class="kw">return </span>[
 					TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;:&#39;</span>, Spacing::Joint)),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;:&#39;</span>, Spacing::Alone)),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;&lt;&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;_&quot;</span>, Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;Overflow&quot;</span>, Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
 					TokenTree::Group (Group::new (Delimiter::Parenthesis, item.into ())),
 				].into_iter ().collect ();
 			},
@@ -604,30 +550,76 @@ left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked
 			CheckedExpr::Sub (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>punct, <span class="kw-2">ref </span>right) =&gt; (<span class="string">&quot;try_sub&quot;</span>, left, punct, right),
 		};
 		[
-			<span class="comment">// $left.and_then (|__left| $right.and_then (|__right| __left.$fn_name (__right)))
-			</span>TokenTree::Group (Group::new (Delimiter::None, left.into ())),
-			TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
-			TokenTree::Ident (Ident::new (<span class="string">&quot;and_then&quot;</span>, punct.span ())),
-			TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-				TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-				TokenTree::Ident (Ident::new (<span class="string">&quot;__left&quot;</span>, punct.span ())),
-				TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-				TokenTree::Group (Group::new (Delimiter::None, right.into ())),
-				TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
-				TokenTree::Ident (Ident::new (<span class="string">&quot;and_then&quot;</span>, punct.span ())),
+			<span class="comment">// match $left {
+			//   Ok (__left) =&gt; match $right {
+			//     Ok (__right) =&gt; __left.$fn_name (__right),
+			//     Err (__err) =&gt; Err (__err),
+			//   },
+			//   Err (__err) =&gt; Err (__err),
+			// }
+			</span>TokenTree::Ident (Ident::new (<span class="string">&quot;match&quot;</span>, Span::mixed_site ())),
+			left.into (),
+			TokenTree::Group (Group::new (Delimiter::Brace, [
+				TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
 				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-					TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-					TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, punct.span ())),
-					TokenTree::Punct (Punct::new (<span class="string">&#39;|&#39;</span>, Spacing::Alone)),
-					TokenTree::Ident (Ident::new (<span class="string">&quot;__left&quot;</span>, punct.span ())),
-					TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
-					TokenTree::Ident (Ident::new (fn_name, punct.span ())),
-					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
-						TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, punct.span ())),
-					].into_iter ().collect ())),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;__left&quot;</span>, Span::mixed_site ())),
 				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+				TokenTree::Ident (Ident::new (<span class="string">&quot;match&quot;</span>, Span::mixed_site ())),
+				right.into (),
+				TokenTree::Group (Group::new (Delimiter::Brace, [
+					TokenTree::Ident (Ident::new (<span class="string">&quot;Ok&quot;</span>, Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;__left&quot;</span>, Span::mixed_site ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;.&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (fn_name, Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new (<span class="string">&quot;__right&quot;</span>, Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+					TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
+					TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+						TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
+					].into_iter ().collect ())),
+					TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
+				TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
+				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+					TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;=&#39;</span>, Spacing::Joint)),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;&gt;&#39;</span>, Spacing::Alone)),
+				TokenTree::Ident (Ident::new (<span class="string">&quot;Err&quot;</span>, Span::mixed_site ())),
+				TokenTree::Group (Group::new (Delimiter::Parenthesis, [
+					TokenTree::Ident (Ident::new (<span class="string">&quot;__err&quot;</span>, Span::mixed_site ())),
+				].into_iter ().collect ())),
+				TokenTree::Punct (Punct::new (<span class="string">&#39;,&#39;</span>, Spacing::Alone)),
 			].into_iter ().collect ())),
 		].into_iter ().collect ()
+	}
+}
+
+<span class="kw">impl </span>From &lt;CheckedExpr&gt; <span class="kw">for </span>TokenTree {
+	<span class="kw">fn </span>from (expr: CheckedExpr) -&gt; <span class="self">Self </span>{
+		<span class="self">Self</span>::Group (Group::new (Delimiter::None, expr.into ()))
+	}
+}
+
+<span class="kw">impl </span>From &lt;&amp; Box &lt;CheckedExpr&gt;&gt; <span class="kw">for </span>TokenTree {
+	<span class="kw">fn </span>from (expr: &amp; Box &lt;CheckedExpr&gt;) -&gt; <span class="self">Self </span>{
+		<span class="self">Self</span>::Group (Group::new (Delimiter::None, expr.into ()))
 	}
 }
 
@@ -675,48 +667,10 @@ left.op (right) =&gt; left.and_then (|left| right.and_then (|right| left.checked
 	}
 }
 
-<span class="comment">/*
-#[ macro_export ]
-macro_rules! checked {
-	( $left:tt += $right:tt ) =&gt; {
-		(|| { $left = $left.try_add (checked_eval! ($right) ?) ?; Ok::&lt;_, Overflow&gt; (()) }) ()
-	};
-	( $left:tt /= $right:tt ) =&gt; {
-		(|| { $left = $left.try_div (checked_eval! ($right) ?) ?; Ok::&lt;_, Overflow&gt; (()) }) ()
-	};
-	( $left:tt *= $right:tt ) =&gt; {
-		(|| { $left = $left.try_mul (checked_eval! ($right) ?) ?; Ok::&lt;_, Overflow&gt; (()) }) ()
-	};
-	( $left:tt %= $right:tt ) =&gt; {
-		(|| { $left = $left.try_rem (checked_eval! ($right) ?) ?; Ok::&lt;_, Overflow&gt; (()) }) ()
-	};
-	( $left:tt -= $right:tt ) =&gt; {
-		(|| { $left = $left.try_sub (checked_eval! ($right) ?) ?; Ok::&lt;_, Overflow&gt; (()) }) ()
-	};
-	( $($arg:tt)* ) =&gt; { (|| checked_eval! ($($arg)*)) () };
+<span class="kw">impl </span>From &lt;CheckedItem&gt; <span class="kw">for </span>TokenTree {
+	<span class="kw">fn </span>from (item: CheckedItem) -&gt; <span class="self">Self </span>{
+		<span class="self">Self</span>::Group (Group::new (Delimiter::None, item.into ()))
+	}
 }
-
-#[ macro_export ]
-macro_rules! checked_eval {
-	( $arg:ident ) =&gt; { Ok::&lt;_, Overflow&gt; ($arg) };
-	( ( $($args:tt)* ) ) =&gt; { checked_eval! ($($args)*) };
-	( $left:tt . $right:ident ) =&gt; { Ok::&lt;_, Overflow&gt; (checked_eval! ($left) ?.$right) };
-	( $left_0:tt + $($right:tt)* ) =&gt; {
-		checked_eval! ($left_0) ?.try_add (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt / $($right:tt)* ) =&gt; {
-		checked_eval! ($left_0) ?.try_div (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt * $($right:tt)* ) =&gt; {
-		checked_eval! ($left_0) ?.try_mul (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt % $($right:tt)* ) =&gt; {
-		checked_eval! ($left_0) ?.try_rem (checked_eval! ($($right)*) ?)
-	};
-	( $left_0:tt - $($right:tt)* ) =&gt; {
-		checked_eval! ($left_0) ?.try_sub (checked_eval! ($($right)*) ?)
-	};
-}
-*/
-</span></code></pre></div>
+</code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_checked" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

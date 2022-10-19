@@ -387,8 +387,8 @@
 	) -&gt; CpuResult &lt;Val&gt; {
 		<span class="kw">use </span>CpuError::Overflow <span class="kw">as </span>ErrNum;
 		<span class="prelude-val">Ok </span>(<span class="kw">match </span>* <span class="self">self </span>{
-			<span class="self">Self</span>::Add =&gt; Val::add_2 (val_a <span class="question-mark">?</span>, val_b <span class="question-mark">?</span>).ok ().ok_or (ErrNum) <span class="question-mark">?</span>,
-			<span class="self">Self</span>::Mul =&gt; Val::mul_2 (val_a <span class="question-mark">?</span>, val_b <span class="question-mark">?</span>).ok ().ok_or (ErrNum) <span class="question-mark">?</span>,
+			<span class="self">Self</span>::Add =&gt; <span class="macro">chk! </span>(val_a <span class="question-mark">? </span>+ val_b <span class="question-mark">?</span>).ok ().ok_or (ErrNum) <span class="question-mark">?</span>,
+			<span class="self">Self</span>::Mul =&gt; <span class="macro">chk! </span>(val_a <span class="question-mark">? </span>* val_b <span class="question-mark">?</span>).ok ().ok_or (ErrNum) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Ban =&gt; val_a <span class="question-mark">? </span>&amp; val_b <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Bor =&gt; val_a <span class="question-mark">? </span>| val_b <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Set =&gt; val_a <span class="question-mark">?</span>,

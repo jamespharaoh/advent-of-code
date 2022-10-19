@@ -18,12 +18,6 @@
 <span id="18">18</span>
 <span id="19">19</span>
 <span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
-<span id="26">26</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>model::Val;
@@ -35,19 +29,13 @@
 }
 
 <span class="macro">struct_parser_display! </span>{
-	Input {
-		data,
-		params,
-	} = [
-		params,
-		@delim <span class="string">&quot;,&quot; </span>data,
-	]
+	Input { data, params } = [ params, @delim <span class="string">&quot;,&quot; </span>data ]
 }
 
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>max_ops: u32 = (<span class="string">&quot;MAX_OPS=&quot;</span>, <span class="number">100</span>, <span class="number">1_u32 </span>..),
+		<span class="kw">pub </span>max_ops: u32 = (<span class="string">&quot;MAX_OPS=&quot;</span>, <span class="number">100</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>

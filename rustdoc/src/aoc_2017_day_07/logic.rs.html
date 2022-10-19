@@ -45,9 +45,6 @@
 <span id="45">45</span>
 <span id="46">46</span>
 <span id="47">47</span>
-<span id="48">48</span>
-<span id="49">49</span>
-<span id="50">50</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::ProgInfo;
@@ -69,10 +66,7 @@
 				.into_option ()
 				.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 		<span class="kw">if </span>min_weight == max_weight {
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(u32::sub_2 (
-				u32::add_2 (cur.prog_weight, target_weight) <span class="question-mark">?</span>,
-				cur.total_weight,
-			) <span class="question-mark">?</span>);
+			<span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="macro">chk! </span>(cur.prog_weight + target_weight - cur.total_weight) <span class="question-mark">?</span>);
 		}
 		<span class="kw">let </span>num_min =
 			cur.holds.iter ()

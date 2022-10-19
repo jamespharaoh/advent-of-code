@@ -40,7 +40,7 @@
 	<span class="kw">for </span>(idx, delta) <span class="kw">in </span>iter::repeat (input.deltas.clone ()).flatten ().enumerate () {
 		<span class="kw">if </span>! seen.insert (total) { <span class="kw">break </span>}
 		<span class="kw">if </span>idx == <span class="number">200_000 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after 200k iterations&quot;</span>.into ()) }
-		total = i32::add_2 (total, delta) <span class="question-mark">?</span>;
+		total = <span class="macro">chk! </span>(total + delta) <span class="question-mark">?</span>;
 	}
 	<span class="prelude-val">Ok </span>(total)
 }

@@ -36,22 +36,16 @@
 <span id="36">36</span>
 <span id="37">37</span>
 <span id="38">38</span>
-<span id="39">39</span>
-<span id="40">40</span>
-<span id="41">41</span>
-<span id="42">42</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::Coord;
 <span class="kw">use </span>model::Pos;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span><span class="kw-2">mut </span>remain: Vec &lt;Pos&gt; =
-		input.coords.iter ()
-			.map (|line| line.coord)
-			.collect ();
+	<span class="kw">let </span><span class="kw-2">mut </span>remain: Vec &lt;Pos&gt; = input.coords.clone ();
 	<span class="kw">let </span><span class="kw-2">mut </span>remain_temp = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>constellations: Vec &lt;Vec &lt;Pos&gt;&gt; = Vec::new ();
 	<span class="kw">while let </span><span class="prelude-val">Some </span>(first_pos) = remain.pop () {
@@ -75,12 +69,10 @@
 }
 
 <span class="kw">fn </span>get_dist (pos_0: Pos, pos_1: Pos) -&gt; NumResult &lt;Coord&gt; {
-	Coord::add_4 (
-		Coord::sub_2 (pos_0.x, pos_1.x) <span class="question-mark">?</span>.abs (),
-		Coord::sub_2 (pos_0.y, pos_1.y) <span class="question-mark">?</span>.abs (),
-		Coord::sub_2 (pos_0.z, pos_1.z) <span class="question-mark">?</span>.abs (),
-		Coord::sub_2 (pos_0.t, pos_1.t) <span class="question-mark">?</span>.abs (),
-	)
+	<span class="macro">chk! </span>(<span class="macro">chk! </span>(pos_0.x - pos_1.x) <span class="question-mark">?</span>.abs (),
+		+ <span class="macro">chk! </span>(pos_0.y - pos_1.y) <span class="question-mark">?</span>.abs (),
+		+ <span class="macro">chk! </span>(pos_0.z - pos_1.z) <span class="question-mark">?</span>.abs (),
+		+ <span class="macro">chk! </span>(pos_0.t - pos_1.t) <span class="question-mark">?</span>.abs ())
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

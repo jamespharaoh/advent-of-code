@@ -849,6 +849,7 @@
 <span id="849">849</span>
 <span id="850">850</span>
 <span id="851">851</span>
+<span id="852">852</span>
 </pre><pre class="rust"><code><span class="kw">use </span>std::fmt::{ <span class="self">self</span>, Debug };
 <span class="kw">use </span>std::ops::{ Add, Neg, Rem, Sub };
 
@@ -858,6 +859,7 @@
 <span class="kw">use </span>nums::Int;
 <span class="kw">use </span>nums::IntSigned;
 <span class="kw">use </span>nums::NumResult;
+<span class="kw">use </span>nums::Overflow;
 <span class="kw">use </span>nums::TryAdd;
 <span class="kw">use </span>nums::TryMul;
 <span class="kw">use </span>nums::TrySub;
@@ -908,14 +910,14 @@
 				<span class="attribute">#[ inline ]
 				</span><span class="kw">pub fn </span><span class="macro-nonterminal">$neg </span>(<span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 					<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
-					result.<span class="macro-nonterminal">$field </span>= Val::sub_2 (result.<span class="macro-nonterminal">$field</span>, num) <span class="question-mark">?</span>;
+					result.<span class="macro-nonterminal">$field </span>= <span class="macro">chk! </span>(result.<span class="macro-nonterminal">$field </span>- num) <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok </span>(result)
 				}
 
 				<span class="attribute">#[ inline ]
 				</span><span class="kw">pub fn </span><span class="macro-nonterminal">$pos </span>(<span class="self">self</span>, num: Val) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 					<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
-					result.<span class="macro-nonterminal">$field </span>= Val::add_2 (result.<span class="macro-nonterminal">$field</span>, num) <span class="question-mark">?</span>;
+					result.<span class="macro-nonterminal">$field </span>= <span class="macro">chk! </span>(result.<span class="macro-nonterminal">$field </span>+ num) <span class="question-mark">?</span>;
 					<span class="prelude-val">Ok </span>(result)
 				}
 
@@ -1344,10 +1346,10 @@
 			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, (dir, dist): (Dir2d, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
 				<span class="kw">match </span>dir {
-					Dir2d::Up =&gt; result.y = Val::sub_2 (result.y, dist) <span class="question-mark">?</span>,
-					Dir2d::Down =&gt; result.y = Val::add_2 (result.y, dist) <span class="question-mark">?</span>,
-					Dir2d::Left =&gt; result.x = Val::sub_2 (result.x, dist) <span class="question-mark">?</span>,
-					Dir2d::Right =&gt; result.x = Val::add_2 (result.x, dist) <span class="question-mark">?</span>,
+					Dir2d::Up =&gt; result.y = <span class="macro">chk! </span>(result.y - dist) <span class="question-mark">?</span>,
+					Dir2d::Down =&gt; result.y = <span class="macro">chk! </span>(result.y + dist) <span class="question-mark">?</span>,
+					Dir2d::Left =&gt; result.x = <span class="macro">chk! </span>(result.x - dist) <span class="question-mark">?</span>,
+					Dir2d::Right =&gt; result.x = <span class="macro">chk! </span>(result.x + dist) <span class="question-mark">?</span>,
 				}
 				<span class="prelude-val">Ok </span>(result)
 			}
@@ -1451,10 +1453,10 @@
 			</span><span class="kw">fn </span>add (<span class="self">self</span>, (dir, dist): (DirGeo, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
 				<span class="kw">match </span>dir {
-					DirGeo::North =&gt; result.n = Val::add_2 (result.n, dist) <span class="question-mark">?</span>,
-					DirGeo::South =&gt; result.n = Val::sub_2 (result.n, dist) <span class="question-mark">?</span>,
-					DirGeo::East =&gt; result.e = Val::add_2 (result.e, dist) <span class="question-mark">?</span>,
-					DirGeo::West =&gt; result.e = Val::sub_2 (result.e, dist) <span class="question-mark">?</span>,
+					DirGeo::North =&gt; result.n = <span class="macro">chk! </span>(result.n + dist) <span class="question-mark">?</span>,
+					DirGeo::South =&gt; result.n = <span class="macro">chk! </span>(result.n - dist) <span class="question-mark">?</span>,
+					DirGeo::East =&gt; result.e = <span class="macro">chk! </span>(result.e + dist) <span class="question-mark">?</span>,
+					DirGeo::West =&gt; result.e = <span class="macro">chk! </span>(result.e - dist) <span class="question-mark">?</span>,
 				}
 				<span class="prelude-val">Ok </span>(result)
 			}
@@ -1681,10 +1683,10 @@
 			</span><span class="kw">fn </span>try_add (<span class="self">self</span>, (dir, dist): (Dir2d, Val)) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
 				<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">self</span>;
 				<span class="kw">match </span>dir {
-					Dir2d::Up =&gt; result.row = Val::sub_2 (result.row, dist) <span class="question-mark">?</span>,
-					Dir2d::Down =&gt; result.row = Val::add_2 (result.row, dist) <span class="question-mark">?</span>,
-					Dir2d::Left =&gt; result.col = Val::sub_2 (result.col, dist) <span class="question-mark">?</span>,
-					Dir2d::Right =&gt; result.col = Val::add_2 (result.col, dist) <span class="question-mark">?</span>,
+					Dir2d::Up =&gt; result.row = <span class="macro">chk! </span>(result.row - dist) <span class="question-mark">?</span>,
+					Dir2d::Down =&gt; result.row = <span class="macro">chk! </span>(result.row + dist) <span class="question-mark">?</span>,
+					Dir2d::Left =&gt; result.col = <span class="macro">chk! </span>(result.col - dist) <span class="question-mark">?</span>,
+					Dir2d::Right =&gt; result.col = <span class="macro">chk! </span>(result.col + dist) <span class="question-mark">?</span>,
 				}
 				<span class="prelude-val">Ok </span>(result)
 			}
