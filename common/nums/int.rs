@@ -68,6 +68,16 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	}
 
 	#[ inline (always) ]
+	fn bit_set_assign (& mut self, bit: u32) {
+		* self |= Self::ONE << bit;
+	}
+
+	#[ inline (always) ]
+	fn bit_clear_assign (& mut self, bit: u32) {
+		* self &= ! (Self::ONE << bit);
+	}
+
+	#[ inline (always) ]
 	fn bound_start_assign (& mut self, other: Self) {
 		* self = cmp::max (* self, other);
 	}

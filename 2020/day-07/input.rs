@@ -17,28 +17,18 @@ pub struct InputBagContains <'inp> {
 	pub contains: Vec <InputNumBags <'inp>>,
 }
 
-impl <'inp> Display for InputBagContains <'inp> {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		let & Self { ref colour, ref contains } = self;
-		display! (formatter, colour, " bags contain ");
-		if self.contains.is_empty () {
-			display! (formatter, "no other bags.");
-		} else {
-			display! (formatter, @delim ", " contains, ".");
-		}
-		Ok (())
-	}
-}
-
-impl <'inp> FromParser <'inp> for InputBagContains <'inp> {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, colour = parse_colour, " bags contain ");
-		let contains = parser.any ()
-			.of (|parser| { parse! (parser, @delim ", " contains, "."); Ok (contains) })
-			.of (|parser| { parse! (parser, "no other bags."); Ok (Vec::new ()) })
-			.done () ?;
-		Ok (Self { colour, contains })
-	}
+struct_parser_display! {
+	input_lifetime = 'inp;
+	InputBagContains <'inp> { colour, contains } = [
+		colour = parse_colour, " bags contain ", contains {
+			type = Vec <InputNumBags>;
+			contains if (contains.is_empty ()) = [
+				"no other bags",
+				@parse contains { Vec::new () },
+			],
+			contains = [ @delim ", " contains ],
+		}, ".",
+	]
 }
 
 #[ derive (Clone, Debug) ]
@@ -47,25 +37,15 @@ pub struct InputNumBags <'inp> {
 	pub colour: InpStr <'inp>,
 }
 
-impl <'inp> Display for InputNumBags <'inp> {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter,
-			"{num} {colour} {noun}",
-			num = self.num,
-			colour = self.colour,
-			noun = if self.num != 1 { "bags" } else { "bag" })
-	}
-}
-
-impl <'inp> FromParser <'inp> for InputNumBags <'inp> {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		parse! (parser, num, " ", colour = parse_colour, " ");
-		parser.any ()
-			.of (|parser| { parser.expect ("bags") ?; Ok (()) })
-			.of (|parser| { parser.expect ("bag") ?; Ok (()) })
-			.done () ?;
-		Ok (Self { num, colour })
-	}
+struct_parser_display! {
+	input_lifetime = 'inp;
+	InputNumBags <'inp> { num, colour } = [
+		(num, colour) {
+			type = (& u32, & InpStr);
+			(num, colour) if (* num != 1) = [ num, " ", colour = parse_colour, " bags" ],
+			(num, colour) = [ num, " ", colour = parse_colour, " bag" ],
+		},
+	]
 }
 
 fn parse_colour <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'inp>> {
@@ -83,7 +63,7 @@ fn parse_colour <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'in
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub max_iters_one: u32 = ("MAX_ITERS_ONE=", 200, 1_u32 .. ),
-		pub max_iters_two: u32 = ("MAX_ITERS_TWO=", 100, 1_u32 .. ),
+		pub max_iters_one: u32 = ("MAX_ITERS_ONE=", 200, 1 .. ),
+		pub max_iters_two: u32 = ("MAX_ITERS_TWO=", 100, 1 .. ),
 	}
 }

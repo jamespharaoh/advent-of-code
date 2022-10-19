@@ -8,6 +8,7 @@ use std::ops::BitOr;
 use std::ops::BitOrAssign;
 use std::ops::Div;
 use std::ops::Mul;
+use std::ops::Not;
 use std::ops::Rem;
 use std::ops::Shl;
 use std::ops::ShlAssign;
@@ -24,15 +25,16 @@ impl <Val> IntOps for Val where Val: IntOpsRust + IntOpsSafe + IntOpsTry {
 
 pub trait IntOpsRust: Sized + Add <Output = Self> + AddAssign + BitAnd <Output = Self>
 	+ BitAndAssign + BitOr <Output = Self> + BitOrAssign + Div <Output = Self>
-	+ Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self> + ShlAssign <u32>
-	+ Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self> + SubAssign {
+	+ Mul <Output = Self> + Not <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
+	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self>
+	+ SubAssign {
 }
 
 impl <Val> IntOpsRust for Val where Val: Sized + Add <Output = Self> + AddAssign
 	+ BitAnd <Output = Self> + BitAndAssign + BitOr <Output = Self> + BitOrAssign
-	+ Div <Output = Self> + Mul <Output = Self> + Rem <Output = Self> + Shl <u32, Output = Self>
-	+ ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32> + Sub <Output = Self>
-	+ SubAssign {
+	+ Div <Output = Self> + Mul <Output = Self> + Not <Output = Self> + Rem <Output = Self>
+	+ Shl <u32, Output = Self> + ShlAssign <u32> + Shr <u32, Output = Self> + ShrAssign <u32>
+	+ Sub <Output = Self> + SubAssign {
 }
 
 pub trait IntOpsSafe: Sized {

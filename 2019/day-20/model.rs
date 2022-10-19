@@ -5,37 +5,14 @@ pub type Dir = pos::Dir2d;
 pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 
-#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-pub enum Tile {
-	#[ default ]
-	Empty,
-	Passage,
-	Wall,
-	Letter (char),
-}
-
-impl Display for Tile {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::Empty => write! (formatter, " "),
-			Self::Passage => write! (formatter, "."),
-			Self::Wall => write! (formatter, "#"),
-			Self::Letter (ch) => write! (formatter, "{}", ch),
-		}
-	}
-}
-
-impl <'inp> FromParser <'inp> for Tile {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		let val = match parser.peek ().ok_or_else (|| parser.err ()) ? {
-			' ' => Self::Empty,
-			'.' => Self::Passage,
-			'#' => Self::Wall,
-			ch @ 'A' ..= 'Z' => Self::Letter (ch),
-			_ => return Err (parser.err ()),
-		};
-		parser.expect_next () ?;
-		Ok (val)
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum Tile {
+		#[ default ]
+		Empty = [ " " ],
+		Passage = [ "." ],
+		Wall = [ "#" ],
+		Letter (ch: char) = [ ch = 'A' ..= 'Z' ],
 	}
 }
 

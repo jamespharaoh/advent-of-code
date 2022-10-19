@@ -196,6 +196,8 @@ macro_rules! parse {
 			None => return Err ($parser.err ()),
 		};
 	};
+	( @item $parser:expr, @display { $($body:tt)* } ) => {
+	};
 	( @item $parser:expr, @lines $item_name:ident ) => {
 		let $item_name = $parser
 			.delim_fn ("\n", Parser::item)
@@ -257,10 +259,11 @@ macro_rules! parse {
 		$parser.confirm ();
 	};
 	( @item $parser:expr, @parse { $($body:tt)* } ) => {
-		{ $($body)* }
+		$($body)*;
 	};
 	( @item $parser:expr, @parse |$arg:ident| { $($body:tt)* } ) => {
-		{ let $arg = $parser; $($body)* }
+		let $arg = $parser;
+		$($body)*;
 	};
 	( @item $parser:expr, @parse $name:ident { $($body:tt)* } ) => {
 		let $name = { $($body)* };

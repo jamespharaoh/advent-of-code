@@ -6,41 +6,23 @@ pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
 pub type Turn = pos::Turn2d;
 
-#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-pub enum Tile {
-	#[ default ]
-	Open,
-	DeadEnd,
-	Wall,
-	Entrance,
-	Key (u8),
-	Door (u8),
-}
-
-impl Display for Tile {
-	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		match * self {
-			Self::Open => write! (formatter, "."),
-			Self::DeadEnd => write! (formatter, "~"),
-			Self::Wall => write! (formatter, "#"),
-			Self::Entrance => write! (formatter, "@"),
-			Self::Key (id) => write! (formatter, "{}", ('a'.pan_u8 () + id).pan_char ()),
-			Self::Door (id) => write! (formatter, "{}", ('A'.pan_u8 () + id).pan_char ()),
-		}
-	}
-}
-
-impl <'inp> FromParser <'inp> for Tile {
-	fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-		let tile = match parser.peek ().ok_or_else (|| parser.err ()) ? {
-			'.' => Self::Open,
-			'#' => Self::Wall,
-			'@' => Self::Entrance,
-			ch @ 'a' ..= 'z' => Self::Key (ch.pan_u8 () - 'a'.pan_u8 ()),
-			ch @ 'A' ..= 'Z' => Self::Door (ch.pan_u8 () - 'A'.pan_u8 ()),
-			_ => return Err (parser.err ()),
-		};
-		parser.expect_next () ?;
-		Ok (tile)
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum Tile {
+		#[ default ]
+		Open = [ "." ],
+		DeadEnd = [ "~" ],
+		Wall = [ "#" ],
+		Entrance = [ "@" ],
+		Key (id: u8) = [
+			@display { let id = (id + b'a').pan_char (); },
+			id = 'a' ..= 'z',
+			@parse { let id = id.pan_u8 () - b'a'; },
+		],
+		Door (id: u8) = [
+			@display { let id = (id + b'A').pan_char (); },
+			id = 'A' ..= 'Z',
+			@parse { let id = id.pan_u8 () - b'A'; },
+		],
 	}
 }

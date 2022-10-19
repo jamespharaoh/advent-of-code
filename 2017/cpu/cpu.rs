@@ -325,148 +325,46 @@ mod model {
 
 	pub type Val = i64;
 
-	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum Instr {
-		Snd (SrcArg),
-		Rcv (DstArg),
-		Set (DstArg, SrcArg),
-		Add (DstArg, SrcArg),
-		Sub (DstArg, SrcArg),
-		Mul (DstArg, SrcArg),
-		Mod (DstArg, SrcArg),
-		Jgz (SrcArg, SrcArg),
-		Jnz (SrcArg, SrcArg),
-	}
-
-	impl Display for Instr {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			match * self {
-				Self::Snd (src) => write! (formatter, "snd {}", src),
-				Self::Rcv (dst) => write! (formatter, "rcv {}", dst),
-				Self::Set (dst, src) => write! (formatter, "set {} {}", dst, src),
-				Self::Add (dst, src) => write! (formatter, "add {} {}", dst, src),
-				Self::Sub (dst, src) => write! (formatter, "sub {} {}", dst, src),
-				Self::Mul (dst, src) => write! (formatter, "mul {} {}", dst, src),
-				Self::Mod (dst, src) => write! (formatter, "mod {} {}", dst, src),
-				Self::Jgz (cnd, off) => write! (formatter, "jgz {} {}", cnd, off),
-				Self::Jnz (cnd, off) => write! (formatter, "jnz {} {}", cnd, off),
-			}
+	enum_decl_parser_display! {
+		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		pub enum Instr {
+			Snd (src: SrcArg) = [ "snd ", src ],
+			Rcv (dst: DstArg) = [ "rcv ", dst ],
+			Set (dst: DstArg, src: SrcArg) = [ "set ", dst, " ", src ],
+			Add (dst: DstArg, src: SrcArg) = [ "add ", dst, " ", src ],
+			Sub (dst: DstArg, src: SrcArg) = [ "sub ", dst, " ", src ],
+			Mul (dst: DstArg, src: SrcArg) = [ "mul ", dst, " ", src ],
+			Mod (dst: DstArg, src: SrcArg) = [ "mod ", dst, " ", src ],
+			Jgz (cnd: SrcArg, off: SrcArg) = [ "jgz ", cnd, " ", off ],
+			Jnz (cnd: SrcArg, off: SrcArg) = [ "jnz ", cnd, " ", off ],
 		}
-
 	}
 
-	impl <'inp> FromParser <'inp> for Instr {
-
-		#[ allow (clippy::missing_inline_in_public_items) ]
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			parser.any ()
-				.of (|parser| {
-					parse! (parser, "snd ", @confirm, src);
-					Ok (Self::Snd (src))
-				})
-				.of (|parser| {
-					parse! (parser, "rcv ", @confirm, dst);
-					Ok (Self::Rcv (dst))
-				})
-				.of (|parser| {
-					parse! (parser, "set ", @confirm, dst, " ", src);
-					Ok (Self::Set (dst, src))
-				})
-				.of (|parser| {
-					parse! (parser, "add ", @confirm, dst, " ", src);
-					Ok (Self::Add (dst, src))
-				})
-				.of (|parser| {
-					parse! (parser, "sub ", @confirm, dst, " ", src);
-					Ok (Self::Sub (dst, src))
-				})
-				.of (|parser| {
-					parse! (parser, "mul ", @confirm, dst, " ", src);
-					Ok (Self::Mul (dst, src))
-				})
-				.of (|parser| {
-					parse! (parser, "mod ", @confirm, dst, " ", src);
-					Ok (Self::Mod (dst, src))
-				})
-				.of (|parser| {
-					parse! (parser, "jgz ", @confirm, cnd, " ", off);
-					Ok (Self::Jgz (cnd, off))
-				})
-				.of (|parser| {
-					parse! (parser, "jnz ", @confirm, cnd, " ", off);
-					Ok (Self::Jnz (cnd, off))
-				})
-				.done ()
+	enum_decl_parser_display! {
+		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		pub enum DstArg {
+			Reg (reg: Reg) = [ reg ],
 		}
-
 	}
 
-	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum DstArg {
-		Reg (Reg),
-	}
-
-	impl Display for DstArg {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			match * self {
-				Self::Reg (reg) => write! (formatter, "{}", reg) ?,
-			}
-			Ok (())
+	enum_decl_parser_display! {
+		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
+		pub enum SrcArg {
+			Reg (reg: Reg) = [ reg ],
+			Imm (val: Val) = [ val ],
 		}
-
-	}
-
-	impl <'inp> FromParser <'inp> for DstArg {
-
-		#[ inline ]
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			parser.any ()
-				.of (|parser| {
-					let reg = parser.item::<Reg> () ?;
-					Ok (Self::Reg (reg))
-				})
-				.done ()
-		}
-
-	}
-
-	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
-	pub enum SrcArg {
-		Reg (Reg),
-		Imm (Val),
-	}
-
-	impl Display for SrcArg {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			match * self {
-				Self::Reg (reg) => write! (formatter, "{}", reg) ?,
-				Self::Imm (val) => write! (formatter, "{}", val) ?,
-			}
-			Ok (())
-		}
-
-	}
-
-	impl <'inp> FromParser <'inp> for SrcArg {
-
-		#[ inline ]
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			parser.any ()
-				.of (|parser| { parse! (parser, reg); Ok (Self::Reg (reg)) })
-				.of (|parser| { parse! (parser, val); Ok (Self::Imm (val)) })
-				.done ()
-		}
-
 	}
 
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub struct Reg (u8);
+
+	struct_parser_display! {
+		Reg (id) = [
+			@display { let id = (id + b'a').pan_char (); },
+			id = 'a' ..= 'z',
+			@parse { let id = id.pan_u8 () - b'a'; },
+		]
+	}
 
 	impl Reg {
 
@@ -474,17 +372,6 @@ mod model {
 		#[ must_use ]
 		pub fn idx (self) -> usize {
 			self.0.qck_usize ()
-		}
-
-		fn as_char (self) -> char { char::from (self.0 + b'a') }
-
-	}
-
-	impl Display for Reg {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			formatter.write_char (self.as_char ())
 		}
 
 	}
@@ -497,21 +384,6 @@ mod model {
 		fn try_from (ch: char) -> Result <Self, ()> {
 			if ! ch.is_ascii_lowercase () { return Err (()) }
 			Ok (Self (ch.qck_u8 () - b'a'))
-		}
-
-	}
-
-	impl <'inp> FromParser <'inp> for Reg {
-
-		#[ inline ]
-		fn from_parser (parser: & mut Parser) -> ParseResult <Self> {
-			parser.any ()
-				.of (|parser| {
-					let ch = parser.expect_next () ?;
-					let reg = Self::try_from (ch).map_err (|()| parser.err ()) ?;
-					Ok (reg)
-				})
-				.done ()
 		}
 
 	}

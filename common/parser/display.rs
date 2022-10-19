@@ -136,6 +136,12 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @array_delim $delim:literal $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
+		::std::fmt::Display::fmt (
+			& $field.display_delim_with ($delim, display! (@nest $($nest)*)),
+			$formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 
 	// @char
 
@@ -177,13 +183,22 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @collect_some_max
+
 	( $formatter:ident, @collect_some_max $max:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim (""), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @confirm
+
 	( $formatter:ident, @confirm $(,$($rest:tt)*)? ) => {
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @delim
+
 	( $formatter:ident, @delim $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -213,10 +228,23 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim_with ($delim, $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @delim_some
+
 	( $formatter:ident, @delim_some $delim:literal $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @display
+
+	( $formatter:ident, @display { $($body:tt)* } $(,$($rest:tt)*)? ) => {
+		$($body)*;
+		display! ($formatter, $($($rest)*)?);
+	};
+
+	// @lines
+
 	( $formatter:ident, @lines $field:ident $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field.display_delim ("\n"), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
@@ -234,12 +262,18 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim_with ("\n", $display), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @opt
+
 	( $formatter:ident, @opt $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
 		if $field != default () {
 			let display_fn = display! (@nest $($nest)*);
 			display_fn (& $field, $formatter) ?;
 		}
 	};
+
+	// @parse
+
 	( $formatter:ident, @parse $(|$arg:ident|)? { $($body:tt)* } $(,$($rest:tt)*)? ) => {
 		display! ($formatter, $($($rest)*)?);
 	};
@@ -247,10 +281,16 @@ macro_rules! display {
 		let _ = $field;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @skip
+
 	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
 		$formatter.write_str ($display) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+
+	// @str
+
 	( $formatter:ident, @str $field:ident = ($ch_0:literal ..= $ch_1:literal, $len:expr) $(,$($rest:tt)*)? ) => {
 		::std::fmt::Display::fmt (& $field, $formatter) ?;
 		display! ($formatter, $($($rest)*)?);

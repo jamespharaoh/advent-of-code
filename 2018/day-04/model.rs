@@ -10,7 +10,7 @@ pub struct Date {
 struct_parser_display! {
 	Date { year, month, day } = [
 		year = 1 ..= 9999, "-", month = 1 ..= 12, "-", day = 1 ..= 31,
-		@parse |parser| {	
+		@parse |parser| {
 			if Date::days_in_month (year, month) < day {
 				return Err (parser.err ())
 			}

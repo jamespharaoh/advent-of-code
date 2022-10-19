@@ -13,6 +13,10 @@ mod pos {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct Pos { id: u8 }
 
+	struct_parser_display! {
+		Pos { id } = [ id = 0 .. 16 ]
+	}
+
 	impl Pos {
 
 		#[ inline ]
@@ -23,28 +27,7 @@ mod pos {
 
 	}
 
-	impl Display for Pos {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			write! (formatter, "{}", self.id) ?;
-			Ok (())
-		}
-
-	}
-
 	impl LineItem for Pos {
-	}
-
-	impl <'inp> FromParser <'inp> for Pos {
-
-		#[ inline ]
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			let id = parser.uint () ?;
-			if ! (0 ..= 15).contains (& id) { return Err (parser.err ()) }
-			Ok (Self { id })
-		}
-
 	}
 
 	impl TryFrom <u8> for Pos {
@@ -68,6 +51,14 @@ mod prog {
 	#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 	pub struct Prog { id: u8 }
 
+	struct_parser_display! {
+		Prog { id } = [
+			@display { let id = (id + b'a').pan_char (); },
+			id = 'a' ..= 'p',
+			@parse { let id = id.pan_u8 () - b'a'; },
+		]
+	}
+
 	impl Prog {
 
 		#[ inline ]
@@ -76,57 +67,9 @@ mod prog {
 			self.id.pan_usize ()
 		}
 
-		#[ inline ]
-		#[ must_use ]
-		pub fn as_char (self) -> char {
-			match self.id {
-				0x00 => 'a', 0x01 => 'b', 0x02 => 'c', 0x03 => 'd',
-				0x04 => 'e', 0x05 => 'f', 0x06 => 'g', 0x07 => 'h',
-				0x08 => 'i', 0x09 => 'j', 0x0a => 'k', 0x0b => 'l',
-				0x0c => 'm', 0x0d => 'n', 0x0e => 'o', 0x0f => 'p',
-				_ => unreachable! (),
-			}
-		}
-
-	}
-
-	impl Display for Prog {
-
-		#[ inline ]
-		fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-			formatter.write_char (self.as_char ()) ?;
-			Ok (())
-		}
-
-	}
-
-	impl <'inp> FromParser <'inp> for Prog {
-
-		fn from_parser (parser: & mut Parser <'inp>) -> ParseResult <Self> {
-			Self::try_from (parser.expect_next () ?).map_err (|_err| parser.err ())
-		}
-
 	}
 
 	impl LineItem for Prog {
-	}
-
-	impl TryFrom <char> for Prog {
-
-		type Error = ();
-
-		#[ inline ]
-		fn try_from (ch: char) -> Result <Self, ()> {
-			let id = match ch {
-				'a' => 0x00, 'b' => 0x01, 'c' => 0x02, 'd' => 0x03,
-				'e' => 0x04, 'f' => 0x05, 'g' => 0x06, 'h' => 0x07,
-				'i' => 0x08, 'j' => 0x09, 'k' => 0x0a, 'l' => 0x0b,
-				'm' => 0x0c, 'n' => 0x0d, 'o' => 0x0e, 'p' => 0x0f,
-				_ => return Err (()),
-			};
-			Ok (Self { id })
-		}
-
 	}
 
 	impl TryFrom <u8> for Prog {

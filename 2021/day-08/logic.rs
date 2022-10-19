@@ -5,8 +5,9 @@ use model::Digit;
 use model::Display;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
+	let displays = Display::build_vec (& input.displays) ?;
 	Ok (
-		input.displays.iter ()
+		displays.iter ()
 			.flat_map (|display| display.value.iter ().copied ()
 				.map (Digit::num_segments))
 			.filter (|& num_segments| matches! (num_segments, 2 | 3 | 4 | 7))
@@ -16,10 +17,11 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
+	let displays = Display::build_vec (& input.displays) ?;
 	if input.params.use_solver {
-		solver::part_two (input)
+		solver::part_two (& displays)
 	} else {
-		bits::part_two (input)
+		bits::part_two (& displays)
 	}
 }
 
@@ -37,8 +39,8 @@ mod bits {
 
 	use super::*;
 
-	pub fn part_two (input: & Input) -> GenResult <u32> {	
-		input.displays.iter ()
+	pub fn part_two (displays: & [Display]) -> GenResult <u32> {	
+		displays.iter ()
 			.map (|& display| decode_display (display))
 			.try_fold (0_u32, |sum, val| Ok (sum + val ?.pan_u32 ()))
 	}
@@ -48,14 +50,14 @@ mod bits {
 	}
 
 	fn get_digits (display: Display) -> GenResult <[u8; 10]> {
-		let mut temp = display.digits.map (Digit::num_segments);
+		let mut temp = display.samples.map (Digit::num_segments);
 		temp.sort ();
 		if temp != [2, 3, 4, 5, 5, 5, 6, 6, 6, 7] {
 			return Err ("No solution found".into ());
 		}
 		let [mut segs_acf, mut segs_bcdf, mut segs_bcef, mut segs_cde, mut segs_cf] = [0; 5];
 		let segs_abcdefg = 0x7f;
-		for & digit in & display.digits {
+		for & digit in & display.samples {
 			match digit.num_segments () {
 				2 => segs_cf = digit.on (),
 				3 => segs_acf = digit.on (),
@@ -94,15 +96,15 @@ mod solver {
 	use super::*;
 	use crate::solver::*;
 
-	pub fn part_two (input: & Input) -> GenResult <u32> {	
+	pub fn part_two (displays: & [Display]) -> GenResult <u32> {	
 		let solver = DigitsSolver::build ();
-		input.displays.iter ()
+		displays.iter ()
 			.map (|& display| decode_display (& solver, display))
 			.try_fold (0_u32, |sum, val| Ok (sum + val ?.pan_u32 ()))
 	}
 
 	fn decode_display (solver: & DigitsSolver, display: Display) -> GenResult <u16> {
-		decode_value (display, solver.solve (display.digits) ?)
+		decode_value (display, solver.solve (display.samples) ?)
 	}
 
 	pub struct DigitsSolver {
