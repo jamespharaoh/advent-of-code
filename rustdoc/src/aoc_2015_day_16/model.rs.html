@@ -33,6 +33,7 @@
 <span id="33">33</span>
 <span id="34">34</span>
 <span id="35">35</span>
+<span id="36">36</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Representation of the puzzle input, etc.
 //!
 
@@ -48,6 +49,7 @@
 	AuntSue { number, attrs } = [
 		<span class="string">&quot;Sue &quot;</span>, number, <span class="string">&quot;: &quot;</span>,
 		@delim <span class="string">&quot;, &quot; </span>attrs {
+			<span class="kw">type </span>= (Attr, u8);
 			(attr, num) = [ attr, <span class="string">&quot;: &quot;</span>, num ],
 		},
 	]

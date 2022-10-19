@@ -26,10 +26,6 @@
 <span id="26">26</span>
 <span id="27">27</span>
 <span id="28">28</span>
-<span id="29">29</span>
-<span id="30">30</span>
-<span id="31">31</span>
-<span id="32">32</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>model::Group;
 
@@ -41,11 +37,7 @@
 }
 
 <span class="macro">struct_parser_display! </span>{
-	Input {
-		immune_system,
-		infection,
-		params,
-	} = [
+	Input { immune_system, infection, params } = [
 		params,
 		<span class="string">&quot;Immune System:\n&quot;</span>,
 		@lines immune_system, <span class="string">&quot;\n&quot;</span>,
@@ -58,8 +50,8 @@
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>max_rounds: u32 = (<span class="string">&quot;MAX_ROUNDS=&quot;</span>, <span class="number">5_000</span>, <span class="number">1_u32 </span>.. ),
-		<span class="kw">pub </span>max_boost: u32 = (<span class="string">&quot;MAX_BOOST=&quot;</span>, <span class="number">2_048</span>, <span class="number">1_u32 </span>.. ),
+		<span class="kw">pub </span>max_rounds: u32 = (<span class="string">&quot;MAX_ROUNDS=&quot;</span>, <span class="number">5_000</span>, <span class="number">1 </span>.. ),
+		<span class="kw">pub </span>max_boost: u32 = (<span class="string">&quot;MAX_BOOST=&quot;</span>, <span class="number">2_048</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>

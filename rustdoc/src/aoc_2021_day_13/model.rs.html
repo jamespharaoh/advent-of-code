@@ -33,7 +33,7 @@
 <span class="macro">struct_parser_display! </span>{
 	Fold { axis, val } = [
 		<span class="string">&quot;fold along &quot;</span>,
-		axis { Axis::X = [ <span class="string">&quot;x&quot; </span>], Axis::Y = [ <span class="string">&quot;y&quot; </span>] },
+		axis { <span class="kw">type </span>= Axis; Axis::X = [ <span class="string">&quot;x&quot; </span>], Axis::Y = [ <span class="string">&quot;y&quot; </span>] },
 		<span class="string">&quot;=&quot;</span>,
 		val,
 	]

@@ -1306,12 +1306,45 @@
 <span id="1306">1306</span>
 <span id="1307">1307</span>
 <span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
+<span id="1317">1317</span>
+<span id="1318">1318</span>
+<span id="1319">1319</span>
+<span id="1320">1320</span>
+<span id="1321">1321</span>
+<span id="1322">1322</span>
+<span id="1323">1323</span>
+<span id="1324">1324</span>
+<span id="1325">1325</span>
+<span id="1326">1326</span>
+<span id="1327">1327</span>
+<span id="1328">1328</span>
+<span id="1329">1329</span>
+<span id="1330">1330</span>
+<span id="1331">1331</span>
+<span id="1332">1332</span>
+<span id="1333">1333</span>
+<span id="1334">1334</span>
+<span id="1335">1335</span>
+<span id="1336">1336</span>
+<span id="1337">1337</span>
+<span id="1338">1338</span>
+<span id="1339">1339</span>
+<span id="1340">1340</span>
 </pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::as_conversions) ]
 #![ allow (clippy::default_numeric_fallback) ]
 #![ allow (clippy::inline_always) ]
 #![ allow (clippy::wrong_self_convention) ]
 
-</span><span class="kw">use </span>std::error::Error;
+</span><span class="kw">use </span>std::cmp;
+<span class="kw">use </span>std::error::Error;
 <span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::fmt::Debug;
 <span class="kw">use </span>std::fmt::Display;
@@ -1322,9 +1355,11 @@
 <span class="kw">use </span>std::ops::BitAndAssign;
 <span class="kw">use </span>std::ops::BitOr;
 <span class="kw">use </span>std::ops::BitOrAssign;
+<span class="kw">use </span>std::ops::Bound;
 <span class="kw">use </span>std::ops::Div;
 <span class="kw">use </span>std::ops::Mul;
 <span class="kw">use </span>std::ops::Neg;
+<span class="kw">use </span>std::ops::RangeBounds;
 <span class="kw">use </span>std::ops::Rem;
 <span class="kw">use </span>std::ops::Shl;
 <span class="kw">use </span>std::ops::ShlAssign;
@@ -1542,6 +1577,35 @@
 	<span class="attribute">#[ inline (always) ]
 	</span><span class="kw">fn </span>check_bit (<span class="self">self</span>, bit: u32) -&gt; bool {
 		<span class="self">self </span>&amp; (<span class="self">Self</span>::ONE &lt;&lt; bit) != <span class="self">Self</span>::ZERO
+	}
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>bound_start_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
+		* <span class="self">self </span>= cmp::max (* <span class="self">self</span>, other);
+	}
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>bound_end_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, other: <span class="self">Self</span>) {
+		* <span class="self">self </span>= cmp::min (* <span class="self">self</span>, other);
+	}
+
+	<span class="attribute">#[ inline (always) ]
+	</span><span class="kw">fn </span>bounds_assign (&amp; <span class="kw-2">mut </span><span class="self">self</span>, bounds: <span class="kw">impl </span>RangeBounds &lt;<span class="self">Self</span>&gt;) {
+		<span class="kw">let </span>start = <span class="kw">match </span>bounds.start_bound () {
+			Bound::Included (&amp; bound) =&gt; <span class="prelude-val">Some </span>(bound),
+			Bound::Excluded (&amp; bound) =&gt; <span class="prelude-val">Some </span>(bound + <span class="self">Self</span>::ONE),
+			Bound::Unbounded =&gt; <span class="prelude-val">None</span>,
+		};
+		<span class="kw">let </span>end = <span class="kw">match </span>bounds.end_bound () {
+			Bound::Included (&amp; bound) =&gt; <span class="prelude-val">Some </span>(bound),
+			Bound::Excluded (&amp; bound) =&gt; <span class="prelude-val">Some </span>(bound - <span class="self">Self</span>::ONE),
+			Bound::Unbounded =&gt; <span class="prelude-val">None</span>,
+		};
+		<span class="kw">if let </span>(<span class="prelude-val">Some </span>(start), <span class="prelude-val">Some </span>(end)) = (start, end) {
+			<span class="macro">assert! </span>(start &lt;= end);
+		}
+		<span class="kw">if let </span><span class="prelude-val">Some </span>(start) = start { <span class="self">self</span>.bound_start_assign (start); }
+		<span class="kw">if let </span><span class="prelude-val">Some </span>(end) = end { <span class="self">self</span>.bound_end_assign (end); }
 	}
 
 }

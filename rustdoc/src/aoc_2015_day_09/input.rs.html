@@ -22,6 +22,9 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -33,11 +36,14 @@
 <span class="macro">struct_parser_display! </span>{
 	input_lifetime = <span class="lifetime">&#39;inp</span>;
 	Input &lt;<span class="lifetime">&#39;inp</span>&gt; { dists, params } = [
-		params, @lines dists { (place_0, place_1, dist) = [
-			@str place_0 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">20</span>), <span class="string">&quot; to &quot;</span>,
-			@str place_1 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">20</span>), <span class="string">&quot; = &quot;</span>,
-			dist,
-		] },
+		params, @lines dists {
+			<span class="kw">type </span>= (InpStr, InpStr, u32);
+			(place_0, place_1, dist) = [
+				@str place_0 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">20</span>), <span class="string">&quot; to &quot;</span>,
+				@str place_1 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">20</span>), <span class="string">&quot; = &quot;</span>,
+				dist,
+			],
+		},
 	]
 }
 

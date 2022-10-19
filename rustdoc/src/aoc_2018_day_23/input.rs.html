@@ -17,12 +17,6 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
-<span id="20">20</span>
-<span id="21">21</span>
-<span id="22">22</span>
-<span id="23">23</span>
-<span id="24">24</span>
-<span id="25">25</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>model::Nanobot;
 
@@ -33,19 +27,13 @@
 }
 
 <span class="macro">struct_parser_display! </span>{
-	Input {
-		nanobots,
-		params,
-	} = [
-		params,
-		@lines nanobots,
-	]
+	Input { nanobots, params } = [ params, @lines nanobots ]
 }
 
 <span class="macro">input_params! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">pub struct </span>InputParams {
-		<span class="kw">pub </span>max_iters: u32 = (<span class="string">&quot;MAX_ITERS=&quot;</span>, <span class="number">5_000</span>, <span class="number">1_u32 </span>.. ),
+		<span class="kw">pub </span>max_iters: u32 = (<span class="string">&quot;MAX_ITERS=&quot;</span>, <span class="number">5_000</span>, <span class="number">1 </span>.. ),
 	}
 }
 </code></pre></div>

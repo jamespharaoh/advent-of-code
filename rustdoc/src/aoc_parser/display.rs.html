@@ -319,6 +319,36 @@
 <span id="319">319</span>
 <span id="320">320</span>
 <span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>DisplayDelim &lt;Delim, Inner&gt; {
@@ -402,7 +432,9 @@
 
 	( <span class="macro-nonterminal">$formatter</span>:ident $(,)<span class="question-mark">? </span>) =&gt; {};
 
-	( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	<span class="comment">// field
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
@@ -418,8 +450,14 @@
 		<span class="macro">display! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>) (<span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
+	( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$field</span>:ident = <span class="macro-nonterminal">$range</span>:expr $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
+		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
+	};
 
-	( <span class="macro-nonterminal">$formatter</span>:ident, ($(<span class="macro-nonterminal">$field</span>:ident),<span class="kw-2">*</span>) = <span class="macro-nonterminal">$display</span>:path $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	<span class="comment">// (tuple, ...)
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, ($(<span class="macro-nonterminal">$field</span>:ident),<span class="kw-2">*</span>) = <span class="macro-nonterminal">$display</span>:path $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="macro-nonterminal">$display </span>(&amp; ($(<span class="macro-nonterminal">$field</span>),<span class="kw-2">*</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
@@ -427,27 +465,39 @@
 		<span class="macro-nonterminal">$display </span>(&amp; ($(<span class="macro-nonterminal">$field</span>),<span class="kw-2">*</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$field</span>:ident = <span class="macro-nonterminal">$range</span>:expr $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
+	( <span class="macro-nonterminal">$formatter</span>:ident, ($(<span class="macro-nonterminal">$field</span>:ident),<span class="kw-2">*</span>) { $(<span class="macro-nonterminal">$nest</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="macro">display! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>) (&amp; ($(<span class="macro-nonterminal">$field</span>),<span class="kw-2">*</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( <span class="macro-nonterminal">$formatter</span>:ident, <span class="macro-nonterminal">$expect</span>:literal $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (<span class="macro-nonterminal">$expect</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @array <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @array
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @array <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="string">&quot;&quot;</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @array_delim <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @array_delim
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @array_delim <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="macro-nonterminal">$delim</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @char <span class="macro-nonterminal">$field</span>:ident = |<span class="macro-nonterminal">$arg</span>:ident| { $(<span class="macro-nonterminal">$parse</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @char
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @char <span class="macro-nonterminal">$field</span>:ident = |<span class="macro-nonterminal">$arg</span>:ident| { $(<span class="macro-nonterminal">$parse</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="macro-nonterminal">$formatter</span>.write_char (* <span class="macro-nonterminal">$field</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @collect <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @collect
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @collect <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="string">&quot;&quot;</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
@@ -464,11 +514,17 @@
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim_with (<span class="string">&quot;&quot;</span>, display_fn), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @collect_max <span class="macro-nonterminal">$max</span>:literal <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @collect_max
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @collect_max <span class="macro-nonterminal">$max</span>:literal <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="string">&quot;&quot;</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @collect_some <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+
+	<span class="comment">// @collect_some
+
+	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @collect_some <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="string">&quot;&quot;</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
@@ -535,10 +591,12 @@
 			display_fn (&amp; <span class="macro-nonterminal">$field</span>, <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		}
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @parse $(|<span class="macro-nonterminal">$arg</span>:ident|)<span class="question-mark">? </span>{ $(<span class="macro-nonterminal">$rest</span>:tt)* } $(,$(rest:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	( <span class="macro-nonterminal">$formatter</span>:ident, @parse $(|<span class="macro-nonterminal">$arg</span>:ident|)<span class="question-mark">? </span>{ $(<span class="macro-nonterminal">$body</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( <span class="macro-nonterminal">$formatter</span>:ident, @parse <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$rest</span>:tt)* } $(,$(rest:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+	( <span class="macro-nonterminal">$formatter</span>:ident, @parse <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$body</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="kw">let _ </span>= <span class="macro-nonterminal">$field</span>;
+		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( <span class="macro-nonterminal">$formatter</span>:ident, @skip <span class="macro-nonterminal">$display</span>:literal $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="macro-nonterminal">$formatter</span>.write_str (<span class="macro-nonterminal">$display</span>) <span class="question-mark">?</span>;
@@ -565,6 +623,12 @@
 			::std::result::Result::Ok (())
 		}
 	};
+	( @nest display_type = <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span>; $(<span class="macro-nonterminal">$nest</span>:tt)* ) =&gt; {
+		|val: &amp; <span class="macro-nonterminal">$</span><span class="kw">type</span>, <span class="macro-nonterminal">formatter</span>: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter| {
+			<span class="macro">display! </span>(@nest_var formatter val $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
+			::std::result::Result::Ok (())
+		}
+	};
 	( @nest input_lifetime = <span class="macro-nonterminal">$input_life</span>:lifetime; <span class="kw">type </span>= <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty</span>; $(<span class="macro-nonterminal">$nest</span>:tt)* ) =&gt; {
 		|val: &amp; <span class="macro-nonterminal">$</span><span class="kw">type</span>, <span class="macro-nonterminal">formatter</span>: &amp; <span class="kw-2">mut </span>::std::fmt::Formatter| {
 			<span class="macro">display! </span>(@nest_var formatter val $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
@@ -585,59 +649,55 @@
 		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name</span>:ident $( <span class="kw">if </span>(<span class="macro-nonterminal">$cond</span>:expr) )<span class="question-mark">? </span>= [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span><span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
-			<span class="macro">display! </span>{ @opt_if [$(<span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>]
-				<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
-				<span class="kw">return </span><span class="prelude-val">Ok </span>(());
-			}
+		<span class="kw">if let </span>(<span class="macro-nonterminal">$name</span>, <span class="bool-val">true</span>) = (<span class="macro-nonterminal">$val</span>, <span class="macro">display! </span>(@opt_cond $(<span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>)) {
+			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name_0</span>:ident::<span class="macro-nonterminal">$name_1</span>:ident = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$name_0</span>::<span class="macro-nonterminal">$name_1 </span>= <span class="macro-nonterminal">$val </span>{
+		<span class="kw">if let </span><span class="macro-nonterminal">$name_0</span>::<span class="macro-nonterminal">$name_1 </span>= <span class="macro-nonterminal">$val </span>{
 			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$name</span>:ident: <span class="macro-nonterminal">$</span><span class="kw">type</span>:<span class="macro-nonterminal">ty </span>= [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
+		<span class="kw">if let </span><span class="macro-nonterminal">$name </span>= <span class="macro-nonterminal">$val </span>{
 			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
-	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident ( $(<span class="macro-nonterminal">$item</span>:tt),* ) = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span>&amp; ( $(<span class="macro">display! </span>(@nest_ref <span class="macro-nonterminal">$item</span>)),* ) = <span class="macro-nonterminal">$val </span>{
+	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident ( $(<span class="macro-nonterminal">$item</span>:tt),* ) $( <span class="kw">if </span>(<span class="macro-nonterminal">$cond</span>:expr) )<span class="question-mark">? </span>= [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">if let </span>(($(<span class="macro-nonterminal">$item</span>),<span class="kw-2">*</span>), <span class="bool-val">true</span>) = (<span class="macro-nonterminal">$val</span>, <span class="macro">display! </span>(@opt_cond $(<span class="macro-nonterminal">$cond</span>)<span class="question-mark">?</span>)) {
 			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$var</span>:ident ( $(<span class="macro-nonterminal">$decl</span>:tt)* ) = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
-		<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$var </span>($(<span class="macro-nonterminal">$decl</span>)<span class="kw-2">*</span>) = <span class="macro-nonterminal">$val </span>{
+		<span class="kw">if let </span><span class="macro-nonterminal">$var </span>($(<span class="macro-nonterminal">$decl</span>)<span class="kw-2">*</span>) = <span class="macro-nonterminal">$val </span>{
 			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident <span class="macro-nonterminal">$var</span>:ident { $(<span class="macro-nonterminal">$decl</span>:tt)* } = [ $(<span class="macro-nonterminal">$display</span>:tt)* ] $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		<span class="kw">if let </span>&amp; <span class="macro-nonterminal">$var </span>{ $(<span class="macro-nonterminal">$decl</span>)* } = <span class="macro-nonterminal">$val </span>{
 			<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $(<span class="macro-nonterminal">$display</span>)<span class="kw-2">*</span>);
+		} <span class="kw">else </span>{
+			<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 		}
-		<span class="macro">display! </span>(@nest_var <span class="macro-nonterminal">$formatter $val </span>$($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 	( @nest_var <span class="macro-nonterminal">$formatter</span>:ident <span class="macro-nonterminal">$val</span>:ident $(,)<span class="question-mark">? </span>) =&gt; { };
 
-	( @nest_ref <span class="macro-nonterminal">$item</span>:ident ) =&gt; {
-		<span class="kw-2">ref </span><span class="macro-nonterminal">$item
+	( @opt_cond <span class="macro-nonterminal">$cond</span>:expr ) =&gt; {
+		<span class="macro-nonterminal">$cond
 	</span>};
-	( @nest_ref ( $(<span class="macro-nonterminal">$item</span>:tt),* ) ) =&gt; {
-		( $(<span class="macro">display! </span>(@nest_ref <span class="macro-nonterminal">$item</span>)),* )
-	};
-
-	( @opt_if [<span class="macro-nonterminal">$cond</span>:expr] $(<span class="macro-nonterminal">$body</span>:tt)* ) =&gt; {
-		<span class="kw">if </span><span class="macro-nonterminal">$cond </span>{ $(<span class="macro-nonterminal">$body</span>)* }
-	};
-	( @opt_if [] $(<span class="macro-nonterminal">$body</span>:tt)* ) =&gt; {
-		$(<span class="macro-nonterminal">$body</span>)*
-	};
+	( @opt_cond ) =&gt; {
+		<span class="bool-val">true
+	</span>};
 
 }
 </code></pre></div>

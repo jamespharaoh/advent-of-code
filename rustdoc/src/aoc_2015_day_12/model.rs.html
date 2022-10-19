@@ -22,6 +22,7 @@
 <span id="22">22</span>
 <span id="23">23</span>
 <span id="24">24</span>
+<span id="25">25</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Val = i32;
@@ -35,6 +36,7 @@
 		],
 		Object (items: Vec &lt;(InpStr &lt;<span class="lifetime">&#39;inp</span>&gt;, Json &lt;<span class="lifetime">&#39;inp</span>&gt;)&gt;) = [
 			<span class="string">&quot;{&quot;</span>, @confirm, @delim <span class="string">&quot;,&quot; </span>items {
+				<span class="kw">type </span>= (InpStr, Json);
 				(key, value) = [
 					<span class="string">&quot;\&quot;&quot;</span>, @str key = (|ch| { ch != <span class="string">&#39;&quot;&#39; </span>}, .. ), <span class="string">&quot;\&quot;:&quot;</span>, value,
 				],

@@ -31,6 +31,8 @@
 <span id="31">31</span>
 <span id="32">32</span>
 <span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data structures to model the puzzle input
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -48,8 +50,10 @@
 	Input { steps, params } = [
 		params,
 		@delim <span class="string">&quot;, &quot; </span>steps {
+			<span class="kw">type </span>= (Turn, Coord);
 			(turn, dist) = [
 				turn {
+					<span class="kw">type </span>= Turn;
 					Turn::Left = [ <span class="string">&quot;L&quot; </span>],
 					Turn::Right = [ <span class="string">&quot;R&quot; </span>],
 				},

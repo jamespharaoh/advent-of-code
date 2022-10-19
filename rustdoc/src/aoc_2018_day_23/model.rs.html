@@ -110,13 +110,6 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = i32;
@@ -129,10 +122,7 @@
 }
 
 <span class="macro">struct_parser_display! </span>{
-	Nanobot {
-		pos: Pos { x, y, z },
-		radius,
-	} = [
+	Nanobot { pos: Pos { x, y, z }, radius } = [
 		<span class="string">&quot;pos=&lt;&quot;</span>, x, <span class="string">&quot;,&quot;</span>, y, <span class="string">&quot;,&quot;</span>, z, <span class="string">&quot;&gt;, &quot;</span>,
 		<span class="string">&quot;r=&quot;</span>, radius,
 	]
@@ -195,11 +185,7 @@
 <span class="kw">impl </span>CoordRange {
 
 	<span class="kw">pub fn </span>new (pos: Pos, radius: Coord, sign: Pos) -&gt; NumResult &lt;<span class="self">Self</span>&gt; {
-		<span class="kw">let </span>base = Coord::add_3 (
-			Coord::mul_2 (pos.x, sign.x) <span class="question-mark">?</span>,
-			Coord::mul_2 (pos.y, sign.y) <span class="question-mark">?</span>,
-			Coord::mul_2 (pos.z, sign.z) <span class="question-mark">?</span>,
-		) <span class="question-mark">?</span>;
+		<span class="kw">let </span>base = <span class="macro">chk! </span>(pos.x * sign.x + pos.y * sign.y + pos.z * sign.z) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
 			start: Coord::sub_2 (base, radius) <span class="question-mark">?</span>,
 			end: Coord::add_3 (base, radius, Coord::ONE) <span class="question-mark">?</span>,

@@ -35,6 +35,7 @@
 <span id="35">35</span>
 <span id="36">36</span>
 <span id="37">37</span>
+<span id="38">38</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attribute">#[ derive (Clone, Debug) ]
@@ -47,12 +48,13 @@
 	input_lifetime = <span class="lifetime">&#39;inp</span>;
 	Input &lt;<span class="lifetime">&#39;inp</span>&gt; { pairs, params } = [
 		params, @lines pairs {
+			<span class="kw">type </span>= (InpStr, InpStr, DiffSign, i32);
 			(person_0, person_1, sign, diff) = [
-				@str person_0 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>.. <span class="number">10</span>),
+				@str person_0 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">10</span>),
 				<span class="string">&quot; would &quot;</span>, sign, <span class="string">&quot; &quot;</span>,
 				diff = <span class="number">0_i32 </span>..= i32::MAX,
 				<span class="string">&quot; happiness units by sitting next to &quot;</span>,
-				@str person_1 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>.. <span class="number">10</span>),
+				@str person_1 = (|ch| { ch.is_ascii_alphabetic () }, <span class="number">1 </span>..= <span class="number">10</span>),
 				<span class="string">&quot;.&quot;</span>,
 			],
 		},

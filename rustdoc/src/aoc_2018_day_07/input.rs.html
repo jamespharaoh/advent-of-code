@@ -34,7 +34,7 @@
 <span class="macro">struct_parser_display! </span>{
 	Input { deps, params } = [
 		params,
-		@lines deps { (before, after) = [
+		@lines deps { <span class="kw">type </span>= (char, char); (before, after) = [
 			<span class="string">&quot;Step &quot;</span>, before = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; must be finished before &quot;</span>,
 			<span class="string">&quot;step &quot;</span>, after = <span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>, <span class="string">&quot; can begin.&quot;</span>,
 		] },

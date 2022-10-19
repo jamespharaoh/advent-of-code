@@ -139,6 +139,7 @@
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::Group;
 <span class="kw">use </span>model::Val;
@@ -189,7 +190,7 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>num_rounds = <span class="number">0</span>;
 	<span class="kw">loop </span>{
 		<span class="kw">if </span>num_rounds == input.params.max_rounds { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Max rounds exceeded&quot;</span>.into ()) }
-		<span class="kw">let </span>progress = one_round (&amp; <span class="kw-2">mut </span>immune_system, &amp; <span class="kw-2">mut </span>infection);
+		<span class="kw">let </span>progress = one_round (&amp; <span class="kw-2">mut </span>immune_system, &amp; <span class="kw-2">mut </span>infection) <span class="question-mark">?</span>;
 		<span class="kw">if </span>! progress { <span class="kw">break </span>}
 		num_rounds += <span class="number">1</span>;
 	}
@@ -198,14 +199,14 @@
 	<span class="prelude-val">Ok </span>((num_0, num_1))
 }
 
-<span class="kw">fn </span>one_round (left: &amp; <span class="kw-2">mut </span>Vec &lt;Group&gt;, right: &amp; <span class="kw-2">mut </span>Vec &lt;Group&gt;) -&gt; bool {
+<span class="kw">fn </span>one_round (left: &amp; <span class="kw-2">mut </span>Vec &lt;Group&gt;, right: &amp; <span class="kw-2">mut </span>Vec &lt;Group&gt;) -&gt; NumResult &lt;bool&gt; {
 	<span class="attribute">#[ derive (Clone, Copy, Debug) ]
 	</span><span class="kw">enum </span>Side { Left, Right }
 	<span class="kw">use </span>Side::{ Left, Right };
 	<span class="kw">let </span>attacks: Vec &lt;(Side, usize, usize)&gt; = iter::empty ()
-		.chain (choose_targets (left, right).into_iter ()
+		.chain (choose_targets (left, right) <span class="question-mark">?</span>.into_iter ()
 			.map (|(att_idx, def_idx)| (Left, att_idx, def_idx)))
-		.chain (choose_targets (right, left).into_iter ()
+		.chain (choose_targets (right, left) <span class="question-mark">?</span>.into_iter ()
 			.map (|(att_idx, def_idx)| (Right, att_idx, def_idx)))
 		.sorted_by_key (|&amp; (side, att_idx, <span class="kw">_</span>)|
 			cmp::Reverse (<span class="kw">match </span>side {
@@ -230,13 +231,13 @@
 	}
 	left.retain (|group| group.num_units &gt; <span class="number">0</span>);
 	right.retain (|group| group.num_units &gt; <span class="number">0</span>);
-	progress
+	<span class="prelude-val">Ok </span>(progress)
 }
 
 <span class="kw">fn </span>choose_targets (
 	att_groups: &amp; [Group],
 	def_groups: &amp; [Group],
-) -&gt; Vec &lt;(usize, usize)&gt; {
+) -&gt; NumResult &lt;Vec &lt;(usize, usize)&gt;&gt; {
 	<span class="kw">let </span><span class="kw-2">mut </span>result = Vec::new ();
 	<span class="kw">let </span>att_groups: Vec &lt;(usize, &amp; Group)&gt; =
 		att_groups.iter ()
@@ -249,30 +250,29 @@
 			.enumerate ()
 			.collect ();
 	<span class="kw">for </span>(att_idx, att_group) <span class="kw">in </span>att_groups.iter ().copied () {
-		<span class="kw">if let </span><span class="prelude-val">Some </span>(def_idx) =
+		<span class="kw">if let </span><span class="prelude-val">Some </span>((def_idx, <span class="kw">_</span>, <span class="kw">_</span>)) =
 			def_groups.iter ().copied ()
 				.filter (|&amp; (<span class="kw">_</span>, def_group)|
 					! def_group.has_immunity (att_group.attack_type))
-				.map (|(def_idx, def_group)| (
+				.map (|(def_idx, def_group)| <span class="prelude-val">Ok </span>((
 					def_idx,
 					def_group,
 					<span class="kw">if </span>def_group.has_weakness (att_group.attack_type) {
-						att_group.effective_power () * <span class="number">2
+						<span class="macro">chk! </span>(att_group.effective_power () * <span class="number">2</span>) <span class="question-mark">?
 					</span>} <span class="kw">else </span>{
 						att_group.effective_power ()
 					}
-				))
-				.max_by_key (|&amp; (<span class="kw">_</span>, def_group, damage)| (
+				)))
+				.max_ok_by_key (|&amp; (<span class="kw">_</span>, def_group, damage)| (
 					damage,
 					def_group.effective_power (),
 					def_group.initiative,
-				))
-				.map (|(def_idx, <span class="kw">_</span>, <span class="kw">_</span>)| def_idx) {
+				)) <span class="question-mark">? </span>{
 			result.push ((att_idx, def_idx));
 			def_groups.retain (|&amp; (idx, <span class="kw">_</span>)| idx != def_idx);
 		}
 	}
-	result
+	<span class="prelude-val">Ok </span>(result)
 }
 </code></pre></div>
 </section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>

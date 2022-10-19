@@ -24,6 +24,7 @@
 <span id="24">24</span>
 <span id="25">25</span>
 <span id="26">26</span>
+<span id="27">27</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Data structures to model the puzzle input
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -40,6 +41,7 @@
 	Input { triangles, params } = [
 		params,
 		@lines triangles {
+			<span class="kw">type </span>= Triangle;
 			(a, b, c) = [ @skip <span class="string">&quot;&quot;</span>, a, @skip <span class="string">&quot; &quot;</span>, b, @skip <span class="string">&quot; &quot;</span>, c ],
 		}
 	]

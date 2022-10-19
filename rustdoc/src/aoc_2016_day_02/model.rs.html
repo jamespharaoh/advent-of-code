@@ -19,6 +19,7 @@
 <span id="19">19</span>
 <span id="20">20</span>
 <span id="21">21</span>
+<span id="22">22</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = i8;
@@ -33,6 +34,7 @@
 <span class="macro">struct_parser_display! </span>{
 	Button { steps } = [
 		@collect steps {
+			<span class="kw">type </span>= Dir;
 			Dir::Up = [ <span class="string">&quot;U&quot; </span>],
 			Dir::Down = [ <span class="string">&quot;D&quot; </span>],
 			Dir::Left = [ <span class="string">&quot;L&quot; </span>],
