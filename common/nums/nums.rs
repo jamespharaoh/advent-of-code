@@ -23,6 +23,21 @@ pub use crate::int::*;
 pub use crate::iter::*;
 pub use crate::ops::*;
 
+pub mod prelude {
+	pub use crate::{ BitPopper, BitPusher };
+	pub use crate::Int;
+	pub use crate::IntConv;
+	pub use crate::{ IntSigned, IntUnsigned };
+	pub use crate::IteratorNums;
+	pub use crate::{ NumResult, Overflow };
+	pub use crate::{ QuickFrom, QuickInto };
+	pub use crate::{ TryAdd, TryAddAssign };
+	pub use crate::{ TryDiv, TryDivAssign };
+	pub use crate::{ TryMul, TryMulAssign };
+	pub use crate::{ TryRem, TryRemAssign };
+	pub use crate::{ TrySub, TrySubAssign };
+}
+
 pub type NumResult <Val> = Result <Val, Overflow>;
 
 #[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]

@@ -2,7 +2,6 @@ use super::*;
 
 use input::Input;
 use model::Room;
-use nums::IntConv;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (

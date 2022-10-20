@@ -1,21 +1,4 @@
-use aoc_inpstr::*;
-use aoc_misc::prelude::*;
-use aoc_nums as nums;
-
-use nums::IntConv;
-
-mod delim;
-mod display;
-mod enums;
-mod from_parser;
-mod parse;
-mod structs;
-
-pub use delim::*;
-pub use display::IntoIteratorDisplayDelim;
-pub use from_parser::FromParser;
-
-pub type ParseResult <Item> = Result <Item, ParseError>;
+use super::*;
 
 #[ derive (Clone, Copy) ]
 pub struct Parser <'inp> {

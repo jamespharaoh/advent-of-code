@@ -1867,6 +1867,7 @@ dependencies = [
  "aoc-misc",
  "aoc-nums",
  "aoc-parser",
+ "aoc-puzzle",
  "itertools",
 ]
 
@@ -1943,6 +1944,15 @@ name = "aoc-pos"
 version = "0.1.0"
 dependencies = [
  "aoc-checked",
+ "aoc-misc",
+ "aoc-nums",
+]
+
+[[package]]
+name = "aoc-puzzle"
+version = "0.1.0"
+dependencies = [
+ "aoc-args",
  "aoc-misc",
  "aoc-nums",
 ]

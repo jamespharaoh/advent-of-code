@@ -23,7 +23,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 						part.pos [axis] = - part.pos [axis];
 					}
 				}
-				Ok::<_, nums::Overflow> ((
+				Ok::<_, Overflow> ((
 					idx,
 					chk! (part.acc.x + part.acc.y + part.acc.z) ?,
 					chk! (part.vel.x + part.vel.y + part.vel.z) ?,

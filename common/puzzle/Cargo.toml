@@ -1,16 +1,16 @@
 [package]
 
-	name = "aoc-parser"
+	name = "aoc-puzzle"
 	version = "0.1.0"
 	edition = "2021"
 
-[lib]
-
-	crate-type = [ "rlib", "dylib" ]
-	path = "lib.rs"
-
 [dependencies]
 
-	aoc-inpstr = { path = "../inpstr" }
+	aoc-args = { path = "../args" }
 	aoc-misc = { path = "../misc" }
 	aoc-nums = { path = "../nums" }
+
+[lib]
+
+	path = "lib.rs"
+	crate-type = [ "rlib", "dylib" ]

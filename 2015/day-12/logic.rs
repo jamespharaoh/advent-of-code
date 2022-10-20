@@ -3,7 +3,6 @@ use super::*;
 use input::Input;
 use model::Json;
 use model::Val;
-use nums::NumResult;
 
 pub fn part_one (input: & Input) -> GenResult <Val> {
 	Ok (calc_sum (& input.json, |_| true) ?)

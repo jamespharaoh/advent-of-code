@@ -6,8 +6,6 @@ use input::Input;
 use model::Instr;
 use model::Reg;
 use model::Val;
-use nums::Int;
-use nums::IntConv;
 
 pub fn part_one (input: & Input) -> GenResult <Val> {
 	let (_, reg_b) = emulate (input, 0, 0, 0, 0x10000) ?;
