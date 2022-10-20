@@ -16,5 +16,6 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct InputParams {
+		pub max_instrs: u32 = ("MAX_INSTRS=", 10_000, 1 .. ),
 	}
 }

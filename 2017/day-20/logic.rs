@@ -1,6 +1,7 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
 use model::Aspect;
 use model::Axis;
@@ -16,8 +17,8 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 				for axis in [ Axis::X, Axis::Y, Axis::Z ] {
 					if [ Aspect::Acc, Aspect::Vel, Aspect::Pos ].iter ().copied ()
 							.map (|aspect| part [aspect] [axis].signum ())
-							.find (|& sign| sign != 0)
-							.unwrap_or (0) < 0 {
+							.find (|& sign| sign != 0_i32)
+							.unwrap_or (0_i32) < 0_i32 {
 						part.acc [axis] = - part.acc [axis];
 						part.vel [axis] = - part.vel [axis];
 						part.pos [axis] = - part.pos [axis];

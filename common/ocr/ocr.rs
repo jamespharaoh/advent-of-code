@@ -22,6 +22,7 @@ impl <Val, Iter> Display for DrawDots <Val, Iter>
 					.map (|(row, col)| (row.qck_usize (), col.qck_usize ()))
 					.collect ();
 			dots_temp.sort_by_key (|& (row, col)| (row, col));
+			dots_temp.dedup ();
 			dots_temp
 		};
 		Self::display_fmt_real (dots, formatter)
@@ -37,12 +38,13 @@ impl <Val, Iter> DrawDots <Val, Iter>
 	fn display_fmt_real (dots: Vec <(usize, usize)>, formatter: & mut fmt::Formatter) -> fmt::Result {
 		let mut first_row = true;
 		let mut first_col = true;
-		let mut row = 0;
-		let mut col = 0;
+		let mut row = dots.iter ().map (|& (row, _)| row).min ().unwrap ();
+		let start_col = dots.iter ().map (|& (_, col)| col).min ().unwrap ();
+		let mut col = start_col;
 		for (dot_row, dot_col) in dots {
 			while first_row || row < dot_row {
 				write! (formatter, "\n") ?;
-				col = 0;
+				col = start_col;
 				if ! first_row { row += 1; }
 				first_row = false;
 				first_col = true;
@@ -144,11 +146,28 @@ const fn decode_ten (encoded: u128) -> Option <char> {
 		0x_3012_0842_1084_3f08_4210_8421 => 'A',
 		0x_f821_0842_10f8_2108_4210_843e => 'B',
 		0x_7821_0802_0080_2008_0200_841e => 'C',
+		// TODO => 'D',
+		0x_fc20_0802_00f8_2008_0200_803f => 'E',
+		// TODO => 'F',
+		// TODO => 'G',
 		0x_8822_0883_e088_2208_8220_0000 => 'H',
 		0x_e010_0401_0040_1004_0380_0000 => 'I',
 		0x_1c02_0080_2008_0200_8220_881c => 'J',
+		// TODO => 'K',
+		// TODO => 'L',
+		// TODO => 'M',
+		// TODO => 'N',
+		// TODO => 'O',
+		// TODO => 'P',
+		// TODO => 'Q',
 		0x_f821_0842_10f8_2408_8220_8421 => 'R',
+		// TODO => 'S',
+		// TODO => 'T',
+		// TODO => 'U',
+		// TODO => 'V',
+		// TODO => 'W',
 		0x_8421_0481_2030_0c04_8120_8421 => 'X',
+		// TODO => 'Y',
 		0x_fc01_0040_2010_0804_0200_803f => 'Z',
 		_ => return None,
 	})

@@ -1,8 +1,8 @@
 use super::*;
 
 pub type Axis = pos::AxisXYZ;
-pub type Coord = i16;
-pub type CoordAbs = u16;
+pub type Coord = i32;
+pub type CoordAbs = u32;
 pub type Pos = pos::PosXYZ <Coord>;
 
 #[ derive (Clone, Copy, Debug, Eq, PartialEq) ]

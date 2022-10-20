@@ -3,7 +3,7 @@
 use super::*;
 
 const EXAMPLE: & [& str] = & [
-	"DIST_TWO=31",
+	"DIST_TWO=32",
 	"1, 1",
 	"1, 6",
 	"8, 3",

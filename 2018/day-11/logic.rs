@@ -1,29 +1,16 @@
 //! Logic for solving the puzzles
 
 use super::*;
+
 use input::Input;
+use model::Coord;
 use model::Grid;
 use model::Pos;
 use model::Power;
 
 pub fn part_one (input: & Input) -> GenResult <String> {
 	let grid = gen_grid (input) ?;
-	let grid_ref = & grid;
-	let (pos, _) = (1 ..= input.params.grid_size - 2)
-		.flat_map (|y_0| (1 ..= input.params.grid_size - 2)
-			.map (move |x_0| {
-				let pos_0 = Pos { y: y_0, x: x_0 };
-				let mut power = 0_i32;
-				for y_1 in y_0 .. y_0 + 3 {
-					for x_1 in x_0 .. x_0 + 3 {
-						let pos_1 = Pos { y: y_1, x: x_1 };
-						power += grid_ref.get (pos_1).unwrap ();
-					}
-				}
-				(pos_0, power)
-			}))
-		.max_by_key (|& (_, power)| power)
-		.unwrap ();
+	let (pos, _) = find_simple (& grid, 3) ?;
 	Ok (format! ("{},{}", pos.x, pos.y))
 }
 
@@ -74,7 +61,8 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 				.flat_map (|y| (1 ..= grid_size)
 					.map (move |x| small_grid_ref.get (Pos { y, x }).unwrap ()
 						+ horiz_grid_ref.get (Pos { y: y + size - 1, x }).unwrap ()
-						+ vert_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()))
+						+ vert_grid_ref.get (Pos { y, x: x + size - 1 }).unwrap ()
+						- base_grid_ref.get (Pos { y: y + size - 1, x: x + size - 1 }).unwrap ()))
 				.collect (),
 			Pos::new (1, 1),
 			Pos::new (grid_size + 1, grid_size + 1)) ?;
@@ -82,6 +70,24 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 	if let Some ((pos, size, _)) = best {
 		Ok (format! ("{},{},{}", pos.x, pos.y, size))
 	} else { Err ("No solution found".into ()) }
+}
+
+pub fn find_simple (grid: & Grid, size: Coord) -> GenResult <(Pos, Power)> {
+	(grid.first_key ().x ..= grid.last_key ().x - size + 1)
+		.flat_map (|y_0| (grid.first_key ().y ..= grid.last_key ().y - size + 1)
+			.map (move |x_0| {
+				let pos_0 = Pos { y: y_0, x: x_0 };
+				let mut power = 0_i32;
+				for y_1 in y_0 .. y_0 + size {
+					for x_1 in x_0 .. x_0 + size {
+						let pos_1 = Pos { y: y_1, x: x_1 };
+						power += grid.get (pos_1).unwrap ();
+					}
+				}
+				(pos_0, power)
+			}))
+		.max_by_key (|& (_, power)| power)
+		.ok_or ("No solution found".into ())
 }
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {

@@ -12,6 +12,7 @@ mod examples;
 pub mod input;
 pub mod logic;
 pub mod model;
+pub mod tools;
 
 puzzle_info! {
 	name = "The Stars Align";
@@ -20,4 +21,7 @@ puzzle_info! {
 	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
+	commands = [
+		( name = "run"; method = tools::run; ),
+	];
 }

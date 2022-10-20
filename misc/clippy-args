@@ -460,7 +460,7 @@
 --deny clippy::unnecessary_to_owned
 --deny clippy::unnecessary_unwrap
 --deny clippy::unnecessary_wraps
---deny clippy::unneeded_field_pattern
+--allow clippy::unneeded_field_pattern
 --deny clippy::unneeded_wildcard_pattern
 --deny clippy::unnested_or_patterns
 --deny clippy::unreadable_literal

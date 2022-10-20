@@ -44,6 +44,20 @@ pub trait IteratorExt: Iterator {
 		Ok (Some (max_item))
 	}
 
+	#[ inline ]
+	fn min_ok <Item, Error> (mut self) -> Result <Option <Item>, Error>
+		where
+			Item: Ord,
+			Self: Sized + Iterator <Item = Result <Item, Error>> {
+		let mut min = if let Some (item) = self.next () { item ? } else { return Ok (None) };
+		for item in self {
+			let item = item ?;
+			if min <= item { continue }
+			min = item;
+		}
+		Ok (Some (min))
+	}
+
 }
 
 impl <SomeIter: Iterator> IteratorExt for SomeIter {}

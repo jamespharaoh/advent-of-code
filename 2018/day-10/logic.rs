@@ -6,30 +6,18 @@ use model::Coord;
 use model::Point;
 
 pub fn part_one (input: & Input) -> GenResult <String> {
-	let (message, _) = calc_result (input) ?;
+	let (points, _) = find_smallest (input) ?;
+	let message = ocr::read_dots (points.iter ()
+		.map (|& point| (point.pos.y, point.pos.x))) ?;
 	Ok (message)
 }
 
 pub fn part_two (input: & Input) -> GenResult <u32> {
-	let (_, num_iters) = calc_result (input) ?;
+	let (_, num_iters) = find_smallest (input) ?;
 	Ok (num_iters)
 }
 
-fn calc_result (input: & Input) -> GenResult <(String, u32)> {
-	fn calc_range (points: & [Point]) -> NumResult <(Coord, Coord, Coord, Coord)> {
-		points.iter ().copied ().fold (
-			Ok ((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
-			|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| Ok ((
-				cmp::min (min_y, point.pos.y),
-				cmp::max (max_y, chk! (point.pos.y + Coord::ONE) ?),
-				cmp::min (min_x, point.pos.x),
-				cmp::max (max_x, chk! (point.pos.x + Coord::ONE) ?),
-			))))
-	}
-	fn calc_size (points: & [Point]) -> NumResult <(Coord, Coord)> {
-		let (min_y, max_y, min_x, max_x) = calc_range (points) ?;
-		Ok ((chk! (max_y - min_y) ?, chk! (max_x - min_x) ?))
-	}
+pub fn find_smallest (input: & Input) -> GenResult <(Vec <Point>, u32)> {
 	let mut points = input.points.clone ();
 	let mut points_temp = Vec::new ();
 	let (mut size_y, mut size_x) = calc_size (& points) ?;
@@ -60,7 +48,21 @@ fn calc_result (input: & Input) -> GenResult <(String, u32)> {
 		(size_y, size_x) = (next_y, next_x);
 		num_iters = chk! (num_iters + step) ?;
 	}
-	let message = ocr::read_dots (points.iter ()
-		.map (|& point| (point.pos.y, point.pos.x))) ?;
-	Ok ((message, num_iters))
+	Ok ((points, num_iters))
+}
+
+fn calc_range (points: & [Point]) -> NumResult <(Coord, Coord, Coord, Coord)> {
+	points.iter ().copied ().fold (
+		Ok ((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
+		|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| Ok ((
+			cmp::min (min_y, point.pos.y),
+			cmp::max (max_y, chk! (point.pos.y + Coord::ONE) ?),
+			cmp::min (min_x, point.pos.x),
+			cmp::max (max_x, chk! (point.pos.x + Coord::ONE) ?),
+		))))
+}
+
+fn calc_size (points: & [Point]) -> NumResult <(Coord, Coord)> {
+	let (min_y, max_y, min_x, max_x) = calc_range (points) ?;
+	Ok ((chk! (max_y - min_y) ?, chk! (max_x - min_x) ?))
 }
