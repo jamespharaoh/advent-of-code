@@ -4,46 +4,34 @@ pub type CpuResult <Item> = Result <Item, CpuError>;
 
 pub use instr::Instr;
 
-parse_display_enum! {
-
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Opcode {
-		Addr = "addr", Addi = "addi",
-		Mulr = "mulr", Muli = "muli",
-		Banr = "banr", Bani = "bani",
-		Borr = "borr", Bori = "bori",
-		Setr = "setr", Seti = "seti",
-		Gtir = "gtir", Gtri = "gtri", Gtrr = "gtrr",
-		Eqir = "eqir", Eqri = "eqri", Eqrr = "eqrr",
+		Addr = [ "addr" ], Addi = [ "addi" ],
+		Mulr = [ "mulr" ], Muli = [ "muli" ],
+		Banr = [ "banr" ], Bani = [ "bani" ],
+		Borr = [ "borr" ], Bori = [ "bori" ],
+		Setr = [ "setr" ], Seti = [ "seti" ],
+		Gtir = [ "gtir" ], Gtri = [ "gtri" ], Gtrr = [ "gtrr" ],
+		Eqir = [ "eqir" ], Eqri = [ "eqri" ], Eqrr = [ "eqrr" ],
 	}
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum Op {
-		Add = "add",
-		Mul = "mul",
-		Ban = "ban",
-		Bor = "bor",
-		Set = "set",
-		Gt = "gt",
-		Eq = "eq",
-	}
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum ArgType { Reg = "r", Imm = "i", Ignore = "x" }
-
-	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum CpuError {
-		Halt = "Halt",
-		Overflow = "Overflow",
-		Register = "Register",
-		Internal = "Internal",
-	}
-
 }
 
-impl Error for CpuError {}
-
 impl Opcode {
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn idx (self) -> usize {
+		match self {
+			Self::Addr => 0, Self::Addi => 1,
+			Self::Mulr => 2, Self::Muli => 3,
+			Self::Banr => 4, Self::Bani => 5,
+			Self::Borr => 6, Self::Bori => 7,
+			Self::Setr => 8, Self::Seti => 9,
+			Self::Gtir => 10, Self::Gtri => 11, Self::Gtrr => 12,
+			Self::Eqir => 13, Self::Eqri => 14, Self::Eqrr => 15,
+		}
+	}
 
 	#[ inline ]
 	pub fn apply <Val: Int, const NUM: usize> (
@@ -111,6 +99,29 @@ impl Opcode {
 	#[ must_use ]
 	pub const fn arg_b (self) -> ArgType { self.data ().2 }
 
+	pub const VARIANTS: [Self; 16] = [
+		Self::Addr, Self::Addi,
+		Self::Mulr, Self::Muli,
+		Self::Banr, Self::Bani,
+		Self::Borr, Self::Bori,
+		Self::Setr, Self::Seti,
+		Self::Gtir, Self::Gtri, Self::Gtrr,
+		Self::Eqir, Self::Eqri, Self::Eqrr,
+	];
+
+}
+
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum Op {
+		Add = [ "add" ],
+		Mul = [ "mul" ],
+		Ban = [ "ban" ],
+		Bor = [ "bor" ],
+		Set = [ "set" ],
+		Gt = [ "gt" ],
+		Eq = [ "eq" ],
+	}
 }
 
 impl Op {
@@ -134,6 +145,27 @@ impl Op {
 	}
 
 }
+
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum ArgType {
+		Reg = [ "r" ],
+		Imm = [ "i" ],
+		Ignore = [ "x" ],
+	}
+}
+
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	pub enum CpuError {
+		Halt = [ "Halt" ],
+		Overflow = [ "Overflow" ],
+		Register = [ "Register" ],
+		Internal = [ "Internal" ],
+	}
+}
+
+impl Error for CpuError {}
 
 #[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 pub struct Regs <Val: Int, const NUM: usize> {

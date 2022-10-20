@@ -8,16 +8,16 @@ pub type Pos = pos::PosYX <Coord>;
 pub type Turn = pos::Turn2d;
 pub type Val = i32;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Tile {
 		#[ default ]
-		Empty = ".",
-		Scaffold = "#",
-		RobotUp = "^",
-		RobotDown = "v",
-		RobotLeft = "<",
-		RobotRight = ">",
+		Empty = [ "." ],
+		Scaffold = [ "#" ],
+		RobotUp = [ "^" ],
+		RobotDown = [ "v" ],
+		RobotLeft = [ "<" ],
+		RobotRight = [ ">" ],
 	}
 }
 

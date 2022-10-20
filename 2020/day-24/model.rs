@@ -2,28 +2,18 @@ use super::*;
 
 pub type Coord = i16;
 pub type Dir = aoc_pos::DirGeoHexLat;
-//pub type Grid = GridBuf <aoc_bitvec::BitVec <Tile>, Pos, 2>;
 pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = aoc_pos::PosGeoHexLat <Coord>;
 
-/*
-pub trait Grid: GridView <Pos, 2, Item = Tile> + GridViewIter <Pos, 2, Item = Tile> {
-}
-
-impl <SomeGrid> Grid for SomeGrid
-	where SomeGrid: GridView <Pos, 2, Item = Tile> + GridViewIter <Pos, 2, Item = Tile> {
-}
-*/
-
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Step {
-		East = "e",
-		SouthEast = "se",
-		SouthWest = "sw",
-		West = "w",
-		NorthWest = "nw",
-		NorthEast = "ne",
+		East = [ "e" ],
+		SouthEast = [ "se" ],
+		SouthWest = [ "sw" ],
+		West = [ "w" ],
+		NorthWest = [ "nw" ],
+		NorthEast = [ "ne" ],
 	}
 }
 
@@ -41,12 +31,12 @@ impl From <Step> for Pos {
 	}
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Tile {
 		#[ default ]
-		White = "  ",
-		Black = "⬢ ",
+		White = [ "  " ],
+		Black = [ "⬢ " ],
 	}
 }
 

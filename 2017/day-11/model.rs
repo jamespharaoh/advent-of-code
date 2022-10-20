@@ -3,14 +3,14 @@ use super::*;
 pub type Coord = i16;
 pub type Pos = aoc_pos::PosGeo <Coord>;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]
 	pub enum VHexDir {
-		NorthWest = "nw",
-		NorthEast = "ne",
-		SouthWest = "sw",
-		SouthEast = "se",
-		North = "n",
-		South = "s",
+		NorthWest = [ "nw" ],
+		NorthEast = [ "ne" ],
+		SouthWest = [ "sw" ],
+		SouthEast = [ "se" ],
+		North = [ "n" ],
+		South = [ "s" ],
 	}
 }

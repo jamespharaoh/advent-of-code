@@ -148,9 +148,12 @@ impl FromStr for RgbColour {
 	}
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
+	#[ derive (Clone, Copy, Debug) ]
 	enum EyeColour {
-		Amb = "amb", Blu = "blu", Brn = "brn", Gry = "gry",
-		Grn = "grn", Hzl = "hzl", Oth = "oth",
+		Amb = [ "amb" ], Blu = [ "blu" ], Brn = [ "brn" ], Gry = [ "gry" ],
+		Grn = [ "grn" ], Hzl = [ "hzl" ], Oth = [ "oth" ],
 	}
 }
+
+from_parser_to_from_str! (EyeColour);

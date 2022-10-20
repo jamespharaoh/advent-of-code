@@ -83,9 +83,9 @@ fn one_round (left: & mut Vec <Group>, right: & mut Vec <Group>) -> NumResult <b
 			Right => (& mut right [att_idx], & mut left [def_idx]),
 		};
 		let damage = if def_group.has_weakness (att_group.attack_type) {
-			att_group.effective_power () * 2
+			chk! (att_group.effective_power () ? * 2) ?
 		} else {
-			att_group.effective_power ()
+			att_group.effective_power () ?
 		};
 		let lost_units = cmp::min (damage / def_group.hit_points, def_group.num_units);
 		if lost_units > 0 { progress = true; }
@@ -118,9 +118,9 @@ fn choose_targets (
 					! def_group.has_immunity (att_group.attack_type))
 				.map (|(def_idx, def_group)| {
 					let damage = if def_group.has_weakness (att_group.attack_type) {
-						chk! (att_group.effective_power () * 2) ?
+						chk! (att_group.effective_power () ? * 2) ?
 					} else {
-						att_group.effective_power ()
+						att_group.effective_power () ?
 					};
 					Ok ((def_idx, def_group, damage))
 				})

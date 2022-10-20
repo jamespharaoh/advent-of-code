@@ -12,15 +12,15 @@ pub type Pos = aoc_pos::PosYX <Coord>;
 pub type RunResult = intcode::RunResult <Val>;
 pub type Val = i32;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Tile {
 		#[ default ]
-		Empty = "  ",
-		Wall = "##",
-		Block = "[]",
-		Paddle = "==",
-		Ball = "()",
+		Empty = [ "  " ],
+		Wall = [ "##" ],
+		Block = [ "[]" ],
+		Paddle = [ "==" ],
+		Ball = [ "()" ],
 	}
 }
 

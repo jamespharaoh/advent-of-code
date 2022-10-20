@@ -9,12 +9,12 @@ pub type TileId = u16;
 pub type Tiles = HashMap <TileId, Tile>;
 pub type Turn = aoc_pos::Turn2d;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Pixel {
 		#[ default ]
-		Black = ".",
-		White = "#",
+		Black = [ "." ],
+		White = [ "#" ],
 	}
 }
 

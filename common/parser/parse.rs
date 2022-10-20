@@ -466,3 +466,15 @@ macro_rules! enum_parser {
 	};
 
 }
+
+#[ macro_export ]
+macro_rules! from_parser_to_from_str {
+	( $name:ident ) => {
+		impl ::std::str::FromStr for $name {
+			type Err = ();
+			fn from_str (src: & str) -> Result <Self, ()> {
+				Parser::wrap (src, $crate::Parser::item).map_err (|_err| ())
+			}
+		}
+	};
+}

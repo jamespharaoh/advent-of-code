@@ -46,16 +46,18 @@ struct_parser_display! {
 
 impl Group {
 
-	#[ must_use ]
-	pub const fn effective_power (& self) -> Val {
-		self.num_units * self.attack_damage
+	#[ inline ]
+	pub fn effective_power (& self) -> NumResult <Val> {
+		chk! (self.num_units * self.attack_damage)
 	}
 
+	#[ inline ]
 	#[ must_use ]
 	pub fn has_weakness (& self, attack_type: AttackType) -> bool {
 		self.weaknesses.contains (& attack_type)
 	}
 
+	#[ inline ]
 	#[ must_use ]
 	pub fn has_immunity (& self, attack_type: AttackType) -> bool {
 		self.immunities.contains (& attack_type)
@@ -63,13 +65,23 @@ impl Group {
 
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum AttackType {
-		Bludgeoning = "bludgeoning",
-		Cold = "cold",
-		Fire = "fire",
-		Radiation = "radiation",
-		Slashing = "slashing",
+		Bludgeoning = [ "bludgeoning" ],
+		Cold = [ "cold" ],
+		Fire = [ "fire" ],
+		Radiation = [ "radiation" ],
+		Slashing = [ "slashing" ],
 	}
+}
+
+impl AttackType {
+	pub const VARIANTS: [Self; 5] = [
+		Self::Bludgeoning,
+		Self::Cold,
+		Self::Fire,
+		Self::Radiation,
+		Self::Slashing,
+	];
 }

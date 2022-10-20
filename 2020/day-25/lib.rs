@@ -14,6 +14,6 @@ puzzle_info! {
 	name = "Combo Breaker";
 	year = 2020;
 	day = 25;
-	parse = |input| input::Input::parse_from_lines (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 }

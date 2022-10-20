@@ -51,7 +51,7 @@ impl State {
 			desert: ArrayVec::new (),
 		};
 		state.hall = places [0 .. 11].iter ().copied ().collect ();
-		for room in Amph::VARIANTS.iter ().copied () {
+		for room in [ Amber, Bronze, Copper, Desert ] {
 			state.room_mut (room).extend (
 				places [11 + room.idx () * 4 .. ].iter ().copied ().take (room_size).rev ()
 					.while_some ());
@@ -359,12 +359,27 @@ impl Place {
 
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum Amph { Amber = "A", Bronze = "B", Copper = "C", Desert = "D" }
+	pub enum Amph {
+		Amber = [ "A" ],
+		Bronze = [ "B" ],
+		Copper = [ "C" ],
+		Desert = [ "D" ],
+	}
 }
 
 impl Amph {
+
+	#[ must_use ]
+	pub const fn idx (self) -> usize {
+		match self {
+			Amber => 0,
+			Bronze => 1,
+			Copper => 2,
+			Desert => 3,
+		}
+	}
 
 	#[ allow (clippy::option_option) ]
 	#[ must_use ]

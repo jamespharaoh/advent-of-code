@@ -4,11 +4,12 @@ pub type Coord = i16;
 pub type Grid = GridBuf <Vec <Space>, Pos, 2>;
 pub type Pos = aoc_pos::PosYX <Coord>;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Space {
-		Asteroid = "#",
-		#[ default ] Empty = ".",
+		#[ default ]
+		Empty = [ "." ],
+		Asteroid = [ "#" ],
 	}
 }
 

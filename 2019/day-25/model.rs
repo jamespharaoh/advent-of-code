@@ -5,13 +5,13 @@ pub type RcStr = Rc <str>;
 pub type RunResult = intcode::RunResult <Val>;
 pub type Val = i64;
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd) ]
 	pub enum Door {
-		North = "north",
-		South = "south",
-		East = "east",
-		West = "west",
+		North = [ "north" ],
+		South = [ "south" ],
+		East = [ "east" ],
+		West = [ "west" ],
 	}
 }
 

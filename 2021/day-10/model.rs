@@ -7,17 +7,17 @@ use Token::{
 	CurlyOpen, CurlyClose, AngleOpen, AngleClose,
 };
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	pub enum Token {
-		RoundOpen = "(",
-		RoundClose = ")",
-		SquareOpen = "[",
-		SquareClose = "]",
-		CurlyOpen = "{",
-		CurlyClose = "}",
-		AngleOpen = "<",
-		AngleClose = ">",
+		RoundOpen = [ "(" ],
+		RoundClose = [ ")" ],
+		SquareOpen = [ "[" ],
+		SquareClose = [ "]" ],
+		CurlyOpen = [ "{" ],
+		CurlyClose = [ "}" ],
+		AngleOpen = [ "<" ],
+		AngleClose = [ ">" ],
 	}
 }
 

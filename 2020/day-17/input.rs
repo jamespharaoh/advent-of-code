@@ -16,7 +16,7 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub iters_one: u32 = ("ITERS_ONE=", 6, 1_u32 .. ),
-		pub iters_two: u32 = ("ITERS_TWO=", 6, 1_u32 .. ),
+		pub iters_one: u32 = ("ITERS_ONE=", 6, 1 .. ),
+		pub iters_two: u32 = ("ITERS_TWO=", 6, 1 .. ),
 	}
 }

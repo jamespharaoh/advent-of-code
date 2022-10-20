@@ -21,12 +21,18 @@ impl Seat {
 	}
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum SeatRow { Back = "B", Front = "F" }
+	pub enum SeatRow {
+		Back = [ "B" ],
+		Front = [ "F" ],
+	}
 }
 
-parse_display_enum! {
+enum_decl_parser_display! {
 	#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	pub enum SeatCol { Left = "L", Right = "R" }
+	pub enum SeatCol {
+		Left = [ "L" ],
+		Right = [ "R" ],
+	}
 }

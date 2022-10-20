@@ -15,7 +15,7 @@ puzzle_info! {
 	name = "Planet of Discord";
 	year = 2019;
 	day = 24;
-	parse = |input| input::Input::parse_from_lines (input);
+	parse = |lines| input::Input::parse_from_lines (lines);
 	part_one = |input| logic::part_one (& input);
 	part_two = |input| logic::part_two (& input);
 }

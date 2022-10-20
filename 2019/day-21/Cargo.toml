@@ -14,15 +14,15 @@
 	aoc-2019-intcode = { path = "../intcode" }
 	aoc-common = { path = "../../common" }
 
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
 [lib]
 
 	path = "lib.rs"
 	doctest = false
 	crate-type = [ "rlib", "dylib" ]
-
-[build-dependencies]
-
-	aoc-codegen = { path = "../../misc/codegen" }
 
 [[bin]]
 
