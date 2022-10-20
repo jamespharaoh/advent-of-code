@@ -3,15 +3,11 @@
 use super::*;
 use model::State;
 
-#[ derive (Debug, clap::Parser) ]
-pub struct Args {
-
-	#[ clap (long, default_value = "20") ]
-	iterations: usize,
-
-	#[ clap (long, default_value = "10") ]
-	max_length: usize,
-
+args_decl! {
+	pub struct Args {
+		iterations: Option <usize>,
+		max_length: Option <usize>,
+	}
 }
 
 #[ derive (Clone, Eq, Hash, PartialEq) ]
@@ -182,7 +178,7 @@ const fn compatible (prev: u8, next: & [u8]) -> bool {
 #[ allow (clippy::too_many_lines) ]
 pub fn run (args: Args) -> GenResult <()> {
 
-	let stables = find_stables (args.max_length, args.iterations);
+	let stables = find_stables (args.max_length.unwrap_or (10), args.iterations.unwrap_or (20));
 	println! ("NUM STABLES: {}", stables.len ());
 	println! ("NUM SINGULAR: {}", stables.values ().filter (|stable|
 		stable.as_ref ().map_or (false, |stable| stable.parts.len () == 1)).count ());
@@ -190,7 +186,7 @@ pub fn run (args: Args) -> GenResult <()> {
 	let mut destinies: HashMap <Span, Destiny> = HashMap::new ();
 	let mut atomics: HashSet <Atomic> = HashSet::new ();
 
-	for length in (2 ..= args.max_length).step_by (2) {
+	for length in (2 ..= args.max_length.unwrap_or (10)).step_by (2) {
 
 		'STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
 			.multi_cartesian_product ()
@@ -243,7 +239,7 @@ pub fn run (args: Args) -> GenResult <()> {
 			let mut left_2 = state [0] == 2;
 			let mut left_3 = state [0] == 3;
 
-			for _ in 0 .. args.iterations {
+			for _ in 0 .. args.iterations.unwrap_or (20) {
 				let next_state = logic::one_round (& prev_state);
 
 				if let Some (_whatever) = destinies.get (next_state.as_slice ()) {

@@ -56,8 +56,9 @@ function main {
 		(fuzz) fuzz_mode ;;
 		(run-test)
 			time_cmd cargo $toolchain run "${cargo_args[@]}" \
-				-- "${extra_args_0[@]}" -- "${extra_args_1[@]}"
-			time_cmd cargo $toolchain test "${cargo_args[@]}"
+				-- "${extra_args_0[@]}"
+			time_cmd cargo $toolchain test "${cargo_args[@]}" \
+				-- "${extra_args_1[@]}"
 			;;
 		(run)
 			time_cmd cargo $toolchain run "${cargo_args[@]}" \

@@ -2,20 +2,21 @@
 
 use super::*;
 
+use std::path::PathBuf;
+
 use input::Input;
 use model::Pos;
 
-#[ derive (clap::Parser) ]
-pub struct RunArgs {
-
-	#[ clap (long, value_parser, default_value = "inputs/day-13") ]
-	input: String,
-
+args_decl! {
+	pub struct RunArgs {
+		input: Option <PathBuf>,
+	}
 }
 
 #[ allow (clippy::print_stdout) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (args.input) ?;
+	let input_string = fs::read_to_string (
+		puzzle_metadata ().find_input_or_arg (args.input)) ?;
 	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let dots = logic::fold_multi (& input.folds, input.dots.iter ().copied ());

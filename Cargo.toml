@@ -49,7 +49,6 @@
 [profile.release]
 
 	codegen-units = 1
-	package.clap = { codegen-units = 16 }
 	rpath = true
 
 [profile.release-lto]
@@ -65,7 +64,6 @@
 	package.aoc-2018-cpu = { opt-level = 3 }
 	package.aoc-2018-day-21 = { opt-level = 3 }
 	package.aoc-md5 = { opt-level = 3 }
-	package.clap = { codegen-units = 256 }
 	rpath = true
 
 [workspace]

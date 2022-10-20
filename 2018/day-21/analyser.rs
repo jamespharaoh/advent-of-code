@@ -14,17 +14,16 @@ use model::Val;
 
 type MultiReg = MultiVal <8>;
 
-#[ derive (clap::Parser) ]
-pub struct Args {
-
-	#[ clap (from_global, value_parser) ]
-	input: PathBuf,
-
+args_decl! {
+	pub struct Args {
+		input: Option <PathBuf>,
+	}
 }
 
 pub fn run (args: Args) -> GenResult <()> {
 
-	let input_string = fs::read_to_string (args.input) ?;
+	let input_path = puzzle_metadata ().find_input_or_arg (args.input);
+	let input_string = fs::read_to_string (& input_path) ?;
 	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 

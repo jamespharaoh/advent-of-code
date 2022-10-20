@@ -1,28 +1,18 @@
 use super::*;
 
+use std::path::PathBuf;
+
 use model::State;
 
-#[ derive (Debug, clap::Parser) ]
-pub struct RunArgs {
-
-	#[ clap (long, default_value = "inputs/day-10") ]
-	input: String,
-
-	#[ clap (conflicts_with = "input") ]
-	state: Option <String>,
-
-	#[ clap (long) ]
-	verbose: bool,
-
-	#[ clap (long, default_value = "15") ]
-	loops: u32,
-
-	#[ clap (long, default_value = "0") ]
-	keep_end: usize,
-
-	#[ clap (long, default_value = "0") ]
-	keep_start: usize,
-
+args_decl! {
+	pub struct RunArgs {
+		input: Option <PathBuf>,
+		state: Option <String>,
+		verbose: bool,
+		loops: Option <u32>,
+		keep_end: Option <usize>,
+		keep_start: Option <usize>,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]
@@ -32,7 +22,7 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 		State::parse (state) ?
 	} else {
 		State::parse (
-			fs::read_to_string (& args.input) ?
+			fs::read_to_string (puzzle_metadata ().find_input_or_arg (args.input.clone ())) ?
 				.trim ()
 				.split ('\n')
 				.next ().unwrap ()
@@ -40,21 +30,22 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 	};
 	for idx in 0 .. {
 		println! ("{:2} {:4} {}", idx, state.len (), state);
-		if idx == args.loops { break }
+		if idx == args.loops.unwrap_or (15) { break }
 		state = logic::one_round (& state);
-		if (args.keep_start > 0 || args.keep_end > 0)
-				&& state.len () > (args.keep_start + args.keep_end) {
+		if (args.keep_start.unwrap_or (0) > 0 || args.keep_end.unwrap_or (0) > 0)
+				&& state.len () > (args.keep_start.unwrap_or (0) + args.keep_end.unwrap_or (0)) {
 			state =
-				state [ .. args.keep_start].iter ().copied ()
-					.chain (state [state.len () - args.keep_end .. ].iter ().copied ())
+				state [ .. args.keep_start.unwrap_or (0)].iter ().copied ()
+					.chain (state [state.len () - args.keep_end.unwrap_or (0) .. ].iter ().copied ())
 					.collect ();
 		}
 	}
 	Ok (())
 }
 
-#[ derive (Debug, clap::Parser) ]
-pub struct InternalsArgs;
+args_decl! {
+	pub struct InternalsArgs {}
+}
 
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]

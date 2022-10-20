@@ -175,87 +175,71 @@ pub fn run_year (puzzles: & [Box <dyn Puzzle>]) -> GenResult <RunStats> {
 
 }
 
+use aoc_args::args_decl;
+args_decl! {
+	#[ derive (Debug) ]
+	pub struct Args {
+		pub input: Option <PathBuf>,
+		pub repeat: Option <u64>,
+	}
+}
+
 #[ allow (clippy::print_stdout) ]
 fn puzzle_invoke_real (
 	puzzle: & dyn Puzzle,
 	args: & [OsString],
 ) -> GenResult <()> {
 
-	let input_path_default = puzzle.find_input_or_default ();
+	let command = args.get (1)
+		.and_then (|os_str| os_str.to_str ())
+		.into_iter ()
+		.find (|rust_str| ! rust_str.starts_with ('-'));
+	let command_args = args.iter ().skip (if command.is_some () { 2 } else { 1 }).cloned ();
 
-	let mut command =
-		clap::Command::new (format! ("aoc-{}-day-{}", puzzle.year (), puzzle.day ()))
-			.arg (
-				clap::Arg::new ("input")
-					.long ("input")
-					.value_parser (clap::value_parser! (PathBuf))
-					.takes_value (true)
-					.default_value_os (input_path_default.as_os_str ())
-					.help ("Input file to use")
-					.global (true));
+	use aoc_args::ArgsParse as _;
 
-	for part_num in 1 ..= puzzle.num_parts () {
-
-		command = command.subcommand (
-			clap::Command::new (format! ("part-{}", part_num))
-				.arg (
-					clap::Arg::new ("repeat")
-						.long ("repeat")
-						.value_parser (clap::value_parser! (u64).range (1 .. ))
-						.takes_value (true)
-						.default_value ("1")
-						.help ("Number of times to repeat the calculation"))
-		);
-
-	}
-
-	for puzzle_command in puzzle.commands () {
-		command = command.subcommand (
-			puzzle_command.command ()
-				.name (puzzle_command.name ())
-		);
-	}
-
-	let matches = command.get_matches_from (args);
-	let input_path = matches.get_one::<PathBuf> ("input").unwrap ();
-	let input_string = fs::read_to_string (input_path) ?;
-	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
-
-	match matches.subcommand () {
-		None => {
-			let result = puzzle.part_one (& input_lines) ?;
-			println! ("Part one: {}", result);
-			if puzzle.num_parts () >= 2 {
-				let result = puzzle.part_two (& input_lines) ?;
-				println! ("Part two: {}", result);
-			}
-		},
-		Some (("part-1", matches)) => {
-			let repeat: u64 = * matches.get_one ("repeat").unwrap ();
-			runner (repeat, |idx| {
-				let result = puzzle.part_one (& input_lines) ?;
-				if idx == 0 { println! ("Result: {}", result); }
-				Ok (())
-			}) ?;
-		},
-		Some (("part-2", matches)) => {
-			let repeat: u64 = * matches.get_one ("repeat").unwrap ();
-			runner (repeat, |idx| {
-				let result = puzzle.part_two (& input_lines) ?;
-				if idx == 0 { println! ("Result: {}", result); }
-				Ok (())
-			}) ?;
-		},
-		Some ((name, matches)) => {
+	let part = match command {
+		None => None,
+		Some ("part-1") => Some (1),
+		Some ("part-2") => Some (2),
+		Some (command) => {
 			for puzzle_command in puzzle.commands () {
-				if puzzle_command.name () == name {
-					return puzzle_command.invoke (matches);
+				if puzzle_command.name () == command {
+					return puzzle_command.invoke (command_args);
 				}
 			}
-			unreachable! ();
+			return Err (format! ("Command not recognised: {command}").into ());
 		},
+	};
+
+	let args = Args::parse (command_args) ?;
+	let input_path = args.input.unwrap_or_else (|| puzzle.find_input_or_default ());
+	let input_string = fs::read_to_string (input_path) ?;
+	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
+	let repeat = args.repeat.unwrap_or (1);
+
+	if part.map_or (false, |part| puzzle.num_parts () < part) {
+		return Err (format! ("No such part: {}", part.unwrap ()).into ());
 	}
+
+	if part.unwrap_or (1) == 1 && 1 <= puzzle.num_parts () {
+		runner (repeat, |idx| {
+			let result = puzzle.part_one (& input_lines) ?;
+			if idx == 0 { println! ("Part one: {}", result); }
+			Ok (())
+		}) ?;
+	}
+
+	if part.unwrap_or (2) == 2 && 2 <= puzzle.num_parts () {
+		runner (repeat, |idx| {
+			let result = puzzle.part_two (& input_lines) ?;
+			if idx == 0 { println! ("Part two: {}", result); }
+			Ok (())
+		}) ?;
+	}
+
 	Ok (())
+
 }
 
 fn percentile (times: & [u64], num: u64, denom: u64) -> u64 {
@@ -355,6 +339,10 @@ pub trait Puzzle {
 		puzzle_invoke_real (self.dyn_puzzle (), args)
 	}
 
+	fn find_input_or_arg (& self, arg: Option <PathBuf>) -> PathBuf {
+		arg.unwrap_or_else (|| self.find_input_or_default ())
+	}
+
 	fn find_input_or_default (& self) -> PathBuf {
 		self.find_input ()
 			.unwrap_or_else (|_| format! (
@@ -396,27 +384,14 @@ pub trait Puzzle {
 
 pub struct PuzzleCommand {
 	name: & 'static str,
-	invoke_fn: Box <dyn Fn (& ArgMatches) -> GenResult <()>>,
-	magic: Box <dyn MagicTrait>,
-}
-
-trait MagicTrait {
-	fn command <'help> (& self) -> Command <'help>;
-}
-
-struct MagicStruct <Args> {
-	phantom: PhantomData <Args>,
-}
-
-impl <Args: clap::CommandFactory> MagicTrait for MagicStruct <Args> {
-	fn command <'help> (& self) -> Command <'help> { Args::command () }
+	invoke_fn: Box <dyn Fn (Vec <OsString>) -> GenResult <()>>,
 }
 
 impl PuzzleCommand {
 
 	#[ inline ]
 	pub fn new <
-		Args: clap::Parser + 'static,
+		Args: ArgsParse + 'static,
 		InvokeFn: Fn (Args) -> GenResult <()> + 'static,
 	> (
 		name: & 'static str,
@@ -424,14 +399,10 @@ impl PuzzleCommand {
 	) -> Self {
 
 		let invoke_fn = Box::new (
-			move |matches: & _| invoke_fn (Args::from_arg_matches (matches).unwrap ()),
+			move |args| invoke_fn (Args::parse (args).unwrap ()),
 		);
 
-		let magic: Box <MagicStruct <Args>> = Box::new (MagicStruct {
-			phantom: PhantomData,
-		});
-
-		Self { name, invoke_fn, magic }
+		Self { name, invoke_fn }
 
 	}
 
@@ -442,14 +413,8 @@ impl PuzzleCommand {
 	}
 
 	#[ inline ]
-	#[ must_use ]
-	pub fn command <'help> (& self) -> Command <'help> {
-		self.magic.command ()
-	}
-
-	#[ inline ]
-	pub fn invoke (& self, args: & ArgMatches) -> GenResult <()> {
-		(self.invoke_fn) (args)
+	pub fn invoke (& self, args: impl Iterator <Item = OsString>) -> GenResult <()> {
+		(self.invoke_fn) (args.into_iter ().collect::<Vec <OsString>> ())
 	}
 
 }

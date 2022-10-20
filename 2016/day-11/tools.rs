@@ -7,32 +7,24 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::process::Stdio;
 
-#[ derive (clap::Parser) ]
-pub struct CorpusGenArgs {
-
-	#[ clap (long, default_value = "fuzz/corpus/2016-day-11") ]
-	output_dir: PathBuf,
-
-	#[ clap (long, default_value = "10") ]
-	num_files: usize,
-
-	#[ clap (long, default_value = "5") ]
-	num_comps: usize,
-
-	#[ clap (long, default_value = "4") ]
-	name_len: usize,
-
+args_decl! {
+	pub struct CorpusGenArgs {
+		output_dir: PathBuf,
+		num_files: Option <usize>,
+		num_comps: Option <usize>,
+		name_len: Option <usize>,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]
 pub fn corpus_gen (args: CorpusGenArgs) -> GenResult <()> {
 	let mut rand = File::open ("/dev/urandom") ?;
-	for _ in 0 .. args.num_files {
+	for _ in 0 .. args.num_files.unwrap_or (10) {
 		let names =
 			iter::from_fn (
 					|| -> Option <String> {
 						let mut name = String::new ();
-						while name.len () < args.name_len {
+						while name.len () < args.name_len.unwrap_or (4) {
 							let mut buf = [0];
 							assert_eq! (rand.read (& mut buf).unwrap (), 1);
 							let ch = ok_or! (buf [0].to_char (), continue);
@@ -41,7 +33,7 @@ pub fn corpus_gen (args: CorpusGenArgs) -> GenResult <()> {
 						}
 						Some (name)
 					})
-				.take (args.num_comps)
+				.take (args.num_comps.unwrap_or (5))
 				.collect::<Vec <String>> ();
 		let comps =
 			iter::from_fn (
@@ -58,7 +50,7 @@ pub fn corpus_gen (args: CorpusGenArgs) -> GenResult <()> {
 			for (name, [gen, chip]) in
 				names.iter ()
 					.zip (comps.iter ().copied ())
-					.take (args.num_comps) {
+					.take (args.num_comps.unwrap_or (5)) {
 				if gen == floor {
 					items.push (format! ("{} generator", name));
 				}

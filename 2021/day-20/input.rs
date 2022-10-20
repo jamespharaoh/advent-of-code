@@ -22,7 +22,7 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub num_times_one: u32 = ("NUM_TIMES_ONE", 2, 1_u32 .. ),
-		pub num_times_two: u32 = ("NUM_TIMES_TWO", 50, 1_u32 .. ),
+		pub num_times_one: u32 = ("NUM_TIMES_ONE", 2, 1 .. ),
+		pub num_times_two: u32 = ("NUM_TIMES_TWO", 50, 1 .. ),
 	}
 }

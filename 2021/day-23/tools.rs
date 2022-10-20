@@ -8,32 +8,22 @@ use model::StateCompact;
 use search::PrioritySearch;
 use search::PrioritySearchAdder;
 
-#[ derive (Debug, clap::Parser) ]
-#[ allow (clippy::struct_excessive_bools) ]
-pub struct RunArgs {
-
-	#[ clap (from_global, value_parser = PathBuf) ]
-	input: PathBuf,
-
-	#[ clap (long) ]
-	verbose: bool,
-
-	#[ clap (long) ]
-	dead_ends: bool,
-
-	#[ clap (long) ]
-	part_1: bool,
-
-	#[ clap (long) ]
-	part_2: bool,
-
+args_decl! {
+	pub struct RunArgs {
+		input: Option <PathBuf>,
+		verbose: bool,
+		dead_ends: bool,
+		part_1: bool,
+		part_2: bool,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
 	let mut args = args;
 	if ! (args.part_1 || args.part_2) { args.part_1 = true; args.part_2 = true; }
-	let input_string = fs::read_to_string (& args.input) ?;
+	let input_string = fs::read_to_string (
+		puzzle_metadata ().find_input_or_arg (args.input.clone ())) ?;
 	let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	if args.part_1 {
@@ -178,8 +168,9 @@ fn print_next_states (
 	}
 }
 
-#[ derive (Debug, clap::Parser) ]
-pub struct InternalsArgs;
+args_decl! {
+	pub struct InternalsArgs {}
+}
 
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]

@@ -1,20 +1,12 @@
 use super::*;
 
-#[ derive (Debug, clap::Parser) ]
-pub struct Args {
-
-	#[ clap (required = true) ]
-	state: String,
-
-	#[ clap (long, default_value = "1000") ]
-	loops: u16,
-
-	#[ clap (long, default_value = "65536") ]
-	max_length: usize,
-
-	#[ clap (long, default_value = "10") ]
-	min_points: u16,
-
+args_decl! {
+	pub struct Args {
+		state: String,
+		loops: Option <u16>,
+		max_length: Option <usize>,
+		min_points: Option <u16>,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]
@@ -23,7 +15,7 @@ pub fn run (args: Args) -> GenResult <()> {
 	let mut states = Vec::new ();
 	states.push (State::parse (& args.state) ?);
 	for cur_gen in 0_u16 .. {
-		if cur_gen == args.loops { break }
+		if cur_gen == args.loops.unwrap_or (1000) { break }
 		let cur_state = states.last ().unwrap ();
 		let next_state = {
 			let mut items_iter = cur_state.items.iter ().copied ().enumerate ().multipeek ();
@@ -76,7 +68,7 @@ pub fn run (args: Args) -> GenResult <()> {
 				// produce value
 				Some (Item { run, num, gen, idx })
 			})
-		}.take (args.max_length * 2 / 3).collect ();
+		}.take (args.max_length.unwrap_or (0x10000) * 2 / 3).collect ();
 		states.push (next_state);
 	}
 	// print states

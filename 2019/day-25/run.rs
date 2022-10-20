@@ -14,18 +14,17 @@ use model::RcStr;
 use model::RunResult;
 use model::Val;
 
-#[ derive (clap::Parser) ]
-pub struct RunArgs {
-
-	#[ clap (from_global, value_parser = PathBuf) ]
-	input: PathBuf,
-
+args_decl! {
+	pub struct RunArgs {
+		input: Option <PathBuf>,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::wildcard_enum_match_arm) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (& args.input) ?;
+	let input_path = puzzle_metadata ().find_input_or_arg (args.input);
+	let input_string = fs::read_to_string (& input_path) ?;
 	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let mut cpu = Cpu::new (input.data.clone ());

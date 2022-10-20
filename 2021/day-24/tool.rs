@@ -7,15 +7,15 @@ use machine::Machine;
 use machine::MachineRegs;
 use solver::Solver;
 
-#[ derive (clap::Parser) ]
-pub struct AllArgs {
-	#[ clap (long, from_global, value_parser = PathBuf) ]
-	input: PathBuf,
+args_decl! {
+	pub struct AllArgs {
+		input: Option <PathBuf>,
+	}
 }
 
 #[ allow (clippy::print_stdout) ]
 pub fn all (args: AllArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (args.input) ?;
+	let input_string = fs::read_to_string (puzzle_metadata ().find_input_or_arg (args.input)) ?;
 	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let steps = quick::steps_for (& input.instrs) ?;
@@ -25,8 +25,11 @@ pub fn all (args: AllArgs) -> GenResult <()> {
 	Ok (())
 }
 
-#[ derive (clap::Parser) ]
-pub struct MachineArgs { inputs: Vec <String> }
+args_decl! {
+	pub struct MachineArgs {
+		inputs: Vec <String>,
+	}
+}
 
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]
@@ -82,9 +85,10 @@ pub fn machine (args: MachineArgs) -> GenResult <()> {
 	}
 }
 
-#[ derive (clap::Parser) ]
-pub struct SolverArgs {
-	args: Vec <String>,
+args_decl! {
+	pub struct SolverArgs {
+		args: Vec <String>,
+	}
 }
 
 #[ allow (clippy::needless_pass_by_value) ]

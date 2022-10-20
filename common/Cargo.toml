@@ -6,12 +6,12 @@
 
 [dependencies]
 
+	aoc-args = { path = "args" }
 	aoc-checked = { path = "checked" }
 	aoc-inpstr = { path = "inpstr" }
 	aoc-misc = { path = "misc" }
 	aoc-nums = { path = "nums" }
 	aoc-parser = { path = "parser" }
-	clap = { version = "3.*", features = [ "derive" ] }
 	itertools = "*"
 
 [lib]

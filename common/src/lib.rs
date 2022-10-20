@@ -1,8 +1,5 @@
 //! Common functionality used in all puzzle solutions
 
-use clap::ArgMatches;
-use clap::Command;
-
 #[ doc (no_inline) ]
 pub use prelude::*;
 
@@ -10,8 +7,7 @@ pub mod puzzle;
 
 mod prelude {
 
-	pub use clap;
-
+	pub use aoc_args::*;
 	pub use aoc_checked::checked as chk;
 	pub use aoc_misc::prelude::*;
 	pub use aoc_nums as nums;

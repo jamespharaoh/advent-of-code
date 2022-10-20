@@ -8,17 +8,16 @@ use model::Game;
 use model::GameNext;
 use model::Tile;
 
-#[ derive (clap::Parser) ]
-pub struct RunArgs {
-
-	#[ clap (from_global, value_parser = PathBuf) ]
-	input: PathBuf,
-
+args_decl! {
+	#[ derive (Clone, Debug) ]
+	pub struct RunArgs {
+		pub input: Option <PathBuf>,
+	}
 }
 
 #[ allow (clippy::print_stdout) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (args.input) ?;
+	let input_string = fs::read_to_string (args.input.unwrap ()) ?;
 	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let size = logic::get_size (& input) ?;
