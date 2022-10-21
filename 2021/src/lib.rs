@@ -29,7 +29,7 @@ pub use aoc_2021_day_24 as day_24;
 pub use aoc_2021_day_25 as day_25;
 
 #[ must_use ]
-pub fn puzzle_metadata () -> Vec <Box <dyn puzzle::Puzzle>> {
+pub fn puzzle_metadata () -> Vec <Box <dyn Puzzle>> {
 	vec! [
 		day_01::puzzle_metadata (),
 		day_02::puzzle_metadata (),

@@ -1,5 +1,19 @@
 use super::*;
 
+use std::ffi::OsString;
+use std::fs;
+use std::path::PathBuf;
+
+use command::PuzzleCommand;
+
+args_decl! {
+	#[ derive (Debug) ]
+	pub struct Args {
+		pub input: Option <PathBuf>,
+		pub repeat: Option <u64>,
+	}
+}
+
 #[ allow (clippy::print_stdout) ]
 pub (crate) fn puzzle_invoke_real (
 	puzzle: & dyn Puzzle,
@@ -39,7 +53,7 @@ pub (crate) fn puzzle_invoke_real (
 	}
 
 	if part.unwrap_or (1) == 1 && 1 <= puzzle.num_parts () {
-		runner (repeat, |idx| {
+		run::runner (repeat, |idx| {
 			let result = puzzle.part_one (& input_lines) ?;
 			if idx == 0 { println! ("Part one: {}", result); }
 			Ok (())
@@ -47,7 +61,7 @@ pub (crate) fn puzzle_invoke_real (
 	}
 
 	if part.unwrap_or (2) == 2 && 2 <= puzzle.num_parts () {
-		runner (repeat, |idx| {
+		run::runner (repeat, |idx| {
 			let result = puzzle.part_two (& input_lines) ?;
 			if idx == 0 { println! ("Part two: {}", result); }
 			Ok (())
@@ -147,8 +161,8 @@ macro_rules! puzzle_info {
 		day = $day:literal ;
 		$($rest4:tt)*
 	) => {
-		pub fn puzzle_metadata () -> Box <dyn $crate::Puzzle> {
-			use $crate::Puzzle;
+		pub fn puzzle_metadata () -> Box <dyn $crate::puzzle::Puzzle> {
+			use $crate::puzzle::Puzzle;
 			struct ThisPuzzle { params: HashMap <String, String> }
 			impl Puzzle for ThisPuzzle {
 				fn dyn_puzzle (& self) -> & dyn Puzzle { self }
@@ -209,7 +223,7 @@ macro_rules! puzzle_info {
 		commands = [ $($commands:tt)* ];
 		$($rest3:tt)*
 	) => {
-		fn commands (& self) -> Vec <$crate::PuzzleCommand> {
+		fn commands (& self) -> Vec <$crate::command::PuzzleCommand> {
 			let mut commands = Vec::new ();
 			puzzle_info! { @commands commands $($commands)* }
 			commands
@@ -237,13 +251,13 @@ macro_rules! puzzle_info {
 		name = $name:literal ;
 		method = $method:expr ;
 	) ) => {
-		$commands.push ($crate::PuzzleCommand::new ($name, $method));
+		$commands.push ($crate::command::PuzzleCommand::new ($name, $method));
 	};
 	( @commands $commands:ident (
 		name = $name:literal ;
 		method = $method:expr ;
 	) , $($rest:tt)* ) => {
-		$commands.push ($crate::PuzzleCommand::new ($name, $method));
+		$commands.push ($crate::command::PuzzleCommand::new ($name, $method));
 		puzzle_info! { @commands $commands $($rest)* }
 	};
 

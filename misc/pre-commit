@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euf -o pipefail
+set -eu -o pipefail
 
 force=""
 for arg in "$@"; do
@@ -133,7 +133,9 @@ cargo test --frozen --workspace --profile pre-commit
 
 for year in {2015..2021}; do
 	header_step "cargo run --package aoc-$year"
-	cargo run --frozen --profile pre-commit --package "aoc-$year"
+	for example in "$year/examples/"*; do
+		cargo run --frozen --profile pre-commit --package "aoc-$year" -- --input-dir "$example"
+	done
 done
 
 (

@@ -20,6 +20,7 @@ fn calc_result (input: & Input, ord: u32) -> GenResult <u32> {
 	)
 }
 
+#[ inline ]
 fn game_iter (start: & [u32]) -> GenResult <impl Iterator <Item = u32> + '_> {
 	if start.is_empty () { return Err ("Must have at least one starting number".into ()) }
 	let mut posns: HashMap <u32, u32> =
