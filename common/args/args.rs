@@ -58,6 +58,38 @@ pub trait ArgsParseOuter: Sized {
 
 }
 
+impl ArgsParseOuter for bool {
+
+	type State = Self;
+
+	#[ inline ]
+	fn init () -> Self {
+		false
+	}
+
+	#[ inline ]
+	fn handle (
+		name: & 'static str,
+		state: & mut Self::State,
+		_args: & mut dyn Iterator <Item = OsString>,
+	) -> Result <(), ArgsParseError> {
+		if * state {
+			return Err (ArgsParseError::Duplicated (name));
+		}
+		* state = true;
+		Ok (())
+	}
+
+	#[ inline ]
+	fn finish (
+		_name: & 'static str,
+		state: Self::State,
+	) -> Result <Self, ArgsParseError> {
+		Ok (state)
+	}
+
+}
+
 impl <Inner> ArgsParseOuter for Option <Inner> where Inner: ArgsParseInner {
 
 	type State = Self;
@@ -177,18 +209,6 @@ impl ArgsParseInner for String {
 		let arg = arg_os.into_string ().map_err (|arg_os|
 			ArgsParseError::Invalid (name, arg_os, "Invalid UTF-8".to_owned ())) ?;
 		Ok (arg)
-	}
-
-}
-
-impl ArgsParseInner for bool {
-
-	#[ inline ]
-	fn parse (
-		_name: & 'static str,
-		_args: & mut dyn Iterator <Item = OsString>,
-	) -> Result <Self, ArgsParseError> {
-		Ok (true)
 	}
 
 }

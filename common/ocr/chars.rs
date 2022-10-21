@@ -1,6 +1,8 @@
 pub const fn decode (encoded: u128) -> Option <char> {
 	if encoded.trailing_zeros () >= 60 {
 		decode_six (encoded)
+	} else if encoded.trailing_zeros () >= 40 {
+		decode_eight (encoded)
 	} else if encoded.trailing_zeros () >= 20 {
 		decode_ten (encoded)
 	} else {
@@ -15,13 +17,12 @@ pub const fn decode_ten (encoded: u128) -> Option <char> {
 		0x_7821_0802_0080_2008_0200_841e => 'C',
 		// TODO => 'D',
 		0x_fc20_0802_00f8_2008_0200_803f => 'E',
-		// TODO => 'F',
-		// TODO => 'G',
-		0x_8822_0883_e088_2208_8220_0000 => 'H',
-		0x_e010_0401_0040_1004_0380_0000 => 'I',
+		0x_fc20_0802_00f8_2008_0200_8020 => 'F',
+		0x_7821_0802_0080_2708_4210_8c1d => 'G',
+		0x_8421_0842_10fc_2108_4210_8421 => 'H',
 		0x_1c02_0080_2008_0200_8220_881c => 'J',
-		// TODO => 'K',
-		// TODO => 'L',
+		0x_8422_0902_80c0_300a_0240_8821 => 'K',
+		0x_8020_0802_0080_2008_0200_803f => 'L',
 		// TODO => 'M',
 		// TODO => 'N',
 		// TODO => 'O',
@@ -40,6 +41,14 @@ pub const fn decode_ten (encoded: u128) -> Option <char> {
 	})
 }
 
+pub const fn decode_eight (encoded: u128) -> Option <char> {
+	Some (match encoded >> 40_u32 {
+		0x_8822_0883_e088_2208_8220 => 'H',
+		0x_e010_0401_0040_1004_0380 => 'I',
+		_ => return None,
+	})
+}
+
 pub const fn decode_six (encoded: u128) -> Option <char> {
 	Some (match encoded >> 64_u32 {
 		0x_0060_2409_03c0_9024 => 'A',
@@ -50,7 +59,7 @@ pub const fn decode_six (encoded: u128) -> Option <char> {
 		0x_00f0_200e_0200_8020 => 'F',
 		0x_0060_2408_02c0_901c => 'G',
 		0x_0090_240f_0240_9024 => 'H',
-		// TODO => 'I',
+		0x_00e0_1004_0100_4038 => 'I',
 		0x_0030_0401_0040_9018 => 'J',
 		0x_0090_280c_0280_a024 => 'K',
 		0x_0080_2008_0200_803c => 'L',

@@ -9,7 +9,7 @@ use model::Pixel;
 args_decl! {
 	pub struct RunArgs {
 		input: Option <PathBuf>,
-		verbose: Option <bool>,
+		verbose: bool,
 		loops: Option <usize>,
 	}
 }
@@ -23,7 +23,7 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 	let start_image = Image::new_from (input.pixels, Pixel::Dark);
 	let end_image = logic::image_iter (input.algorithm, start_image)
 		.enumerate ()
-		.inspect (|& (ref steps, ref image)| if args.verbose.unwrap_or (false) {
+		.inspect (|& (ref steps, ref image)| if args.verbose {
 			println! (
 				"\nAfter {steps} steps: {num_pixels} pixels {pixel}\n{image}",
 				num_pixels = image.num_pixels (),

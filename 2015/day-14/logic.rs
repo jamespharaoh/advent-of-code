@@ -7,7 +7,7 @@ pub fn part_one (input: & Input) -> GenResult <u64> {
 	let max_dist =
 		input.deers.iter ()
 			.map (|deer| iter_distance (deer)
-				.nth (input.params.race_time.pan_usize ())
+				.nth (input.params.race_time.pan_usize () - 1)
 				.unwrap ())
 			.max ()
 			.unwrap_or (0);
@@ -20,13 +20,15 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 			.map (iter_distance)
 			.collect ();
 	let mut scores = vec! [0; input.deers.len ()];
+	let mut dists = Vec::new ();
 	for _ in 0 .. input.params.race_time {
-		let (idx, _) = iters.iter_mut ()
-			.map (|iter| iter.next ().unwrap ())
-			.enumerate ()
-			.max_by_key (|& (_, dist)| dist)
-			.unwrap ();
-		scores [idx] += 1;
+		dists.clear ();
+		dists.extend (iters.iter_mut ().map (|iter| iter.next ().unwrap ()));
+		let max_dist = dists.iter ().copied ().max ().unwrap ();
+		for (_, score) in dists.iter ().zip (scores.iter_mut ())
+				.filter (|& (& dist, _)| dist == max_dist) {
+			* score += 1;
+		}
 	}
 	Ok (scores.iter ().copied ().max ().unwrap ())
 }

@@ -6,20 +6,22 @@ use model::GridInner;
 use model::Pos;
 use model::Region;
 
-pub fn part_one (input: & Input) -> GenResult <i64> {
+pub fn part_one (input: & Input) -> GenResult <u32> {
 	if 160 < input.grid.size ().y || 160 < input.grid.size ().x {
 		return Err ("Maximum grid size is 160×160".into ());
 	}
-	let mut count = 0;
+	let mut num_iters = 0;
 	let mut prev_grid = input.grid.clone ();
 	loop {
-		if count == 500 { return Err ("Giving up after 500 iterations".into ()) }
+		if num_iters == input.params.max_iters {
+			return Err ("Giving up after max iterations".into ());
+		}
 		let next_grid = move_both (& prev_grid);
-		count += 1;
+		num_iters += 1;
 		if prev_grid == next_grid { break }
 		prev_grid = next_grid;
 	}
-	Ok (count)
+	Ok (num_iters)
 }
 
 fn move_both (grid: & Grid) -> Grid {

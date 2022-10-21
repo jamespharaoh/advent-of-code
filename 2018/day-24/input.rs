@@ -23,7 +23,7 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Copy, Debug) ]
 	pub struct InputParams {
-		pub max_rounds: u32 = ("MAX_ROUNDS=", 5_000, 1 .. ),
+		pub max_rounds: u32 = ("MAX_ROUNDS=", 6_000, 1 .. ),
 		pub max_boost: u32 = ("MAX_BOOST=", 2_048, 1 .. ),
 	}
 }

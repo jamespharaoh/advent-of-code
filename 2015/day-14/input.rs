@@ -16,6 +16,6 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub race_time: u32 = ("RACE_TIME=", 2503, 1_u32 .. ),
+		pub race_time: u32 = ("RACE_TIME=", 2503, 1 .. ),
 	}
 }

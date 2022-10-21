@@ -88,7 +88,8 @@ pub fn calc_next_states (state_compact: StateCompact) -> ArrayVec <(StateCompact
 			},
 			Move::In (amph, from_hall, to_room) => {
 				if ! sections [to_room.idx ()] { continue }
-				let cost = amph.cost () * (in_cost (to_room) + hall_cost (to_room, from_hall)).pan_i64 ();
+				let cost = amph.cost () * (in_cost (to_room)
+					+ hall_cost (to_room, from_hall)).pan_i64 ();
 				let next_state = state.move_in (from_hall, to_room);
 				return iter::once ((next_state.compact (), cost)).collect ();
 			},
@@ -119,20 +120,13 @@ pub enum Move {
 #[ must_use ]
 pub fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
 	let mut result = ArrayVec::new ();
-	let path_clear = |from: Place, to: Place|
-		state.hall ().iter ().enumerate ()
-			.skip (cmp::min (to.idx (), from.idx ()))
-			.take (usize::abs_diff (from.idx (), to.idx ()) + 1)
-			.map (|(idx, amph)| (Place::for_idx (idx), amph))
-			.filter (|& (hall, _)| hall != from)
-			.all (|(_, amph)| amph.is_none ());
 	let room_entrance = |room: Amph| Place::for_idx (2 + room.idx () * 2);
 	for (idx, amph) in state.hall ().iter ().enumerate ()
 			.filter_map (|(idx, amph)| amph.map (|amph| (idx, amph))) {
 		let to_room = amph;
 		let hall = Place::for_idx (idx);
 		if ! state.room_is_happy (to_room) { continue }
-		if ! path_clear (hall, room_entrance (to_room)) { continue }
+		if ! path_clear (state, hall, room_entrance (to_room)) { continue }
 		result.clear ();
 		result.push (Move::In (amph, hall, to_room));
 		return result;
@@ -146,8 +140,8 @@ pub fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
 		if let Some (& amph) = amphs.last () {
 			let to_room = amph;
 			if state.room_is_happy (from_room) { continue }
-			if state.room_is_happy (to_room) {
-				if ! path_clear (room_entrance (from_room), room_entrance (to_room)) { continue }
+			if state.room_is_happy (to_room)
+					&& path_clear (state, room_entrance (from_room), room_entrance (to_room)) {
 				result.clear ();
 				result.push (Move::Between (amph, from_room, to_room));
 				return result;
@@ -165,12 +159,21 @@ pub fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
 									Place::for_idx (prev_hall.idx () + 1)))
 							.take_while (|& hall| state.get (hall).is_none ()))
 					.filter (|hall| ! hall.entrance ()) {
-				if ! path_clear (room_entrance (from_room), hall) { continue }
+				if ! path_clear (state, room_entrance (from_room), hall) { continue }
 				result.push (Move::Out (amph, from_room, hall));
 			}
 		}
 	}
 	result
+}
+
+fn path_clear (state: & State, from: Place, to: Place) -> bool {
+	state.hall ().iter ().enumerate ()
+		.skip (cmp::min (to.idx (), from.idx ()))
+		.take (usize::abs_diff (from.idx (), to.idx ()) + 1)
+		.map (|(idx, amph)| (Place::for_idx (idx), amph))
+		.filter (|& (hall, _)| hall != from)
+		.all (|(_, amph)| amph.is_none ())
 }
 
 fn check_input (input: & Input) -> GenResult <()> {

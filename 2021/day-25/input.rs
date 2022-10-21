@@ -15,5 +15,6 @@ struct_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
+		pub max_iters: u32 = ("MAX_ITERS=", 1000, 1 .. ),
 	}
 }

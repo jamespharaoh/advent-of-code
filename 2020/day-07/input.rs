@@ -63,7 +63,7 @@ fn parse_colour <'inp> (parser: & mut Parser <'inp>) -> ParseResult <InpStr <'in
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
-		pub max_iters_one: u32 = ("MAX_ITERS_ONE=", 200, 1 .. ),
-		pub max_iters_two: u32 = ("MAX_ITERS_TWO=", 150, 1 .. ),
+		pub max_iters_one: u32 = ("MAX_ITERS_ONE=", 500, 1 .. ),
+		pub max_iters_two: u32 = ("MAX_ITERS_TWO=", 200, 1 .. ),
 	}
 }

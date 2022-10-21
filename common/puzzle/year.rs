@@ -17,6 +17,7 @@ pub struct RunStats {
 args_decl! {
 	pub struct Args {
 		pub input_dir: Option <PathBuf>,
+		pub plain: bool,
 	}
 }
 
@@ -63,10 +64,7 @@ pub fn main (
 }
 
 #[ allow (clippy::missing_inline_in_public_items) ]
-#[ allow (clippy::print_stdout) ]
 pub fn run (puzzles: & [Box <dyn Puzzle>], args: Args) -> GenResult <RunStats> {
-
-	let flush = || io::stdout ().flush ().unwrap ();
 
 	let mut stats = RunStats {
 		num_correct: 0,
@@ -84,139 +82,198 @@ pub fn run (puzzles: & [Box <dyn Puzzle>], args: Args) -> GenResult <RunStats> {
 
 	// load answers
 
-	let answers_path = if let Some (input_dir) = args.input_dir.as_ref () {
-		let mut input_dir = input_dir.clone ();
-		input_dir.push ("answers");
-		input_dir
-	} else {
-		PathBuf::from (format! ("{}/inputs/answers", puzzles [0].year ()))
-	};
-
-	let answers: HashMap <(u8, u8), String> =
-		if answers_path.exists () {
-			BufReader::new (File::open (answers_path) ?)
-				.lines ()
-				.map (move |line| {
-					let line = line ?;
-					let line_parts: Vec <String> =
-						line.split (' ')
-							.map (str::to_string)
-							.collect ();
-					let day: u8 = line_parts [0].parse::<u8> () ?;
-					Ok (
-						line_parts.into_iter ()
-							.skip (1)
-							.enumerate ()
-							.map (move |(idx, val)|
-								((day, idx.pan_u8 ()), val))
-					)
-				})
-				.flatten_ok ()
-				.collect::<GenResult <_>> () ?
-		} else { HashMap::new () };
-
-	let answer_lens =
-		answers.iter ()
-			.fold ([0, 0], |[mut part_0, mut part_1], (& (_day, part), answer)| {
-				if part == 0 { part_0 = cmp::max (part_0, answer.len ()); }
-				if part == 1 { part_1 = cmp::max (part_1, answer.len ()); }
-				[part_0, part_1]
-			});
+	let answers = Answers::load (puzzles [0].year (), & args) ?;
 
 	// iterate puzzles
 
 	for puzzle in puzzles.iter () {
+		run_puzzle (& args, name_len, & answers, & ** puzzle, & mut stats) ?;
+	}
 
-		// load input
+	Ok (stats)
 
-		let input_string = if let Some (input_dir) = args.input_dir.as_ref () {
-			let mut input_path = input_dir.clone ();
-			input_path.push (format! ("day-{:02}", puzzle.day ()));
-			fs::read_to_string (input_path) ?
-		} else {
-			puzzle.load_input () ?
-		};
+}
 
-		let input_lines: Vec <& str> =
-			input_string.trim_end ().split ('\n').collect ();
+#[ allow (clippy::print_stdout) ]
+fn run_puzzle (
+	args: & Args,
+	name_len: usize,
+	answers: & Answers,
+	puzzle: & dyn Puzzle,
+	stats: & mut RunStats,
+) -> GenResult <()> {
 
-		// print day and puzzle name
+	// load input
 
+	let input_string = load_input (args, puzzle) ?;
+
+	let input_lines: Vec <& str> =
+		input_string.trim_end ().split ('\n').collect ();
+
+	// print day and puzzle name
+
+	if args.plain {
+		print! ("{:02}", puzzle.day ());
+	} else {
 		print! (
 			"{day:02} {name:len$}",
 			day = puzzle.day (),
 			name = puzzle.name (),
 			len = name_len + 2);
+	}
 
-		// start timer
+	// start timer
 
-		let start_time = time::Instant::now ();
+	let start_time = time::Instant::now ();
 
-		// iterate over parts
+	// iterate over parts
 
-		let mut errors = Vec::new ();
-		for (part_idx, part_name) in [ "One", "Two" ].into_iter ().enumerate () {
+	let mut errors = Vec::new ();
+	for (part_idx, part_name) in [ "One", "Two" ].into_iter ().enumerate () {
 
-			// handle missing part
+		// handle missing part
 
-			if puzzle.num_parts () < part_idx + 1 {
-				print! ("{:len$} ", "", len = answer_lens [part_idx] + 6);
-				continue;
+		if puzzle.num_parts () < part_idx + 1 {
+			if ! args.plain {
+				print! ("{:len$} ", "", len = answers.lens [part_idx] + 6);
 			}
-
-			// print part name
-
-			print! ("{}: ", part_name);
-
-			// calculate result
-
-			flush ();
-
-			let result =
-				if part_idx == 0 { puzzle.part_one (& input_lines) ? }
-				else { puzzle.part_two (& input_lines) ? };
-
-			// check against answers
-
-			if let Some (answer) = answers.get (& (puzzle.day (), part_idx.pan_u8 ())) {
-				if & result == answer {
-					stats.num_correct += 1;
-				} else if & result != answer {
-					stats.num_incorrect += 1;
-					errors.push (format! (
-						"Part {part}: Expected {answer:?}, but calculated {result:?}",
-						part = part_idx + 1,
-						answer = answer,
-						result = result));
-				} else {
-					// no answer
-				}
-			} else { stats.num_unknown += 1; }
-
-			// print result
-
-			print! ("{result:len$} ", len = answer_lens [part_idx] + 1);
-
+			continue;
 		}
 
-		// print duration
+		// print part name
 
-		let end_time = time::Instant::now ();
-		let duration = end_time - start_time;
+		if ! args.plain {
+			print! ("{}: ", part_name);
+		}
 
-		print! (
-			"Time: {millis:>4}.{micros:02}ms\n",
-			millis = duration.as_millis (),
-			micros = (duration.as_micros () % 1000) / 10);
+		// calculate result
 
-		// print errors
+		io::stdout ().flush ().unwrap ();
 
-		for error in errors {
-			print! ("  {}\n", error);
+		let result =
+			if part_idx == 0 { puzzle.part_one (& input_lines) ? }
+			else { puzzle.part_two (& input_lines) ? };
+
+		// check against answers
+
+		answers.check (puzzle, part_idx.pan_u8 (), & result, stats, & mut errors);
+
+		// print result
+
+		if args.plain {
+			print! (" {result}");
+		} else {
+			print! ("{result:len$} ", len = answers.lens [part_idx] + 1);
 		}
 
 	}
 
-	Ok (stats)
+	// print duration
+
+	let end_time = time::Instant::now ();
+	let duration = end_time - start_time;
+
+	if args.plain {
+		print! ("\n");
+	} else {
+		print! (
+			"Time: {millis:>4}.{micros:02}ms\n",
+			millis = duration.as_millis (),
+			micros = (duration.as_micros () % 1000) / 10);
+	}
+
+	// print errors
+
+	for error in errors {
+		print! ("  {}\n", error);
+	}
+
+	Ok (())
+
+}
+
+fn load_input (args: & Args, puzzle: & dyn Puzzle) -> GenResult <String> {
+	if let Some (input_dir) = args.input_dir.as_ref () {
+		let mut input_path = input_dir.clone ();
+		input_path.push (format! ("day-{:02}", puzzle.day ()));
+		Ok (fs::read_to_string (input_path) ?)
+	} else {
+		Ok (puzzle.load_input () ?)
+	}
+}
+
+struct Answers {
+	answers: HashMap <(u8, u8), String>,
+	lens: [usize; 2],
+}
+
+impl Answers {
+
+	fn load (year: u16, args: & Args) -> GenResult <Self> {
+
+		let answers_path = if let Some (input_dir) = args.input_dir.as_ref () {
+			let mut input_dir = input_dir.clone ();
+			input_dir.push ("answers");
+			input_dir
+		} else {
+			PathBuf::from (format! ("{year}/inputs/answers"))
+		};
+
+		let answers: HashMap <(u8, u8), String> =
+			if answers_path.exists () {
+				BufReader::new (File::open (answers_path) ?)
+					.lines ()
+					.map (move |line| {
+						let line = line ?;
+						let line_parts: Vec <String> =
+							line.split (' ')
+								.map (str::to_string)
+								.collect ();
+						let day: u8 = line_parts [0].parse::<u8> () ?;
+						Ok (
+							line_parts.into_iter ()
+								.skip (1)
+								.enumerate ()
+								.map (move |(idx, val)|
+									((day, idx.pan_u8 ()), val))
+						)
+					})
+					.flatten_ok ()
+					.collect::<GenResult <_>> () ?
+			} else { HashMap::new () };
+
+		let lens =
+			answers.iter ()
+				.fold ([0, 0], |[mut part_0, mut part_1], (& (_day, part), answer)| {
+					if part == 0 { part_0 = cmp::max (part_0, answer.len ()); }
+					if part == 1 { part_1 = cmp::max (part_1, answer.len ()); }
+					[ part_0, part_1 ]
+				});
+
+		Ok (Self { answers, lens })
+
+	}
+
+	fn check (
+		& self,
+		puzzle: & dyn Puzzle,
+		part_idx: u8,
+		result: & str,
+		stats: & mut RunStats,
+		errors: & mut Vec <String>,
+	) {
+		if let Some (answer) = self.answers.get (& (puzzle.day (), part_idx.pan_u8 ())) {
+			if result == answer {
+				stats.num_correct += 1;
+			} else {
+				stats.num_incorrect += 1;
+				errors.push (format! (
+					"Part {part}: Expected {answer:?}, but calculated {result:?}",
+					part = part_idx + 1,
+					answer = answer,
+				result = result));
+			}
+		} else { stats.num_unknown += 1; }
+	}
 
 }
