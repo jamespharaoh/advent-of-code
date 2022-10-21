@@ -26,5 +26,6 @@ enum_decl_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
+		pub num_reps_two: u32 = ("NUM_REPS_TWO=", 200, 1 .. ),
 	}
 }

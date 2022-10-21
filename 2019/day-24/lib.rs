@@ -8,6 +8,7 @@ use aoc_common::*;
 use aoc_grid::prelude::*;
 use aoc_pos as pos;
 
+mod examples;
 pub mod input;
 pub mod logic;
 

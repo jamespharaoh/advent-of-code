@@ -71,8 +71,8 @@ fn get_start_grid (input: & Input) -> GenResult <Grid> {
 			Pos::new (cmp::min (min.nw, pos.nw), cmp::min (min.e, pos.e)),
 			Pos::new (cmp::max (max.nw, pos.nw), cmp::max (max.e, pos.e)),
 		));
-	if 30 < max.nw - min.nw || 30 < max.e - min.e {
-		return Err ("Max initial grid size is 30×30".into ());
+	if 35 < max.nw - min.nw || 35 < max.e - min.e {
+		return Err ("Max initial grid size is 35×35".into ());
 	}
 	let mut grid = Grid::new_range (min, max + Pos::new (1, 1)) ?;
 	for tile_pos in tile_posns {

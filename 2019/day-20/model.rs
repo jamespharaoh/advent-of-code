@@ -1,6 +1,6 @@
 use super::*;
 
-pub type Coord = i8;
+pub type Coord = i16;
 pub type Dir = pos::Dir2d;
 pub type Grid = GridBuf <Vec <Tile>, Pos, 2>;
 pub type Pos = pos::PosYX <Coord>;
