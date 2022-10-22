@@ -20,7 +20,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 
 pub fn part_two (input: & Input) -> GenResult <String> {
 	let grid = calc_result (input, Colour::White) ?;
-	let result = ocr::read_dots (
+	let result = ocr::read_auto (
 		grid.iter ()
 			.filter (|& (_, colour)| matches! (colour, Colour::White))
 			.map (|(pos, _)| (pos.y, pos.x))) ?;

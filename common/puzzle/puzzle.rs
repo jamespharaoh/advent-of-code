@@ -109,8 +109,8 @@ pub trait Puzzle {
 		puzzle_invoke_real (self.dyn_puzzle (), args)
 	}
 
-	fn find_input_or_arg (& self, arg: Option <PathBuf>) -> PathBuf {
-		arg.unwrap_or_else (|| self.find_input_or_default ())
+	fn find_input_or_arg (& self, arg: & Option <PathBuf>) -> PathBuf {
+		arg.as_ref ().map_or_else (|| self.find_input_or_default (), PathBuf::clone)
 	}
 
 	fn find_input_or_default (& self) -> PathBuf {

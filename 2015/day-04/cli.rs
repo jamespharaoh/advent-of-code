@@ -21,7 +21,7 @@ args_decl! {
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_path = puzzle_metadata ().find_input_or_arg (args.input.clone ());
+	let input_path = puzzle_metadata ().find_input_or_arg (& args.input);
 	let input_string = fs::read_to_string (& input_path) ?;
 	let input_lines: Vec <_> = input_string.trim ().split ('\n').collect ();
 	println! ("Using input file: {}", input_path.display ());

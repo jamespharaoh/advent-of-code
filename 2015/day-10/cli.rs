@@ -21,8 +21,9 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 	let mut state = if let Some (state) = args.state.as_ref () {
 		State::parse (state) ?
 	} else {
+		let input_path = puzzle_metadata ().find_input_or_arg (& args.input);
 		State::parse (
-			fs::read_to_string (puzzle_metadata ().find_input_or_arg (args.input.clone ())) ?
+			fs::read_to_string (input_path) ?
 				.trim ()
 				.split ('\n')
 				.next ().unwrap ()

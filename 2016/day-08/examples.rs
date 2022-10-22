@@ -3,22 +3,26 @@
 use super::*;
 
 const EXAMPLE: & [& str] = & [
-	"WIDTH=7",
-	"HEIGHT=3",
-	"rect 3x2",
-	"rotate column x=1 by 1",
-	"rotate row y=0 by 4",
-	"rotate column x=1 by 1",
+	"WIDTH=5",
+	"HEIGHT=6",
+	"rect 1x6",
+	"rotate row y=5 by 1",
+	"rotate column x=0 by 1",
+	"rotate row y=5 by 1",
+	"rotate column x=0 by 1",
+	"rotate row y=5 by 1",
+	"rotate column x=0 by 1",
+	"rect 1x3",
 ];
 
 #[ test ]
 fn part_one () {
 	let puzzle = puzzle_metadata ();
-	assert_eq_ok! ("6", puzzle.part_one (EXAMPLE));
+	assert_eq_ok! ("9", puzzle.part_one (EXAMPLE));
 }
 
 #[ test ]
 fn part_two () {
 	let puzzle = puzzle_metadata ();
-	assert_err! ("Unrecognised character: 0x402804 << 96 in position 1", puzzle.part_two (EXAMPLE));
+	assert_eq_ok! ("L", puzzle.part_two (EXAMPLE));
 }

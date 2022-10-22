@@ -7,7 +7,7 @@ use model::Point;
 
 pub fn part_one (input: & Input) -> GenResult <String> {
 	let (points, _) = find_smallest (input) ?;
-	let message = ocr::read_dots (points.iter ()
+	let message = ocr::read_auto (points.iter ()
 		.map (|& point| (point.pos.y, point.pos.x))) ?;
 	Ok (message)
 }

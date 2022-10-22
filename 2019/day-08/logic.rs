@@ -47,7 +47,7 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 			});
 	let mut result = String::new ();
 	for ch_idx in 0 .. 5 {
-		let ch_str = ocr::read_dots (
+		let ch_str = ocr::read_auto (
 			image.iter ().copied ().enumerate ()
 				.filter_map (|(idx, val)| {
 					let row = idx / 25;

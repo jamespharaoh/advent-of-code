@@ -15,8 +15,8 @@ args_decl! {
 
 #[ allow (clippy::print_stdout) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (
-		puzzle_metadata ().find_input_or_arg (args.input)) ?;
+	let input_path = puzzle_metadata ().find_input_or_arg (& args.input);
+	let input_string = fs::read_to_string (input_path) ?;
 	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let dots = logic::fold_multi (& input.folds, input.dots.iter ().copied ());

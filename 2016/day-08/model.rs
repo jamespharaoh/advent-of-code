@@ -1,6 +1,7 @@
 use super::*;
 
 pub type Coord = u32;
+pub type Grid = GridBuf <Vec <bool>, Pos, 2>;
 pub type Pos = pos::PosRowCol <Coord>;
 
 enum_decl_parser_display! {
