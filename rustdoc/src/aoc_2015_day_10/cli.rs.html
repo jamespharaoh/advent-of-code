@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/cli.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2015/day-10/cli.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2015_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2015_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -62,39 +62,21 @@
 <span id="62">62</span>
 <span id="63">63</span>
 <span id="64">64</span>
-<span id="65">65</span>
-<span id="66">66</span>
-<span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
-<span id="71">71</span>
-<span id="72">72</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+<span class="kw">use </span>std::path::PathBuf;
 
 <span class="kw">use </span>model::State;
 
-<span class="attribute">#[ derive (Debug, clap::Parser) ]
-</span><span class="kw">pub struct </span>RunArgs {
-
-	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;inputs/day-10&quot;</span>) ]
-	</span>input: String,
-
-	<span class="attribute">#[ clap (conflicts_with = <span class="string">&quot;input&quot;</span>) ]
-	</span>state: <span class="prelude-ty">Option </span>&lt;String&gt;,
-
-	<span class="attribute">#[ clap (long) ]
-	</span>verbose: bool,
-
-	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;15&quot;</span>) ]
-	</span>loops: u32,
-
-	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;0&quot;</span>) ]
-	</span>keep_end: usize,
-
-	<span class="attribute">#[ clap (long, default_value = <span class="string">&quot;0&quot;</span>) ]
-	</span>keep_start: usize,
-
+<span class="macro">args_decl! </span>{
+	<span class="kw">pub struct </span>RunArgs {
+		input: <span class="prelude-ty">Option </span>&lt;PathBuf&gt;,
+		state: <span class="prelude-ty">Option </span>&lt;String&gt;,
+		verbose: bool,
+		loops: <span class="prelude-ty">Option </span>&lt;u32&gt;,
+		keep_end: <span class="prelude-ty">Option </span>&lt;usize&gt;,
+		keep_start: <span class="prelude-ty">Option </span>&lt;usize&gt;,
+	}
 }
 
 <span class="attribute">#[ allow (clippy::needless_pass_by_value) ]
@@ -103,8 +85,9 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>state = <span class="kw">if let </span><span class="prelude-val">Some </span>(state) = args.state.as_ref () {
 		State::parse (state) <span class="question-mark">?
 	</span>} <span class="kw">else </span>{
+		<span class="kw">let </span>input_path = puzzle_metadata ().find_input_or_arg (&amp; args.input);
 		State::parse (
-			fs::read_to_string (&amp; args.input) <span class="question-mark">?
+			fs::read_to_string (input_path) <span class="question-mark">?
 				</span>.trim ()
 				.split (<span class="string">&#39;\n&#39;</span>)
 				.next ().unwrap ()
@@ -112,21 +95,22 @@
 	</span>};
 	<span class="kw">for </span>idx <span class="kw">in </span><span class="number">0 </span>.. {
 		<span class="macro">println! </span>(<span class="string">&quot;{:2} {:4} {}&quot;</span>, idx, state.len (), state);
-		<span class="kw">if </span>idx == args.loops { <span class="kw">break </span>}
+		<span class="kw">if </span>idx == args.loops.unwrap_or (<span class="number">15</span>) { <span class="kw">break </span>}
 		state = logic::one_round (&amp; state);
-		<span class="kw">if </span>(args.keep_start &gt; <span class="number">0 </span>|| args.keep_end &gt; <span class="number">0</span>)
-				&amp;&amp; state.len () &gt; (args.keep_start + args.keep_end) {
+		<span class="kw">if </span>(args.keep_start.unwrap_or (<span class="number">0</span>) &gt; <span class="number">0 </span>|| args.keep_end.unwrap_or (<span class="number">0</span>) &gt; <span class="number">0</span>)
+				&amp;&amp; state.len () &gt; (args.keep_start.unwrap_or (<span class="number">0</span>) + args.keep_end.unwrap_or (<span class="number">0</span>)) {
 			state =
-				state [ .. args.keep_start].iter ().copied ()
-					.chain (state [state.len () - args.keep_end .. ].iter ().copied ())
+				state [ .. args.keep_start.unwrap_or (<span class="number">0</span>)].iter ().copied ()
+					.chain (state [state.len () - args.keep_end.unwrap_or (<span class="number">0</span>) .. ].iter ().copied ())
 					.collect ();
 		}
 	}
 	<span class="prelude-val">Ok </span>(())
 }
 
-<span class="attribute">#[ derive (Debug, clap::Parser) ]
-</span><span class="kw">pub struct </span>InternalsArgs;
+<span class="macro">args_decl! </span>{
+	<span class="kw">pub struct </span>InternalsArgs {}
+}
 
 <span class="attribute">#[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]
@@ -143,4 +127,4 @@
 	<span class="prelude-val">Ok </span>(())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

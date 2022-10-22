@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-10/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-10/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_10/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_day_10/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -64,6 +64,8 @@
 <span id="64">64</span>
 <span id="65">65</span>
 <span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -72,30 +74,18 @@
 <span class="kw">use </span>model::Point;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
-	<span class="kw">let </span>(message, <span class="kw">_</span>) = calc_result (input) <span class="question-mark">?</span>;
+	<span class="kw">let </span>(points, <span class="kw">_</span>) = find_smallest (input) <span class="question-mark">?</span>;
+	<span class="kw">let </span>message = ocr::read_auto (points.iter ()
+		.map (|&amp; point| (point.pos.y, point.pos.x))) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(message)
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
-	<span class="kw">let </span>(<span class="kw">_</span>, num_iters) = calc_result (input) <span class="question-mark">?</span>;
+	<span class="kw">let </span>(<span class="kw">_</span>, num_iters) = find_smallest (input) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(num_iters)
 }
 
-<span class="kw">fn </span>calc_result (input: &amp; Input) -&gt; GenResult &lt;(String, u32)&gt; {
-	<span class="kw">fn </span>calc_range (points: &amp; [Point]) -&gt; NumResult &lt;(Coord, Coord, Coord, Coord)&gt; {
-		points.iter ().copied ().fold (
-			<span class="prelude-val">Ok </span>((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
-			|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| <span class="prelude-val">Ok </span>((
-				cmp::min (min_y, point.pos.y),
-				cmp::max (max_y, <span class="macro">chk! </span>(point.pos.y + Coord::ONE) <span class="question-mark">?</span>),
-				cmp::min (min_x, point.pos.x),
-				cmp::max (max_x, <span class="macro">chk! </span>(point.pos.x + Coord::ONE) <span class="question-mark">?</span>),
-			))))
-	}
-	<span class="kw">fn </span>calc_size (points: &amp; [Point]) -&gt; NumResult &lt;(Coord, Coord)&gt; {
-		<span class="kw">let </span>(min_y, max_y, min_x, max_x) = calc_range (points) <span class="question-mark">?</span>;
-		<span class="prelude-val">Ok </span>((<span class="macro">chk! </span>(max_y - min_y) <span class="question-mark">?</span>, <span class="macro">chk! </span>(max_x - min_x) <span class="question-mark">?</span>))
-	}
+<span class="kw">pub fn </span>find_smallest (input: &amp; Input) -&gt; GenResult &lt;(Vec &lt;Point&gt;, u32)&gt; {
 	<span class="kw">let </span><span class="kw-2">mut </span>points = input.points.clone ();
 	<span class="kw">let </span><span class="kw-2">mut </span>points_temp = Vec::new ();
 	<span class="kw">let </span>(<span class="kw-2">mut </span>size_y, <span class="kw-2">mut </span>size_x) = calc_size (&amp; points) <span class="question-mark">?</span>;
@@ -126,9 +116,23 @@
 		(size_y, size_x) = (next_y, next_x);
 		num_iters = <span class="macro">chk! </span>(num_iters + step) <span class="question-mark">?</span>;
 	}
-	<span class="kw">let </span>message = ocr::read_dots (points.iter ()
-		.map (|&amp; point| (point.pos.y, point.pos.x))) <span class="question-mark">?</span>;
-	<span class="prelude-val">Ok </span>((message, num_iters))
+	<span class="prelude-val">Ok </span>((points, num_iters))
+}
+
+<span class="kw">fn </span>calc_range (points: &amp; [Point]) -&gt; NumResult &lt;(Coord, Coord, Coord, Coord)&gt; {
+	points.iter ().copied ().fold (
+		<span class="prelude-val">Ok </span>((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
+		|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| <span class="prelude-val">Ok </span>((
+			cmp::min (min_y, point.pos.y),
+			cmp::max (max_y, <span class="macro">chk! </span>(point.pos.y + Coord::ONE) <span class="question-mark">?</span>),
+			cmp::min (min_x, point.pos.x),
+			cmp::max (max_x, <span class="macro">chk! </span>(point.pos.x + Coord::ONE) <span class="question-mark">?</span>),
+		))))
+}
+
+<span class="kw">fn </span>calc_size (points: &amp; [Point]) -&gt; NumResult &lt;(Coord, Coord)&gt; {
+	<span class="kw">let </span>(min_y, max_y, min_x, max_x) = calc_range (points) <span class="question-mark">?</span>;
+	<span class="prelude-val">Ok </span>((<span class="macro">chk! </span>(max_y - min_y) <span class="question-mark">?</span>, <span class="macro">chk! </span>(max_x - min_x) <span class="question-mark">?</span>))
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2020/day-22/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2020_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2020_day_22/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2020/day-22/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2020_day_22/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2020_day_22/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -112,37 +112,72 @@
 <span id="112">112</span>
 <span id="113">113</span>
 <span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
+<span class="kw">use </span>input::InputParams;
 <span class="kw">use </span>model::Deck;
+<span class="kw">use </span>model::DecksState;
 <span class="kw">use </span>model::Game;
 <span class="kw">use </span>model::Pool;
-<span class="kw">use </span>model::State;
 <span class="kw">use </span>model::Winner;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	check_input (input) <span class="question-mark">?</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>deck_1: Deck = input.player_1.iter ().copied ().collect ();
-	<span class="kw">let </span><span class="kw-2">mut </span>deck_2: Deck = input.player_2.iter ().copied ().collect ();
-	<span class="kw">let </span><span class="kw-2">mut </span>seen = HashSet::new ();
-	<span class="kw">while </span>! deck_1.is_empty () &amp;&amp; ! deck_2.is_empty () {
-		<span class="kw">if </span>! seen.insert (State::new (&amp; deck_1, &amp; deck_2)) {
-			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Game is looping&quot;</span>.into ());
+	<span class="kw">let </span><span class="kw-2">mut </span>game = Game::new_input (input);
+	<span class="kw">let </span>winner = <span class="kw">loop </span>{
+		<span class="kw">let </span>decks_state = game.decks_state ();
+		<span class="kw">if </span>! game.seen.insert (decks_state) {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Infinite loop&quot;</span>.into ());
 		}
-		<span class="kw">let </span>card_1 = deck_1.pop_front ().unwrap ();
-		<span class="kw">let </span>card_2 = deck_2.pop_front ().unwrap ();
-		<span class="kw">if </span>card_1 &lt; card_2 {
-			deck_2.push_back (card_2);
-			deck_2.push_back (card_1);
-		} <span class="kw">else </span>{
-			deck_1.push_back (card_1);
-			deck_1.push_back (card_2);
+		<span class="kw">if let </span><span class="prelude-val">Some </span>(winner) = game.draw_cards ().err () {
+			<span class="kw">break match </span>winner {
+				Winner::One =&gt; game.deck_1,
+				Winner::Two =&gt; game.deck_2,
+			}
 		}
-	}
-	<span class="kw">let </span>winner = <span class="kw">if </span>deck_1.is_empty () { deck_2 } <span class="kw">else </span>{ deck_1 };
+		game.replace_cards (
+			<span class="kw">if </span>game.card_1 &lt; game.card_2 { Winner::Two }
+			<span class="kw">else </span>{ Winner::One });
+	};
 	<span class="prelude-val">Ok </span>(
 		winner.iter ().rev ().enumerate ()
 			.map (|(idx, card)| (idx.pan_u32 () + <span class="number">1</span>) * card.pan_u32 ())
@@ -152,64 +187,101 @@
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	check_input (input) <span class="question-mark">?</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>pool = Pool::new ();
-	<span class="kw">let </span><span class="kw-2">mut </span>stack: Vec &lt;Game&gt; = Vec::new ();
-	<span class="kw">let </span><span class="kw-2">mut </span>game = Game::new (&amp; <span class="kw-2">mut </span>pool, input.player_1.iter (), input.player_2.iter ());
-	<span class="kw">let </span><span class="kw-2">mut </span>games = <span class="number">0_u32</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>rounds = <span class="number">0_u32</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>cache: HashMap &lt;State, Winner&gt; = HashMap::new ();
-	<span class="kw">let </span>winner = <span class="lifetime">&#39;OUTER</span>: <span class="kw">loop </span>{
-		<span class="kw">if </span>games == <span class="number">50_000 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max games&quot;</span>.into ()) }
-		games += <span class="number">1</span>;
-		<span class="kw">let </span>winner = <span class="kw">loop </span>{
-			<span class="kw">if </span>rounds == <span class="number">2_000_000 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max rounds&quot;</span>.into ()) }
-			rounds += <span class="number">1</span>;
-			<span class="kw">let </span>state = State::new (&amp; game.deck_1, &amp; game.deck_2);
-			<span class="kw">if let </span><span class="prelude-val">Some </span>(&amp; winner) = cache.get (&amp; state) { <span class="kw">break </span>winner }
-			<span class="kw">if </span>! game.seen.insert (state) { <span class="kw">break </span>Winner::One }
-			game.card_1 = <span class="macro">some_or! </span>(game.deck_1.pop_front (), <span class="kw">break </span>Winner::Two);
-			game.card_2 = <span class="macro">some_or! </span>(game.deck_2.pop_front (), <span class="kw">break </span>Winner::One);
-			<span class="kw">if </span>game.card_1.pan_usize () &lt;= game.deck_1.len ()
-					&amp;&amp; game.card_2.pan_usize () &lt;= game.deck_2.len () {
-				<span class="kw">let </span>new_game = Game::new (&amp; <span class="kw-2">mut </span>pool,
-					game.deck_1.iter ().take (game.card_1.pan_usize ()),
-					game.deck_2.iter ().take (game.card_2.pan_usize ()));
-				stack.push (game);
-				game = new_game;
-				<span class="kw">continue </span><span class="lifetime">&#39;OUTER</span>;
-			}
-			<span class="kw">if </span>game.card_1 &lt; game.card_2 {
-				game.deck_2.push_back (game.card_2);
-				game.deck_2.push_back (game.card_1);
-			} <span class="kw">else </span>{
-				game.deck_1.push_back (game.card_1);
-				game.deck_1.push_back (game.card_2);
-			}
-		};
-		cache.insert (game.start_state, winner);
-		<span class="kw">let </span>prev_game = <span class="macro">some_or! </span>(stack.pop (), <span class="kw">break </span>winner);
-		game.free (&amp; <span class="kw-2">mut </span>pool);
-		game = prev_game;
-		<span class="kw">match </span>winner {
-			Winner::One =&gt; {
-				game.deck_1.push_back (game.card_1);
-				game.deck_1.push_back (game.card_2);
-			},
-			Winner::Two =&gt; {
-				game.deck_2.push_back (game.card_2);
-				game.deck_2.push_back (game.card_1);
-			},
-		}
-	};
-	<span class="kw">let </span>winner = <span class="kw">match </span>winner {
-		Winner::One =&gt; game.deck_1,
-		Winner::Two =&gt; game.deck_2,
-	};
+	<span class="kw">let </span>winner = play_recursive (input) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(
 		winner.iter ().rev ().enumerate ()
-			.map (|(idx, card)| (idx.pan_u32 () + <span class="number">1</span>) * card.pan_u32 ())
-			.try_fold (<span class="number">0_u32</span>, |sum, item| <span class="macro">chk! </span>(sum + item)) <span class="question-mark">?
+			.map (|(idx, card)| <span class="macro">chk! </span>((idx.pan_u32 () + <span class="number">1_u32</span>) * card.pan_u32 ()))
+			.try_fold (<span class="number">0_u32</span>, |sum, item| <span class="macro">chk! </span>(sum + item <span class="question-mark">?</span>)) <span class="question-mark">?
 	</span>)
+}
+
+<span class="kw">struct </span>RecursiveGame &lt;<span class="lifetime">&#39;dat</span>&gt; {
+	params: &amp; <span class="lifetime">&#39;dat </span>InputParams,
+	num_games: u32,
+	num_rounds: u32,
+	pool: Pool,
+	cache: HashMap &lt;DecksState, Winner&gt;,
+	stack: Vec &lt;Game&gt;,
+}
+
+<span class="kw">fn </span>play_recursive (input: &amp; Input) -&gt; GenResult &lt;Deck&gt; {
+	<span class="kw">let </span><span class="kw-2">mut </span>rec_game = RecursiveGame {
+		params: &amp; input.params,
+		num_games: <span class="number">1</span>,
+		num_rounds: <span class="number">0</span>,
+		pool: Pool::new (),
+		cache: HashMap::new (),
+		stack: Vec::new (),
+	};
+	<span class="kw">let </span><span class="kw-2">mut </span>game = Game::new_input (input);
+	<span class="prelude-val">Ok </span>(<span class="kw">match </span>rec_game.play_real (&amp; <span class="kw-2">mut </span>game) <span class="question-mark">? </span>{
+		Winner::One =&gt; game.deck_1,
+		Winner::Two =&gt; game.deck_2,
+	})
+}
+
+<span class="kw">impl </span>&lt;<span class="lifetime">&#39;dat</span>&gt; RecursiveGame &lt;<span class="lifetime">&#39;dat</span>&gt; {
+
+	<span class="kw">fn </span>play_real (&amp; <span class="kw-2">mut </span><span class="self">self</span>, game: &amp; <span class="kw-2">mut </span>Game) -&gt; GenResult &lt;Winner&gt; {
+		<span class="kw">loop </span>{
+			<span class="self">self</span>.inc_num_rounds () <span class="question-mark">?</span>;
+
+			<span class="kw">let </span>decks_state = game.decks_state ();
+			<span class="kw">if let </span><span class="prelude-val">Some </span>(winner) = <span class="prelude-val">None
+					</span>.or_else (|| <span class="self">self</span>.cache.get (&amp; decks_state).copied ())
+					.or_else (|| (! game.seen.insert (decks_state)).then_some (Winner::One))
+					.or_else (|| game.draw_cards ().err ()) {
+
+				<span class="comment">// game has been won, unrecurse
+
+				</span><span class="self">self</span>.cache.insert (game.start_state, winner);
+				<span class="kw">let </span>prev_game = <span class="macro">some_or! </span>(<span class="self">self</span>.stack.pop (), <span class="kw">return </span><span class="prelude-val">Ok </span>(winner));
+				mem::replace (game, prev_game).free (&amp; <span class="kw-2">mut </span><span class="self">self</span>.pool);
+				game.replace_cards (winner);
+
+			} <span class="kw">else if </span>game.deck_1.len () &lt; game.card_1.pan_usize ()
+					|| game.deck_2.len () &lt; game.card_2.pan_usize () {
+
+				<span class="comment">// not enough cards to recurse, select winner based on value
+
+				</span>game.replace_cards (
+					<span class="kw">if </span>game.card_1 &lt; game.card_2 { Winner::Two }
+					<span class="kw">else </span>{ Winner::One });
+
+			} <span class="kw">else </span>{
+
+				<span class="comment">// enough cards to recurse, start a new recursive game
+
+				</span><span class="self">self</span>.inc_num_games () <span class="question-mark">?</span>;
+
+				<span class="self">self</span>.stack.push (mem::replace (game, Game::new (
+					&amp; <span class="kw-2">mut </span><span class="self">self</span>.pool,
+					game.deck_1.iter ().take (game.card_1.pan_usize ()),
+					game.deck_2.iter ().take (game.card_2.pan_usize ()))));
+
+			}
+
+		}
+	}
+
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>inc_num_rounds (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; GenResult &lt;()&gt; {
+		<span class="kw">if </span><span class="self">self</span>.num_rounds == <span class="self">self</span>.params.max_rounds {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max rounds&quot;</span>.into ());
+		}
+		<span class="self">self</span>.num_rounds += <span class="number">1</span>;
+		<span class="prelude-val">Ok </span>(())
+	}
+
+	<span class="attribute">#[ inline ]
+	</span><span class="kw">fn </span>inc_num_games (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; GenResult &lt;()&gt; {
+		<span class="kw">if </span><span class="self">self</span>.num_games == <span class="self">self</span>.params.max_games {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max games&quot;</span>.into ());
+		}
+		<span class="self">self</span>.num_games += <span class="number">1</span>;
+		<span class="prelude-val">Ok </span>(())
+	}
+
 }
 
 <span class="kw">fn </span>check_input (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
@@ -227,4 +299,4 @@
 	<span class="prelude-val">Ok </span>(())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

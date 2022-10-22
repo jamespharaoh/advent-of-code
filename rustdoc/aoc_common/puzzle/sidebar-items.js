@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":[["run_year",""],["run_year_and_exit",""]],"struct":[["PuzzleCommand",""],["RunStats",""]],"trait":[["Puzzle",""]]};

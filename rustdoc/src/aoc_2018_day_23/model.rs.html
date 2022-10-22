@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-23/model.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-23/model.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>model.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -110,6 +110,41 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = i32;
@@ -150,21 +185,44 @@
 	<span class="attribute">#[ must_use ]
 	</span><span class="kw">pub fn </span>overlap (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;<span class="self">Self</span>&gt; {
 		<span class="prelude-val">Some </span>(<span class="self">Self </span>{
-			ppp: <span class="macro">some_or! </span>(<span class="self">self</span>.ppp.overlap (other.ppp), <span class="kw">return </span><span class="prelude-val">None</span>),
-			pnn: <span class="macro">some_or! </span>(<span class="self">self</span>.pnn.overlap (other.pnn), <span class="kw">return </span><span class="prelude-val">None</span>),
-			npn: <span class="macro">some_or! </span>(<span class="self">self</span>.npn.overlap (other.npn), <span class="kw">return </span><span class="prelude-val">None</span>),
-			nnp: <span class="macro">some_or! </span>(<span class="self">self</span>.nnp.overlap (other.nnp), <span class="kw">return </span><span class="prelude-val">None</span>),
+			ppp: <span class="self">self</span>.ppp.overlap (other.ppp) <span class="question-mark">?</span>,
+			pnn: <span class="self">self</span>.pnn.overlap (other.pnn) <span class="question-mark">?</span>,
+			npn: <span class="self">self</span>.npn.overlap (other.npn) <span class="question-mark">?</span>,
+			nnp: <span class="self">self</span>.nnp.overlap (other.nnp) <span class="question-mark">?</span>,
 		})
 	}
 
-	<span class="attribute">#[ must_use ]
-	</span><span class="kw">pub fn </span>dist (<span class="self">self</span>) -&gt; Coord {
-		[
-			<span class="self">self</span>.ppp.dist (),
-			<span class="self">self</span>.pnn.dist (),
-			<span class="self">self</span>.npn.dist (),
-			<span class="self">self</span>.nnp.dist (),
-		].iter ().copied ().max ().unwrap ()
+	<span class="kw">pub fn </span>reduce (<span class="self">self</span>) -&gt; NumResult &lt;<span class="prelude-ty">Option </span>&lt;<span class="self">Self</span>&gt;&gt; {
+		<span class="kw">let </span><span class="self">Self </span>{ <span class="kw-2">mut </span>ppp, <span class="kw-2">mut </span>pnn, <span class="kw-2">mut </span>npn, <span class="kw-2">mut </span>nnp } = <span class="self">self</span>;
+		<span class="kw">loop </span>{
+			<span class="kw">let </span>prev = <span class="self">Self </span>{ ppp, pnn, npn, nnp };
+			ppp = <span class="macro">some_or! </span>(<span class="self">Self</span>::reduce_one (ppp, [ pnn, npn, nnp ]) <span class="question-mark">?</span>, <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>));
+			pnn = <span class="macro">some_or! </span>(<span class="self">Self</span>::reduce_one (pnn, [ ppp, npn, nnp ]) <span class="question-mark">?</span>, <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>));
+			npn = <span class="macro">some_or! </span>(<span class="self">Self</span>::reduce_one (npn, [ pnn, ppp, nnp ]) <span class="question-mark">?</span>, <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>));
+			nnp = <span class="macro">some_or! </span>(<span class="self">Self</span>::reduce_one (nnp, [ pnn, npn, ppp ]) <span class="question-mark">?</span>, <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>));
+			<span class="kw">let </span>(even, odd) = [ ppp, pnn, npn, nnp ].into_iter ()
+				.filter (|val| val.start == val.end)
+				.map (|val| val.start)
+				.fold ((<span class="bool-val">false</span>, <span class="bool-val">false</span>), |(even, odd), val|
+					<span class="kw">if </span>val.check_bit (<span class="number">0</span>) { (even, <span class="bool-val">true</span>) } <span class="kw">else </span>{ (<span class="bool-val">true</span>, odd) });
+			<span class="kw">if </span>even &amp;&amp; odd { <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>) }
+			<span class="kw">if </span>even || odd {
+				<span class="kw">for </span>val <span class="kw">in </span>[ &amp; <span class="kw-2">mut </span>ppp, &amp; <span class="kw-2">mut </span>pnn, &amp; <span class="kw-2">mut </span>npn, &amp; <span class="kw-2">mut </span>nnp ] {
+					<span class="kw">if </span>val.start.check_bit (<span class="number">0</span>) != odd { val.start += Coord::ONE; }
+					<span class="kw">if </span>val.end.check_bit (<span class="number">0</span>) != odd { val.end -= Coord::ONE; }
+				}
+			}
+			<span class="kw">let </span>next = <span class="self">Self </span>{ ppp, pnn, npn, nnp };
+			<span class="kw">if </span>prev == next { <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Some </span>(next)) }
+		}
+	}
+
+	<span class="kw">fn </span>reduce_one (main: CoordRange, others: [CoordRange; <span class="number">3</span>]) -&gt; NumResult &lt;<span class="prelude-ty">Option </span>&lt;CoordRange&gt;&gt; {
+		<span class="kw">let </span>others_start = <span class="macro">chk! </span>(others [<span class="number">0</span>].start + others [<span class="number">1</span>].start + others [<span class="number">2</span>].start) <span class="question-mark">?</span>;
+		<span class="kw">let </span>others_end = <span class="macro">chk! </span>(others [<span class="number">0</span>].end + others [<span class="number">1</span>].end + others [<span class="number">2</span>].end) <span class="question-mark">?</span>;
+		<span class="kw">let </span>start = cmp::max (main.start, - others_end);
+		<span class="kw">let </span>end = cmp::min (main.end, - others_start);
+		<span class="prelude-val">Ok </span>((start &lt;= end).then_some (CoordRange { start, end }))
 	}
 
 	<span class="kw">pub const </span>OPEN: <span class="self">Self </span>= <span class="self">Self </span>{
@@ -176,7 +234,7 @@
 
 }
 
-<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+<span class="attribute">#[ derive (Clone, Copy, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 </span><span class="kw">pub struct </span>CoordRange {
 	<span class="kw">pub </span>start: Coord,
 	<span class="kw">pub </span>end: Coord,
@@ -188,31 +246,43 @@
 		<span class="kw">let </span>base = <span class="macro">chk! </span>(pos.x * sign.x + pos.y * sign.y + pos.z * sign.z) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
 			start: <span class="macro">chk! </span>(base - radius) <span class="question-mark">?</span>,
-			end: <span class="macro">chk! </span>(base + radius + Coord::ONE) <span class="question-mark">?</span>,
+			end: <span class="macro">chk! </span>(base + radius) <span class="question-mark">?</span>,
 		})
 	}
 
 	<span class="attribute">#[ must_use ]
 	</span><span class="kw">pub fn </span>overlap (<span class="self">self</span>, other: <span class="self">Self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;<span class="self">Self</span>&gt; {
-		(<span class="self">self</span>.start &lt; other.end &amp;&amp; other.start &lt; <span class="self">self</span>.end).then (|| <span class="self">Self </span>{
+		(<span class="self">self</span>.start &lt;= other.end &amp;&amp; other.start &lt;= <span class="self">self</span>.end).then (|| <span class="self">Self </span>{
 			start: cmp::max (<span class="self">self</span>.start, other.start),
 			end: cmp::min (<span class="self">self</span>.end, other.end),
 		})
 	}
 
 	<span class="attribute">#[ must_use ]
-	</span><span class="kw">pub const fn </span>dist (<span class="self">self</span>) -&gt; Coord {
-		<span class="kw">if </span><span class="self">self</span>.start &gt; Coord::ZERO {
-			<span class="self">self</span>.start
-		} <span class="kw">else if </span><span class="self">self</span>.end &lt;= Coord::ZERO {
-			Coord::ONE - <span class="self">self</span>.end
-		} <span class="kw">else </span>{
-			Coord::ZERO
-		}
+	</span><span class="kw">pub fn </span>contains (&amp; <span class="self">self</span>, val: Coord) -&gt; bool {
+		(<span class="self">self</span>.start ..= <span class="self">self</span>.end).contains (&amp; val)
+	}
+
+	<span class="attribute">#[ must_use ]
+	</span><span class="kw">pub fn </span>dist (&amp; <span class="self">self</span>) -&gt; Coord {
+		<span class="kw">if </span>Coord::ZERO &lt; <span class="self">self</span>.start { <span class="kw">return </span><span class="self">self</span>.start }
+		<span class="kw">if </span><span class="self">self</span>.end &lt; Coord::ZERO { <span class="kw">return </span>- <span class="self">self</span>.end }
+		Coord::ZERO
 	}
 
 	<span class="kw">pub const </span>OPEN: <span class="self">Self </span>= <span class="self">Self </span>{ start: Coord::MIN, end: Coord::MAX };
 
+}
+
+<span class="kw">impl </span>Debug <span class="kw">for </span>CoordRange {
+	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, fmtr: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
+		<span class="kw">let </span>&amp; <span class="self">Self </span>{ start, end } = <span class="self">self</span>;
+		<span class="kw">if </span><span class="self">self</span>.start == <span class="self">self</span>.end {
+			<span class="macro">write! </span>(fmtr, <span class="string">&quot;{start}&quot;</span>)
+		} <span class="kw">else </span>{
+			<span class="macro">write! </span>(fmtr, <span class="string">&quot;{start} ..= {end}&quot;</span>)
+		}
+	}
 }
 
 <span class="kw">pub mod </span>signs {
@@ -223,4 +293,4 @@
 	<span class="kw">pub const </span>NNP: Pos = Pos { x: Coord::NEG_ONE, y: Coord::NEG_ONE, z: Coord::ONE };
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

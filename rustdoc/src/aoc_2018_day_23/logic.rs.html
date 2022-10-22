@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-23/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-23/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_23/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_day_23/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -82,6 +82,16 @@
 <span id="82">82</span>
 <span id="83">83</span>
 <span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -99,26 +109,25 @@
 			.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 	<span class="kw">let </span>num_in_range =
 		input.nanobots.iter ()
-			.map (|bot| get_dist (bot.pos, strongest.pos))
+			.map (|bot| posns_dist (bot.pos, strongest.pos))
 			.filter (|dist| dist.as_ref ().map (|&amp; dist| dist &lt;= strongest.radius).unwrap_or (<span class="bool-val">true</span>))
 			.try_fold (<span class="number">0_u32</span>, |sum, item| { item <span class="question-mark">?</span>; <span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, Overflow&gt; (sum + <span class="number">1</span>) }) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(num_in_range)
 }
 
-<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;i32&gt; {
+<span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;Coord&gt; {
 	sanity_check (input) <span class="question-mark">?</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>bots: Vec &lt;Region&gt; =
+	<span class="kw">let </span>regions: Vec &lt;Region&gt; =
 		input.nanobots.iter ()
 			.map (Region::from_bot)
 			.try_collect () <span class="question-mark">?</span>;
-	bots.sort_by_key (|bot| bot.dist ());
 	<span class="kw">let </span><span class="kw-2">mut </span>todo: Vec &lt;(Region, usize, u32)&gt; = Vec::new ();
 	todo.push ((Region::OPEN, <span class="number">0</span>, <span class="number">0</span>));
 	<span class="kw">let </span><span class="kw-2">mut </span>best_num = <span class="number">0_u32</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>best_dist = Coord::MAX;
 	<span class="kw">let </span><span class="kw-2">mut </span>num_iters = <span class="number">0</span>;
-	<span class="lifetime">&#39;OUTER</span>: <span class="kw">while let </span><span class="prelude-val">Some </span>((<span class="kw-2">mut </span>region, bot_idx, <span class="kw-2">mut </span>num)) = todo.pop () {
-		<span class="kw">for </span>bot_idx <span class="kw">in </span>bot_idx .. bots.len () {
+	<span class="lifetime">&#39;OUTER</span>: <span class="kw">while let </span><span class="prelude-val">Some </span>((<span class="kw-2">mut </span>region, next_idx, <span class="kw-2">mut </span>num)) = todo.pop () {
+		<span class="kw">for </span>next_idx <span class="kw">in </span>next_idx .. regions.len () {
 			<span class="kw">if </span>num_iters == input.params.max_iters {
 				<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(
 					<span class="string">&quot;Giving up after {max_iters} iterations.&quot;</span>,
@@ -127,26 +136,26 @@
 			}
 			num_iters += <span class="number">1</span>;
 			<span class="kw">let </span>num_remain =
-				bots.iter ()
-					.skip (bot_idx)
-					.filter (|bot| bot.overlap (region).is_some ())
+				regions [next_idx .. ].iter ()
+					.filter (|existing_region| existing_region.overlap (region).is_some ())
 					.count ()
 					.pan_u32 ();
 			<span class="kw">if </span>num + num_remain &lt; best_num { <span class="kw">continue </span><span class="lifetime">&#39;OUTER </span>}
-			<span class="kw">let </span>bot = bots [bot_idx];
-			<span class="kw">if let </span><span class="prelude-val">Some </span>(overlap) = region.overlap (bot) {
+			<span class="kw">let </span>next_region = regions [next_idx];
+			<span class="kw">if let </span><span class="prelude-val">Some </span>(overlap) = region.overlap (next_region) {
 				<span class="kw">if </span>region != overlap {
-					todo.push ((region, bot_idx + <span class="number">1</span>, num));
+					todo.push ((region, next_idx + <span class="number">1</span>, num));
 				}
 				region = overlap;
 				num += <span class="number">1</span>;
 			}
 		}
 		<span class="kw">if </span>best_num &lt;= num {
-			<span class="kw">let </span>dist = region.dist ();
-			<span class="kw">if </span>best_num &lt; num || region.dist () &lt; best_dist {
-				best_num = num;
-				best_dist = dist;
+			<span class="kw">if let </span><span class="prelude-val">Some </span>(dist) = region_dist (&amp; region) <span class="question-mark">? </span>{
+				<span class="kw">if </span>best_num &lt; num || dist &lt; best_dist {
+					best_num = num;
+					best_dist = dist;
+				}
 			}
 		}
 	}
@@ -156,15 +165,26 @@
 
 <span class="kw">fn </span>sanity_check (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">for </span>bot <span class="kw">in </span>&amp; * input.nanobots {
-		<span class="kw">if </span>bot.radius &lt; <span class="number">0_i32 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Radius must not be negative&quot;</span>.into ()) }
+		<span class="kw">if </span>bot.radius &lt; Coord::ZERO {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Radius must not be negative&quot;</span>.into ());
+		}
 	}
 	<span class="prelude-val">Ok </span>(())
 }
 
-<span class="kw">fn </span>get_dist (pos_0: Pos, pos_1: Pos) -&gt; NumResult &lt;Coord&gt; {
+<span class="kw">fn </span>posns_dist (pos_0: Pos, pos_1: Pos) -&gt; NumResult &lt;Coord&gt; {
 	<span class="macro">chk! </span>(<span class="macro">chk! </span>(pos_0.x - pos_1.x) <span class="question-mark">?</span>.abs (),
 		+ <span class="macro">chk! </span>(pos_0.y - pos_1.y) <span class="question-mark">?</span>.abs (),
 		+ <span class="macro">chk! </span>(pos_0.z - pos_1.z) <span class="question-mark">?</span>.abs ())
 }
+
+<span class="kw">fn </span>region_dist (region: &amp; Region) -&gt; NumResult &lt;<span class="prelude-ty">Option </span>&lt;Coord&gt;&gt; {
+	<span class="kw">let </span>Region { ppp, pnn, npn, nnp } = <span class="macro">some_or! </span>(region.reduce () <span class="question-mark">?</span>, <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>));
+	<span class="kw">let </span>a = [ ppp, pnn, npn, nnp ].into_iter ()
+		.map (|rng| rng.dist ())
+		.max ()
+		.unwrap ();
+	<span class="prelude-val">Ok </span>(<span class="prelude-val">Some </span>(a))
+}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

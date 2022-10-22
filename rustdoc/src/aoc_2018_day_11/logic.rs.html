@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-11/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_11/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-11/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_11/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_day_11/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -107,32 +107,25 @@
 <span id="107">107</span>
 <span id="108">108</span>
 <span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="kw">use </span>input::Input;
+<span class="kw">use </span>model::Coord;
 <span class="kw">use </span>model::Grid;
 <span class="kw">use </span>model::Pos;
 <span class="kw">use </span>model::Power;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
 	<span class="kw">let </span>grid = gen_grid (input) <span class="question-mark">?</span>;
-	<span class="kw">let </span>grid_ref = &amp; grid;
-	<span class="kw">let </span>(pos, <span class="kw">_</span>) = (<span class="number">1 </span>..= input.params.grid_size - <span class="number">2</span>)
-		.flat_map (|y_0| (<span class="number">1 </span>..= input.params.grid_size - <span class="number">2</span>)
-			.map (<span class="kw">move </span>|x_0| {
-				<span class="kw">let </span>pos_0 = Pos { y: y_0, x: x_0 };
-				<span class="kw">let </span><span class="kw-2">mut </span>power = <span class="number">0_i32</span>;
-				<span class="kw">for </span>y_1 <span class="kw">in </span>y_0 .. y_0 + <span class="number">3 </span>{
-					<span class="kw">for </span>x_1 <span class="kw">in </span>x_0 .. x_0 + <span class="number">3 </span>{
-						<span class="kw">let </span>pos_1 = Pos { y: y_1, x: x_1 };
-						power += grid_ref.get (pos_1).unwrap ();
-					}
-				}
-				(pos_0, power)
-			}))
-		.max_by_key (|&amp; (<span class="kw">_</span>, power)| power)
-		.unwrap ();
+	<span class="kw">let </span>(pos, <span class="kw">_</span>) = find_simple (&amp; grid, <span class="number">3</span>) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(<span class="macro">format! </span>(<span class="string">&quot;{},{}&quot;</span>, pos.x, pos.y))
 }
 
@@ -183,7 +176,8 @@
 				.flat_map (|y| (<span class="number">1 </span>..= grid_size)
 					.map (<span class="kw">move </span>|x| small_grid_ref.get (Pos { y, x }).unwrap ()
 						+ horiz_grid_ref.get (Pos { y: y + size - <span class="number">1</span>, x }).unwrap ()
-						+ vert_grid_ref.get (Pos { y, x: x + size - <span class="number">1 </span>}).unwrap ()))
+						+ vert_grid_ref.get (Pos { y, x: x + size - <span class="number">1 </span>}).unwrap ()
+						- base_grid_ref.get (Pos { y: y + size - <span class="number">1</span>, x: x + size - <span class="number">1 </span>}).unwrap ()))
 				.collect (),
 			Pos::new (<span class="number">1</span>, <span class="number">1</span>),
 			Pos::new (grid_size + <span class="number">1</span>, grid_size + <span class="number">1</span>)) <span class="question-mark">?</span>;
@@ -191,6 +185,24 @@
 	<span class="kw">if let </span><span class="prelude-val">Some </span>((pos, size, <span class="kw">_</span>)) = best {
 		<span class="prelude-val">Ok </span>(<span class="macro">format! </span>(<span class="string">&quot;{},{},{}&quot;</span>, pos.x, pos.y, size))
 	} <span class="kw">else </span>{ <span class="prelude-val">Err </span>(<span class="string">&quot;No solution found&quot;</span>.into ()) }
+}
+
+<span class="kw">pub fn </span>find_simple (grid: &amp; Grid, size: Coord) -&gt; GenResult &lt;(Pos, Power)&gt; {
+	(grid.first_key ().x ..= grid.last_key ().x - size + <span class="number">1</span>)
+		.flat_map (|y_0| (grid.first_key ().y ..= grid.last_key ().y - size + <span class="number">1</span>)
+			.map (<span class="kw">move </span>|x_0| {
+				<span class="kw">let </span>pos_0 = Pos { y: y_0, x: x_0 };
+				<span class="kw">let </span><span class="kw-2">mut </span>power = <span class="number">0_i32</span>;
+				<span class="kw">for </span>y_1 <span class="kw">in </span>y_0 .. y_0 + size {
+					<span class="kw">for </span>x_1 <span class="kw">in </span>x_0 .. x_0 + size {
+						<span class="kw">let </span>pos_1 = Pos { y: y_1, x: x_1 };
+						power += grid.get (pos_1).unwrap ();
+					}
+				}
+				(pos_0, power)
+			}))
+		.max_by_key (|&amp; (<span class="kw">_</span>, power)| power)
+		.ok_or (<span class="string">&quot;No solution found&quot;</span>.into ())
 }
 
 <span class="kw">fn </span>gen_grid (input: &amp; Input) -&gt; GenResult &lt;Grid&gt; {
@@ -217,4 +229,4 @@
 	<span class="prelude-val">Some </span>((power_level % <span class="number">1000_i32</span>) / <span class="number">100_i32 </span>- <span class="number">5_i32</span>)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

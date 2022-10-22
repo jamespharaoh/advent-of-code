@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["read_dots",""]],"struct":[["DrawDots",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["read_auto",""],["read_fixed",""],["read_fixed_real",""]],"struct":[["DrawDots",""]]};

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-19/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_day_19/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/day-19/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_day_19/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_day_19/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -78,6 +78,27 @@
 <span id="78">78</span>
 <span id="79">79</span>
 <span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
+<span id="100">100</span>
+<span id="101">101</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -86,6 +107,7 @@
 <span class="kw">use </span>model::Instr;
 <span class="kw">use </span>model::Opcode;
 <span class="kw">use </span>model::Regs;
+<span class="kw">use </span>model::Val;
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u64&gt; {
 	<span class="kw">let </span>regs: Regs= Regs::default ();
@@ -100,63 +122,83 @@
 
 <span class="attribute">#[ allow (clippy::unneeded_field_pattern) ]
 </span><span class="kw">fn </span>calc_result (input: &amp; Input, <span class="kw-2">mut </span>regs: Regs) -&gt; GenResult &lt;u64&gt; {
-	<span class="kw">let </span>is_sum_of_factors = <span class="kw">if </span>input.instrs.len () == <span class="number">36 </span>{
-		<span class="macro">matches! </span>(&lt;[Instr; <span class="number">16</span>]&gt;::try_from (&amp; input.instrs [<span class="number">1 </span>.. <span class="number">17</span>]).unwrap (), [
-			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: <span class="number">2 </span>},
-			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: <span class="number">4 </span>},
-			Instr { opcode: Opcode::Mulr, arg_a: <span class="number">2</span>, arg_b: <span class="number">4</span>, arg_c: <span class="number">1 </span>},
-			Instr { opcode: Opcode::Eqrr, arg_a: <span class="number">1</span>, arg_b: <span class="number">5</span>, arg_c: <span class="number">1 </span>},
-			Instr { opcode: Opcode::Addr, arg_a: <span class="number">1</span>, arg_b: <span class="number">3</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Addi, arg_a: <span class="number">3</span>, arg_b: <span class="number">1</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Addr, arg_a: <span class="number">2</span>, arg_b: <span class="number">0</span>, arg_c: <span class="number">0 </span>},
-			Instr { opcode: Opcode::Addi, arg_a: <span class="number">4</span>, arg_b: <span class="number">1</span>, arg_c: <span class="number">4 </span>},
-			Instr { opcode: Opcode::Gtrr, arg_a: <span class="number">4</span>, arg_b: <span class="number">5</span>, arg_c: <span class="number">1 </span>},
-			Instr { opcode: Opcode::Addr, arg_a: <span class="number">3</span>, arg_b: <span class="number">1</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Seti, arg_a: <span class="number">2</span>, arg_b: <span class="kw">_</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Addi, arg_a: <span class="number">2</span>, arg_b: <span class="number">1</span>, arg_c: <span class="number">2 </span>},
-			Instr { opcode: Opcode::Gtrr, arg_a: <span class="number">2</span>, arg_b: <span class="number">5</span>, arg_c: <span class="number">1 </span>},
-			Instr { opcode: Opcode::Addr, arg_a: <span class="number">1</span>, arg_b: <span class="number">3</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: <span class="number">3 </span>},
-			Instr { opcode: Opcode::Mulr, arg_a: <span class="number">3</span>, arg_b: <span class="number">3</span>, arg_c: <span class="number">3 </span>},
-		])
-	} <span class="kw">else </span>{ <span class="bool-val">false </span>};
-	<span class="kw">let </span><span class="kw-2">mut </span>limit = <span class="number">10_000_u32</span>;
+	<span class="kw">let </span>sum_of_factors_reg = get_sum_of_factors_reg (input);
+	<span class="kw">let </span><span class="kw-2">mut </span>num_instrs = <span class="number">0</span>;
 	<span class="attribute">#[ allow (clippy::while_let_loop) ]
 	</span><span class="kw">loop </span>{
 		<span class="kw">let </span>instr_val = <span class="macro">some_or! </span>(regs.get (input.ip), <span class="kw">break</span>);
 		<span class="kw">let </span>instr_idx = <span class="macro">ok_or! </span>(instr_val.to_usize (), <span class="kw">break</span>);
 		<span class="kw">if </span>input.instrs.len () &lt;= instr_idx { <span class="kw">break </span>}
-		<span class="kw">if </span>is_sum_of_factors &amp;&amp; instr_idx == <span class="number">1 </span>{
-			<span class="kw">let </span>target = regs.get (<span class="number">5</span>).unwrap ();
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(calc_sum_of_factors (target));
+		<span class="kw">if </span>instr_idx == <span class="number">1 </span>{
+			<span class="kw">if let </span><span class="prelude-val">Some </span>(reg) = sum_of_factors_reg {
+				<span class="kw">let </span>target = regs.get (reg).unwrap ();
+				<span class="kw">return </span><span class="prelude-val">Ok </span>(calc_sum_of_factors (target));
+			}
 		}
 		<span class="kw">let </span>instr = input.instrs [instr_idx];
 		regs = instr.apply (regs) <span class="question-mark">?</span>;
 		<span class="kw">let </span>new_ip = regs.get (input.ip).unwrap () + <span class="number">1</span>;
 		regs.set (input.ip, new_ip).unwrap ();
-		limit -= <span class="number">1</span>;
-		<span class="kw">if </span>limit == <span class="number">0 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after 10k instrs&quot;</span>.into ()) }
+		num_instrs += <span class="number">1</span>;
+		<span class="kw">if </span>num_instrs == input.params.max_instrs {
+			<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Giving up after max instrs&quot;</span>.into ());
+		}
 	}
 	<span class="prelude-val">Ok </span>(regs.get (<span class="number">0</span>).unwrap ())
 }
 
-<span class="kw">const fn </span>calc_sum_of_factors (target: u64) -&gt; u64 {
+<span class="kw">fn </span>get_sum_of_factors_reg (input: &amp; Input) -&gt; <span class="prelude-ty">Option </span>&lt;Val&gt; {
+	<span class="kw">if </span>input.instrs.len () != <span class="number">36 </span>{ <span class="kw">return </span><span class="prelude-val">None </span>}
+	<span class="kw">match </span>&lt;[Instr; <span class="number">16</span>]&gt;::try_from (&amp; input.instrs [<span class="number">1 </span>.. <span class="number">17</span>]).unwrap () {
+		[
+			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: reg_a_0 },
+			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: reg_b_0 },
+			Instr { opcode: Opcode::Mulr, arg_a: reg_a_1, arg_b: reg_b_1, arg_c: reg_c_0 },
+			Instr { opcode: Opcode::Eqrr, arg_a: reg_c_1, arg_b: reg_d_0, arg_c: reg_c_2 },
+			Instr { opcode: Opcode::Addr, arg_a: reg_c_3, arg_b: reg_e_0, arg_c: reg_e_1 },
+			Instr { opcode: Opcode::Addi, arg_a: reg_e_2, arg_b: <span class="number">1</span>, arg_c: reg_e_3 },
+			Instr { opcode: Opcode::Addr, arg_a: reg_a_2, arg_b: <span class="number">0</span>, arg_c: <span class="number">0 </span>},
+			Instr { opcode: Opcode::Addi, arg_a: reg_b_2, arg_b: <span class="number">1</span>, arg_c: reg_b_3 },
+			Instr { opcode: Opcode::Gtrr, arg_a: reg_b_4, arg_b: reg_d_1, arg_c: reg_c_4 },
+			Instr { opcode: Opcode::Addr, arg_a: reg_e_4, arg_b: reg_c_5, arg_c: reg_e_5 },
+			Instr { opcode: Opcode::Seti, arg_a: <span class="number">2</span>, arg_b: <span class="kw">_</span>, arg_c: reg_e_6 },
+			Instr { opcode: Opcode::Addi, arg_a: reg_a_3, arg_b: <span class="number">1</span>, arg_c: reg_a_4 },
+			Instr { opcode: Opcode::Gtrr, arg_a: reg_a_5, arg_b: reg_d_2, arg_c: reg_c_6 },
+			Instr { opcode: Opcode::Addr, arg_a: reg_c_7, arg_b: reg_e_7, arg_c: reg_e_8 },
+			Instr { opcode: Opcode::Seti, arg_a: <span class="number">1</span>, arg_b: <span class="kw">_</span>, arg_c: reg_e_9 },
+			Instr { opcode: Opcode::Mulr, arg_a: reg_e_10, arg_b: reg_e_11, arg_c: reg_e_12 },
+		] <span class="kw">if </span>reg_a_0 != reg_b_0 &amp;&amp; reg_a_0 != reg_c_0 &amp;&amp; reg_a_0 != reg_d_0 &amp;&amp; reg_a_0 != reg_e_0
+				&amp;&amp; reg_b_0 != reg_c_0 &amp;&amp; reg_b_0 != reg_d_0 &amp;&amp; reg_b_0 != reg_e_0
+				&amp;&amp; reg_c_0 != reg_d_0 &amp;&amp; reg_c_0 != reg_e_0 &amp;&amp; reg_d_0 != reg_e_0 &amp;&amp; reg_a_0 != <span class="number">0
+				</span>&amp;&amp; reg_b_0 != <span class="number">0 </span>&amp;&amp; reg_c_0 != <span class="number">0 </span>&amp;&amp; reg_d_0 != <span class="number">0 </span>&amp;&amp; reg_e_0 != <span class="number">0
+				</span>&amp;&amp; reg_e_0 == input.ip
+				&amp;&amp; [ reg_a_0, reg_a_1, reg_a_2, reg_a_3, reg_a_4, reg_a_5 ].into_iter ()
+					.all_equal ()
+				&amp;&amp; [ reg_b_0, reg_b_1, reg_b_2, reg_b_3, reg_b_4 ].into_iter ().all_equal ()
+				&amp;&amp; [ reg_c_0, reg_c_1, reg_c_2, reg_c_3, reg_c_4, reg_c_5, reg_c_6, reg_c_7 ]
+					.into_iter ().all_equal ()
+				&amp;&amp; [ reg_d_0, reg_d_1, reg_d_2 ].into_iter ().all_equal ()
+				&amp;&amp; [ reg_e_0, reg_e_1, reg_e_2, reg_e_3, reg_e_4, reg_e_5, reg_e_6, reg_e_7,
+					reg_e_8, reg_e_9, reg_e_10, reg_e_11, reg_e_12 ].into_iter ().all_equal ()
+			=&gt; <span class="prelude-val">Some </span>(reg_d_0),
+		<span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+	}
+}
+
+<span class="kw">fn </span>calc_sum_of_factors (target: u64) -&gt; u64 {
 	<span class="kw">let </span><span class="kw-2">mut </span>result = target + <span class="number">1</span>;
-	<span class="kw">let </span><span class="kw-2">mut </span>div_0 = <span class="number">2_u64</span>;
+	<span class="kw">let </span><span class="kw-2">mut </span>div = <span class="number">2_u64</span>;
 	<span class="kw">loop </span>{
-		<span class="kw">let </span>div_1 = target / div_0;
-		<span class="kw">let </span>product = div_0 * div_1;
-		<span class="kw">if </span>product == target {
-			<span class="kw">if </span>div_0 == div_1 {
-				result += div_0;
-			} <span class="kw">else </span>{
-				result += div_0 + div_1;
-			}
+		<span class="kw">let </span>co_div = target / div;
+		<span class="kw">let </span>rem = target % div;
+		<span class="kw">if </span>co_div &lt; div { <span class="kw">break </span>}
+		<span class="kw">if </span>rem == <span class="number">0 </span>{
+			result += div;
+			<span class="kw">if </span>div != co_div { result += co_div; }
 		}
-		<span class="kw">if </span>target &lt;= product { <span class="kw">break </span>}
-		div_0 += <span class="number">1</span>;
+		div += <span class="number">1</span>;
 	}
 	result
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

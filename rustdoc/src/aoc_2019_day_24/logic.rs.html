@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2019/day-24/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2019_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2019_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2019/day-24/logic.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>logic.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2019_day_24/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2019_day_24/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -136,6 +136,9 @@
 <span id="136">136</span>
 <span id="137">137</span>
 <span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="attribute">#![ allow (clippy::identity_op) ]
@@ -153,26 +156,31 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>state = <span class="macro">vec! </span>[ get_state (input) <span class="question-mark">? </span>];
 	<span class="kw">let </span><span class="kw-2">mut </span>state_temp = Vec::with_capacity (state.len ());
 	<span class="kw">let </span><span class="kw-2">mut </span>seen = HashSet::new ();
-	<span class="kw">loop </span>{
+	<span class="kw">let </span>layer_val = <span class="kw">loop </span>{
 		<span class="kw">let </span>layer_val = state [<span class="number">0</span>];
 		<span class="kw">if </span>! seen.insert (layer_val) {
-			<span class="kw">return </span><span class="prelude-val">Ok </span>(layer_val);
+			<span class="kw">break </span>layer_val;
 		}
 		next_state::&lt;<span class="bool-val">false</span>&gt; (&amp; state, &amp; <span class="kw-2">mut </span>state_temp);
 		mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
-	}
+	};
+	<span class="kw">let </span>(<span class="kw">_</span>, bio_val) = (<span class="number">0_u32 </span>.. <span class="number">25</span>)
+		.fold ((layer_val, <span class="number">0</span>), |(inp, out), <span class="kw">_</span>|
+			(inp &gt;&gt; <span class="number">1_u32</span>, (out &lt;&lt; <span class="number">1_u32</span>) | (inp &amp; <span class="number">1</span>)));
+	<span class="prelude-val">Ok </span>(bio_val)
 }
 
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
+	<span class="kw">let </span>empty_layers = (input.params.num_reps_two.pan_usize () + <span class="number">1</span>) / <span class="number">2</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>state: Vec &lt;u32&gt; =
 		iter::empty ()
-			.chain (iter::repeat (<span class="number">0_u32</span>).take (<span class="number">100</span>))
+			.chain (iter::repeat (<span class="number">0_u32</span>).take (empty_layers))
 			.chain (iter::once (get_state (input) <span class="question-mark">?</span>))
-			.chain (iter::repeat (<span class="number">0_u32</span>).take (<span class="number">100</span>))
+			.chain (iter::repeat (<span class="number">0_u32</span>).take (empty_layers))
 			.collect ();
 	<span class="kw">let </span><span class="kw-2">mut </span>state_temp: Vec &lt;u32&gt; =
 		Vec::with_capacity (state.len ());
-	<span class="kw">for _ in </span><span class="number">0_u32 </span>.. <span class="number">200 </span>{
+	<span class="kw">for _ in </span><span class="number">0_u32 </span>.. input.params.num_reps_two {
 		next_state::&lt;<span class="bool-val">true</span>&gt; (&amp; state, &amp; <span class="kw-2">mut </span>state_temp);
 		mem::swap (&amp; <span class="kw-2">mut </span>state, &amp; <span class="kw-2">mut </span>state_temp);
 	}
@@ -188,12 +196,8 @@
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Grid must be exactly 5×5&quot;</span>.into ());
 	}
 	<span class="prelude-val">Ok </span>(
-		input.grid.values ()
-			.fold (<span class="number">0</span>, |<span class="kw-2">mut </span>sum, tile| {
-				sum &gt;&gt;= <span class="number">1_u32</span>;
-				<span class="kw">if </span><span class="macro">matches! </span>(tile, InputTile::Bug) { sum |= <span class="number">1 </span>&lt;&lt; <span class="number">24_u32</span>; }
-				sum
-			})
+		input.grid.values ().fold (<span class="number">0</span>, |sum, tile|
+			(sum &lt;&lt; <span class="number">1_u32</span>) | u32::from (<span class="macro">matches! </span>(tile, InputTile::Bug)))
 	)
 }
 
@@ -226,19 +230,21 @@
 	<span class="kw">if </span>layer_val == <span class="number">0 </span>&amp;&amp; outer_val == <span class="number">0 </span>&amp;&amp; inner_val == <span class="number">0 </span>{ <span class="kw">return </span><span class="number">0_u32 </span>}
 	<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="number">0_u32</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>pat_layers = calc_pat_layers::&lt;RECURSE&gt; (layer_val, outer_val);
-	<span class="kw">let </span>inner_pats = <span class="kw">if </span>RECURSE { calc_inner_pats (inner_val) } <span class="kw">else </span>{ [<span class="number">0_u64</span>; <span class="number">5</span>] };
+	<span class="kw">let </span>inner_pats = <span class="kw">if </span>RECURSE { calc_inner_pats (inner_val) } <span class="kw">else </span>{ [<span class="number">0_u32</span>; <span class="number">5</span>] };
+	<span class="kw">const </span>VAL_MASK: u64 = <span class="number">0b_0000000_0100000_0000000_0000000_0000000_0000000_0000000</span>;
+	<span class="kw">const </span>ADJ_MASK: u64 = <span class="number">0b_0100000_1010000_0100000_0000000_0000000_0000000_0000000</span>;
+	<span class="kw">const </span>INNER_MASK: u32 = <span class="number">0b_10000_10000_10000_10000_10000</span>;
 	<span class="kw">for </span>y <span class="kw">in </span><span class="number">0_u32 </span>.. <span class="number">5 </span>{
 		<span class="kw">let </span><span class="kw-2">mut </span>pat_inner = inner_pats [y.pan_usize ()];
 		<span class="kw">for </span>_x <span class="kw">in </span><span class="number">0_u32 </span>.. <span class="number">5 </span>{
-			<span class="kw">let </span>val = pat_layers &amp; <span class="number">0b_0000000_0000010_0000000 </span>!= <span class="number">0</span>;
-			<span class="kw">let </span>adj_count = (pat_layers &amp; <span class="number">0b_0000010_0000101_0000010</span>).count_ones ()
-				+ (pat_inner &amp; <span class="macro">bitrep! </span>(u64, <span class="number">0b_00000001</span>, <span class="number">8</span>, <span class="number">5</span>)).count_ones ();
-			result &gt;&gt;= <span class="number">1_u32</span>;
-			<span class="kw">if </span>adj_count == <span class="number">1 </span>|| (adj_count == <span class="number">2 </span>&amp;&amp; ! val) { result |= <span class="number">1 </span>&lt;&lt; <span class="number">24_u32</span>; }
-			pat_layers &gt;&gt;= <span class="number">1_u32</span>;
-			pat_inner &gt;&gt;= <span class="number">1_u32</span>;
+			<span class="kw">let </span>val = pat_layers &amp; VAL_MASK != <span class="number">0</span>;
+			<span class="kw">let </span>adj_count = (pat_layers &amp; ADJ_MASK).count_ones ()
+				+ (pat_inner &amp; INNER_MASK).count_ones ();
+			result = (result &lt;&lt; <span class="number">1_u32</span>) | u32::from (adj_count == <span class="number">1 </span>|| (adj_count == <span class="number">2 </span>&amp;&amp; ! val));
+			pat_layers &lt;&lt;= <span class="number">1_u32</span>;
+			pat_inner &lt;&lt;= <span class="number">1_u32</span>;
 		}
-		pat_layers &gt;&gt;= <span class="number">2_u32</span>;
+		pat_layers &lt;&lt;= <span class="number">2_u32</span>;
 	}
 	<span class="kw">if </span>RECURSE { result &amp;= <span class="number">0b_11111_11111_11011_11111_11111</span>; }
 	result
@@ -247,32 +253,32 @@
 <span class="attribute">#[ inline ]
 </span><span class="kw">fn </span>calc_pat_layers &lt;<span class="kw">const </span>RECURSE: bool&gt; (layer_val: u32, outer_val: u32) -&gt; u64 {
 	<span class="kw">let </span><span class="kw-2">mut </span>pat_layers = <span class="number">0_u64
-		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">0_u32</span>)) &lt;&lt; <span class="number">8_u32
-		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">5_u32</span>)) &lt;&lt; <span class="number">10_u32
-		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">10_u32</span>)) &lt;&lt; <span class="number">12_u32
+		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">20_u32</span>)) &lt;&lt; <span class="number">16_u32
 		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">15_u32</span>)) &lt;&lt; <span class="number">14_u32
-		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">20_u32</span>)) &lt;&lt; <span class="number">16_u32</span>;
+		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">10_u32</span>)) &lt;&lt; <span class="number">12_u32
+		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">5_u32</span>)) &lt;&lt; <span class="number">10_u32
+		</span>| (layer_val.pan_u64 () &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">0_u32</span>)) &lt;&lt; <span class="number">8_u32</span>;
 	<span class="kw">if </span>RECURSE {
-		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00100 </span>&lt;&lt; <span class="number">5_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="number">0b_0111110</span>; }
-		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00100 </span>&lt;&lt; <span class="number">15_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="number">0b_0111110 </span>&lt;&lt; <span class="number">28_u32</span>; }
-		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00010 </span>&lt;&lt; <span class="number">10_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_0000001</span>, <span class="number">7</span>, <span class="number">5</span>) &lt;&lt; <span class="number">7_u32</span>; }
+		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00100 </span>&lt;&lt; <span class="number">15_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="number">0b_0111110 </span>&lt;&lt; <span class="number">42_u32</span>; }
 		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_01000 </span>&lt;&lt; <span class="number">10_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_1000000</span>, <span class="number">7</span>, <span class="number">5</span>) &lt;&lt; <span class="number">7_u32</span>; }
+		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00010 </span>&lt;&lt; <span class="number">10_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_0000001</span>, <span class="number">7</span>, <span class="number">5</span>) &lt;&lt; <span class="number">7_u32</span>; }
+		<span class="kw">if </span>outer_val &amp; (<span class="number">0b_00100 </span>&lt;&lt; <span class="number">5_u32</span>) != <span class="number">0 </span>{ pat_layers |= <span class="number">0b_0111110</span>; }
 	}
 	pat_layers
 }
 
 <span class="attribute">#[ inline ]
-</span><span class="kw">const fn </span>calc_inner_pats (inner_val: u32) -&gt; [u64; <span class="number">5</span>] {
-	<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0_u64</span>; <span class="number">5</span>];
-	<span class="kw">let </span>num_inner_up = (inner_val &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">20</span>)).count_ones ();
-	result [<span class="number">3</span>] |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_00000100</span>, <span class="number">8</span>, <span class="number">5</span>) &gt;&gt; (<span class="number">40 </span>- num_inner_up * <span class="number">8</span>);
-	<span class="kw">let </span>num_inner_down = (inner_val &amp; <span class="number">0b_11111</span>).count_ones ();
-	result [<span class="number">1</span>] |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_00000100</span>, <span class="number">8</span>, <span class="number">5</span>) &gt;&gt; (<span class="number">40 </span>- num_inner_down * <span class="number">8</span>);
+</span><span class="kw">const fn </span>calc_inner_pats (inner_val: u32) -&gt; [u32; <span class="number">5</span>] {
+	<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0_u32</span>; <span class="number">5</span>];
+	<span class="kw">let </span>num_inner_top = (inner_val &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">20_u32</span>)).count_ones ();
 	<span class="kw">let </span>num_inner_left = (inner_val &amp; <span class="macro">bitrep! </span>(u32, <span class="number">0b_10000</span>, <span class="number">5</span>, <span class="number">5</span>)).count_ones ();
-	result [<span class="number">2</span>] |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_00001000</span>, <span class="number">8</span>, <span class="number">5</span>) &gt;&gt; (<span class="number">40 </span>- num_inner_left * <span class="number">8</span>);
 	<span class="kw">let </span>num_inner_right = (inner_val &amp; <span class="macro">bitrep! </span>(u32, <span class="number">0b_00001</span>, <span class="number">5</span>, <span class="number">5</span>)).count_ones ();
-	result [<span class="number">2</span>] |= <span class="macro">bitrep! </span>(u64, <span class="number">0b_00000010</span>, <span class="number">8</span>, <span class="number">5</span>) &gt;&gt; (<span class="number">40 </span>- num_inner_right * <span class="number">8</span>);
+	<span class="kw">let </span>num_inner_bottom = (inner_val &amp; (<span class="number">0b_11111 </span>&lt;&lt; <span class="number">0_u32</span>)).count_ones ();
+	result [<span class="number">1</span>] |= <span class="number">0b_00100_00100_00100_00100_00100 </span>&gt;&gt; (<span class="number">25 </span>- num_inner_top * <span class="number">5</span>);
+	result [<span class="number">2</span>] |= <span class="number">0b_01000_01000_01000_01000_01000 </span>&gt;&gt; (<span class="number">25 </span>- num_inner_left * <span class="number">5</span>);
+	result [<span class="number">2</span>] |= <span class="number">0b_00010_00010_00010_00010_00010 </span>&gt;&gt; (<span class="number">25 </span>- num_inner_right * <span class="number">5</span>);
+	result [<span class="number">3</span>] |= <span class="number">0b_00100_00100_00100_00100_00100 </span>&gt;&gt; (<span class="number">25 </span>- num_inner_bottom * <span class="number">5</span>);
 	result
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

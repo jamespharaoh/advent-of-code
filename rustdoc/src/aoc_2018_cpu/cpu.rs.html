@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/cpu/cpu.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cpu.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_cpu/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../aoc_2018_cpu/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><nav class="sub"><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `2018/cpu/cpu.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>cpu.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><a class="sidebar-logo" href="../../aoc_2018_cpu/index.html"><div class="logo-container"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></div></a></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../aoc_2018_cpu/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
@@ -262,52 +262,72 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
 </pre><pre class="rust"><code><span class="kw">use </span>aoc_common::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>CpuResult &lt;Item&gt; = <span class="prelude-ty">Result </span>&lt;Item, CpuError&gt;;
 
 <span class="kw">pub use </span>instr::Instr;
 
-<span class="macro">parse_display_enum! </span>{
-
+<span class="macro">enum_decl_parser_display! </span>{
 	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 	</span><span class="kw">pub enum </span>Opcode {
-		Addr = <span class="string">&quot;addr&quot;</span>, Addi = <span class="string">&quot;addi&quot;</span>,
-		Mulr = <span class="string">&quot;mulr&quot;</span>, Muli = <span class="string">&quot;muli&quot;</span>,
-		Banr = <span class="string">&quot;banr&quot;</span>, Bani = <span class="string">&quot;bani&quot;</span>,
-		Borr = <span class="string">&quot;borr&quot;</span>, Bori = <span class="string">&quot;bori&quot;</span>,
-		Setr = <span class="string">&quot;setr&quot;</span>, Seti = <span class="string">&quot;seti&quot;</span>,
-		Gtir = <span class="string">&quot;gtir&quot;</span>, Gtri = <span class="string">&quot;gtri&quot;</span>, Gtrr = <span class="string">&quot;gtrr&quot;</span>,
-		Eqir = <span class="string">&quot;eqir&quot;</span>, Eqri = <span class="string">&quot;eqri&quot;</span>, Eqrr = <span class="string">&quot;eqrr&quot;</span>,
+		Addr = [ <span class="string">&quot;addr&quot; </span>], Addi = [ <span class="string">&quot;addi&quot; </span>],
+		Mulr = [ <span class="string">&quot;mulr&quot; </span>], Muli = [ <span class="string">&quot;muli&quot; </span>],
+		Banr = [ <span class="string">&quot;banr&quot; </span>], Bani = [ <span class="string">&quot;bani&quot; </span>],
+		Borr = [ <span class="string">&quot;borr&quot; </span>], Bori = [ <span class="string">&quot;bori&quot; </span>],
+		Setr = [ <span class="string">&quot;setr&quot; </span>], Seti = [ <span class="string">&quot;seti&quot; </span>],
+		Gtir = [ <span class="string">&quot;gtir&quot; </span>], Gtri = [ <span class="string">&quot;gtri&quot; </span>], Gtrr = [ <span class="string">&quot;gtrr&quot; </span>],
+		Eqir = [ <span class="string">&quot;eqir&quot; </span>], Eqri = [ <span class="string">&quot;eqri&quot; </span>], Eqrr = [ <span class="string">&quot;eqrr&quot; </span>],
 	}
-
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub enum </span>Op {
-		Add = <span class="string">&quot;add&quot;</span>,
-		Mul = <span class="string">&quot;mul&quot;</span>,
-		Ban = <span class="string">&quot;ban&quot;</span>,
-		Bor = <span class="string">&quot;bor&quot;</span>,
-		Set = <span class="string">&quot;set&quot;</span>,
-		Gt = <span class="string">&quot;gt&quot;</span>,
-		Eq = <span class="string">&quot;eq&quot;</span>,
-	}
-
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub enum </span>ArgType { Reg = <span class="string">&quot;r&quot;</span>, Imm = <span class="string">&quot;i&quot;</span>, Ignore = <span class="string">&quot;x&quot; </span>}
-
-	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
-	</span><span class="kw">pub enum </span>CpuError {
-		Halt = <span class="string">&quot;Halt&quot;</span>,
-		Overflow = <span class="string">&quot;Overflow&quot;</span>,
-		Register = <span class="string">&quot;Register&quot;</span>,
-		Internal = <span class="string">&quot;Internal&quot;</span>,
-	}
-
 }
 
-<span class="kw">impl </span>Error <span class="kw">for </span>CpuError {}
-
 <span class="kw">impl </span>Opcode {
+
+	<span class="attribute">#[ inline ]
+	#[ must_use ]
+	</span><span class="kw">pub fn </span>idx (<span class="self">self</span>) -&gt; usize {
+		<span class="kw">match </span><span class="self">self </span>{
+			<span class="self">Self</span>::Addr =&gt; <span class="number">0</span>, <span class="self">Self</span>::Addi =&gt; <span class="number">1</span>,
+			<span class="self">Self</span>::Mulr =&gt; <span class="number">2</span>, <span class="self">Self</span>::Muli =&gt; <span class="number">3</span>,
+			<span class="self">Self</span>::Banr =&gt; <span class="number">4</span>, <span class="self">Self</span>::Bani =&gt; <span class="number">5</span>,
+			<span class="self">Self</span>::Borr =&gt; <span class="number">6</span>, <span class="self">Self</span>::Bori =&gt; <span class="number">7</span>,
+			<span class="self">Self</span>::Setr =&gt; <span class="number">8</span>, <span class="self">Self</span>::Seti =&gt; <span class="number">9</span>,
+			<span class="self">Self</span>::Gtir =&gt; <span class="number">10</span>, <span class="self">Self</span>::Gtri =&gt; <span class="number">11</span>, <span class="self">Self</span>::Gtrr =&gt; <span class="number">12</span>,
+			<span class="self">Self</span>::Eqir =&gt; <span class="number">13</span>, <span class="self">Self</span>::Eqri =&gt; <span class="number">14</span>, <span class="self">Self</span>::Eqrr =&gt; <span class="number">15</span>,
+		}
+	}
 
 	<span class="attribute">#[ inline ]
 	</span><span class="kw">pub fn </span>apply &lt;Val: Int, <span class="kw">const </span>NUM: usize&gt; (
@@ -375,6 +395,29 @@
 	#[ must_use ]
 	</span><span class="kw">pub const fn </span>arg_b (<span class="self">self</span>) -&gt; ArgType { <span class="self">self</span>.data ().<span class="number">2 </span>}
 
+	<span class="kw">pub const </span>VARIANTS: [<span class="self">Self</span>; <span class="number">16</span>] = [
+		<span class="self">Self</span>::Addr, <span class="self">Self</span>::Addi,
+		<span class="self">Self</span>::Mulr, <span class="self">Self</span>::Muli,
+		<span class="self">Self</span>::Banr, <span class="self">Self</span>::Bani,
+		<span class="self">Self</span>::Borr, <span class="self">Self</span>::Bori,
+		<span class="self">Self</span>::Setr, <span class="self">Self</span>::Seti,
+		<span class="self">Self</span>::Gtir, <span class="self">Self</span>::Gtri, <span class="self">Self</span>::Gtrr,
+		<span class="self">Self</span>::Eqir, <span class="self">Self</span>::Eqri, <span class="self">Self</span>::Eqrr,
+	];
+
+}
+
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>Op {
+		Add = [ <span class="string">&quot;add&quot; </span>],
+		Mul = [ <span class="string">&quot;mul&quot; </span>],
+		Ban = [ <span class="string">&quot;ban&quot; </span>],
+		Bor = [ <span class="string">&quot;bor&quot; </span>],
+		Set = [ <span class="string">&quot;set&quot; </span>],
+		Gt = [ <span class="string">&quot;gt&quot; </span>],
+		Eq = [ <span class="string">&quot;eq&quot; </span>],
+	}
 }
 
 <span class="kw">impl </span>Op {
@@ -398,6 +441,27 @@
 	}
 
 }
+
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>ArgType {
+		Reg = [ <span class="string">&quot;r&quot; </span>],
+		Imm = [ <span class="string">&quot;i&quot; </span>],
+		Ignore = [ <span class="string">&quot;x&quot; </span>],
+	}
+}
+
+<span class="macro">enum_decl_parser_display! </span>{
+	<span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
+	</span><span class="kw">pub enum </span>CpuError {
+		Halt = [ <span class="string">&quot;Halt&quot; </span>],
+		Overflow = [ <span class="string">&quot;Overflow&quot; </span>],
+		Register = [ <span class="string">&quot;Register&quot; </span>],
+		Internal = [ <span class="string">&quot;Internal&quot; </span>],
+	}
+}
+
+<span class="kw">impl </span>Error <span class="kw">for </span>CpuError {}
 
 <span class="attribute">#[ derive (Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd) ]
 </span><span class="kw">pub struct </span>Regs &lt;Val: Int, <span class="kw">const </span>NUM: usize&gt; {
@@ -527,4 +591,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_cpu" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (a24a020e6 2022-10-18)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_cpu" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>

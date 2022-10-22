@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["part_one",""],["part_two",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["find_simple",""],["part_one",""],["part_two",""]]};
