@@ -10,7 +10,7 @@ pub fn read_auto <Val: Int> (
 		dots.into_iter ()
 			.map (|(row, col)| (row.pan_isize (), col.pan_isize ()))
 			.sorted_by_key (|& (row, col)| (col, row))
-			.dedup ()
+			.dedup_consecutive ()
 			.collect ())
 }
 
@@ -37,7 +37,7 @@ pub fn read_fixed <Val: Int> (
 		dots.into_iter ()
 			.map (|(row, col)| (row.pan_isize (), col.pan_isize ()))
 			.sorted_by_key (|& (row, col)| (col, row))
-			.dedup ()
+			.dedup_consecutive ()
 			.collect (),
 		(rows.pan_isize (), cols.pan_isize ()))
 }
@@ -145,7 +145,7 @@ fn glyphs_iter_fixed (
 	})
 }
 
-#[ cfg (debug_assertions) ]
+#[ cfg (all (debug_assertions, not (fuzzing))) ]
 fn draw_glyph (encoded: u128) -> String {
 	let mut drawn = String::new ();
 	let mut val = encoded;

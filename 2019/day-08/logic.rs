@@ -6,10 +6,8 @@ use model::Pixel;
 
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	let layers: Vec <Vec <Pixel>> =
-		input.pixels.iter ().copied ()
-			.chunks (25 * 6)
-			.into_iter ()
-			.map (Iterator::collect)
+		input.pixels.chunks (25 * 6)
+			.map (<[Pixel]>::to_vec)
 			.collect ();
 	let most_black_idx =
 		layers.iter ().enumerate ()
@@ -35,13 +33,11 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 pub fn part_two (input: & Input) -> GenResult <String> {
 	let start: Vec <Pixel> = iter::repeat (Pixel::Transparent).take (25 * 6).collect ();
 	let image: Vec <Pixel> =
-		input.pixels.iter ().copied ()
-			.chunks (25 * 6)
-			.into_iter ()
+		input.pixels.chunks (25 * 6)
 			.fold (start, |mut image, layer| {
-				for (im_pixel, lr_pixel) in Iterator::zip (image.iter_mut (), layer) {
-					if * im_pixel != Pixel::Transparent { continue }
-					* im_pixel = lr_pixel;
+				for (img_pixel, & lyr_pixel) in Iterator::zip (image.iter_mut (), layer) {
+					if * img_pixel != Pixel::Transparent { continue }
+					* img_pixel = lyr_pixel;
 				}
 				image
 			});

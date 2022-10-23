@@ -125,9 +125,9 @@ impl TryFrom <model::State> for State {
 		}
 		Ok (Self {
 			items: state.iter ().copied ()
-				.tuples::<(_, _)> ()
+				.arrays ()
 				.enumerate ()
-				.map (|(idx, (run, num))|
+				.map (|(idx, [run, num])|
 					Ok (Item {
 						gen: 0,
 						idx: idx.try_into () ?,

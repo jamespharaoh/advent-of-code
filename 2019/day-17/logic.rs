@@ -59,7 +59,8 @@ fn find_bot (grid: & mut Grid) -> GenResult <(Pos, Dir)> {
 			Tile::RobotRight => Dir::Right,
 			Tile::Empty | Tile::Scaffold => return None,
 		})))
-		.exactly_one ().ok ().ok_or ("Must have exactly one robot tile") ?;
+		.exactly_one ()
+		.ok_or ("Must have exactly one robot tile") ?;
 	grid.set (bot_pos, Tile::Scaffold);
 	Ok ((bot_pos, bot_dir))
 }
@@ -101,9 +102,7 @@ fn find_funcs (route: & [Step]) -> GenResult <(Main, Funcs)> {
 		// find matching functions for the remaining route
 
 		for (func_id, func) in ('A' .. ).zip (& funcs) {
-			if ! itertools::equal (
-					route.iter ().copied ().skip (prefix_len).take (func.len ()),
-					func.iter ().copied ()) {
+			if ! route.iter ().skip (prefix_len).take (func.len ()).eq (func.iter ()) {
 				continue;
 			}
 			let mut main = main.clone ();

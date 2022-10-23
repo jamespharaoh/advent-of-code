@@ -26,7 +26,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 					(val_high % val_low == 0).then_some (val_high / val_low)
 				}))
 			.exactly_one ()
-			.map_err (|_err| GenError::from ("No solution found")))
+			.ok_or ("No solution found"))
 		.try_fold (0_u32, |sum, item| {
 			let item = item ?.pan_u32 ();
 			Ok (chk! (sum + item) ?)

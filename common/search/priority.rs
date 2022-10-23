@@ -20,30 +20,16 @@
 /// # use aoc_misc::prelude::*;
 /// # use aoc_search::*;
 /// // set up a data structure with a map of connected nodes and the distance between them
-/// let nodes: HashMap <& str, Vec <(& str, u64)>> = {
-///
-///    // use of Itertools::group_by requires a temporary...
-///    let nodes_group_by_temp = [
-///          // list of connected nodes and the distance between them
-///          ("one", "two", 7), ("one", "three", 9), ("one", "six", 14),
-///          ("two", "three", 10), ("two", "four", 15), ("three", "four", 11),
-///          ("three", "six", 2), ("four", "five", 6), ("five", "six", 8),
-///       ].into_iter ()
-///          // double up the connections to include the reverse
-///          .flat_map (|(node_1, node_2, dist)| [(node_1, node_2, dist), (node_2, node_1, dist)])
-///          // group by node_1 (requires sort)
-///          .sorted_by_key (|& (node_1, _, _)| node_1)
-///         .group_by (|& (node_1, _, _)| node_1);
-///
-///    // collect into a hash map from node_1 to (node_2, dist)
-///    nodes_group_by_temp.into_iter ()
-///       .map (|(node_1, group)| (
-///             node_1,
-///             group.map (|(_, node_2, dist)| (node_2, dist)).collect::<Vec <_>> (),
-///          ))
-///       .collect ()
-///
-/// };
+/// let mut nodes = HashMap::new ();
+/// for (left, right, dist) in [
+///    // list of connected nodes and the distance between them
+///    ("one", "two", 7), ("one", "three", 9), ("one", "six", 14), ("two", "three", 10),
+///    ("two", "four", 15), ("three", "four", 11), ("three", "six", 2), ("four", "five", 6),
+///    ("five", "six", 8),
+/// ] {
+///    nodes.entry (left).or_insert (Vec::new ()).push ((right, dist));
+///    nodes.entry (right).or_insert (Vec::new ()).push ((left, dist));
+/// }
 ///
 /// // create a PrioritySearch to traverse our nodes
 /// let mut search = PrioritySearch::with_hash_map (nodes);

@@ -78,7 +78,8 @@ fn sanity_check (input: & Input) -> GenResult <()> {
 fn calc_grid (input: & Input, size: Pos) -> Grid {
 	let mut grid_data = Vec::new ();
 	let mut ero_row: Vec <Val> =
-		itertools::iterate (input.depth, |prev| (prev + input.params.top_factor) % input.params.modulo)
+		iter::successors (Some (input.depth), |prev|
+				Some ((prev + input.params.top_factor) % input.params.modulo))
 			.take (size.x.pan_usize ())
 			.collect ();
 	let mut y: Coord = 0;

@@ -115,7 +115,7 @@ fn merge_counts <Square: Copy + Ord> (
 	counts.into_iter ()
 		.sorted ()
 		.map (Ok)
-		.coalesce (|left, right| {
+		.merge_consecutive (|left, right| {
 			let left = ok_or_else! (left, |err| return Ok (Err (err)));
 			let right = ok_or_else! (right, |err| return Ok (Err (err)));
 			if left.0 == right.0 {

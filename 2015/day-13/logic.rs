@@ -9,8 +9,8 @@ pub fn part_one (input: & Input) -> GenResult <i32> {
 	Ok (
 		iter::from_fn (|| perms_helper.next ()
 				.then (|| perms_helper.iter ()
-					.circular_tuple_windows ()
-					.map (|(& idx_0, & idx_1)| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
+					.circular_array_windows ()
+					.map (|[& idx_0, & idx_1]| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
 					.sum ()))
 			.max ()
 			.ok_or ("No solution found") ?
@@ -23,8 +23,8 @@ pub fn part_two (input: & Input) -> GenResult <i32> {
 	Ok (
 		iter::from_fn (|| perms_helper.next ()
 				.then (|| perms_helper.iter ()
-					.tuple_windows ()
-					.map (|(& idx_0, & idx_1)| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
+					.array_windows ()
+					.map (|[& idx_0, & idx_1]| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
 					.sum ()))
 			.max ()
 			.ok_or ("No solution found") ?

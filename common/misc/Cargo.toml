@@ -13,4 +13,3 @@
 
 	ahash = { version = "*", features = [ "std" ] }
 	arrayvec = "*"
-	itertools = "*"

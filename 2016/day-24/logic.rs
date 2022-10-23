@@ -81,7 +81,7 @@ fn calc_distances (
 
 	// check for duplicates
 
-	if nums.iter ().map (|& (num, _)| num).sorted ().dedup ().count () != nums.len () {
+	if ! nums.iter ().map (|& (num, _)| num).all_unique () {
 		return Err ("Duplicated nums".into ());
 	}
 

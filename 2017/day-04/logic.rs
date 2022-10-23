@@ -6,8 +6,8 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (
 		input.passphrases.iter ()
 			.filter (|passphrase| ! passphrase.iter ()
-				.tuple_combinations::<(_, _)> ()
-				.any (|(left, right)| left == right))
+				.array_combinations ()
+				.any (|[left, right]| left == right))
 			.count ()
 			.pan_u32 ()
 	)
@@ -30,8 +30,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 						}));
 				let result =
 					! words.iter ()
-						.tuple_combinations::<(_, _)> ()
-						.any (|(left, right)| left == right);
+						.array_combinations ()
+						.any (|[left, right]| left == right);
 				buffer_pool.append (& mut words);
 				result
 			})

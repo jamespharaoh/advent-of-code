@@ -23,13 +23,11 @@ pub fn part_two (input: & Input) -> GenResult <i64> {
 	let scanners: Vec <Pos> = scanners.into_iter ().collect ();
 	Ok (
 		scanners.iter ()
-			.combinations (2)
-			.map (|scanners| {
-				let (pos_0, pos_1) = (scanners [0], scanners [1]);
+			.array_combinations ()
+			.map (|[pos_0, pos_1]|
 				Coord::abs_diff (pos_0.x, pos_1.x)
 					+ Coord::abs_diff (pos_0.y, pos_1.y)
-					+ Coord::abs_diff (pos_0.z, pos_1.z)
-			})
+					+ Coord::abs_diff (pos_0.z, pos_1.z))
 			.max ()
 			.unwrap ()
 			.pan_i64 ()
@@ -137,15 +135,18 @@ impl ScannerArranger {
 				.map (|(unplaced_beacon, placed_beacon)| chk! (placed_beacon - unplaced_beacon))
 				.try_collect () ?;
 		offsets_temp.sort ();
-		let offsets_grouped = offsets_temp.into_iter ()
-			.group_by (|& offset| offset);
-		Ok (
-			offsets_grouped.into_iter ()
-				.map (|(offset, iter)| (offset, iter.count ()))
-				.filter (|& (_, count)| count >= 12)
-				.map (|(offset, _)| offset)
-				.next ()
-		)
+		let mut last = None;
+		let mut num = 0_u32;
+		for & offset in offsets_temp.iter () {
+			if last == Some (offset) {
+				num += 1;
+				if num == 12 { return Ok (Some (offset)) }
+			} else {
+				last = Some (offset);
+				num = 1;
+			}
+		}
+		Ok (None)
 	}
 
 	fn place_scanner (

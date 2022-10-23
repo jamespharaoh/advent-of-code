@@ -27,7 +27,7 @@ fn calc_result <const PILES: usize> (input: & Input) -> GenResult <u64> {
 		Err ("Refusing to deal with more than 50 items") ?;
 	}
 
-	if weights.iter ().dedup ().count () != weights.len () {
+	if ! weights.iter ().all_unique () {
 		Err ("Refusing to deal with duplicated weights") ?;
 	}
 

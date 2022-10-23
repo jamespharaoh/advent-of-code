@@ -8,8 +8,8 @@ pub fn part_one (input: & Input) -> GenResult <u16> {
 	let sequence = get_sequence (input) ?;
 	let (num_ones, num_threes) =
 		sequence.iter ().copied ()
-			.tuple_windows ()
-			.map (|(prev, next)| next - prev)
+			.array_windows ()
+			.map (|[prev, next]| next - prev)
 			.fold ((0, 0), |(num_ones, num_threes), diff| (
 				num_ones + u16::from (diff == 1),
 				num_threes + u16::from (diff == 3),
@@ -40,7 +40,7 @@ fn get_sequence (input: & Input) -> GenResult <Vec <u16>> {
 			.sorted ()
 			.collect ();
 	sequence.push (* sequence.last ().unwrap () + 3);
-	if sequence.iter ().tuple_windows ().any (|(& a, & b)| a == b) {
+	if sequence.iter ().array_windows ().any (|[& a, & b]| a == b) {
 		return Err ("Duplicated adapter".into ());
 	}
 	Ok (sequence)

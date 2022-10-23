@@ -146,8 +146,8 @@ impl From <& [Pot]> for State {
 		let data =
 			pots.iter ().copied ()
 				.chain (iter::repeat (Pot::Empty).take (7))
-				.tuples::<(_, _, _, _, _, _, _, _)> ()
-				.map (|(a, b, c, d, e, f, g, h)|
+				.arrays ()
+				.map (|[a, b, c, d, e, f, g, h]|
 					a.as_u8 () << 7_u32 | b.as_u8 () << 6_u32 |
 					c.as_u8 () << 5_u32 | d.as_u8 () << 4_u32 |
 					e.as_u8 () << 3_u32 | f.as_u8 () << 2_u32 |

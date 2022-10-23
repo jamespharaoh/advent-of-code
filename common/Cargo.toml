@@ -13,7 +13,6 @@
 	aoc-nums = { path = "nums" }
 	aoc-parser = { path = "parser" }
 	aoc-puzzle = { path = "puzzle" }
-	itertools = "*"
 
 [lib]
 

@@ -16,26 +16,30 @@ pub fn calc_result (input: & Input, loops: u32) -> GenResult <u64> {
 	let rules = get_rules (input) ?;
 	let mut pair_counts =
 		input.template.chars ()
-			.tuple_windows ()
-			.map (|(left, right)| ((left, right), 1))
-			.into_grouping_map ()
-			.sum ();
+			.array_windows ()
+			.fold (HashMap::new (), |mut counts, [left, right]| {
+				* counts.entry ((left, right)).or_insert (0) += 1;
+				counts
+			});
 	for _ in 0 .. loops {
 		pair_counts = pair_counts.into_iter ()
 			.flat_map (|((left, right), num)| {
 				let insert = rules [& (left, right)];
 				[ ((left, insert), num), ((insert, right), num) ]
 			})
-			.into_grouping_map ()
-			.sum ();
+			.fold (HashMap::new (), |mut counts, ((left, right), num)| {
+				* counts.entry ((left, right)).or_insert (0) += num;
+				counts
+			});
 	}
 	let char_counts = pair_counts.iter ()
 		.map (|(& (_, right), & num)| (right, num))
 		.chain (iter::once ((input.template.chars ().next ().unwrap (), 1)))
-		.into_grouping_map ()
-		.sum ();
-	let most = char_counts.values ().max ().unwrap ();
-	let least = char_counts.values ().min ().unwrap ();
+		.fold (HashMap::new (), |mut counts, (ch, num)| {
+			* counts.entry (ch).or_insert (0) += num;
+			counts
+		});
+	let (least, most) = char_counts.values ().min_max ().unwrap ();
 	Ok (most - least)
 }
 

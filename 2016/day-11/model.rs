@@ -28,7 +28,7 @@ impl State {
 						Component::Microchip (ref name) => name.clone (),
 					}))
 				.sorted ()
-				.dedup ()
+				.dedup_consecutive ()
 				.collect ();
 		if names.is_empty () { return Err ("Must have at least one component type".into ()) }
 		if names.len () > 7 { return Err ("Only support seven types of component".into ()) }
@@ -40,7 +40,7 @@ impl State {
 				.filter (|& (_, some_comp)| * some_comp == comp)
 				.map (|(floor, _)| floor)
 				.exactly_one ()
-				.map_err (|_err| "Must have exactly one generator of each type");
+				.ok_or ("Must have exactly one generator of each type");
 		Ok ((Self {
 			comps: names.iter ()
 				.map (|name| Ok::<_, GenError> ([

@@ -46,7 +46,7 @@ impl <'inp> ProgInfo <'inp> {
 		let root = input.progs.iter ()
 			.filter (|prog| ! parents.contains_key (& prog.name))
 			.exactly_one ()
-			.map_err (|_err| "More than one prog which is not held by another") ?;
+			.ok_or ("More than one prog which is not held by another") ?;
 
 		Ok (Self::build_recursive (& progs, & root.name))
 

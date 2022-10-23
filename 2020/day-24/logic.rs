@@ -118,8 +118,8 @@ fn next_grid_bits (grid: & [u128]) -> Vec <u128> {
 		.chain (grid.iter ().copied ())
 		.chain (iter::once (0))
 		.map (|val| val << 1_u32)
-		.tuple_windows ()
-		.map (|(mut a, mut b, mut c)| {
+		.array_windows ()
+		.map (|[mut a, mut b, mut c]| {
 			let mut row = 0;
 			for _ in 0 .. grid.len () {
 				let black = b & 0b_010 != 0;

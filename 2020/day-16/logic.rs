@@ -128,8 +128,8 @@ fn get_matches (input: & Input) -> Vec <u32> {
 		}
 	}
 	matches_temp.into_iter ()
-		.tuple_windows ()
-		.flat_map (|((val_0, fld_0), (val_1, _))|
+		.array_windows ()
+		.flat_map (|[(val_0, fld_0), (val_1, _)]|
 			iter::repeat (fld_0).take ((val_1 - val_0).pan_usize ()))
 		.collect ()
 }

@@ -5,8 +5,7 @@ pub struct HashMap <Key, Val, Hshr = RandomHasher> {
 	phantom: PhantomData <Hshr>,
 }
 
-impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
-	where Key: Ord {
+impl <Key, Val> HashMap <Key, Val, RandomHasher> where Key: Ord {
 
 	pub fn new () -> Self {
 		Self {
@@ -18,6 +17,10 @@ impl <Key, Val, Hshr> HashMap <Key, Val, Hshr>
 	pub fn with_capacity (_capacity: usize) -> Self {
 		Self::new ()
 	}
+
+}
+
+impl <Key, Val, Hshr> HashMap <Key, Val, Hshr> where Key: Ord {
 
 	pub fn clear (& mut self) {
 		self.map.clear ();
@@ -137,6 +140,14 @@ impl <Key, Val, Qry> Index <& '_ Qry> for HashMap <Key, Val>
 	type Output = Val;
 	fn index (& self, query: & Qry) -> & Val {
 		self.map.get (query).unwrap ()
+	}
+}
+
+impl <'map, Key, Val> IntoIterator for HashMap <Key, Val> {
+	type Item = (Key, Val);
+	type IntoIter = BTreeIntoIter <Key, Val>;
+	fn into_iter (self) -> BTreeIntoIter <Key, Val> {
+		self.map.into_iter ()
 	}
 }
 

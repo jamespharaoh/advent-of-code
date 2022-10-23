@@ -39,8 +39,8 @@ fn check_input (input: & Input) -> GenResult <()> {
 	}
 	comps.sort ();
 	if comps.iter ()
-		.tuple_windows::<(_, _)> ()
-		.any (|(left, right)| left == right
+		.array_windows ()
+		.any (|[left, right]| left == right
 			|| (left.port_0 == right.port_1 && left.port_1 == right.port_0)) {
 		return Err ("Duplicated components".into ());
 	}

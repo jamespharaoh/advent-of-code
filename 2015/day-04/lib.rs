@@ -7,6 +7,7 @@
 use aoc_common::*;
 use aoc_md5 as md5;
 use aoc_parallel::{ self as parallel, prelude::* };
+use aoc_search::prelude::*;
 
 pub mod cli;
 mod examples;

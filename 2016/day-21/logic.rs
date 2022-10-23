@@ -23,7 +23,7 @@ fn calc_result (ops: & [ScrambleOp], start: & str, mode: Mode) -> GenResult <Str
 	if ! start.chars ().all (|ch| ch.is_ascii_lowercase ()) {
 		return Err ("Password must contains only lowercase ASCII characters".into ());
 	}
-	if start.chars ().duplicates ().next ().is_some () {
+	if ! start.chars ().all_unique () {
 		return Err ("Password must contain only unique characters".into ());
 	}
 	if mode == Mode::Unscramble && start.chars ().count () != 8 {

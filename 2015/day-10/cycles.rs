@@ -1,4 +1,8 @@
-#![ allow (clippy::else_if_without_else) ]
+#![ allow (clippy::todo) ]
+#![ allow (dead_code) ]
+#![ allow (unused_imports) ]
+#![ allow (unused_mut) ]
+#![ allow (unused_variables) ]
 
 use super::*;
 use model::State;
@@ -186,6 +190,10 @@ pub fn run (args: Args) -> GenResult <()> {
 	let mut destinies: HashMap <Span, Destiny> = HashMap::new ();
 	let mut atomics: HashSet <Atomic> = HashSet::new ();
 
+	/*
+
+	NOTE: commented out because of removal of itertools, wasn't working properly anyway...
+
 	for length in (2 ..= args.max_length.unwrap_or (10)).step_by (2) {
 
 		'STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
@@ -301,6 +309,7 @@ pub fn run (args: Args) -> GenResult <()> {
 	for (_key, _destiny) in destinies.iter ().sorted_by_key (|& (key, _)| key.clone ()) {
 		//println! (" - {:?}", atomic);
 	}
+	*/
 
 	todo! ();
 
@@ -315,6 +324,12 @@ struct Stable {
 fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option <Stable>> {
 
 	let mut stables: HashMap <Span, Option <Stable>> = HashMap::new ();
+
+	todo! ();
+
+	/*
+
+	NOTE: commented out because of removal of itertools
 
 	for length in (2 ..= max_length).step_by (2) {
 
@@ -400,6 +415,8 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 	}
 
 	stables
+
+	*/
 
 }
 

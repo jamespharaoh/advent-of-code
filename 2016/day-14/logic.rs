@@ -60,9 +60,9 @@ impl <HashesIter> Iterator for KeyIndexIter <HashesIter>
 
 fn find_triple (hash: & [u8; 32]) -> Option <u8> {
 	hash.iter ()
-		.tuple_windows::<(_, _, _)> ()
-		.filter (|& (& a, & b, & c)| a == b && a == c)
-		.map (|(& a, _, _)| a)
+		.array_windows ()
+		.filter (|& [& a, & b, & c]| a == b && a == c)
+		.map (|[& a, _, _]| a)
 		.next ()
 }
 

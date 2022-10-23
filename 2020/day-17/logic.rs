@@ -23,8 +23,7 @@ fn calc_result <Pos: GenPos <DIMS>, const DIMS: usize> (
 	num_iters: u32,
 ) -> GenResult <u32> {
 	let mut grid = get_grid (input) ?;
-	let base_dirs: Vec <Pos> = get_base_dirs ();
-	for _ in 0 .. num_iters { grid = next_grid (& grid, & base_dirs) ?; }
+	for _ in 0 .. num_iters { grid = next_grid (& grid, Pos::BASE_DIRS) ?; }
 	Ok (
 		grid.values ()
 			.filter (|& tile| tile == Tile::Active)
@@ -75,12 +74,118 @@ fn get_grid <Pos: GenPos <DIMS>, const DIMS: usize> (
 	Ok (grid)
 }
 
-#[ inline ]
-fn get_base_dirs <Pos: GenPos <DIMS>, const DIMS: usize> () -> Vec <Pos> {
-	iter::repeat ([ Coord::NEG_ONE, Coord::ZERO, Coord::ONE ])
-		.take (DIMS)
-		.multi_cartesian_product ()
-		.map (|combo| <[Coord; DIMS]>::try_from (combo).unwrap ().into ())
-		.filter (|& pos| pos != Pos::ZERO)
-		.collect ()
-}
+/*
+const SIGNS_3: [[Coord; 3]; 26] = [
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::NEG_ONE],
+	//[Coord::ZERO, Coord::ZERO, Coord::ZERO],
+	[Coord::ZERO, Coord::ZERO, Coord::ONE],
+	[Coord::ZERO, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::ONE, Coord::ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::ONE, Coord::ZERO, Coord::ONE],
+	[Coord::ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ONE, Coord::ZERO],
+	[Coord::ONE, Coord::ONE, Coord::ONE],
+];
+
+const SIGNS_4: [[Coord; 4]; 80] = [
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::ZERO],
+	[Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE],
+	//[Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::ZERO],
+	[Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::ONE],
+	[Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::ONE],
+	[Coord::ZERO, Coord::ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ZERO, Coord::ONE, Coord::ONE, Coord::ZERO],
+	[Coord::ZERO, Coord::ONE, Coord::ONE, Coord::ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::ZERO],
+	[Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::ONE],
+	[Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::ZERO],
+	[Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::ONE],
+	[Coord::ONE, Coord::ZERO, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ZERO, Coord::ONE, Coord::ZERO],
+	[Coord::ONE, Coord::ZERO, Coord::ONE, Coord::ONE],
+	[Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::ZERO],
+	[Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::ONE],
+	[Coord::ONE, Coord::ONE, Coord::ZERO, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ONE, Coord::ZERO, Coord::ZERO],
+	[Coord::ONE, Coord::ONE, Coord::ZERO, Coord::ONE],
+	[Coord::ONE, Coord::ONE, Coord::ONE, Coord::NEG_ONE],
+	[Coord::ONE, Coord::ONE, Coord::ONE, Coord::ZERO],
+	[Coord::ONE, Coord::ONE, Coord::ONE, Coord::ONE],
+];
+*/

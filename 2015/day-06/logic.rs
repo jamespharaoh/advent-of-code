@@ -44,8 +44,7 @@ fn calc_result (steps: & [Step], mode_fn: ModeFn) -> GenResult <u32> {
 	let rows =
 		steps.iter ().copied ()
 			.flat_map (|(_, step)| [ step.origin.row, step.peak.row ])
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect::<Vec <_>> ();
 	let mut cur_steps: Vec <(usize, Step)> = Vec::new ();
 	let mut sum = 0;
@@ -125,8 +124,8 @@ fn calc_result (steps: & [Step], mode_fn: ModeFn) -> GenResult <u32> {
 		prev_row = row;
 		prev_active =
 			row_data.iter ().copied ()
-				.tuple_windows::<(_, _)> ()
-				.map (|((start, val), (end, _))|
+				.array_windows ()
+				.map (|[(start, val), (end, _)]|
 					chk! (chk! (end - start) ?.pan_u32 () * val.pan_u32 ()))
 				.try_fold (0, |sum, val| chk! (sum + val ?)) ?;
 		assert! (row_data.last ().copied ().map_or (0, |(_, val)| val) == 0);

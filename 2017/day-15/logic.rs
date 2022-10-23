@@ -40,8 +40,9 @@ fn calc_result (
 	calc_a: fn (u64) -> u64,
 	calc_b: fn (u64) -> u64,
 ) -> u32 {
-	itertools::iterate ((input.start_a.pan_u64 (), input.start_b.pan_u64 ()),
-			|& (a, b)| (calc_a (a), calc_b (b)))
+	iter::successors (
+			Some ((input.start_a.pan_u64 (), input.start_b.pan_u64 ())),
+			|& (a, b)| Some ((calc_a (a), calc_b (b))))
 		.skip (1)
 		.take (num_compares.pan_usize ())
 		.filter (|& (a, b)| a & 0xffff == b & 0xffff)

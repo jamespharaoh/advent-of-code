@@ -50,10 +50,11 @@ fn make_iter (inner: impl Iterator <Item = u8>) -> impl Iterator <Item = u8> {
 
 #[ must_use ]
 pub fn one_round (state: & State) -> State {
-	let group_by =
-		state.iter ().copied ()
-			.group_by (|& val| val);
-	group_by.into_iter ()
-		.flat_map (|(val, group)| [ group.count ().pan_u8 (), val ])
+	state.iter ()
+		.map (|& val| (val, 1_u8))
+		.merge_consecutive (|(left, num_left), (right, num_right)|
+			if left == right { Ok ((left, num_left + 1)) }
+			else { Err (((left, num_left), (right, num_right))) })
+		.flat_map (|(val, num)| [ num, val ])
 		.collect ()
 }

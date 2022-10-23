@@ -42,8 +42,8 @@ fn iter_distances <'out> (
 		if ! perms_helper.next () { return None }
 		Some (
 			perms_helper.iter ()
-				.tuple_windows::<(_, _)> ()
-				.map (|(& idx_0, & idx_1)| dist_table [(idx_0, idx_1)])
+				.array_windows ()
+				.map (|[& idx_0, & idx_1]| dist_table [(idx_0, idx_1)])
 				.sum::<u32> ()
 		)
 	})

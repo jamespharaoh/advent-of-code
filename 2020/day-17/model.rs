@@ -15,12 +15,140 @@ enum_decl_parser_display! {
 	}
 }
 
-pub trait GenPos <const DIMS: usize>:
-	pos::GenPos <DIMS, Val = Coord> +
-	GridPos <DIMS, Coord = Coord> {
+pub trait GenPos <const DIMS: usize>: pos::GenPos <DIMS, Val = Coord>
+		+ GridPos <DIMS, Coord = Coord>
+		+ 'static{
+	const BASE_DIRS: & 'static [Self];
 }
 
-impl <Pos, const DIMS: usize> GenPos <DIMS> for Pos where Pos:
-	pos::GenPos <DIMS, Val = Coord> +
-	GridPos <DIMS, Coord = Coord> {
+impl GenPos <2> for PosXY {
+	const BASE_DIRS: & 'static [Self] = & [
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE),
+		//Self::new (Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ONE),
+	];
+}
+
+impl GenPos <3> for PosXYZ {
+	const BASE_DIRS: & 'static [Self] = & [
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::NEG_ONE),
+		//Self::new (Coord::ZERO, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ONE),
+	];
+}
+
+impl GenPos <4> for PosXYZW {
+	const BASE_DIRS: & 'static [Self] = & [
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ZERO, Coord::ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::NEG_ONE, Coord::ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::NEG_ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE),
+		//Self::new (Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ZERO, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ZERO, Coord::ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::NEG_ONE, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ZERO, Coord::ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ONE, Coord::NEG_ONE, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ZERO, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ZERO, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ZERO, Coord::ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ONE, Coord::NEG_ONE),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ONE, Coord::ZERO),
+		Self::new (Coord::ONE, Coord::ONE, Coord::ONE, Coord::ONE),
+	];
 }

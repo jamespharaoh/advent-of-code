@@ -85,9 +85,12 @@ fn find_test_case_worker (args: FindTestCaseArgs, complete: Arc <AtomicBool>) {
 			};
 			buffer.push (ch);
 		}
-		for chars in ('a' ..= 'z').permutations (4) {
+		let mut perms_helper = PermutationsHelper::new (4);
+		while perms_helper.next () {
 			buffer.truncate (args.len.unwrap_or (16) - 4);
-			for ch in chars { buffer.push (ch); }
+			for ch_idx in & * perms_helper {
+				buffer.push ((b'a' + ch_idx.pan_u8 ()).pan_char ());
+			}
 			write! (buffer, "{}", num).unwrap ();
 			let hash = md5::md5_hash (buffer.as_bytes ());
 			if hash [0] == 0 && hash [1] == 0 && hash [2] == 0 {

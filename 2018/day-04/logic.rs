@@ -39,8 +39,8 @@ fn analyse (input: & Input) -> GenResult <HashMap <(u32, u32), u32>> {
 	let mut entries = input.entries.clone ();
 	entries.sort_by_key (|entry| (entry.date, entry.time));
 	if entries.iter ()
-			.tuple_windows::<(_, _)> ()
-			.any (|(left, right)| (left.date, left.time) == (right.date, right.time)) {
+			.array_windows ()
+			.any (|[left, right]| (left.date, left.time) == (right.date, right.time)) {
 		return Err ("Two entries share the same time".into ());
 	}
 	let mut guard_id = None;

@@ -51,7 +51,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	loop {
 		let mut progress = false;
 		for match_opcode in Opcode::VARIANTS.iter ().copied () {
-			if let Ok (match_num) =
+			if let Some (match_num) =
 				opcode_to_num_arr [match_opcode.idx ()]
 					.iter ().copied ()
 					.enumerate ()

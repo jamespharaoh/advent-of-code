@@ -233,6 +233,7 @@ mod base_list {
 
 	}
 
+	#[ derive (Clone) ]
 	pub struct ListIter <'dat, Item: Clone> {
 		list: & 'dat List <Item>,
 	}

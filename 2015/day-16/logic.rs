@@ -41,6 +41,6 @@ pub fn calc_result (input: & Input, ticker_fn: fn (Attr, u8) -> bool) -> GenResu
 			.filter (|sue| sue.attrs.iter ().copied ()
 				.all (|(attr, num)| ticker_fn (attr, num)))
 			.exactly_one ()
-			.map_err (|iter| format! ("Expected exactly one match but found {}", iter.count ())) ?;
+			.ok_or ("Expected exactly one match") ?;
 	Ok (the_sue.number)
 }

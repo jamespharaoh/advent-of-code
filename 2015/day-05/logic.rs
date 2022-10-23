@@ -27,13 +27,13 @@ fn is_nice_one (input: & str) -> bool {
 		return false;
 	}
 	if ! input.chars ()
-			.tuple_windows::<(_, _)> ()
-			.any (|(ch_0, ch_1)| ch_0 == ch_1) {
+			.array_windows ()
+			.any (|[ch_0, ch_1]| ch_0 == ch_1) {
 		return false;
 	}
 	if input.chars ()
-			.tuple_windows::<(_, _)> ()
-			.any (|chars| [ ('a', 'b'), ('c', 'd'), ('p', 'q'), ('x', 'y') ]
+			.array_windows ()
+			.any (|chars| [ ['a', 'b'], ['c', 'd'], ['p', 'q'], ['x', 'y'] ]
 				.contains (& chars)) {
 		return false;
 	}
@@ -42,17 +42,17 @@ fn is_nice_one (input: & str) -> bool {
 
 fn is_nice_two (input: & str) -> bool {
 	if ! input.chars ()
-			.tuple_windows::<(_, _)> ()
+			.array_windows::<2> ()
 			.enumerate ()
 			.any (|(idx, chars_0)|
 				input.chars ().skip (idx + 2)
-					.tuple_windows::<(_, _)> ()
+					.array_windows ()
 					.any (|chars_1| chars_0 == chars_1)) {
 		return false;
 	}
 	if ! input.chars ()
-			.tuple_windows::<(_, _, _)> ()
-			.any (|(ch_0, _, ch_1)| ch_0 == ch_1) {
+			.array_windows ()
+			.any (|[ch_0, _, ch_1]| ch_0 == ch_1) {
 		return false;
 	}
 	true

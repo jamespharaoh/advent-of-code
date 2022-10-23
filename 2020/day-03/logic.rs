@@ -26,12 +26,12 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 }
 
 fn calc_result (input: & Input, traj: Pos) -> u32 {
-	itertools::iterate (
-			Pos::ZERO,
+	iter::successors (
+			Some (Pos::ZERO),
 			|& pos| {
 				let mut pos = pos + traj;
 				while input.grid.size ().x <= pos.x { pos.x -= input.grid.size ().x; }
-				pos
+				Some (pos)
 			})
 		.take_while (|pos| pos.y < input.grid.size ().y)
 		.map (|pos| input.grid.get (pos).unwrap ())

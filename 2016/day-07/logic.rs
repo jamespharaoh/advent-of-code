@@ -29,8 +29,8 @@ fn has_abba_unbracketed (addr: & str) -> bool {
 			})
 		})
 		.flatten ()
-		.tuple_windows::<(_, _, _, _)> ()
-		.any (|(a, b, c, d)| a == d && b == c && a != b)
+		.array_windows ()
+		.any (|[a, b, c, d]| a == d && b == c && a != b)
 }
 
 fn has_abba_bracketed (addr: & str) -> bool {
@@ -43,8 +43,8 @@ fn has_abba_bracketed (addr: & str) -> bool {
 			})
 		})
 		.flatten ()
-		.tuple_windows::<(_, _, _, _)> ()
-		.any (|(a, b, c, d)| a == d && b == c && a != b)
+		.array_windows ()
+		.any (|[a, b, c, d]| a == d && b == c && a != b)
 }
 
 fn iter_abas_unbracketed (addr: & str) -> impl Iterator <Item = (char, char)> + '_ {
@@ -57,9 +57,9 @@ fn iter_abas_unbracketed (addr: & str) -> impl Iterator <Item = (char, char)> + 
 			})
 		})
 		.flatten ()
-		.tuple_windows::<(_, _, _)> ()
-		.filter (|& (a, b, c)| a == c && a != b)
-		.map (|(a, b, _)| (a, b))
+		.array_windows ()
+		.filter (|& [a, b, c]| a == c && a != b)
+		.map (|[a, b, _]| (a, b))
 }
 
 fn has_bab_bracketed (addr: & str, a: char, b: char) -> bool {
@@ -72,6 +72,6 @@ fn has_bab_bracketed (addr: & str, a: char, b: char) -> bool {
 			})
 		})
 		.flatten ()
-		.tuple_windows::<(_, _, _)> ()
-		.any (|(a1, b1, c1)| a == b1 && b == a1 && b == c1)
+		.array_windows ()
+		.any (|[a1, b1, c1]| a == b1 && b == a1 && b == c1)
 }

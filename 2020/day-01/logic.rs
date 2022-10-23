@@ -8,8 +8,7 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	let entries: Vec <u16> =
 		input.entries.iter ().copied ()
 			.filter (|& val| val < 2020)
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect ();
 	let (entry_0, entry_1) =
 		find_two (
@@ -24,8 +23,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	let entries: Vec <u16> =
 		input.entries.iter ().copied ()
 			.filter (|& val| val < 2020)
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect ();
 	for & entry_0 in entries.iter () {
 		if let Some ((entry_1, entry_2)) =

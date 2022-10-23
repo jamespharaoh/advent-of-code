@@ -82,9 +82,9 @@ fn find_monsters_transform (
 		.map (|cur| cur.walk (col_off)
 			.fold (0_u128, |sum, cur|
 				sum << 1_u32 | u128::from (cur.get (grid) == Pixel::White)))
-		.tuple_windows ()
+		.array_windows ()
 		.enumerate ()
-		.flat_map (|(y, (mut a, mut b, mut c))| {
+		.flat_map (|(y, [mut a, mut b, mut c])| {
 			let y = y.pan_i8 ();
 			let mut results = Vec::new ();
 			for x in (0 .. size - 19).rev () {
@@ -205,7 +205,7 @@ fn pick_first (tiles: & mut Tiles) -> GenResult <Tile> {
 
 fn check_input (input: & Input) -> GenResult <()> {
 	if input.tiles.len () < 2 { return Err ("Must provide at least two tiles".into ()) }
-	if input.tiles.iter ().duplicates_by (|tile| tile.id).next ().is_some () {
+	if ! input.tiles.iter ().map (|tile| tile.id).all_unique () {
 		return Err ("Every tile must have a unique id".into ());
 	}
 	if ! input.tiles.iter ().map (|tile| tile.grid.size ()).all_equal () {

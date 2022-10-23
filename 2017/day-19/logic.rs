@@ -38,7 +38,6 @@ pub fn route_iter (
 			.filter (|& (_, tile)| tile == Tile::Vert)
 			.map (|(pos, _)| pos)
 			.exactly_one ()
-			.ok ()
 			.ok_or ("Must have exactly one start position") ?;
 
 	// iterate over path

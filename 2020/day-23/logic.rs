@@ -40,7 +40,7 @@ fn calc_final_deck (input: & Input, deck_size: Card, num_rounds: u32) -> GenResu
 }
 
 fn build_deck (input: & Input, deck_size: Card) -> GenResult <Deck> {
-	if input.start.chars ().duplicates ().next ().is_some () {
+	if ! input.start.chars ().all_unique () {
 		return Err ("Duplicate cards".into ());
 	}
 	Ok (

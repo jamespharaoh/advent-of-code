@@ -90,8 +90,9 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 			if todo_prefix.is_empty () {
 				println! ("queue={} steps={} {}", todo.len (), todo_steps, todo_suffix);
 			} else {
-				println! ("queue={} steps={} {} | {}", todo.len (), todo_steps,
-					todo_prefix.iter ().join (" | "), todo_suffix);
+				println! ("queue={todo_len} steps={todo_steps} {todo_prefix} | {todo_suffix}",
+					todo_len = todo.len (),
+					todo_prefix = todo_prefix.iter ().display_delim (" | "));
 			}
 		}
 

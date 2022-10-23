@@ -41,7 +41,6 @@ pub fn part_two (input: & Input) -> GenResult <usize> {
 			.filter (|node| node.used == 0)
 			.map (|node| node.pos)
 			.exactly_one ()
-			.ok ()
 			.ok_or ("Must have exactly one empty node") ?;
 
 	let lowest =

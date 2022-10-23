@@ -63,14 +63,14 @@ fn next_password (mut password: [char; 6]) -> Option <[char; 6]> {
 
 fn is_ascending (password: & [char; 6]) -> bool {
 	password.iter ()
-		.tuple_windows ()
-		.all (|(a, b)| a <= b)
+		.array_windows ()
+		.all (|[a, b]| a <= b)
 }
 
 fn has_repeated (password: & [char; 6]) -> bool {
 	password.iter ()
-		.tuple_windows ()
-		.any (|(a, b)| a == b)
+		.array_windows ()
+		.any (|[a, b]| a == b)
 }
 
 fn has_repeated_alone (password: & [char; 6]) -> bool {
@@ -78,6 +78,6 @@ fn has_repeated_alone (password: & [char; 6]) -> bool {
 		.chain (iter::once ('X'))
 		.chain (password.iter ().copied ())
 		.chain (iter::once ('X'))
-		.tuple_windows ()
-		.any (|(a, b, c, d)| a != b && b == c && c != d)
+		.array_windows ()
+		.any (|[a, b, c, d]| a != b && b == c && c != d)
 }

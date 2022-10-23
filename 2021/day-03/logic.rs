@@ -39,7 +39,7 @@ fn calc_rating (readings: & [u16], keep_fn: fn (Ordering) -> bool) -> GenResult 
 fn iter_bits (readings: & [u16]) -> impl Iterator <Item = u16> {
 	let max = readings.iter ().copied ().max ().unwrap ();
 	let high = if 0 < max { 0x8000 >> max.leading_zeros () } else { 0 };
-	itertools::iterate (high, |& bit| bit >> 1_u32)
+	iter::successors (Some (high), |& bit| Some (bit >> 1_u32))
 		.take_while (|& bit| bit != 0)
 }
 

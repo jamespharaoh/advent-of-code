@@ -5,9 +5,9 @@ use input::Input;
 pub fn part_one (input: & Input) -> GenResult <u32> {
 	Ok (
 		input.digits.iter ()
-			.circular_tuple_windows::<(_, _)> ()
-			.filter (|& (& digit_0, & digit_1)| digit_0 == digit_1)
-			.map (|(& digit, _)| digit.pan_u32 ())
+			.circular_array_windows ()
+			.filter (|& [& digit_0, & digit_1]| digit_0 == digit_1)
+			.map (|[& digit, _]| digit.pan_u32 ())
 			.sum ()
 	)
 }

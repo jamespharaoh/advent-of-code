@@ -213,10 +213,10 @@ impl <const CIR: bool, const MIR: bool> PermutationsHelper <CIR, MIR> {
 
 			let (idx_0, val_0) = some_or! (
 				self.data.iter ().rev ()
-					.tuple_windows ()
+					.array_windows ()
 					.enumerate ()
-					.find (|& (_, (& val_1, & val_0))| val_0 < val_1)
-					.map (|(off_0, (_, & val_0))| (self.data.len () - 2 - off_0, val_0)),
+					.find (|& (_, [& val_1, & val_0])| val_0 < val_1)
+					.map (|(off_0, [_, & val_0])| (self.data.len () - 2 - off_0, val_0)),
 				return false);
 
 			if CIR && idx_0 == 0 { return false }

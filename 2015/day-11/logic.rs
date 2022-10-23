@@ -52,8 +52,8 @@ pub fn next_password (input: & str) -> GenResult <String> {
 pub fn is_valid <Inpt> (input: Inpt) -> bool
 		where Inpt: Iterator <Item = char> + Clone {
 	if ! input.clone ()
-		.tuple_windows::<(_, _, _)> ()
-		.any (|(a, b, c)| a.pan_u32 () + 1 == b.pan_u32 () && b.pan_u32 () + 1 == c.pan_u32 ()) {
+		.array_windows ()
+		.any (|[a, b, c]| a.pan_u32 () + 1 == b.pan_u32 () && b.pan_u32 () + 1 == c.pan_u32 ()) {
 		return false;
 	}
 	let (num_repeats, _, _) =
@@ -70,9 +70,9 @@ pub fn is_valid <Inpt> (input: Inpt) -> bool
 pub fn find_pair <Inpt> (input: Inpt) -> Option <(usize, char)>
 		where Inpt: Iterator <Item = char> + Clone {
 	input
-		.tuple_windows::<(_, _)> ()
-		.filter (|& (a, b)| a == b)
-		.map (|(a, _)| a)
+		.array_windows ()
+		.filter (|& [a, b]| a == b)
+		.map (|[a, _]| a)
 		.enumerate ()
 		.next ()
 }

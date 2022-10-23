@@ -146,8 +146,7 @@ mod mutator {
 				[ pipe_0.left, pipe_1.left ].iter ().copied ()
 					.chain (pipe_0.right.iter ().copied ())
 					.chain (pipe_1.right.iter ().copied ())
-					.sorted ()
-					.dedup ()
+					.sorted_unique ()
 					.collect ();
 			if ! (2 ..= 9).contains (& villages.len ()) { return None }
 			let left_idx = rng.gen_range (0 .. villages.len ());
@@ -164,8 +163,7 @@ mod mutator {
 			let mut villages_0: Vec <Village> =
 				iter::once (pipe.left)
 					.chain (pipe.right.iter ().copied ())
-					.sorted ()
-					.dedup ()
+					.sorted_unique ()
 					.collect ();
 			if villages_0.len () < 2 { return None }
 			let split_idx = rng.gen_range (1 ..= villages_0.len () - 1);
