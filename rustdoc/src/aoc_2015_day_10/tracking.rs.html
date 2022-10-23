@@ -268,9 +268,9 @@
 		}
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{
 			items: state.iter ().copied ()
-				.tuples::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+				.arrays ()
 				.enumerate ()
-				.map (|(idx, (run, num))|
+				.map (|(idx, [run, num])|
 					<span class="prelude-val">Ok </span>(Item {
 						gen: <span class="number">0</span>,
 						idx: idx.try_into () <span class="question-mark">?</span>,
@@ -285,4 +285,4 @@
 <span class="attribute">#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]
 </span><span class="kw">pub struct </span>Item { run: u8, num: u8, gen: u16, idx: u32 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

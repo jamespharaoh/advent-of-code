@@ -59,10 +59,6 @@
 <span id="59">59</span>
 <span id="60">60</span>
 <span id="61">61</span>
-<span id="62">62</span>
-<span id="63">63</span>
-<span id="64">64</span>
-<span id="65">65</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -71,10 +67,8 @@
 
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	<span class="kw">let </span>layers: Vec &lt;Vec &lt;Pixel&gt;&gt; =
-		input.pixels.iter ().copied ()
-			.chunks (<span class="number">25 </span>* <span class="number">6</span>)
-			.into_iter ()
-			.map (Iterator::collect)
+		input.pixels.chunks (<span class="number">25 </span>* <span class="number">6</span>)
+			.map (&lt;[Pixel]&gt;::to_vec)
 			.collect ();
 	<span class="kw">let </span>most_black_idx =
 		layers.iter ().enumerate ()
@@ -100,13 +94,11 @@
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;String&gt; {
 	<span class="kw">let </span>start: Vec &lt;Pixel&gt; = iter::repeat (Pixel::Transparent).take (<span class="number">25 </span>* <span class="number">6</span>).collect ();
 	<span class="kw">let </span>image: Vec &lt;Pixel&gt; =
-		input.pixels.iter ().copied ()
-			.chunks (<span class="number">25 </span>* <span class="number">6</span>)
-			.into_iter ()
+		input.pixels.chunks (<span class="number">25 </span>* <span class="number">6</span>)
 			.fold (start, |<span class="kw-2">mut </span>image, layer| {
-				<span class="kw">for </span>(im_pixel, lr_pixel) <span class="kw">in </span>Iterator::zip (image.iter_mut (), layer) {
-					<span class="kw">if </span>* im_pixel != Pixel::Transparent { <span class="kw">continue </span>}
-					* im_pixel = lr_pixel;
+				<span class="kw">for </span>(img_pixel, &amp; lyr_pixel) <span class="kw">in </span>Iterator::zip (image.iter_mut (), layer) {
+					<span class="kw">if </span>* img_pixel != Pixel::Transparent { <span class="kw">continue </span>}
+					* img_pixel = lyr_pixel;
 				}
 				image
 			});
@@ -129,4 +121,4 @@
 	<span class="prelude-val">Ok </span>(result)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_08" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

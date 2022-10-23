@@ -171,7 +171,7 @@
 		dots.into_iter ()
 			.map (|(row, col)| (row.pan_isize (), col.pan_isize ()))
 			.sorted_by_key (|&amp; (row, col)| (col, row))
-			.dedup ()
+			.dedup_consecutive ()
 			.collect ())
 }
 
@@ -198,7 +198,7 @@
 		dots.into_iter ()
 			.map (|(row, col)| (row.pan_isize (), col.pan_isize ()))
 			.sorted_by_key (|&amp; (row, col)| (col, row))
-			.dedup ()
+			.dedup_consecutive ()
 			.collect (),
 		(rows.pan_isize (), cols.pan_isize ()))
 }
@@ -306,7 +306,7 @@
 	})
 }
 
-<span class="attribute">#[ cfg (debug_assertions) ]
+<span class="attribute">#[ cfg (all (debug_assertions, not (fuzzing))) ]
 </span><span class="kw">fn </span>draw_glyph (encoded: u128) -&gt; String {
 	<span class="kw">let </span><span class="kw-2">mut </span>drawn = String::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>val = encoded;
@@ -321,4 +321,4 @@
 	drawn
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_ocr" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_ocr" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

@@ -146,14 +146,14 @@
 
 <span class="kw">fn </span>is_ascending (password: &amp; [char; <span class="number">6</span>]) -&gt; bool {
 	password.iter ()
-		.tuple_windows ()
-		.all (|(a, b)| a &lt;= b)
+		.array_windows ()
+		.all (|[a, b]| a &lt;= b)
 }
 
 <span class="kw">fn </span>has_repeated (password: &amp; [char; <span class="number">6</span>]) -&gt; bool {
 	password.iter ()
-		.tuple_windows ()
-		.any (|(a, b)| a == b)
+		.array_windows ()
+		.any (|[a, b]| a == b)
 }
 
 <span class="kw">fn </span>has_repeated_alone (password: &amp; [char; <span class="number">6</span>]) -&gt; bool {
@@ -161,8 +161,8 @@
 		.chain (iter::once (<span class="string">&#39;X&#39;</span>))
 		.chain (password.iter ().copied ())
 		.chain (iter::once (<span class="string">&#39;X&#39;</span>))
-		.tuple_windows ()
-		.any (|(a, b, c, d)| a != b &amp;&amp; b == c &amp;&amp; c != d)
+		.array_windows ()
+		.any (|[a, b, c, d]| a != b &amp;&amp; b == c &amp;&amp; c != d)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2019_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

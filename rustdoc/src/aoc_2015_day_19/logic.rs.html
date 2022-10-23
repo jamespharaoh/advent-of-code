@@ -172,6 +172,7 @@
 <span id="172">172</span>
 <span id="173">173</span>
 <span id="174">174</span>
+<span id="175">175</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles.
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -264,8 +265,9 @@
 			<span class="kw">if </span>todo_prefix.is_empty () {
 				<span class="macro">println! </span>(<span class="string">&quot;queue={} steps={} {}&quot;</span>, todo.len (), todo_steps, todo_suffix);
 			} <span class="kw">else </span>{
-				<span class="macro">println! </span>(<span class="string">&quot;queue={} steps={} {} | {}&quot;</span>, todo.len (), todo_steps,
-					todo_prefix.iter ().join (<span class="string">&quot; | &quot;</span>), todo_suffix);
+				<span class="macro">println! </span>(<span class="string">&quot;queue={todo_len} steps={todo_steps} {todo_prefix} | {todo_suffix}&quot;</span>,
+					todo_len = todo.len (),
+					todo_prefix = todo_prefix.iter ().display_delim (<span class="string">&quot; | &quot;</span>));
 			}
 		}
 
@@ -347,4 +349,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

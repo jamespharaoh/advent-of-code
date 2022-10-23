@@ -47,8 +47,8 @@
 	<span class="prelude-val">Ok </span>(
 		input.passphrases.iter ()
 			.filter (|passphrase| ! passphrase.iter ()
-				.tuple_combinations::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-				.any (|(left, right)| left == right))
+				.array_combinations ()
+				.any (|[left, right]| left == right))
 			.count ()
 			.pan_u32 ()
 	)
@@ -71,8 +71,8 @@
 						}));
 				<span class="kw">let </span>result =
 					! words.iter ()
-						.tuple_combinations::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-						.any (|(left, right)| left == right);
+						.array_combinations ()
+						.any (|[left, right]| left == right);
 				buffer_pool.append (&amp; <span class="kw-2">mut </span>words);
 				result
 			})
@@ -81,4 +81,4 @@
 	)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

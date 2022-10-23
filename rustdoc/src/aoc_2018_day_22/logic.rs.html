@@ -110,6 +110,7 @@
 <span id="110">110</span>
 <span id="111">111</span>
 <span id="112">112</span>
+<span id="113">113</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -190,7 +191,8 @@
 <span class="kw">fn </span>calc_grid (input: &amp; Input, size: Pos) -&gt; Grid {
 	<span class="kw">let </span><span class="kw-2">mut </span>grid_data = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>ero_row: Vec &lt;Val&gt; =
-		itertools::iterate (input.depth, |prev| (prev + input.params.top_factor) % input.params.modulo)
+		iter::successors (<span class="prelude-val">Some </span>(input.depth), |prev|
+				<span class="prelude-val">Some </span>((prev + input.params.top_factor) % input.params.modulo))
 			.take (size.x.pan_usize ())
 			.collect ();
 	<span class="kw">let </span><span class="kw-2">mut </span>y: Coord = <span class="number">0</span>;
@@ -223,4 +225,4 @@
 	Grid::wrap_size (grid_data, size)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_22" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

@@ -315,9 +315,9 @@
 		.map (|cur| cur.walk (col_off)
 			.fold (<span class="number">0_u128</span>, |sum, cur|
 				sum &lt;&lt; <span class="number">1_u32 </span>| u128::from (cur.get (grid) == Pixel::White)))
-		.tuple_windows ()
+		.array_windows ()
 		.enumerate ()
-		.flat_map (|(y, (<span class="kw-2">mut </span>a, <span class="kw-2">mut </span>b, <span class="kw-2">mut </span>c))| {
+		.flat_map (|(y, [<span class="kw-2">mut </span>a, <span class="kw-2">mut </span>b, <span class="kw-2">mut </span>c])| {
 			<span class="kw">let </span>y = y.pan_i8 ();
 			<span class="kw">let </span><span class="kw-2">mut </span>results = Vec::new ();
 			<span class="kw">for </span>x <span class="kw">in </span>(<span class="number">0 </span>.. size - <span class="number">19</span>).rev () {
@@ -438,7 +438,7 @@
 
 <span class="kw">fn </span>check_input (input: &amp; Input) -&gt; GenResult &lt;()&gt; {
 	<span class="kw">if </span>input.tiles.len () &lt; <span class="number">2 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must provide at least two tiles&quot;</span>.into ()) }
-	<span class="kw">if </span>input.tiles.iter ().duplicates_by (|tile| tile.id).next ().is_some () {
+	<span class="kw">if </span>! input.tiles.iter ().map (|tile| tile.id).all_unique () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Every tile must have a unique id&quot;</span>.into ());
 	}
 	<span class="kw">if </span>! input.tiles.iter ().map (|tile| tile.grid.size ()).all_equal () {
@@ -465,4 +465,4 @@
 		.fold (<span class="number">0_u8</span>, |sum, val| (sum &lt;&lt; <span class="number">1_u32</span>) | u8::from (val))
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_20" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_20" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

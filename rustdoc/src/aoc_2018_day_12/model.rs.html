@@ -305,8 +305,8 @@
 		<span class="kw">let </span>data =
 			pots.iter ().copied ()
 				.chain (iter::repeat (Pot::Empty).take (<span class="number">7</span>))
-				.tuples::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-				.map (|(a, b, c, d, e, f, g, h)|
+				.arrays ()
+				.map (|[a, b, c, d, e, f, g, h]|
 					a.as_u8 () &lt;&lt; <span class="number">7_u32 </span>| b.as_u8 () &lt;&lt; <span class="number">6_u32 </span>|
 					c.as_u8 () &lt;&lt; <span class="number">5_u32 </span>| d.as_u8 () &lt;&lt; <span class="number">4_u32 </span>|
 					e.as_u8 () &lt;&lt; <span class="number">3_u32 </span>| f.as_u8 () &lt;&lt; <span class="number">2_u32 </span>|
@@ -317,4 +317,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_12" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_12" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

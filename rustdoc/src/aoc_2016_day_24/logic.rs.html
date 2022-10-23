@@ -256,7 +256,7 @@
 
 	<span class="comment">// check for duplicates
 
-	</span><span class="kw">if </span>nums.iter ().map (|&amp; (num, <span class="kw">_</span>)| num).sorted ().dedup ().count () != nums.len () {
+	</span><span class="kw">if </span>! nums.iter ().map (|&amp; (num, <span class="kw">_</span>)| num).all_unique () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Duplicated nums&quot;</span>.into ());
 	}
 
@@ -349,4 +349,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

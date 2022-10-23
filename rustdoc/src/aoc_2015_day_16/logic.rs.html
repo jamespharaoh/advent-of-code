@@ -87,8 +87,8 @@
 			.filter (|sue| sue.attrs.iter ().copied ()
 				.all (|(attr, num)| ticker_fn (attr, num)))
 			.exactly_one ()
-			.map_err (|iter| <span class="macro">format! </span>(<span class="string">&quot;Expected exactly one match but found {}&quot;</span>, iter.count ())) <span class="question-mark">?</span>;
+			.ok_or (<span class="string">&quot;Expected exactly one match&quot;</span>) <span class="question-mark">?</span>;
 	<span class="prelude-val">Ok </span>(the_sue.number)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_16" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_16" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

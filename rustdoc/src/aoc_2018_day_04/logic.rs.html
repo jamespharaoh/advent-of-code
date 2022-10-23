@@ -130,8 +130,8 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>entries = input.entries.clone ();
 	entries.sort_by_key (|entry| (entry.date, entry.time));
 	<span class="kw">if </span>entries.iter ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.any (|(left, right)| (left.date, left.time) == (right.date, right.time)) {
+			.array_windows ()
+			.any (|[left, right]| (left.date, left.time) == (right.date, right.time)) {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Two entries share the same time&quot;</span>.into ());
 	}
 	<span class="kw">let </span><span class="kw-2">mut </span>guard_id = <span class="prelude-val">None</span>;
@@ -181,4 +181,4 @@
 	<span class="prelude-val">Ok </span>(result)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2018_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

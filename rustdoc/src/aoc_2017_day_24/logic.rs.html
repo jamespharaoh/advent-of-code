@@ -117,8 +117,8 @@
 	}
 	comps.sort ();
 	<span class="kw">if </span>comps.iter ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.any (|(left, right)| left == right
+		.array_windows ()
+		.any (|[left, right]| left == right
 			|| (left.port_0 == right.port_1 &amp;&amp; left.port_1 == right.port_0)) {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Duplicated components&quot;</span>.into ());
 	}
@@ -155,4 +155,4 @@
 	total
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_24" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

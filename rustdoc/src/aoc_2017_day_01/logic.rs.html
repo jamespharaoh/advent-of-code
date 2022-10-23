@@ -31,9 +31,9 @@
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	<span class="prelude-val">Ok </span>(
 		input.digits.iter ()
-			.circular_tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.filter (|&amp; (&amp; digit_0, &amp; digit_1)| digit_0 == digit_1)
-			.map (|(&amp; digit, <span class="kw">_</span>)| digit.pan_u32 ())
+			.circular_array_windows ()
+			.filter (|&amp; [&amp; digit_0, &amp; digit_1]| digit_0 == digit_1)
+			.map (|[&amp; digit, <span class="kw">_</span>]| digit.pan_u32 ())
 			.sum ()
 	)
 }
@@ -51,4 +51,4 @@
 	)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

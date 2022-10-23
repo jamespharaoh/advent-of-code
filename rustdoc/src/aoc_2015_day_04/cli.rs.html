@@ -105,6 +105,9 @@
 <span id="105">105</span>
 <span id="106">106</span>
 <span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
 </pre><pre class="rust"><code><span class="attribute">#![ cfg (not (tarpaulin_include)) ]
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -192,9 +195,12 @@
 			};
 			buffer.push (ch);
 		}
-		<span class="kw">for </span>chars <span class="kw">in </span>(<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>).permutations (<span class="number">4</span>) {
+		<span class="kw">let </span><span class="kw-2">mut </span>perms_helper = PermutationsHelper::new (<span class="number">4</span>);
+		<span class="kw">while </span>perms_helper.next () {
 			buffer.truncate (args.len.unwrap_or (<span class="number">16</span>) - <span class="number">4</span>);
-			<span class="kw">for </span>ch <span class="kw">in </span>chars { buffer.push (ch); }
+			<span class="kw">for </span>ch_idx <span class="kw">in </span>&amp; * perms_helper {
+				buffer.push ((<span class="string">b&#39;a&#39; </span>+ ch_idx.pan_u8 ()).pan_char ());
+			}
 			<span class="macro">write! </span>(buffer, <span class="string">&quot;{}&quot;</span>, num).unwrap ();
 			<span class="kw">let </span>hash = md5::md5_hash (buffer.as_bytes ());
 			<span class="kw">if </span>hash [<span class="number">0</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">1</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">2</span>] == <span class="number">0 </span>{
@@ -213,4 +219,4 @@
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_04" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

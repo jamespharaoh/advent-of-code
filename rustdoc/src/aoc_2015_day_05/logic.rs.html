@@ -110,13 +110,13 @@
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
 	<span class="kw">if </span>! input.chars ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.any (|(ch_0, ch_1)| ch_0 == ch_1) {
+			.array_windows ()
+			.any (|[ch_0, ch_1]| ch_0 == ch_1) {
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
 	<span class="kw">if </span>input.chars ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.any (|chars| [ (<span class="string">&#39;a&#39;</span>, <span class="string">&#39;b&#39;</span>), (<span class="string">&#39;c&#39;</span>, <span class="string">&#39;d&#39;</span>), (<span class="string">&#39;p&#39;</span>, <span class="string">&#39;q&#39;</span>), (<span class="string">&#39;x&#39;</span>, <span class="string">&#39;y&#39;</span>) ]
+			.array_windows ()
+			.any (|chars| [ [<span class="string">&#39;a&#39;</span>, <span class="string">&#39;b&#39;</span>], [<span class="string">&#39;c&#39;</span>, <span class="string">&#39;d&#39;</span>], [<span class="string">&#39;p&#39;</span>, <span class="string">&#39;q&#39;</span>], [<span class="string">&#39;x&#39;</span>, <span class="string">&#39;y&#39;</span>] ]
 				.contains (&amp; chars)) {
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
@@ -125,17 +125,17 @@
 
 <span class="kw">fn </span>is_nice_two (input: &amp; str) -&gt; bool {
 	<span class="kw">if </span>! input.chars ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+			.array_windows::&lt;<span class="number">2</span>&gt; ()
 			.enumerate ()
 			.any (|(idx, chars_0)|
 				input.chars ().skip (idx + <span class="number">2</span>)
-					.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
+					.array_windows ()
 					.any (|chars_1| chars_0 == chars_1)) {
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
 	<span class="kw">if </span>! input.chars ()
-			.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-			.any (|(ch_0, <span class="kw">_</span>, ch_1)| ch_0 == ch_1) {
+			.array_windows ()
+			.any (|[ch_0, <span class="kw">_</span>, ch_1]| ch_0 == ch_1) {
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
 	<span class="bool-val">true
@@ -165,4 +165,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_05" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

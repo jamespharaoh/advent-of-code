@@ -375,20 +375,6 @@
 <span id="375">375</span>
 <span id="376">376</span>
 <span id="377">377</span>
-<span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
-<span id="384">384</span>
-<span id="385">385</span>
-<span id="386">386</span>
-<span id="387">387</span>
-<span id="388">388</span>
-<span id="389">389</span>
-<span id="390">390</span>
-<span id="391">391</span>
 </pre><pre class="rust"><code><span class="doccomment">/// Implements [Digkstra&#39;s algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 ///
 /// This searches for the cheapest path from one point to another, given a starting point (or
@@ -411,30 +397,16 @@
 /// # use aoc_misc::prelude::*;
 /// # use aoc_search::*;
 /// // set up a data structure with a map of connected nodes and the distance between them
-/// let nodes: HashMap &lt;&amp; str, Vec &lt;(&amp; str, u64)&gt;&gt; = {
-///
-///    // use of Itertools::group_by requires a temporary...
-///    let nodes_group_by_temp = [
-///          // list of connected nodes and the distance between them
-///          (&quot;one&quot;, &quot;two&quot;, 7), (&quot;one&quot;, &quot;three&quot;, 9), (&quot;one&quot;, &quot;six&quot;, 14),
-///          (&quot;two&quot;, &quot;three&quot;, 10), (&quot;two&quot;, &quot;four&quot;, 15), (&quot;three&quot;, &quot;four&quot;, 11),
-///          (&quot;three&quot;, &quot;six&quot;, 2), (&quot;four&quot;, &quot;five&quot;, 6), (&quot;five&quot;, &quot;six&quot;, 8),
-///       ].into_iter ()
-///          // double up the connections to include the reverse
-///          .flat_map (|(node_1, node_2, dist)| [(node_1, node_2, dist), (node_2, node_1, dist)])
-///          // group by node_1 (requires sort)
-///          .sorted_by_key (|&amp; (node_1, _, _)| node_1)
-///         .group_by (|&amp; (node_1, _, _)| node_1);
-///
-///    // collect into a hash map from node_1 to (node_2, dist)
-///    nodes_group_by_temp.into_iter ()
-///       .map (|(node_1, group)| (
-///             node_1,
-///             group.map (|(_, node_2, dist)| (node_2, dist)).collect::&lt;Vec &lt;_&gt;&gt; (),
-///          ))
-///       .collect ()
-///
-/// };
+/// let mut nodes = HashMap::new ();
+/// for (left, right, dist) in [
+///    // list of connected nodes and the distance between them
+///    (&quot;one&quot;, &quot;two&quot;, 7), (&quot;one&quot;, &quot;three&quot;, 9), (&quot;one&quot;, &quot;six&quot;, 14), (&quot;two&quot;, &quot;three&quot;, 10),
+///    (&quot;two&quot;, &quot;four&quot;, 15), (&quot;three&quot;, &quot;four&quot;, 11), (&quot;three&quot;, &quot;six&quot;, 2), (&quot;four&quot;, &quot;five&quot;, 6),
+///    (&quot;five&quot;, &quot;six&quot;, 8),
+/// ] {
+///    nodes.entry (left).or_insert (Vec::new ()).push ((right, dist));
+///    nodes.entry (right).or_insert (Vec::new ()).push ((left, dist));
+/// }
 ///
 /// // create a PrioritySearch to traverse our nodes
 /// let mut search = PrioritySearch::with_hash_map (nodes);
@@ -781,4 +753,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_search" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_search" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

@@ -80,7 +80,7 @@
 	<span class="kw">if </span>! start.chars ().all (|ch| ch.is_ascii_lowercase ()) {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Password must contains only lowercase ASCII characters&quot;</span>.into ());
 	}
-	<span class="kw">if </span>start.chars ().duplicates ().next ().is_some () {
+	<span class="kw">if </span>! start.chars ().all_unique () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Password must contain only unique characters&quot;</span>.into ());
 	}
 	<span class="kw">if </span>mode == Mode::Unscramble &amp;&amp; start.chars ().count () != <span class="number">8 </span>{
@@ -113,4 +113,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

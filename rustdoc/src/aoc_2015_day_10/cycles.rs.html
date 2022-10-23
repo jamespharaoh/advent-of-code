@@ -437,7 +437,28 @@
 <span id="437">437</span>
 <span id="438">438</span>
 <span id="439">439</span>
-</pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::else_if_without_else) ]
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
+<span id="453">453</span>
+<span id="454">454</span>
+<span id="455">455</span>
+<span id="456">456</span>
+</pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::todo) ]
+#![ allow (dead_code) ]
+#![ allow (unused_imports) ]
+#![ allow (unused_mut) ]
+#![ allow (unused_variables) ]
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>model::State;
@@ -625,104 +646,108 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>destinies: HashMap &lt;Span, Destiny&gt; = HashMap::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>atomics: HashSet &lt;Atomic&gt; = HashSet::new ();
 
-	<span class="kw">for </span>length <span class="kw">in </span>(<span class="number">2 </span>..= args.max_length.unwrap_or (<span class="number">10</span>)).step_by (<span class="number">2</span>) {
+	<span class="comment">/*
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for </span>state <span class="kw">in </span>(<span class="number">0 </span>.. length).map (|<span class="kw">_</span>| (<span class="number">1_u8 </span>..= <span class="number">3_u8</span>))
+	NOTE: commented out because of removal of itertools, wasn&#39;t working properly anyway...
+
+	for length in (2 ..= args.max_length.unwrap_or (10)).step_by (2) {
+
+		&#39;STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			<span class="kw">let </span>has_long_run = {
-				<span class="kw">let </span>group_by_temp =
+			let has_long_run = {
+				let group_by_temp =
 					state.iter ().copied ()
 						.group_by (|&amp; item| item);
 				group_by_temp.into_iter ()
-					.any (|(<span class="kw">_</span>, group)| group.count () &gt; <span class="number">3</span>)
+					.any (|(_, group)| group.count () &gt; 3)
 			};
-			<span class="kw">if </span>has_long_run { <span class="kw">continue </span>}
+			if has_long_run { continue }
 
-			<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>..= length.pan_usize () - <span class="number">2</span>).step_by (<span class="number">2</span>) {
-				<span class="kw">match </span>(
+			for prefix_len in (2 ..= length.pan_usize () - 2).step_by (2) {
+				match (
 					atomics.get (&amp; state [ .. prefix_len]),
 					destinies.get (&amp; state [prefix_len .. ]).unwrap_or_else (||
-						<span class="macro">panic! </span>(<span class="string">&quot;Can&#39;t find destiny for {:?}&quot;</span>, &amp; state [prefix_len .. ])),
+						panic! (&quot;Can&#39;t find destiny for {:?}&quot;, &amp; state [prefix_len .. ])),
 				) {
-					(<span class="prelude-val">Some </span>(<span class="kw">_</span>), &amp; Destiny::Unstable (<span class="kw">_</span>)) | (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="kw">continue</span>,
-					(<span class="prelude-val">Some </span>(prefix), &amp; Destiny::Atomic (<span class="kw-2">ref </span>suffix)) =&gt; {
-						<span class="kw">if </span>! compatible (prefix.last, &amp; suffix.first) { <span class="kw">continue </span>}
+					(Some (_), &amp; Destiny::Unstable (_)) | (None, _) =&gt; continue,
+					(Some (prefix), &amp; Destiny::Atomic (ref suffix)) =&gt; {
+						if ! compatible (prefix.last, &amp; suffix.first) { continue }
 						destinies.insert (
 							state.as_slice ().into (),
 							Destiny::Stable ([ prefix.clone (), suffix.clone () ].as_slice ().into ()));
-						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+						continue &#39;STATE;
 					},
-					(<span class="prelude-val">Some </span>(prefix), &amp; Destiny::Stable (<span class="kw-2">ref </span>suffix)) =&gt; {
-						<span class="kw">if </span>! compatible (prefix.last, &amp; suffix [<span class="number">0</span>].first) { <span class="kw">continue </span>}
+					(Some (prefix), &amp; Destiny::Stable (ref suffix)) =&gt; {
+						if ! compatible (prefix.last, &amp; suffix [0].first) { continue }
 						destinies.insert (
 							state.as_slice ().into (),
 							Destiny::Stable (
 								iter::once (prefix.clone ())
 									.chain (suffix.iter ().cloned ())
-									.collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ()
+									.collect::&lt;Vec &lt;_&gt;&gt; ()
 									.into ()));
-						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+						continue &#39;STATE;
 					},
 				}
 			}
 
-			<span class="kw">let </span><span class="kw-2">mut </span>seq_ord = Vec::new ();
+			let mut seq_ord = Vec::new ();
 			seq_ord.push (state.clone ());
-			<span class="kw">let </span><span class="kw-2">mut </span>seq_set = HashSet::new ();
+			let mut seq_set = HashSet::new ();
 			seq_set.insert (state.clone ());
 
-			<span class="kw">let </span><span class="kw-2">mut </span>prev_state = state.clone ();
-			<span class="kw">let </span><span class="kw-2">mut </span>left_1 = state [<span class="number">0</span>] == <span class="number">1</span>;
-			<span class="kw">let </span><span class="kw-2">mut </span>left_2 = state [<span class="number">0</span>] == <span class="number">2</span>;
-			<span class="kw">let </span><span class="kw-2">mut </span>left_3 = state [<span class="number">0</span>] == <span class="number">3</span>;
+			let mut prev_state = state.clone ();
+			let mut left_1 = state [0] == 1;
+			let mut left_2 = state [0] == 2;
+			let mut left_3 = state [0] == 3;
 
-			<span class="kw">for _ in </span><span class="number">0 </span>.. args.iterations.unwrap_or (<span class="number">20</span>) {
-				<span class="kw">let </span>next_state = logic::one_round (&amp; prev_state);
+			for _ in 0 .. args.iterations.unwrap_or (20) {
+				let next_state = logic::one_round (&amp; prev_state);
 
-				<span class="kw">if let </span><span class="prelude-val">Some </span>(_whatever) = destinies.get (next_state.as_slice ()) {
-					<span class="comment">//todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state); TODO
-				</span>}
+				if let Some (_whatever) = destinies.get (next_state.as_slice ()) {
+					//todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state); TODO
+				}
 
 				seq_ord.push (next_state.clone ());
 				seq_set.insert (next_state.clone ());
 
-				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">1 </span>{ left_1 = <span class="bool-val">true</span>; }
-				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">2 </span>{ left_2 = <span class="bool-val">true</span>; }
-				<span class="kw">if </span>next_state [<span class="number">0</span>] == <span class="number">3 </span>{ left_3 = <span class="bool-val">true</span>; }
+				if next_state [0] == 1 { left_1 = true; }
+				if next_state [0] == 2 { left_2 = true; }
+				if next_state [0] == 3 { left_3 = true; }
 
-				<span class="kw">if </span>left_1 &amp;&amp; left_2 &amp;&amp; left_3 {
+				if left_1 &amp;&amp; left_2 &amp;&amp; left_3 {
 					destinies.insert (
 						state.as_slice ().into (),
-						Destiny::Unstable (seq_ord [<span class="number">1</span>].as_slice ().into ()));
-					<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+						Destiny::Unstable (seq_ord [1].as_slice ().into ()));
+					continue &#39;STATE;
 				}
 
 				prev_state = next_state;
 			}
 
-			<span class="kw">let </span><span class="kw-2">mut </span>next_rest = &amp; seq_ord [<span class="number">1</span>] [ .. ];
-			<span class="kw">let </span><span class="kw-2">mut </span>atomic_next = Vec::new ();
-			<span class="lifetime">&#39;OUTER</span>: <span class="kw">while </span>! next_rest.is_empty () {
-				<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>.. next_rest.len ()).step_by (<span class="number">2</span>) {
-					<span class="kw">if let </span><span class="prelude-val">Some </span>(prefix_atomic) = atomics.get (&amp; seq_ord [<span class="number">1</span>] [<span class="number">0 </span>.. prefix_len]) {
+			let mut next_rest = &amp; seq_ord [1] [ .. ];
+			let mut atomic_next = Vec::new ();
+			&#39;OUTER: while ! next_rest.is_empty () {
+				for prefix_len in (2 .. next_rest.len ()).step_by (2) {
+					if let Some (prefix_atomic) = atomics.get (&amp; seq_ord [1] [0 .. prefix_len]) {
 						atomic_next.push (prefix_atomic.clone ());
 						next_rest = &amp; next_rest [ prefix_len .. ];
-						<span class="kw">continue </span><span class="lifetime">&#39;OUTER</span>;
+						continue &#39;OUTER;
 					}
 				}
-				<span class="comment">//unreachable! (&quot;Can&#39;t find atomics for: {}: {}&quot;, state, seq_ord [1]);
-				</span>atomic_next.clear ();
-				<span class="kw">break</span>;
+				//unreachable! (&quot;Can&#39;t find atomics for: {}: {}&quot;, state, seq_ord [1]);
+				atomic_next.clear ();
+				break;
 			}
 
-			<span class="kw">let </span>key: Span = state.as_slice ().into ();
-			<span class="kw">let </span>atomic: Atomic = AtomicInner {
+			let key: Span = state.as_slice ().into ();
+			let atomic: Atomic = AtomicInner {
 				key: key.clone (),
 				next: atomic_next.as_slice ().into (),
-				first: [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>].map (|idx| seq_ord [idx].first ().copied ().unwrap ()),
-				last: seq_ord [<span class="number">0</span>].last ().copied ().unwrap (),
+				first: [0, 1, 2].map (|idx| seq_ord [idx].first ().copied ().unwrap ()),
+				last: seq_ord [0].last ().copied ().unwrap (),
 			}.into ();
 			atomics.insert (atomic.clone ());
 			destinies.insert (key, Destiny::Atomic (atomic));
@@ -731,17 +756,18 @@
 
 	}
 
-	<span class="macro">println! </span>(<span class="string">&quot;ATOMICS: count={}&quot;</span>, atomics.len ());
-	<span class="kw">for </span>atomic <span class="kw">in </span>atomics.iter ().sorted_by_key (|atomic| atomic.key.clone ()) {
-		<span class="macro">println! </span>(<span class="string">&quot; - {:?}&quot;</span>, atomic);
+	println! (&quot;ATOMICS: count={}&quot;, atomics.len ());
+	for atomic in atomics.iter ().sorted_by_key (|atomic| atomic.key.clone ()) {
+		println! (&quot; - {:?}&quot;, atomic);
 	}
 
-	<span class="macro">println! </span>(<span class="string">&quot;DESTINIES: count={}&quot;</span>, destinies.len ());
-	<span class="kw">for </span>(_key, _destiny) <span class="kw">in </span>destinies.iter ().sorted_by_key (|&amp; (key, <span class="kw">_</span>)| key.clone ()) {
-		<span class="comment">//println! (&quot; - {:?}&quot;, atomic);
-	</span>}
+	println! (&quot;DESTINIES: count={}&quot;, destinies.len ());
+	for (_key, _destiny) in destinies.iter ().sorted_by_key (|&amp; (key, _)| key.clone ()) {
+		//println! (&quot; - {:?}&quot;, atomic);
+	}
+	*/
 
-	<span class="macro">todo! </span>();
+	</span><span class="macro">todo! </span>();
 
 }
 
@@ -755,82 +781,88 @@
 
 	<span class="kw">let </span><span class="kw-2">mut </span>stables: HashMap &lt;Span, <span class="prelude-ty">Option </span>&lt;Stable&gt;&gt; = HashMap::new ();
 
-	<span class="kw">for </span>length <span class="kw">in </span>(<span class="number">2 </span>..= max_length).step_by (<span class="number">2</span>) {
+	<span class="macro">todo! </span>();
 
-		<span class="lifetime">&#39;STATE</span>: <span class="kw">for </span>state <span class="kw">in </span>(<span class="number">0 </span>.. length).map (|<span class="kw">_</span>| (<span class="number">1_u8 </span>..= <span class="number">3_u8</span>))
+	<span class="comment">/*
+
+	NOTE: commented out because of removal of itertools
+
+	for length in (2 ..= max_length).step_by (2) {
+
+		&#39;STATE: for state in (0 .. length).map (|_| (1_u8 ..= 3_u8))
 			.multi_cartesian_product ()
 			.map (|nums| State::try_from (nums).unwrap ()) {
 
-			<span class="kw">let </span>has_long_run = {
-				<span class="kw">let </span>group_by_temp =
+			let has_long_run = {
+				let group_by_temp =
 					state.iter ().copied ()
 						.group_by (|&amp; item| item);
 				group_by_temp.into_iter ()
-					.any (|(<span class="kw">_</span>, group)| group.count () &gt; <span class="number">3</span>)
+					.any (|(_, group)| group.count () &gt; 3)
 			};
-			<span class="kw">if </span>has_long_run { <span class="kw">continue </span>}
+			if has_long_run { continue }
 
-			<span class="kw">for </span>prefix_len <span class="kw">in </span>(<span class="number">2 </span>..= length.pan_usize () - <span class="number">2</span>).step_by (<span class="number">2</span>) {
-				<span class="kw">match </span>(
+			for prefix_len in (2 ..= length.pan_usize () - 2).step_by (2) {
+				match (
 					stables [&amp; state [ .. prefix_len]].as_ref (),
 					stables [&amp; state [prefix_len .. ]].as_ref (),
 				) {
-					(<span class="prelude-val">Some </span>(prefix), <span class="prelude-val">Some </span>(suffix))
-							<span class="kw">if </span>compatible (prefix.last, &amp; suffix.first) =&gt; {
-						<span class="macro">assert_eq! </span>(prefix.parts.len (), <span class="number">1</span>);
-						stables.insert (state.as_slice ().into (), <span class="prelude-val">Some </span>(Stable {
+					(Some (prefix), Some (suffix))
+							if compatible (prefix.last, &amp; suffix.first) =&gt; {
+						assert_eq! (prefix.parts.len (), 1);
+						stables.insert (state.as_slice ().into (), Some (Stable {
 							parts: prefix.parts.iter ().cloned ()
 								.chain (suffix.parts.iter ().cloned ())
 								.collect (),
 							first: prefix.first,
 							last: suffix.last,
 						}));
-						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+						continue &#39;STATE;
 					},
-					<span class="kw">_ </span>=&gt; <span class="kw">continue</span>,
+					_ =&gt; continue,
 				}
 			}
 
-			<span class="kw">let </span><span class="kw-2">mut </span>sequence = Vec::new ();
+			let mut sequence = Vec::new ();
 			sequence.push (state.clone ());
 
-			<span class="kw">let </span><span class="kw-2">mut </span>prev_state = state.clone ();
-			<span class="kw">let </span><span class="kw-2">mut </span>first_seq: ArrayVec &lt;u8, <span class="number">3</span>&gt; = ArrayVec::new ();
+			let mut prev_state = state.clone ();
+			let mut first_seq: ArrayVec &lt;u8, 3&gt; = ArrayVec::new ();
 			first_seq.push (state.first ().copied ().unwrap ());
 
-			<span class="kw">let </span>key = Span::from (state.as_slice ());
+			let key = Span::from (state.as_slice ());
 
-			<span class="kw">for </span>step_idx <span class="kw">in </span><span class="number">0 </span>.. iterations {
-				<span class="kw">let </span>next_state = logic::one_round (&amp; prev_state);
-				<span class="kw">let </span>next_first = next_state.first ().copied ().unwrap ();
+			for step_idx in 0 .. iterations {
+				let next_state = logic::one_round (&amp; prev_state);
+				let next_first = next_state.first ().copied ().unwrap ();
 
-				<span class="comment">/*
+				/*
 				if let Some (whatever) = stables.get (next_state.as_slice ()) {
 					todo! (&quot;CHECK FOR EXISTING {} {}&quot;, state, next_state);
 				}
 				*/
 
-				</span>sequence.push (next_state.clone ());
+				sequence.push (next_state.clone ());
 
-				<span class="kw">if </span>! first_seq.is_full () {
+				if ! first_seq.is_full () {
 					first_seq.push (next_first);
-					<span class="kw">if </span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].into_iter ()
+					if [1, 2, 3].into_iter ()
 						.all (|num_0| first_seq.iter ().copied ()
 							.any (|num_1| num_0 == num_1)) {
-						stables.insert (key.clone (), <span class="prelude-val">None</span>);
-						<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+						stables.insert (key.clone (), None);
+						continue &#39;STATE;
 					}
-				} <span class="kw">else if </span>first_seq [(step_idx + <span class="number">1</span>) % <span class="number">3</span>] != next_first {
-					stables.insert (key.clone (), <span class="prelude-val">None</span>);
-					<span class="kw">continue </span><span class="lifetime">&#39;STATE</span>;
+				} else if first_seq [(step_idx + 1) % 3] != next_first {
+					stables.insert (key.clone (), None);
+					continue &#39;STATE;
 				}
 
 				prev_state = next_state;
 			}
 
-			stables.insert (key.clone (), <span class="prelude-val">Some </span>(Stable {
-				parts: <span class="macro">vec! </span>[ key ],
-				first: [ first_seq [<span class="number">0</span>], first_seq [<span class="number">1</span>], first_seq [<span class="number">2</span>] ],
+			stables.insert (key.clone (), Some (Stable {
+				parts: vec! [ key ],
+				first: [ first_seq [0], first_seq [1], first_seq [2] ],
 				last: state.last ().copied ().unwrap (),
 			}));
 
@@ -840,7 +872,9 @@
 
 	stables
 
-}
+	*/
+
+</span>}
 
 <span class="kw">pub trait </span>Intern &lt;Item&gt; <span class="kw">where </span>Item: Eq + Hash {
 	<span class="kw">type </span>Shared;
@@ -877,4 +911,4 @@
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

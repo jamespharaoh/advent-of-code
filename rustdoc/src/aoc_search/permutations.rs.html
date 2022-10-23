@@ -476,10 +476,10 @@
 
 			</span><span class="kw">let </span>(idx_0, val_0) = <span class="macro">some_or! </span>(
 				<span class="self">self</span>.data.iter ().rev ()
-					.tuple_windows ()
+					.array_windows ()
 					.enumerate ()
-					.find (|&amp; (<span class="kw">_</span>, (&amp; val_1, &amp; val_0))| val_0 &lt; val_1)
-					.map (|(off_0, (<span class="kw">_</span>, &amp; val_0))| (<span class="self">self</span>.data.len () - <span class="number">2 </span>- off_0, val_0)),
+					.find (|&amp; (<span class="kw">_</span>, [&amp; val_1, &amp; val_0])| val_0 &lt; val_1)
+					.map (|(off_0, [<span class="kw">_</span>, &amp; val_0])| (<span class="self">self</span>.data.len () - <span class="number">2 </span>- off_0, val_0)),
 				<span class="kw">return </span><span class="bool-val">false</span>);
 
 			<span class="kw">if </span>CIR &amp;&amp; idx_0 == <span class="number">0 </span>{ <span class="kw">return </span><span class="bool-val">false </span>}
@@ -525,4 +525,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_search" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_search" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

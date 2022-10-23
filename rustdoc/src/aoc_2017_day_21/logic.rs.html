@@ -280,7 +280,7 @@
 	counts.into_iter ()
 		.sorted ()
 		.map (<span class="prelude-val">Ok</span>)
-		.coalesce (|left, right| {
+		.merge_consecutive (|left, right| {
 			<span class="kw">let </span>left = <span class="macro">ok_or_else! </span>(left, |err| <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Err </span>(err)));
 			<span class="kw">let </span>right = <span class="macro">ok_or_else! </span>(right, |err| <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Err </span>(err)));
 			<span class="kw">if </span>left.<span class="number">0 </span>== right.<span class="number">0 </span>{
@@ -329,4 +329,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_21" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

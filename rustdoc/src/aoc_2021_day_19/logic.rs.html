@@ -225,6 +225,7 @@
 <span id="225">225</span>
 <span id="226">226</span>
 <span id="227">227</span>
+<span id="228">228</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
@@ -250,13 +251,11 @@
 	<span class="kw">let </span>scanners: Vec &lt;Pos&gt; = scanners.into_iter ().collect ();
 	<span class="prelude-val">Ok </span>(
 		scanners.iter ()
-			.combinations (<span class="number">2</span>)
-			.map (|scanners| {
-				<span class="kw">let </span>(pos_0, pos_1) = (scanners [<span class="number">0</span>], scanners [<span class="number">1</span>]);
+			.array_combinations ()
+			.map (|[pos_0, pos_1]|
 				Coord::abs_diff (pos_0.x, pos_1.x)
 					+ Coord::abs_diff (pos_0.y, pos_1.y)
-					+ Coord::abs_diff (pos_0.z, pos_1.z)
-			})
+					+ Coord::abs_diff (pos_0.z, pos_1.z))
 			.max ()
 			.unwrap ()
 			.pan_i64 ()
@@ -364,15 +363,18 @@
 				.map (|(unplaced_beacon, placed_beacon)| <span class="macro">chk! </span>(placed_beacon - unplaced_beacon))
 				.try_collect () <span class="question-mark">?</span>;
 		offsets_temp.sort ();
-		<span class="kw">let </span>offsets_grouped = offsets_temp.into_iter ()
-			.group_by (|&amp; offset| offset);
-		<span class="prelude-val">Ok </span>(
-			offsets_grouped.into_iter ()
-				.map (|(offset, iter)| (offset, iter.count ()))
-				.filter (|&amp; (<span class="kw">_</span>, count)| count &gt;= <span class="number">12</span>)
-				.map (|(offset, <span class="kw">_</span>)| offset)
-				.next ()
-		)
+		<span class="kw">let </span><span class="kw-2">mut </span>last = <span class="prelude-val">None</span>;
+		<span class="kw">let </span><span class="kw-2">mut </span>num = <span class="number">0_u32</span>;
+		<span class="kw">for </span>&amp; offset <span class="kw">in </span>offsets_temp.iter () {
+			<span class="kw">if </span>last == <span class="prelude-val">Some </span>(offset) {
+				num += <span class="number">1</span>;
+				<span class="kw">if </span>num == <span class="number">12 </span>{ <span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="prelude-val">Some </span>(offset)) }
+			} <span class="kw">else </span>{
+				last = <span class="prelude-val">Some </span>(offset);
+				num = <span class="number">1</span>;
+			}
+		}
+		<span class="prelude-val">Ok </span>(<span class="prelude-val">None</span>)
 	}
 
 	<span class="kw">fn </span>place_scanner (
@@ -453,4 +455,4 @@
 	Rotation::Around, Rotation::Down, Rotation::Left,
 ];
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_19" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

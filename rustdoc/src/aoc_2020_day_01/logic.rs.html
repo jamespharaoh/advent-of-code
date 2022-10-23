@@ -54,8 +54,6 @@
 <span id="54">54</span>
 <span id="55">55</span>
 <span id="56">56</span>
-<span id="57">57</span>
-<span id="58">58</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Logic for solving the puzzles
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -66,8 +64,7 @@
 	<span class="kw">let </span>entries: Vec &lt;u16&gt; =
 		input.entries.iter ().copied ()
 			.filter (|&amp; val| val &lt; <span class="number">2020</span>)
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect ();
 	<span class="kw">let </span>(entry_0, entry_1) =
 		find_two (
@@ -82,8 +79,7 @@
 	<span class="kw">let </span>entries: Vec &lt;u16&gt; =
 		input.entries.iter ().copied ()
 			.filter (|&amp; val| val &lt; <span class="number">2020</span>)
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect ();
 	<span class="kw">for </span>&amp; entry_0 <span class="kw">in </span>entries.iter () {
 		<span class="kw">if let </span><span class="prelude-val">Some </span>((entry_1, entry_2)) =
@@ -115,4 +111,4 @@
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

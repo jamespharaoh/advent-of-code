@@ -33,6 +33,27 @@
 <span id="33">33</span>
 <span id="34">34</span>
 <span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub type </span>Coord = u16;
@@ -68,5 +89,26 @@
 		}
 	}
 }
+
+<span class="kw">pub enum </span>Either &lt;Left, Right&gt; {
+	Left (Left),
+	Right (Right),
+}
+
+<span class="kw">impl </span>&lt;Item, Left, Right&gt; Iterator <span class="kw">for </span>Either &lt;Left, Right&gt;
+	<span class="kw">where
+		</span>Left: Iterator &lt;Item = Item&gt;,
+		Right: Iterator &lt;Item = Item&gt; {
+
+	<span class="kw">type </span>Item = Item;
+
+	<span class="kw">fn </span>next (&amp; <span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option </span>&lt;Item&gt; {
+		<span class="kw">match </span>* <span class="self">self </span>{
+			<span class="self">Self</span>::Left (<span class="kw-2">ref mut </span>left) =&gt; left.next (),
+			<span class="self">Self</span>::Right (<span class="kw-2">ref mut </span>right) =&gt; right.next (),
+		}
+	}
+
+}
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_25" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

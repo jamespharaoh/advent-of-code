@@ -55,6 +55,10 @@
 <span id="55">55</span>
 <span id="56">56</span>
 <span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
 </pre><pre class="rust"><code><span class="attribute">#![ allow (clippy::missing_inline_in_public_items) ]
 
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -73,26 +77,30 @@
 	<span class="kw">let </span>rules = get_rules (input) <span class="question-mark">?</span>;
 	<span class="kw">let </span><span class="kw-2">mut </span>pair_counts =
 		input.template.chars ()
-			.tuple_windows ()
-			.map (|(left, right)| ((left, right), <span class="number">1</span>))
-			.into_grouping_map ()
-			.sum ();
+			.array_windows ()
+			.fold (HashMap::new (), |<span class="kw-2">mut </span>counts, [left, right]| {
+				* counts.entry ((left, right)).or_insert (<span class="number">0</span>) += <span class="number">1</span>;
+				counts
+			});
 	<span class="kw">for _ in </span><span class="number">0 </span>.. loops {
 		pair_counts = pair_counts.into_iter ()
 			.flat_map (|((left, right), num)| {
 				<span class="kw">let </span>insert = rules [&amp; (left, right)];
 				[ ((left, insert), num), ((insert, right), num) ]
 			})
-			.into_grouping_map ()
-			.sum ();
+			.fold (HashMap::new (), |<span class="kw-2">mut </span>counts, ((left, right), num)| {
+				* counts.entry ((left, right)).or_insert (<span class="number">0</span>) += num;
+				counts
+			});
 	}
 	<span class="kw">let </span>char_counts = pair_counts.iter ()
 		.map (|(&amp; (<span class="kw">_</span>, right), &amp; num)| (right, num))
 		.chain (iter::once ((input.template.chars ().next ().unwrap (), <span class="number">1</span>)))
-		.into_grouping_map ()
-		.sum ();
-	<span class="kw">let </span>most = char_counts.values ().max ().unwrap ();
-	<span class="kw">let </span>least = char_counts.values ().min ().unwrap ();
+		.fold (HashMap::new (), |<span class="kw-2">mut </span>counts, (ch, num)| {
+			* counts.entry (ch).or_insert (<span class="number">0</span>) += num;
+			counts
+		});
+	<span class="kw">let </span>(least, most) = char_counts.values ().min_max ().unwrap ();
 	<span class="prelude-val">Ok </span>(most - least)
 }
 
@@ -113,4 +121,4 @@
 	<span class="prelude-val">Ok </span>(rules)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

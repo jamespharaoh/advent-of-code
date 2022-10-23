@@ -263,10 +263,10 @@
 		}
 	}
 	matches_temp.into_iter ()
-		.tuple_windows ()
-		.flat_map (|((val_0, fld_0), (val_1, <span class="kw">_</span>))|
+		.array_windows ()
+		.flat_map (|[(val_0, fld_0), (val_1, <span class="kw">_</span>)]|
 			iter::repeat (fld_0).take ((val_1 - val_0).pan_usize ()))
 		.collect ()
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_16" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_16" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

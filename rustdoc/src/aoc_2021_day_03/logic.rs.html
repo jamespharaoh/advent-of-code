@@ -91,7 +91,7 @@
 <span class="kw">fn </span>iter_bits (readings: &amp; [u16]) -&gt; <span class="kw">impl </span>Iterator &lt;Item = u16&gt; {
 	<span class="kw">let </span>max = readings.iter ().copied ().max ().unwrap ();
 	<span class="kw">let </span>high = <span class="kw">if </span><span class="number">0 </span>&lt; max { <span class="number">0x8000 </span>&gt;&gt; max.leading_zeros () } <span class="kw">else </span>{ <span class="number">0 </span>};
-	itertools::iterate (high, |&amp; bit| bit &gt;&gt; <span class="number">1_u32</span>)
+	iter::successors (<span class="prelude-val">Some </span>(high), |&amp; bit| <span class="prelude-val">Some </span>(bit &gt;&gt; <span class="number">1_u32</span>))
 		.take_while (|&amp; bit| bit != <span class="number">0</span>)
 }
 
@@ -103,4 +103,4 @@
 	(num_ones * <span class="number">2</span>).cmp (&amp; readings.len ())
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_03" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

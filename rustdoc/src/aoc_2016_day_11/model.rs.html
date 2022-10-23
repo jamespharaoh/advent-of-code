@@ -166,7 +166,7 @@
 						Component::Microchip (<span class="kw-2">ref </span>name) =&gt; name.clone (),
 					}))
 				.sorted ()
-				.dedup ()
+				.dedup_consecutive ()
 				.collect ();
 		<span class="kw">if </span>names.is_empty () { <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Must have at least one component type&quot;</span>.into ()) }
 		<span class="kw">if </span>names.len () &gt; <span class="number">7 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Only support seven types of component&quot;</span>.into ()) }
@@ -178,7 +178,7 @@
 				.filter (|&amp; (<span class="kw">_</span>, some_comp)| * some_comp == comp)
 				.map (|(floor, <span class="kw">_</span>)| floor)
 				.exactly_one ()
-				.map_err (|_err| <span class="string">&quot;Must have exactly one generator of each type&quot;</span>);
+				.ok_or (<span class="string">&quot;Must have exactly one generator of each type&quot;</span>);
 		<span class="prelude-val">Ok </span>((<span class="self">Self </span>{
 			comps: names.iter ()
 				.map (|name| <span class="prelude-val">Ok</span>::&lt;<span class="kw">_</span>, GenError&gt; ([
@@ -275,4 +275,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

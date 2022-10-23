@@ -44,7 +44,6 @@
 <span id="44">44</span>
 <span id="45">45</span>
 <span id="46">46</span>
-<span id="47">47</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>input::Input;
 <span class="kw">use </span>model::ProgInfo;
@@ -62,8 +61,7 @@
 		<span class="kw">let </span>(min_weight, max_weight) =
 			cur.holds.iter ()
 				.map (|held| held.total_weight)
-				.minmax ()
-				.into_option ()
+				.min_max ()
 				.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?</span>;
 		<span class="kw">if </span>min_weight == max_weight {
 			<span class="kw">return </span><span class="prelude-val">Ok </span>(<span class="macro">chk! </span>(cur.prog_weight + target_weight - cur.total_weight) <span class="question-mark">?</span>);
@@ -93,4 +91,4 @@
 	}
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

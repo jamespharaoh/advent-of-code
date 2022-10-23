@@ -41,8 +41,8 @@
 	<span class="prelude-val">Ok </span>(
 		iter::from_fn (|| perms_helper.next ()
 				.then (|| perms_helper.iter ()
-					.circular_tuple_windows ()
-					.map (|(&amp; idx_0, &amp; idx_1)| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
+					.circular_array_windows ()
+					.map (|[&amp; idx_0, &amp; idx_1]| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
 					.sum ()))
 			.max ()
 			.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?
@@ -55,12 +55,12 @@
 	<span class="prelude-val">Ok </span>(
 		iter::from_fn (|| perms_helper.next ()
 				.then (|| perms_helper.iter ()
-					.tuple_windows ()
-					.map (|(&amp; idx_0, &amp; idx_1)| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
+					.array_windows ()
+					.map (|[&amp; idx_0, &amp; idx_1]| table [(idx_0, idx_1)] + table [(idx_1, idx_0)])
 					.sum ()))
 			.max ()
 			.ok_or (<span class="string">&quot;No solution found&quot;</span>) <span class="question-mark">?
 	</span>)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_13" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

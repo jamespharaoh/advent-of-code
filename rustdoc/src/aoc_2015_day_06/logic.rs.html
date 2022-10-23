@@ -231,7 +231,6 @@
 <span id="231">231</span>
 <span id="232">232</span>
 <span id="233">233</span>
-<span id="234">234</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
@@ -278,8 +277,7 @@
 	<span class="kw">let </span>rows =
 		steps.iter ().copied ()
 			.flat_map (|(<span class="kw">_</span>, step)| [ step.origin.row, step.peak.row ])
-			.sorted ()
-			.dedup ()
+			.sorted_unique ()
 			.collect::&lt;Vec &lt;<span class="kw">_</span>&gt;&gt; ();
 	<span class="kw">let </span><span class="kw-2">mut </span>cur_steps: Vec &lt;(usize, Step)&gt; = Vec::new ();
 	<span class="kw">let </span><span class="kw-2">mut </span>sum = <span class="number">0</span>;
@@ -359,8 +357,8 @@
 		</span>prev_row = row;
 		prev_active =
 			row_data.iter ().copied ()
-				.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-				.map (|((start, val), (end, <span class="kw">_</span>))|
+				.array_windows ()
+				.map (|[(start, val), (end, <span class="kw">_</span>)]|
 					<span class="macro">chk! </span>(<span class="macro">chk! </span>(end - start) <span class="question-mark">?</span>.pan_u32 () * val.pan_u32 ()))
 				.try_fold (<span class="number">0</span>, |sum, val| <span class="macro">chk! </span>(sum + val <span class="question-mark">?</span>)) <span class="question-mark">?</span>;
 		<span class="macro">assert! </span>(row_data.last ().copied ().map_or (<span class="number">0</span>, |(<span class="kw">_</span>, val)| val) == <span class="number">0</span>);
@@ -467,4 +465,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_06" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

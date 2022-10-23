@@ -106,8 +106,8 @@
 			})
 		})
 		.flatten ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.any (|(a, b, c, d)| a == d &amp;&amp; b == c &amp;&amp; a != b)
+		.array_windows ()
+		.any (|[a, b, c, d]| a == d &amp;&amp; b == c &amp;&amp; a != b)
 }
 
 <span class="kw">fn </span>has_abba_bracketed (addr: &amp; str) -&gt; bool {
@@ -120,8 +120,8 @@
 			})
 		})
 		.flatten ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.any (|(a, b, c, d)| a == d &amp;&amp; b == c &amp;&amp; a != b)
+		.array_windows ()
+		.any (|[a, b, c, d]| a == d &amp;&amp; b == c &amp;&amp; a != b)
 }
 
 <span class="kw">fn </span>iter_abas_unbracketed (addr: &amp; str) -&gt; <span class="kw">impl </span>Iterator &lt;Item = (char, char)&gt; + <span class="lifetime">&#39;_ </span>{
@@ -134,9 +134,9 @@
 			})
 		})
 		.flatten ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.filter (|&amp; (a, b, c)| a == c &amp;&amp; a != b)
-		.map (|(a, b, <span class="kw">_</span>)| (a, b))
+		.array_windows ()
+		.filter (|&amp; [a, b, c]| a == c &amp;&amp; a != b)
+		.map (|[a, b, <span class="kw">_</span>]| (a, b))
 }
 
 <span class="kw">fn </span>has_bab_bracketed (addr: &amp; str, a: char, b: char) -&gt; bool {
@@ -149,8 +149,8 @@
 			})
 		})
 		.flatten ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.any (|(a1, b1, c1)| a == b1 &amp;&amp; b == a1 &amp;&amp; b == c1)
+		.array_windows ()
+		.any (|[a1, b1, c1]| a == b1 &amp;&amp; b == a1 &amp;&amp; b == c1)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_07" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

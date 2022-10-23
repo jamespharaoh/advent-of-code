@@ -28,8 +28,8 @@
 <span class="kw">pub fn </span>part_one (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	<span class="prelude-val">Ok </span>(
 		input.report.iter ().copied ()
-			.tuple_windows ()
-			.filter (|&amp; (a, b)| a &lt; b)
+			.array_windows ()
+			.filter (|&amp; [a, b]| a &lt; b)
 			.count ()
 			.pan_u32 ()
 	)
@@ -38,11 +38,11 @@
 <span class="kw">pub fn </span>part_two (input: &amp; Input) -&gt; GenResult &lt;u32&gt; {
 	<span class="prelude-val">Ok </span>(
 		input.report.iter ().copied ()
-			.tuple_windows ()
-			.filter (|&amp; (a, <span class="kw">_</span>, <span class="kw">_</span>, b)| a &lt; b)
+			.array_windows ()
+			.filter (|&amp; [a, <span class="kw">_</span>, <span class="kw">_</span>, b]| a &lt; b)
 			.count ()
 			.pan_u32 ()
 	)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2021_day_01" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

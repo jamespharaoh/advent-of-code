@@ -57,6 +57,7 @@
 <span id="57">57</span>
 <span id="58">58</span>
 <span id="59">59</span>
+<span id="60">60</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>input::Input;
@@ -109,12 +110,13 @@
 
 <span class="attribute">#[ must_use ]
 </span><span class="kw">pub fn </span>one_round (state: &amp; State) -&gt; State {
-	<span class="kw">let </span>group_by =
-		state.iter ().copied ()
-			.group_by (|&amp; val| val);
-	group_by.into_iter ()
-		.flat_map (|(val, group)| [ group.count ().pan_u8 (), val ])
+	state.iter ()
+		.map (|&amp; val| (val, <span class="number">1_u8</span>))
+		.merge_consecutive (|(left, num_left), (right, num_right)|
+			<span class="kw">if </span>left == right { <span class="prelude-val">Ok </span>((left, num_left + <span class="number">1</span>)) }
+			<span class="kw">else </span>{ <span class="prelude-val">Err </span>(((left, num_left), (right, num_right))) })
+		.flat_map (|(val, num)| [ num, val ])
 		.collect ()
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_10" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

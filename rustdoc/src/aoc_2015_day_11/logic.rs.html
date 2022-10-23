@@ -150,8 +150,8 @@
 <span class="kw">pub fn </span>is_valid &lt;Inpt&gt; (input: Inpt) -&gt; bool
 		<span class="kw">where </span>Inpt: Iterator &lt;Item = char&gt; + Clone {
 	<span class="kw">if </span>! input.clone ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.any (|(a, b, c)| a.pan_u32 () + <span class="number">1 </span>== b.pan_u32 () &amp;&amp; b.pan_u32 () + <span class="number">1 </span>== c.pan_u32 ()) {
+		.array_windows ()
+		.any (|[a, b, c]| a.pan_u32 () + <span class="number">1 </span>== b.pan_u32 () &amp;&amp; b.pan_u32 () + <span class="number">1 </span>== c.pan_u32 ()) {
 		<span class="kw">return </span><span class="bool-val">false</span>;
 	}
 	<span class="kw">let </span>(num_repeats, <span class="kw">_</span>, <span class="kw">_</span>) =
@@ -168,9 +168,9 @@
 <span class="kw">pub fn </span>find_pair &lt;Inpt&gt; (input: Inpt) -&gt; <span class="prelude-ty">Option </span>&lt;(usize, char)&gt;
 		<span class="kw">where </span>Inpt: Iterator &lt;Item = char&gt; + Clone {
 	input
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.filter (|&amp; (a, b)| a == b)
-		.map (|(a, <span class="kw">_</span>)| a)
+		.array_windows ()
+		.filter (|&amp; [a, b]| a == b)
+		.map (|[a, <span class="kw">_</span>]| a)
 		.enumerate ()
 		.next ()
 }
@@ -195,4 +195,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_11" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

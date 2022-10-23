@@ -109,7 +109,7 @@
 }
 
 <span class="kw">fn </span>build_deck (input: &amp; Input, deck_size: Card) -&gt; GenResult &lt;Deck&gt; {
-	<span class="kw">if </span>input.start.chars ().duplicates ().next ().is_some () {
+	<span class="kw">if </span>! input.start.chars ().all_unique () {
 		<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="string">&quot;Duplicate cards&quot;</span>.into ());
 	}
 	<span class="prelude-val">Ok </span>(
@@ -137,4 +137,4 @@
 	Card::new (card.get () - <span class="number">1</span>).unwrap_or (deck_size)
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2020_day_23" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

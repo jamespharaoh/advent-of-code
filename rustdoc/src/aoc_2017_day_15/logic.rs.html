@@ -48,6 +48,7 @@
 <span id="48">48</span>
 <span id="49">49</span>
 <span id="50">50</span>
+<span id="51">51</span>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>input::Input;
 
@@ -90,8 +91,9 @@
 	calc_a: <span class="kw">fn </span>(u64) -&gt; u64,
 	calc_b: <span class="kw">fn </span>(u64) -&gt; u64,
 ) -&gt; u32 {
-	itertools::iterate ((input.start_a.pan_u64 (), input.start_b.pan_u64 ()),
-			|&amp; (a, b)| (calc_a (a), calc_b (b)))
+	iter::successors (
+			<span class="prelude-val">Some </span>((input.start_a.pan_u64 (), input.start_b.pan_u64 ())),
+			|&amp; (a, b)| <span class="prelude-val">Some </span>((calc_a (a), calc_b (b))))
 		.skip (<span class="number">1</span>)
 		.take (num_compares.pan_usize ())
 		.filter (|&amp; (a, b)| a &amp; <span class="number">0xffff </span>== b &amp; <span class="number">0xffff</span>)
@@ -99,4 +101,4 @@
 		.pan_u32 ()
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_15" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

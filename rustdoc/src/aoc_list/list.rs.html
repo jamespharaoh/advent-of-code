@@ -388,6 +388,7 @@
 <span id="388">388</span>
 <span id="389">389</span>
 <span id="390">390</span>
+<span id="391">391</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Implementation of lisp-like lists
 //!
 //! A list is represented as the first list item and a reference to another list to represent the
@@ -623,7 +624,8 @@
 
 	}
 
-	<span class="kw">pub struct </span>ListIter &lt;<span class="lifetime">&#39;dat</span>, Item: Clone&gt; {
+	<span class="attribute">#[ derive (Clone) ]
+	</span><span class="kw">pub struct </span>ListIter &lt;<span class="lifetime">&#39;dat</span>, Item: Clone&gt; {
 		list: &amp; <span class="lifetime">&#39;dat </span>List &lt;Item&gt;,
 	}
 
@@ -779,4 +781,4 @@
 
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_list" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_list" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

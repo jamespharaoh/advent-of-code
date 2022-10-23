@@ -92,11 +92,11 @@
 		<span class="kw">if </span>! perms_helper.next () { <span class="kw">return </span><span class="prelude-val">None </span>}
 		<span class="prelude-val">Some </span>(
 			perms_helper.iter ()
-				.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-				.map (|(&amp; idx_0, &amp; idx_1)| dist_table [(idx_0, idx_1)])
+				.array_windows ()
+				.map (|[&amp; idx_0, &amp; idx_1]| dist_table [(idx_0, idx_1)])
 				.sum::&lt;u32&gt; ()
 		)
 	})
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2015_day_09" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

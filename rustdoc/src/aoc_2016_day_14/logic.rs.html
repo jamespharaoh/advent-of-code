@@ -172,9 +172,9 @@
 
 <span class="kw">fn </span>find_triple (hash: &amp; [u8; <span class="number">32</span>]) -&gt; <span class="prelude-ty">Option </span>&lt;u8&gt; {
 	hash.iter ()
-		.tuple_windows::&lt;(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>)&gt; ()
-		.filter (|&amp; (&amp; a, &amp; b, &amp; c)| a == b &amp;&amp; a == c)
-		.map (|(&amp; a, <span class="kw">_</span>, <span class="kw">_</span>)| a)
+		.array_windows ()
+		.filter (|&amp; [&amp; a, &amp; b, &amp; c]| a == b &amp;&amp; a == c)
+		.map (|[&amp; a, <span class="kw">_</span>, <span class="kw">_</span>]| a)
 		.next ()
 }
 
@@ -223,4 +223,4 @@
 	hash.as_hex_bytes ()
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2016_day_14" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>

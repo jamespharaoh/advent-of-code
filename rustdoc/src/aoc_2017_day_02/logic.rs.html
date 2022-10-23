@@ -60,11 +60,11 @@
 					(val_high % val_low == <span class="number">0</span>).then_some (val_high / val_low)
 				}))
 			.exactly_one ()
-			.map_err (|_err| GenError::from (<span class="string">&quot;No solution found&quot;</span>)))
+			.ok_or (<span class="string">&quot;No solution found&quot;</span>))
 		.try_fold (<span class="number">0_u32</span>, |sum, item| {
 			<span class="kw">let </span>item = item <span class="question-mark">?</span>.pan_u32 ();
 			<span class="prelude-val">Ok </span>(<span class="macro">chk! </span>(sum + item) <span class="question-mark">?</span>)
 		})
 }
 </code></pre></div>
-</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_02" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (5c8bff74b 2022-10-21)" ></div></body></html>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="aoc_2017_day_02" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0-nightly (6e95b6da8 2022-10-22)" ></div></body></html>
