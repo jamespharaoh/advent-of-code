@@ -79,16 +79,16 @@ mod wire_input {
 
 		#[ inline ]
 		#[ must_use ]
-		pub fn inputs (& self) -> ArrayVec <& WireId <'inp>, 2> {
+		pub fn inputs (& self) -> TinyVec <& WireId <'inp>, 2> {
 			match * self {
-				Self::Static (_) => array_vec! [],
-				Self::Wire (ref arg) => array_vec! [ arg ],
-				Self::Not (ref arg) => array_vec! [ arg ],
-				Self::And (ref arg_0, ref arg_1) => array_vec! [ arg_0, arg_1 ],
-				Self::AndOne (ref arg) => array_vec! [ arg ],
-				Self::Or (ref arg_0, ref arg_1) => array_vec! [ arg_0, arg_1 ],
-				Self::LeftShift (ref arg_0, _) => array_vec! [ arg_0 ],
-				Self::RightShift (ref arg_0, _) => array_vec! [ arg_0 ],
+				Self::Static (_) => tiny_vec! [],
+				Self::Wire (ref arg) => tiny_vec! [ arg ],
+				Self::Not (ref arg) => tiny_vec! [ arg ],
+				Self::And (ref arg_0, ref arg_1) => tiny_vec! [ arg_0, arg_1 ],
+				Self::AndOne (ref arg) => tiny_vec! [ arg ],
+				Self::Or (ref arg_0, ref arg_1) => tiny_vec! [ arg_0, arg_1 ],
+				Self::LeftShift (ref arg_0, _) => tiny_vec! [ arg_0 ],
+				Self::RightShift (ref arg_0, _) => tiny_vec! [ arg_0 ],
 			}
 		}
 

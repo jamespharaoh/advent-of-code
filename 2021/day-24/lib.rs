@@ -6,6 +6,7 @@
 #![ allow (dead_code) ]
 
 use aoc_common::*;
+use aoc_stvec::prelude::*;
 
 pub mod input;
 pub mod logic;

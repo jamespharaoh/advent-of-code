@@ -55,7 +55,7 @@ fn outcomes (
 
 }
 
-fn next_states (mut state: State) -> ArrayVec <State, 5> {
+fn next_states (mut state: State) -> TinyVec <State, 5> {
 
 	if state.effects.shield > 0 {
 		state.effects.shield -= 1;
@@ -63,7 +63,7 @@ fn next_states (mut state: State) -> ArrayVec <State, 5> {
 
 	if state.effects.poison > 0 {
 		state.boss.hit_points -= cmp::min (state.boss.hit_points, 3);
-		if state.boss.hit_points == 0 { return array_vec! [ state ] }
+		if state.boss.hit_points == 0 { return tiny_vec! [ state ] }
 		state.effects.poison -= 1;
 	}
 
@@ -78,17 +78,17 @@ fn next_states (mut state: State) -> ArrayVec <State, 5> {
 
 		if state.player.mana < 53 {
 			state.player.hit_points = 0;
-			return array_vec! [ state ];
+			return tiny_vec! [ state ];
 		}
 
 		if state.difficulty == Difficulty::Hard {
 			state.player.hit_points -= 1;
 			if state.player.hit_points == 0 {
-				return array_vec! [ state ];
+				return tiny_vec! [ state ];
 			}
 		}
 
-		let mut results = ArrayVec::new ();
+		let mut results = TinyVec::new ();
 
 		if state.player.mana >= 53 {
 			let mut state = state;
@@ -140,7 +140,7 @@ fn next_states (mut state: State) -> ArrayVec <State, 5> {
 		let armor = if state.effects.shield > 0 { 7 } else { 0 };
 		let attack = if state.boss.damage <= armor { 1 } else { state.boss.damage - armor };
 		state.player.hit_points -= cmp::min (state.player.hit_points, attack);
-		array_vec! [ state ]
+		tiny_vec! [ state ]
 
 	}
 

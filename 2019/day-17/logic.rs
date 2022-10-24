@@ -35,9 +35,9 @@ pub fn part_two (input: & Input) -> GenResult <Val> {
 	Ok (result)
 }
 
-pub type Func = ArrayVec <Step, 10>;
-pub type Funcs = ArrayVec <Func, 3>;
-pub type Main = ArrayVec <char, 10>;
+pub type Func = TinyVec <Step, 10>;
+pub type Funcs = TinyVec <Func, 3>;
+pub type Main = TinyVec <char, 10>;
 
 fn calc_grid (input: & Input) -> GenResult <Grid> {
 	let mut cpu = Cpu::new (input.data.clone ());

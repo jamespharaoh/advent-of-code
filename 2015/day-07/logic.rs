@@ -35,7 +35,7 @@ fn resolve <'inp> (
 	struct Wire <'inp> {
 		id: WireId <'inp>,
 		input: WireInput <'inp>,
-		inputs: ArrayVec <WireId <'inp>, 2>,
+		inputs: TinyVec <WireId <'inp>, 2>,
 		outputs: Vec <WireId <'inp>>,
 	}
 
@@ -121,7 +121,7 @@ fn check_input (input: & Input) -> GenResult <()> {
 				let wire_id = wire.id.clone ();
 				wire.input.inputs ().clone ().iter ()
 					.map (move |& input| (wire_id.clone (), input.clone ()))
-					.collect::<ArrayVec <_, 2>> ()
+					.collect::<TinyVec <_, 2>> ()
 			})
 			.find (|& (_, ref input)| ! all_wire_ids.contains (input)) {
 		Err (format! ("Wire {} refers to non-existant input {}", wire, input)) ?;

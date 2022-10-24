@@ -5,24 +5,24 @@ use input::Input;
 pub fn part_one (input: & Input) -> GenResult <String> {
 	let mut password = String::new ();
 	for hash in iter_hashes (input) {
-		if password.len () == input.params.password_len { break }
+		if password.len () == input.params.password_len.pan_usize () { break }
 		password.push (char::from_digit ((hash [2] & 0xf).pan_u32 (), 16).unwrap ());
 	}
 	Ok (password)
 }
 
 pub fn part_two (input: & Input) -> GenResult <String> {
-	let mut password: ArrayVec <Option <char>, 8> =
+	let mut password: TinyVec <Option <char>, 8> =
 		iter::repeat (None)
-			.take (input.params.password_len)
+			.take (input.params.password_len.pan_usize ())
 			.collect ();
 	for hash in iter_hashes (input) {
 		if ! password.iter ().any (Option::is_none) { break }
-		let pos = (hash [2] & 0xf).pan_usize ();
+		let pos = hash [2] & 0xf;
 		if input.params.password_len <= pos { continue }
-		if password [pos].is_some () { continue }
+		if password [pos.pan_usize ()].is_some () { continue }
 		let ch = char::from_digit ((hash [3] >> 4_u32).pan_u32 (), 16).unwrap ();
-		password [pos] = Some (ch);
+		password [pos.pan_usize ()] = Some (ch);
 	}
 	Ok (
 		password.iter ()

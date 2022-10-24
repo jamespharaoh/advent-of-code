@@ -31,7 +31,7 @@ struct SymbolInner {
 	original_value: Option <SymVal>,
 	original_depth: usize,
 	original_len: usize,
-	original_children: ArrayVec <Symbol, 2>,
+	original_children: TinyVec <Symbol, 2>,
 	state: RefCell <SymbolState>,
 }
 
@@ -354,7 +354,7 @@ impl Symbol {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn children (& self) -> ArrayVec <Self, 2> {
+	pub fn children (& self) -> TinyVec <Self, 2> {
 		let inner = self.inner.as_ref ();
 		let state = inner.state.borrow ();
 		state.value.children ()
@@ -362,7 +362,7 @@ impl Symbol {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn original_children (& self) -> ArrayVec <Self, 2> {
+	pub fn original_children (& self) -> TinyVec <Self, 2> {
 		let inner = self.inner.as_ref ();
 		inner.original_children.clone ()
 	}
@@ -607,8 +607,8 @@ impl SymVal {
 	}
 
 	#[ must_use ]
-	pub fn children (& self) -> ArrayVec <Symbol, 2> {
-		fn make <const CAP: usize> (arg: [& Symbol; CAP]) -> ArrayVec <Symbol, 2> {
+	pub fn children (& self) -> TinyVec <Symbol, 2> {
+		fn make <const CAP: usize> (arg: [& Symbol; CAP]) -> TinyVec <Symbol, 2> {
 			arg.into_iter ().cloned ().collect ()
 		}
 		match * self {

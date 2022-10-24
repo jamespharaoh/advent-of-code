@@ -101,11 +101,11 @@ impl Square {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn remove (self, other: Self) -> ArrayVec <Self, 4> {
+	pub fn remove (self, other: Self) -> TinyVec <Self, 4> {
 		if Self::overlap (self, other).is_none () {
-			return array_vec! [ self ];
+			return tiny_vec! [ self ];
 		}
-		let mut result = ArrayVec::new ();
+		let mut result = TinyVec::new ();
 		if self.left < other.left {
 			result.push (Self {
 				left: self.left,
@@ -162,34 +162,34 @@ mod tests {
 	#[ test ]
 	fn square_remove () {
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 15, top: 10, right: 20, bottom: 15 } ],
 			Square::remove (
 				Square { left: 10, top: 10, right: 20, bottom: 15 },
 				Square { left: 5, top: 5, right: 15, bottom: 20 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 10, top: 5, right: 15, bottom: 10 },
 				Square { left: 10, top: 15, right: 15, bottom: 20 } ],
 			Square::remove (
 				Square { left: 10, top: 5, right: 15, bottom: 20 },
 				Square { left: 5, top: 10, right: 20, bottom: 15 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 5, top: 10, right: 10, bottom: 15 },
 				Square { left: 15, top: 10, right: 20, bottom: 15 } ],
 			Square::remove (
 				Square { left: 5, top: 10, right: 20, bottom: 15 },
 				Square { left: 10, top: 5, right: 15, bottom: 20 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 5, top: 10, right: 10, bottom: 20 },
 				Square { left: 10, top: 15, right: 15, bottom: 20 } ],
 			Square::remove (
 				Square { left: 5, top: 10, right: 15, bottom: 20 },
 				Square { left: 10, top: 5, right: 20, bottom: 15 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 5, top: 5, right: 10, bottom: 20 },
 				Square { left: 10, top: 5, right: 15, bottom: 10 },
 				Square { left: 10, top: 15, right: 15, bottom: 20 },
@@ -198,20 +198,20 @@ mod tests {
 				Square { left: 5, top: 5, right: 20, bottom: 20 },
 				Square { left: 10, top: 10, right: 15, bottom: 15 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 10, top: 5, right: 15, bottom: 10 },
 				Square { left: 15, top: 5, right: 20, bottom: 15 } ],
 			Square::remove (
 				Square { left: 10, top: 5, right: 20, bottom: 15 },
 				Square { left: 5, top: 10, right: 15, bottom: 20 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 10, top: 15, right: 15, bottom: 20 } ],
 			Square::remove (
 				Square { left: 10, top: 10, right: 15, bottom: 20 },
 				Square { left: 5, top: 5, right: 20, bottom: 15 }));
 		assert_eq! (
-			array_vec! [
+			tiny_vec! [
 				Square { left: 5, top: 10, right: 10, bottom: 20 },
 				Square { left: 10, top: 15, right: 15, bottom: 20 },
 				Square { left: 15, top: 10, right: 20, bottom: 20 } ],

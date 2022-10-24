@@ -152,7 +152,7 @@ mod solver {
 		pub fn solve (& self, digits: [Digit; 10]) -> GenResult <[u8; 10]> {
 			let mut solver = self.solver.clone ();
 			for (digit_idx, & num_segs) in DIGIT_SEGMENTS.iter ().enumerate () {
-				let samples: ArrayVec <u8, 3> = digits.iter ()
+				let samples: TinyVec <u8, 3> = digits.iter ()
 					.filter (|digit| digit.num_segments () == num_segs)
 					.map (|digit| digit.on ())
 					.collect ();

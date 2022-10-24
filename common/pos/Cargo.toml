@@ -14,3 +14,4 @@
 	aoc-checked = { path = "../checked" }
 	aoc-misc = { path = "../misc" }
 	aoc-nums = { path = "../nums" }
+	aoc-stvec = { path = "../stvec" }

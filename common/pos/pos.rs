@@ -4,6 +4,8 @@ use std::ops::{ Add, Neg, Rem, Sub };
 use aoc_checked::checked as chk;
 use aoc_misc::prelude::*;
 use aoc_nums as nums;
+use aoc_stvec::prelude::*;
+
 use nums::Int;
 use nums::IntSigned;
 use nums::NumResult;
@@ -393,8 +395,8 @@ mod dim_2 {
 		impl <Val: Int> PosXY <Val> {
 
 			#[ inline ]
-			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_4 (& self) -> TinyVec <Self, 4> {
+				let mut result = TinyVec::new ();
 				let Self { x, y } = * self;
 				if self.x > Val::MIN { result.push (Self { x: x - Val::ONE, y }); }
 				if self.x < Val::MAX { result.push (Self { x: x + Val::ONE, y }); }
@@ -424,8 +426,8 @@ mod dim_2 {
 		impl <Val: Int> PosYX <Val> {
 
 			#[ inline ]
-			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_4 (& self) -> TinyVec <Self, 4> where Val: Int {
+				let mut result = TinyVec::new ();
 				let Self { y, x } = * self;
 				if self.y > Val::MIN { result.push (Self { x, y: y - Val::ONE }); }
 				if self.y < Val::MAX { result.push (Self { x, y: y + Val::ONE }); }
@@ -435,8 +437,8 @@ mod dim_2 {
 			}
 
 			#[ inline ]
-			pub fn adjacent_8 (& self) -> ArrayVec <Self, 8> where Val: Int {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_8 (& self) -> TinyVec <Self, 8> where Val: Int {
+				let mut result = TinyVec::new ();
 				let Self { y, x } = * self;
 				if self.y > Val::MIN {
 					let y = y - Val::ONE;
@@ -538,8 +540,8 @@ mod dim_2 {
 			}
 
 			#[ inline ]
-			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_4 (& self) -> TinyVec <Self, 4> where Val: Int {
+				let mut result = TinyVec::new ();
 				let Self { n, e } = * self;
 				if n > Val::MIN { result.push (Self { n: n - Val::ONE, e }); }
 				if n < Val::MAX { result.push (Self { n: n + Val::ONE, e }); }
@@ -632,7 +634,7 @@ mod dim_2 {
 			}
 
 			#[ inline ]
-			pub fn adjacent (& self) -> ArrayVec <Self, 6> where Val: Int {
+			pub fn adjacent (& self) -> TinyVec <Self, 6> where Val: Int {
 				[
 					self.north_west (Val::ONE).ok (),
 					self.north_east (Val::ONE).ok (),
@@ -732,8 +734,8 @@ mod dim_2 {
 		impl <Val: Int> PosRowCol <Val> {
 
 			#[ inline ]
-			pub fn adjacent_4 (& self) -> ArrayVec <Self, 4> where Val: Int {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_4 (& self) -> TinyVec <Self, 4> where Val: Int {
+				let mut result = TinyVec::new ();
 				let Self { row, col } = * self;
 				if row > Val::MIN { result.push (Self { row: row - Val::ONE, col }); }
 				if row < Val::MAX { result.push (Self { row: row + Val::ONE, col }); }
@@ -743,8 +745,8 @@ mod dim_2 {
 			}
 
 			#[ inline ]
-			pub fn adjacent_8 (& self) -> ArrayVec <Self, 8> where Val: Int {
-				let mut result = ArrayVec::new ();
+			pub fn adjacent_8 (& self) -> TinyVec <Self, 8> where Val: Int {
+				let mut result = TinyVec::new ();
 				let Self { row, col } = * self;
 				if self.row > Val::MIN {
 					let row = row - Val::ONE;

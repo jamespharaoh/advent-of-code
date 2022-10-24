@@ -13,6 +13,7 @@
 
 	aoc-bitvec = { path = "../../common/bitvec" }
 	aoc-common = { path = "../../common" }
+	aoc-stvec = { path = "../../common/stvec" }
 
 [build-dependencies]
 

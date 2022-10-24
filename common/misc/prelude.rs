@@ -1,4 +1,3 @@
-pub use arrayvec::ArrayVec;
 pub use crate::array_vec::*;
 pub use crate::collections::*;
 pub use crate::default::*;

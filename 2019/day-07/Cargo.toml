@@ -13,6 +13,7 @@
 
 	aoc-2019-intcode = { path = "../intcode" }
 	aoc-common = { path = "../../common" }
+	aoc-stvec = { path = "../../common/stvec" }
 
 [build-dependencies]
 

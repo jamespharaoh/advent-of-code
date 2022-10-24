@@ -30,8 +30,8 @@
 
 use aoc_common::*;
 use aoc_parallel::{ self as parallel, prelude::* };
-use aoc_md5 as md5;
-use md5::md5_hash;
+use aoc_md5::{ self as md5, md5_hash };
+use aoc_stvec::prelude::*;
 
 mod examples;
 pub mod input;

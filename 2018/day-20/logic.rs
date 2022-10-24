@@ -52,15 +52,15 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 fn gen_grid (input: & Input) -> GenResult <Grid> {
 	use RouteRegexItem::{ Branch, Span };
 	type Frame = (RouteRegexString, Pos, u8, u8);
-	type Stack = ArrayVec <Frame, STACK_SIZE>;
+	type Stack = MiniVec <Frame, STACK_SIZE>;
 	let mut grid = Grid::new_range (
 		Pos::new (- GRID_EXPAND, - GRID_EXPAND),
 		Pos::new (GRID_EXPAND + 1, GRID_EXPAND + 1)) ?;
 	let mut todo: Vec <(Pos, Stack)> = Vec::new ();
-	todo.push ((Pos::ZERO, array_vec! [ (input.regex.deref ().clone (), Pos::ZERO, 0, 0) ]));
-	let mut seen: HashSet <(Pos, ArrayVec <(u8, u8), STACK_SIZE>)> = HashSet::new ();
-	seen.insert ((Pos::ZERO, array_vec! [ (0, 0) ]));
-	fn make_seen_indexes (stack: & Stack) -> ArrayVec <(u8, u8), STACK_SIZE> {
+	todo.push ((Pos::ZERO, mini_vec! [ (input.regex.deref ().clone (), Pos::ZERO, 0, 0) ]));
+	let mut seen: HashSet <(Pos, MiniVec <(u8, u8), STACK_SIZE>)> = HashSet::new ();
+	seen.insert ((Pos::ZERO, mini_vec! [ (0, 0) ]));
+	fn make_seen_indexes (stack: & Stack) -> MiniVec <(u8, u8), STACK_SIZE> {
 		stack.iter ()
 			.map (|& (_, _, branch_idx, string_idx)| (branch_idx, string_idx))
 			.collect ()

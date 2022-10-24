@@ -14,6 +14,7 @@
 	aoc-common = { path = "../../common" }
 	aoc-parallel = { path = "../../common/parallel" }
 	aoc-md5 = { path = "../../common/md5" }
+	aoc-stvec = { path = "../../common/stvec" }
 
 [build-dependencies]
 

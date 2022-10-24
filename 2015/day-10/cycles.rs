@@ -371,7 +371,7 @@ fn find_stables (max_length: usize, iterations: usize) -> HashMap <Span, Option 
 			sequence.push (state.clone ());
 
 			let mut prev_state = state.clone ();
-			let mut first_seq: ArrayVec <u8, 3> = ArrayVec::new ();
+			let mut first_seq: TinyVec <u8, 3> = TinyVec::new ();
 			first_seq.push (state.first ().copied ().unwrap ());
 
 			let key = Span::from (state.as_slice ());

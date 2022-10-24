@@ -6,8 +6,8 @@ use model::Cpu;
 use model::Val;
 
 pub fn part_one (input: & Input) -> GenResult <Val> {
-	let mut todo: Vec <(ArrayVec <Val, 5>, Val)> = Vec::new ();
-	todo.push ((ArrayVec::new (), Val::ZERO));
+	let mut todo: Vec <(TinyVec <Val, 5>, Val)> = Vec::new ();
+	todo.push ((TinyVec::new (), Val::ZERO));
 	let mut highest = Val::ZERO;
 	while let Some ((phases, value)) = todo.pop () {
 		if phases.len () == 5 {
@@ -32,8 +32,8 @@ pub fn part_one (input: & Input) -> GenResult <Val> {
 
 pub fn part_two (input: & Input) -> GenResult <Val> {
 	let mut highest = Val::ZERO;
-	let mut todo: Vec <ArrayVec <Val, 5>> = Vec::new ();
-	todo.push (ArrayVec::new ());
+	let mut todo: Vec <TinyVec <Val, 5>> = Vec::new ();
+	todo.push (TinyVec::new ());
 	while let Some (phases) = todo.pop () {
 		if phases.len () < 5 {
 			for phase in Val::FIVE ..= Val::NINE {

@@ -45,7 +45,7 @@ pub fn iterator (initial_state: State) -> impl Iterator <Item = (StateCompact, i
 }
 
 #[ must_use ]
-pub fn calc_next_states (state_compact: StateCompact) -> ArrayVec <(StateCompact, i64), 28> {
+pub fn calc_next_states (state_compact: StateCompact) -> TinyVec <(StateCompact, i64), 28> {
 	let state = state_compact.expand ();
 
 	let out_cost = |room| state.room_size () - state.room (room).len () + 1;
@@ -54,7 +54,7 @@ pub fn calc_next_states (state_compact: StateCompact) -> ArrayVec <(StateCompact
 		usize::abs_diff (2 + room.idx () * 2, hall.idx ());
 
 	let next_moves = calc_next_moves (& state);
-	if next_moves.is_empty () { return ArrayVec::new () }
+	if next_moves.is_empty () { return TinyVec::new () }
 
 	let blocking = (state.hall () [3], state.hall () [5], state.hall () [7]);
 	let sections = [
@@ -76,7 +76,7 @@ pub fn calc_next_states (state_compact: StateCompact) -> ArrayVec <(StateCompact
 			(_, _, Some (Amber | Bronze | Copper))),
 	];
 
-	let mut next_states = ArrayVec::new ();
+	let mut next_states = TinyVec::new ();
 	for next_move in next_moves.iter ().copied () {
 		match next_move {
 			Move::Between (amph, from_room, to_room) => {
@@ -118,8 +118,8 @@ pub enum Move {
 }
 
 #[ must_use ]
-pub fn calc_next_moves (state: & State) -> ArrayVec <Move, 28> {
-	let mut result = ArrayVec::new ();
+pub fn calc_next_moves (state: & State) -> TinyVec <Move, 28> {
+	let mut result = TinyVec::new ();
 	let room_entrance = |room: Amph| Place::for_idx (2 + room.idx () * 2);
 	for (idx, amph) in state.hall ().iter ().enumerate ()
 			.filter_map (|(idx, amph)| amph.map (|amph| (idx, amph))) {

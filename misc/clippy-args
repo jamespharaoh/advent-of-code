@@ -359,7 +359,7 @@
 --deny clippy::redundant_closure
 --deny clippy::redundant_closure_call
 --deny clippy::redundant_closure_for_method_calls
---deny clippy::redundant_else
+--allow clippy::redundant_else
 --deny clippy::redundant_feature_names
 --deny clippy::redundant_field_names
 --deny clippy::redundant_pattern

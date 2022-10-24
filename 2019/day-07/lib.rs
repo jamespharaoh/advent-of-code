@@ -6,6 +6,7 @@
 
 use aoc_2019_intcode as intcode;
 use aoc_common::*;
+use aoc_stvec::prelude::*;
 
 pub mod input;
 pub mod logic;

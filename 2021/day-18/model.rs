@@ -81,7 +81,7 @@ mod number {
 
 	use super::*;
 
-	type DigitsVec = ArrayVec <Digit, 31>;
+	type DigitsVec = TinyVec <Digit, 31>;
 
 	#[ derive (Clone, Eq, PartialEq) ]
 	pub struct Number {

@@ -6,6 +6,7 @@
 
 use aoc_common::*;
 use aoc_grid::prelude::*;
+use aoc_stvec::prelude::*;
 
 mod examples;
 pub mod input;

@@ -6,6 +6,7 @@
 
 use aoc_common::*;
 use aoc_pos as pos;
+use aoc_stvec::prelude::*;
 
 mod examples;
 pub mod input;

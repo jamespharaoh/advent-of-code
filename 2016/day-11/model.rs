@@ -56,7 +56,7 @@ impl State {
 	}
 
 	pub fn next_states (& self, results: & mut Vec <StateCompact>) {
-		let mut next_floors = ArrayVec::<u8, 2>::new ();
+		let mut next_floors = TinyVec::<u8, 2>::new ();
 		if self.elevator > 1 { next_floors.push (self.elevator - 1); }
 		if self.elevator < 4 { next_floors.push (self.elevator + 1); }
 		for name_idx_0 in 0 .. self.comps_len.pan_usize () {

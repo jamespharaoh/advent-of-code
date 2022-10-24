@@ -31,7 +31,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 }
 
 fn next_grid (grid: impl GridView <Pos, 2, Item = Tile>) -> GenResult <(Grid, bool)> {
-	let offsets: ArrayVec <_, 6> =
+	let offsets: TinyVec <_, 6> =
 		Pos::ZERO.adjacent ().into_iter ()
 			.map (|pos| grid.offset (pos))
 			.try_collect () ?;

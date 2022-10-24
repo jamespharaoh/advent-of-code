@@ -53,7 +53,7 @@ fn calc_result (input: & Input, grid: & Grid) -> GenResult <u32> {
 		})
 		.fold (0_u32, |sum, val| sum | (1 << val));
 	let mut search = PrioritySearch::with_hash_map (
-		|(posns, need_keys): (ArrayVec <Pos, 4>, u32), dist: u32, mut adder: PrioritySearchAdder <_, _, _>| {
+		|(posns, need_keys): (TinyVec <Pos, 4>, u32), dist: u32, mut adder: PrioritySearchAdder <_, _, _>| {
 			for (pos_idx, & pos) in posns.iter ().enumerate () {
 				for path in & paths [& pos] {
 					if need_keys & (1 << path.key_id) == 0 { continue }
@@ -67,7 +67,7 @@ fn calc_result (input: & Input, grid: & Grid) -> GenResult <u32> {
 			}
 			(posns, need_keys, dist)
 		});
-	let start_posns: ArrayVec <Pos, 4> =
+	let start_posns: TinyVec <Pos, 4> =
 		grid.iter ()
 			.filter (|& (_, tile)| matches! (tile, Tile::Entrance))
 			.map (|(pos, _)| pos)

@@ -6,6 +6,7 @@
 
 use aoc_common::*;
 use aoc_search as search;
+use aoc_stvec::prelude::*;
 
 mod examples;
 pub mod input;

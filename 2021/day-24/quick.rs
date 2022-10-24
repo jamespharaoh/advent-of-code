@@ -208,7 +208,7 @@ pub fn iterator (steps: & [Step; 14], reverse: bool) -> impl Iterator <Item = In
 		})
 }
 
-type TempAnswer = (ArrayVec <u8, 14>, i64);
+type TempAnswer = (TinyVec <u8, 14>, i64);
 
 pub enum NextNumIter <'stp, Nested> {
 	Outer {
@@ -220,7 +220,7 @@ pub enum NextNumIter <'stp, Nested> {
 		steps: & 'stp [Step; 14],
 		nested: Nested,
 		reverse: bool,
-		nums: ArrayVec <u8, 14>,
+		nums: TinyVec <u8, 14>,
 		progress: i64,
 		next_iter: ops::RangeInclusive <u8>,
 	},
@@ -232,7 +232,7 @@ impl <'stp> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
 		steps: & 'stp [Step; 14],
 		reverse: bool,
 	) -> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
-		let a: TempAnswer = (ArrayVec::new (), 0);
+		let a: TempAnswer = (TinyVec::new (), 0);
 		NextNumIter::Outer { steps, nested: Some (a).into_iter (), reverse }
 	}
 }

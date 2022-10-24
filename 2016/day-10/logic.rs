@@ -85,7 +85,7 @@ fn events (input: & Input) -> GenResult <Vec <Event>> {
 
 #[ derive (Debug, Default) ]
 struct BotState {
-	chips: ArrayVec <Val, 2>,
+	chips: TinyVec <Val, 2>,
 	gives: Option <(Target, Target)>,
 }
 

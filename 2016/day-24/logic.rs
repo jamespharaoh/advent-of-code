@@ -33,7 +33,7 @@ fn calc_shortest (
 ) -> GenResult <u32> {
 
 	let mut search = PrioritySearch::with_hash_map (
-		|mut route: ArrayVec <u8, 11>, dist, mut adder: PrioritySearchAdder <_, _, _>| {
+		|mut route: TinyVec <u8, 11>, dist, mut adder: PrioritySearchAdder <_, _, _>| {
 			let here = route.last ().copied ().unwrap ();
 			route.sort ();
 			for & (from, to, next_dist) in dists.iter () {
@@ -50,7 +50,7 @@ fn calc_shortest (
 		});
 
 	search
-		.push (array_vec! [ 0_u8 ], 0)
+		.push (tiny_vec! [ 0_u8 ], 0)
 		.filter (|& (ref route, _)| route.len () ==
 			if round_trip { nums.len () + 1 } else { nums.len () })
 		.map (|(_, dist)| dist)

@@ -137,7 +137,7 @@ struct UpdateLineIter <Inner: Iterator <Item = NumResult <(Coord, u8)>>> {
 	inner: Inner,
 	next: Option <(Coord, u8)>,
 	action: Action,
-	step: ArrayVec <Coord, 2>,
+	step: TinyVec <Coord, 2>,
 	old_active: u8,
 	cur_active: u8,
 	in_step: bool,

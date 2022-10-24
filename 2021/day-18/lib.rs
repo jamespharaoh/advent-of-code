@@ -3,6 +3,7 @@
 //! [https://adventofcode.com/2021/day/18](https://adventofcode.com/2021/day/18)
 
 use aoc_common::*;
+use aoc_stvec::prelude::*;
 
 mod examples;
 pub mod input;

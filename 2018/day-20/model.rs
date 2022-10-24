@@ -73,8 +73,8 @@ mod room {
 
 		#[ inline ]
 		#[ must_use ]
-		pub fn doors (self) -> ArrayVec <Dir, 4> {
-			let mut result = ArrayVec::new ();
+		pub fn doors (self) -> TinyVec <Dir, 4> {
+			let mut result = TinyVec::new ();
 			if self.north () { result.push (Dir::North); }
 			if self.south () { result.push (Dir::South); }
 			if self.east () { result.push (Dir::East); }

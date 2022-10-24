@@ -7,11 +7,11 @@ use model::Place::{ Hall, Room };
 #[ derive (Clone, Debug, Eq, PartialEq) ]
 pub struct State {
 	room_size: usize,
-	hall: ArrayVec <Option <Amph>, 11>,
-	amber: ArrayVec <Amph, 4>,
-	bronze: ArrayVec <Amph, 4>,
-	copper: ArrayVec <Amph, 4>,
-	desert: ArrayVec <Amph, 4>,
+	hall: TinyVec <Option <Amph>, 11>,
+	amber: TinyVec <Amph, 4>,
+	bronze: TinyVec <Amph, 4>,
+	copper: TinyVec <Amph, 4>,
+	desert: TinyVec <Amph, 4>,
 }
 
 impl State {
@@ -20,11 +20,11 @@ impl State {
 	pub fn new_part_one (input: & Input) -> Self {
 		Self {
 			room_size: 2,
-			hall: array_vec! [None; 11],
-			amber: array_vec! [ input.amphs [0] [1], input.amphs [0] [0] ],
-			bronze: array_vec! [ input.amphs [1] [1], input.amphs [1] [0] ],
-			copper: array_vec! [ input.amphs [2] [1], input.amphs [2] [0] ],
-			desert: array_vec! [ input.amphs [3] [1], input.amphs [3] [0] ],
+			hall: tiny_vec! [None; 11_usize],
+			amber: tiny_vec! [ input.amphs [0] [1], input.amphs [0] [0] ],
+			bronze: tiny_vec! [ input.amphs [1] [1], input.amphs [1] [0] ],
+			copper: tiny_vec! [ input.amphs [2] [1], input.amphs [2] [0] ],
+			desert: tiny_vec! [ input.amphs [3] [1], input.amphs [3] [0] ],
 		}
 	}
 
@@ -32,11 +32,11 @@ impl State {
 	pub fn new_part_two (input: & Input) -> Self {
 		Self {
 			room_size: 4,
-			hall: array_vec! [None; 11],
-			amber: array_vec! [ input.amphs [0] [1], Desert, Desert, input.amphs [0] [0] ],
-			bronze: array_vec! [ input.amphs [1] [1], Bronze, Copper, input.amphs [1] [0] ],
-			copper: array_vec! [ input.amphs [2] [1], Amber, Bronze, input.amphs [2] [0] ],
-			desert: array_vec! [ input.amphs [3] [1], Copper, Amber, input.amphs [3] [0] ],
+			hall: tiny_vec! [None; 11_usize],
+			amber: tiny_vec! [ input.amphs [0] [1], Desert, Desert, input.amphs [0] [0] ],
+			bronze: tiny_vec! [ input.amphs [1] [1], Bronze, Copper, input.amphs [1] [0] ],
+			copper: tiny_vec! [ input.amphs [2] [1], Amber, Bronze, input.amphs [2] [0] ],
+			desert: tiny_vec! [ input.amphs [3] [1], Copper, Amber, input.amphs [3] [0] ],
 		}
 	}
 
@@ -44,11 +44,11 @@ impl State {
 	pub fn from_array (room_size: usize, places: [Option <Amph>; 27]) -> Self {
 		let mut state = Self {
 			room_size,
-			hall: ArrayVec::new (),
-			amber: ArrayVec::new (),
-			bronze: ArrayVec::new (),
-			copper: ArrayVec::new (),
-			desert: ArrayVec::new (),
+			hall: TinyVec::new (),
+			amber: TinyVec::new (),
+			bronze: TinyVec::new (),
+			copper: TinyVec::new (),
+			desert: TinyVec::new (),
 		};
 		state.hall = places [0 .. 11].iter ().copied ().collect ();
 		for room in [ Amber, Bronze, Copper, Desert ] {
@@ -115,7 +115,7 @@ impl State {
 		}
 	}
 
-	fn room_mut (& mut self, amph: Amph) -> & mut ArrayVec <Amph, 4> {
+	fn room_mut (& mut self, amph: Amph) -> & mut TinyVec <Amph, 4> {
 		match amph {
 			Amber => & mut self.amber,
 			Bronze => & mut self.bronze,

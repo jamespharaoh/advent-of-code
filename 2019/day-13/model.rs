@@ -48,7 +48,7 @@ mod core {
 
 		#[ allow (clippy::should_implement_trait) ]
 		pub fn next (& mut self) -> GenResult <CoreNext> {
-			let mut output_buf: ArrayVec <Val, 3> = array_vec! [];
+			let mut output_buf: TinyVec <Val, 3> = tiny_vec! [];
 			self.cpu.set_max_ops (self.step_max_ops);
 			loop {
 				#[ allow (clippy::wildcard_enum_match_arm) ]

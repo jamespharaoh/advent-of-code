@@ -13,6 +13,7 @@
 
 	aoc-common = { path = "../../common" }
 	aoc-pos = { path = "../../common/pos" }
+	aoc-stvec = { path = "../../common/stvec" }
 
 [build-dependencies]
 
