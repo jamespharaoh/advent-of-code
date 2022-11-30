@@ -2,6 +2,5 @@
 "aoc_2021_day_08":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/str/traits/trait.FromStr.html\" title=\"trait core::str::traits::FromStr\">FromStr</a> for <a class=\"struct\" href=\"aoc_2021_day_08/model/struct.Digit.html\" title=\"struct aoc_2021_day_08::model::Digit\">Digit</a>"]],
 "aoc_2021_day_18":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/str/traits/trait.FromStr.html\" title=\"trait core::str::traits::FromStr\">FromStr</a> for <a class=\"struct\" href=\"aoc_2021_day_18/model/struct.Number.html\" title=\"struct aoc_2021_day_18::model::Number\">Number</a>"]],
 "aoc_2021_day_23":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/str/traits/trait.FromStr.html\" title=\"trait core::str::traits::FromStr\">FromStr</a> for <a class=\"struct\" href=\"aoc_2021_day_23/model/struct.State.html\" title=\"struct aoc_2021_day_23::model::State\">State</a>"]],
-"aoc_misc":[],
-"arrayvec":[["impl&lt;const CAP:&nbsp;<a class=\"primitive\" href=\"https://doc.rust-lang.org/nightly/std/primitive.usize.html\">usize</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/str/traits/trait.FromStr.html\" title=\"trait core::str::traits::FromStr\">FromStr</a> for <a class=\"struct\" href=\"arrayvec/struct.ArrayString.html\" title=\"struct arrayvec::ArrayString\">ArrayString</a>&lt;CAP&gt;"]]
+"aoc_misc":[]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

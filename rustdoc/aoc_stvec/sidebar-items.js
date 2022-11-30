@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":[["mini_vec",""],["tiny_vec",""]],"mod":[["prelude",""]],"struct":[["MiniIntoIter",""],["MiniVec",""],["TinyIntoIter",""],["TinyVec",""]]};
