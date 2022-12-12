@@ -56,7 +56,8 @@ and Node.js environments are supported, invoking the methods
 <p>To enable the <code>js</code> Cargo feature, add the following to the <code>dependencies</code>
 section in your <code>Cargo.toml</code> file:</p>
 <div class="example-wrap"><pre class="language-toml"><code>[dependencies]
-getrandom = { version = &quot;0.2&quot;, features = [&quot;js&quot;] }</code></pre></div>
+getrandom = { version = &quot;0.2&quot;, features = [&quot;js&quot;] }
+</code></pre></div>
 <p>This can be done even if <code>getrandom</code> is not a direct dependency. Cargo
 allows crates to enable features for indirect dependencies.</p>
 <p>This feature should only be enabled for binary, test, or benchmark crates.
@@ -70,7 +71,8 @@ limitations in wasm-bindgen’s <a href="https://rustwasm.github.io/wasm-bindgen
 support ES Modules running on Node.js. However, on Node v15 and later, the
 module author can add a simple shim to support the Web Cryptography API:</p>
 <div class="example-wrap"><pre class="language-js"><code>import { webcrypto } from &#39;node:crypto&#39;
-globalThis.crypto = webcrypto</code></pre></div>
+globalThis.crypto = webcrypto
+</code></pre></div>
 <p>This crate will then use the provided <code>webcrypto</code> implementation.</p>
 <h4 id="custom-implementations"><a href="#custom-implementations">Custom implementations</a></h4>
 <p>The [<code>register_custom_getrandom!</code>] macro allows a user to mark their own
@@ -108,4 +110,4 @@ impossible. If an error does occur, then it is likely that it will occur
 on every call to <code>getrandom</code>, hence after the first successful call one
 can be reasonably confident that no errors will occur.</p>
 </div></details><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.Error.html" title="getrandom::Error struct">Error</a></div><div class="item-right docblock-short">A small and <code>no_std</code> compatible error type</div></div></div><h2 id="functions" class="small-section-header"><a href="#functions">Functions</a></h2><div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="fn" href="fn.getrandom.html" title="getrandom::getrandom fn">getrandom</a></div><div class="item-right docblock-short">Fill <code>dest</code> with random bytes from the system’s preferred random number
-source.</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="getrandom" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0-nightly (c6fcdb690 2022-12-10)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
+source.</div></div></div></section></div></main><div id="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="getrandom" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.0-nightly (bdb07a8ec 2022-12-11)" data-search-js="search-444266647c4dba98.js" data-settings-js="settings-bebeae96e00e4617.js" data-settings-css="settings-af96d9e2fc13e081.css" ></div></body></html>
