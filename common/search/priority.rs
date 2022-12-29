@@ -308,7 +308,7 @@ pub trait Seen <Node, Pri> where Node: Clone, Pri: Clone + Ord {
 	#[ inline ]
 	fn seen_visited (& mut self, node: & Node) -> bool {
 		let seen_state = self.seen_get_mut (node.clone ());
-		if let SeenState::Visited = seen_state.clone () {
+		if matches! (* seen_state, SeenState::Visited) {
 			true
 		} else {
 			* seen_state = SeenState::Visited;

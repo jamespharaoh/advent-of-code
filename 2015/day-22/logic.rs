@@ -19,7 +19,7 @@ fn calc_result (player: Player, boss: Boss, difficulty: Difficulty) -> GenResult
 		.filter (|outcome| outcome.winner == Contender::Player)
 		.map (|outcome| outcome.mana)
 		.next ()
-		.ok_or ("No solution found".into ())
+		.ok_or_else (|| "No solution found".into ())
 }
 
 fn outcomes (

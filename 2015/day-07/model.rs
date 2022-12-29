@@ -36,7 +36,7 @@ mod wire_id {
 
 	struct_parser_display! {
 		input_lifetime = 'inp;
-		WireId <'inp> { id } = [ @str id = ('a' ..= 'z', 1 ..= 10) ]
+		WireId <'inp> { id } = [ @str id = (|ch| { ch.is_ascii_lowercase () }, 1 ..= 10) ]
 	}
 
 	impl TryFrom <& str> for WireId <'static> {

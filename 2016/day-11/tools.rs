@@ -52,10 +52,10 @@ pub fn corpus_gen (args: CorpusGenArgs) -> GenResult <()> {
 					.zip (comps.iter ().copied ())
 					.take (args.num_comps.unwrap_or (5)) {
 				if gen == floor {
-					items.push (format! ("{} generator", name));
+					items.push (format! ("{name} generator"));
 				}
 				if chip == floor {
-					items.push (format! ("{}-compatible microchip", name));
+					items.push (format! ("{name}-compatible microchip"));
 				}
 			}
 			let floor_name = match floor {
@@ -63,18 +63,18 @@ pub fn corpus_gen (args: CorpusGenArgs) -> GenResult <()> {
 				_ => unreachable! (),
 			};
 			if items.is_empty () {
-				writeln! (& mut output, "The {} floor contains nothing relevant.",
-					floor_name).unwrap ();
+				writeln! (& mut output, "The {floor_name} floor contains nothing relevant.")
+					.unwrap ();
 			} else if items.len () == 1 {
-				writeln! (& mut output, "The {} floor contains a {}.", floor_name,
-					items [0]).unwrap ();
+				writeln! (& mut output, "The {floor_name} floor contains a {}.", items [0])
+					.unwrap ();
 			} else if items.len () == 2 {
-				writeln! (& mut output, "The {} floor contains a {} and a {}.", floor_name,
+				writeln! (& mut output, "The {floor_name} floor contains a {} and a {}.",
 					items [0], items [1]).unwrap ();
 			} else {
 				write! (& mut output, "The {} floor contains a {}", floor_name, items [0]).unwrap ();
 				for item in & items [1 .. items.len () - 1] {
-					write! (& mut output, ", a {}", item).unwrap ();
+					write! (& mut output, ", a {item}").unwrap ();
 				}
 				writeln! (& mut output, ", and a {}.", items [items.len () - 1]).unwrap ();
 			}

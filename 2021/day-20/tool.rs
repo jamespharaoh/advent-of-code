@@ -17,7 +17,7 @@ args_decl! {
 #[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]
 pub fn run (args: RunArgs) -> GenResult <()> {
-	let input_string = fs::read_to_string (& args.input.unwrap ()) ?;
+	let input_string = fs::read_to_string (args.input.unwrap ()) ?;
 	let input_lines: Vec <& str> = input_string.trim ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 	let start_image = Image::new_from (input.pixels, Pixel::Dark);

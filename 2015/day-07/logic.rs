@@ -124,7 +124,7 @@ fn check_input (input: & Input) -> GenResult <()> {
 					.collect::<TinyVec <_, 2>> ()
 			})
 			.find (|& (_, ref input)| ! all_wire_ids.contains (input)) {
-		Err (format! ("Wire {} refers to non-existant input {}", wire, input)) ?;
+		Err (format! ("Wire {wire} refers to non-existant input {input}")) ?;
 	}
 	Ok (())
 }

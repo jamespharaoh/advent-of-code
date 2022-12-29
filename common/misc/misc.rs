@@ -108,6 +108,12 @@ mod error {
 
 	pub type GenError = Box <dyn Error>;
 
+	#[ allow (non_snake_case) ]
+	#[ inline ]
+	pub fn GenOk <Val> (val: Val) -> GenResult <Val> {
+		Ok (val)
+	}
+
 }
 
 mod default {

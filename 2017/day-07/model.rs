@@ -34,10 +34,10 @@ impl <'inp> ProgInfo <'inp> {
 		for prog in input.progs.iter () {
 			for held_name in prog.holds.iter () {
 				if ! progs.contains_key (held_name) {
-					return Err (format! ("Prog {} holds invalid prog {}", prog.name, held_name).into ());
+					return Err (format! ("Prog {} holds invalid prog {held_name}", prog.name).into ());
 				}
 				if parents.contains_key (held_name) {
-					return Err (format! ("Prog is held multiple times: {}", held_name).into ());
+					return Err (format! ("Prog is held multiple times: {held_name}").into ());
 				}
 				parents.insert (held_name.clone (), prog.name.clone ());
 			}

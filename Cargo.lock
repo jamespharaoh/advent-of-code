@@ -25,6 +25,7 @@ dependencies = [
  "aoc-2019",
  "aoc-2020",
  "aoc-2021",
+ "aoc-2022",
  "aoc-common",
 ]
 
@@ -1848,6 +1849,59 @@ dependencies = [
  "aoc-common",
  "aoc-grid",
  "aoc-pos",
+]
+
+[[package]]
+name = "aoc-2022"
+version = "0.1.0"
+dependencies = [
+ "aoc-2022-day-01",
+ "aoc-2022-day-02",
+ "aoc-2022-day-03",
+ "aoc-2022-day-04",
+ "aoc-2022-day-05",
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2022-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2022-day-02"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2022-day-03"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2022-day-04"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2022-day-05"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
 ]
 
 [[package]]

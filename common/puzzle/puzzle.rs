@@ -55,7 +55,7 @@ pub (crate) fn puzzle_invoke_real (
 	if part.unwrap_or (1) == 1 && 1 <= puzzle.num_parts () {
 		run::runner (repeat, |idx| {
 			let result = puzzle.part_one (& input_lines) ?;
-			if idx == 0 { println! ("Part one: {}", result); }
+			if idx == 0 { println! ("Part one: {result}"); }
 			Ok (())
 		}) ?;
 	}
@@ -63,7 +63,7 @@ pub (crate) fn puzzle_invoke_real (
 	if part.unwrap_or (2) == 2 && 2 <= puzzle.num_parts () {
 		run::runner (repeat, |idx| {
 			let result = puzzle.part_two (& input_lines) ?;
-			if idx == 0 { println! ("Part two: {}", result); }
+			if idx == 0 { println! ("Part two: {result}"); }
 			Ok (())
 		}) ?;
 	}

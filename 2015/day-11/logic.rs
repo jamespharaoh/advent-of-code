@@ -26,7 +26,7 @@ pub fn next_password (input: & str) -> GenResult <String> {
 		input.chars ()
 			.map (|ch| ALL_CHARS.iter ().copied ()
 				.position (|valid_ch| ch == valid_ch)
-				.ok_or_else (|| format! ("Input contains invalid character: {}", ch).into ()))
+				.ok_or_else (|| format! ("Input contains invalid character: {ch}").into ()))
 			.collect::<GenResult <_>> () ?;
 	fn idxs_to_chars (char_idxs: & [usize]) -> impl Iterator <Item = char> + '_ + Clone {
 		char_idxs.iter ().copied ().map (|idx| ALL_CHARS [idx])

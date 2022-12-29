@@ -87,7 +87,7 @@ fn hashes_iter (
 			.take (batch_size)
 			.map (|num| {
 				buffer.truncate (salt.len ());
-				write! (& mut buffer, "{}", num).unwrap ();
+				write! (& mut buffer, "{num}").unwrap ();
 				stretched_hash (& buffer, hash_reps)
 			})
 			.collect::<Vec <_>> ()

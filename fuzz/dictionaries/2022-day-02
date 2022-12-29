@@ -1,0 +1,9 @@
+misc_newline = "\x0a"
+misc_space = " "
+
+letter_a = "A"
+letter_b = "B"
+letter_c = "C"
+letter_x = "X"
+letter_y = "Y"
+letter_z = "Z"

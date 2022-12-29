@@ -18,7 +18,7 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 			input.params.rounds_two);
 	let result =
 		hash.iter ()
-			.map (|& byte| format! ("{:02x}", byte))
+			.map (|& byte| format! ("{byte:02x}"))
 			.collect ();
 	Ok (result)
 }

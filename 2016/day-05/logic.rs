@@ -40,7 +40,7 @@ fn iter_hashes (input: & Input) -> impl Iterator <Item = md5::Output> {
 		let mut buffer = door_id.deref ().to_owned ();
 		for num in (num_start .. ).take (batch_size) {
 			buffer.truncate (door_id.len ());
-			write! (buffer, "{}", num).unwrap ();
+			write! (buffer, "{num}").unwrap ();
 			let hash = md5_hash (buffer.as_bytes ());
 			if hash.num_zeros () < num_zeros { continue }
 			hashes.push (hash);

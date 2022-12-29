@@ -26,7 +26,7 @@ fn calc_result (input: & Input, reduce_fn: fn (u32, u32) -> u32) -> u32 {
 fn get_bits (person: & InputPerson) -> u32 {
 	person.chars ()
 		.fold (0, |sum, ch| {
-			assert! (('a' ..= 'z').contains (& ch));
+			assert! (ch.is_ascii_lowercase ());
 			let bit = ch.pan_u32 () - 'a'.pan_u32 ();
 			sum | (1 << bit)
 		})

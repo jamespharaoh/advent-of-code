@@ -143,7 +143,7 @@ fn run_puzzle (
 		// print part name
 
 		if ! args.plain {
-			print! ("{}: ", part_name);
+			print! ("{part_name}: ");
 		}
 
 		// calculate result
@@ -185,7 +185,7 @@ fn run_puzzle (
 	// print errors
 
 	for error in errors {
-		print! ("  {}\n", error);
+		print! ("  {error}\n");
 	}
 
 	Ok (())

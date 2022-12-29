@@ -60,7 +60,7 @@ pub fn run (args: Args) -> GenResult <()> {
 					1 => (1_i32, Some (next_1.unwrap ())),
 					2 => (1_i32, None),
 					3 => (2_i32, Some (next_3.unwrap ())),
-					_ => panic! ("Found run of {} + {} = {}", buffer_run, next_run, run),
+					_ => panic! ("Found run of {buffer_run} + {next_run} = {run}"),
 				};
 				for _ in 0_i32 .. iter_adv { items_iter.next ().unwrap (); }
 				buffer = buffer_new;
@@ -90,7 +90,7 @@ pub fn run (args: Args) -> GenResult <()> {
 				(align_key, align_col) = align_iter.next ().unwrap_or (((0, 0), 0));
 			}
 			//print! ("[{}:{}]", gen, idx);
-			print! ("{}{}", run, num); col += 2;
+			print! ("{run}{num}"); col += 2;
 		}
 		print! ("\n");
 	}

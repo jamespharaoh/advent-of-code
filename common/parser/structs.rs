@@ -35,13 +35,14 @@ macro_rules! struct_parser {
 		
 	(
 		@outer $inp_life:tt [$($param_decl:tt)*]
+		$( #[ $($attr:tt)* ] )*
 		$name:ident
 		$( < $($param:tt),* > )?
 		{ $($fields:tt)* }
 		= [ $($args:tt)* ]
 	) => {
 		struct_parser! (
-			@main $name $inp_life
+			@main $( #[ $($attr)* ] )* $name $inp_life
 			[ $($param_decl)* ]
 			[ $( $($param),* )? ]
 			[ { $($fields)* } ]
@@ -64,12 +65,13 @@ macro_rules! struct_parser {
 	};
 
 	(
-		@main $name:ident $inp_life:tt
+		@main $( #[ $($attr:tt)* ] )* $name:ident $inp_life:tt
 		[ $($param_decl:tt)* ]
 		[ $($param:tt)* ]
 		[ $($fields:tt)* ]
 		[ $($args:tt)* ]
 	) => {
+		$( #[ $($attr)* ] )*
 		impl <$inp_life, $($param_decl)*> FromParser <$inp_life> for $name <$($param)*> {
 			#[ inline ]
 			fn from_parser (parser: & mut Parser <$inp_life>) -> ParseResult <Self> {

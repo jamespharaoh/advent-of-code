@@ -31,7 +31,7 @@ pub fn invoke () -> Result <(), Box <dyn Error>> {
 	if pkg_name == "aoc-common" {
 		let home = env::current_dir () ?;
 		for year in ["2015", "2021"] {
-			env::set_current_dir (format! ("../{}", year)) ?;
+			env::set_current_dir (format! ("../{year}")) ?;
 			year::prepare (year) ?;
 			env::set_current_dir (& home) ?;
 		}
@@ -82,7 +82,7 @@ fn write_file (
 	let old_contents = fs::read_to_string (& name).unwrap_or_default ();
 	if old_contents != new_contents {
 		let mut main_rs_file = File::create (name) ?;
-		write! (& mut main_rs_file, "{}", new_contents) ?;
+		write! (& mut main_rs_file, "{new_contents}") ?;
 	}
 	Ok (())
 }
@@ -99,7 +99,7 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 					buffer.push (letter);
 					if letter == '}' {
 						let replacement = replacements.get (buffer.as_str ()).unwrap_or_else (||
-							panic! ("Replacement not found for: {}", buffer),
+							panic! ("Replacement not found for: {buffer}"),
 						);
 						output.push_str (replacement);
 						buffer = String::new ();

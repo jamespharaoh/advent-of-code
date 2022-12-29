@@ -87,7 +87,7 @@ pub fn find_simple (grid: & Grid, size: Coord) -> GenResult <(Pos, Power)> {
 				(pos_0, power)
 			}))
 		.max_by_key (|& (_, power)| power)
-		.ok_or ("No solution found".into ())
+		.ok_or_else (|| "No solution found".into ())
 }
 
 fn gen_grid (input: & Input) -> GenResult <Grid> {

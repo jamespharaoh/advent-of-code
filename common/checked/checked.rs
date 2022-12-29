@@ -139,8 +139,8 @@ impl CheckedExpr {
 	fn parse_tight (iter: & mut TokenIter) -> Self {
 		let mut result = Self::parse_single (iter);
 		while iter.peek ().is_some () {
-			let punct = match iter.peek ().unwrap () {
-				& TokenTree::Punct (ref punct) => punct,
+			let punct = match * iter.peek ().unwrap () {
+				TokenTree::Punct (ref punct) => punct,
 				_ => panic! (),
 			};
 			let ctor = match punct.as_char () {

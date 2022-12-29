@@ -10,7 +10,7 @@ struct_parser_display! {
 	input_lifetime = 'inp;
 	Input <'inp> { initial, params } = [
 		params,
-		@str initial = ('a' ..= 'z', 8 ..= 8),
+		@str initial = (|ch| { ch.is_ascii_lowercase () }, 8 ..= 8),
 	]
 }
 

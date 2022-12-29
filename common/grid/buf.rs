@@ -37,7 +37,7 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 				.product::<usize> ();
 		let actual_len = storage.storage_len ();
 		assert! (expected_len == actual_len,
-			"Expected {} items but was passed {}", expected_len, actual_len);
+			"Expected {expected_len} items but was passed {actual_len}");
 		Ok (Self { storage, start, end, size, phantom: PhantomData })
 	}
 

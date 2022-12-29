@@ -58,7 +58,7 @@ function main {
 			time_cmd cargo $toolchain run "${cargo_args[@]}" \
 				-- "${extra_args_0[@]}"
 			time_cmd cargo $toolchain test "${cargo_args[@]}" \
-				-- "${extra_args_1[@]}"
+				-- --color always "${extra_args_1[@]}"
 			;;
 		(run)
 			time_cmd cargo $toolchain run "${cargo_args[@]}" \

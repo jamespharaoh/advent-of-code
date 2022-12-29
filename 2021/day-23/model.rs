@@ -348,7 +348,7 @@ impl Place {
 			15 ..= 18 => Room (Bronze, idx.pan_u8 () - 15),
 			19 ..= 22 => Room (Copper, idx.pan_u8 () - 19),
 			23 ..= 26 => Room (Desert, idx.pan_u8 () - 23),
-			_ => panic! ("Invalid index: {}", idx),
+			_ => panic! ("Invalid index: {idx}"),
 		}
 	}
 

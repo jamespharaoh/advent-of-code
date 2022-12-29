@@ -69,8 +69,8 @@ pub fn run_part (args: & RunArgs, initial_state: State) -> GenResult <()> {
 					.collect ();
 			if cost != last_cost {
 				println! ();
-				println! ("Evaluating states with cost: {}", cost);
-				println! ("Number of iterations: {}", num_loops);
+				println! ("Evaluating states with cost: {cost}");
+				println! ("Number of iterations: {num_loops}");
 				println! ("Size of backlog: {}", search.len ());
 			}
 			println! ();
@@ -116,9 +116,9 @@ pub fn run_part (args: & RunArgs, initial_state: State) -> GenResult <()> {
 		println! ("═══════════════════════════ Found solution ═══════════════════════════");
 	}
 	println! ();
-	println! ("Solved with cost: {}", final_cost);
+	println! ("Solved with cost: {final_cost}");
 	println! ("Number of steps in solution: {}", all_states.len () - 1);
-	println! ("Number of iterations: {}", num_loops);
+	println! ("Number of iterations: {num_loops}");
 	println! ("Total states generated: {}", prev_states.len ());
 	println! ();
 	for chunk in all_states.chunks (11) {
@@ -155,7 +155,7 @@ fn print_next_states (
 	for (chunk_idx, chunk) in next_states.chunks (chunk_size.pan_usize ()).enumerate () {
 		print! ("{:^13}  ", if chunk_idx == 0 { "START" } else { "" });
 		for & (_, ref cost) in chunk.iter () {
-			print! (" {:^13}", cost);
+			print! (" {cost:^13}");
 		}
 		print! ("\n");
 		for line in 0 .. (cur_state.room_size ().pan_usize () + 3) {
@@ -180,7 +180,7 @@ pub fn internals (_args: InternalsArgs) -> GenResult <()> {
 		let name = std::any::type_name::<Type> ();
 		let size = mem::size_of::<Type> ();
 		let align = mem::align_of::<Type> ();
-		println! (" - {} {} bytes (align = {})", name, size, align);
+		println! (" - {name} {size} bytes (align = {align})");
 	}
 	show_struct::<logic::Move> ();
 	show_struct::<model::Amph> ();

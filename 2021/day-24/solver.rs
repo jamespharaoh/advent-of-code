@@ -378,7 +378,7 @@ impl Symbol {
 		let state = inner.state.borrow ();
 		print! ("{}", inner.name);
 		if let Some (use_count) = use_count {
-			print! (" ({})", use_count);
+			print! (" ({use_count})");
 		}
 		match options {
 			FormatExpandOptions::Depth (depth) => {
@@ -636,23 +636,23 @@ impl SymVal {
 			Self::Symbol (ref other_symbol) =>
 				write! (formatter, "{}", expand (other_symbol, wrap)) ?,
 			Self::Input (ref index) =>
-				write! (formatter, "input [{}]", index) ?,
+				write! (formatter, "input [{index}]") ?,
 			Self::Add (ref left, ref right) =>
-				write! (formatter, "{}{} + {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} + {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::Multiply (ref left, ref right) =>
-				write! (formatter, "{}{} × {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} × {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::Divide (ref left, ref right) =>
-				write! (formatter, "{}{} ÷ {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} ÷ {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::Modulo (ref left, ref right) =>
-				write! (formatter, "{}{} mod {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} mod {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::IsEqual (ref left, ref right) =>
-				write! (formatter, "{}{} = {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} = {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::IsUnequal (ref left, ref right) =>
-				write! (formatter, "{}{} ≠ {}{}", open, expand (left, true), expand (right, true), close) ?,
+				write! (formatter, "{open}{} ≠ {}{close}", expand (left, true), expand (right, true)) ?,
 			Self::Value (ref value) =>
-				write! (formatter, "{}", value) ?,
+				write! (formatter, "{value}") ?,
 			Self::Error (ref arg) =>
-				write! (formatter, "{:?}", arg) ?,
+				write! (formatter, "{arg:?}") ?,
 		}
 		Ok (())
 	}

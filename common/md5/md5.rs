@@ -43,13 +43,13 @@ impl Output {
 	#[ allow (clippy::missing_inline_in_public_items) ]
 	pub fn from_hex (input: & str) -> Result <Self, String> {
 		let input_len = input.chars ().count ();
-		if input_len != 32 { return Err (format! ("Expected 32 chars, not {}", input_len)) }
+		if input_len != 32 { return Err (format! ("Expected 32 chars, not {input_len}")) }
 		let mut result = [0; 16];
 		let mut input_iter = input.chars ();
 		for result_ch in result.iter_mut () {
 			let high_ch = input_iter.next ().unwrap ();
 			let low_ch = input_iter.next ().unwrap ();
-			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {}", ch));
+			let decode = |ch: char| ch.to_digit (16).ok_or (format! ("Invalid hex: {ch}"));
 			* result_ch = (decode (high_ch) ?.qck_u8 ()) << 4_i32 | decode (low_ch) ?.qck_u8 ();
 		}
 		Ok (Self (result))

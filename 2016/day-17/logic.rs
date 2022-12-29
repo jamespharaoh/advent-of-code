@@ -62,7 +62,7 @@ impl Iterator for RoutesIter {
 				let adj_pos = ok_or! (pos.try_add ((dir, 1)), continue);
 				if adj_pos.y >= self.size.y || adj_pos.x >= self.size.x { continue }
 				if hash_hex [dir_idx] > b'a' {
-					self.todo.push_back ((adj_pos, format! ("{}{}", route, dir_tag)));
+					self.todo.push_back ((adj_pos, format! ("{route}{dir_tag}")));
 				}
 			}
 		}

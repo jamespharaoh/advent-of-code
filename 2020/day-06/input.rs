@@ -32,7 +32,7 @@ wrapper_deref_mut! {
 
 struct_parser_display! {
 	input_lifetime = 'inp;
-	InputPerson <'inp> { answers } = [ @str answers = ('a' ..= 'z', 1 ..= 26) ]
+	InputPerson <'inp> { answers } = [ @str answers = (|ch| { ch.is_ascii_lowercase () }, 1 ..= 26) ]
 }
 
 input_params! {

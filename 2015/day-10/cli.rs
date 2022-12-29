@@ -57,7 +57,7 @@ pub fn internals (_args: InternalsArgs) -> GenResult <()> {
 		let name = std::any::type_name::<Type> ();
 		let size = mem::size_of::<Type> ();
 		let align = mem::align_of::<Type> ();
-		println! (" - {} {} bytes (align = {})", name, size, align);
+		println! (" - {name} {size} bytes (align = {align})");
 	}
 	show_struct::<tracking::Item> ();
 	Ok (())

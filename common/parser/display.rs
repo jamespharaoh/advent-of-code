@@ -235,6 +235,11 @@ macro_rules! display {
 		::std::fmt::Display::fmt (& $field.display_delim ($delim), $formatter) ?;
 		display! ($formatter, $($($rest)*)?);
 	};
+	( $formatter:ident, @delim_some $delim:literal $field:ident { $($nest:tt)* } $(,$($rest:tt)*)? ) => {
+		let display_fn = display! (@nest $($nest)*);
+		::std::fmt::Display::fmt (& $field.display_delim_with ($delim, display_fn), $formatter) ?;
+		display! ($formatter, $($($rest)*)?);
+	};
 
 	// @display
 

@@ -87,7 +87,7 @@ fn passport_errors <'inp> (
 			}
 		};
 		( @field_rest ($val:expr, $name:expr, $orig:expr, $errors:ident) { } ) => {
-			#[ allow (clippy::let_underscore_drop) ]
+			#[ allow (let_underscore_drop) ]
 			let _ = $val;
 		};
 	}

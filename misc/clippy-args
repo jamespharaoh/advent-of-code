@@ -1,5 +1,5 @@
 --deny clippy::absurd_extreme_comparisons
---deny clippy::almost_complete_letter_range
+--deny clippy::almost_complete_range
 --deny clippy::almost_swapped
 --deny clippy::approx_constant
 --deny clippy::as_conversions
@@ -198,7 +198,7 @@
 --deny clippy::len_zero
 --deny clippy::let_and_return
 --deny clippy::let_underscore_lock
---deny clippy::let_underscore_drop
+--deny let_underscore_drop
 --deny clippy::let_underscore_must_use
 --deny clippy::let_unit_value
 --deny clippy::linkedlist
@@ -283,7 +283,7 @@
 --deny clippy::needless_bitwise_bool
 --deny clippy::needless_bool
 --deny clippy::needless_borrow
---deny clippy::needless_borrowed_reference
+--allow clippy::needless_borrowed_reference
 --deny clippy::needless_collect
 --deny clippy::needless_continue
 --deny clippy::needless_doctest_main

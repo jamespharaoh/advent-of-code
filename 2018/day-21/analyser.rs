@@ -23,7 +23,7 @@ args_decl! {
 pub fn run (args: Args) -> GenResult <()> {
 
 	let input_path = puzzle_metadata ().find_input_or_arg (& args.input);
-	let input_string = fs::read_to_string (& input_path) ?;
+	let input_string = fs::read_to_string (input_path) ?;
 	let input_lines: Vec <& str> = input_string.trim_end ().split ('\n').collect ();
 	let input = Input::parse_from_lines (& input_lines) ?;
 
@@ -733,14 +733,14 @@ struct ArgInfoDisplay <'arg> {
 impl <'arg> Display for ArgInfoDisplay <'arg> {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
 		match (* self.arg, self.orig) {
-			(ArgInfo::Immediate (val), _) => write! (formatter, "{}", val) ?,
+			(ArgInfo::Immediate (val), _) => write! (formatter, "{val}") ?,
 			(ArgInfo::InReg (_), _) => unimplemented! (),
 			(ArgInfo::OutReg (_), _) => unimplemented! (),
-			(ArgInfo::InOutReg (reg), _) => write! (formatter, "r{}", reg) ?,
-			(ArgInfo::Temp (_, temp), false) => write! (formatter, "v{}", temp) ?,
-			(ArgInfo::Temp (reg, _), true) => write! (formatter, "r{}", reg) ?,
+			(ArgInfo::InOutReg (reg), _) => write! (formatter, "r{reg}") ?,
+			(ArgInfo::Temp (_, temp), false) => write! (formatter, "v{temp}") ?,
+			(ArgInfo::Temp (reg, _), true) => write! (formatter, "r{reg}") ?,
 			(ArgInfo::InstrPtr (_), false) => write! (formatter, "ip") ?,
-			(ArgInfo::InstrPtr (reg), true) => write! (formatter, "r{}", reg) ?,
+			(ArgInfo::InstrPtr (reg), true) => write! (formatter, "r{reg}") ?,
 			(ArgInfo::Unused (_), _) => unreachable! (),
 		}
 		Ok (())

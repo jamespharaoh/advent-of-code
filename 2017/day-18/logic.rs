@@ -63,7 +63,7 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 				prog_a.state = Waiting;
 			},
 			Err (err) => {
-				return Err (format! ("CPU error: {}", err).into ());
+				return Err (format! ("CPU error: {err}").into ());
 			}
 		}
 

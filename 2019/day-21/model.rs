@@ -352,7 +352,7 @@ mod rules {
 			}
 			formatter.write_str ("Rules [\n") ?;
 			for & (regs, jump) in & self.rules {
-				write! (formatter, "    {} => {}\n", regs, jump) ?;
+				write! (formatter, "    {regs} => {jump}\n") ?;
 			}
 			formatter.write_str ("]") ?;
 			Ok (())

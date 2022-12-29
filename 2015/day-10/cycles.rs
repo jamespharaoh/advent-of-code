@@ -45,7 +45,7 @@ impl Span {
 
 impl Debug for Span {
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		write! (formatter, "Span (\"{}\")", self) ?;
+		write! (formatter, "Span (\"{self}\")") ?;
 		Ok (())
 	}
 }

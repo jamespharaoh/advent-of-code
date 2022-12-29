@@ -134,7 +134,7 @@ impl Display for Reg {
 impl TryFrom <char> for Reg {
 	type Error = Overflow;
 	fn try_from (ch: char) -> Result <Self, Overflow> {
-		if ! ('A' ..= 'Z').contains (& ch) { return Err (Overflow) }
+		if ! ch.is_ascii_uppercase () { return Err (Overflow) }
 		Ok (Self { idx: (ch.pan_u32 () - 'A'.pan_u32 ()).pan_u8 () })
 	}
 }

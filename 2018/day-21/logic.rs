@@ -76,7 +76,7 @@ impl <'inp> Iterator for SolutionsIter <'inp> {
 						|| (instr.opcode.arg_b () == ArgType::Reg && instr.arg_b == 0) {
 					if instr.opcode != Opcode::Eqrr || (instr.arg_a == 0 && instr.arg_b == 0) {
 						return Some (Err (
-							format! ("Don't know how to handle {:?}", instr).into ()));
+							format! ("Don't know how to handle {instr:?}").into ()));
 					}
 					if reg_0.is_some () {
 						return Some (Err ("Reg 0 compared again after matching as equal".into ()));

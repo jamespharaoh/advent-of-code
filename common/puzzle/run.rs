@@ -32,7 +32,7 @@ pub (crate) fn runner (
 	let disp_float = |val, ref_val|
 		if ref_val >= 2_000_000_f64 { format! ("{:.3}s", val / 1_000_000_f64) }
 		else if ref_val >= 2_000_f64 { format! ("{:.3}ms", val / 1_000_f64) }
-		else { format! ("{:.0}µs", val) };
+		else { format! ("{val:.0}µs") };
 	let disp = |val: u128| disp_float (val.pan_f64 (), val.pan_f64 ());
 	let disp_mean = |val: u64| disp_float (val.pan_f64 (), mean.pan_f64 ());
 	let disp_pc = |pc| disp_float (percentile (& times, pc, 1000).pan_f64 (), mean.pan_f64 ());

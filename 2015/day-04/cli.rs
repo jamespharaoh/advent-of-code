@@ -29,7 +29,7 @@ pub fn run (args: RunArgs) -> GenResult <()> {
 	let mut input = Input::parse_from_lines (& input_lines) ?;
 	if let Some (max_threads) = args.max_threads { input.params.max_threads = max_threads; }
 	let result = logic::calc_result (& input, args.num_zeros.unwrap_or (5)) ?;
-	println! ("Result: {}", result);
+	println! ("Result: {result}");
 	Ok (())
 }
 
@@ -81,7 +81,7 @@ fn find_test_case_worker (args: FindTestCaseArgs, complete: Arc <AtomicBool>) {
 				let mut buf = [0; 1];
 				assert_eq! (1, rand.read (& mut buf).unwrap ());
 				let ch = buf [0].pan_char ();
-				if ('a' ..= 'z').contains (& ch) { break ch }
+				if ch.is_ascii_lowercase () { break ch }
 			};
 			buffer.push (ch);
 		}
@@ -91,11 +91,11 @@ fn find_test_case_worker (args: FindTestCaseArgs, complete: Arc <AtomicBool>) {
 			for ch_idx in & * perms_helper {
 				buffer.push ((b'a' + ch_idx.pan_u8 ()).pan_char ());
 			}
-			write! (buffer, "{}", num).unwrap ();
+			write! (buffer, "{num}").unwrap ();
 			let hash = md5::md5_hash (buffer.as_bytes ());
 			if hash [0] == 0 && hash [1] == 0 && hash [2] == 0 {
 				for num in 1 .. num {
-					let buffer = format! ("{}{}", & buffer [0 .. args.len.unwrap_or (16)], num);
+					let buffer = format! ("{}{num}", & buffer [0 .. args.len.unwrap_or (16)]);
 					let hash = md5::md5_hash (buffer.as_bytes ());
 					if hash [0] == 0 && hash [1] == 0 && hash [2] & 0xf0 == 0
 							&& hash [2] & 0xf != 0 {

@@ -45,6 +45,6 @@ pub fn run (args: Args) -> GenResult <()> {
 		.map (|(pos, _)| (pos.row, pos.col))
 		.collect ();
 	let result = ocr::read_fixed (dots.iter ().copied (), (6, 5)) ?;
-	println! ("Result: {}", result);
+	println! ("Result: {result}");
 	Ok (())
 }

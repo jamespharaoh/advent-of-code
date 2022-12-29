@@ -56,10 +56,10 @@ pub fn machine (args: MachineArgs) -> GenResult <()> {
 		printer (& machines,
 			|| print! ("| {:2}  {:9} |", machines [0].0.regs.pc % 18 + 1,
 				prog.get (machines [0].0.regs.pc)
-					.map_or_else (|| "(end)".to_owned (), |instr| format! ("{}", instr))),
+					.map_or_else (|| "(end)".to_owned (), |instr| format! ("{instr}"))),
 			|machine| print! (" {:30} |", dump_regs (& machine.regs)));
 		for & mut (ref mut machine, ref mut input) in machines.iter_mut () {
-			if machine.step (prog, input).map_err (|err| format! ("{:?}", err)) ? {
+			if machine.step (prog, input).map_err (|err| format! ("{err:?}")) ? {
 				done = true;
 			}
 		}

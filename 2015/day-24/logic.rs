@@ -42,7 +42,7 @@ fn calc_result <const PILES: usize> (input: & Input) -> GenResult <u64> {
 			.try_fold (0, |sum, item| chk! (sum + item)) ?;
 	let want_pile_weight = total_weight / PILES.pan_u32 ();
 	if want_pile_weight * PILES.pan_u32 () != total_weight {
-		Err (format! ("Total weight is not a multiple of {}", PILES)) ?;
+		Err (format! ("Total weight is not a multiple of {PILES}")) ?;
 	}
 
 	// once we find one solution we can rule out any first piles which are bigger or have a

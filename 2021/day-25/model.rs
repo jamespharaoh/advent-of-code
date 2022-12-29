@@ -29,7 +29,7 @@ impl BitVecNative for Region {
 			0 => Self::Empty,
 			1 => Self::East,
 			2 => Self::South,
-			_ => panic! ("Invalid encoded value for Region: {:#x}", encoded),
+			_ => panic! ("Invalid encoded value for Region: {encoded:#x}"),
 		}
 	}
 }

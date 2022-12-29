@@ -20,12 +20,12 @@ pub fn prepare (year: & str) -> Result <(), Box <dyn Error>> {
 	let dynamic_part = |template| {
 		(1_u32 ..= 25)
 			.filter_map (move |day|
-				PathBuf::from (format! ("day-{:02}", day)).exists ().then_some (
+				PathBuf::from (format! ("day-{day:02}")).exists ().then_some (
 					replace_placeholders (
 						template,
 						& HashMap::from_iter (vec! [
 							("${YEAR}", year),
-							("${DAY}", & format! ("{:02}", day)),
+							("${DAY}", & format! ("{day:02}")),
 						] ),
 					)))
 			.flatten ()

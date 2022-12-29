@@ -225,7 +225,7 @@ mod base_list {
 			let mut cur = self.clone ();
 			while let Self::Present (inner) = cur {
 				let & (head, ref tail) = inner.as_ref ();
-				write! (formatter, "{}", head) ?;
+				write! (formatter, "{head}") ?;
 				cur = tail.clone ();
 			}
 			Ok (())

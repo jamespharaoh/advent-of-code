@@ -196,6 +196,14 @@ macro_rules! parse {
 			None => return Err ($parser.err ()),
 		};
 	};
+	( @item $parser:expr, @delim_some $delim:literal $item_name:ident { $($nest:tt)* } ) => {
+		let parse_fn = parse! (@nest $($nest)*);
+		let mut temp_iter = $parser.delim_fn ($delim, parse_fn);
+		let $item_name = match temp_iter.next () {
+			Some (first) => iter::once (first).chain (temp_iter).collect (),
+			None => return Err ($parser.err ()),
+		};
+	};
 	( @item $parser:expr, @display { $($body:tt)* } ) => {
 	};
 	( @item $parser:expr, @lines $item_name:ident ) => {
