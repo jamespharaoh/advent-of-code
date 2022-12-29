@@ -95,7 +95,7 @@
 		<span class="kw">let </span><span class="kw-2">mut </span>buffer = door_id.deref ().to_owned ();
 		<span class="kw">for </span>num <span class="kw">in </span>(num_start .. ).take (batch_size) {
 			buffer.truncate (door_id.len ());
-			<span class="macro">write! </span>(buffer, <span class="string">&quot;{}&quot;</span>, num).unwrap ();
+			<span class="macro">write! </span>(buffer, <span class="string">&quot;{num}&quot;</span>).unwrap ();
 			<span class="kw">let </span>hash = md5_hash (buffer.as_bytes ());
 			<span class="kw">if </span>hash.num_zeros () &lt; num_zeros { <span class="kw">continue </span>}
 			hashes.push (hash);

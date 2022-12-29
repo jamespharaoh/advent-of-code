@@ -616,7 +616,7 @@
 			<span class="kw">let </span><span class="kw-2">mut </span>cur = <span class="self">self</span>.clone ();
 			<span class="kw">while let </span><span class="self">Self</span>::Present (inner) = cur {
 				<span class="kw">let </span>&amp; (head, <span class="kw-2">ref </span>tail) = inner.as_ref ();
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, head) <span class="question-mark">?</span>;
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{head}&quot;</span>) <span class="question-mark">?</span>;
 				cur = tail.clone ();
 			}
 			<span class="prelude-val">Ok </span>(())

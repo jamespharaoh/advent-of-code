@@ -900,7 +900,7 @@
 			}
 			formatter.write_str (<span class="string">&quot;Rules [\n&quot;</span>) <span class="question-mark">?</span>;
 			<span class="kw">for </span>&amp; (regs, jump) <span class="kw">in </span>&amp; <span class="self">self</span>.rules {
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;    {} =&gt; {}\n&quot;</span>, regs, jump) <span class="question-mark">?</span>;
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;    {regs} =&gt; {jump}\n&quot;</span>) <span class="question-mark">?</span>;
 			}
 			formatter.write_str (<span class="string">&quot;]&quot;</span>) <span class="question-mark">?</span>;
 			<span class="prelude-val">Ok </span>(())

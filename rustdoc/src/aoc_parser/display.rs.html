@@ -389,6 +389,11 @@
 <a href="#389" id="389">389</a>
 <a href="#390" id="390">390</a>
 <a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub struct </span>DisplayDelim &lt;Delim, Inner&gt; {
@@ -624,6 +629,11 @@
 
 	</span>( <span class="macro-nonterminal">$formatter</span>:ident, @delim_some <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$field</span>:ident $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
 		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim (<span class="macro-nonterminal">$delim</span>), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
+		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
+	};
+	( <span class="macro-nonterminal">$formatter</span>:ident, @delim_some <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$field</span>:ident { $(<span class="macro-nonterminal">$nest</span>:tt)* } $(,$(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>)<span class="question-mark">? </span>) =&gt; {
+		<span class="kw">let </span>display_fn = <span class="macro">display! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
+		::std::fmt::Display::fmt (&amp; <span class="macro-nonterminal">$field</span>.display_delim_with (<span class="macro-nonterminal">$delim</span>, display_fn), <span class="macro-nonterminal">$formatter</span>) <span class="question-mark">?</span>;
 		<span class="macro">display! </span>(<span class="macro-nonterminal">$formatter</span>, $($(<span class="macro-nonterminal">$rest</span>)<span class="kw-2">*</span>)<span class="question-mark">?</span>);
 	};
 

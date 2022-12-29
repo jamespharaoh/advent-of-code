@@ -74,7 +74,7 @@
 
 <span class="macro">struct_parser_display! </span>{
 	input_lifetime = <span class="lifetime">&#39;inp</span>;
-	InputPerson &lt;<span class="lifetime">&#39;inp</span>&gt; { answers } = [ @str answers = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>, <span class="number">1 </span>..= <span class="number">26</span>) ]
+	InputPerson &lt;<span class="lifetime">&#39;inp</span>&gt; { answers } = [ @str answers = (|ch| { ch.is_ascii_lowercase () }, <span class="number">1 </span>..= <span class="number">26</span>) ]
 }
 
 <span class="macro">input_params! </span>{

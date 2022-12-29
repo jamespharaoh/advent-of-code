@@ -95,7 +95,7 @@
 	<span class="kw">let </span>disp_float = |val, ref_val|
 		<span class="kw">if </span>ref_val &gt;= <span class="number">2_000_000_f64 </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.3}s&quot;</span>, val / <span class="number">1_000_000_f64</span>) }
 		<span class="kw">else if </span>ref_val &gt;= <span class="number">2_000_f64 </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.3}ms&quot;</span>, val / <span class="number">1_000_f64</span>) }
-		<span class="kw">else </span>{ <span class="macro">format! </span>(<span class="string">&quot;{:.0}µs&quot;</span>, val) };
+		<span class="kw">else </span>{ <span class="macro">format! </span>(<span class="string">&quot;{val:.0}µs&quot;</span>) };
 	<span class="kw">let </span>disp = |val: u128| disp_float (val.pan_f64 (), val.pan_f64 ());
 	<span class="kw">let </span>disp_mean = |val: u64| disp_float (val.pan_f64 (), mean.pan_f64 ());
 	<span class="kw">let </span>disp_pc = |pc| disp_float (percentile (&amp; times, pc, <span class="number">1000</span>).pan_f64 (), mean.pan_f64 ());

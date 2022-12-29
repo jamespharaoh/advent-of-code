@@ -273,7 +273,7 @@
 				.product::&lt;usize&gt; ();
 		<span class="kw">let </span>actual_len = storage.storage_len ();
 		<span class="macro">assert! </span>(expected_len == actual_len,
-			<span class="string">&quot;Expected {} items but was passed {}&quot;</span>, expected_len, actual_len);
+			<span class="string">&quot;Expected {expected_len} items but was passed {actual_len}&quot;</span>);
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ storage, start, end, size, phantom: PhantomData })
 	}
 

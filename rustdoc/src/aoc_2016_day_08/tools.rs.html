@@ -95,7 +95,7 @@
 		.map (|(pos, <span class="kw">_</span>)| (pos.row, pos.col))
 		.collect ();
 	<span class="kw">let </span>result = ocr::read_fixed (dots.iter ().copied (), (<span class="number">6</span>, <span class="number">5</span>)) <span class="question-mark">?</span>;
-	<span class="macro">println! </span>(<span class="string">&quot;Result: {}&quot;</span>, result);
+	<span class="macro">println! </span>(<span class="string">&quot;Result: {result}&quot;</span>);
 	<span class="prelude-val">Ok </span>(())
 }
 </code></pre></div>

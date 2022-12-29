@@ -685,7 +685,7 @@
 	<span class="attr">#[ inline ]
 	</span><span class="kw">fn </span>seen_visited (&amp; <span class="kw-2">mut </span><span class="self">self</span>, node: &amp; Node) -&gt; bool {
 		<span class="kw">let </span>seen_state = <span class="self">self</span>.seen_get_mut (node.clone ());
-		<span class="kw">if let </span>SeenState::Visited = seen_state.clone () {
+		<span class="kw">if </span><span class="macro">matches! </span>(* seen_state, SeenState::Visited) {
 			<span class="bool-val">true
 		</span>} <span class="kw">else </span>{
 			* seen_state = SeenState::Visited;

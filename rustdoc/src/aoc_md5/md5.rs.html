@@ -422,13 +422,13 @@
 	<span class="attr">#[ allow (clippy::missing_inline_in_public_items) ]
 	</span><span class="kw">pub fn </span>from_hex (input: &amp; str) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, String&gt; {
 		<span class="kw">let </span>input_len = input.chars ().count ();
-		<span class="kw">if </span>input_len != <span class="number">32 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Expected 32 chars, not {}&quot;</span>, input_len)) }
+		<span class="kw">if </span>input_len != <span class="number">32 </span>{ <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Expected 32 chars, not {input_len}&quot;</span>)) }
 		<span class="kw">let </span><span class="kw-2">mut </span>result = [<span class="number">0</span>; <span class="number">16</span>];
 		<span class="kw">let </span><span class="kw-2">mut </span>input_iter = input.chars ();
 		<span class="kw">for </span>result_ch <span class="kw">in </span>result.iter_mut () {
 			<span class="kw">let </span>high_ch = input_iter.next ().unwrap ();
 			<span class="kw">let </span>low_ch = input_iter.next ().unwrap ();
-			<span class="kw">let </span>decode = |ch: char| ch.to_digit (<span class="number">16</span>).ok_or (<span class="macro">format! </span>(<span class="string">&quot;Invalid hex: {}&quot;</span>, ch));
+			<span class="kw">let </span>decode = |ch: char| ch.to_digit (<span class="number">16</span>).ok_or (<span class="macro">format! </span>(<span class="string">&quot;Invalid hex: {ch}&quot;</span>));
 			* result_ch = (decode (high_ch) <span class="question-mark">?</span>.qck_u8 ()) &lt;&lt; <span class="number">4_i32 </span>| decode (low_ch) <span class="question-mark">?</span>.qck_u8 ();
 		}
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>(result))

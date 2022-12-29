@@ -287,7 +287,7 @@
 					.collect::&lt;TinyVec &lt;<span class="kw">_</span>, <span class="number">2</span>&gt;&gt; ()
 			})
 			.find (|&amp; (<span class="kw">_</span>, <span class="kw-2">ref </span>input)| ! all_wire_ids.contains (input)) {
-		<span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Wire {} refers to non-existant input {}&quot;</span>, wire, input)) <span class="question-mark">?</span>;
+		<span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Wire {wire} refers to non-existant input {input}&quot;</span>)) <span class="question-mark">?</span>;
 	}
 	<span class="prelude-val">Ok </span>(())
 }

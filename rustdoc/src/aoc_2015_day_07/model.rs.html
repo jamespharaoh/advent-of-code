@@ -133,7 +133,7 @@
 
 	<span class="macro">struct_parser_display! </span>{
 		input_lifetime = <span class="lifetime">&#39;inp</span>;
-		WireId &lt;<span class="lifetime">&#39;inp</span>&gt; { id } = [ @str id = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>, <span class="number">1 </span>..= <span class="number">10</span>) ]
+		WireId &lt;<span class="lifetime">&#39;inp</span>&gt; { id } = [ @str id = (|ch| { ch.is_ascii_lowercase () }, <span class="number">1 </span>..= <span class="number">10</span>) ]
 	}
 
 	<span class="kw">impl </span>TryFrom &lt;&amp; str&gt; <span class="kw">for </span>WireId &lt;<span class="lifetime">&#39;static</span>&gt; {

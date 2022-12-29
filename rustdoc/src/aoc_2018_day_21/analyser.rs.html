@@ -856,7 +856,7 @@
 <span class="kw">pub fn </span>run (args: Args) -&gt; GenResult &lt;()&gt; {
 
 	<span class="kw">let </span>input_path = puzzle_metadata ().find_input_or_arg (&amp; args.input);
-	<span class="kw">let </span>input_string = fs::read_to_string (&amp; input_path) <span class="question-mark">?</span>;
+	<span class="kw">let </span>input_string = fs::read_to_string (input_path) <span class="question-mark">?</span>;
 	<span class="kw">let </span>input_lines: Vec &lt;&amp; str&gt; = input_string.trim_end ().split (<span class="string">&#39;\n&#39;</span>).collect ();
 	<span class="kw">let </span>input = Input::parse_from_lines (&amp; input_lines) <span class="question-mark">?</span>;
 
@@ -1566,14 +1566,14 @@
 <span class="kw">impl </span>&lt;<span class="lifetime">&#39;arg</span>&gt; Display <span class="kw">for </span>ArgInfoDisplay &lt;<span class="lifetime">&#39;arg</span>&gt; {
 	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
 		<span class="kw">match </span>(* <span class="self">self</span>.arg, <span class="self">self</span>.orig) {
-			(ArgInfo::Immediate (val), <span class="kw">_</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, val) <span class="question-mark">?</span>,
+			(ArgInfo::Immediate (val), <span class="kw">_</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;{val}&quot;</span>) <span class="question-mark">?</span>,
 			(ArgInfo::InReg (<span class="kw">_</span>), <span class="kw">_</span>) =&gt; <span class="macro">unimplemented! </span>(),
 			(ArgInfo::OutReg (<span class="kw">_</span>), <span class="kw">_</span>) =&gt; <span class="macro">unimplemented! </span>(),
-			(ArgInfo::InOutReg (reg), <span class="kw">_</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{}&quot;</span>, reg) <span class="question-mark">?</span>,
-			(ArgInfo::Temp (<span class="kw">_</span>, temp), <span class="bool-val">false</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;v{}&quot;</span>, temp) <span class="question-mark">?</span>,
-			(ArgInfo::Temp (reg, <span class="kw">_</span>), <span class="bool-val">true</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{}&quot;</span>, reg) <span class="question-mark">?</span>,
+			(ArgInfo::InOutReg (reg), <span class="kw">_</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{reg}&quot;</span>) <span class="question-mark">?</span>,
+			(ArgInfo::Temp (<span class="kw">_</span>, temp), <span class="bool-val">false</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;v{temp}&quot;</span>) <span class="question-mark">?</span>,
+			(ArgInfo::Temp (reg, <span class="kw">_</span>), <span class="bool-val">true</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{reg}&quot;</span>) <span class="question-mark">?</span>,
 			(ArgInfo::InstrPtr (<span class="kw">_</span>), <span class="bool-val">false</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;ip&quot;</span>) <span class="question-mark">?</span>,
-			(ArgInfo::InstrPtr (reg), <span class="bool-val">true</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{}&quot;</span>, reg) <span class="question-mark">?</span>,
+			(ArgInfo::InstrPtr (reg), <span class="bool-val">true</span>) =&gt; <span class="macro">write! </span>(formatter, <span class="string">&quot;r{reg}&quot;</span>) <span class="question-mark">?</span>,
 			(ArgInfo::Unused (<span class="kw">_</span>), <span class="kw">_</span>) =&gt; <span class="macro">unreachable! </span>(),
 		}
 		<span class="prelude-val">Ok </span>(())

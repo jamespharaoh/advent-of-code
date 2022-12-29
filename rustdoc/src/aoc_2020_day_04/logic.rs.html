@@ -246,7 +246,7 @@
 			}
 		};
 		( @field_rest (<span class="macro-nonterminal">$val</span>:expr, <span class="macro-nonterminal">$name</span>:expr, <span class="macro-nonterminal">$orig</span>:expr, <span class="macro-nonterminal">$errors</span>:ident) { } ) =&gt; {
-			<span class="attr">#[ allow (clippy::let_underscore_drop) ]
+			<span class="attr">#[ allow (let_underscore_drop) ]
 			</span><span class="kw">let _ </span>= <span class="macro-nonterminal">$val</span>;
 		};
 	}

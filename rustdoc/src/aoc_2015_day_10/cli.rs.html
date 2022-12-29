@@ -121,7 +121,7 @@
 		<span class="kw">let </span>name = std::any::type_name::&lt;Type&gt; ();
 		<span class="kw">let </span>size = mem::size_of::&lt;Type&gt; ();
 		<span class="kw">let </span>align = mem::align_of::&lt;Type&gt; ();
-		<span class="macro">println! </span>(<span class="string">&quot; - {} {} bytes (align = {})&quot;</span>, name, size, align);
+		<span class="macro">println! </span>(<span class="string">&quot; - {name} {size} bytes (align = {align})&quot;</span>);
 	}
 	show_struct::&lt;tracking::Item&gt; ();
 	<span class="prelude-val">Ok </span>(())

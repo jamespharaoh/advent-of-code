@@ -129,10 +129,10 @@
 		<span class="kw">for </span>prog <span class="kw">in </span>input.progs.iter () {
 			<span class="kw">for </span>held_name <span class="kw">in </span>prog.holds.iter () {
 				<span class="kw">if </span>! progs.contains_key (held_name) {
-					<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Prog {} holds invalid prog {}&quot;</span>, prog.name, held_name).into ());
+					<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Prog {} holds invalid prog {held_name}&quot;</span>, prog.name).into ());
 				}
 				<span class="kw">if </span>parents.contains_key (held_name) {
-					<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Prog is held multiple times: {}&quot;</span>, held_name).into ());
+					<span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Prog is held multiple times: {held_name}&quot;</span>).into ());
 				}
 				parents.insert (held_name.clone (), prog.name.clone ());
 			}

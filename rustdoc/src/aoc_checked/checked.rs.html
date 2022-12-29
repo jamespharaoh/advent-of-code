@@ -476,8 +476,8 @@
 	<span class="kw">fn </span>parse_tight (iter: &amp; <span class="kw-2">mut </span>TokenIter) -&gt; <span class="self">Self </span>{
 		<span class="kw">let </span><span class="kw-2">mut </span>result = <span class="self">Self</span>::parse_single (iter);
 		<span class="kw">while </span>iter.peek ().is_some () {
-			<span class="kw">let </span>punct = <span class="kw">match </span>iter.peek ().unwrap () {
-				&amp; TokenTree::Punct (<span class="kw-2">ref </span>punct) =&gt; punct,
+			<span class="kw">let </span>punct = <span class="kw">match </span>* iter.peek ().unwrap () {
+				TokenTree::Punct (<span class="kw-2">ref </span>punct) =&gt; punct,
 				<span class="kw">_ </span>=&gt; <span class="macro">panic! </span>(),
 			};
 			<span class="kw">let </span>ctor = <span class="kw">match </span>punct.as_char () {

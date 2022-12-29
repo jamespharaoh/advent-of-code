@@ -42,7 +42,7 @@
 			input.params.rounds_two);
 	<span class="kw">let </span>result =
 		hash.iter ()
-			.map (|&amp; byte| <span class="macro">format! </span>(<span class="string">&quot;{:02x}&quot;</span>, byte))
+			.map (|&amp; byte| <span class="macro">format! </span>(<span class="string">&quot;{byte:02x}&quot;</span>))
 			.collect ();
 	<span class="prelude-val">Ok </span>(result)
 }

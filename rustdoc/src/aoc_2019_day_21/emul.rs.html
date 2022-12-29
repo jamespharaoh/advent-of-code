@@ -282,7 +282,7 @@
 <span class="kw">impl </span>TryFrom &lt;char&gt; <span class="kw">for </span>Reg {
 	<span class="kw">type </span>Error = Overflow;
 	<span class="kw">fn </span>try_from (ch: char) -&gt; <span class="prelude-ty">Result </span>&lt;<span class="self">Self</span>, Overflow&gt; {
-		<span class="kw">if </span>! (<span class="string">&#39;A&#39; </span>..= <span class="string">&#39;Z&#39;</span>).contains (&amp; ch) { <span class="kw">return </span><span class="prelude-val">Err </span>(Overflow) }
+		<span class="kw">if </span>! ch.is_ascii_uppercase () { <span class="kw">return </span><span class="prelude-val">Err </span>(Overflow) }
 		<span class="prelude-val">Ok </span>(<span class="self">Self </span>{ idx: (ch.pan_u32 () - <span class="string">&#39;A&#39;</span>.pan_u32 ()).pan_u8 () })
 	}
 }

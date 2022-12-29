@@ -169,7 +169,7 @@
 	<span class="kw">if </span>pkg_name == <span class="string">&quot;aoc-common&quot; </span>{
 		<span class="kw">let </span>home = env::current_dir () <span class="question-mark">?</span>;
 		<span class="kw">for </span>year <span class="kw">in </span>[<span class="string">&quot;2015&quot;</span>, <span class="string">&quot;2021&quot;</span>] {
-			env::set_current_dir (<span class="macro">format! </span>(<span class="string">&quot;../{}&quot;</span>, year)) <span class="question-mark">?</span>;
+			env::set_current_dir (<span class="macro">format! </span>(<span class="string">&quot;../{year}&quot;</span>)) <span class="question-mark">?</span>;
 			year::prepare (year) <span class="question-mark">?</span>;
 			env::set_current_dir (&amp; home) <span class="question-mark">?</span>;
 		}
@@ -220,7 +220,7 @@
 	<span class="kw">let </span>old_contents = fs::read_to_string (&amp; name).unwrap_or_default ();
 	<span class="kw">if </span>old_contents != new_contents {
 		<span class="kw">let </span><span class="kw-2">mut </span>main_rs_file = File::create (name) <span class="question-mark">?</span>;
-		<span class="macro">write! </span>(&amp; <span class="kw-2">mut </span>main_rs_file, <span class="string">&quot;{}&quot;</span>, new_contents) <span class="question-mark">?</span>;
+		<span class="macro">write! </span>(&amp; <span class="kw-2">mut </span>main_rs_file, <span class="string">&quot;{new_contents}&quot;</span>) <span class="question-mark">?</span>;
 	}
 	<span class="prelude-val">Ok </span>(())
 }
@@ -237,7 +237,7 @@
 					buffer.push (letter);
 					<span class="kw">if </span>letter == <span class="string">&#39;}&#39; </span>{
 						<span class="kw">let </span>replacement = replacements.get (buffer.as_str ()).unwrap_or_else (||
-							<span class="macro">panic! </span>(<span class="string">&quot;Replacement not found for: {}&quot;</span>, buffer),
+							<span class="macro">panic! </span>(<span class="string">&quot;Replacement not found for: {buffer}&quot;</span>),
 						);
 						output.push_str (replacement);
 						buffer = String::new ();

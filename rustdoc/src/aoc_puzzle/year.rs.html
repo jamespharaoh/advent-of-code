@@ -422,7 +422,7 @@
 		<span class="comment">// print part name
 
 		</span><span class="kw">if </span>! args.plain {
-			<span class="macro">print! </span>(<span class="string">&quot;{}: &quot;</span>, part_name);
+			<span class="macro">print! </span>(<span class="string">&quot;{part_name}: &quot;</span>);
 		}
 
 		<span class="comment">// calculate result
@@ -464,7 +464,7 @@
 	<span class="comment">// print errors
 
 	</span><span class="kw">for </span>error <span class="kw">in </span>errors {
-		<span class="macro">print! </span>(<span class="string">&quot;  {}\n&quot;</span>, error);
+		<span class="macro">print! </span>(<span class="string">&quot;  {error}\n&quot;</span>);
 	}
 
 	<span class="prelude-val">Ok </span>(())

@@ -176,7 +176,7 @@
 						|| (instr.opcode.arg_b () == ArgType::Reg &amp;&amp; instr.arg_b == <span class="number">0</span>) {
 					<span class="kw">if </span>instr.opcode != Opcode::Eqrr || (instr.arg_a == <span class="number">0 </span>&amp;&amp; instr.arg_b == <span class="number">0</span>) {
 						<span class="kw">return </span><span class="prelude-val">Some </span>(<span class="prelude-val">Err </span>(
-							<span class="macro">format! </span>(<span class="string">&quot;Don&#39;t know how to handle {:?}&quot;</span>, instr).into ()));
+							<span class="macro">format! </span>(<span class="string">&quot;Don&#39;t know how to handle {instr:?}&quot;</span>).into ()));
 					}
 					<span class="kw">if </span>reg_0.is_some () {
 						<span class="kw">return </span><span class="prelude-val">Some </span>(<span class="prelude-val">Err </span>(<span class="string">&quot;Reg 0 compared again after matching as equal&quot;</span>.into ()));

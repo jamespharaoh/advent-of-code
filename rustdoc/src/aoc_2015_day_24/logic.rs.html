@@ -217,7 +217,7 @@
 			.try_fold (<span class="number">0</span>, |sum, item| <span class="macro">chk! </span>(sum + item)) <span class="question-mark">?</span>;
 	<span class="kw">let </span>want_pile_weight = total_weight / PILES.pan_u32 ();
 	<span class="kw">if </span>want_pile_weight * PILES.pan_u32 () != total_weight {
-		<span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Total weight is not a multiple of {}&quot;</span>, PILES)) <span class="question-mark">?</span>;
+		<span class="prelude-val">Err </span>(<span class="macro">format! </span>(<span class="string">&quot;Total weight is not a multiple of {PILES}&quot;</span>)) <span class="question-mark">?</span>;
 	}
 
 	<span class="comment">// once we find one solution we can rule out any first piles which are bigger or have a

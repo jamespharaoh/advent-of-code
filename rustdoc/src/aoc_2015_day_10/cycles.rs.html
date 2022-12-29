@@ -501,7 +501,7 @@
 
 <span class="kw">impl </span>Debug <span class="kw">for </span>Span {
 	<span class="kw">fn </span>fmt (&amp; <span class="self">self</span>, formatter: &amp; <span class="kw-2">mut </span>fmt::Formatter) -&gt; fmt::Result {
-		<span class="macro">write! </span>(formatter, <span class="string">&quot;Span (\&quot;{}\&quot;)&quot;</span>, <span class="self">self</span>) <span class="question-mark">?</span>;
+		<span class="macro">write! </span>(formatter, <span class="string">&quot;Span (\&quot;{self}\&quot;)&quot;</span>) <span class="question-mark">?</span>;
 		<span class="prelude-val">Ok </span>(())
 	}
 }

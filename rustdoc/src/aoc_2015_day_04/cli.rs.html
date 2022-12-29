@@ -139,7 +139,7 @@
 	<span class="kw">let </span><span class="kw-2">mut </span>input = Input::parse_from_lines (&amp; input_lines) <span class="question-mark">?</span>;
 	<span class="kw">if let </span><span class="prelude-val">Some </span>(max_threads) = args.max_threads { input.params.max_threads = max_threads; }
 	<span class="kw">let </span>result = logic::calc_result (&amp; input, args.num_zeros.unwrap_or (<span class="number">5</span>)) <span class="question-mark">?</span>;
-	<span class="macro">println! </span>(<span class="string">&quot;Result: {}&quot;</span>, result);
+	<span class="macro">println! </span>(<span class="string">&quot;Result: {result}&quot;</span>);
 	<span class="prelude-val">Ok </span>(())
 }
 
@@ -191,7 +191,7 @@
 				<span class="kw">let </span><span class="kw-2">mut </span>buf = [<span class="number">0</span>; <span class="number">1</span>];
 				<span class="macro">assert_eq! </span>(<span class="number">1</span>, rand.read (&amp; <span class="kw-2">mut </span>buf).unwrap ());
 				<span class="kw">let </span>ch = buf [<span class="number">0</span>].pan_char ();
-				<span class="kw">if </span>(<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>).contains (&amp; ch) { <span class="kw">break </span>ch }
+				<span class="kw">if </span>ch.is_ascii_lowercase () { <span class="kw">break </span>ch }
 			};
 			buffer.push (ch);
 		}
@@ -201,11 +201,11 @@
 			<span class="kw">for </span>ch_idx <span class="kw">in </span>&amp; * perms_helper {
 				buffer.push ((<span class="string">b&#39;a&#39; </span>+ ch_idx.pan_u8 ()).pan_char ());
 			}
-			<span class="macro">write! </span>(buffer, <span class="string">&quot;{}&quot;</span>, num).unwrap ();
+			<span class="macro">write! </span>(buffer, <span class="string">&quot;{num}&quot;</span>).unwrap ();
 			<span class="kw">let </span>hash = md5::md5_hash (buffer.as_bytes ());
 			<span class="kw">if </span>hash [<span class="number">0</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">1</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">2</span>] == <span class="number">0 </span>{
 				<span class="kw">for </span>num <span class="kw">in </span><span class="number">1 </span>.. num {
-					<span class="kw">let </span>buffer = <span class="macro">format! </span>(<span class="string">&quot;{}{}&quot;</span>, &amp; buffer [<span class="number">0 </span>.. args.len.unwrap_or (<span class="number">16</span>)], num);
+					<span class="kw">let </span>buffer = <span class="macro">format! </span>(<span class="string">&quot;{}{num}&quot;</span>, &amp; buffer [<span class="number">0 </span>.. args.len.unwrap_or (<span class="number">16</span>)]);
 					<span class="kw">let </span>hash = md5::md5_hash (buffer.as_bytes ());
 					<span class="kw">if </span>hash [<span class="number">0</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">1</span>] == <span class="number">0 </span>&amp;&amp; hash [<span class="number">2</span>] &amp; <span class="number">0xf0 </span>== <span class="number">0
 							</span>&amp;&amp; hash [<span class="number">2</span>] &amp; <span class="number">0xf </span>!= <span class="number">0 </span>{

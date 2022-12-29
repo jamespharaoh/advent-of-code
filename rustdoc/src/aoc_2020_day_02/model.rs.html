@@ -26,6 +26,8 @@
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
 </pre><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="attr">#[ derive (Clone, Debug) ]
@@ -38,13 +40,15 @@
 
 <span class="macro">struct_parser! </span>{
 	input_lifetime = <span class="lifetime">&#39;inp</span>;
-	PassPolicy &lt;<span class="lifetime">&#39;inp</span>&gt; { num_0, num_1, ch, password } = [
+	<span class="attr">#[ allow (clippy::manual_is_ascii_check) ]
+	</span>PassPolicy &lt;<span class="lifetime">&#39;inp</span>&gt; { num_0, num_1, ch, password } = [
 		num_0 = <span class="number">1 </span>.. , <span class="string">&quot;-&quot;</span>,
 		num_1 = <span class="number">1 </span>.. , <span class="string">&quot; &quot;</span>,
 		ch = <span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>, <span class="string">&quot;: &quot;</span>,
 		@str password = (<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>, <span class="number">1 </span>.. ),
 	]
 }
+
 <span class="macro">struct_display! </span>{
 	input_lifetime = <span class="lifetime">&#39;inp</span>;
 	PassPolicy &lt;<span class="lifetime">&#39;inp</span>&gt; { num_0, num_1, ch, password } = [

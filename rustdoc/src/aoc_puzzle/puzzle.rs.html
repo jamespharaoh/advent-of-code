@@ -319,7 +319,7 @@
 	<span class="kw">if </span>part.unwrap_or (<span class="number">1</span>) == <span class="number">1 </span>&amp;&amp; <span class="number">1 </span>&lt;= puzzle.num_parts () {
 		run::runner (repeat, |idx| {
 			<span class="kw">let </span>result = puzzle.part_one (&amp; input_lines) <span class="question-mark">?</span>;
-			<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Part one: {}&quot;</span>, result); }
+			<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Part one: {result}&quot;</span>); }
 			<span class="prelude-val">Ok </span>(())
 		}) <span class="question-mark">?</span>;
 	}
@@ -327,7 +327,7 @@
 	<span class="kw">if </span>part.unwrap_or (<span class="number">2</span>) == <span class="number">2 </span>&amp;&amp; <span class="number">2 </span>&lt;= puzzle.num_parts () {
 		run::runner (repeat, |idx| {
 			<span class="kw">let </span>result = puzzle.part_two (&amp; input_lines) <span class="question-mark">?</span>;
-			<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Part two: {}&quot;</span>, result); }
+			<span class="kw">if </span>idx == <span class="number">0 </span>{ <span class="macro">println! </span>(<span class="string">&quot;Part two: {result}&quot;</span>); }
 			<span class="prelude-val">Ok </span>(())
 		}) <span class="question-mark">?</span>;
 	}

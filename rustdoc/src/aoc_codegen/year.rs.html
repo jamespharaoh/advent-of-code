@@ -117,12 +117,12 @@
 	<span class="kw">let </span>dynamic_part = |template| {
 		(<span class="number">1_u32 </span>..= <span class="number">25</span>)
 			.filter_map (<span class="kw">move </span>|day|
-				PathBuf::from (<span class="macro">format! </span>(<span class="string">&quot;day-{:02}&quot;</span>, day)).exists ().then_some (
+				PathBuf::from (<span class="macro">format! </span>(<span class="string">&quot;day-{day:02}&quot;</span>)).exists ().then_some (
 					replace_placeholders (
 						template,
 						&amp; HashMap::from_iter (<span class="macro">vec! </span>[
 							(<span class="string">&quot;${YEAR}&quot;</span>, year),
-							(<span class="string">&quot;${DAY}&quot;</span>, &amp; <span class="macro">format! </span>(<span class="string">&quot;{:02}&quot;</span>, day)),
+							(<span class="string">&quot;${DAY}&quot;</span>, &amp; <span class="macro">format! </span>(<span class="string">&quot;{day:02}&quot;</span>)),
 						] ),
 					)))
 			.flatten ()

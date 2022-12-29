@@ -181,10 +181,10 @@
 		printer (&amp; machines,
 			|| <span class="macro">print! </span>(<span class="string">&quot;| {:2}  {:9} |&quot;</span>, machines [<span class="number">0</span>].<span class="number">0</span>.regs.pc % <span class="number">18 </span>+ <span class="number">1</span>,
 				prog.get (machines [<span class="number">0</span>].<span class="number">0</span>.regs.pc)
-					.map_or_else (|| <span class="string">&quot;(end)&quot;</span>.to_owned (), |instr| <span class="macro">format! </span>(<span class="string">&quot;{}&quot;</span>, instr))),
+					.map_or_else (|| <span class="string">&quot;(end)&quot;</span>.to_owned (), |instr| <span class="macro">format! </span>(<span class="string">&quot;{instr}&quot;</span>))),
 			|machine| <span class="macro">print! </span>(<span class="string">&quot; {:30} |&quot;</span>, dump_regs (&amp; machine.regs)));
 		<span class="kw">for </span>&amp; <span class="kw-2">mut </span>(<span class="kw-2">ref mut </span>machine, <span class="kw-2">ref mut </span>input) <span class="kw">in </span>machines.iter_mut () {
-			<span class="kw">if </span>machine.step (prog, input).map_err (|err| <span class="macro">format! </span>(<span class="string">&quot;{:?}&quot;</span>, err)) <span class="question-mark">? </span>{
+			<span class="kw">if </span>machine.step (prog, input).map_err (|err| <span class="macro">format! </span>(<span class="string">&quot;{err:?}&quot;</span>)) <span class="question-mark">? </span>{
 				done = <span class="bool-val">true</span>;
 			}
 		}

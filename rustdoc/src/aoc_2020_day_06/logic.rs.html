@@ -59,7 +59,7 @@
 <span class="kw">fn </span>get_bits (person: &amp; InputPerson) -&gt; u32 {
 	person.chars ()
 		.fold (<span class="number">0</span>, |sum, ch| {
-			<span class="macro">assert! </span>((<span class="string">&#39;a&#39; </span>..= <span class="string">&#39;z&#39;</span>).contains (&amp; ch));
+			<span class="macro">assert! </span>(ch.is_ascii_lowercase ());
 			<span class="kw">let </span>bit = ch.pan_u32 () - <span class="string">&#39;a&#39;</span>.pan_u32 ();
 			sum | (<span class="number">1 </span>&lt;&lt; bit)
 		})

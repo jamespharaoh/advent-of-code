@@ -1240,7 +1240,7 @@
 		<span class="kw">let </span>state = inner.state.borrow ();
 		<span class="macro">print! </span>(<span class="string">&quot;{}&quot;</span>, inner.name);
 		<span class="kw">if let </span><span class="prelude-val">Some </span>(use_count) = use_count {
-			<span class="macro">print! </span>(<span class="string">&quot; ({})&quot;</span>, use_count);
+			<span class="macro">print! </span>(<span class="string">&quot; ({use_count})&quot;</span>);
 		}
 		<span class="kw">match </span>options {
 			FormatExpandOptions::Depth (depth) =&gt; {
@@ -1498,23 +1498,23 @@
 			<span class="self">Self</span>::Symbol (<span class="kw-2">ref </span>other_symbol) =&gt;
 				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, expand (other_symbol, wrap)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Input (<span class="kw-2">ref </span>index) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;input [{}]&quot;</span>, index) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;input [{index}]&quot;</span>) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Add (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} + {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} + {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Multiply (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} × {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} × {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Divide (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} ÷ {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} ÷ {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Modulo (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} mod {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} mod {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::IsEqual (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} = {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} = {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::IsUnequal (<span class="kw-2">ref </span>left, <span class="kw-2">ref </span>right) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}{} ≠ {}{}&quot;</span>, open, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>), close) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{open}{} ≠ {}{close}&quot;</span>, expand (left, <span class="bool-val">true</span>), expand (right, <span class="bool-val">true</span>)) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Value (<span class="kw-2">ref </span>value) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{}&quot;</span>, value) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{value}&quot;</span>) <span class="question-mark">?</span>,
 			<span class="self">Self</span>::Error (<span class="kw-2">ref </span>arg) =&gt;
-				<span class="macro">write! </span>(formatter, <span class="string">&quot;{:?}&quot;</span>, arg) <span class="question-mark">?</span>,
+				<span class="macro">write! </span>(formatter, <span class="string">&quot;{arg:?}&quot;</span>) <span class="question-mark">?</span>,
 		}
 		<span class="prelude-val">Ok </span>(())
 	}

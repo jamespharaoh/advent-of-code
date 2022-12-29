@@ -52,7 +52,7 @@
 <span class="attr">#[ allow (clippy::needless_pass_by_value) ]
 #[ allow (clippy::print_stdout) ]
 </span><span class="kw">pub fn </span>run (args: RunArgs) -&gt; GenResult &lt;()&gt; {
-	<span class="kw">let </span>input_string = fs::read_to_string (&amp; args.input.unwrap ()) <span class="question-mark">?</span>;
+	<span class="kw">let </span>input_string = fs::read_to_string (args.input.unwrap ()) <span class="question-mark">?</span>;
 	<span class="kw">let </span>input_lines: Vec &lt;&amp; str&gt; = input_string.trim ().split (<span class="string">&#39;\n&#39;</span>).collect ();
 	<span class="kw">let </span>input = Input::parse_from_lines (&amp; input_lines) <span class="question-mark">?</span>;
 	<span class="kw">let </span>start_image = Image::new_from (input.pixels, Pixel::Dark);

@@ -260,8 +260,8 @@
 					.collect ();
 			<span class="kw">if </span>cost != last_cost {
 				<span class="macro">println! </span>();
-				<span class="macro">println! </span>(<span class="string">&quot;Evaluating states with cost: {}&quot;</span>, cost);
-				<span class="macro">println! </span>(<span class="string">&quot;Number of iterations: {}&quot;</span>, num_loops);
+				<span class="macro">println! </span>(<span class="string">&quot;Evaluating states with cost: {cost}&quot;</span>);
+				<span class="macro">println! </span>(<span class="string">&quot;Number of iterations: {num_loops}&quot;</span>);
 				<span class="macro">println! </span>(<span class="string">&quot;Size of backlog: {}&quot;</span>, search.len ());
 			}
 			<span class="macro">println! </span>();
@@ -307,9 +307,9 @@
 		<span class="macro">println! </span>(<span class="string">&quot;═══════════════════════════ Found solution ═══════════════════════════&quot;</span>);
 	}
 	<span class="macro">println! </span>();
-	<span class="macro">println! </span>(<span class="string">&quot;Solved with cost: {}&quot;</span>, final_cost);
+	<span class="macro">println! </span>(<span class="string">&quot;Solved with cost: {final_cost}&quot;</span>);
 	<span class="macro">println! </span>(<span class="string">&quot;Number of steps in solution: {}&quot;</span>, all_states.len () - <span class="number">1</span>);
-	<span class="macro">println! </span>(<span class="string">&quot;Number of iterations: {}&quot;</span>, num_loops);
+	<span class="macro">println! </span>(<span class="string">&quot;Number of iterations: {num_loops}&quot;</span>);
 	<span class="macro">println! </span>(<span class="string">&quot;Total states generated: {}&quot;</span>, prev_states.len ());
 	<span class="macro">println! </span>();
 	<span class="kw">for </span>chunk <span class="kw">in </span>all_states.chunks (<span class="number">11</span>) {
@@ -346,7 +346,7 @@
 	<span class="kw">for </span>(chunk_idx, chunk) <span class="kw">in </span>next_states.chunks (chunk_size.pan_usize ()).enumerate () {
 		<span class="macro">print! </span>(<span class="string">&quot;{:^13}  &quot;</span>, <span class="kw">if </span>chunk_idx == <span class="number">0 </span>{ <span class="string">&quot;START&quot; </span>} <span class="kw">else </span>{ <span class="string">&quot;&quot; </span>});
 		<span class="kw">for </span>&amp; (<span class="kw">_</span>, <span class="kw-2">ref </span>cost) <span class="kw">in </span>chunk.iter () {
-			<span class="macro">print! </span>(<span class="string">&quot; {:^13}&quot;</span>, cost);
+			<span class="macro">print! </span>(<span class="string">&quot; {cost:^13}&quot;</span>);
 		}
 		<span class="macro">print! </span>(<span class="string">&quot;\n&quot;</span>);
 		<span class="kw">for </span>line <span class="kw">in </span><span class="number">0 </span>.. (cur_state.room_size ().pan_usize () + <span class="number">3</span>) {
@@ -371,7 +371,7 @@
 		<span class="kw">let </span>name = std::any::type_name::&lt;Type&gt; ();
 		<span class="kw">let </span>size = mem::size_of::&lt;Type&gt; ();
 		<span class="kw">let </span>align = mem::align_of::&lt;Type&gt; ();
-		<span class="macro">println! </span>(<span class="string">&quot; - {} {} bytes (align = {})&quot;</span>, name, size, align);
+		<span class="macro">println! </span>(<span class="string">&quot; - {name} {size} bytes (align = {align})&quot;</span>);
 	}
 	show_struct::&lt;logic::Move&gt; ();
 	show_struct::&lt;model::Amph&gt; ();

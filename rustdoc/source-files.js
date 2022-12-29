@@ -188,6 +188,12 @@ var sourcesIndex = JSON.parse('{\
 "aoc_2021_day_23":["",[],["input.rs","lib.rs","logic.rs","model.rs","tools.rs"]],\
 "aoc_2021_day_24":["",[],["input.rs","lib.rs","logic.rs","machine.rs","model.rs","quick.rs","solver.rs","tool.rs"]],\
 "aoc_2021_day_25":["",[],["input.rs","lib.rs","logic.rs","model.rs"]],\
+"aoc_2022":["",[],["lib.rs"]],\
+"aoc_2022_day_01":["",[],["input.rs","lib.rs","logic.rs"]],\
+"aoc_2022_day_02":["",[],["input.rs","lib.rs","logic.rs"]],\
+"aoc_2022_day_03":["",[],["input.rs","lib.rs","logic.rs"]],\
+"aoc_2022_day_04":["",[],["input.rs","lib.rs","logic.rs"]],\
+"aoc_2022_day_05":["",[],["input.rs","lib.rs","logic.rs"]],\
 "aoc_args":["",[],["args.rs"]],\
 "aoc_bithash":["",[],["bithash.rs"]],\
 "aoc_bitvec":["",[],["bitvec.rs","encode.rs","iter.rs","lib.rs"]],\

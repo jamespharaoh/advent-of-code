@@ -478,6 +478,14 @@
 <a href="#478" id="478">478</a>
 <a href="#479" id="479">479</a>
 <a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
 </pre><pre class="rust"><code><span class="attr">#[ macro_export ]
 </span><span class="macro">macro_rules! </span>parse {
 	( <span class="macro-nonterminal">$parser</span>:expr, $(<span class="macro-nonterminal">$rest</span>:tt)* ) =&gt; {
@@ -671,6 +679,14 @@
 	};
 	( @item <span class="macro-nonterminal">$parser</span>:expr, @delim_some <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$item_name</span>:ident ) =&gt; {
 		<span class="kw">let </span><span class="kw-2">mut </span>temp_iter = <span class="macro-nonterminal">$parser</span>.delim_fn (<span class="macro-nonterminal">$delim</span>, Parser::item);
+		<span class="kw">let </span><span class="macro-nonterminal">$item_name </span>= <span class="kw">match </span>temp_iter.next () {
+			<span class="prelude-val">Some </span>(first) =&gt; iter::once (first).chain (temp_iter).collect (),
+			<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro-nonterminal">$parser</span>.err ()),
+		};
+	};
+	( @item <span class="macro-nonterminal">$parser</span>:expr, @delim_some <span class="macro-nonterminal">$delim</span>:literal <span class="macro-nonterminal">$item_name</span>:ident { $(<span class="macro-nonterminal">$nest</span>:tt)* } ) =&gt; {
+		<span class="kw">let </span>parse_fn = <span class="macro">parse! </span>(@nest $(<span class="macro-nonterminal">$nest</span>)<span class="kw-2">*</span>);
+		<span class="kw">let </span><span class="kw-2">mut </span>temp_iter = <span class="macro-nonterminal">$parser</span>.delim_fn (<span class="macro-nonterminal">$delim</span>, parse_fn);
 		<span class="kw">let </span><span class="macro-nonterminal">$item_name </span>= <span class="kw">match </span>temp_iter.next () {
 			<span class="prelude-val">Some </span>(first) =&gt; iter::once (first).chain (temp_iter).collect (),
 			<span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err </span>(<span class="macro-nonterminal">$parser</span>.err ()),

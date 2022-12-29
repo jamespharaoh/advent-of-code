@@ -195,7 +195,7 @@
 		.filter (|outcome| outcome.winner == Contender::Player)
 		.map (|outcome| outcome.mana)
 		.next ()
-		.ok_or (<span class="string">&quot;No solution found&quot;</span>.into ())
+		.ok_or_else (|| <span class="string">&quot;No solution found&quot;</span>.into ())
 }
 
 <span class="kw">fn </span>outcomes (

@@ -133,7 +133,7 @@
 				<span class="kw">let </span>adj_pos = <span class="macro">ok_or! </span>(pos.try_add ((dir, <span class="number">1</span>)), <span class="kw">continue</span>);
 				<span class="kw">if </span>adj_pos.y &gt;= <span class="self">self</span>.size.y || adj_pos.x &gt;= <span class="self">self</span>.size.x { <span class="kw">continue </span>}
 				<span class="kw">if </span>hash_hex [dir_idx] &gt; <span class="string">b&#39;a&#39; </span>{
-					<span class="self">self</span>.todo.push_back ((adj_pos, <span class="macro">format! </span>(<span class="string">&quot;{}{}&quot;</span>, route, dir_tag)));
+					<span class="self">self</span>.todo.push_back ((adj_pos, <span class="macro">format! </span>(<span class="string">&quot;{route}{dir_tag}&quot;</span>)));
 				}
 			}
 		}
