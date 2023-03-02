@@ -104,6 +104,7 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
+	#[ must_use ]
 	pub fn try_set (& mut self, pos: Pos, item: Storage::Item) -> Option <()> {
 		let native = pos.to_native (self.start) ?;
 		let idx = native.native_to_index (self.size) ?;
