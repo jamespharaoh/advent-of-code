@@ -1852,6 +1852,7 @@ dependencies = [
  "aoc-2022-day-10",
  "aoc-2022-day-11",
  "aoc-2022-day-12",
+ "aoc-2022-day-13",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -1959,6 +1960,14 @@ dependencies = [
  "aoc-grid",
  "aoc-pos",
  "aoc-search",
+]
+
+[[package]]
+name = "aoc-2022-day-13"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
 ]
 
 [[package]]

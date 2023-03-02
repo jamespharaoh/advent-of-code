@@ -2,6 +2,7 @@ pub use crate::array_vec::*;
 pub use crate::collections::*;
 pub use crate::default::*;
 pub use crate::deref::*;
+pub use crate::either::*;
 pub use crate::error::*;
 pub use crate::iter::*;
 pub use crate::option::*;

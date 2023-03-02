@@ -3,7 +3,6 @@ use super::*;
 use input::Input;
 use model::Grid;
 use model::GridInner;
-use model::Either;
 use model::Pos;
 use model::Region;
 

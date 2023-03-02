@@ -223,3 +223,29 @@ mod deref {
 	}
 
 }
+
+mod either {
+
+	pub enum Either <Left, Right> {
+		Left (Left),
+		Right (Right),
+	}
+
+	impl <Item, Left, Right> Iterator for Either <Left, Right>
+		where
+			Left: Iterator <Item = Item>,
+			Right: Iterator <Item = Item> {
+
+		type Item = Item;
+
+		#[ inline ]
+		fn next (& mut self) -> Option <Item> {
+			match * self {
+				Self::Left (ref mut left) => left.next (),
+				Self::Right (ref mut right) => right.next (),
+			}
+		}
+
+	}
+
+}
