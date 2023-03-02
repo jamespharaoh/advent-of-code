@@ -11,6 +11,7 @@ use nums::IntSigned;
 use nums::NumResult;
 use nums::Overflow;
 use nums::TryAdd;
+use nums::TryAddAssign;
 use nums::TryMul;
 use nums::TrySub;
 
@@ -214,9 +215,18 @@ macro_rules! pos_ops {
 				let other_array: [ArgVal; $dims] = other.into ();
 				let mut result_array = [Val::ZERO; $dims];
 				for idx in 0 .. self_array.len () {
-					result_array [idx] = self_array [idx].try_add (other_array [idx]) ?
+					result_array [idx] = self_array [idx].try_add (other_array [idx]) ?;
 				}
 				Ok (result_array.into ())
+			}
+		}
+
+		impl <Val: Int, ArgVal: Int> TryAddAssign <$name <ArgVal>> for $name <Val>
+				where Self: TryAdd <$name <ArgVal>, Output = Self> {
+			#[ inline ]
+			fn try_add_assign (& mut self, other: $name <ArgVal>) -> NumResult <()> {
+				* self = self.try_add (other) ?;
+				Ok (())
 			}
 		}
 

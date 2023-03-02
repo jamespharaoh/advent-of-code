@@ -69,9 +69,9 @@
 --deny clippy::deref_addrof
 --deny clippy::deref_by_slicing
 --deny clippy::derivable_impls
---deny clippy::derive_hash_xor_eq
 --deny clippy::derive_ord_xor_partial_ord
 --deny clippy::derive_partial_eq_without_eq
+--deny clippy::derived_hash_with_manual_eq
 --deny clippy::disallowed_methods
 --deny clippy::disallowed_script_idents
 --deny clippy::disallowed_types

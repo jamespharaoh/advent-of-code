@@ -17,7 +17,6 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 		input.elves.iter ()
 			.map (|elf| elf.items.iter ().sum ())
 			.sorted_by_key (|& elf: & Val| cmp::Reverse (elf))
-			.into_iter ()
 			.take (3)
 			.sum ()
 	)

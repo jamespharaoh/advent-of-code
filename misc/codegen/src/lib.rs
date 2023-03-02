@@ -111,7 +111,7 @@ fn replace_placeholders (lines: & [& str], replacements: & HashMap <& str, & str
 				(output, buffer)
 			},
 		);
-		if ! buffer.is_empty () { panic! () }
+		assert! (buffer.is_empty ());
 		output
 	}).collect ()
 }

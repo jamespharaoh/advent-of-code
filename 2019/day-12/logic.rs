@@ -24,7 +24,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 	let repeat_x = calc_axis_repeat (input, Axis::X) ?;
 	let repeat_y = calc_axis_repeat (input, Axis::Y) ?;
 	let repeat_z = calc_axis_repeat (input, Axis::Z) ?;
-	if repeat_x.0 != 0 || repeat_y.0 != 0 || repeat_z.0 != 0 { panic! () }
+	assert! (repeat_x.0 == 0 && repeat_y.0 == 0 && repeat_z.0 == 0);
 	let mut result = 1_u64;
 	result = u64::lcm (result, repeat_x.1);
 	result = u64::lcm (result, repeat_y.1);

@@ -22,7 +22,7 @@ pub struct DirVec {
 impl DirVec {
 	#[ must_use ]
 	pub fn new (offset: Pos) -> Self {
-		if offset == Pos::ZERO { panic! () }
+		assert! (offset != Pos::ZERO);
 		if offset.x == 0 {
 			let sign = offset.y.signum ();
 			return Self { dir: Dir (Pos { y: sign, x: 0 }), mul: offset.y.abs () }

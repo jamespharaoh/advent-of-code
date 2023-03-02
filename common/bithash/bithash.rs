@@ -92,7 +92,7 @@ impl <const LEN: usize> BitHash <LEN> {
 	#[ inline ]
 	#[ must_use ]
 	pub fn reduce <const OTHER_LEN: usize> (& self) -> BitHash <OTHER_LEN> {
-		if LEN < OTHER_LEN { panic! () }
+		assert! (OTHER_LEN < LEN);
 		let mut data = [0; OTHER_LEN];
 		for idx in 0 .. LEN { data [idx % OTHER_LEN] |= self.data [idx]; }
 		BitHash { data }

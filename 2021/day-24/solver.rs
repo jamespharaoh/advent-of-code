@@ -244,7 +244,7 @@ impl Solver {
 	pub fn define (& self, name: Rc <str>, value: SymVal) -> Symbol {
 		value.children ().iter ().for_each (|child| self.require_own_symbol ("define", child));
 		let mut state = self.inner.state.borrow_mut ();
-		if state.symbols.contains_key (& name) { panic! () }
+		assert! (! state.symbols.contains_key (& name));
 		let mut value = value;
 		let mut depth = value.depth ();
 		let mut len = value.len ();

@@ -1,0 +1,32 @@
+[package]
+
+	name = "aoc-2022-day-06"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2022: Day 6: Tuning Trouble"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2022/day-06"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[lib]
+
+	path = "lib.rs"
+	doctest = false
+	crate-type = [ "rlib", "dylib" ]
+
+[[bin]]
+
+	name = "aoc-2022-day-06"
+	path = "main.rs"
+	test = false
+	doctest = false
+	bench = false

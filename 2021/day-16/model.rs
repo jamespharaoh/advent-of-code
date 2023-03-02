@@ -35,7 +35,7 @@ mod bit_iter {
 
 		#[ inline ]
 		pub fn next_uint (& mut self, bits: u8) -> Option <u64> {
-			if 64 < bits { panic! (); }
+			assert! (bits <= 64);
 			let mut val = 0;
 			for _ in 0 .. bits {
 				let next_bit = some_or! (self.next_bit (), return None);

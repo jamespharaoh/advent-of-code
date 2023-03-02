@@ -1289,3 +1289,45 @@
 	path = "src/2022-day-05.rs"
 	test = false
 	doc = false
+
+[[bin]]
+
+	name = "2022-day-06"
+	path = "src/2022-day-06.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2022-day-07"
+	path = "src/2022-day-07.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2022-day-08"
+	path = "src/2022-day-08.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2022-day-09"
+	path = "src/2022-day-09.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2022-day-10"
+	path = "src/2022-day-10.rs"
+	test = false
+	doc = false
+
+[[bin]]
+
+	name = "2022-day-11"
+	path = "src/2022-day-11.rs"
+	test = false
+	doc = false

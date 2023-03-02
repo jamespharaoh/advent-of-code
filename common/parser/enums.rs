@@ -152,8 +152,9 @@ macro_rules! enum_decl_parser_display {
 			$(
 				$( #[ $($var_attr:tt)* ] )*
 				$var_name:ident
-					$(($($tuple_name:ident: $tuple_type:ty),*))?
-						= [ $($var_parse:tt)* ]
+				$(( $($tuple_name:ident: $tuple_type:ty),* ))?
+				$({ $($struct_name:ident: $struct_type:ty),* })?
+					= [ $($var_parse:tt)* ]
 			),*
 			$(,)?
 		}
@@ -163,19 +164,31 @@ macro_rules! enum_decl_parser_display {
 		$vis enum $name <$param> {
 			$(
 				$( #[ $($var_attr)* ] )*
-				$var_name $(( $($tuple_type),* ))?
+				$var_name
+				$(( $($tuple_type),* ))?
+				$({ $($struct_name: $struct_type),* })?
 			),*
 		}
 
 		enum_display! {
 			$name <$param>,
-			$( $var_name $(($($tuple_name),*))? = [ $($var_parse)* ] ),*
+			$(
+				$var_name
+				$(( $($tuple_name),* ))?
+				$({ $($struct_name),* })?
+					= [ $($var_parse)* ]
+			),*
 		}
 
 		enum_parser! {
 			input_lifetime = $inp;
 			$name <$param>,
-			$( $var_name $(($($tuple_name),*))? = [ $($var_parse)* ] ),*
+			$(
+				$var_name
+				$(( $($tuple_name),* ))?
+				$({ $($struct_name),* })?
+					= [ $($var_parse)* ]
+			),*
 		}
 
 	};
