@@ -1,0 +1,3 @@
+sensor_0 = "Sensor at x="
+sensor_1 = ", y="
+sensor_2 = ": closest beacon is at x="
