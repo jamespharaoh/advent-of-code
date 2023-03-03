@@ -63,8 +63,15 @@ pub trait Int: Clone + Copy + Debug + Default + Display + Eq + FromStr + Hash + 
 	fn gen_count_ones (self) -> u32;
 
 	#[ inline (always) ]
+	#[ must_use ]
 	fn check_bit (self, bit: u32) -> bool {
 		self & (Self::ONE << bit) != Self::ZERO
+	}
+
+	#[ inline (always) ]
+	#[ must_use ]
+	fn bit_set (self, bit: u32) -> Self {
+		self | Self::ONE << bit
 	}
 
 	#[ inline (always) ]
