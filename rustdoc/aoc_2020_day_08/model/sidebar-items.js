@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Op",""]],"struct":[["Instr",""]],"type":[["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Op"],"struct":["Instr"],"type":["Val"]};

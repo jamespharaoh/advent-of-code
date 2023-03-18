@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["signs",""]],"struct":[["CoordRange",""],["Nanobot",""],["Region",""]],"type":[["Coord",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"mod":["signs"],"struct":["CoordRange","Nanobot","Region"],"type":["Coord","Pos"]};

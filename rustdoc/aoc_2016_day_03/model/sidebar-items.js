@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":[["Side",""],["Triangle",""]]};
+window.SIDEBAR_ITEMS = {"type":["Side","Triangle"]};

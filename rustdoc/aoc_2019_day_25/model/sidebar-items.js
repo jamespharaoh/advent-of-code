@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Door",""]],"type":[["Cpu",""],["RcStr",""],["RunResult",""],["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Door"],"type":["Cpu","RcStr","RunResult","Val"]};

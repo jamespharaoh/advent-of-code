@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["VHexDir",""]],"type":[["Coord",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"enum":["VHexDir"],"type":["Coord","Pos"]};

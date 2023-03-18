@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":[["Tramp",""]]};
+window.SIDEBAR_ITEMS = {"type":["Tramp"]};

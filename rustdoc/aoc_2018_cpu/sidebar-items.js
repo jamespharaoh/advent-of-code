@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["ArgType",""],["CpuError",""],["Op",""],["Opcode",""]],"struct":[["Instr",""],["Regs",""]],"type":[["CpuResult",""]]};
+window.SIDEBAR_ITEMS = {"enum":["ArgType","CpuError","Op","Opcode"],"struct":["Instr","Regs"],"type":["CpuResult"]};

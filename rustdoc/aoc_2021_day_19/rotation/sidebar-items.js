@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Rotation",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Rotation"]};

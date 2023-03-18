@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["puzzle_metadata",""]],"mod":[["analyser",""],["input",""],["logic","Logic for solving the puzzles"],["model",""]]};
+window.SIDEBAR_ITEMS = {"fn":["puzzle_metadata"],"mod":["analyser","input","logic","model"]};

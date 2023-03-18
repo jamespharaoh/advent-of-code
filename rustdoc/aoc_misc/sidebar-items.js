@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["array_vec",""],["assert_eq_ok",""],["assert_err",""],["assert_is_err",""],["assert_is_ok",""],["ok_or",""],["ok_or_else",""],["some_or",""],["wrapper_deref",""],["wrapper_deref_mut",""]],"mod":[["prelude",""]]};
+window.SIDEBAR_ITEMS = {"macro":["array_vec","assert_eq_ok","assert_err","assert_is_err","assert_is_ok","ok_or","ok_or_else","some_or","wrapper_deref","wrapper_deref_mut"],"mod":["prelude"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["find_test_case",""],["run",""]],"struct":[["FindTestCaseArgs",""],["RunArgs",""]]};
+window.SIDEBAR_ITEMS = {"fn":["find_test_case","run"],"struct":["FindTestCaseArgs","RunArgs"]};

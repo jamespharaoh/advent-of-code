@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["ProgInfo",""]]};
+window.SIDEBAR_ITEMS = {"struct":["ProgInfo"]};

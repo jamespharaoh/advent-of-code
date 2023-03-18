@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":[["Cpu",""],["Mem",""],["RunResult",""],["Val",""]]};
+window.SIDEBAR_ITEMS = {"type":["Cpu","Mem","RunResult","Val"]};

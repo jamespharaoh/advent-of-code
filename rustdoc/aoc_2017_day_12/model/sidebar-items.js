@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Grouper",""]],"type":[["Village",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Grouper"],"type":["Village"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["puzzle_info",""]]};
+window.SIDEBAR_ITEMS = {"macro":["puzzle_info"]};

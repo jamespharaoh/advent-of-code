@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["AttackType",""]],"struct":[["Group",""]],"type":[["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["AttackType"],"struct":["Group"],"type":["Val"]};

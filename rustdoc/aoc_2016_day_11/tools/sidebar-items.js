@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["corpus_gen",""]],"struct":[["CorpusGenArgs",""]]};
+window.SIDEBAR_ITEMS = {"fn":["corpus_gen"],"struct":["CorpusGenArgs"]};

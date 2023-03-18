@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["calc_result","Main logic for both parts, takes a list of discs and calculates the start time."],["part_one","Implementation for part one"],["part_two","Implementation for part two"]]};
+window.SIDEBAR_ITEMS = {"fn":["calc_result","part_one","part_two"]};

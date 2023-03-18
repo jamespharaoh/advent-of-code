@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Field",""],["Ticket",""]],"type":[["Val",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Field","Ticket"],"type":["Val"]};

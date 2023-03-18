@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["SeenState",""]],"struct":[["PrioritySearch",""],["PrioritySearchAdder",""]],"trait":[["PrioritySearchVisitor",""],["Seen",""]]};
+window.SIDEBAR_ITEMS = {"enum":["SeenState"],"struct":["PrioritySearch","PrioritySearchAdder"],"trait":["PrioritySearchVisitor","Seen"]};

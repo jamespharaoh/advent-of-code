@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["puzzle_info",""]],"mod":[["command",""],["prelude",""],["puzzle",""],["run",""],["year",""]]};
+window.SIDEBAR_ITEMS = {"macro":["puzzle_info"],"mod":["command","prelude","puzzle","run","year"]};

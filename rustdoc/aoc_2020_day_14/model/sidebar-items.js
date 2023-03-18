@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Instr",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Instr"]};

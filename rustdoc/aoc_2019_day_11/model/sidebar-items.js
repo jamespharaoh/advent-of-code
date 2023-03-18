@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Colour",""]],"type":[["Coord",""],["Cpu",""],["Dir",""],["Grid",""],["Pos",""],["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Colour"],"type":["Coord","Cpu","Dir","Grid","Pos","Val"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Command",""]],"type":[["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Command"],"type":["Val"]};

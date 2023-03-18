@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["BitVec","Dynamically sized array of items encoded as bits and packed"]],"trait":[["BitVecEncoding","Trait for encoding an item as bits for storing in a [`BitVec`]"],["BitVecNative","Trait for items which know how to encode themselves for storing in a [`BitVec`]"]]};
+window.SIDEBAR_ITEMS = {"struct":["BitVec"],"trait":["BitVecEncoding","BitVecNative"]};

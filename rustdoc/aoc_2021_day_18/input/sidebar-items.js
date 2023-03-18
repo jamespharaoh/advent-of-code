@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Token",""]],"struct":[["Input",""],["InputParams",""],["Tokens",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Token"],"struct":["Input","InputParams","Tokens"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":[["Dim",""]]};
+window.SIDEBAR_ITEMS = {"type":["Dim"]};

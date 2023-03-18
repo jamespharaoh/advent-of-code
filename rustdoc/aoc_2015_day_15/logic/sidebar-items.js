@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["check_input","Validate extra conditions on the input."],["iter_recipes","Iterate through all recipes containing exactly 100 ingredients"],["part_one","Part one: Find the combination of ingredients which gives the maximum possible score."],["part_two","Part two: Find the combination of ingredients which gives the maximum score and exactly 500 calories in total."]]};
+window.SIDEBAR_ITEMS = {"fn":["check_input","iter_recipes","part_one","part_two"]};

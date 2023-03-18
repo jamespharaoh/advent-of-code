@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["RunResult",""]],"struct":[["Machine",""]],"type":[["Mem",""]]};
+window.SIDEBAR_ITEMS = {"enum":["RunResult"],"struct":["Machine"],"type":["Mem"]};

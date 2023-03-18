@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["InputPixel",""],["InputRule",""]],"fn":[["parse_pixels",""],["parse_pixels_2",""],["parse_pixels_3",""],["parse_pixels_4",""]],"struct":[["Input",""],["InputParams",""]]};
+window.SIDEBAR_ITEMS = {"enum":["InputPixel","InputRule"],"fn":["parse_pixels","parse_pixels_2","parse_pixels_3","parse_pixels_4"],"struct":["Input","InputParams"]};

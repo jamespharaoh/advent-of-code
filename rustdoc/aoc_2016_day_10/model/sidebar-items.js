@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Step",""],["Target",""]],"type":[["Val",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Step","Target"],"type":["Val"]};

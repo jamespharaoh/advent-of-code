@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Pixel",""]],"struct":[["Image",""]],"type":[["Algorithm",""],["Pixels",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Pixel"],"struct":["Image"],"type":["Algorithm","Pixels","Pos"]};

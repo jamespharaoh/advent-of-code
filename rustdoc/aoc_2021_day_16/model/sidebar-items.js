@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["BitIter",""],["Packet",""]]};
+window.SIDEBAR_ITEMS = {"struct":["BitIter","Packet"]};

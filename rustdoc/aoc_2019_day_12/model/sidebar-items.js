@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Moon",""],["MoonAxis",""]],"type":[["Axis",""],["Coord",""],["Energy",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Moon","MoonAxis"],"type":["Axis","Coord","Energy","Pos"]};

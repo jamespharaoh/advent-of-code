@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["part_one",""],["part_two",""]],"type":[["Dependencies",""],["Order",""],["Reactions",""]]};
+window.SIDEBAR_ITEMS = {"fn":["part_one","part_two"],"type":["Dependencies","Order","Reactions"]};

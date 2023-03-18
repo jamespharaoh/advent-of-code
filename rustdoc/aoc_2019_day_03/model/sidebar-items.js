@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Step",""]],"type":[["Dir",""],["Pos",""],["Val",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Step"],"type":["Dir","Pos","Val"]};

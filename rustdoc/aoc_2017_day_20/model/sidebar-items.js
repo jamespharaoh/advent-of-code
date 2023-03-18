@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Aspect",""]],"struct":[["Particle",""]],"type":[["Axis",""],["Coord",""],["CoordAbs",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"enum":["Aspect"],"struct":["Particle"],"type":["Axis","Coord","CoordAbs","Pos"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["Input",""],["InputGroup",""],["InputParams",""],["InputPerson",""]]};
+window.SIDEBAR_ITEMS = {"struct":["Input","InputGroup","InputParams","InputPerson"]};

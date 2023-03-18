@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["part_one",""],["part_two",""]],"type":[["TokensIter",""]]};
+window.SIDEBAR_ITEMS = {"fn":["part_one","part_two"],"type":["TokensIter"]};

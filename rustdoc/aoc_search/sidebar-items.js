@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":[["pairs_map",""],["permutations","Generate permutations of [`usize`] from `0 .. len`."],["prelude","Standard prelude for wildcard imports."],["priority",""]]};
+window.SIDEBAR_ITEMS = {"mod":["pairs_map","permutations","prelude","priority"]};

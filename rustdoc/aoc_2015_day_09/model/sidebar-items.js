@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":[["DistTable",""]],"type":[["Dist",""]]};
+window.SIDEBAR_ITEMS = {"struct":["DistTable"],"type":["Dist"]};

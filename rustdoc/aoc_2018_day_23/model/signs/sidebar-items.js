@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":[["NNP",""],["NPN",""],["PNN",""],["PPP",""]]};
+window.SIDEBAR_ITEMS = {"constant":["NNP","NPN","PNN","PPP"]};

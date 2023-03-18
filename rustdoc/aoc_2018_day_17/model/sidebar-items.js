@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["ClayRange",""],["Tile",""]],"type":[["Coord",""],["Grid",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"enum":["ClayRange","Tile"],"type":["Coord","Grid","Pos"]};

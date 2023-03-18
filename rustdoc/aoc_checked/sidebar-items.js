@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":[["checked",""]]};
+window.SIDEBAR_ITEMS = {"macro":["checked"]};

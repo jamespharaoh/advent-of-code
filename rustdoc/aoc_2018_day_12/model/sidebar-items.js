@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["Pot","Simple enum to represent the state of a pot"]],"struct":[["Generator","Efficiently apply rules to a [`State`]"],["State","Represents all occupied plant pots at a specific point in time"]]};
+window.SIDEBAR_ITEMS = {"enum":["Pot"],"struct":["Generator","State"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":[["NextNumIter",""]],"fn":[["iterator",""],["steps_for",""]],"struct":[["Step",""]]};
+window.SIDEBAR_ITEMS = {"enum":["NextNumIter"],"fn":["iterator","steps_for"],"struct":["Step"]};

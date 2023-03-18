@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["iter_posns",""],["part_one",""],["part_two",""]]};
+window.SIDEBAR_ITEMS = {"fn":["iter_posns","part_one","part_two"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"type":[["Board",""],["Coord",""],["Dir",""],["Grid",""],["Pos",""]]};
+window.SIDEBAR_ITEMS = {"type":["Board","Coord","Dir","Grid","Pos"]};

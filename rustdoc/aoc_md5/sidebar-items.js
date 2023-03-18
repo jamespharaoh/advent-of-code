@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["md5_hash",""]],"struct":[["MD5",""],["Output",""]]};
+window.SIDEBAR_ITEMS = {"fn":["md5_hash"],"struct":["MD5","Output"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["puzzle_metadata",""]],"macro":[["make_solver",""],["solver_constrain",""]],"mod":[["input",""],["logic",""],["model",""]]};
+window.SIDEBAR_ITEMS = {"fn":["puzzle_metadata"],"macro":["make_solver","solver_constrain"],"mod":["input","logic","model"]};
