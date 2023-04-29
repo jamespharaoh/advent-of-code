@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["GridBuf","GridCursor","GridCursorCompact","GridOffset"],"trait":["GridPos","GridView","GridViewExtend","GridViewIter","GridViewPrint"]};
+window.SIDEBAR_ITEMS = {};

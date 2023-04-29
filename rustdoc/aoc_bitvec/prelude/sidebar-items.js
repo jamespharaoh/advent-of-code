@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["BitVec"],"trait":["BitVecEncoding","BitVecNative"]};
+window.SIDEBAR_ITEMS = {};
