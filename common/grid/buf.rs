@@ -46,13 +46,6 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 		Self::wrap_range (storage, Pos::default (), size).unwrap ()
 	}
 
-}
-
-impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
-	where
-		Storage: GridStorage + Clone,
-		Pos: GridPos <DIMS> {
-
 	#[ inline ]
 	pub fn new_range (start: Pos, end: Pos) -> NumResult <Self>
 		where
@@ -82,6 +75,12 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 			Storage: FromIterator <Storage::Item>,
 			Storage::Item: Clone + Default {
 		Self::new_range (Pos::default (), size).unwrap ()
+	}
+
+	#[ inline ]
+	#[ must_use ]
+	pub fn into_storage (self) -> Storage {
+		self.storage
 	}
 
 }

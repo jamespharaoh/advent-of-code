@@ -17,6 +17,7 @@ use nums::TrySub;
 
 pub use gen::GenAxis;
 pub use gen::GenPos;
+pub use gen::GenPos3;
 pub use dim_2::AxisRowCol;
 pub use dim_2::AxisXY;
 pub use dim_2::Dir2d;
@@ -375,6 +376,27 @@ mod gen {
 		const ZERO: Self;
 		const MIN: Self;
 		const MAX: Self;
+
+	}
+
+	pub trait GenPos3 <const DIMS: usize>: GenPos <DIMS> {
+		fn adjacent_six (self) -> TinyVec <Self, 6>;
+	}
+
+	impl <SomePos: GenPos <3>> GenPos3 <3> for SomePos {
+
+		#[ inline ]
+		fn adjacent_six (self) -> TinyVec <Self, 6> {
+			let mut result = TinyVec::new ();
+			let [ a, b, c ] = self.as_array ();
+			if Self::Val::MIN < a { result.push ([ a - Self::Val::ONE, b, c ].into ()); }
+			if a < Self::Val::MAX { result.push ([ a + Self::Val::ONE, b, c ].into ()); }
+			if Self::Val::MIN < b { result.push ([ a, b - Self::Val::ONE, c ].into ()); }
+			if b < Self::Val::MAX { result.push ([ a, b + Self::Val::ONE, c ].into ()); }
+			if Self::Val::MIN < c { result.push ([ a, b, c - Self::Val::ONE ].into ()); }
+			if c < Self::Val::MAX { result.push ([ a, b, c + Self::Val::ONE ].into ()); }
+			result
+		}
 
 	}
 
