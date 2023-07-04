@@ -14,7 +14,7 @@ pub fn part_one (input: & Input) -> GenResult <Val> {
 		input.nums.iter ()
 			.map (Number::try_from)
 			.try_collect () ?;
-	let sum = Number::sum (nums.into_iter ());
+	let sum = Number::sum (nums);
 	Ok (sum.unwrap ().magnitude ())
 }
 

@@ -2,6 +2,7 @@
 --deny clippy::almost_complete_range
 --deny clippy::almost_swapped
 --deny clippy::approx_constant
+--allow clippy::arithmetic_side_effects
 --deny clippy::as_conversions
 --deny clippy::as_underscore
 --deny clippy::assertions_on_constants
@@ -41,11 +42,9 @@
 --deny clippy::chars_last_cmp
 --deny clippy::chars_next_cmp
 --deny clippy::checked_conversions
---deny clippy::clone_double_ref
 --deny clippy::clone_on_copy
 --deny clippy::clone_on_ref_ptr
 --deny clippy::cloned_instead_of_copied
---deny clippy::cmp_nan
 --deny clippy::cmp_null
 --deny clippy::cmp_owned
 --deny clippy::collapsible_else_if
@@ -82,9 +81,7 @@
 --deny clippy::double_must_use
 --deny clippy::double_neg
 --deny clippy::double_parens
---deny clippy::drop_copy
 --deny clippy::drop_non_drop
---deny clippy::drop_ref
 --deny clippy::duplicate_mod
 --deny clippy::duplicate_underscore_argument
 --deny clippy::duration_subsec
@@ -132,9 +129,7 @@
 --deny clippy::fn_to_numeric_cast_with_truncation
 --deny clippy::for_kv_map
 --deny for_loops_over_fallibles
---deny clippy::forget_copy
 --deny clippy::forget_non_drop
---deny clippy::forget_ref
 --deny clippy::format_in_format_args
 --deny clippy::format_push_string
 --deny clippy::from_iter_instead_of_collect
@@ -169,7 +164,6 @@
 --deny clippy::init_numbered_fields
 --deny clippy::inspect_for_each
 --deny clippy::int_plus_one
---allow clippy::integer_arithmetic
 --allow clippy::integer_division
 --deny clippy::into_iter_on_ref
 --deny clippy::invalid_regex
@@ -437,10 +431,10 @@
 --deny clippy::trivial_regex
 --allow clippy::trivially_copy_pass_by_ref
 --allow clippy::try_err
+--allow clippy::tuple_array_conversions
 --allow clippy::type_complexity
 --deny clippy::type_repetition_in_bounds
 --deny clippy::undocumented_unsafe_blocks
---deny clippy::undropped_manually_drops
 --deny clippy::unicode_not_nfc
 --deny clippy::unit_arg
 --deny clippy::unit_cmp

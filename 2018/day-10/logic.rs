@@ -52,14 +52,14 @@ pub fn find_smallest (input: & Input) -> GenResult <(Vec <Point>, u32)> {
 }
 
 fn calc_range (points: & [Point]) -> NumResult <(Coord, Coord, Coord, Coord)> {
-	points.iter ().copied ().fold (
-		Ok ((Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN)),
-		|state, point| state.and_then (|(min_y, max_y, min_x, max_x)| Ok ((
+	points.iter ().copied ().try_fold (
+		(Coord::MAX, Coord::MIN, Coord::MAX, Coord::MIN),
+		|(min_y, max_y, min_x, max_x), point| Ok ((
 			cmp::min (min_y, point.pos.y),
 			cmp::max (max_y, chk! (point.pos.y + Coord::ONE) ?),
 			cmp::min (min_x, point.pos.x),
 			cmp::max (max_x, chk! (point.pos.x + Coord::ONE) ?),
-		))))
+		)))
 }
 
 fn calc_size (points: & [Point]) -> NumResult <(Coord, Coord)> {

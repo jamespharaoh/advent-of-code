@@ -25,6 +25,7 @@ pub trait GridPosDisplayAuto: GridPos <2> {
 
 impl <Pos: GridPosDisplayAuto> GridPosDisplay for Pos {
 
+	#[ allow (clippy::tuple_array_conversions) ]
 	#[ inline ]
 	fn grid_pos_display_rows_cols (size: Self) -> (Self::Coord, Self::Coord) {
 		use GridPosDisplayType::{ DownRight, RightUp, UpRight, UpRightSlant };

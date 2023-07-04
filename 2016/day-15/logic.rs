@@ -32,8 +32,8 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 /// 
 pub fn calc_result (discs: & [Disc]) -> GenResult <u64> {
 	let (time, _) = discs.iter ()
-		.fold (Ok ((0_u64, 1_u64)), |state, disc|
-			state.and_then (|(time, step)| Ok::<_, GenError> ((
+		.try_fold ((0_u64, 1_u64), |(time, step), disc|
+			Ok::<_, GenError> ((
 				(time .. )
 					.step_by (step.pan_usize ())
 					.take (disc.num_posns.pan_usize ())
@@ -45,6 +45,6 @@ pub fn calc_result (discs: & [Disc]) -> GenResult <u64> {
 					.step_by (step.pan_usize ())
 					.find (|step| step % disc.num_posns.pan_u64 () == 0)
 					.unwrap (),
-			)))) ?;
+			))) ?;
 	Ok (time)
 }

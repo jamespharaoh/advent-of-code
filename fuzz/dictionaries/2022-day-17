@@ -1,0 +1,6 @@
+param_0 = "MAX_ITERS="
+param_1 = "NUM_DROPS_ONE="
+param_2 = "NUM_DROPS_TWO="
+
+push_left = "<"
+push_right = ">"
