@@ -1,4 +1,4 @@
-var sourcesIndex = JSON.parse('{\
+var srcIndex = JSON.parse('{\
 "ahash":["",[],["convert.rs","fallback_hash.rs","hash_map.rs","hash_set.rs","lib.rs","operations.rs","random_state.rs","specialize.rs"]],\
 "aoc":["",[],["lib.rs"]],\
 "aoc_2015":["",[],["lib.rs"]],\
@@ -218,4 +218,4 @@ var sourcesIndex = JSON.parse('{\
 "libc":["",[["unix",[["linux_like",[["linux",[["arch",[["generic",[],["mod.rs"]]],["mod.rs"]],["gnu",[["b64",[["x86_64",[],["align.rs","mod.rs","not_x32.rs"]]],["mod.rs"]]],["align.rs","mod.rs"]]],["align.rs","mod.rs","non_exhaustive.rs"]]],["mod.rs"]]],["align.rs","mod.rs"]]],["fixed_width_ints.rs","lib.rs","macros.rs"]],\
 "once_cell":["",[],["lib.rs","race.rs"]]\
 }');
-createSourceSidebar();
+createSrcSidebar();
