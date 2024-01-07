@@ -129,7 +129,7 @@ impl <'inp> PartialEq <InpStr <'inp>> for & str {
 impl <'inp> PartialOrd for InpStr <'inp> {
 	#[ inline ]
 	fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
-		self.deref ().partial_cmp (& ** other)
+		Some (self.cmp (other))
 	}
 }
 

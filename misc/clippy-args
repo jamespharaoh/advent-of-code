@@ -15,7 +15,7 @@
 --deny clippy::bad_bit_mask
 --deny clippy::bind_instead_of_map
 --deny clippy::blanket_clippy_restriction_lints
---deny clippy::blocks_in_if_conditions
+--deny clippy::blocks_in_conditions
 --deny clippy::bool_assert_comparison
 --deny clippy::bool_comparison
 --deny clippy::bool_to_int_with_if
@@ -468,7 +468,7 @@
 --allow clippy::unusual_byte_groupings
 --allow clippy::unwrap_in_result
 --allow clippy::unwrap_used
---deny clippy::unwrap_or_else_default
+--deny clippy::unwrap_or_default
 --deny clippy::upper_case_acronyms
 --allow clippy::use_debug
 --deny clippy::use_self
@@ -484,7 +484,6 @@
 --allow clippy::vec_resize_to_zero
 --deny clippy::verbose_bit_mask
 --deny clippy::verbose_file_reads
---deny clippy::vtable_address_comparisons
 --deny clippy::while_immutable_condition
 --deny clippy::while_let_loop
 --deny clippy::while_let_on_iterator

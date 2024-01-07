@@ -16,9 +16,9 @@ pub fn part_two (input: & Input) -> GenResult <String> {
 		knot::calculate_rounds (
 			input.data.as_bytes (),
 			input.params.rounds_two);
-	let result =
-		hash.iter ()
-			.map (|& byte| format! ("{byte:02x}"))
-			.collect ();
+	let mut result = String::new ();
+	for & byte in & hash {
+		write! (result, "{byte:02x}").unwrap ();
+	}
 	Ok (result)
 }

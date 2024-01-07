@@ -519,7 +519,7 @@ impl PartialEq for Symbol {
 
 impl cmp::PartialOrd for Symbol {
 	fn partial_cmp (& self, other: & Self) -> Option <Ordering> {
-		self.inner.name.partial_cmp (& other.inner.name)
+		Some (self.cmp (other))
 	}
 }
 

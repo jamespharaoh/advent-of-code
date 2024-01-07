@@ -662,7 +662,7 @@ enum ArgInfo {
 
 impl ArgInfo {
 	fn auto (ip: u16, arg_type: ArgType, arg: Val) -> Self {
-		let ip_val = Val::try_from (ip).unwrap ();
+		let ip_val = Val::from (ip);
 		match arg_type {
 			ArgType::Reg if arg == ip_val => Self::InstrPtr (ip),
 			ArgType::Reg => Self::InOutReg (arg.pan_u16 ()),

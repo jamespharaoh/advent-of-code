@@ -238,12 +238,12 @@ impl IntConv for char {
 
 	#[ inline (always) ]
 	fn to_i64 (self) -> NumResult <i64> {
-		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+		Ok (self.to_u32 () ?.into ())
 	}
 
 	#[ inline (always) ]
 	fn to_i128 (self) -> NumResult <i128> {
-		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+		Ok (self.to_u32 () ?.into ())
 	}
 
 	#[ inline (always) ]
@@ -263,17 +263,17 @@ impl IntConv for char {
 
 	#[ inline (always) ]
 	fn to_u32 (self) -> NumResult <u32> {
-		self.try_into ().map_err (|_err| Overflow)
+		Ok (self.into ())
 	}
 
 	#[ inline (always)]
 	fn to_u64 (self) -> NumResult <u64> {
-		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+		Ok (self.to_u32 () ?.into ())
 	}
 
 	#[ inline (always) ]
 	fn to_u128 (self) -> NumResult <u128> {
-		self.to_u32 () ?.try_into ().map_err (|_err| Overflow)
+		Ok (self.to_u32 () ?.into ())
 	}
 
 	#[ inline (always) ]

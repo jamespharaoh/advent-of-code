@@ -79,7 +79,7 @@ fn analyse (input: & Input) -> GenResult <Vec <LayerInfo>> {
 		return Err ("Layer range must be at least two".into ());
 	}
 	let layers =
-		input.layers.iter ().cloned ()
+		input.layers.iter ()
 			.map (|layer| LayerInfo {
 				offset: layer.depth.pan_u32 (),
 				period: (layer.range.pan_u32 () - 1) * 2,

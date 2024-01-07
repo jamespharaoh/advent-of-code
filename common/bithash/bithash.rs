@@ -1,7 +1,7 @@
 //! Bloom filter
 
 use std::fmt::{ self, Display };
-use std::hash::{ BuildHasher, Hash, Hasher };
+use std::hash::{ BuildHasher, Hash };
 use std::ops::{ BitAnd, Not };
 
 use aoc_nums as nums;
@@ -34,9 +34,7 @@ impl <BldHsh: BuildHasher, const LEN: usize, const BITS: usize> BitHasher <BldHs
 	///
 	#[ inline ]
 	pub fn update <Val: Hash> (& mut self, val: Val) -> & mut Self {
-		let mut hasher = self.hash_builder.build_hasher ();
-		val.hash (& mut hasher);
-		let mut hash = hasher.finish ();
+		let mut hash = self.hash_builder.hash_one (& val);		
 		for _ in 0 .. BITS {
 			let bit = 1 << (hash & 0x3f);
 			hash >>= 6_u32;

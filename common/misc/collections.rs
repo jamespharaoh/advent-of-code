@@ -1,16 +1,10 @@
 use super::prelude::*;
 
 #[ cfg (not (fuzzing)) ]
-//pub use std_hash::*;
 pub use fast_hash::*;
 
 #[ cfg (fuzzing) ]
 pub use test_hash::*;
-
-mod std_hash {
-	pub use std::collections::HashMap;
-	pub use std::collections::HashSet;
-}
 
 mod fast_hash {
 	pub use ahash::AHashMap as HashMap;

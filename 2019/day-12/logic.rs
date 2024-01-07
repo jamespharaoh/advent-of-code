@@ -60,7 +60,7 @@ fn calc_axis_repeat (input: & Input, axis: Axis) -> GenResult <(u64, u64)> {
 	Err ("Max steps exceeded".into ())
 }
 
-fn tick (moons: & mut Vec <Moon>) -> GenResult <()> {
+fn tick (moons: & mut [Moon]) -> GenResult <()> {
 	for idx_0 in 0 .. moons.len () {
 		for idx_1 in 0 .. moons.len () {
 			if idx_0 == idx_1 { continue }

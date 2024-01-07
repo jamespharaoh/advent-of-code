@@ -445,7 +445,7 @@ mod dim_2 {
 
 		use super::*;
 
-		pos_decl! (PosYX AxisXY 2, y Y up down, x X left right);
+		pos_decl! (PosYX AxisYX 2, y Y up down, x X left right);
 
 		pos_dirs! {
 			PosYX Dir2d 2,

@@ -44,7 +44,7 @@ impl Eq for ScannerMatch {}
 
 impl PartialOrd for ScannerMatch {
 	fn partial_cmp (& self, other: & Self) -> Option <cmp::Ordering> {
-		u32::partial_cmp (& self.priority, & other.priority)
+		Some (self.cmp (other))
 	}
 }
 

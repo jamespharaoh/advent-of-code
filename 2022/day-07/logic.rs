@@ -118,5 +118,6 @@ struct Dir {
 #[ derive (Debug) ]
 enum DirEntry {
 	Dir (Rc <Dir>),
+	#[ allow (dead_code) ]
 	File (u32),
 }

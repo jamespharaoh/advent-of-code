@@ -81,8 +81,8 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 fn get_deps (input: & Input) -> HashMap <char, Vec <char>> {
 	let mut deps: HashMap <char, Vec <char>> = HashMap::new ();
 	for & (before, after) in input.deps.iter () {
-		deps.entry (before).or_insert_with (Vec::new);
-		deps.entry (after).or_insert_with (Vec::new).push (before);
+		deps.entry (before).or_default ();
+		deps.entry (after).or_default ().push (before);
 	}
 	deps
 }

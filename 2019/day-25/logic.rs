@@ -71,7 +71,7 @@ pub struct Explorer {
 impl Explorer {
 	pub fn new (game: & mut Game) -> GenResult <Self> {
 		let outputs = game.read_output () ?;
-		let output = match outputs.get (0) {
+		let output = match outputs.first () {
 			Some (& GameOutput::Room (ref room)) => room,
 			Some (other) => return Err (format! ("Unexpected output: {other:?}").into ()),
 			None => return Err ("No output".into ()),
@@ -114,7 +114,7 @@ impl Explorer {
 			let chosen_door = route.pop_front ().unwrap ();
 			game.command (& chosen_door.to_string ());
 			let outputs = game.read_output () ?;
-			let output = match outputs.get (0) {
+			let output = match outputs.first () {
 				Some (& GameOutput::Room (ref output)) => output,
 				Some (other) => return Err (format! ("Unexpected output: {other:?}").into ()),
 				None => return Err ("No output".into ()),
