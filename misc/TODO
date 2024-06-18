@@ -1,21 +1,6 @@
-TODO LIST:
+ADVENT OF CODE TODO:
 
-- check answers for examples
-- remove arrayvec dependency
-- remove itertools dependency
-- missing letters for ocr puzzles
-- remove external deps in other puzzles
-
-LOOK AGAIN:
-
-- 2015/day-10
-- 2022/day-24
-
-REFACTORING:
-
-- use Ord::clamp
-
-OTHER IDEAS:
-
-- fuzzing
-- input generator
+ - optimize 2022/day-19
+ - better fuzzing for 2022/day-21
+ - revisit 2016/day-10
+ - revisit 2022/day-24

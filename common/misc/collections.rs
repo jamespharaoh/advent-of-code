@@ -6,6 +6,7 @@ pub use fast_hash::*;
 #[ cfg (fuzzing) ]
 pub use test_hash::*;
 
+#[ cfg (not (fuzzing)) ]
 mod fast_hash {
 	pub use ahash::AHashMap as HashMap;
 	pub use ahash::AHashSet as HashSet;
