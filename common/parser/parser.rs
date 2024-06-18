@@ -123,7 +123,7 @@ impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn new (input_line: & 'inp str) -> Parser <'inp> {
+	pub fn new (input_line: & 'inp str) -> Self {
 		Parser {
 			input_line,
 			input_lines: & [],
@@ -138,7 +138,7 @@ impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	#[ must_use ]
-	pub fn new_lines (input_lines: & 'inp [& 'inp str]) -> Parser <'inp> {
+	pub fn new_lines (input_lines: & 'inp [& 'inp str]) -> Self {
 		Parser {
 			input_line: input_lines.first ().copied ().unwrap_or (""),
 			input_lines,
@@ -457,7 +457,7 @@ impl <'inp> Parser <'inp> {
 		input: & 'inp str,
 		mut wrap_fn: WrapFn,
 	) -> ParseResult <Output>
-			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where WrapFn: FnMut (& mut Self) -> ParseResult <Output> {
 		let mut parser = Parser::new (input);
 		wrap_fn (& mut parser)
 	}
@@ -467,7 +467,7 @@ impl <'inp> Parser <'inp> {
 		input: & 'inp str,
 		mut wrap_fn: WrapFn,
 	) -> GenResult <Output>
-			where WrapFn: for <'par1> FnMut (& 'par1 mut Parser <'inp>) -> ParseResult <Output> {
+			where WrapFn: for <'par1> FnMut (& 'par1 mut Self) -> ParseResult <Output> {
 		Self::wrap (input, |parser: & mut Parser <'inp>| {
 			let item = wrap_fn (parser) ?;
 			parser.end () ?;
@@ -480,7 +480,7 @@ impl <'inp> Parser <'inp> {
 		input: impl Iterator <Item = (usize, & 'inp str)>,
 		mut wrap_fn: WrapFn,
 	) -> GenResult <Vec <Output>>
-			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where WrapFn: FnMut (& mut Self) -> ParseResult <Output> {
 		input
 			.map (|(line_idx, line)| Self::wrap (line, & mut wrap_fn)
 				.map_parse_err_line (line_idx, line))
@@ -492,7 +492,7 @@ impl <'inp> Parser <'inp> {
 		input_lines: & 'inp [& 'inp str],
 		mut wrap_fn: WrapFn,
 	) -> GenResult <Output>
-			where WrapFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where WrapFn: FnMut (& mut Self) -> ParseResult <Output> {
 		let mut parser = Parser::new_lines (input_lines);
 		let item = wrap_fn (& mut parser).map_parse_err_auto (& parser) ?;
 		parser.end ().map_parse_err_auto (& parser) ?;
@@ -570,7 +570,7 @@ impl <'inp> Parser <'inp> {
 	pub fn opt_fn <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> Output
 		where
 			Output: Default,
-			ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			ParseFn: FnMut (& mut Self) -> ParseResult <Output> {
 		let saved = * self;
 		if let Ok (val) = parse_fn (self) { return val }
 		* self = saved;
@@ -579,7 +579,7 @@ impl <'inp> Parser <'inp> {
 
 	#[ inline ]
 	pub fn nest <ParseFn, Output> (& mut self, mut parse_fn: ParseFn) -> ParseResult <Output>
-			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where ParseFn: FnMut (& mut Self) -> ParseResult <Output> {
 		let saved = * self;
 		let result = parse_fn (self);
 		self.ignore_whitespace = saved.ignore_whitespace;

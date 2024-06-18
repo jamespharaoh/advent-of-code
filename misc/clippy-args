@@ -244,7 +244,6 @@
 --deny clippy::mem_replace_option_with_none
 --deny clippy::mem_replace_with_default
 --deny clippy::min_max
---deny clippy::mismatched_target_os
 --deny clippy::mismatching_type_param_order
 --deny clippy::misrefactored_assign_op
 --allow clippy::missing_const_for_fn
@@ -435,6 +434,7 @@
 --allow clippy::type_complexity
 --deny clippy::type_repetition_in_bounds
 --deny clippy::undocumented_unsafe_blocks
+--deny unexpected_cfgs
 --deny clippy::unicode_not_nfc
 --deny clippy::unit_arg
 --deny clippy::unit_cmp

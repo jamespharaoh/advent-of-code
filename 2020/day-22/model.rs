@@ -8,6 +8,7 @@ pub type Deck = VecDeque <u8>;
 #[ derive (Clone, Copy, Debug) ]
 pub enum Winner { One, Two }
 
+#[ derive (Default) ]
 pub struct Pool {
 	decks: Vec <Deck>,
 	seens: Vec <HashSet <DecksState>>,

@@ -42,15 +42,15 @@
 //!
 //!
 //! * `w` --- The current input value. This is loaded in the first instruction and not modified
-//! again.
+//!   again.
 //! * `x` --- Temporary value, the value from the previous step is discarded. This is set to `0` if
-//! the input value matches a calculation based on `z` and a parameter which varies for each step,
-//! or to `1` otherwise.
+//!   the input value matches a calculation based on `z` and a parameter which varies for each
+//!   step, or to `1` otherwise.
 //! * `y` --- Another temporary value, this is used to calculate values based on `x`, `w` and a
-//! parameter, and then used to update `z`. The value is carefully calculated to not update `z` if
-//! `x` is set to `0`, by setting it to `1` for a multiply or `0` for an add.
+//!   parameter, and then used to update `z`. The value is carefully calculated to not update `z`
+//!   if `x` is set to `0`, by setting it to `1` for a multiply or `0` for an add.
 //! * `z` --- An accumulator, which is kept between steps. This starts off at `0` and gets
-//! conditionally multiplied by 26, divided by 26, and added to.
+//!   conditionally multiplied by 26, divided by 26, and added to.
 //!
 //! We can compile the differences in each step into a table of parameters. Since a divide by one
 //! is an identity operation, we reduce the first difference into a boolean, tracking whether we
@@ -87,8 +87,8 @@
 //! We can either divide `acc` by 26, multiply it by 26 and add something, or just add something.
 //! Furthermore, in seven of our fourteen steps we always multiply, so to get this value down to
 //! zero we are going to have to make sure we divide on all seven of the other steps. The extra
-//! addition from increment will have to be removed as a rounding error from the division - this
-//! presumably is intended to reduce the total number of valid inputs.
+//! addition from increment will have to be removed as a rounding error from the division &emdash;
+//! this presumably is intended to reduce the total number of valid inputs.
 //!
 //! Since we are deciding whether to divide based on a value derived from `acc` and `check`, we
 //! can simply calculate the correct value based on the previous digits. This reduces our problem
@@ -98,10 +98,10 @@
 //! This leads to the algorithm implemented here. The steps are encoded in the [`Step`] struct,
 //! and the `steps_for` function reads an input programme and identifies the correct parameters
 //! for each step. I inverted the `divide` parameter around and called it [`random`][Step::random]
-//! - this indicates that we should choose a random value for this input value, or in practice try
-//! all possible values. The `iterator` function returns an iterator over all of the valid inputs,
-//! actually 14 nested iterators plus a final call to `map` at the end to check the final sum, and
-//! to convert to match the function signature.
+//! &emdash; this indicates that we should choose a random value for this input value, or in
+//! practice try all possible values. The `iterator` function returns an iterator over all of the
+//! valid inputs, actually 14 nested iterators plus a final call to `map` at the end to check the
+//! final sum, and to convert to match the function signature.
 //!
 //! The actual algorithm is implemented in the [`NextNumIter`] struct. This is an iterator
 //! adapter, which takes an iterator over partial solutions and provides the possible answers with
@@ -231,7 +231,7 @@ impl <'stp> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
 	fn new (
 		steps: & 'stp [Step; 14],
 		reverse: bool,
-	) -> NextNumIter <'stp, std::option::IntoIter <TempAnswer>> {
+	) -> Self {
 		let a: TempAnswer = (TinyVec::new (), 0);
 		NextNumIter::Outer { steps, nested: Some (a).into_iter (), reverse }
 	}

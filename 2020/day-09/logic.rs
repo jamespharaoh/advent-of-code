@@ -30,7 +30,7 @@ fn find_invalid (data: & [u64]) -> Option <u64> {
 }
 
 fn contains_sum (
-	iter: impl Iterator <Item = u64> + Clone + ExactSizeIterator + DoubleEndedIterator,
+	iter: impl Clone + ExactSizeIterator <Item = u64> + DoubleEndedIterator,
 	sum: u64,
 ) -> bool {
 	let mut fwd_iter = iter.clone ().enumerate ().peekable ();

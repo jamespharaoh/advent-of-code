@@ -13,3 +13,7 @@
 
 	aoc-misc = { path = "../misc" }
 	aoc-nums = { path = "../nums" }
+
+[lints.rust]
+
+	unexpected_cfgs = { level = "warn", check-cfg = [ "cfg (fuzzing)" ] }

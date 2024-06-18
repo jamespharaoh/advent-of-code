@@ -10,7 +10,7 @@ impl <'inp> Parser <'inp> {
 	) -> ParserDelim <'par0, 'inp, Delim, Output, ParseFn>
 		where
 			Delim: ParseDelimiter,
-			ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			ParseFn: FnMut (& mut Self) -> ParseResult <Output> {
 		assert! (delim.is_valid ());
 		ParserDelim {
 			parser: self,
@@ -25,7 +25,7 @@ impl <'inp> Parser <'inp> {
 		& 'par mut self,
 		parse_fn: ParseFn,
 	) -> ParserRepeat <'par, 'inp, Output, ParseFn>
-			where ParseFn: FnMut (& mut Parser <'inp>) -> ParseResult <Output> {
+			where ParseFn: FnMut (& mut Self) -> ParseResult <Output> {
 		ParserRepeat {
 			parser: self,
 			parse_fn,

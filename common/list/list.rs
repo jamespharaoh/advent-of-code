@@ -120,6 +120,15 @@ mod base_list {
 
 	}
 
+	impl <Item> Default for List <Item> {
+
+		#[ inline ]
+		fn default () -> Self {
+			Self::Empty
+		}
+
+	}
+
 	impl <Item: Clone> Clone for List <Item> {
 
 		#[ inline ]

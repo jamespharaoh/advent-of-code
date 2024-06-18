@@ -55,7 +55,7 @@ impl <'inp> ProgInfo <'inp> {
 	fn build_recursive (
 		progs: & HashMap <InpStr <'inp>, & Prog <'inp>>,
 		name: & InpStr <'inp>,
-	) -> ProgInfo <'inp> {
+	) -> Self {
 
 		let prog = progs [name];
 

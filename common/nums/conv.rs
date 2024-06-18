@@ -429,45 +429,69 @@ macro_rules! int_conv_impl {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_precision_loss) ]
 			#[ inline (always) ]
 			fn qck_f32 (self) -> f32 { self as f32 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_precision_loss) ]
 			#[ inline (always) ]
 			fn qck_f64 (self) -> f64 { self as f64 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_i8 (self) -> i8 { self as i8 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_i16 (self) -> i16 { self as i16 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_i32 (self) -> i32 { self as i32 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_i64 (self) -> i64 { self as i64 }
 
+			#[ allow (clippy::cast_lossless) ]
 			#[ inline (always) ]
 			fn qck_i128 (self) -> i128 { self as i128 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_isize (self) -> isize { self as isize }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_u8 (self) -> u8 { self as u8 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_u16 (self) -> u16 { self as u16 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_u32 (self) -> u32 { self as u32 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_u64 (self) -> u64 { self as u64 }
 
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_u128 (self) -> u128 { self as u128 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_sign_loss) ]
 			#[ inline (always) ]
 			fn qck_usize (self) -> usize { self as usize }
 
@@ -560,45 +584,73 @@ macro_rules! int_conv_impl {
 				self.try_into ().ok ().ok_or (Overflow)
 			}
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_precision_loss) ]
 			#[ inline (always) ]
 			fn qck_f32 (self) -> f32 { self as f32 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_precision_loss) ]
 			#[ inline (always) ]
 			fn qck_f64 (self) -> f64 { self as f64 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_i8 (self) -> i8 { self as i8 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_i16 (self) -> i16 { self as i16 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_i32 (self) -> i32 { self as i32 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_i64 (self) -> i64 { self as i64 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_i128 (self) -> i128 { self as i128 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
+			#[ allow (clippy::cast_possible_wrap) ]
 			#[ inline (always) ]
 			fn qck_isize (self) -> isize { self as isize }
 
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_u8 (self) -> u8 { self as u8 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_u16 (self) -> u16 { self as u16 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_u32 (self) -> u32 { self as u32 }
 
+			#[ allow (clippy::cast_lossless) ]
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_u64 (self) -> u64 { self as u64 }
 
 			#[ inline (always) ]
 			fn qck_u128 (self) -> u128 { self as u128 }
 
+			#[ allow (clippy::cast_possible_truncation) ]
 			#[ inline (always) ]
 			fn qck_usize (self) -> usize { self as usize }
 
@@ -616,6 +668,10 @@ macro_rules! quick_from_impl {
 
 			impl QuickFrom <$source> for $target {
 
+				#[ allow (clippy::cast_lossless) ]
+				#[ allow (clippy::cast_possible_truncation) ]
+				#[ allow (clippy::cast_possible_wrap) ]
+				#[ allow (clippy::cast_sign_loss) ]
 				#[ inline (always) ]
 				fn quick_from (arg: $source) -> Self {
 					arg as $target

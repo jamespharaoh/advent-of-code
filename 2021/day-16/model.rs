@@ -18,7 +18,7 @@ mod bit_iter {
 
 		#[ inline ]
 		#[ must_use ]
-		pub const fn new (data: & 'dat [u8]) -> BitIter <'dat> {
+		pub const fn new (data: & 'dat [u8]) -> Self {
 			BitIter {
 				data,
 				val: 0,
