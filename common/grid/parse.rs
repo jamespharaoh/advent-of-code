@@ -127,7 +127,8 @@ impl <Pos: GridPosDisplayAuto> GridPosParse for Pos {
 	fn grid_parse_row_offset (_rows: usize, cols: usize) -> isize {
 		use GridPosDisplayType::{ DownRight, RightUp, UpRight, UpRightSlant };
 		match Self::DISPLAY_TYPE {
-			DownRight | UpRight | UpRightSlant => cols.pan_isize (),
+			DownRight => cols.pan_isize (),
+			UpRight | UpRightSlant => - cols.pan_isize (),
 			RightUp => -1_isize,
 		}
 	}
@@ -136,9 +137,8 @@ impl <Pos: GridPosDisplayAuto> GridPosParse for Pos {
 	fn grid_parse_col_offset (rows: usize, _cols: usize) -> isize {
 		use GridPosDisplayType::{ DownRight, RightUp, UpRight, UpRightSlant };
 		match Self::DISPLAY_TYPE {
-			DownRight => 1_isize,
+			DownRight | UpRight | UpRightSlant => 1_isize,
 			RightUp => rows.pan_isize (),
-			UpRight | UpRightSlant => -1_isize,
 		}
 	}
 

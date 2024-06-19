@@ -595,6 +595,27 @@ mod dim_2 {
 				result
 			}
 
+			#[ inline ]
+			pub fn adjacent_8 (& self) -> TinyVec <Self, 8> where Val: Int {
+				let mut result = TinyVec::new ();
+				let Self { n, e } = * self;
+				if n > Val::MIN {
+					let n = n - Val::ONE;
+					if Val::MIN < e { result.push (Self { n, e: e - Val::ONE }); }
+					result.push (Self { n, e });
+					if e < Val::MAX { result.push (Self { n, e: e + Val::ONE }); }
+				}
+				if Val::MIN < e { result.push (Self { n, e: e - Val::ONE }); }
+				if e < Val::MAX { result.push (Self { n, e: e + Val::ONE }); }
+				if n < Val::MAX {
+					let n = n + Val::ONE;
+					if Val::MIN < e { result.push (Self { n, e: e - Val::ONE }); }
+					result.push (Self { n, e });
+					if e < Val::MAX { result.push (Self { n, e: e + Val::ONE }); }
+				}
+				result
+			}
+
 		}
 
 		#[ derive (Clone, Copy, Debug, Eq, PartialEq) ]

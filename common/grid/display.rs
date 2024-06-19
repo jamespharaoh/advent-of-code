@@ -6,6 +6,7 @@ use aoc_pos::PosRowCol;
 use aoc_pos::PosXY;
 use aoc_pos::PosYX;
 
+#[ derive (Debug) ]
 pub enum GridPosDisplayType {
 	DownRight,
 	RightUp,

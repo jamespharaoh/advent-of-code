@@ -1,0 +1,4 @@
+tile_elf = "#"
+tile_empty = "."
+
+misc_newline = "\x0a"
