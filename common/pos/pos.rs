@@ -302,6 +302,19 @@ macro_rules! pos_ops {
 			}
 		}
 
+		impl <Val: Int> Rem <Val> for $name <Val> {
+			type Output = Self;
+			#[ inline ]
+			fn rem (self, arg: Val) -> Self {
+				let self_array: [Val; $dims] = self.into ();
+				let mut result_array = [Val::ZERO; $dims];
+				for idx in 0 .. self_array.len () {
+					result_array [idx] = self_array [idx] % arg;
+				}
+				result_array.into ()
+			}
+		}
+
 		pos_ops! ($name <$dims>: $($rest),*);
 
 	};

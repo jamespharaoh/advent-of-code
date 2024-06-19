@@ -137,4 +137,13 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 		GridBuf::wrap_range (storage, start, end)
 	}
 
+	#[ inline ]
+	fn contains (self, pos: Pos) -> bool {
+		pos.to_array ().into_iter ()
+			.zip (self.start ().to_array ())
+			.zip (self.end ().to_array ())
+			.map (|((val, start), end)| (val, start, end))
+			.all (|(val, start, end)| start <= val && val <= end)
+	}
+
 }
