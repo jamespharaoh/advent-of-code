@@ -27,6 +27,7 @@ dependencies = [
  "aoc-2020",
  "aoc-2021",
  "aoc-2022",
+ "aoc-2023",
  "aoc-common",
 ]
 
@@ -2100,6 +2101,23 @@ dependencies = [
 
 [[package]]
 name = "aoc-2022-day-25"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2023"
+version = "0.1.0"
+dependencies = [
+ "aoc-2023-day-01",
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2023-day-01"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",

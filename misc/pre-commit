@@ -131,7 +131,7 @@ cargo doc --frozen --workspace --profile pre-commit
 header_step "cargo test"
 cargo test --frozen --workspace --profile pre-commit
 
-for year in {2015..2022}; do
+for year in {2015..2023}; do
 	header_step "cargo run --package aoc-$year"
 	for example in "$year/examples/"*; do
 		cargo run --frozen --profile pre-commit --package "aoc-$year" -- --input-dir "$example"

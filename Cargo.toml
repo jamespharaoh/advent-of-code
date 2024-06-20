@@ -20,6 +20,7 @@
 	aoc-2020 = { path = "2020" }
 	aoc-2021 = { path = "2021" }
 	aoc-2022 = { path = "2022" }
+	aoc-2023 = { path = "2023" }
 
 [profile.coverage]
 
