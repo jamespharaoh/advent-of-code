@@ -210,6 +210,28 @@ pub trait IteratorExt: Iterator {
 	}
 
 	#[ inline ]
+	fn reduce_ok <ReduceFn, Item, Error> (
+		mut self,
+		mut reduce_fn: ReduceFn,
+	) -> Result <Option <Item>, Error>
+		where
+			ReduceFn: FnMut (Item, Item) -> Item,
+			Self: Iterator <Item = Result <Item, Error>> + Sized {
+		let mut state = match self.next () {
+			Some (Ok (item)) => item,
+			Some (Err (error)) => return Err (error),
+			None => return Ok (None),
+		};
+		for item in self {
+			match item {
+				Ok (item) => state = reduce_fn (state, item),
+				Err (error) => return Err (error),
+			}
+		}
+		Ok (Some (state))
+	}
+
+	#[ inline ]
 	fn sorted (self) -> VecIntoIter <Self::Item>
 		where
 			Self: Sized,
@@ -269,6 +291,24 @@ pub trait IteratorExt: Iterator {
 			Self: Iterator <Item = Result <In, Error>> + Sized,
 			Result <Out, Error>: FromIterator <Result <In, Error>> {
 		self.collect ()
+	}
+
+	#[ inline ]
+	fn try_reduce <Item, Error, ReduceFn> (
+		mut self,
+		mut reduce_fn: ReduceFn,
+	) -> Result <Option <Item>, Error>
+		where
+			ReduceFn: FnMut (Item, Item) -> Result <Item, Error>,
+			Self: Iterator <Item = Item> + Sized {
+		let Some (mut state) = self.next () else { return Ok (None) };
+		for item in self {
+			match reduce_fn (state, item) {
+				Ok (item) => state = item,
+				Err (error) => return Err (error),
+			}
+		}
+		Ok (Some (state))
 	}
 
 	#[ inline ]
