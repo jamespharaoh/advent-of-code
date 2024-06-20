@@ -289,6 +289,10 @@ macro_rules! display {
 
 	// @skip
 
+	( $formatter:ident, @skip $(,$($rest:tt)*)? ) => {
+		display! ($formatter, $($($rest)*)?);
+	};
+
 	( $formatter:ident, @skip $display:literal $(,$($rest:tt)*)? ) => {
 		$formatter.write_str ($display) ?;
 		display! ($formatter, $($($rest)*)?);
