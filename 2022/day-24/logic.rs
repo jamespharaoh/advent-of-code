@@ -6,13 +6,26 @@ use model::Grid;
 use model::Pos;
 
 pub fn part_one (input: & Input) -> GenResult <u64> {
+	check_input (input) ?;
 	let (start, end) = calc_start_end (& input.grid) ?;
-	Ok (calc_result (& input.grid, start, & [ end ]))
+	calc_result (input, start, & [ end ])
 }
 
 pub fn part_two (input: & Input) -> GenResult <u64> {
+	check_input (input) ?;
 	let (start, end) = calc_start_end (& input.grid) ?;
-	Ok (calc_result (& input.grid, start, & [ end, start, end ]))
+	calc_result (input, start, & [ end, start, end ])
+}
+
+fn check_input (input: & Input) -> GenResult <()> {
+	if input.params.max_grid_size < input.grid.size ().x
+			|| input.params.max_grid_size < input.grid.size ().y {
+		return Err (format! (
+				"Max grid size is {size}×{size}",
+				size = input.params.max_grid_size)
+			.into ());
+	}
+	Ok (())
 }
 
 fn calc_start_end (grid: & Grid) -> GenResult <(Pos, Pos)> {
@@ -31,7 +44,8 @@ fn calc_start_end (grid: & Grid) -> GenResult <(Pos, Pos)> {
 	Ok ((start, end))
 }
 
-fn calc_result (grid: & Grid, start: Pos, route: & [Pos]) -> u64 {
+fn calc_result (input: & Input, start: Pos, route: & [Pos]) -> GenResult <u64> {
+	let grid = & input.grid;
 	let mut blizs: Vec <(Pos, Pos)> =
 		grid.iter ()
 			.filter_map (|(pos, tile)| match tile {
@@ -78,6 +92,9 @@ fn calc_result (grid: & Grid, start: Pos, route: & [Pos]) -> u64 {
 		}
 		posns = new_posns;
 		num_steps += 1;
+		if input.params.max_steps <= num_steps {
+			return Err (format! ("Exceed max steps of {}", input.params.max_steps).into ());
+		}
 	}
-	num_steps
+	Ok (num_steps)
 }

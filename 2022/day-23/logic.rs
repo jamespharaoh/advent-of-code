@@ -6,6 +6,7 @@ use model::Dir;
 use model::Pos;
 
 pub fn part_one (input: & Input) -> GenResult <u64> {
+	check_input (input) ?;
 	let mut state = State::build (input);
 	for _ in 0_i32 .. 10_i32 {
 		state.step ();
@@ -14,14 +15,29 @@ pub fn part_one (input: & Input) -> GenResult <u64> {
 }
 
 pub fn part_two (input: & Input) -> GenResult <u64> {
+	check_input (input) ?;
 	let mut state = State::build (input);
-	let mut num_rounds = 0;
+	let mut num_rounds = 0_u64;
 	loop {
 		num_rounds += 1;
 		let num_moves = state.step ();
 		if num_moves == 0 { break }
+		if num_rounds == input.params.max_rounds {
+			return Err (format! ("Max rounds is {}", input.params.max_rounds).into ());
+		}
 	}
 	Ok (num_rounds)
+}
+
+fn check_input (input: & Input) -> GenResult <()> {
+	if input.params.max_size < input.grid.size ().n
+			|| input.params.max_size < input.grid.size ().e {
+		return Err ("Input grid must be at most 100×100".into ());
+	}
+	if input.grid.iter ().filter (|& (_, tile)| tile == Tile::Elf).count () < 1 {
+		return Err ("Input must have at least one elf".into ());
+	}
+	Ok (())
 }
 
 struct State {

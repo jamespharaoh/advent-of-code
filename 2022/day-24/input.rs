@@ -1,5 +1,6 @@
 use super::*;
 
+use model::Coord;
 use model::Grid;
 
 #[ derive (Clone, Debug) ]
@@ -33,5 +34,7 @@ enum_decl_parser_display! {
 input_params! {
 	#[ derive (Clone, Debug) ]
 	pub struct InputParams {
+		pub max_grid_size: Coord = ("MAX_GRID_SIZE=", 200, 1 .. ),
+		pub max_steps: u64 = ("MAX_STEPS=", 1000, 1 .. ),
 	}
 }

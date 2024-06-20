@@ -3,6 +3,7 @@ use super::*;
 use input::Input;
 
 pub fn part_one (input: & Input) -> GenResult <i64> {
+	check_input (input) ?;
 	let mut nums: Vec <(i64, i64)> =
 		input.nums.iter ()
 			.enumerate ()
@@ -13,6 +14,7 @@ pub fn part_one (input: & Input) -> GenResult <i64> {
 }
 
 pub fn part_two (input: & Input) -> GenResult <i64> {
+	check_input (input) ?;
 	let mut nums: Vec <(i64, i64)> =
 		input.nums.iter ()
 			.enumerate ()
@@ -22,6 +24,16 @@ pub fn part_two (input: & Input) -> GenResult <i64> {
 		move_all (& mut nums);
 	}
 	Ok (calc_result (& nums))
+}
+
+fn check_input (input: & Input) -> GenResult <()> {
+	if input.nums.len () < 2 {
+		return Err ("Input must have at least two number".into ());
+	}
+	if input.nums.iter ().filter (|&& num| num == 0_i32).count () != 1 {
+		return Err ("Input must have exactly one zero".into ());
+	}
+	Ok (())
 }
 
 fn calc_result (nums: & [(i64, i64)]) -> i64 {

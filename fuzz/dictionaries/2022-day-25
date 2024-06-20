@@ -1,0 +1,7 @@
+snafu_minus_2 = "="
+snafu_minus_1 = "-"
+snafu_zero = "0"
+snafu_plus_one = "1"
+snafu_plus_two = "2"
+
+misc_newline = "\xa0"
