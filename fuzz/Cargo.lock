@@ -2096,12 +2096,21 @@ name = "aoc-2023"
 version = "0.1.0"
 dependencies = [
  "aoc-2023-day-01",
+ "aoc-2023-day-02",
  "aoc-codegen",
  "aoc-common",
 ]
 
 [[package]]
 name = "aoc-2023-day-01"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+]
+
+[[package]]
+name = "aoc-2023-day-02"
 version = "0.1.0"
 dependencies = [
  "aoc-codegen",
