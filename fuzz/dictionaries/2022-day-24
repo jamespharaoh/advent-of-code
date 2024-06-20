@@ -1,0 +1,8 @@
+tile_empty = "."
+tile_up = "^"
+tile_down = "v"
+tile_left = "<"
+tile_right = ">"
+tile_wall = "#"
+
+misc_newline = "\x0a"
