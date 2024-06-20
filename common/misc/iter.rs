@@ -96,6 +96,17 @@ pub trait IteratorExt: Iterator {
 	}
 
 	#[ inline ]
+	fn filter_ok <Item, Error, FilterFn> (
+		self,
+		filter_fn: FilterFn,
+	) -> FilterOk <Self, Item, Error, FilterFn>
+		where
+			FilterFn: FnMut (& Item) -> bool,
+			Self: Iterator <Item = Result <Item, Error>> + Sized {
+		FilterOk::Inner { inner: self, filter_fn }
+	}
+
+	#[ inline ]
 	fn flatten_ok <Item, Error> (self) -> FlattenOk <Self, Item, Error>
 		where
 			Item: IntoIterator,
@@ -579,6 +590,57 @@ impl <Inner> Iterator for DedupConsecutive <Inner>
 			return Some (item);
 		}
 		None
+	}
+
+}
+
+pub enum FilterOk <Inner, Item, Error, FilterFn>
+	where
+		FilterFn: FnMut (& Item) -> bool,
+		Inner: Iterator <Item = Result <Item, Error>> {
+	Inner { inner: Inner, filter_fn: FilterFn },
+	Finished,
+	Poison,
+}
+
+impl <Inner, Item, Error, FilterFn> FusedIterator for FilterOk <Inner, Item, Error, FilterFn>
+	where
+		FilterFn: FnMut (& Item) -> bool,
+		Inner: Iterator <Item = Result <Item, Error>> {
+}
+
+impl <Inner, Item, Error, FilterFn> Iterator for FilterOk <Inner, Item, Error, FilterFn>
+	where
+		FilterFn: FnMut (& Item) -> bool,
+		Inner: Iterator <Item = Result <Item, Error>> {
+
+	type Item = Result <Item, Error>;
+
+	#[ inline ]
+	fn next (& mut self) -> Option <Self::Item> {
+		loop {
+			match mem::replace (self, Self::Poison) {
+				Self::Inner { mut inner, mut filter_fn } => match inner.next () {
+					Some (Ok (item)) => {
+						if filter_fn (& item) {
+							* self = Self::Inner { inner, filter_fn };
+							return Some (Ok (item));
+						} else {
+							* self = Self::Inner { inner, filter_fn };
+						}
+					},
+					Some (Err (error)) => {
+						* self = Self::Inner { inner, filter_fn };
+						return Some (Err (error));
+					},
+					None => {
+						* self = Self::Finished;
+					},
+				},
+				Self::Finished => return None,
+				Self::Poison => panic! ("Poisoned"),
+			}
+		}
 	}
 
 }
