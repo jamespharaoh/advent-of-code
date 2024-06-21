@@ -1,0 +1,35 @@
+[package]
+
+	name = "aoc-2023-day-16"
+	version = "0.1.0"
+	authors = [ "James Pharaoh <james@pharaoh.uk>" ]
+	edition = "2021"
+	description = "Advent of Code 2023: Day 16: The Floor Will Be Lava"
+	repository = "https://github.com/jamespharaoh/advent-of-code/tree/master/2023/day-16"
+	license = "MIT"
+	publish = false
+
+[dependencies]
+
+	aoc-common = { path = "../../common" }
+	aoc-grid = { path = "../../common/grid" }
+	aoc-pos = { path = "../../common/pos" }
+	aoc-stvec = { path = "../../common/stvec" }
+
+[build-dependencies]
+
+	aoc-codegen = { path = "../../misc/codegen" }
+
+[lib]
+
+	path = "lib.rs"
+	doctest = false
+	crate-type = [ "rlib", "dylib" ]
+
+[[bin]]
+
+	name = "aoc-2023-day-16"
+	path = "main.rs"
+	test = false
+	doctest = false
+	bench = false

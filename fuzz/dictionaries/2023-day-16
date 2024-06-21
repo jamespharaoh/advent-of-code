@@ -1,0 +1,7 @@
+tile_empty = "."
+tile_mirror_back = "\\"
+tile_mirror_forward = "/"
+tile_splitter_vertical = "|"
+tile_splitter_horizontal = "-"
+
+misc_newline = "\x0a"

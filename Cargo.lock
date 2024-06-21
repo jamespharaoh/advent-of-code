@@ -2126,6 +2126,7 @@ dependencies = [
  "aoc-2023-day-13",
  "aoc-2023-day-14",
  "aoc-2023-day-15",
+ "aoc-2023-day-16",
  "aoc-codegen",
  "aoc-common",
 ]
@@ -2256,6 +2257,17 @@ version = "0.1.0"
 dependencies = [
  "aoc-codegen",
  "aoc-common",
+]
+
+[[package]]
+name = "aoc-2023-day-16"
+version = "0.1.0"
+dependencies = [
+ "aoc-codegen",
+ "aoc-common",
+ "aoc-grid",
+ "aoc-pos",
+ "aoc-stvec",
 ]
 
 [[package]]
