@@ -1,0 +1,5 @@
+tile_cube_rock = "#"
+tile_round_rock = "O"
+tile_empty = "."
+
+misc_newline = "\x0a"
