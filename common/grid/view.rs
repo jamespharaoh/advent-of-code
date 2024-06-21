@@ -55,8 +55,8 @@ pub trait GridView <Pos, const DIMS: usize>: Copy + Sized
 	}
 
 	#[ inline ]
-	fn offset (self, pos: Pos) -> NumResult <GridOffset <Pos, DIMS>> {
-		GridOffset::new (self.size (), pos)
+	fn offset (self, pos: impl Into <Pos>) -> NumResult <GridOffset <Pos, DIMS>> {
+		GridOffset::new (self.size (), pos.into ())
 	}
 
 	#[ inline ]

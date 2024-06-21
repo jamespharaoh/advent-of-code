@@ -1,0 +1,10 @@
+tile_horizontal = "-"
+tile_vertical = "|"
+tile_north_east = "L"
+tile_north_west = "J"
+tile_south_east = "F"
+tile_south_west = "7"
+tile_ground = "."
+tile_start = "S"
+
+misc_newline = "\x0a"

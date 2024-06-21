@@ -94,8 +94,8 @@ impl <'grd, Inner, Pos, const DIMS: usize> GridView <Pos, DIMS>
 	}
 
 	#[ inline ]
-	fn offset (self, pos: Pos) -> NumResult <GridOffset <Pos, DIMS>> {
-		GridOffset::new (self.inner.size (), pos)
+	fn offset (self, pos: impl Into <Pos>) -> NumResult <GridOffset <Pos, DIMS>> {
+		GridOffset::new (self.inner.size (), pos.into ())
 	}
 
 	#[ inline ]

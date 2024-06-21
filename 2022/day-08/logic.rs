@@ -10,10 +10,10 @@ pub fn part_one (input: & Input) -> GenResult <u32> {
 	let grid = & input.grid;
 	let mut visible: Grid <bool> = Grid::new_range (grid.start (), grid.end ()) ?;
 	let mut todo = Vec::new ();
-	let offset_right = grid.offset (Dir::Right.into ()).unwrap ();
-	let offset_left = grid.offset (Dir::Left.into ()).unwrap ();
-	let offset_down = grid.offset (Dir::Down.into ()).unwrap ();
-	let offset_up = grid.offset (Dir::Up.into ()).unwrap ();
+	let offset_right = grid.offset (Dir::Right).unwrap ();
+	let offset_left = grid.offset (Dir::Left).unwrap ();
+	let offset_down = grid.offset (Dir::Down).unwrap ();
+	let offset_up = grid.offset (Dir::Up).unwrap ();
 	for y in grid.first_key ().y ..= grid.last_key ().y {
 		todo.push ((grid.cursor (Pos::new (y, grid.first_key ().x)).unwrap (), offset_right, -1));
 		todo.push ((grid.cursor (Pos::new (y, grid.last_key ().x)).unwrap (), offset_left, -1));
@@ -41,10 +41,10 @@ pub fn part_two (input: & Input) -> GenResult <u32> {
 	check_input (input) ?;
 	let grid = & input.grid;
 	let dirs = [
-		grid.offset (Dir::Right.into ()).unwrap (),
-		grid.offset (Dir::Left.into ()).unwrap (),
-		grid.offset (Dir::Down.into ()).unwrap (),
-		grid.offset (Dir::Up.into ()).unwrap (),
+		grid.offset (Dir::Right).unwrap (),
+		grid.offset (Dir::Left).unwrap (),
+		grid.offset (Dir::Down).unwrap (),
+		grid.offset (Dir::Up).unwrap (),
 	];
 	Ok (
 		grid.cursors ()

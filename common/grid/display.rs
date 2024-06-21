@@ -153,21 +153,37 @@ pub struct GridPrint <Grid, Pos, MapFn, Out>
 impl <Grid, Pos, MapFn, Out> Display for GridPrint <Grid, Pos, MapFn, Out>
 	where
 		Grid: GridView <Pos, 2>,
-		Pos: GridPos <2>,
+		Pos: GridPos <2> + GridPosDisplayAuto,
 		MapFn: Fn (<Grid as GridView <Pos, 2>>::Item) -> Out,
 		Out: Display {
 
 	#[ inline ]
 	fn fmt (& self, formatter: & mut fmt::Formatter) -> fmt::Result {
-		for row in 0 .. self.grid.size ().to_array () [0].qck_usize () {
-			let row = Pos::Coord::from_usize (row).unwrap ();
-			for col in 0 .. self.grid.size ().to_array () [1].qck_usize () {
-				let col = Pos::Coord::from_usize (col).unwrap ();
+		let grid_start = self.grid.start ().to_array ();
+		let grid_end = self.grid.end ().to_array ();
+		let grid_size = self.grid.size ().to_array ();
+		let (row_count, row_start, row_step, col_count, col_start, col_step) = match Pos::DISPLAY_TYPE {
+			GridPosDisplayType::DownRight => (
+				grid_size [0], grid_start [0], Pos::Coord::ONE,
+				grid_size [1], grid_start [1], Pos::Coord::ONE),
+			GridPosDisplayType::UpRight | GridPosDisplayType::UpRightSlant => (
+				grid_size [0], grid_end [0] - Pos::Coord::ONE, Pos::Coord::ZERO - Pos::Coord::ONE,
+				grid_size [1], grid_start [1], Pos::Coord::ONE),
+			GridPosDisplayType::RightUp => (
+				grid_size [1], grid_start [1], Pos::Coord::ONE,
+				grid_size [0], grid_end [0] - Pos::Coord::ONE, Pos::Coord::ZERO - Pos::Coord::ONE),
+		};
+		let mut row = row_start;
+		for _ in 0 .. row_count.to_usize ().unwrap () {
+			let mut col = col_start;
+			for _ in 0 .. col_count.to_usize ().unwrap () {
 				let pos = Pos::from_array ([ row, col ]);
 				let item = self.grid.get_native (pos).unwrap ();
 				write! (formatter, "{}", (self.map_fn) (item)) ?;
+				col += col_step;
 			}
 			write! (formatter, "\n") ?;
+			row += row_step;
 		}
 		Ok (())
 	}

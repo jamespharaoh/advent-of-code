@@ -50,8 +50,8 @@ fn calc_win_turn (input: & Input, board: & Board) -> Option <u16> {
 				.map (usize::pan_u16)
 		});
 	let turns = & turns;
-	let down = turns.offset (Dir::Down.into ()).unwrap ();
-	let right = turns.offset (Dir::Right.into ()).unwrap ();
+	let down = turns.offset (Dir::Down).unwrap ();
+	let right = turns.offset (Dir::Right).unwrap ();
 	let cur = turns.cursor (Pos::ZERO).unwrap ();
 	[ (down, right), (right, down) ].into_iter ()
 		.flat_map (|(dir_0, dir_1)| cur.walk (dir_0)

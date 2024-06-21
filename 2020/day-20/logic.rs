@@ -76,8 +76,8 @@ fn find_monsters_transform (
 	col_dir: Dir,
 	size: i8,
 ) -> Vec <Pos> {
-	let row_off = grid.offset (row_dir.into ()).unwrap ();
-	let col_off = grid.offset (col_dir.into ()).unwrap ();
+	let row_off = grid.offset (row_dir).unwrap ();
+	let col_off = grid.offset (col_dir).unwrap ();
 	grid.cursor (start).unwrap ().walk (row_off)
 		.map (|cur| cur.walk (col_off)
 			.fold (0_u128, |sum, cur|
