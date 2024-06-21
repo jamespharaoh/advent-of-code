@@ -178,7 +178,7 @@ impl <Grid, Pos, MapFn, Out> Display for GridPrint <Grid, Pos, MapFn, Out>
 			let mut col = col_start;
 			for _ in 0 .. col_count.to_usize ().unwrap () {
 				let pos = Pos::from_array ([ row, col ]);
-				let item = self.grid.get_native (pos).unwrap ();
+				let item = self.grid.get (pos).unwrap ();
 				write! (formatter, "{}", (self.map_fn) (item)) ?;
 				col += col_step;
 			}

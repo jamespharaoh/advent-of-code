@@ -69,6 +69,28 @@ impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 	}
 
 	#[ inline ]
+	pub fn new_range_with (start: Pos, end: Pos, item: Storage::Item) -> NumResult <Self>
+		where
+			Storage: FromIterator <Storage::Item>,
+			Storage::Item: Clone + Default {
+		assert! (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.all (|(start, end)| start < end),
+			"Size must be positive in all dimensions: {start:?} to {end:?}");
+		let size = Pos::from_array (
+			std::iter::zip (start.to_array (), end.to_array ())
+				.map (|(start, end)| chk! (end - start))
+				.try_array () ?);
+		let storage =
+			std::iter::repeat (item)
+				.take (size.to_array ().into_iter ()
+					.map (Pos::Coord::pan_usize)
+					.product ())
+				.collect::<Storage> ();
+		Ok (Self { storage, start, end, size, phantom: PhantomData })
+	}
+
+	#[ inline ]
 	#[ must_use ]
 	pub fn new_size (size: Pos) -> Self
 		where
