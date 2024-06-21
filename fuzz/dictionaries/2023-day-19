@@ -1,0 +1,8 @@
+misc_colon = ":"
+misc_comma = ","
+misc_curly_open = "{"
+misc_curly_close = "}"
+misc_equals = "="
+misc_greater_than = ">"
+misc_less_than = "<"
+misc_newline = "\x0a"
