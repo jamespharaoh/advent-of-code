@@ -1,0 +1,6 @@
+module_0 = " -> "
+module_1 = ", "
+
+misc_ampersand = "&"
+misc_newline = "\x0a"
+misc_percent = "%"
