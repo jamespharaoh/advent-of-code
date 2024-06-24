@@ -5,11 +5,12 @@ use input::Input;
 pub fn part_one (input: & Input) -> GenResult <i64> {
 	let mut sum = 0;
 	for history in & input.histories {
-		sum +=
+		let inc =
 			calc_diffs (history) ?
 				.iter ().rev ()
 				.map (|row| row.last ().copied ().unwrap ())
-				.fold (0, |diff, prev| prev + diff);
+				.try_fold (0, |diff, prev| chk! (prev + diff)) ?;
+		chk! (sum += inc) ?;
 	}
 	Ok (sum)
 }
@@ -17,11 +18,12 @@ pub fn part_one (input: & Input) -> GenResult <i64> {
 pub fn part_two (input: & Input) -> GenResult <i64> {
 	let mut sum = 0;
 	for history in & input.histories {
-		sum +=
+		let inc =
 			calc_diffs (history) ?
 				.iter ().rev ()
 				.map (|row| row.first ().copied ().unwrap ())
-				.fold (0, |diff, prev| prev - diff);
+				.try_fold (0, |diff, prev| chk! (prev - diff)) ?;
+		chk! (sum += inc) ?;
 	}
 	Ok (sum)
 }

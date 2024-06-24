@@ -33,7 +33,8 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 fn calc_result (input: & Input) -> GenResult <u64> {
 	let mut sum = 0;
 	for row in & input.rows {
-		sum += calc_row (row) ?;
+		let inc = calc_row (row) ?;
+		chk! (sum += inc) ?;
 	}
 	Ok (sum)
 }

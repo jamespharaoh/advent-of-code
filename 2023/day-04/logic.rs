@@ -12,10 +12,10 @@ pub fn part_one (input: & Input) -> GenResult <u64> {
 			if score == 0 {
 				score = 1;
 			} else {
-				score <<= 1_i32;
+				chk! (score *= 2) ?;
 			}
 		}
-		sum += score;
+		chk! (sum += score) ?;
 	}
 	Ok (sum)
 }
@@ -25,7 +25,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 	let mut cards: Vec <_> = input.cards.iter ().map (|card| (card, 1)).collect ();
 	for card_idx in 0 .. cards.len () {
 		let (card, num) = cards [card_idx];
-		sum += num;
+		chk! (sum += num) ?;
 		let winning: HashSet <u8> = card.winning.iter ().copied ().collect ();
 		let score =
 			card.selected.iter ().copied ()
@@ -34,7 +34,7 @@ pub fn part_two (input: & Input) -> GenResult <u64> {
 				.pan_u64 ();
 		for & mut (_, ref mut next_num) in
 				cards [card_idx + 1 .. ].iter_mut ().take (score.pan_usize ()) {
-			* next_num += num;
+			chk! (* next_num += num) ?;
 		}
 	}
 	Ok (sum)

@@ -171,7 +171,7 @@ impl <Item, Pos, const DIMS: usize> GridBuf <Vec <Item>, Pos, DIMS>
 
 impl <Storage, Pos, const DIMS: usize> GridBuf <Storage, Pos, DIMS>
 	where
-		Storage: GridStorageMut + Clone,
+		Storage: GridStorageMut,
 		Pos: GridPos <DIMS> {
 
 	#[ inline ]
@@ -255,4 +255,25 @@ impl <'grd, Storage, Pos, const DIMS: usize> GridViewIter <Pos, DIMS>
 		(& self.storage).storage_iter ()
 	}
 
+}
+
+impl <Storage, Pos, const DIMS: usize> Index <Pos> for GridBuf <Storage, Pos, DIMS>
+	where
+		Storage: GridStorageMut,
+		Pos: GridPos <DIMS> {
+	type Output = Storage::Item;
+	#[ inline ]
+	fn index (& self, pos: Pos) -> & Storage::Item {
+		self.get_ref (pos).unwrap ()
+	}
+}
+
+impl <Storage, Pos, const DIMS: usize> IndexMut <Pos> for GridBuf <Storage, Pos, DIMS>
+	where
+		Storage: GridStorageMut,
+		Pos: GridPos <DIMS> {
+	#[ inline ]
+	fn index_mut (& mut self, pos: Pos) -> & mut Storage::Item {
+		self.get_mut (pos).unwrap ()
+	}
 }

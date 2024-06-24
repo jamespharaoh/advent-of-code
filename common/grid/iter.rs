@@ -35,7 +35,8 @@ pub struct GridKeysIter <Pos: GridPos <DIMS>, const DIMS: usize> {
 }
 
 impl <Pos: GridPos <DIMS>, const DIMS: usize> GridKeysIter <Pos, DIMS> {
-	pub (crate) const fn new (start: Pos, end: Pos) -> Self {
+	#[ inline ]
+	pub const fn new (start: Pos, end: Pos) -> Self {
 		Self { start, end, val: start, phantom: PhantomData }
 	}
 }

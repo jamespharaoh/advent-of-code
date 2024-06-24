@@ -1,0 +1,9 @@
+param_0 = "NUM_STEPS_ONE="
+param_1 = "NUM_STEPS_TWO="
+param_2 = "TEST="
+
+tile_garden = "."
+tile_rock = "#"
+tile_start = "S"
+
+misc_newline = "\x0a"

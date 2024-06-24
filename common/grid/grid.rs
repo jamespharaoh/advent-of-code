@@ -48,6 +48,7 @@ pub mod prelude {
 	pub use crate::GridBuf;
 	pub use crate::GridCursor;
 	pub use crate::GridCursorCompact;
+	pub use crate::GridKeysIter;
 	pub use crate::GridOffset;
 	pub use crate::GridPos;
 	pub use crate::GridView;
