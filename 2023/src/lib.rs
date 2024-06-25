@@ -23,6 +23,7 @@ pub use aoc_2023_day_18 as day_18;
 pub use aoc_2023_day_19 as day_19;
 pub use aoc_2023_day_20 as day_20;
 pub use aoc_2023_day_21 as day_21;
+pub use aoc_2023_day_22 as day_22;
 
 #[ must_use ]
 pub fn puzzle_metadata () -> Vec <Box <dyn Puzzle>> {
@@ -48,5 +49,6 @@ pub fn puzzle_metadata () -> Vec <Box <dyn Puzzle>> {
 		day_19::puzzle_metadata (),
 		day_20::puzzle_metadata (),
 		day_21::puzzle_metadata (),
+		day_22::puzzle_metadata (),
 	]
 }
