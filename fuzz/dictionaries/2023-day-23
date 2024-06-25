@@ -1,0 +1,8 @@
+tile_forest = "#"
+tile_path = "."
+tile_slope_up = "^"
+tile_slope_down = "v"
+tile_slope_left = "<"
+tile_slope_right = ">"
+
+misc_newline = "\x0a"
