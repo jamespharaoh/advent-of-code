@@ -1,0 +1,8 @@
+&t -> rx
+%bu -> t
+%cct -> t
+%gc -> t
+%ccf -> b, tc
+%cc -> bt
+&rt -> b, t
+&b -> t 

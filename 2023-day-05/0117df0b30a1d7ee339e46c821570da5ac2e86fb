@@ -1,0 +1,7 @@
+seeds: 
+
+seed-to-soil map:
+3 9 7
+
+soil-to-fertilizer map:
+4 2 6

@@ -1,0 +1,8 @@
+&t -> rx
+%g -> t
+&cr -> t
+&chmz -> t
+&cgu -> t
+&rx -> t
+&bp -> 
+broadcaster -> c

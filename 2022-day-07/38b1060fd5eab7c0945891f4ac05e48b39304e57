@@ -1,0 +1,16 @@
+$ cd nc
+$ cd c
+$ ls
+7 yrsls
+$ ls
+$ cd /
+$ cd c
+$ ls
+7 l
+2 c
+$ cd ls
+$ cd /
+$ ls
+7 l
+2 c
+2 c

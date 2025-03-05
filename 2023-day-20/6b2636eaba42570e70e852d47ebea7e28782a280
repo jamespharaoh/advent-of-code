@@ -1,0 +1,25 @@
+&bu -> t
+&t -> rx
+&w -> bt
+&b -> bt
+&bcc -> btt
+&w -> bt
+&b -> bt
+&hcc -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bbbt
+&bcg -> bt
+&g -> b, rt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rbt
+&bcgc -> b, rt
+&w -> bt
+&b -> b, rt
+&w -> bt
+&b -> bu
+&bcc -> eeeeee

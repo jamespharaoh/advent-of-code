@@ -1,0 +1,5 @@
+&wu -> t
+&t -> rx
+%zvg -> t
+&rx -> t
+broadcaster -> roa, t

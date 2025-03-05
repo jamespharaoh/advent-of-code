@@ -1,0 +1,5 @@
+ROUNDS_TWO=5
+Monkey 8:
+  Starting items: 1
+  Operation: new = old * 3
+ rz 

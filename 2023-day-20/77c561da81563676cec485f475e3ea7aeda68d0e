@@ -1,0 +1,10 @@
+%bbt -> t
+%u -> t
+&t -> rx
+%gt -> rx
+%g -> t
+&rx -> t
+%mb -> t
+&rx -> t
+%mbu -> t
+%o -> t

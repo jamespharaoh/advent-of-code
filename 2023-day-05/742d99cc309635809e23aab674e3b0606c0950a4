@@ -1,0 +1,27 @@
+seeds: 4 1 0 5 8 5 8 0 7 7 5 8 0 8 5 7 7 5 1 8 0 8 5 5 1 5
+
+seed-to-soil map:
+1 79 9
+7 77 8
+7 3 2
+7 7 1
+7 7 4
+7 7 7
+
+soil-to-fertilizer map:
+
+
+fertilizer-to-water map:
+2 6 36
+
+water-to-light map:
+0 5 51
+
+light-to-temperature map:
+
+
+temperature-to-humidity map:
+3 0 8
+
+humidity-to-location map:
+7 0 4

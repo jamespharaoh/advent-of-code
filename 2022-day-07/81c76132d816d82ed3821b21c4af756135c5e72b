@@ -1,0 +1,17 @@
+$ ls
+4 h
+4 n
+dir s
+$ cd r
+$ ls
+$ cd c
+$ ls
+6 rs
+6 s
+dir srsls
+$ ls
+$ cd c
+$ cd c
+$ ls
+1 sys
+dir s

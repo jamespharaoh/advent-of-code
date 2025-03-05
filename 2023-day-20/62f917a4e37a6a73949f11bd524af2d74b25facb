@@ -1,0 +1,10 @@
+&wccgu -> t
+&t -> brt
+&brt -> rx
+%z -> t
+&rx -> t
+&bhtu -> tt
+&b -> b, t
+&ccc -> b, t
+&rt -> b, rt
+&wb -> t, rx

@@ -1,0 +1,11 @@
+Valve Y has flow rate=0; tunnel leads to valve D, B, B, X, B, B, D, D, B, B, B, B, X, B, D, D, B, D, X, B, D, D, B, B, D, B, D, B, B, D, K
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, B, K
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, B, D, D, B, D, X, B, D, D, B, B, D, B, B, D, D, B, D, X, B, D, D, B, B, D, B, D, B, D, B, D, X, B, B, D, DB, B, D, B, D, B, B, B, X, B, DK
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, X, B, B, D, D, D, B, D, X, B, D, D, B, B, B, B, X, B, D, K
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, B, D, D, B, D, X, B, D, D, B, B, D, B, D, B, D, B, D, X, B, B, D, DB, B, D, B, D, B, B, B, X, B, DK
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, B, D, D, B, D, X, B, D, D, B, B, D, B, D, B, D, B, D, B, D, B, D, X, B, D, D, B, B, B, K
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, D, B, D, B, D, B, D, B, D, X, B, D, D, B, B, B, K
+Valve Y has flow rate=2; tunnel leads to valve D, B, B, X, B, D, D, B, D, X, B, D, D, B, B, D, B, D, K
+Valve Y has flow rate=1; tunnel leads to valve D, BD, B, B, D, D, X, B, D, D, B, B, B, X, BD, B, K
+Valve Y has flow rate=1; tunnel leads to valve D, B, J
+Valve Y has flow rate=1; tunnel leads to valve D, B, B, X, B, B, D, X, B, D, D, B, D, X, B, D, D, B, B, D, B, D, B, B, BX, B, D, D, D, X, B, B, D,

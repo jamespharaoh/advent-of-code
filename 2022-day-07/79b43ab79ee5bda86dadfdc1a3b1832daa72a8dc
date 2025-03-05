@@ -1,0 +1,7 @@
+$ cd nc
+$ cd c
+$ ls
+7 ls
+$ cd /
+$ ls
+72 c

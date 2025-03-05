@@ -1,0 +1,18 @@
+&w -> o, a, c, a, a, a, c, a, a, r, a, c, a, o, a, c, a, c, r, a, c, o, a, a, c, a, ccb, ttrx, a, ccb, ttt
+&e -> b, ro, a, c, tbtc, rx, a, ccb, tt, a, c, tbtc, rx, a, ccb, ttt
+&e -> mb, mbbtc, rx, a, ccb, ttt
+&e -> mb, ro, cox, a, c, cox, a, ccb, ttt
+&e -> mbbtc, rx, a, a, c, a, ccb, cox, a, ccb, ttt
+&e -> mbbtc, rx, a, ccb, ttt
+&e -> mb, b, tt, a, c, tbtc, rx, a, ccb, ttrx, a, ccb, ttt
+&e -> b, ro, a, c, tbtc, rx, a, ccb, tt, a, c, tbtc, rx, a, ccb, ttt
+&e -> mb, ro, a, ccox, a, ccbt
+&e -> mb, ro, ccb, tttcb, ttt
+&e -> b, ro, a, c, tbtc, rx, ac, r, a, c, o, a, a, c, a, ccb, cox, a, ccb, ttt
+&e -> mbbtc, rx, a, ccb, ttt
+&e -> mb, b, tt, a, c, tbtc, rx, a, ccb, ttrx, a, ccb, ttt
+&e -> b, ro, a, c, tbtc, rx, a, ccb, tt, a, c, tbtc, rx, a, ccb, ttt
+&e -> mb, ro, a, ccox, a, ccbt
+&e -> mb, ro, a, ccox, a, ccb, ttt
+&e -> mbbtc, rx, a, ccb, ttt
+&e -> mb, ro, cox, a, c, o, a, a, c, a, o, a, c, a, c, r, a, c, o, a, c, o, a, c, a, a, ca, a, c, o, a, a, a, r, r, a, b, a, c, r, a, c, o, a, c

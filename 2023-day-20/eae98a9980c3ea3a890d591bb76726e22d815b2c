@@ -1,0 +1,19 @@
+&w -> b, t
+&t -> t
+&c -> bt
+&rx -> t
+&utu -> t
+%c -> f, rt
+&w -> t
+&ttob -> bt
+&btt -> bt
+&bcbt -> t
+&t -> bt
+&bcc -> bt
+&bt -> rx
+&f -> t
+&b -> b, t
+&ccc -> bt
+&rt -> b, t
+&r -> r, zacw, cÃb -> b, v
+&g -> b

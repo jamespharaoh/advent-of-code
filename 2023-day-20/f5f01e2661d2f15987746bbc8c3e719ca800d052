@@ -1,0 +1,6 @@
+&bt -> t
+%u -> bt
+broadcaster -> kl, t
+%kl -> u, t
+&z -> o
+&t -> rx

@@ -1,0 +1,7 @@
+&bt -> txm
+&u -> bt
+broadcaster -> kl, t
+%kl -> u, c, t
+&u -> t
+&t -> rx
+&rx -> t©,t

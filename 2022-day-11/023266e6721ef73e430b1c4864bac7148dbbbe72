@@ -1,0 +1,4 @@
+Monkey 4:
+  Starting items: 77, 9, 7, 6
+  Operation: new = old * old
+  Test: divisible by 0

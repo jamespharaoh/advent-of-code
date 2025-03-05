@@ -1,0 +1,7 @@
+pxv{,rc}
+jrd{,fp}
+in{,jrd}
+fp{x<0:p,pxv}
+rc{s>6:in,z}
+
+{x=0,m=2,a=8,s=9}

@@ -1,0 +1,5 @@
+&t -> hv
+broadcaster -> t
+&bc -> bt
+&b -> t
+&t -> o, b

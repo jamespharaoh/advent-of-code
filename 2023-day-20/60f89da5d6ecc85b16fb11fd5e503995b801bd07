@@ -1,0 +1,7 @@
+&t -> r
+%bu -> t
+%cct -> t
+%gc -> t
+%ccf -> b, tc
+%c -> b, t
+&b -> t 

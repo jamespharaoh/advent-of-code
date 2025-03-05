@@ -1,0 +1,14 @@
+seeds: 
+
+seed-to-soil map:
+0 4 9
+7 7 87
+
+soil-to-fertilizer map:
+66 11 1941
+1 4 5
+
+fertilizer-to-water map:
+0 72 975
+2 7 8
+9

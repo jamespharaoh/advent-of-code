@@ -1,0 +1,13 @@
+&w -> bb, rt
+&bt -> t
+&t -> bt
+&bccrp -> f, rt
+&b -> bt
+&bt -> rx
+&f -> t
+&b -> b, t
+&ccc -> bt
+&rt -> b, rt
+&wb -> t
+&bu -> t
+&f -> b

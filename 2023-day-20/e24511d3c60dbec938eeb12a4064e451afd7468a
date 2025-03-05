@@ -1,0 +1,8 @@
+&u -> u
+&g -> u
+%c -> t
+&l -> t
+&d -> rx
+%b -> b
+&bt -> t
+&a -> rrx

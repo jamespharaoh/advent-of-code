@@ -1,0 +1,5 @@
+ROUNDS_TWO=5
+Monkey 32:
+  Starting items: 
+  Operation: new = old * od
+ 

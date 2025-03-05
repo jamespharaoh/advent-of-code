@@ -1,0 +1,5 @@
+&h -> t
+&t -> rx
+%g -> m
+&rx -> t
+broadcaster -> d

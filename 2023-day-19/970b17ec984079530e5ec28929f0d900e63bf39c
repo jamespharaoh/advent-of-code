@@ -1,0 +1,17 @@
+r{x>2:A,x>1:A,x<2:A,A}
+in{s<4:r,m<4:r,m<59:z,mC}
+m{m<8:z,m<8:zz,mCC}
+iKK{m<8:z,m<8:zz,mCC}
+iK{m<8:z,m<8:zz,m<8:z,mC}
+m{m<8:z,m<8:zz,mCC}
+iKK{m<8:z,m<8:z,mC}
+mK{m<8:zzz,m<8:z,CC}
+iKK{m<8:z,m<8:zz,m}
+m{,CC}
+iKK{m<8:z,m<8:zz,m}
+m{m<8:z,m<8:zz,mC}
+iKK{m<8:z,m<8:zz,m}
+m{m<8:z,m<8:zz,mCC}
+iK{m<8:z,m<8:z,C}
+m{m<8:z,m<8:zz,mCC}
+iKK{m<8:z,m<8:zx=1,m=}

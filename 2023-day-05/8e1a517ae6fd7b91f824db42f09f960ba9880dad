@@ -1,0 +1,25 @@
+seeds: 5 8 0 8 5 7 7 7 5 8 0 5 8 0 5 7 5 7 8 5 7 7 8 0 8 5 7 7 7 5 8 1 5 8 0 5 7 5 7 5 8 5 8 0 5 8 0 8 5 8 0 5 8 0 8 5 7 7 7 5 8 0 5 8 0 5 7 5 7 5 7 7 0 5 8 0 5 7 5 7 8 98 804904201 43 2 33
+
+seed-to-soil map:
+059891 1 508
+1 15994868 8
+
+soil-to-fertilizer map:
+3 1 86
+
+fertilizer-to-water map:
+4643 36789615 8
+
+water-to-light map:
+237591 3714 7
+
+light-to-temperature map:
+0 13325 1
+
+temperature-to-humidity map:
+4 2 1877
+6981 229160301 2422384394
+3 3793 112
+
+humidity-to-location map:
+1955 0 7

@@ -1,0 +1,72 @@
+$ ls
+4 ls
+4 s
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd nql
+$ ls
+4 d
+4 fns
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd n
+$ ls
+42 fns
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd n
+$ ls
+4 d
+4 fns
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd n
+$ ls
+4 d
+4 f
+4 l
+$ ls
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd n
+$ ls
+4 d
+4 fns
+$ cd n
+$ ls
+4 d
+$ cd ns
+$ cd n
+$ ls
+4 d
+4 f
+4 l
+$ ls
+4 s
+4 mll
+2 fns
+$ cd n
+$ ls
+4 s
+4 mll
+2 ns
+$ cd n
+$ ls
+4 d
+4 f
+2 fns
+$ cd n
+$ ls
+4 d
+$ cd l
+4 l

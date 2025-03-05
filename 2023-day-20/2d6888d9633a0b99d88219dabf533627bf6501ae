@@ -1,0 +1,8 @@
+&t -> bt
+&bcc -> f, rt
+&b -> bt
+&bt -> rx
+&f -> t
+&rt -> b, t
+&b -> t
+ 

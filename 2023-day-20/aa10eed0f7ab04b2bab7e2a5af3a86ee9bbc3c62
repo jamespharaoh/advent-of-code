@@ -1,0 +1,6 @@
+&t -> rx
+%rx -> t
+%ct -> t
+%ccg -> t
+%cc -> t
+%g -> t 

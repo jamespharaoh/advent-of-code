@@ -1,0 +1,10 @@
+&z -> sb, t
+&rx -> t
+&ccw -> brx, ffd, hv
+broadcaster -> t
+&t -> bt
+&bcc -> rx
+&f -> c
+broadcaster -> rx
+%g -> b
+&og -> br, m, r, b

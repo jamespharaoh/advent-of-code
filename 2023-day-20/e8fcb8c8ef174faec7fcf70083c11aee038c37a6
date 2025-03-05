@@ -1,0 +1,59 @@
+&w -> bt
+&bcg -> bt
+&g -> b, rxrt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&ww -> bbbt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> bc, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&ww -> bbbt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt³
+&b -> bt
+&bt -> bt rt
+&w -bb, r

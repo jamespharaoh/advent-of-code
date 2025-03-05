@@ -1,0 +1,7 @@
+&wg -> b, b, t
+&t -> w, bb, bt
+&bt -> t
+&t -> rx
+&w -> bt
+&b -> b, t
+&g -> b

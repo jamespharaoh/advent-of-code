@@ -1,0 +1,9 @@
+$ cd nss
+$ cd n
+$ ls
+4 s
+$ cd n
+$ ls
+4 d
+4 l
+4 .

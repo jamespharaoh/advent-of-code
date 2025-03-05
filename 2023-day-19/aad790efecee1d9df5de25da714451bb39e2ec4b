@@ -1,0 +1,6 @@
+pxv{,rc}
+in{x>0:n,pxv}
+qz{,A}
+rc{s>66:in,qz}
+
+{x=58,m=2,a=9,s=8}

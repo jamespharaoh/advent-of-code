@@ -1,0 +1,16 @@
+seeds: 
+
+seed-to-soil map:
+
+
+soil-to-fertilizer map:
+7 04 283
+
+fertilizer-to-water map:
+0 1 77
+
+water-to-light map:
+79 7 7
+
+light-to-temperature map:
+010 27 7

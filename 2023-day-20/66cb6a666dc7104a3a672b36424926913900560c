@@ -1,0 +1,6 @@
+%w -> t
+%qtu -> t
+&rx -> t
+%uplrx -> t
+%u -> t
+&t -> rx

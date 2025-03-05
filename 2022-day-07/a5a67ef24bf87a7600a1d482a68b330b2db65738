@@ -1,0 +1,9 @@
+$ ls
+0 c
+$ cd c
+$ ls
+0 c
+$ cd c
+$ ls
+2 l
+6 s

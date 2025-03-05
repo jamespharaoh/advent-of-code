@@ -1,0 +1,9 @@
+&x -> t
+&u -> b
+&gz -> t
+&rx -> t
+&t -> rx
+&b -> rx
+&b -> b
+&g -> u
+%s -> t«

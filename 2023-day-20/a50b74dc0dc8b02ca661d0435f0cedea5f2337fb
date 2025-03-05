@@ -1,0 +1,10 @@
+&w -> zc, t
+&u -> t
+&t -> rx
+%gz -> u
+&rx -> t
+&w -> 
+%ccw -> b, rx, hv
+broadcaster -> t
+&bcb -> t
+&n -> o, e

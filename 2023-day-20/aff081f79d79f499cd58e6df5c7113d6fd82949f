@@ -1,0 +1,185 @@
+&w -> bt
+&bcg -> bt
+&g -> b
+&g -> b, rt
+&w -> bt
+&b -> bt
+&hcc -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbb
+&g -> b, rt
+&w -> bt
+&b -> bt
+&hcc -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&g -> b, rt
+&w -> br
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rtz
+&w -> bt
+&b -> bt
+&bcg -> bj
+&n -> bb, rt
+&b -> bt
+&bcc -> bt
+&g -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rtz
+&w -> bt
+&b -> bt
+&bcg -> b
+&b -> bt
+&bcc -> bt
+&g -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbt
+&b -> bt
+&bcc -> bt
+&b -> bt
+&bcc -> bt
+&g -> t
+&bcc -> f, rbct
+&w -> bt
+&b -> b
+&w -> bt
+&b -> at
+&bcc -> hgb, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbt
+&b -> bt
+&bcc -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&c -> f, rbct
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bu
+&b -> bt
+&lbg -> bj
+&g -> bb, rt
+&b -> bt
+&bac -> bt
+&g -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> bt
+&bcc -> t
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> at
+&bcc -> hgb, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbt
+&b -> bt
+&bcc -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&c -> f, rbct
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bu
+&b -> bt
+&lbg -> bj
+&g -> bb, rt
+&b -> bt
+&bac -> bt
+&g -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> bt
+&bcc -> t
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> at
+&bcc -> hgb, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bbtbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> b, rt
+&g -> b
+&g -> b, rt
+&w -> b
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bt
+&bcg -> bt
+&g -> b, rt
+&g -> b
+&g -> b, r‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚‚-> bt
+&b -> bbt
+&b - r

@@ -1,0 +1,15 @@
+&u -> u
+%c -> t
+&u -> t
+&t -> rx
+&wgu -> b
+&u -> u
+%c -> t
+&u -> t
+&t -> r
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+
+&a 

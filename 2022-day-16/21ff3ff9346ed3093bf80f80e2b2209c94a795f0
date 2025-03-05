@@ -1,0 +1,13 @@
+Valve A has flow rate=2; tunnels lead to valves X, X, BD, D, KD, B, K
+Valve Y has flow rate=1; tunnel leads to valve D, BD, B, K
+Valve Y has flow rate=1; tunnel leads to valve D, B, K
+Valve Y has flow rate=1; tunnel leads to valve K
+Valve Y has flow rate=1; tunnel leads to valve D, B, D, B, K
+Valve Y has flow rate=1; tunnel leads to valve DD, KD, B, K
+Valve Y has flow rate=1; tunnel leads to valve D, BD, B, K
+Valve Y has flow rate=1; tunnel leads to valve D, B, K
+Valve Y has flow rate=1; tunnel leads to valve K
+Valve Y has flow rate=1; tunnel leads to valve D, B, D, B, K
+Valve Y has flow rate=1; tunnel leads to valve D,~BD, B, K
+Va flow rate=1to valve B, B, D, B, D, B, D, X, B, D, B, B, DB, KD, B, K
+Valve Y has flow rate=2; tunnel leads to vhas flow rate=1; tuVn

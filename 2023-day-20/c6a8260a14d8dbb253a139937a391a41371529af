@@ -1,0 +1,8 @@
+&gsu -> t
+%c -> t
+&wr -> t
+&t -> rx
+%g -> t
+&rx -> t
+%boutu -> t
+%go -> t

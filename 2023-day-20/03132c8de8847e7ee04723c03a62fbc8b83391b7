@@ -1,0 +1,304 @@
+&ccw -> bt
+&bcgbcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bc -> b
+&bcgbcg -> bt
+&g -> brt
+&g -> ct
+&g -> bt
+&g -> b
+&g -> bt
+&g -> b, rt
+&w -> b, r
+&tw -> bt
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+&b -> bt
+&bcl -> bt
+&g -> bb, rt
+&bt -> t
+&t -> b, rt
+&w -> bt
+&b -> bt
+&bc -> b
+&bcgbcg -> bt
+&g -> brt
+&g -> ct
+&g -> bt
+&g -> b
+&g -> bt
+&g -> b, rt
+&w -> b, r
+&tw -> bt
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+&b -> bt
+&bcl -> bt
+&g -> bb, rt
+&bt -> t
+&t -> rx
+&w -> bt
+&b -> b, t
+&bcc -> bt
+&g -> b, rt
+&w -> rt
+&w -> btt
+&w -> bt
+&b -> bu
+&bttg -> bt
+&bcg -> bl
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&ww -> bbbt
+&b -> bt
+&bac -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&b -> bt
+&bcc -> f, rt
+&w -> bt
+&b -> bt
+&bcbcc -> bt
+&g -> bt
+&bcg -> bt
+&g -> b, rt
+&ww -> bbt
+&bcc -> f, rt
+&w -> bt
+&b -> bt
+&lbg -> bj
+&g -> bb, rt
+&b -> bt
+&bac -> bbt
+&g -> b
+&g -> b, bt
+&blbg -> bj
+&g -> bt
+&bcb -> bt
+&hcc -> bybt
+&g -> b, rt
+&w -> bt
+&b -> bthgb, rt
+&w -> b
+&bcc -> btbt
+&bcc -> f, rbct
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&zg -> b, rt
+&w -> t
+&g -> b, rt
+&w -> bt
+&g -> b
+&g -> b, bt
+&blbg -> bj
+&g -> bt
+&bcb -> bt
+&hcc -> bybt
+&g -> b, rt
+&w -> bt
+&b -> bthgb, rt
+&w -> b
+&bcc -> btbt
+&bcc -> f, rbct
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&zg -> b, rt
+&w -> bt
+&lbg -> bu
+&b -> bt
+&lbg -> bj
+&g -> bb, rt
+&bu -> t
+&t -> rx
+&w -> bt
+&b -> b, t
+&bcc -> bt
+&g -> b, rtrt
+&w -> rtbt
+&bcc -> bt
+&g -> b, rt
+&w -> rt
+&w -> btt
+&w -> bt
+&b -> bu
+&bttbcc -> bt
+&g -> bbt
+&g -> c, rt
+&w -> bt
+&f -> bt
+&bcc -> bt
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+&b -> bt
+&g -> bb, rt
+&ct -> t
+&cc -> bt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&lbg -> b
+&og -> brt
+&og -> t
+&ccgu -> t
+&t -> rx
+%g -> brt
+&ocgu -> t
+&t -> rx
+%g -> brt
+&og -> brt
+&og -> t
+&ccg -> t
+&ccc -> t
+&w -> bt
+&b -> bt
+&bcc -> rx
+%g -> brt
+&og -> brt
+&og -> t
+%ccg -> t
+&ccc -> t
+&w -> f, rt
+&w -> bu
+&b -> bt
+&lbg -> bjthgb, rt
+&z -> b
+&bcc -> f, rbct
+&w -> bt
+&b -> bbbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&lbg -> bj
+&g -> bb, rt
+&b -> bt
+&bac -> bt
+&g -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> b
+&g -> b, rt
+&w -> bt
+&b -> bt
+&hcc -> bybt
+&g -> b, r
+&tw -> bt
+&b -> bt
+&bcl -> bt
+&hcc -> bybt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> t
+&t -> rx
+&b -> bt
+&bcl -> bt
+&g -> bb, rt
+&bt -> t
+&t -> bt
+&bcc -> f, rt
+&b -> bt
+&bbt -> t
+&t -> brt
+&w -> bb, rt
+&b -> bt
+&bcc -> bb, bt
+&bcc -> f, rt
+&b -> bt
+&bbt -> t
+&t -> brt
+&w -> bb, rt
+&b -> bt
+&bcc -> bb, rt
+&b -> bt
+&bcc -> bt
+&g -> b, rt
+&bbttcw -> bt
+&bcgbbg -> bt
+&g -> brt
+&g -> ct
+&g -> bt
+&g -> b
+&g -> bt
+&g -> b, rt
+&w -> b, r
+&tw -> bt
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+&b -> bbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> b
+&g -> u
+%c -> t
+&u -> t
+&t -> rx
+&f -> bt
+&bcc -> f, rt
+&w -> bu
+&b -> bt
+&lbg -> bj
+&g -> bb, rt
+&r -> bt
+&babrc -> bt
+&z -> b, rt
+&w -> bt
+&g -> bhgb, rt
+&w -> bt
+&b -> bt
+&bcc -> t
+&p -> bt
+&b -> bt
+&blbg -> bj
+&g -> bt
+&bcb -> bt
+&hcc -> bybt
+&g -> b, rt
+&w -> b
+&w -> btÄ&b -> bbbt
+&bcg -> bt
+&g -> b, rt
+&w -> bt
+&b -> bt
+&bcc -> bt
+&g -> c, rt
+&w -> bt
+&lbg -> bj
+&g ->&w -> bt
+&g -> brt
+&og -> brt
+&og -> t
+&c -> bt
+&g  bb, rt
+&b -> bt
+&bac -> bt
+&g -> b, rt
+&w -> bt
+&g -> b-> b

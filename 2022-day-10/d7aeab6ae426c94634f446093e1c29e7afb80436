@@ -1,0 +1,6 @@
+noop
+addx 80
+addx 2
+addx +44
+noop
+addx 5

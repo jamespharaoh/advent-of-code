@@ -1,0 +1,13 @@
+LR
+
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (2, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (12B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (11B, 2QB)
+XXX = (XXX, TVHXXX)

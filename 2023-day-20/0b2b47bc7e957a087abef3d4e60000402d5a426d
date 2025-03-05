@@ -1,0 +1,5 @@
+&g -> t
+&t -> rx
+%g -> bcgt
+&rx -> t
+broadcaster -> t

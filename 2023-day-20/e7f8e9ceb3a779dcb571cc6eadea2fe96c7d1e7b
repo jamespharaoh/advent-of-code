@@ -1,0 +1,5 @@
+&rx -> t
+&bt -> t
+&t -> rx
+&w -> bt
+&b -> bt

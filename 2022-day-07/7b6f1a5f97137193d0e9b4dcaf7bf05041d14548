@@ -1,0 +1,12 @@
+$ ls
+8 c
+$ cd c
+$ ls
+6 l
+8 c
+$ cd c
+$ ls
+64 .s
+4 ms
+48 ylml
+2 ossn

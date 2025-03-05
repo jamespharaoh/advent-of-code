@@ -1,0 +1,11 @@
+$ ls
+8 c
+$ cd c
+$ ls
+6 l
+8 c
+$ cd c
+$ ls
+642 u
+4 mm
+2 ossn

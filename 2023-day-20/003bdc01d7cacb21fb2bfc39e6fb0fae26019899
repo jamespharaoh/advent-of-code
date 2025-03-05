@@ -1,0 +1,6 @@
+&gsu -> t
+%c -> t
+&t -> rx
+%g -> t
+&rx -> t
+%go -> t

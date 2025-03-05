@@ -1,0 +1,17 @@
+seeds: 6 5
+
+seed-to-soil map:
+3 04815 6
+189 194868 818
+
+soil-to-fertilizer map:
+31 4 2
+49 373 5
+
+fertilizer-to-water map:
+5 1 256
+1 292 067
+
+water-to-light map:
+280 196 1460
+618 7 7
